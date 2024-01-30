@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript/nextjs.json",
+  "extends": "@repo/ts/nextjs.json",
   "compilerOptions": {
     "plugins": [
       {

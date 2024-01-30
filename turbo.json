@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDotEnv": [".env", ".env.development.local"],
+  "globalDotEnv": [".env", ".env.local"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],

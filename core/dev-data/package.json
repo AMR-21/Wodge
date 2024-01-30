@@ -1,0 +1,15 @@
+{
+  "name": "dev-data",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Mock data for development with JSON server",
+  "scripts": {
+    "populate": "node populate.js",
+    "dev": "json-server --watch data.json --port 3100"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
+    "json-server": "^0.17.4"
+  }
+}

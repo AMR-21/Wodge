@@ -1,19 +1,20 @@
 {
   "name": "wodge",
+  "description": "A collaborative workspace.",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "dotenv -e .env.local -- turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "@repo/ts": "workspace:*",
+    "eslint": "latest",
+    "eslint-config-turbo": "^1.10.14",
     "dotenv-cli": "^7.3.0",
-    "prettier": "^3.1.1",
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.9.0",
+  "license":"AGPL-3.0",
   "engines": {
     "node": ">=18"
   }
