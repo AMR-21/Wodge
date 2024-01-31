@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "development") {
         // },
         DB: {
           type: "d1",
-          databaseName: "wodge-db",
+          databaseName: "DB",
         },
       },
     });
