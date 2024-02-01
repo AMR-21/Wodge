@@ -23,6 +23,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../core/db
       '@repo/env':
         specifier: workspace:*
         version: link:../../core/env
@@ -87,8 +90,39 @@ importers:
       typescript:
         specifier: ^5
         version: 5.3.3
+      wrangler:
+        specifier: ^3.25.0
+        version: 3.25.0
 
   config/ts: {}
+
+  core/db:
+    dependencies:
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../env
+      drizzle-orm:
+        specifier: ^0.29.3
+        version: 0.29.3(@cloudflare/workers-types@4.20240129.0)(@types/react@18.2.48)(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@repo/ts':
+        specifier: workspace:*
+        version: link:../../config/ts
+      '@types/node':
+        specifier: ^20
+        version: 20.11.13
+      drizzle-kit:
+        specifier: ^0.20.13
+        version: 0.20.13
+      eslint:
+        specifier: ^8
+        version: 8.56.0
+      typescript:
+        specifier: ^5
+        version: 5.3.3
 
   core/dev-data:
     devDependencies:
@@ -103,7 +137,7 @@ importers:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(zod@3.22.4)
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -114,6 +148,12 @@ importers:
       '@types/node':
         specifier: ^20.11.13
         version: 20.11.13
+      eslint:
+        specifier: ^8
+        version: 8.56.0
+      typescript:
+        specifier: ^5
+        version: 5.3.3
 
   core/ui:
     dependencies:
@@ -154,9 +194,15 @@ importers:
       '@types/react':
         specifier: ^18.2.48
         version: 18.2.48
+      eslint:
+        specifier: ^8
+        version: 8.56.0
       tailwindcss:
         specifier: ^3
         version: 3.4.1
+      typescript:
+        specifier: ^5
+        version: 5.3.3
 
 packages:
 
@@ -1778,7 +1824,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@t3-oss/env-core@0.8.0(zod@3.22.4):
+  /@t3-oss/env-core@0.8.0(typescript@5.3.3)(zod@3.22.4):
     resolution: {integrity: sha512-Tc1pg0KH/tJeI0Z1s/Isp1VsGDj1N03ZAYFV8GjWgMxytF/ve0Dv+opjmTapHICRv8qiB1Y/fsTjkWNMpKPRCQ==}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -1787,10 +1833,11 @@ packages:
       typescript:
         optional: true
     dependencies:
+      typescript: 5.3.3
       zod: 3.22.4
     dev: false
 
-  /@t3-oss/env-nextjs@0.8.0(zod@3.22.4):
+  /@t3-oss/env-nextjs@0.8.0(typescript@5.3.3)(zod@3.22.4):
     resolution: {integrity: sha512-bJyoE8of4QmqZN7a49iLJAbUq4graScb9ezXzvnuIVr9JP43C093vmy55hT1uZL533CwiPz8zo1INwyAS6qnHw==}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -1799,7 +1846,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@t3-oss/env-core': 0.8.0(zod@3.22.4)
+      '@t3-oss/env-core': 0.8.0(typescript@5.3.3)(zod@3.22.4)
+      typescript: 5.3.3
       zod: 3.22.4
     dev: false
 
@@ -6927,7 +6975,6 @@ packages:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
   /uid-promise@1.0.0:
     resolution: {integrity: sha512-R8375j0qwXyIu/7R0tjdF06/sElHqbmdmWC9M2qQHpEVbvE4I5+38KJI7LUUmQMp7NVq4tKHiBMkT0NFM453Ig==}
