@@ -2,6 +2,7 @@
 
 import type { NextRequest } from "next/server";
 import { db } from "../../lib/db";
+import { schema } from "@repo/db";
 
 export const runtime = "edge";
 
@@ -9,13 +10,19 @@ export async function GET(request: NextRequest) {
   let responseText = "Hello World";
   const d1 = process.env.DB;
 
+  // console.log(await db.query.countries.findMany());
+  console.log(
+    await db
+      .insert(schema.countries)
+      .values({ name: "Zambia", n2: "EG", n3: "EGY" })
+  );
   // console.log(
   //   process.env.WODGE_DB.exec(
   //     "create table if not exists test (id integer primary key, name text)"
   //   )
-  // );
-  const stmt = d1.prepare("select * from countries");
-  console.log(await stmt.run());
+  // // );
+  // const stmt = d1.prepare("select * from countries");
+  // console.log(await stmt.run());
 
   // In the edge runtime you can use Bindings that are available in your application
   // (for more details see:

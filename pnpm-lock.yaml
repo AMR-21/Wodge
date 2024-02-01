@@ -32,15 +32,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../core/db
-      '@repo/env':
-        specifier: workspace:*
-        version: link:../../core/env
       '@repo/ui':
         specifier: workspace:*
         version: link:../../core/ui
-      '@t3-oss/env-core':
-        specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
@@ -110,9 +104,6 @@ importers:
 
   core/db:
     dependencies:
-      '@repo/env':
-        specifier: workspace:*
-        version: link:../env
       drizzle-orm:
         specifier: ^0.29.3
         version: 0.29.3(@cloudflare/workers-types@4.20240129.0)(@types/react@18.2.48)(better-sqlite3@9.3.0)(react@18.2.0)
@@ -144,31 +135,6 @@ importers:
       json-server:
         specifier: ^0.17.4
         version: 0.17.4
-
-  core/env:
-    dependencies:
-      '@t3-oss/env-core':
-        specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
-      '@t3-oss/env-nextjs':
-        specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@repo/ts':
-        specifier: workspace:*
-        version: link:../../config/ts
-      '@types/node':
-        specifier: ^20.11.13
-        version: 20.11.13
-      eslint:
-        specifier: ^8
-        version: 8.56.0
-      typescript:
-        specifier: ^5
-        version: 5.3.3
 
   core/ui:
     dependencies:

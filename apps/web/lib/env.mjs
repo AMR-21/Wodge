@@ -6,9 +6,9 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    // AUTH_SECRET: z.string(),
+    AUTH_SECRET: z.string(),
     // // DB: z.,
-    // DB_HOST: z.enum(["local", "cloud"]),
+    DB_HOST: z.enum(["local", "cloud"]),
   },
 
   client: {
@@ -17,7 +17,7 @@ export const env = createEnv({
 
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    // DB_HOST: process.env.DB_HOST,
-    // AUTH_SECRET: process.env.AUTH_SECRET,
+    DB_HOST: process.env.DB_HOST,
+    AUTH_SECRET: process.env.AUTH_SECRET,
   },
 });

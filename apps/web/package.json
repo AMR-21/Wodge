@@ -2,7 +2,6 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "infisical run --env=dev --path=/web-nextjs next dev",
     "build": "next build",
@@ -11,7 +10,8 @@
     "pages:build": "pnpm next-on-pages",
     "pages:preview": "pnpm pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat",
     "db:migration:local": "wrangler d1 migrations apply wodge-db --local",
-    "db:migration:cloud": "wrangler d1 migrations apply wodge-db"
+    "db:migration:cloud": "wrangler d1 migrations apply wodge-db",
+    "db:studio": "infisical run --env=dev --path=/web-nextjs drizzle-kit studio"
   },
   "dependencies": {
     "@repo/db": "workspace:*",

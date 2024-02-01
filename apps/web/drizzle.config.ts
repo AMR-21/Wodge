@@ -5,7 +5,7 @@
  */
 import type { Config } from "drizzle-kit";
 import { mfIdFromName } from "./lib/utils";
-import { env } from "./lib/env";
+import { env } from "./lib/env.mjs";
 
 export default env.DB_HOST === "local"
   ? ({
