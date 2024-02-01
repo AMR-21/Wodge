@@ -2,7 +2,7 @@
 
 import type { NextRequest } from "next/server";
 import { db } from "../../lib/db";
-import { schema } from "@repo/db";
+import { schema } from "@repo/data";
 
 export const runtime = "edge";
 
