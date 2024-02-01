@@ -23,6 +23,6 @@ export default env?.DB_HOST === "local"
       driver: "d1",
       dbCredentials: {
         wranglerConfigPath: "./wrangler.toml",
-        dbName: env.DB_NAME,
+        dbName: "wodge-db",
       },
     } satisfies Config);

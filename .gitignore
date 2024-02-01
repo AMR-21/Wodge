@@ -36,8 +36,3 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
-
-# wrangler
-wrangler.toml
-/.wrangler/
-.dev.vars

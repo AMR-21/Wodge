@@ -138,6 +138,9 @@ importers:
 
   core/env:
     dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.3.3)(zod@3.22.4)

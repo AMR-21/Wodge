@@ -9,8 +9,8 @@
     "lint": "next lint",
     "pages:build": "pnpm next-on-pages",
     "pages:preview": "pnpm pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat",
-    "db:migration:local": "wrangler d1 migrations apply --local",
-    "db:migration:cloud": "wrangler d1 migrations apply"
+    "db:migration:local": "wrangler d1 migrations apply wodge-db --local",
+    "db:migration:cloud": "wrangler d1 migrations apply wodge-db"
   },
   "dependencies": {
     "@repo/db": "workspace:*",
