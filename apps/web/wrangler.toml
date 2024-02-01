@@ -1,6 +1,0 @@
-[[d1_databases]]
-binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "wodge-db"
-database_id = "bf552aa1-6862-46d6-a270-4f09d30fd8d6"
-preview_database_id = "DB"
-migrations_dir = "./node_modules/@repo/db/migrations"

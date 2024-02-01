@@ -13,9 +13,10 @@
       "cache": false,
       "persistent": true
     },
-    "pages:build": {},
-    "pages:preview": {},
     "db:migration": {
+      "cache": false
+    },
+    "db:drop": {
       "cache": false
     }
   }

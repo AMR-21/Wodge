@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "db:migration": "drizzle-kit generate:sqlite",
-    "drop": "drizzle-kit drop",
+    "db:drop": "drizzle-kit drop",
     "migrate": "",
     "db:init": "",
     "migrate:local": "",
