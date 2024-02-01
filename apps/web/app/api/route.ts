@@ -1,6 +1,7 @@
 // Next.js Edge API Route Handlers: https://nextjs.org/docs/app/building-your-application/routing/router-handlers#edge-and-nodejs-runtimes
 
 import type { NextRequest } from "next/server";
+import { db } from "../../lib/db";
 
 export const runtime = "edge";
 
@@ -13,7 +14,8 @@ export async function GET(request: NextRequest) {
   //     "create table if not exists test (id integer primary key, name text)"
   //   )
   // );
-  console.log(d1);
+  const stmt = d1.prepare("select * from countries");
+  console.log(await stmt.run());
 
   // In the edge runtime you can use Bindings that are available in your application
   // (for more details see:

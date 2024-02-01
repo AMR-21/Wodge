@@ -2,13 +2,10 @@
   "name": "@repo/db",
   "version": "0.1.0",
   "private": true,
+  "main": "index.ts",
   "scripts": {
-    "db:migration": "drizzle-kit generate:sqlite",
-    "db:drop": "drizzle-kit drop",
-    "migrate": "",
-    "db:init": "",
-    "migrate:local": "",
-    "db:init:local": ""
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
     "@repo/env": "workspace:*",

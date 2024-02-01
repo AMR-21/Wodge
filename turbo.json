@@ -13,10 +13,19 @@
       "cache": false,
       "persistent": true
     },
-    "db:migration": {
+    "db:generate": {
       "cache": false
     },
     "db:drop": {
+      "cache": false
+    },
+    "db:migration:local": {
+      "cache": false
+    },
+    "db:migration:cloud": {
+      "cache": false
+    },
+    "db:studio": {
       "cache": false
     }
   }

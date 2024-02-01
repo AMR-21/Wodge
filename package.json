@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "dotenv -e .env.local -- turbo dev",
+    "studio": "dotenv -e .env.local -- turbo studio",
     "lint": "turbo lint"
   },
   "devDependencies": {
