@@ -8,7 +8,6 @@
     "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
-    "@repo/env": "workspace:*",
     "drizzle-orm": "^0.29.3",
     "zod": "^3.22.4"
   },
