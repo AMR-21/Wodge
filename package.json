@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "dotenv -e .env.local -- turbo dev",
-    "studio": "dotenv -e .env.local -- turbo studio",
+    "dev": "turbo dev",
+    "studio": "turbo studio",
     "lint": "turbo lint"
   },
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-turbo": "^1.10.14",
-    "dotenv-cli": "^7.3.0",
-    "turbo": "latest"
+    "tsx": "^4.7.0",
+    "turbo": "latest",
+    "typescript": "^5",
+    "wrangler": "^3.25.0"
   },
   "packageManager": "pnpm@8.9.0",
   "license": "AGPL-3.0",

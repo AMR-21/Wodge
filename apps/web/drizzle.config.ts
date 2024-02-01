@@ -5,9 +5,9 @@
  */
 import type { Config } from "drizzle-kit";
 import { mfIdFromName } from "./lib/utils";
-import { env } from "@repo/env";
+import { env } from "./lib/env";
 
-export default env?.DB_HOST === "local"
+export default env.DB_HOST === "local"
   ? ({
       schema: "./node_modules/@repo/db/schema.ts",
       driver: "better-sqlite",

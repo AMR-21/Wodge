@@ -6,7 +6,8 @@
         "name": "next"
       }
     ],
-    "types": ["@cloudflare/workers-types/2023-07-01"]
+    "types": ["@cloudflare/workers-types/2023-07-01"],
+    "checkJs": true
   },
   "include": [
     "next-env.d.ts",
@@ -14,8 +15,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "env.d.ts",
-    "lib/env.ts"
+    "env.d.ts"
   ],
   "exclude": ["node_modules"]
 }
