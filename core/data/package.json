@@ -8,6 +8,7 @@
     "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
+    "@auth/core": "^0.25.0",
     "drizzle-orm": "^0.29.3",
     "zod": "^3.22.4"
   },

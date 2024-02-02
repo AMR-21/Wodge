@@ -1,6 +1,5 @@
 import { setupDevBindings } from "@cloudflare/next-on-pages/next-dev";
-
-await import("./lib/env.mjs");
+await import("./lib/env.js");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

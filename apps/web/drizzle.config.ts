@@ -5,11 +5,13 @@
  */
 import type { Config } from "drizzle-kit";
 import { mfIdFromName } from "./lib/utils";
-import { env } from "./lib/env.mjs";
+import { env } from "./lib/env.js";
+
+const schemaPath = "./node_modules/@repo/data/schemas/*.schema.ts";
 
 export default env.DB_HOST === "local"
   ? ({
-      schema: "./node_modules/@repo/db/schema.ts",
+      schema: schemaPath,
       driver: "better-sqlite",
       dbCredentials: {
         url: `./.wrangler/state/v3/d1/miniflare-D1DatabaseObject/${mfIdFromName(
@@ -19,7 +21,7 @@ export default env.DB_HOST === "local"
       },
     } satisfies Config)
   : ({
-      schema: "./node_modules/@repo/db/schema.ts",
+      schema: schemaPath,
       driver: "d1",
       dbCredentials: {
         wranglerConfigPath: "./wrangler.toml",
