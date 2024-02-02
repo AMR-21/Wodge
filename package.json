@@ -9,13 +9,13 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "@repo/ts": "workspace:*",
     "eslint": "latest",
     "eslint-config-turbo": "^1.10.14",
     "tsx": "^4.7.0",
-    "turbo": "latest",
+    "turbo": "^1.11.3",
     "typescript": "^5",
-    "wrangler": "^3.25.0",
-    "@repo/ts": "workspace:*"
+    "wrangler": "^3.25.0"
   },
   "packageManager": "pnpm@8.9.0",
   "license": "AGPL-3.0",

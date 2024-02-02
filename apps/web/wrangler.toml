@@ -1,6 +1,6 @@
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "wodge-db"
-database_id = "0050ca12-fe45-466d-8efa-d94c7638ea8f"
+database_id = "06551e4a-854a-4b7d-b493-e95f0eea223f"
 preview_database_id = "DB"
 migrations_dir = "./node_modules/@repo/data/migrations"

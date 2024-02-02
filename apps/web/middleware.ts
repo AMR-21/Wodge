@@ -3,8 +3,8 @@ import {
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
-} from "@/lib/auth/routes";
-import { auth } from "@/lib/auth/auth";
+} from "@/lib/routes";
+import { auth } from "@/lib/auth";
 
 export default auth((req) => {
   const { nextUrl } = req;

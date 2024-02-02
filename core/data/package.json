@@ -8,12 +8,12 @@
     "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
-    "@auth/core": "^0.25.0",
     "drizzle-orm": "^0.29.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",
+    "@auth/core": "^0.25.0",
     "@types/node": "^20",
     "drizzle-kit": "^0.20.13",
     "eslint": "^8",
