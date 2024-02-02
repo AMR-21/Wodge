@@ -15,7 +15,7 @@
     "turbo": "latest",
     "typescript": "^5",
     "wrangler": "^3.25.0",
-    "@repo/ts":"workspace:*"
+    "@repo/ts": "workspace:*"
   },
   "packageManager": "pnpm@8.9.0",
   "license": "AGPL-3.0",

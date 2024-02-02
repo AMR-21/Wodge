@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import Discord from "next-auth/providers/discord";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
@@ -16,6 +15,7 @@ export const {
     {
       id: "resend",
       type: "email",
+      name: "Resend",
       async sendVerificationRequest({
         identifier: email,
         url,
@@ -45,11 +45,6 @@ export const {
         } else console.log(response.text());
       },
     },
-
-    Discord({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
 
     GitHub({
       clientId: env.GITHUB_CLIENT_ID,
