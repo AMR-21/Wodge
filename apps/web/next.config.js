@@ -3,7 +3,7 @@ await import("./lib/env.js");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@repo/ui", "@radix-ui"],
+  transpilePackages: ["@radix-ui"],
 };
 
 /**

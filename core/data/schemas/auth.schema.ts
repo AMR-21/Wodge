@@ -57,3 +57,11 @@ export const verificationTokens = sqliteTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+// username: text("username").unique(),
+// bio: text("bio"),
+// banner: text("banner"),
+// createdAt: integer("created_at", { mode: "timestamp_ms" })
+//   .notNull()
+//   .default(sql`CURRENT_TIMESTAMP`),
+// isComplete: integer("is_complete", { mode: "boolean" }).default(false),
