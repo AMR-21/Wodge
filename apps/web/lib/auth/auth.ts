@@ -1,19 +1,14 @@
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { DefaultSession, Session, User } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
-
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { env } from "@/lib/env";
 import { db } from "@/lib/db";
 import { sendMagicLink } from "../utils";
 import { SQLiteDrizzleAdapter } from "./drizzle-adapter";
 import { users } from "@repo/data";
-import { AdapterUser } from "@auth/core/adapters";
-import { User } from "@auth/core/types";
-import { ExtendedUser } from "@/next-auth";
 
 export const {
   handlers: { GET, POST },
@@ -21,20 +16,20 @@ export const {
 } = NextAuth({
   // adapter: DrizzleAdapter(db),
   adapter: SQLiteDrizzleAdapter(db),
-  // session: {
-  //   // generateSessionToken() {
-  //   //   return nanoid();
-  //   // },
+  session: {
+    generateSessionToken() {
+      return nanoid();
+    },
 
-  //   strategy: "database",
-  // },
+    strategy: "database",
+  },
 
   pages: {
     signIn: "/auth/login",
     error: "/auth/error",
     // signOut
     // verifyRequest
-    // newUser: "/auth/complete-profile",
+    newUser: "/auth/complete-profile",
   },
 
   events: {
@@ -46,6 +41,16 @@ export const {
             .set({ emailVerified: new Date() })
             .where(eq(users.id, user.id)));
       }
+    },
+  },
+
+  callbacks: {
+    async session({ user, session }) {
+      if (session.user && user) {
+        session.user.id = user.id;
+        session.user.hasProfile = user.hasProfile;
+      }
+      return session;
     },
   },
 
@@ -76,6 +81,17 @@ export const {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
+      profile(profile) {
+        console.log({ profile });
+        return {
+          // ...profile,
+          id: profile.sub,
+          email: profile.email,
+          // emailVerified: profile.email_verified ?  : null,
+          image: profile.picture,
+          name: profile.name,
+        };
+      },
     }),
   ],
 });

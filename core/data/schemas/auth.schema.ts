@@ -1,3 +1,7 @@
+/**
+ * In the future db sessions will be replaced by cloudflare KV sessions
+ */
+
 import {
   integer,
   sqliteTable,
@@ -8,10 +12,11 @@ import type { AdapterAccount } from "@auth/core/adapters";
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
-  name: text("name"),
-  email: text("email").notNull(),
+  // name: text("name"), //remove
+  email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  image: text("image"),
+  // image: text("image"), //remove
+  hasProfile: integer("has_profile", { mode: "boolean" }).default(false), // indicate if user has completed profile
 });
 
 export const accounts = sqliteTable(
@@ -58,7 +63,20 @@ export const verificationTokens = sqliteTable(
   })
 );
 
+export const profiles = sqliteTable("profile", {
+  userId: text("user_id")
+    .notNull()
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name"),
+  username: text("username").unique(),
+  avatar: text("avatar"),
+  bio: text("bio"),
+});
+
+// name
 // username: text("username").unique(),
+// avatar
 // bio: text("bio"),
 // banner: text("banner"),
 // createdAt: integer("created_at", { mode: "timestamp_ms" })

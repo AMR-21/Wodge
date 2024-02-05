@@ -6,7 +6,14 @@ import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
-import { accounts, sessions, users, verificationTokens } from "@repo/data";
+import {
+  accounts,
+  profiles,
+  sessions,
+  users,
+  verificationTokens,
+} from "@repo/data";
+import { db } from "../db";
 
 type NonNullableProps<T> = {
   [P in keyof T]: null extends T[P] ? never : P;
@@ -23,14 +30,25 @@ export function SQLiteDrizzleAdapter(
 ): Adapter {
   return {
     async createUser(data) {
-      // const { image, ...user } = data;
-      // user.avatar = image;
+      const userId = nanoid();
 
-      return await client
+      // if(data.image){
+      //   await client.insert(profiles).values
+      // }
+
+      const { image, name, ...authData } = data;
+
+      const newUser = await client
         .insert(users)
-        .values({ ...data, id: nanoid() })
+        .values({ ...authData, id: userId })
         .returning()
         .get();
+
+      if (newUser) {
+        await client.insert(profiles).values({ userId, name, avatar: image });
+      }
+
+      return newUser;
     },
 
     async getUser(data) {
@@ -56,7 +74,6 @@ export function SQLiteDrizzleAdapter(
     },
 
     async getSessionAndUser(data) {
-      // console.log("called", data);
       const result = await client
         .select({ session: sessions, user: users })
         .from(sessions)
@@ -64,7 +81,6 @@ export function SQLiteDrizzleAdapter(
         .innerJoin(users, eq(users.id, sessions.userId))
         .get();
 
-      // console.log({ result });
       return result ?? null;
     },
 

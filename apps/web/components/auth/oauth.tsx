@@ -15,22 +15,22 @@ export function OAuth() {
   }
 
   return (
-    <div className="flex flex-col space-y-3">
+    <div className="flex space-x-3">
       <Button
         variant="outline"
-        className="w-full items-center gap-2 bg-transparent"
+        className="w-full bg-transparent hover:bg-[#0057e7] hover:text-white"
         onClick={() => onClick("google")}
       >
-        <Google className="h-4 w-4" />
-        Continue with Google
+        <Google className="h-5 w-5" />
+        {/* Continue with Google */}
       </Button>
       <Button
         variant="outline"
-        className="w-full gap-2 bg-transparent"
+        className="w-full bg-transparent text-[#24292e] hover:bg-[#24292e] hover:text-white"
         onClick={() => onClick("github")}
       >
-        <Github className="h-4 w-4" />
-        Continue with GitHub
+        <Github className="h-5 w-5" />
+        {/* Continue with GitHub */}
       </Button>
     </div>
   );

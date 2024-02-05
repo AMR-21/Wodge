@@ -1,3 +1,4 @@
+import { auth } from "./auth/auth";
 import { env } from "./env";
 
 export type VerificationMail = {
@@ -30,4 +31,10 @@ export async function sendMagicLink({
     console.error("Error sending email:", error);
     // throw new Error("Error sending email");
   }
+}
+
+export async function currentUser() {
+  const session = await auth();
+
+  return session?.user;
 }
