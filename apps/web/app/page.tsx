@@ -7,7 +7,7 @@ export default function Home() {
       A page
       <Button>Click</Button>
       <Button asChild>
-        <Link href="/auth/login">Login</Link>
+        <Link href="/login">Login</Link>
       </Button>
     </main>
   );

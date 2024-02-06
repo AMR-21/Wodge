@@ -1,27 +1,26 @@
-/**
- * Config file for drizzle studio
- * Works on local DB only on windows
- * Should work fine on linux
- */
 import type { Config } from "drizzle-kit";
 import crypto from "node:crypto";
-import { env } from "./lib/env.js";
 
-const schemaPath = "./node_modules/@repo/data/schemas/*.schema.ts";
+const DB_HOST = "local";
 
-export default env.DB_HOST === "local"
+const baseConfig: Partial<Config> = {
+  schema: "./data/schemas/*.schema.ts",
+  out: "./data/migrations",
+};
+
+export default DB_HOST === "local"
   ? ({
-      schema: schemaPath,
+      ...baseConfig,
       driver: "better-sqlite",
       dbCredentials: {
         url: `./.wrangler/state/v3/d1/miniflare-D1DatabaseObject/${mfIdFromName(
           "miniflare-D1DatabaseObject",
-          "DB"
+          "DB",
         )}.sqlite`,
       },
     } satisfies Config)
   : ({
-      schema: schemaPath,
+      ...baseConfig,
       driver: "d1",
       dbCredentials: {
         wranglerConfigPath: "./wrangler.toml",

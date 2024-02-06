@@ -8,7 +8,6 @@ export const env = createEnv({
       .default("development"),
 
     AUTH_SECRET: z.string(),
-    DB_HOST: z.enum(["local", "cloud"]),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
@@ -24,7 +23,6 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
 
-    DB_HOST: process.env.DB_HOST,
     AUTH_SECRET: process.env.AUTH_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,

@@ -1,35 +1,27 @@
-import NextAuth, { DefaultSession, Session, User } from "next-auth";
-import GitHub from "next-auth/providers/github";
+import NextAuth from "next-auth";
+import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
-import { env } from "@/lib/env";
+import { SQLiteDrizzleAdapter } from "./adapter";
 import { db } from "@/lib/db";
-import { sendMagicLink } from "../utils";
-import { SQLiteDrizzleAdapter } from "./drizzle-adapter";
-import { users } from "@repo/data";
+import { env } from "../env";
+import { users } from "@/data/schemas/auth.schema";
+import { sendMagicLink } from "../server-utils";
 
 export const {
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut,
 } = NextAuth({
-  // adapter: DrizzleAdapter(db),
-  adapter: SQLiteDrizzleAdapter(db),
-  session: {
-    generateSessionToken() {
-      return nanoid();
-    },
-
-    strategy: "database",
-  },
-
   pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
-    // signOut
-    // verifyRequest
-    newUser: "/auth/complete-profile",
+    signIn: "/login",
+    error: "/login/error",
+    newUser: "/onboarding",
   },
 
   events: {
@@ -46,15 +38,32 @@ export const {
 
   callbacks: {
     async session({ user, session }) {
-      if (session.user && user) {
-        session.user.id = user.id;
+      if (session.user) {
         session.user.hasProfile = user.hasProfile;
+        session.user.id = user.id;
       }
+
       return session;
     },
   },
 
+  // Bug: Typeerror - typical Next-Auth bugs
+  // @ts-ignore
+  adapter: SQLiteDrizzleAdapter(db) as Adapter,
+
+  session: { strategy: "database" },
+
   providers: [
+    Github({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+    Google({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
     {
       id: "email",
       type: "email",
@@ -70,28 +79,5 @@ export const {
         return nanoid();
       },
     },
-
-    GitHub({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
-    }),
-
-    Google({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
-      profile(profile) {
-        console.log({ profile });
-        return {
-          // ...profile,
-          id: profile.sub,
-          email: profile.email,
-          // emailVerified: profile.email_verified ?  : null,
-          image: profile.picture,
-          name: profile.name,
-        };
-      },
-    }),
   ],
 });

@@ -3,20 +3,20 @@
   "compilerOptions": {
     "plugins": [
       {
-        "name": "next",
-      },
+        "name": "next"
+      }
     ],
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./*"]
     },
-    "types": ["@cloudflare/workers-types/2023-07-01"],
+    "types": ["@cloudflare/workers-types/2023-07-01"]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../core/ui/components/ui/separator.tsx",
+    "../../core/ui/components/ui/separator.tsx"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

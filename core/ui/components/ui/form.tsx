@@ -129,13 +129,17 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
+  const { formDescriptionId, error } = useFormField();
 
   return (
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-[0.8rem] text-muted-foreground", className)}
+      className={cn(
+        "text-[0.8rem] text-muted-foreground",
+        error && "text-destructive-muted-foreground",
+        className,
+      )}
       {...props}
     />
   );
