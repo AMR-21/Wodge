@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 export const ProfileSchema = z.object({
   username: z
     .string({
@@ -19,4 +21,8 @@ export const ProfileSchema = z.object({
     .max(70, "Display name is too long")
     .min(1, "Display name is required"),
   avatar: z.string().url().optional().or(z.literal("/avatar.jpeg")),
+  avatarFile: z
+    .custom<File>()
+    .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 5MB")
+    .optional(),
 });

@@ -2,7 +2,7 @@
 
 import { Profile } from "@repo/data";
 import { type CarouselApi } from "@repo/ui";
-import React, { createContext } from "react";
+import React, { createContext, useRef } from "react";
 
 interface ContextValues {
   api: CarouselApi;
@@ -12,6 +12,10 @@ interface ContextValues {
   startTransition: React.TransitionStartFunction;
   avatar: string;
   setAvatar: React.Dispatch<React.SetStateAction<string>>;
+  inputRef: React.RefObject<HTMLInputElement>;
+  avatarRef: React.RefObject<HTMLInputElement>;
+  avatarFile: File | undefined;
+  setAvatarFile: React.Dispatch<React.SetStateAction<File | undefined>>;
 }
 const Context = createContext<ContextValues | null>(null);
 
@@ -24,7 +28,12 @@ export function OnboardingProvider({
 }) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [isPending, startTransition] = React.useTransition();
-  const [avatar, setAvatar] = React.useState<string>(profile?.avatar || "");
+  const [avatar, setAvatar] = React.useState<string>(
+    profile?.avatar || "/avatar.jpeg",
+  );
+  const [avatarFile, setAvatarFile] = React.useState<File>();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const avatarRef = useRef<HTMLInputElement>(null);
 
   return (
     <Context.Provider
@@ -36,6 +45,10 @@ export function OnboardingProvider({
         startTransition,
         avatar,
         setAvatar,
+        inputRef,
+        avatarFile,
+        setAvatarFile,
+        avatarRef,
       }}
     >
       {children}

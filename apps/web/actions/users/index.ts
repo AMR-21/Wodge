@@ -10,8 +10,9 @@ import {
   getProfileByUsername,
   updateProfileById,
 } from "@repo/data";
+import { writeFile } from "fs/promises";
 
-export async function updateProfile(data: z.infer<typeof ProfileSchema>) {
+export async function updateProfile(formData: FormData) {
   // 1. Authenticate access
   const user = await currentUser();
 
@@ -19,12 +20,21 @@ export async function updateProfile(data: z.infer<typeof ProfileSchema>) {
     return redirect("/login");
   }
 
+  const rawData = {
+    displayName: formData.get("displayName"),
+    username: formData.get("username"),
+    avatar: formData.get("avatar"),
+    avatarFile: formData.get("avatarFile"),
+  };
+
   // 2. Validate data
-  const validatedFields = ProfileSchema.safeParse(data);
+  const validatedFields = ProfileSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };
   }
+
+  const { avatarFile, ...data } = validatedFields.data;
 
   // 3. Verify that the username is unique
   if (data.username) {
@@ -35,7 +45,12 @@ export async function updateProfile(data: z.infer<typeof ProfileSchema>) {
     }
   }
 
-  // 4. Check if a new user then update profile
+  // 4. Check if there is a new profile avatar
+  if (avatarFile) {
+    // TODO: Save the file to R2
+  }
+
+  // 5. Check if a new user then update profile
   const updatedProfile = await updateProfileById(
     user.id,
     {

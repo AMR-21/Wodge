@@ -2,8 +2,6 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Button,
-  Input,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -13,38 +11,42 @@ import {
 } from "@repo/ui";
 
 import { LuX } from "react-icons/lu";
-import { useOnboarding } from "./onboarding-context";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { uploadAvatar } from "@/lib/client-utils";
+import { useEffect, useState } from "react";
 interface ProfileAvatarProps {
-  fallback: string;
+  avatar?: string;
+  avatarFile?: File;
+  setAvatar?: React.Dispatch<React.SetStateAction<string>>;
+  setAvatarFile?: React.Dispatch<React.SetStateAction<File | undefined>>;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  // avatarRef?: React.RefObject<HTMLImageElement>;
+  fallback?: string;
   className?: string;
 }
 
-// TODO: Allow user to upload their own avatar here
 export function ProfileAvatar({
+  avatar,
+  avatarFile,
+  setAvatar,
+  setAvatarFile,
+  inputRef,
+  // avatarRef,
   fallback = "",
   className,
 }: ProfileAvatarProps) {
-  const { avatar, setAvatar } = useOnboarding();
   const [isHovered, setIsHovered] = useState(false);
-  const [file, setFile] = useState<File>();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const isDefault = avatar === "/avatar.jpeg";
+  const [url, setUrl] = useState<string>("");
+
+  const hasFile = !!avatarFile || avatar !== "/avatar.jpeg";
 
   useEffect(() => {
-    if (file) {
-      uploadAvatar(file);
-
-      const url = URL.createObjectURL(file);
-
-      console.log(url);
-      setAvatar(url);
+    if (avatarFile) {
+      const url = URL.createObjectURL(avatarFile);
+      setUrl(url);
+      if (avatar !== "/avatar.jpeg") setAvatar?.("/avatar.jpeg");
+      return;
     }
-  }, [file]);
+    setUrl("");
+  }, [avatarFile]);
 
   return (
     <div className="flex justify-center">
@@ -53,30 +55,16 @@ export function ProfileAvatar({
           <TooltipTrigger>
             <div
               className="group relative flex w-fit"
-              onClick={() => inputRef.current?.click()}
+              onClick={() => inputRef?.current?.click()}
+              onMouseLeave={(e) => e.currentTarget.blur()}
             >
-              <Input
-                type="file"
-                id="avatar"
-                accept="image/*"
-                className="hidden"
-                ref={inputRef}
-                onChange={(e) =>
-                  setFile((cur) =>
-                    e.target.files && e.target.files.length > 0
-                      ? e.target.files[0]
-                      : cur,
-                  )
-                }
-              />
-
               <Avatar
                 className={cn(
                   "peer h-20 w-20  ring-2 ring-border ring-offset-2 ring-offset-background",
                   className,
                 )}
               >
-                <AvatarImage src={avatar} alt={``} />
+                <AvatarImage src={url || avatar} alt={``} />
                 <AvatarFallback>
                   {fallback.length >= 2
                     ? fallback.slice(0, 2).toUpperCase()
@@ -84,7 +72,7 @@ export function ProfileAvatar({
                 </AvatarFallback>
               </Avatar>
 
-              {!isDefault && (
+              {hasFile && (
                 <div
                   role="button"
                   className={cn(
@@ -93,7 +81,9 @@ export function ProfileAvatar({
                   )}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setAvatar("/avatar.jpeg");
+
+                    setAvatarFile?.(undefined);
+                    setAvatar?.("");
                   }}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
@@ -105,11 +95,11 @@ export function ProfileAvatar({
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={6} className="px-2 py-1">
             <p>
-              {isHovered && !isDefault
+              {isHovered && hasFile
                 ? "Remove avatar"
-                : isDefault
-                  ? "Add avatar"
-                  : "Change avatar"}
+                : hasFile
+                  ? "Change avatar"
+                  : "Add avatar"}
             </p>
           </TooltipContent>
         </Tooltip>

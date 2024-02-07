@@ -10,7 +10,15 @@ import { ProfileForm } from "./profile-form";
 import { useOnboarding } from "./onboarding-context";
 
 export function ProfileWrapper() {
-  const { profile } = useOnboarding();
+  const {
+    profile,
+    avatar,
+    avatarFile,
+    inputRef,
+    setAvatar,
+    setAvatarFile,
+    avatarRef,
+  } = useOnboarding();
 
   return (
     <Card className="flex w-full flex-col items-center border-none bg-background p-0 shadow-none">
@@ -22,7 +30,15 @@ export function ProfileWrapper() {
       </CardHeader>
 
       <CardContent className="flex w-full max-w-[350px] flex-col justify-center space-y-3 p-0">
-        <ProfileAvatar fallback={profile?.displayName || ""} />
+        <ProfileAvatar
+          avatar={avatar}
+          avatarFile={avatarFile}
+          setAvatar={setAvatar}
+          setAvatarFile={setAvatarFile}
+          inputRef={inputRef}
+          // avatarRef={avatarRef}
+          fallback={profile?.displayName || ""}
+        />
 
         <ProfileForm />
       </CardContent>
