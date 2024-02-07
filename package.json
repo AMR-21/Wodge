@@ -5,7 +5,11 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "studio": "turbo studio",
+    "studio": "turbo db:studio",
+    "generate": "turbo db:generate",
+    "migrate": "turbo db:migration",
+    "migrate:local": "turbo db:migration:local",
+    "drop": "turbo db:drop",
     "lint": "turbo lint"
   },
   "devDependencies": {

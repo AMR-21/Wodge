@@ -16,6 +16,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "target": "es2022"
+    "target": "es2022",
+    "sourceMap": true
   }
 }

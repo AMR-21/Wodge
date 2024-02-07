@@ -1,7 +1,3 @@
-/**
- * In the future db sessions will be replaced by cloudflare KV sessions
- */
-
 import {
   integer,
   sqliteTable,
@@ -9,15 +5,25 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { relations, sql } from "drizzle-orm";
+import { profiles } from "./db.schema";
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
-  // name: text("name"), //remove
-  email: text("email").notNull().unique(),
+  name: text("name"),
+  email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  // image: text("image"), //remove
-  hasProfile: integer("has_profile", { mode: "boolean" }).default(false), // indicate if user has completed profile
+  image: text("image"),
+  hasProfile: integer("has_profile", { mode: "boolean" }).default(false),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .$defaultFn(() => new Date())
+    .notNull(),
 });
+
+// A user has only one profile
+export const usersRelations = relations(users, ({ one }) => ({
+  profile: one(profiles),
+}));
 
 export const accounts = sqliteTable(
   "account",
@@ -40,7 +46,7 @@ export const accounts = sqliteTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = sqliteTable("session", {
@@ -60,26 +66,5 @@ export const verificationTokens = sqliteTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
-
-export const profiles = sqliteTable("profile", {
-  userId: text("user_id")
-    .notNull()
-    .primaryKey()
-    .references(() => users.id, { onDelete: "cascade" }),
-  name: text("name"),
-  username: text("username").unique(),
-  avatar: text("avatar"),
-  bio: text("bio"),
-});
-
-// name
-// username: text("username").unique(),
-// avatar
-// bio: text("bio"),
-// banner: text("banner"),
-// createdAt: integer("created_at", { mode: "timestamp_ms" })
-//   .notNull()
-//   .default(sql`CURRENT_TIMESTAMP`),
-// isComplete: integer("is_complete", { mode: "boolean" }).default(false),

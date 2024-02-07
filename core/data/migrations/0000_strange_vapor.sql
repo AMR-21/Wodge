@@ -26,7 +26,9 @@ CREATE TABLE `user` (
 	`name` text,
 	`email` text NOT NULL,
 	`emailVerified` integer,
-	`image` text
+	`image` text,
+	`has_profile` integer DEFAULT false,
+	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `verificationToken` (
@@ -35,3 +37,15 @@ CREATE TABLE `verificationToken` (
 	`expires` integer NOT NULL,
 	PRIMARY KEY(`identifier`, `token`)
 );
+--> statement-breakpoint
+CREATE TABLE `profiles` (
+	`user_id` text PRIMARY KEY NOT NULL,
+	`display_name` text,
+	`username` text,
+	`avatar` text,
+	`bio` text(512),
+	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `profiles_username_unique` ON `profiles` (`username`);

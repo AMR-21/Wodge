@@ -12,6 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   Input,
 } from "@repo/ui";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
@@ -49,6 +50,7 @@ export function EmailForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
+              {/* <FormLabel className="text-muted-foreground">Email</FormLabel> */}
               <FormControl>
                 <Input {...field} label="Email" />
               </FormControl>

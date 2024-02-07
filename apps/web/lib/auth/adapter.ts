@@ -2,18 +2,12 @@
  * The same official adapter but using nanoid instead of the default uuid
  */
 import { eq, and } from "drizzle-orm";
-import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
-import {
-  accounts,
-  profiles,
-  sessions,
-  users,
-  verificationTokens,
-} from "@repo/data";
-import { db } from "../db";
+import { accounts, sessions, users, verificationTokens } from "@repo/data";
+import { profiles } from "@repo/data";
+import { DrizzleD1Database } from "drizzle-orm/d1";
 
 type NonNullableProps<T> = {
   [P in keyof T]: null extends T[P] ? never : P;
@@ -26,29 +20,35 @@ function stripUndefined<T>(obj: T): Pick<T, NonNullableProps<T>> {
 }
 
 export function SQLiteDrizzleAdapter(
-  client: InstanceType<typeof BaseSQLiteDatabase>,
+  client: InstanceType<typeof DrizzleD1Database>,
 ): Adapter {
   return {
     async createUser(data) {
       const userId = nanoid();
 
-      // if(data.image){
-      //   await client.insert(profiles).values
-      // }
+      console.log({ data });
 
       const { image, name, ...authData } = data;
+      console.log({ authData });
 
-      const newUser = await client
-        .insert(users)
-        .values({ ...authData, id: userId })
-        .returning()
-        .get();
+      const [newUser] = await client.batch([
+        client
+          .insert(users)
+          .values({ ...data, id: userId })
+          .returning(),
+        client
+          .insert(profiles)
+          .values({
+            displayName: name,
+            userId,
+            avatar: image,
+          })
+          .returning(),
+      ]);
 
-      if (newUser) {
-        await client.insert(profiles).values({ userId, name, avatar: image });
-      }
+      // console.log({ newUser, profile });
 
-      return newUser;
+      return newUser[0]!;
     },
 
     async getUser(data) {

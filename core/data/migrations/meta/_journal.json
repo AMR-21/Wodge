@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707089494194,
-      "tag": "0000_jittery_nomad",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1707116603545,
-      "tag": "0001_cultured_jackpot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707117738056,
-      "tag": "0002_panoramic_lester",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1707118116760,
-      "tag": "0003_windy_scrambler",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1707118654201,
-      "tag": "0004_rare_mimic",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1707119179383,
-      "tag": "0005_tense_captain_britain",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1707119246964,
-      "tag": "0006_flaky_wrecker",
+      "when": 1707179871814,
+      "tag": "0000_strange_vapor",
       "breakpoints": true
     }
   ]
