@@ -7,9 +7,9 @@ import { eq } from "drizzle-orm";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { SQLiteDrizzleAdapter } from "./adapter";
-import { db } from "@/lib/db";
+import { db } from "@repo/data";
 import { env } from "../env";
-import { users } from "@/data/schemas/auth.schema";
+import { users } from "@repo/data";
 import { sendMagicLink } from "../server-utils";
 
 export const {

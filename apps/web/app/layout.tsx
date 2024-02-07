@@ -4,6 +4,7 @@ import "@repo/ui/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth/auth";
+import { Toaster } from "@repo/ui";
 
 /** Runtime = edge require in order to make next-auth works with cf-pages */
 export const runtime = "edge";
@@ -37,6 +38,7 @@ export default async function RootLayout({
           > */}
           {children}
           {/* </ThemeProvider> */}
+          <Toaster />
         </body>
       </html>
     </SessionProvider>

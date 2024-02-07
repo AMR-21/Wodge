@@ -2,21 +2,12 @@
  * The same official adapter but using nanoid instead of the default uuid
  */
 import { eq, and } from "drizzle-orm";
-import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-} from "@/data/schemas/auth.schema";
-import { db } from "@/lib/db";
-import { profiles } from "@/data/schemas/db.schema";
+import { accounts, sessions, users, verificationTokens } from "@repo/data";
+import { profiles } from "@repo/data";
 import { DrizzleD1Database } from "drizzle-orm/d1";
-import { AdapterUser } from "@auth/core";
-import { Awaitable } from "@auth/core/types";
 
 type NonNullableProps<T> = {
   [P in keyof T]: null extends T[P] ? never : P;

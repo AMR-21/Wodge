@@ -4,8 +4,8 @@ import crypto from "node:crypto";
 const DB_HOST = "local";
 
 const baseConfig: Partial<Config> = {
-  schema: "./data/schemas/*.schema.ts",
-  out: "./data/migrations",
+  schema: "./node_modules/@repo/data/schemas/*.schema.ts",
+  out: "./node_modules/@repo/data/migrations",
 };
 
 export default DB_HOST === "local"

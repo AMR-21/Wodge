@@ -4,3 +4,7 @@ export function useCurrentUser() {
   const session = useSession();
   return session?.data?.user;
 }
+
+export function uploadAvatar(file: File) {
+  console.log(file);
+}

@@ -50,9 +50,9 @@ export function EmailForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-muted-foreground">Email</FormLabel>
+              {/* <FormLabel className="text-muted-foreground">Email</FormLabel> */}
               <FormControl>
-                <Input {...field} placeholder="johndoe@example.com" />
+                <Input {...field} label="Email" />
               </FormControl>
             </FormItem>
           )}

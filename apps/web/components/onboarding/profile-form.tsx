@@ -1,9 +1,8 @@
 "use client";
 
-import { Profile } from "@/data/schemas/db.schema";
+import { Profile } from "@repo/data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Button,
   Form,
   FormControl,
   FormDescription,
@@ -12,51 +11,67 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  cn,
+  toast,
 } from "@repo/ui";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useOnboarding } from "./onboarding-context";
+import { ProfileSchema } from "@repo/data";
+import React, { useEffect } from "react";
+import { updateProfile } from "@/actions/users";
 
-const ProfileSchema = z.object({
-  username: z
-    .string({
-      required_error: "Username is required",
-    })
-    .max(10, "Username is too long")
-    .min(3, "Username is too short"),
-  displayName: z
-    .string({
-      required_error: "Display name is required",
-    })
-    .max(70, "Display name is too long")
-    .min(2, "Display name is too short"),
-  avatar: z.string().url().optional(),
-  bio: z.string().max(512).optional(),
-});
+export function ProfileForm() {
+  const { profile, startTransition, api, avatar } = useOnboarding();
 
-export function ProfileForm({ profile }: { profile?: Partial<Profile> }) {
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
       displayName: profile?.displayName ?? "",
-      bio: profile?.bio ?? "",
-      avatar: profile?.avatar ?? "",
       username: profile?.username ?? "",
+      avatar,
     },
   });
 
+  useEffect(() => {
+    form.setValue("avatar", avatar);
+  }, [avatar]);
+
   function onSubmit(data: z.infer<typeof ProfileSchema>) {
     console.log(data);
+    return;
+    startTransition(() => {
+      updateProfile(data).then((res) => {
+        if (res?.error) {
+          toast(res.error);
+        }
+
+        if (res?.success) {
+          api?.scrollNext();
+        }
+      });
+    });
   }
 
   if (!profile) return null;
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-2"
+        id="profile-form"
       >
+        <FormField
+          control={form.control}
+          name="avatar"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} type="hidden" />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="displayName"
@@ -68,7 +83,10 @@ export function ProfileForm({ profile }: { profile?: Partial<Profile> }) {
               <FormControl>
                 <Input {...field} placeholder="John Doe" className="peer" />
               </FormControl>
-              <FormDescription className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5">
+              <FormDescription
+                withError
+                className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
+              >
                 This how people will see you. Use whatever you want.
               </FormDescription>
             </FormItem>
@@ -81,23 +99,17 @@ export function ProfileForm({ profile }: { profile?: Partial<Profile> }) {
             <FormItem>
               <FormLabel className="text-muted-foreground">Username</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  // value={profile.displayNames}
-                  className="peer"
-                  placeholder="johndoe"
-                />
+                <Input {...field} className="peer" placeholder="johndoe" />
               </FormControl>
-              <FormDescription className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5">
-                Only letters, numbers, and underscores are allowed.
+              <FormDescription
+                withError
+                className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
+              >
+                Only letters, numbers, dashes, and underscores.
               </FormDescription>
             </FormItem>
           )}
         />
-
-        {/* <Button type="submit" className="w-full">
-          Continue with email
-        </Button> */}
       </form>
     </Form>
   );

@@ -8,3 +8,6 @@ export * from "./components/ui/card";
 export * from "./components/ui/separator";
 export * from "./components/ui/carousel";
 export * from "./components/ui/avatar";
+export * from "./components/ui/loader";
+export * from "./components/ui/toast";
+export * from "./components/ui/tooltip";
