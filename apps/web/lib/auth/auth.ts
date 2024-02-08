@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import Resend from "next-auth/providers/resend";
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
@@ -22,8 +23,7 @@ export const {
     signIn: "/login",
     error: "/login/error",
     newUser: "/onboarding",
-    // verifyRequest: null,
-    // signOut
+    signOut: "/logout",
   },
 
   events: {
@@ -39,6 +39,8 @@ export const {
   },
 
   callbacks: {
+    // Bug: Typeerror - typical Next-Auth bugs
+    // @ts-ignore
     async session({ user, session }) {
       if (session.user) {
         session.user.hasProfile = user.hasProfile;
@@ -48,7 +50,6 @@ export const {
       return session;
     },
   },
-
   // Bug: Typeerror - typical Next-Auth bugs
   // @ts-ignore
   adapter: DbAdapter(db) as Adapter,
