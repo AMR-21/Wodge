@@ -46,6 +46,7 @@ export async function updateProfile(formData: FormData) {
   }
 
   // 4. Check if there is a new profile avatar
+  // and remover the default avatar
   if (avatarFile) {
     // TODO: Save the file to R2
   }

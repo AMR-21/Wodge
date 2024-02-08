@@ -22,6 +22,8 @@ export const {
     signIn: "/login",
     error: "/login/error",
     newUser: "/onboarding",
+    // verifyRequest: null,
+    // signOut
   },
 
   events: {
@@ -51,7 +53,12 @@ export const {
   // @ts-ignore
   adapter: DbAdapter(db) as Adapter,
 
-  session: { strategy: "database" },
+  session: {
+    strategy: "database",
+    generateSessionToken() {
+      return nanoid();
+    },
+  },
 
   providers: [
     Github({

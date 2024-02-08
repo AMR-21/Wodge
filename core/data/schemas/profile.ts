@@ -20,7 +20,7 @@ export const ProfileSchema = z.object({
     })
     .max(70, "Display name is too long")
     .min(1, "Display name is required"),
-  avatar: z.string().url().optional().or(z.literal("/avatar.jpeg")),
+  avatar: z.string().url().optional().or(z.literal("/avatar.jpeg").optional()),
   avatarFile: z
     .custom<File>()
     .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 5MB")

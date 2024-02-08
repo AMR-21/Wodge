@@ -12,6 +12,7 @@ interface ContextValues {
   setAvatar: React.Dispatch<React.SetStateAction<string>>;
   inputRef: React.RefObject<HTMLInputElement>;
   avatarRef: React.RefObject<HTMLInputElement>;
+  submitBtnRef: React.RefObject<HTMLButtonElement>;
   avatarFile: File | undefined;
   setAvatarFile: React.Dispatch<React.SetStateAction<File | undefined>>;
 }
@@ -31,6 +32,7 @@ export function OnboardingProvider({
   const [avatarFile, setAvatarFile] = React.useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
   const avatarRef = useRef<HTMLInputElement>(null);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <Context.Provider
@@ -44,6 +46,7 @@ export function OnboardingProvider({
         avatarFile,
         setAvatarFile,
         avatarRef,
+        submitBtnRef,
       }}
     >
       {children}

@@ -17,7 +17,7 @@ import Link from "next/link";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
 
 export function OnboardingSteps() {
-  const { isPending } = useOnboarding();
+  const { isPending, submitBtnRef } = useOnboarding();
 
   return (
     <Stepper className="max-w-lg">
@@ -30,9 +30,12 @@ export function OnboardingSteps() {
           <ProfileWrapper />
           <NextBtn
             className="w-4/6"
-            onClick={(e) => {}}
-            type="submit"
-            form="profile-form"
+            onClick={(e) => {
+              console.log("aass");
+              submitBtnRef.current?.click();
+            }}
+            // type="submit"
+            // form="profile-form"
             disabled={isPending}
           >
             {isPending ? (

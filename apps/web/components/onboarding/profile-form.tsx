@@ -28,6 +28,7 @@ export function ProfileForm() {
     avatar,
     inputRef,
     avatarRef,
+    submitBtnRef,
     setAvatarFile,
     setAvatar,
     avatarFile,
@@ -42,7 +43,7 @@ export function ProfileForm() {
     defaultValues: {
       displayName: profile?.displayName ?? "",
       username: profile?.username ?? "",
-      avatar: profile?.avatar ?? "",
+      avatar: profile?.avatar ?? "/avatar.jpeg",
     },
   });
 
@@ -97,7 +98,7 @@ export function ProfileForm() {
                     type="file"
                     id="avatarFile"
                     accept="image/*"
-                    className="hidden"
+                    className=""
                     {...form.register("avatarFile")}
                     ref={inputRef}
                     onChange={(e) => {
@@ -120,7 +121,7 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input {...field} ref={avatarRef} type="hidden" />
+                <Input {...field} ref={avatarRef} />
               </FormControl>
             </FormItem>
           )}
@@ -163,6 +164,8 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
+
+        <button type="submit" ref={submitBtnRef}></button>
       </form>
     </Form>
   );

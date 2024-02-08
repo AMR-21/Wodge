@@ -14,6 +14,8 @@ import {
   FormItem,
   FormLabel,
   Input,
+  Loader,
+  toast,
 } from "@repo/ui";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
 
@@ -22,7 +24,7 @@ const EmailFormSchema = z.object({
 });
 
 export function EmailForm() {
-  const [pending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   // Form definition
   const form = useForm<z.infer<typeof EmailFormSchema>>({
@@ -36,8 +38,12 @@ export function EmailForm() {
   function onSubmit(values: z.infer<typeof EmailFormSchema>) {
     startTransition(() => {
       signIn("email", {
-        callbackUrl: DEFAULT_LOGIN_REDIRECT,
         email: values.email,
+        redirect: false,
+      }).then((res) => {
+        if (!res) return toast.error("An error occurred. Please try again.");
+        if (res.ok) toast.success("Check your email for a sign-in link");
+        else toast.error("An error occurred. Please try again.");
       });
     });
   }
@@ -58,8 +64,12 @@ export function EmailForm() {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={pending}>
-          Continue with email
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? (
+            <Loader color="rgb(var(--primary-foreground))" />
+          ) : (
+            "Continue with email"
+          )}
         </Button>
       </form>
     </Form>
