@@ -15,7 +15,7 @@ export function LoginWrapper() {
   return (
     <Card className="flex w-fit max-w-96 flex-col justify-center border-none bg-transparent shadow-none">
       <CardHeader>
-        <CardTitle className="text-center text-2xl">Welcome onboard!</CardTitle>
+        <CardTitle className="text-center text-2xl">Welcome Back</CardTitle>
         <CardDescription className="text-center">
           Enter your email below to continue
         </CardDescription>

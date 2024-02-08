@@ -7,7 +7,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
     "types": ["@cloudflare/workers-types/2023-07-01"]
   },
@@ -16,9 +16,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../core/ui/components/ui/separator.tsx",
-    "../../core/ui/components/ui/stepper.tsx",
-    "../../core/ui/components/ui/step.tsx"
+
   ],
   "exclude": ["node_modules"]
 }
