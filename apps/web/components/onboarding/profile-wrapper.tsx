@@ -10,18 +10,11 @@ import { ProfileForm } from "./profile-form";
 import { useOnboarding } from "./onboarding-context";
 
 export function ProfileWrapper() {
-  const {
-    profile,
-    avatar,
-    avatarFile,
-    inputRef,
-    setAvatar,
-    setAvatarFile,
-    avatarRef,
-  } = useOnboarding();
+  const { profile, avatar, avatarFile, inputRef, setAvatar, setAvatarFile } =
+    useOnboarding();
 
   return (
-    <Card className="flex w-full flex-col items-center border-none bg-background p-0 shadow-none">
+    <Card className="flex w-full flex-col items-center border-none  shadow-none">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl">Complete your profile</CardTitle>
         <CardDescription>
@@ -36,7 +29,6 @@ export function ProfileWrapper() {
           setAvatar={setAvatar}
           setAvatarFile={setAvatarFile}
           inputRef={inputRef}
-          // avatarRef={avatarRef}
           fallback={profile?.displayName || ""}
         />
 

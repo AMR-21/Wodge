@@ -16,15 +16,13 @@ function Wrapper({
   description: string;
 }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center space-y-3 p-1">
-      <Logo />
-      <Card className="border-none bg-background text-center shadow-none">
-        <CardHeader className="">
-          <CardTitle className="text-4xl">{title}</CardTitle>
-          <CardDescription className="text-base">{description}</CardDescription>
-        </CardHeader>
-      </Card>
-    </div>
+    <Card className="border-none text-center shadow-none">
+      <CardHeader className="flex flex-col items-center">
+        <Logo />
+        <CardTitle className="text-4xl">{title}</CardTitle>
+        <CardDescription className="text-base">{description}</CardDescription>
+      </CardHeader>
+    </Card>
   );
 }
 

@@ -29,7 +29,6 @@ export function ProfileAvatar({
   setAvatar,
   setAvatarFile,
   inputRef,
-  // avatarRef,
   fallback = "",
   className,
 }: ProfileAvatarProps) {

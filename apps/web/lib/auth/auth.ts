@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
-import { SQLiteDrizzleAdapter } from "./adapter";
+import { DbAdapter } from "./adapter";
 import { db } from "@repo/data";
 import { env } from "../env";
 import { users } from "@repo/data";
@@ -49,7 +49,7 @@ export const {
 
   // Bug: Typeerror - typical Next-Auth bugs
   // @ts-ignore
-  adapter: SQLiteDrizzleAdapter(db) as Adapter,
+  adapter: DbAdapter(db) as Adapter,
 
   session: { strategy: "database" },
 

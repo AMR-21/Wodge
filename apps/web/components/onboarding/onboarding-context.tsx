@@ -5,8 +5,6 @@ import { type CarouselApi } from "@repo/ui";
 import React, { createContext, useRef } from "react";
 
 interface ContextValues {
-  api: CarouselApi;
-  setApi: React.Dispatch<React.SetStateAction<CarouselApi | undefined>>;
   profile: Partial<Profile>;
   isPending: boolean;
   startTransition: React.TransitionStartFunction;
@@ -26,7 +24,6 @@ export function OnboardingProvider({
   children: React.ReactNode;
   profile?: Partial<Profile>;
 }) {
-  const [api, setApi] = React.useState<CarouselApi>();
   const [isPending, startTransition] = React.useTransition();
   const [avatar, setAvatar] = React.useState<string>(
     profile?.avatar || "/avatar.jpeg",
@@ -38,8 +35,6 @@ export function OnboardingProvider({
   return (
     <Context.Provider
       value={{
-        api,
-        setApi,
         profile,
         isPending,
         startTransition,

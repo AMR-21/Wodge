@@ -11,6 +11,7 @@ import {
   FormMessage,
   Input,
   toast,
+  useStepper,
 } from "@repo/ui";
 
 import { useForm } from "react-hook-form";
@@ -24,7 +25,6 @@ export function ProfileForm() {
   const {
     profile,
     startTransition,
-    api,
     avatar,
     inputRef,
     avatarRef,
@@ -32,6 +32,8 @@ export function ProfileForm() {
     setAvatar,
     avatarFile,
   } = useOnboarding();
+
+  const { nextStep } = useStepper();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -60,8 +62,6 @@ export function ProfileForm() {
   async function onSubmit() {
     const data = new FormData(formRef.current!);
 
-    console.log(data.get("avatarFile"));
-
     startTransition(() => {
       updateProfile(data).then((res) => {
         if (res?.error) {
@@ -69,7 +69,7 @@ export function ProfileForm() {
         }
 
         if (res?.success) {
-          api?.scrollNext();
+          nextStep();
         }
       });
     });

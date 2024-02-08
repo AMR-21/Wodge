@@ -15,7 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@auth/core": "^0.25.1",
+    "@auth/core": "^0.26.3",
     "@auth/drizzle-adapter": "^0.5.1",
     "@hookform/resolvers": "^3.3.4",
     "@repo/data": "workspace:*",
@@ -49,6 +49,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "eslint-plugin-next-on-pages": "^1.8.5",
+    "eslint-plugin-react": "^7.33.2",
     "postcss": "^8",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",

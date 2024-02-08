@@ -19,17 +19,14 @@ function stripUndefined<T>(obj: T): Pick<T, NonNullableProps<T>> {
   return result;
 }
 
-export function SQLiteDrizzleAdapter(
+export function DbAdapter(
   client: InstanceType<typeof DrizzleD1Database>,
 ): Adapter {
   return {
     async createUser(data) {
       const userId = nanoid();
 
-      console.log({ data });
-
       const { image, name, ...authData } = data;
-      console.log({ authData });
 
       const [newUser] = await client.batch([
         client
@@ -45,8 +42,6 @@ export function SQLiteDrizzleAdapter(
           })
           .returning(),
       ]);
-
-      // console.log({ newUser, profile });
 
       return newUser[0]!;
     },
