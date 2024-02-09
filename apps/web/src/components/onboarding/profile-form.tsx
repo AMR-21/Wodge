@@ -1,6 +1,10 @@
 "use client";
 
+import { use, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import {
   Form,
   FormControl,
@@ -8,67 +12,59 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
   Input,
+  ProfileAvatar,
   toast,
   useStepper,
 } from "@repo/ui";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useOnboarding } from "./onboarding-context";
-import { ProfileSchema } from "@repo/data";
-import React, { useEffect, useRef } from "react";
+import { Profile, ProfileSchema } from "@repo/data";
 import { updateProfile } from "@/actions/users";
+import { useOnboarding } from "./onboarding-context";
 
 export function ProfileForm() {
-  const {
-    profile,
-    startTransition,
-    avatar,
-    inputRef,
-    avatarRef,
-    submitBtnRef,
-    setAvatarFile,
-    setAvatar,
-    avatarFile,
-  } = useOnboarding();
-
+  const { profile, startTransition } = useOnboarding();
   const { nextStep } = useStepper();
-
-  const formRef = useRef<HTMLFormElement>(null);
+  const [localUrl, setLocalUrl] = useState<string>("");
+  const avatarFileRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
       displayName: profile?.displayName ?? "",
       username: profile?.username ?? "",
-      avatar: profile?.avatar ?? "/avatar.jpeg",
+      avatar: profile?.avatar ?? "",
     },
   });
 
-  useEffect(() => {
-    if (!avatar) setAvatar(() => "/avatar.jpeg");
-    form.setValue("avatar", avatar);
-  }, [avatar]);
+  function removeAvatar() {
+    form.setValue("avatar", "");
+    setLocalUrl("");
+  }
 
-  useEffect(() => {
-    if (!avatarFile) {
-      form.setValue("avatar", avatar);
-      return form.reset({ avatarFile });
-    }
-    form.setValue("avatarFile", avatarFile);
-  }, [avatarFile]);
+  // TODO
+  async function onAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // 1 Get the file and set preview URL - optionally validate file type and size
+    // Optionally set local state to file to upload to server action
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setLocalUrl(url);
 
-  async function onSubmit() {
-    const data = new FormData(formRef.current!);
+    // 2 Created presigned url
 
+    // 3 Upload file to R2
+
+    // 4 Set avatar to the new url
+    form.setValue("avatar", url);
+  }
+
+  async function onSubmit(data: z.infer<typeof ProfileSchema>) {
     startTransition(() => {
       updateProfile(data).then((res) => {
         if (res?.error) {
           toast(res.error);
         }
-
         if (res?.success) {
           nextStep();
         }
@@ -76,97 +72,82 @@ export function ProfileForm() {
     });
   }
 
-  if (!profile) return null;
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-2"
-        id="profile-form"
-        ref={formRef}
-      >
-        <FormField
-          control={form.control}
-          name="avatarFile"
-          // BUG: when using field, it yields type error
-          render={() => {
-            return (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="file"
-                    id="avatarFile"
-                    accept="image/*"
-                    className=""
-                    {...form.register("avatarFile")}
-                    ref={inputRef}
-                    onChange={(e) => {
-                      setAvatarFile(
-                        e.target.files && e.target.files.length > 0
-                          ? e.target.files[0]
-                          : undefined,
-                      );
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="avatar"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input {...field} ref={avatarRef} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="displayName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-muted-foreground">
-                Display name
-              </FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="John Doe" className="peer" />
-              </FormControl>
-              <FormDescription
-                withError
-                className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
-              >
-                This how people will see you. Use whatever you want.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-muted-foreground">Username</FormLabel>
-              <FormControl>
-                <Input {...field} className="peer" placeholder="johndoe" />
-              </FormControl>
-              <FormDescription
-                withError
-                className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
-              >
-                Only letters, numbers, dashes, and underscores.
-              </FormDescription>
-            </FormItem>
-          )}
+      <div className="flex flex-col space-y-3">
+        <ProfileAvatar
+          inputRef={avatarFileRef}
+          localUrl={localUrl}
+          onRemoveAvatar={removeAvatar}
+          avatar={form.watch("avatar")}
+          fallback={form.watch("displayName")}
         />
 
-        <button type="submit" ref={submitBtnRef}></button>
-      </form>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col space-y-2"
+          id="profile-form"
+        >
+          <Input
+            type="file"
+            onChange={onAvatarChange}
+            ref={avatarFileRef}
+            className="hidden"
+          />
+
+          <FormField
+            control={form.control}
+            name="avatar"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} type="hidden" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="displayName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-muted-foreground">
+                  Display name
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="John Doe" className="peer" />
+                </FormControl>
+                <FormDescription
+                  withError
+                  className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
+                >
+                  This how people will see you. Use whatever you want.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-muted-foreground">
+                  Username
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} className="peer" placeholder="johndoe" />
+                </FormControl>
+                <FormDescription
+                  withError
+                  className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
+                >
+                  Only letters, numbers, dashes, and underscores.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </form>
+      </div>
     </Form>
   );
 }

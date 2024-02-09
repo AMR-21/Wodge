@@ -12,3 +12,4 @@ export * from "./components/ui/loader";
 export * from "./components/ui/toast";
 export * from "./components/ui/tooltip";
 export * from "./components/ui/stepper";
+export * from "./components/profile-avatar";

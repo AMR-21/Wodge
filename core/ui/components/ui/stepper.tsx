@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "../..//lib/utils";
+import { cn } from "../../lib/utils";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Button, ButtonProps } from "./button";
 
@@ -19,7 +19,6 @@ interface StepperProps {
 interface StepperContextValues {
   currentStep: number;
   count: React.MutableRefObject<number>;
-  // setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
   nextStep: () => void;
   prevStep: () => void;
 }

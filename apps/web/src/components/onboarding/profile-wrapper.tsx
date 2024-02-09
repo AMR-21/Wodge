@@ -5,14 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui";
-import { ProfileAvatar } from "./profile-avatar";
 import { ProfileForm } from "./profile-form";
-import { useOnboarding } from "./onboarding-context";
+import { Profile } from "@repo/data";
 
 export function ProfileWrapper() {
-  const { profile, avatar, avatarFile, inputRef, setAvatar, setAvatarFile } =
-    useOnboarding();
-
   return (
     <Card className="flex w-full flex-col items-center border-none  shadow-none">
       <CardHeader className="text-center">
@@ -22,16 +18,7 @@ export function ProfileWrapper() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex w-full max-w-[350px] flex-col justify-center space-y-3 p-0">
-        <ProfileAvatar
-          avatar={avatar}
-          avatarFile={avatarFile}
-          setAvatar={setAvatar}
-          setAvatarFile={setAvatarFile}
-          inputRef={inputRef}
-          fallback={profile?.displayName || ""}
-        />
-
+      <CardContent className="flex w-full max-w-[350px] flex-col justify-center ">
         <ProfileForm />
       </CardContent>
     </Card>

@@ -7,25 +7,18 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/server-utils";
 import {
   ProfileSchema,
+  db,
   getProfileByUsername,
   updateProfileById,
 } from "@repo/data";
-import { writeFile } from "fs/promises";
 
-export async function updateProfile(formData: FormData) {
+export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   // 1. Authenticate access
   const user = await currentUser();
 
   if (!user) {
     return redirect("/login");
   }
-
-  const rawData = {
-    displayName: formData.get("displayName"),
-    username: formData.get("username"),
-    avatar: formData.get("avatar"),
-    avatarFile: formData.get("avatarFile"),
-  };
 
   // 2. Validate data
   const validatedFields = ProfileSchema.safeParse(rawData);
@@ -34,21 +27,19 @@ export async function updateProfile(formData: FormData) {
     return { error: "Invalid data" };
   }
 
-  const { avatarFile, ...data } = validatedFields.data;
+  const { data } = validatedFields;
 
-  // 3. Verify that the username is unique
+  // TODO
+  // 3. Check if there is a new profile avatar
+
+  // TODO Do check and update in a single transaction
+  // 4. Verify that the username is unique and update profile
   if (data.username) {
     const profile = await getProfileByUsername(data.username);
 
     if (profile) {
       return { error: "Username already exists" };
     }
-  }
-
-  // 4. Check if there is a new profile avatar
-  // and remover the default avatar
-  if (avatarFile) {
-    // TODO: Save the file to R2
   }
 
   // 5. Check if a new user then update profile

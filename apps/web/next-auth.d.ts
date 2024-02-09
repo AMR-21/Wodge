@@ -14,9 +14,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "@auth/core" {
-  interface AdapterUser {
-    createdAt: Date;
-    hasProfile: boolean;
-  }
-}
+// declare module "@auth/core" {
+//   interface AdapterUser {
+//   }
+// }

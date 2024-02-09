@@ -1,21 +1,14 @@
 "use client";
 
 import { Profile } from "@repo/data";
-import { type CarouselApi } from "@repo/ui";
-import React, { createContext, useRef } from "react";
+import { createContext, useContext, useTransition } from "react";
 
 interface ContextValues {
   profile: Partial<Profile>;
   isPending: boolean;
   startTransition: React.TransitionStartFunction;
-  avatar: string;
-  setAvatar: React.Dispatch<React.SetStateAction<string>>;
-  inputRef: React.RefObject<HTMLInputElement>;
-  avatarRef: React.RefObject<HTMLInputElement>;
-  submitBtnRef: React.RefObject<HTMLButtonElement>;
-  avatarFile: File | undefined;
-  setAvatarFile: React.Dispatch<React.SetStateAction<File | undefined>>;
 }
+
 const Context = createContext<ContextValues | null>(null);
 
 export function OnboardingProvider({
@@ -25,14 +18,7 @@ export function OnboardingProvider({
   children: React.ReactNode;
   profile?: Partial<Profile>;
 }) {
-  const [isPending, startTransition] = React.useTransition();
-  const [avatar, setAvatar] = React.useState<string>(
-    profile?.avatar || "/avatar.jpeg",
-  );
-  const [avatarFile, setAvatarFile] = React.useState<File>();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const avatarRef = useRef<HTMLInputElement>(null);
-  const submitBtnRef = useRef<HTMLButtonElement>(null);
+  const [isPending, startTransition] = useTransition();
 
   return (
     <Context.Provider
@@ -40,13 +26,6 @@ export function OnboardingProvider({
         profile,
         isPending,
         startTransition,
-        avatar,
-        setAvatar,
-        inputRef,
-        avatarFile,
-        setAvatarFile,
-        avatarRef,
-        submitBtnRef,
       }}
     >
       {children}
@@ -55,7 +34,7 @@ export function OnboardingProvider({
 }
 
 export function useOnboarding() {
-  const context = React.useContext(Context);
+  const context = useContext(Context);
   if (!context) {
     throw new Error("useOnboarding must be used within OnboardingProvider");
   }

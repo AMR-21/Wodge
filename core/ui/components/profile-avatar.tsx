@@ -1,61 +1,50 @@
+"use client";
+
+import * as React from "react";
+import { LuX } from "react-icons/lu";
+
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  buttonVariants,
-  cn,
-} from "@repo/ui";
+} from "./ui/tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { buttonVariants } from "./ui/button";
+import { cn } from "../lib/utils";
 
-import { LuX } from "react-icons/lu";
-import { useEffect, useState } from "react";
 interface ProfileAvatarProps {
   avatar?: string;
-  avatarFile?: File;
-  setAvatar?: React.Dispatch<React.SetStateAction<string>>;
-  setAvatarFile?: React.Dispatch<React.SetStateAction<File | undefined>>;
-  inputRef?: React.RefObject<HTMLInputElement>;
-  // avatarRef?: React.RefObject<HTMLImageElement>;
   fallback?: string;
+  localUrl?: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  onRemoveAvatar?: () => void;
   className?: string;
 }
 
 export function ProfileAvatar({
   avatar,
-  avatarFile,
-  setAvatar,
-  setAvatarFile,
-  inputRef,
   fallback = "",
+  localUrl,
+  inputRef,
+  onRemoveAvatar,
   className,
 }: ProfileAvatarProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [url, setUrl] = useState<string>("");
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [isClearHovered, setIsClearHovered] = React.useState(false);
 
-  const hasFile = !!avatarFile || avatar !== "/avatar.jpeg";
-
-  useEffect(() => {
-    if (avatarFile) {
-      const url = URL.createObjectURL(avatarFile);
-      setUrl(url);
-      if (avatar !== "/avatar.jpeg") setAvatar?.("/avatar.jpeg");
-      return;
-    }
-    setUrl("");
-  }, [avatarFile]);
+  const hasAvatar = !!localUrl || !!avatar;
 
   return (
     <div className="flex justify-center">
       <TooltipProvider delayDuration={0}>
-        <Tooltip>
+        <Tooltip open={isHovered}>
           <TooltipTrigger>
             <div
               className="group relative flex w-fit"
               onClick={() => inputRef?.current?.click()}
-              onMouseLeave={(e) => e.currentTarget.blur()}
+              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setIsHovered(true)}
             >
               <Avatar
                 className={cn(
@@ -63,7 +52,10 @@ export function ProfileAvatar({
                   className,
                 )}
               >
-                <AvatarImage src={url || avatar} alt={``} />
+                <AvatarImage
+                  src={localUrl || avatar}
+                  alt={`${fallback}'s avatar`}
+                />
                 <AvatarFallback>
                   {fallback.length >= 2
                     ? fallback.slice(0, 2).toUpperCase()
@@ -71,7 +63,7 @@ export function ProfileAvatar({
                 </AvatarFallback>
               </Avatar>
 
-              {hasFile && (
+              {hasAvatar && (
                 <div
                   role="button"
                   className={cn(
@@ -80,12 +72,13 @@ export function ProfileAvatar({
                   )}
                   onClick={(e) => {
                     e.stopPropagation();
-
-                    setAvatarFile?.(undefined);
-                    setAvatar?.("");
+                    onRemoveAvatar?.();
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
+                  onMouseEnter={() => {
+                    setIsClearHovered(true);
+                    setIsHovered(true);
+                  }}
+                  onMouseLeave={() => setIsClearHovered(false)}
                 >
                   <LuX />
                 </div>
@@ -94,11 +87,11 @@ export function ProfileAvatar({
           </TooltipTrigger>
           <TooltipContent side="bottom" sideOffset={6} className="px-2 py-1">
             <p>
-              {isHovered && hasFile
-                ? "Remove avatar"
-                : hasFile
-                  ? "Change avatar"
-                  : "Add avatar"}
+              {hasAvatar
+                ? isClearHovered
+                  ? "Remove avatar"
+                  : "Change avatar"
+                : "Add avatar"}
             </p>
           </TooltipContent>
         </Tooltip>

@@ -19,7 +19,7 @@ export default auth((req) => {
   // order matters here
   // api auth routes for auth.js
   if (isApiAuthRoute) {
-    return null;
+    return;
   }
 
   // auth routes ex. login, onboarding
@@ -28,7 +28,7 @@ export default auth((req) => {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
-    return null;
+    return;
   }
 
   // User is not authentic and trying to access a protected route
@@ -46,7 +46,8 @@ export default auth((req) => {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 
-  return null;
+  // A public route
+  return;
 });
 
 // Optionally, don't invoke Middleware on some paths

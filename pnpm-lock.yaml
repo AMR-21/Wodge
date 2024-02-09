@@ -63,7 +63,7 @@ importers:
         specifier: 14.1.0
         version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       next-auth:
-        specifier: ^5.0.0-beta.9
+        specifier: ^5.0.0-beta.4
         version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
@@ -234,6 +234,9 @@ importers:
       react-hook-form:
         specifier: ^7.50.0
         version: 7.50.0(react@18.2.0)
+      react-icons:
+        specifier: ^5.0.1
+        version: 5.0.1(react@18.2.0)
       react-spinners:
         specifier: ^0.13.8
         version: 0.13.8(react-dom@18.2.0)(react@18.2.0)

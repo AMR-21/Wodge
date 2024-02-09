@@ -12,6 +12,7 @@ import { db } from "@repo/data";
 import { env } from "../env";
 import { users } from "@repo/data";
 import { sendMagicLink } from "../server-utils";
+import { DefaultSession } from "next-auth";
 
 export const {
   handlers: { GET, POST },
@@ -39,19 +40,22 @@ export const {
   },
 
   callbacks: {
-    // Bug: Typeerror - typical Next-Auth bugs
-    // @ts-ignore
     async session({ user, session }) {
       if (session.user) {
         session.user.hasProfile = user.hasProfile;
         session.user.id = user.id;
       }
 
-      return session;
+      return {
+        ...session,
+        user: {
+          id: user.id,
+          hasProfile: user.hasProfile,
+        },
+      };
     },
   },
-  // Bug: Typeerror - typical Next-Auth bugs
-  // @ts-ignore
+
   adapter: DbAdapter(db) as Adapter,
 
   session: {
