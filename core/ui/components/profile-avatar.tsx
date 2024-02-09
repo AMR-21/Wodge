@@ -53,7 +53,7 @@ export function ProfileAvatar({
                 )}
               >
                 <AvatarImage
-                  src={localUrl || avatar}
+                  src={localUrl || avatar || "/avatar.jpeg"}
                   alt={`${fallback}'s avatar`}
                 />
                 <AvatarFallback>

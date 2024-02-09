@@ -128,7 +128,7 @@ export function DbAdapter(
       if (!results) {
         return null;
       }
-      return Promise.resolve(results).then((results) => results.user);
+      return Promise.resolve(results).then((results) => results.users);
     },
 
     async deleteSession(sessionToken) {

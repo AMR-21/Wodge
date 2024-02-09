@@ -8,6 +8,20 @@
       "when": 1707179871814,
       "tag": "0000_strange_vapor",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1707469945495,
+      "tag": "0001_happy_harpoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1707470076947,
+      "tag": "0002_living_machine_man",
+      "breakpoints": true
     }
   ]
 }

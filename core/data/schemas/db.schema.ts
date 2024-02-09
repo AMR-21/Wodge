@@ -11,7 +11,6 @@ export const profiles = sqliteTable("profiles", {
   displayName: text("display_name"),
   username: text("username").unique(),
   avatar: text("avatar"),
-  bio: text("bio", { length: 512 }),
   updatedAt: integer("created_at", { mode: "timestamp" })
     .$default(() => new Date())
     .notNull(),

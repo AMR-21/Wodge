@@ -3,4 +3,4 @@ binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "wodge-db"
 database_id = "06551e4a-854a-4b7d-b493-e95f0eea223f"
 preview_database_id = "DB"
-migrations_dir = "./data/migrations"
+migrations_dir = "./node_modules/@repo/data/migrations"

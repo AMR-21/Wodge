@@ -13,14 +13,15 @@ export function OnboardingSteps() {
   return (
     <Stepper className="max-w-lg">
       <StepperContainer>
-        {/* <Step index={1}>
+        <Step index={1}>
           <Welcome />
           <NextBtn className="w-4/6">Continue</NextBtn>
-        </Step> */}
+        </Step>
         <Step index={2}>
           <ProfileWrapper />
           <NextBtn
             className="w-4/6"
+            onClick={() => {}}
             type="submit"
             form="profile-form"
             disabled={isPending}

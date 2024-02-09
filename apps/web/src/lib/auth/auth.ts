@@ -81,7 +81,7 @@ export const {
       type: "email",
       from: "auth@example.com",
       server: {},
-      maxAge: 24 * 60 * 60,
+      maxAge: 300,
       name: "Email",
       options: {},
       async sendVerificationRequest({ identifier, url }) {
