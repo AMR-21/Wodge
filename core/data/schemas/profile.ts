@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateProfileSchema = z.object({
+export const ProfileSchema = z.object({
   username: z
     .string({
       required_error: "Username is required",

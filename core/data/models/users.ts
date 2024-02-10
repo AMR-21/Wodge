@@ -9,7 +9,7 @@ import { db, users } from "..";
 /**
  * Get profile by userId
  */
-export async function getProfileById(id: string): Promise<Partial<Profile>> {
+export async function getProfileById(id: string) {
   try {
     const profile = await db.query.profiles.findFirst({
       columns: { userId: false },

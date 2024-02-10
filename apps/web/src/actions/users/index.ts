@@ -6,15 +6,13 @@ import { redirect } from "next/navigation";
 
 import { currentUser } from "@/lib/server-utils";
 import {
-  UpdateProfileSchema,
+  ProfileSchema,
   db,
   getProfileByUsername,
   updateProfileById,
 } from "@repo/data";
 
-export async function updateProfile(
-  rawData: z.infer<typeof UpdateProfileSchema>,
-) {
+export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   // 1. Authenticate access
   const user = await currentUser();
 
@@ -23,7 +21,7 @@ export async function updateProfile(
   }
 
   // 2. Validate data
-  const validatedFields = UpdateProfileSchema.safeParse(rawData);
+  const validatedFields = ProfileSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };

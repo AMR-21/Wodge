@@ -24,5 +24,5 @@ export const profilesRelations = relations(profiles, ({ one }) => ({
   }),
 }));
 
-export type Profile = typeof profiles.$inferSelect | null | undefined;
+export type Profile = typeof profiles.$inferSelect;
 export type NewProfile = typeof profiles.$inferInsert;
