@@ -18,7 +18,7 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { Profile, ProfileSchema } from "@repo/data";
+import { Profile, UpdateProfileSchema } from "@repo/data";
 import { updateProfile } from "@/actions/users";
 import { useOnboarding } from "./onboarding-context";
 
@@ -28,8 +28,8 @@ export function ProfileForm() {
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof ProfileSchema>>({
-    resolver: zodResolver(ProfileSchema),
+  const form = useForm<z.infer<typeof UpdateProfileSchema>>({
+    resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
       displayName: profile?.displayName ?? "",
       username: profile?.username ?? "",
@@ -59,7 +59,7 @@ export function ProfileForm() {
     form.setValue("avatar", url);
   }
 
-  async function onSubmit(data: z.infer<typeof ProfileSchema>) {
+  async function onSubmit(data: z.infer<typeof UpdateProfileSchema>) {
     startTransition(() => {
       updateProfile(data).then((res) => {
         if (res?.error) {

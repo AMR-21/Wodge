@@ -6,13 +6,15 @@ import { redirect } from "next/navigation";
 
 import { currentUser } from "@/lib/server-utils";
 import {
-  ProfileSchema,
+  UpdateProfileSchema,
   db,
   getProfileByUsername,
   updateProfileById,
 } from "@repo/data";
 
-export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
+export async function updateProfile(
+  rawData: z.infer<typeof UpdateProfileSchema>,
+) {
   // 1. Authenticate access
   const user = await currentUser();
 
@@ -21,7 +23,7 @@ export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   }
 
   // 2. Validate data
-  const validatedFields = ProfileSchema.safeParse(rawData);
+  const validatedFields = UpdateProfileSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };
@@ -32,7 +34,6 @@ export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   // TODO
   // 3. Check if there is a new profile avatar
 
-  // TODO Do check and update in a single transaction
   // 4. Verify that the username is unique and update profile
   if (data.username) {
     const profile = await getProfileByUsername(data.username);
