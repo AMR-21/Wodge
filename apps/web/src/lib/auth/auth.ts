@@ -41,10 +41,6 @@ export const {
 
   callbacks: {
     async session({ user, session }) {
-      // if (session?.user) {
-      //   session.user.id = session.userId;
-      //   session.user.username = user?.username;
-      // }
       return {
         ...session,
         user: {
