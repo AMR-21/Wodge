@@ -5,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui";
-import { ProfileForm } from "./profile-form";
+import { CompleteProfileForm } from "./complete-profile-form";
 
-export function ProfileWrapper() {
+export function CompleteProfileWrapper() {
   return (
     <Card className="flex w-full flex-col items-center border-none shadow-none">
       <CardHeader className="text-center">
@@ -18,7 +18,7 @@ export function ProfileWrapper() {
       </CardHeader>
 
       <CardContent className="flex w-4/6 flex-col justify-center p-0">
-        <ProfileForm />
+        <CompleteProfileForm />
       </CardContent>
     </Card>
   );

@@ -5,25 +5,22 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
-import { relations, sql } from "drizzle-orm";
-import { profiles } from "./db.schema";
 
 export const users = sqliteTable("users", {
   id: text("id").notNull().primaryKey(),
-  // name: text("name"),
   email: text("email").notNull(),
+  // hasProfile: integer("has_profile", { mode: "boolean" }).default(false),
+  displayName: text("name"),
+  avatar: text("avatar"),
+  username: text("username").unique(),
   emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
-  // image: text("image"),
-  hasProfile: integer("has_profile", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .$defaultFn(() => new Date())
     .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .$default(() => new Date())
+    .notNull(),
 });
-
-// A user has only one profile
-export const usersRelations = relations(users, ({ one }) => ({
-  profile: one(profiles),
-}));
 
 export const accounts = sqliteTable(
   "accounts",
@@ -68,3 +65,6 @@ export const verificationTokens = sqliteTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;

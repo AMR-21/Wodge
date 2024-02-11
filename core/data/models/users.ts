@@ -2,76 +2,62 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
-import { NewProfile, Profile, profiles } from "../schemas/db.schema";
-import { z } from "zod";
-import { db, users } from "..";
+import { NewUser, db, users } from "..";
 
 /**
- * Get profile by userId
+ * Get user by userId
  */
-export async function getProfileById(id: string) {
+export async function getUserById(id: string) {
   try {
-    const profile = await db.query.profiles.findFirst({
-      columns: { userId: false },
-      where: eq(profiles.userId, id),
+    const user = await db.query.users.findFirst({
+      columns: { emailVerified: false },
+      where: eq(users.id, id),
     });
 
-    return profile;
+    return user;
   } catch (e) {
     return null;
   }
 }
 
-export async function getProfileByUsername(username: string) {
+export async function getUserByUsername(username: string) {
   try {
-    const profile = await db.query.profiles.findFirst({
-      columns: { username: true },
-      where: eq(profiles.username, username),
+    const user = await db.query.users.findFirst({
+      columns: { id: false, emailVerified: false, updatedAt: false },
+      where: eq(users.username, username),
     });
 
-    return profile;
+    return user;
   } catch (e) {
     return null;
   }
 }
 
 /**
- * Update profile (displayName, avatar, username or all of them)
- * for corresponding profile with @param userId
- * @param withFlag indicate whether to update the hasProfile flag
- * for a user with @param userId - i.e. A profile for new user.
+ * Update user (displayName, avatar, username or all of them)
+ * for corresponding user with @param userId
  */
-export async function updateProfileById(
+export async function updateUserById(
   userId: string,
-  data: Partial<NewProfile>,
+  data: Partial<NewUser>,
   withFlag = false
 ) {
   try {
-    if (withFlag) {
-      const [profilesArr, usersArr] = await db.batch([
-        db
-          .update(profiles)
-          .set(data)
-          .where(eq(profiles.userId, userId))
-          .returning(),
-        db
-          .update(users)
-          .set({ hasProfile: true })
-          .where(eq(users.id, userId))
-          .returning(),
-      ]);
-
-      return profilesArr[0];
-    }
-
-    const profile = await db
-      .update(profiles)
+    const user = await db
+      .update(users)
       .set(data)
-      .where(eq(profiles.userId, userId))
+      .where(eq(users.id, userId))
       .returning();
 
-    return profile;
-  } catch {
-    return null;
+    return { user };
+  } catch (e) {
+    if (!(e instanceof Error)) return { error: "Internal server error" };
+
+    switch (e.message) {
+      case "D1_ERROR: UNIQUE constraint failed: users.username":
+        return { error: "Username already exists" };
+      default:
+        return { error: "Failed to update user" };
+    }
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE users ADD `is_verified` integer DEFAULT false;

@@ -41,16 +41,15 @@ export const {
 
   callbacks: {
     async session({ user, session }) {
-      if (session.user) {
-        session.user.hasProfile = user.hasProfile;
-        session.user.id = user.id;
-      }
-
+      // if (session?.user) {
+      //   session.user.id = session.userId;
+      //   session.user.username = user?.username;
+      // }
       return {
         ...session,
         user: {
           id: user.id,
-          hasProfile: user.hasProfile,
+          username: user?.username,
         },
       };
     },
@@ -71,6 +70,7 @@ export const {
       clientSecret: env.GITHUB_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
+
     Google({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,

@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,22 +18,22 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { Profile, ProfileSchema } from "@repo/data";
+import { EditUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/users";
 import { useOnboarding } from "./onboarding-context";
 
-export function ProfileForm() {
-  const { profile, startTransition } = useOnboarding();
+export function CompleteProfileForm() {
+  const { user, startTransition } = useOnboarding();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof ProfileSchema>>({
-    resolver: zodResolver(ProfileSchema),
+  const form = useForm<z.infer<typeof EditUserSchema>>({
+    resolver: zodResolver(EditUserSchema),
     defaultValues: {
-      displayName: profile?.displayName ?? "",
-      username: profile?.username ?? "",
-      avatar: profile?.avatar ?? "",
+      displayName: user?.displayName ?? "",
+      username: user?.username ?? "",
+      avatar: user?.avatar ?? "",
     },
   });
 
@@ -59,7 +59,7 @@ export function ProfileForm() {
     form.setValue("avatar", url);
   }
 
-  async function onSubmit(data: z.infer<typeof ProfileSchema>) {
+  async function onSubmit(data: z.infer<typeof EditUserSchema>) {
     startTransition(() => {
       updateProfile(data).then((res) => {
         if (res?.error) {

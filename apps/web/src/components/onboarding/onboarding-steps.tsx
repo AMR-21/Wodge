@@ -2,7 +2,7 @@
 
 import { Loader, NextBtn, Step, Stepper, StepperContainer } from "@repo/ui";
 import { Outro, Welcome } from "./screening";
-import { ProfileWrapper } from "./profile-wrapper";
+import { CompleteProfileWrapper } from "./complete-profile-wrapper";
 import { useOnboarding } from "./onboarding-context";
 import Link from "next/link";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
@@ -18,7 +18,7 @@ export function OnboardingSteps() {
           <NextBtn className="w-4/6">Continue</NextBtn>
         </Step>
         <Step index={2}>
-          <ProfileWrapper />
+          <CompleteProfileWrapper />
           <NextBtn
             className="w-4/6"
             onClick={() => {}}

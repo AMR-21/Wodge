@@ -1,16 +1,16 @@
-/**
- * The same official adapter but using nanoid instead of the default uuid
- */
-
-// Bug: Type Errors
 // @ts-nocheck
 import { eq, and } from "drizzle-orm";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
 import { accounts, sessions, users, verificationTokens } from "@repo/data";
-import { profiles } from "@repo/data";
-import { DrizzleD1Database } from "drizzle-orm/d1";
+import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
+
+declare module "@auth/core" {
+  interface AdapterUser {
+    login?: string;
+  }
+}
 
 type NonNullableProps<T> = {
   [P in keyof T]: null extends T[P] ? never : P;
@@ -23,32 +23,21 @@ function stripUndefined<T>(obj: T): Pick<T, NonNullableProps<T>> {
 }
 
 export function DbAdapter(
-  client: InstanceType<typeof DrizzleD1Database>,
+  client: InstanceType<typeof BaseSQLiteDatabase>,
 ): Adapter {
   return {
     async createUser(data) {
-      const userId = nanoid();
-
-      const { image, name, ...authData } = data;
-
-      const [newUser] = await client.batch([
-        client
-          .insert(users)
-          .values({ ...data, id: userId })
-          .returning(),
-        client
-          .insert(profiles)
-          .values({
-            displayName: name,
-            userId,
-            avatar: image,
-          })
-          .returning(),
-      ]);
-
-      return newUser[0]!;
+      return await client
+        .insert(users)
+        .values({
+          ...data,
+          displayName: data.name,
+          avatar: data.image,
+          id: nanoid(),
+        })
+        .returning()
+        .get();
     },
-
     async getUser(data) {
       const result = await client
         .select()
@@ -57,7 +46,6 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async getUserByEmail(data) {
       const result = await client
         .select()
@@ -66,11 +54,9 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     createSession(data) {
       return client.insert(sessions).values(data).returning().get();
     },
-
     async getSessionAndUser(data) {
       const result = await client
         .select({ session: sessions, user: users })
@@ -78,10 +64,8 @@ export function DbAdapter(
         .where(eq(sessions.sessionToken, data))
         .innerJoin(users, eq(users.id, sessions.userId))
         .get();
-
       return result ?? null;
     },
-
     async updateUser(data) {
       if (!data.id) {
         throw new Error("No user id.");
@@ -95,7 +79,6 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async updateSession(data) {
       const result = await client
         .update(sessions)
@@ -105,13 +88,11 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async linkAccount(rawAccount) {
       return stripUndefined(
         await client.insert(accounts).values(rawAccount).returning().get(),
       );
     },
-
     async getUserByAccount(account) {
       const results = await client
         .select()
@@ -130,7 +111,6 @@ export function DbAdapter(
       }
       return Promise.resolve(results).then((results) => results.users);
     },
-
     async deleteSession(sessionToken) {
       const result = await client
         .delete(sessions)
@@ -139,7 +119,6 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async createVerificationToken(token) {
       const result = await client
         .insert(verificationTokens)
@@ -148,7 +127,6 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async useVerificationToken(token) {
       try {
         const result = await client
@@ -166,7 +144,6 @@ export function DbAdapter(
         throw new Error("No verification token found.");
       }
     },
-
     async deleteUser(id) {
       const result = await client
         .delete(users)
@@ -175,7 +152,6 @@ export function DbAdapter(
         .get();
       return result ?? null;
     },
-
     async unlinkAccount(account) {
       await client
         .delete(accounts)

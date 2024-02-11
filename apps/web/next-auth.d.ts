@@ -3,18 +3,18 @@ import { DefaultSession } from "next-auth";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
+      username?: string;
       id: string;
-      hasProfile: boolean;
-      // createdAt: string;
     } & DefaultSession["user"];
   }
 
   interface User {
-    hasProfile: boolean;
+    username?: string;
   }
 }
 
-// declare module "@auth/core" {
-//   interface AdapterUser {
-//   }
-// }
+declare module "@auth/core" {
+  interface AdapterUser {
+    username?: string;
+  }
+}

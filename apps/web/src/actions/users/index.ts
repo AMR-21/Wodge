@@ -5,14 +5,9 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@/lib/server-utils";
-import {
-  ProfileSchema,
-  db,
-  getProfileByUsername,
-  updateProfileById,
-} from "@repo/data";
+import { EditUserSchema, db, updateUserById } from "@repo/data";
 
-export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
+export async function updateProfile(rawData: z.infer<typeof EditUserSchema>) {
   // 1. Authenticate access
   const user = await currentUser();
 
@@ -21,7 +16,7 @@ export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   }
 
   // 2. Validate data
-  const validatedFields = ProfileSchema.safeParse(rawData);
+  const validatedFields = EditUserSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };
@@ -32,26 +27,14 @@ export async function updateProfile(rawData: z.infer<typeof ProfileSchema>) {
   // TODO
   // 3. Check if there is a new profile avatar
 
-  // 4. Verify that the username is unique and update profile
-  if (data.username) {
-    const profile = await getProfileByUsername(data.username);
+  // 4. Update user data
+  const res = await updateUserById(user.id, {
+    ...data,
+    updatedAt: new Date(),
+  });
 
-    if (profile) {
-      return { error: "Username already exists" };
-    }
-  }
+  // if (updatedUser) return { success: true, user: updatedUser };
+  if (res.user) return { success: true, user: res.user };
 
-  // 5. Check if a new user then update profile
-  const updatedProfile = await updateProfileById(
-    user.id,
-    {
-      ...data,
-      updatedAt: new Date(),
-    },
-    !user.hasProfile,
-  );
-
-  if (updatedProfile) return { success: true, profile: updatedProfile };
-
-  return { error: "Failed to update profile" };
+  return res;
 }

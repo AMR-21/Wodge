@@ -9,7 +9,8 @@ import { auth } from "@/lib/auth/auth";
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const hasProfile = !!req.auth?.user?.hasProfile;
+  // const hasUsername = !!req.auth?.user?.hasUsername;
+  const hasUsername = !!req.auth?.user?.username;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -37,12 +38,12 @@ export default auth((req) => {
   }
 
   // User is authentic but has no profile
-  if (!hasProfile && !isOnboardingRoute) {
+  if (!hasUsername && !isOnboardingRoute) {
     return Response.redirect(new URL("/onboarding", nextUrl));
   }
 
   // User is authentic, has profile, and trying to access onboarding route
-  if (isOnboardingRoute && hasProfile) {
+  if (isOnboardingRoute && hasUsername) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 

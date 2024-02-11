@@ -1,7 +1,7 @@
 import { OnboardingProvider } from "@/components/onboarding/onboarding-context";
 import { OnboardingSteps } from "@/components/onboarding/onboarding-steps";
-import { getProfileById } from "@repo/data";
 import { currentUser } from "@/lib/server-utils";
+import { getUserById } from "@repo/data";
 import { redirect } from "next/navigation";
 
 async function OnboardingPage() {
@@ -9,12 +9,13 @@ async function OnboardingPage() {
 
   if (!user) return redirect("/login");
 
-  const profile = await getProfileById(user.id);
-  if (!profile) return redirect("auth/login");
+  const userData = await getUserById(user.id);
+
+  if (!userData) return redirect("/login");
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <OnboardingProvider profile={profile}>
+      <OnboardingProvider user={userData}>
         <OnboardingSteps />
       </OnboardingProvider>
     </div>
