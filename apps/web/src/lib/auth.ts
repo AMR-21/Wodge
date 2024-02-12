@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
@@ -9,10 +8,9 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { DbAdapter } from "./adapter";
 import { db } from "@repo/data";
-import { env } from "../env";
+import { env } from "./env";
 import { users } from "@repo/data";
-import { sendMagicLink } from "../server-utils";
-import { DefaultSession } from "next-auth";
+import { sendMagicLink } from "./server-utils";
 
 export const {
   handlers: { GET, POST },
@@ -71,6 +69,14 @@ export const {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
+
+      profile(profile) {
+        return {
+          ...profile,
+          id: profile.sub,
+          image: profile.picture,
+        };
+      },
     }),
     {
       id: "email",

@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import "@repo/ui/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/auth";
 import { Toaster } from "@repo/ui";
+import { ModeToggle } from "@/components/toggle";
 
 /** Runtime = edge require in order to make next-auth works with cf-pages */
 export const runtime = "edge";
@@ -30,14 +31,14 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en" className={inter.variable} suppressHydrationWarning>
         <body className="font-sans">
-          {/* <ThemeProvider
+          <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
-          > */}
-          {children}
-          {/* </ThemeProvider> */}
+          >
+            {children}
+          </ThemeProvider>
           <Toaster />
         </body>
       </html>

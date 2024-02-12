@@ -5,7 +5,7 @@ import { Outro, Welcome } from "./screening";
 import { CompleteProfileWrapper } from "./complete-profile-wrapper";
 import { useOnboarding } from "./onboarding-context";
 import Link from "next/link";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
+import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export function OnboardingSteps() {
   const { isPending } = useOnboarding();
@@ -33,7 +33,7 @@ export function OnboardingSteps() {
             )}
           </NextBtn>
         </Step>
-        <Step index={2}>
+        <Step index={3}>
           <Outro />
           <NextBtn className="w-4/6" asChild>
             <Link href={DEFAULT_LOGIN_REDIRECT}>Get started</Link>

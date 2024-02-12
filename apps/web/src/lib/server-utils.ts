@@ -1,6 +1,6 @@
 import "server-only";
 import { env } from "./env";
-import { auth } from "./auth/auth";
+import { auth } from "./auth";
 
 export type VerificationMail = {
   identifier?: string;

@@ -17,7 +17,7 @@ import {
   Loader,
   toast,
 } from "@repo/ui";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/routes";
+import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 const EmailFormSchema = z.object({
   email: z.string().email(),

@@ -6,12 +6,6 @@ import { nanoid } from "nanoid";
 import { accounts, sessions, users, verificationTokens } from "@repo/data";
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
-declare module "@auth/core" {
-  interface AdapterUser {
-    login?: string;
-  }
-}
-
 type NonNullableProps<T> = {
   [P in keyof T]: null extends T[P] ? never : P;
 }[keyof T];

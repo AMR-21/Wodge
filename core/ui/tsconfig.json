@@ -2,7 +2,7 @@
   "extends": "@repo/ts/tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./*"],
-    },
-  },
+      "@/*": ["./*"]
+    }
+  }
 }

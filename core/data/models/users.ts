@@ -37,11 +37,7 @@ export async function getUserByUsername(username: string) {
  * Update user (displayName, avatar, username or all of them)
  * for corresponding user with @param userId
  */
-export async function updateUserById(
-  userId: string,
-  data: Partial<NewUser>,
-  withFlag = false
-) {
+export async function updateUserById(userId: string, data: Partial<NewUser>) {
   try {
     const user = await db
       .update(users)

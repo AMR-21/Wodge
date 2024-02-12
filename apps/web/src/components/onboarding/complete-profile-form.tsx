@@ -13,7 +13,7 @@ import {
   FormItem,
   FormLabel,
   Input,
-  ProfileAvatar,
+  UserAvatar,
   toast,
   useStepper,
 } from "@repo/ui";
@@ -63,7 +63,7 @@ export function CompleteProfileForm() {
     startTransition(() => {
       updateProfile(data).then((res) => {
         if (res?.error) {
-          toast(res.error);
+          toast.error(res.error);
         }
         if (res?.success) {
           nextStep();
@@ -75,7 +75,7 @@ export function CompleteProfileForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col space-y-3">
-        <ProfileAvatar
+        <UserAvatar
           inputRef={avatarFileRef}
           localUrl={localUrl}
           onRemoveAvatar={removeAvatar}

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { LuX } from "react-icons/lu";
 
 import {
   Tooltip,
@@ -12,6 +11,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { buttonVariants } from "./ui/button";
 import { cn } from "../lib/utils";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { X } from "lucide-react";
 
 interface ProfileAvatarProps {
   avatar?: string;
@@ -22,7 +23,7 @@ interface ProfileAvatarProps {
   className?: string;
 }
 
-export function ProfileAvatar({
+export function UserAvatar({
   avatar,
   fallback = "",
   localUrl,
@@ -80,7 +81,7 @@ export function ProfileAvatar({
                   }}
                   onMouseLeave={() => setIsClearHovered(false)}
                 >
-                  <LuX />
+                  <X className="h-3.5 w-3.5" />
                 </div>
               )}
             </div>
