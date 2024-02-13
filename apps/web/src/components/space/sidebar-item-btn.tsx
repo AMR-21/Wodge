@@ -5,19 +5,25 @@ import { IconType } from "react-icons/lib";
 interface SidebarItemBtnProps extends ButtonProps {
   Icon: LucideIcon | IconType;
   iconClassName?: string;
+  isVisible?: () => boolean;
 }
 
 export function SidebarItemBtn({
   className,
   Icon,
   iconClassName,
+  isVisible = () => true,
   ...props
 }: SidebarItemBtnProps) {
   return (
     <Button
       variant="ghost"
       size="fit"
-      className={cn("group/sidebtn z-10", className)}
+      className={cn(
+        "group/sidebtn z-10",
+        !isVisible() && "invisible",
+        className,
+      )}
       {...props}
     >
       <Icon

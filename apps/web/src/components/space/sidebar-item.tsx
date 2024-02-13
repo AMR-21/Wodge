@@ -1,70 +1,51 @@
 "use client";
 import Link from "next/link";
 import { Hash, LucideIcon } from "lucide-react";
-import { cn, buttonVariants } from "@repo/ui";
+import { cn, buttonVariants, ButtonProps, Button } from "@repo/ui";
 import { forwardRef } from "react";
 import { IconType } from "react-icons/lib";
 
 interface SidebarItemProps {
   label: string;
   Icon?: LucideIcon | IconType | null;
-  action?: () => void;
-  href?: string;
   children?: React.ReactNode;
   className?: string;
-  ItemFor: string;
   isActive?: boolean;
 }
 
-const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
+const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
   function SidebarItem(
-    {
-      label,
-      Icon,
-      action,
-      href,
-      children,
-      className,
-      ItemFor,
-      isActive = false,
-      ...props
-    },
+    { label, Icon, children, className, isActive = false, ...props },
     ref,
   ) {
     if (!Icon) Icon = Hash;
 
-    const jsx = (
-      <div
-        ref={ref}
-        role="button"
-        className={cn(
-          buttonVariants({
-            variant: "ghost",
-            size: "fit",
-          }),
-          "group/sidebar w-full justify-start gap-2 pl-3.5 pr-0.5 capitalize text-muted-foreground hover:text-foreground",
-          isActive &&
-            "bg-neutral-muted/75 text-foreground dark:bg-neutral-muted/60",
-          className,
-        )}
-        {...(action && { onClick: action })}
-        {...props}
-        aria-current={isActive ? "page" : undefined}
-      >
-        <Icon className="mr-0.5 h-4 w-4 shrink-0 transition-transform duration-200" />
-        <span>{label}</span>
+    return (
+      <li ref={ref} className="grow">
+        <div
+          tabIndex={0}
+          role="button"
+          className={cn(
+            buttonVariants({
+              variant: "ghost",
+              size: "fit",
+            }),
 
-        {/* Extra options */}
-        {children}
-      </div>
-    );
+            // Center the icon with the space avatar by adding padding left of 12px + 4px - 8px = 8px
+            // 12px half of the avatar width - 4px padding of the space switcher - 8px half of the icon width
+            "w-full items-center justify-start pl-2 text-muted-foreground hover:text-accent-foreground",
+            isActive && "bg-accent text-accent-foreground dark:bg-accent",
+            className,
+          )}
+          {...props}
+        >
+          {/* 8px margin of the switcher + 12px half space avatar width - 8px half icon width */}
+          <Icon className="mr-3 h-4 w-4 shrink-0 transition-all" />
+          <span>{label}</span>
 
-    return href ? (
-      <li className="w-full">
-        <Link href={href}>{jsx}</Link>
+          {children}
+        </div>
       </li>
-    ) : (
-      <li className="w-full">{jsx}</li>
     );
   },
 );

@@ -3,6 +3,7 @@ import { mountStoreDevtool } from "simple-zustand-devtools";
 
 interface AppState {
   isSidebarOpen: boolean;
+
   toggleSidebar: () => void;
 }
 

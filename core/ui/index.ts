@@ -14,3 +14,4 @@ export * from "./components/ui/tooltip";
 export * from "./components/ui/stepper";
 export * from "./components/user-avatar";
 export * from "./components/ui/dropdown-menu";
+export * from "./components/ui/accordion";
