@@ -1,2 +1,2 @@
-export * from "./models/client/user";
-export * from "./models/client/workspace";
+export * from "./models/client/user-client-model";
+export * from "./models/client/workspace-client-model";

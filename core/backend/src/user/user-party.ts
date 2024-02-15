@@ -1,8 +1,8 @@
 import type * as Party from "partykit/server";
 import { Session, isSessionValid, ok, unauthorized } from "../utils";
-import { handlePost } from "./post";
+import { handlePost } from "./user-party-post";
 
-export default class Server implements Party.Server {
+export default class UserParty implements Party.Server {
   constructor(readonly room: Party.Room) {}
 
   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
@@ -91,4 +91,4 @@ export default class Server implements Party.Server {
   }
 }
 
-Server satisfies Party.Worker;
+UserParty satisfies Party.Worker;

@@ -22,6 +22,7 @@ export async function handlePost(req: Party.Request, room: Party.Room) {
       await room.storage.put("user:data", data);
 
       return json({ message: "User data populated." }, 201);
+
     default:
       return badRequest();
   }

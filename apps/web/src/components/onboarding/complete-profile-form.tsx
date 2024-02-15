@@ -86,8 +86,7 @@ export function CompleteProfileForm() {
           );
 
           if (postRes.ok || postRes.status === 304) {
-            // nextStep();
-            console.log("success");
+            nextStep();
           } else {
             toast.error("Something went wrong. Please try again.");
           }

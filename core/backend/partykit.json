@@ -3,7 +3,7 @@
   "name": "backend",
   "main": "src/server.ts",
   "parties": {
-    "user": "src/user/user.ts"
+    "user": "src/user/user-party.ts"
   },
   "compatibilityDate": "2024-02-14"
 }
