@@ -20,6 +20,8 @@ export const users = sqliteTable("users", {
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .$default(() => new Date())
     .notNull(),
+  deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+  version: integer("version").notNull().default(1),
 });
 
 export const accounts = sqliteTable(
@@ -66,5 +68,17 @@ export const verificationTokens = sqliteTable(
   })
 );
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export const replicacheServer = sqliteTable("replicache_server", {
+  id: text("id").notNull().primaryKey().default("1234"),
+  version: integer("version").default(1),
+});
+
+export const replicacheClient = sqliteTable("replicache_client", {
+  id: text("id").notNull().primaryKey(),
+  lastMutationID: integer("last_mutation_id").notNull(),
+  client_group_id: text("client_group_id").notNull(),
+  version: integer("version").notNull(),
+});
+
+export type UserType = typeof users.$inferSelect;
+export type NewUserType = typeof users.$inferInsert;

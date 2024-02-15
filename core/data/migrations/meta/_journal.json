@@ -15,6 +15,13 @@
       "when": 1707663848199,
       "tag": "0001_talented_the_professor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1707944496137,
+      "tag": "0002_tranquil_centennial",
+      "breakpoints": true
     }
   ]
 }

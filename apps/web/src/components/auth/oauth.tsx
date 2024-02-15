@@ -1,15 +1,17 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+// import { signIn } from "next-auth/react";
 import { RiGoogleFill as Google } from "react-icons/ri";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 import { Button } from "@repo/ui";
+import { getCsrfToken, getSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function OAuth() {
   async function onClick(provider: "google" | "github") {
     await signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: DEFAULT_LOGIN_REDIRECT + "?newLogin=true",
     });
   }
 
@@ -25,7 +27,7 @@ export function OAuth() {
       </Button>
       <Button
         variant="outline"
-        className="w-full bg-transparent text-[#24292e] hover:bg-[#24292e] hover:text-white"
+        className="w-full bg-transparent text-[#24292e] hover:bg-[#24292e] hover:text-white dark:text-white"
         onClick={() => onClick("github")}
       >
         <GitHubLogoIcon className="h-5 w-5" />

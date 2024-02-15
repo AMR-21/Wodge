@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const EditUserSchema = z.object({
+export const UserPublicInfoSchema = z.object({
   username: z
     .string({
       required_error: "Username is required",
@@ -19,4 +19,14 @@ export const EditUserSchema = z.object({
     .max(70, "Display name is too long")
     .min(1, "Display name is required"),
   avatar: z.optional(z.string().url()).or(z.literal("")),
+});
+
+export const UserSchema = UserPublicInfoSchema.extend({
+  id: z.string(),
+  email: z.string().email(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  emailVerified: z.string().datetime(),
+  deleted: z.boolean(),
+  version: z.number(),
 });

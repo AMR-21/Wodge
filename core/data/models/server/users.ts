@@ -2,7 +2,8 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
-import { NewUser, db, users } from "..";
+import { db } from "../../db";
+import { UserType, users } from "../../schemas/auth.schema";
 
 /**
  * Get user by userId
@@ -37,7 +38,7 @@ export async function getUserByUsername(username: string) {
  * Update user (displayName, avatar, username or all of them)
  * for corresponding user with @param userId
  */
-export async function updateUserById(userId: string, data: Partial<NewUser>) {
+export async function updateUserById(userId: string, data: Partial<UserType>) {
   try {
     const user = await db
       .update(users)

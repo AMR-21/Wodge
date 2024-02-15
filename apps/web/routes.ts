@@ -20,4 +20,4 @@ export const apiAuthPrefix = "/api/auth";
 /**
  * Default redirect path after logging in
  */
-export const DEFAULT_LOGIN_REDIRECT = "/protected";
+export const DEFAULT_LOGIN_REDIRECT = "/me";

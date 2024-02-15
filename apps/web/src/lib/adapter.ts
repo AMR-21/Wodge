@@ -3,7 +3,12 @@ import { eq, and } from "drizzle-orm";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
-import { accounts, sessions, users, verificationTokens } from "@repo/data";
+import {
+  accounts,
+  sessions,
+  users,
+  verificationTokens,
+} from "@repo/data/schemas";
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 type NonNullableProps<T> = {

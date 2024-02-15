@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "partykit dev --live",
+    "deploy": "partykit deploy"
+  },
+  "dependencies": {
+    "partysocket": "^0.0.25",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@repo/data": "workspace:*",
+    "@repo/ts": "workspace:*",
+    "partykit": "^0.0.89",
+    "typescript": "^5.3.3"
+  }
+}

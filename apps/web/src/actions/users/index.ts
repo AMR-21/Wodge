@@ -5,9 +5,12 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@/lib/server-utils";
-import { EditUserSchema, db, updateUserById } from "@repo/data";
+import { UserPublicInfoSchema } from "@repo/data/schemas";
+import { updateUserById } from "@repo/data/server-models";
 
-export async function updateProfile(rawData: z.infer<typeof EditUserSchema>) {
+export async function updateProfile(
+  rawData: z.infer<typeof UserPublicInfoSchema>,
+) {
   // 1. Authenticate access
   const user = await currentUser();
 
@@ -16,7 +19,7 @@ export async function updateProfile(rawData: z.infer<typeof EditUserSchema>) {
   }
 
   // 2. Validate data
-  const validatedFields = EditUserSchema.safeParse(rawData);
+  const validatedFields = UserPublicInfoSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
     return { error: "Invalid data" };

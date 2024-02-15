@@ -18,9 +18,11 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { EditUserSchema } from "@repo/data";
+import { UserPublicInfoSchema } from "@repo/data/schemas";
 import { updateProfile } from "@/actions/users";
 import { useOnboarding } from "./onboarding-context";
+import { getCsrfToken, getSession } from "next-auth/react";
+import { User } from "@repo/data/client-models";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
@@ -28,8 +30,8 @@ export function CompleteProfileForm() {
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof EditUserSchema>>({
-    resolver: zodResolver(EditUserSchema),
+  const form = useForm<z.infer<typeof UserPublicInfoSchema>>({
+    resolver: zodResolver(UserPublicInfoSchema),
     defaultValues: {
       displayName: user?.displayName ?? "",
       username: user?.username ?? "",
@@ -59,14 +61,36 @@ export function CompleteProfileForm() {
     form.setValue("avatar", url);
   }
 
-  async function onSubmit(data: z.infer<typeof EditUserSchema>) {
+  async function onSubmit(data: z.infer<typeof UserPublicInfoSchema>) {
     startTransition(() => {
-      updateProfile(data).then((res) => {
+      updateProfile(data).then(async (res) => {
         if (res?.error) {
           toast.error(res.error);
         }
         if (res?.success) {
-          nextStep();
+          const {
+            csrf: { csrfToken },
+            session: { userId, sessionToken },
+          } = await User.getInstance().session();
+
+          const postRes = await fetch(
+            `http://localhost:1999/parties/user/${userId}/populate`,
+            {
+              method: "POST",
+              body: JSON.stringify(res.user[0]),
+              headers: {
+                Accept: "application/json",
+                Authorization: `${sessionToken}$${csrfToken}`,
+              },
+            },
+          );
+
+          if (postRes.ok || postRes.status === 304) {
+            // nextStep();
+            console.log("success");
+          } else {
+            toast.error("Something went wrong. Please try again.");
+          }
         }
       });
     });

@@ -1,10 +1,10 @@
 "use client";
 
-import { User } from "@repo/data";
+import { UserType } from "@repo/data/schemas";
 import { createContext, useContext, useTransition } from "react";
 
 interface ContextValues {
-  user: Partial<User>;
+  user: Partial<UserType>;
   isPending: boolean;
   startTransition: React.TransitionStartFunction;
 }
@@ -16,7 +16,7 @@ export function OnboardingProvider({
   user,
 }: {
   children: React.ReactNode;
-  user: Partial<User>;
+  user: Partial<UserType>;
 }) {
   const [isPending, startTransition] = useTransition();
 

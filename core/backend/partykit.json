@@ -1,0 +1,9 @@
+{
+  "$schema": "https://www.partykit.io/schema.json",
+  "name": "backend",
+  "main": "src/server.ts",
+  "parties": {
+    "user": "src/user/user.ts"
+  },
+  "compatibilityDate": "2024-02-14"
+}
