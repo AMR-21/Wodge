@@ -1,5 +1,12 @@
-import { Replicache } from "replicache";
-import { UserType } from "../../schemas/auth.schema";
+import {
+  PullRequest,
+  PullerResult,
+  PushRequest,
+  PusherResult,
+  Replicache,
+  WriteTransaction,
+} from "replicache";
+import { replicacheWrapper } from "./replicache-wrapper";
 
 export type Session = {
   sessionToken: string;
@@ -11,38 +18,58 @@ export type Session = {
   };
 };
 
-export type CSRF = {
-  csrfToken: string;
-};
-
 export class User {
   private static user: User;
+  // @ts-ignore
+  store: Replicache<UserMutators>;
 
   private constructor() {}
 
-  static getInstance(): User {
+  static async getInstance() {
     if (!User.user) {
       User.user = new User();
+      await User.user.persistId();
+      User.user.initStore();
     }
-
     return User.user;
   }
 
-  static initialize(data: UserType) {}
+  async initStore() {
+    this.store = new Replicache({
+      name: this.id,
+      licenseKey: "lc800451908284747976640672606f56d",
+      pusher: replicacheWrapper<PushRequest, PusherResult>("push", this.id),
+      puller: replicacheWrapper<PullRequest, PullerResult>("pull", this.id),
+      mutators,
+    });
+  }
 
-  async session(): Promise<{ session: Session; csrf: CSRF }> {
-    const curSession = localStorage.getItem("session");
+  // TODO: Handle edge case where userId exist but not the correct one
+  /**
+   * Persist userId in the local storage for accessing/creating the user data's replicache instance
+   */
+  async persistId() {
+    if (this.id) return true;
+    const { userId } = (await (
+      await fetch("/api/auth/session")
+    ).json()) as Session;
 
-    if (!curSession) {
-      const session = (await (
-        await fetch("/api/auth/session")
-      ).json()) as Session;
-      const csrf = (await (await fetch("/api/auth/csrf")).json()) as CSRF;
+    if (!userId) throw new Error("No user id found");
 
-      if (!csrf || !session) throw new Error("No session or csrf token found");
-      localStorage.setItem("session", JSON.stringify({ session, csrf }));
-    }
+    localStorage.setItem("userId", userId);
 
-    return JSON.parse(localStorage.getItem("session")!);
+    return true;
+  }
+
+  get id() {
+    return localStorage.getItem("userId")!;
   }
 }
+
+const mutators = {
+  async createUser(tx: WriteTransaction, name: string) {
+    await tx.set("name", name);
+  },
+};
+
+export type UserMutators = typeof mutators;

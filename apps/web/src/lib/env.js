@@ -18,12 +18,14 @@ export const env = createEnv({
 
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_BACKEND_DOMAIN: z.string(),
   },
 
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
 
     AUTH_SECRET: process.env.AUTH_SECRET,
+    NEXT_PUBLIC_BACKEND_DOMAIN: process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

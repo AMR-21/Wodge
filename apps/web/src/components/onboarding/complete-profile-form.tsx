@@ -23,8 +23,10 @@ import { updateProfile } from "@/actions/users";
 import { useOnboarding } from "./onboarding-context";
 import { getCsrfToken, getSession } from "next-auth/react";
 import { User } from "@repo/data/client-models";
+import { useCurrentUser } from "@/lib/client-utils";
 
 export function CompleteProfileForm() {
+  const currentUser = useCurrentUser();
   const { user, startTransition } = useOnboarding();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
@@ -68,20 +70,13 @@ export function CompleteProfileForm() {
           toast.error(res.error);
         }
         if (res?.success) {
-          const {
-            csrf: { csrfToken },
-            session: { userId, sessionToken },
-          } = await User.getInstance().session();
-
+          // populate user DO with user data
           const postRes = await fetch(
-            `http://localhost:1999/parties/user/${userId}/populate`,
+            `http://localhost:1999/parties/user/${currentUser?.id}/populate`,
             {
               method: "POST",
               body: JSON.stringify(res.user[0]),
-              headers: {
-                Accept: "application/json",
-                Authorization: `${sessionToken}$${csrfToken}`,
-              },
+              credentials: "include",
             },
           );
 

@@ -21,7 +21,7 @@ export const users = sqliteTable("users", {
     .$default(() => new Date())
     .notNull(),
   deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
-  version: integer("version").notNull().default(1),
+  lastModifiedVersion: integer("version").notNull().default(1),
 });
 
 export const accounts = sqliteTable(

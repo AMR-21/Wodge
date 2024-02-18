@@ -4,17 +4,8 @@
 import type * as Party from "partykit/server";
 
 /**
- * Referenced from user client model
+ * HTTP Helpers
  */
-export type Session = {
-  sessionToken: string;
-  userId: string;
-  expires: string;
-  user: {
-    id: string;
-    username: string;
-  };
-};
 
 /**
  * General CORS configuration
@@ -23,18 +14,9 @@ export type Session = {
 export const CORS = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
-  "Access-Control-Allow-Headers": "Authorization",
-};
-
-/**
- * Check if a session is valid by checking if it exists and if it has expired
- */
-export const isSessionValid = (
-  session?: Session | null
-): session is Session => {
-  return Boolean(
-    session && (!session.expires || session.expires > new Date().toISOString())
-  );
+  "Access-Control-Allow-Credentials": "true",
+  "Access-Control-Allow-Headers":
+    "Authorization, Content-Type,X-Replicache-RequestID",
 };
 
 /**
@@ -80,6 +62,11 @@ export const notChanged = () =>
   new Response(null, { status: 304, headers: CORS });
 
 /**
+ * Helper function that sends a 501 status response
+ */
+export const notImplemented = () => error("Not implemented", 501);
+
+/**
  * Helper function that sends a 401 status response
  */
 export const unauthorized = () => error("Unauthorized", 401);
@@ -97,3 +84,13 @@ export const getRoute = (req: Party.Request) => {
   const routes = pathname.split("/");
   return routes.length > 3 ? "/" + routes.slice(4).join("/") : "/";
 };
+
+/**
+ * Helper function to get the party id from the url
+ */
+export const getPartyId = (req: Party.Request) =>
+  new URL(req.url).pathname.split("/")[3];
+
+/**
+ * End of HTTP Helpers
+ */

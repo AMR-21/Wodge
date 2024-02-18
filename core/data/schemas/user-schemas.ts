@@ -28,5 +28,5 @@ export const UserSchema = UserPublicInfoSchema.extend({
   updatedAt: z.string().datetime(),
   emailVerified: z.string().datetime(),
   deleted: z.boolean(),
-  version: z.number(),
+  lastModifiedVersion: z.number(),
 });

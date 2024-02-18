@@ -66,9 +66,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 134.59055162200974,
-			"y": -17.683894262665035,
-			"lastActivityTimestamp": 1707994758283,
+			"x": 407.5430582784801,
+			"y": 261.4102953636533,
+			"lastActivityTimestamp": 1708197950804,
 			"meta": {}
 		},
 		{
@@ -123,8 +123,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 876,
-				"h": 660
+				"w": 807,
+				"h": 644
 			},
 			"insets": [
 				false,
@@ -147,7 +147,7 @@
 			"isChangingStyle": false,
 			"isReadonly": false,
 			"meta": {},
-			"currentPageId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"currentPageId": "page:4dlOoZ6f0kfdvo4IC3ENI",
 			"duplicateProps": null,
 			"id": "instance:instance",
 			"typeName": "instance"
@@ -160,9 +160,9 @@
 			"typeName": "page"
 		},
 		{
-			"x": 360.3040688737428,
-			"y": 258.67605728668366,
-			"z": 0.9294908066270807,
+			"x": 841.7217574337477,
+			"y": 329.6078269973194,
+			"z": 0.5901821597841544,
 			"meta": {},
 			"id": "camera:page:XhvkXCqAmwd75Nudbc6dy",
 			"typeName": "camera"
@@ -292,6 +292,36 @@
 			"meta": {},
 			"id": "instance_page_state:page:eaozcbw44HwUse2aEEceZ",
 			"pageId": "page:eaozcbw44HwUse2aEEceZ",
+			"typeName": "instance_page_state"
+		},
+		{
+			"meta": {},
+			"id": "page:4dlOoZ6f0kfdvo4IC3ENI",
+			"name": "Data handling in DO KV",
+			"index": "a7",
+			"typeName": "page"
+		},
+		{
+			"x": 79.61278512300692,
+			"y": 125.56983939471104,
+			"z": 0.7287195767195767,
+			"meta": {},
+			"id": "camera:page:4dlOoZ6f0kfdvo4IC3ENI",
+			"typeName": "camera"
+		},
+		{
+			"editingShapeId": "shape:39JhE9IFk8Kdj_u6HgU0g",
+			"croppingShapeId": null,
+			"selectedShapeIds": [
+				"shape:39JhE9IFk8Kdj_u6HgU0g"
+			],
+			"hoveredShapeId": "shape:39JhE9IFk8Kdj_u6HgU0g",
+			"erasingShapeIds": [],
+			"hintingShapeIds": [],
+			"focusedGroupId": null,
+			"meta": {},
+			"id": "instance_page_state:page:4dlOoZ6f0kfdvo4IC3ENI",
+			"pageId": "page:4dlOoZ6f0kfdvo4IC3ENI",
 			"typeName": "instance_page_state"
 		},
 		{
@@ -13116,124 +13146,49 @@
 			"typeName": "shape"
 		},
 		{
-			"x": -127.91876881486769,
-			"y": -378.0962809280501,
+			"x": 30.138623450413263,
+			"y": 180.38574732344102,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:PigWfw3MuLcJrY3ET5puK",
-			"type": "geo",
-			"props": {
-				"w": 208,
-				"h": 104.890625,
-				"geo": "rectangle",
-				"color": "black",
-				"labelColor": "black",
-				"fill": "none",
-				"dash": "draw",
-				"size": "s",
-				"font": "draw",
-				"text": "indexeddb/local stor has userId",
-				"align": "middle",
-				"verticalAlign": "middle",
-				"growY": 0,
-				"url": ""
-			},
-			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "a9",
-			"typeName": "shape"
-		},
-		{
-			"x": -279.6531438148677,
-			"y": -245.00390589125317,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:b7Klnls7qPgphxxEgH_zQ",
 			"type": "text",
 			"props": {
 				"color": "black",
 				"size": "s",
-				"w": 511.46875,
-				"text": "should be encrypted, but how to store encryption key?",
+				"w": 877.078125,
+				"text": "Create a versions map <id,version>\nstore this map in memory on DO initialization*\nOn pull reads get the needed items with needed versions grouped to minimize read requests.\nSome entities as user does not need this way as it is only one kv pair.\nmostly effictive in messages and forums.\nspaces may not needed but still applicable.\nby this sharding occurs only on the versions map.",
 				"font": "draw",
 				"align": "middle",
 				"autoSize": true,
 				"scale": 1
 			},
-			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "aA",
+			"parentId": "page:4dlOoZ6f0kfdvo4IC3ENI",
+			"index": "a1",
+			"id": "shape:39JhE9IFk8Kdj_u6HgU0g",
 			"typeName": "shape"
 		},
 		{
-			"x": -93.20948267350133,
-			"y": -178.30071791139085,
+			"x": 161.11518595041326,
+			"y": 422.15603299494364,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:4dFnS-ZzUJ8MG47U0ONkM",
 			"type": "text",
 			"props": {
 				"color": "black",
 				"size": "s",
-				"w": 169.421875,
-				"text": "local storage:\n{\nuserId_encrypted\n}",
+				"w": 615.125,
+				"text": "Tip: prefetch the data needed by replicache to minimize read cost",
 				"font": "draw",
 				"align": "middle",
 				"autoSize": true,
 				"scale": 1
 			},
-			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "aB",
-			"typeName": "shape"
-		},
-		{
-			"x": -61.47357526064252,
-			"y": -73.9425044590256,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:cXy92RMw4UqAC2a_s8Te5",
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "s",
-				"w": 148.984375,
-				"text": "on logout purge",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "aC",
-			"typeName": "shape"
-		},
-		{
-			"x": -280,
-			"y": 20,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:JRSEUIZrB3WcEte6g8-Bc",
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "s",
-				"w": 534.015625,
-				"text": "Missing features multi account + offline login\n\noffline login:\nuser info store in local store with encryption key hashed\nand userId encrypted then try to login",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "aD",
+			"parentId": "page:4dlOoZ6f0kfdvo4IC3ENI",
+			"index": "a2",
+			"id": "shape:zJh1IIovsYJCbqVQ5HF--",
 			"typeName": "shape"
 		},
 		{

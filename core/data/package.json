@@ -9,6 +9,7 @@
   "dependencies": {
     "drizzle-orm": "^0.29.3",
     "drizzle-zod": "^0.5.1",
+    "next-auth": "^5.0.0-beta.4",
     "replicache": "^14.1.0",
     "server-only": "^0.0.1",
     "zod": "^3.22.4"

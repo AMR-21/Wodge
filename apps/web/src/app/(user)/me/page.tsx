@@ -1,47 +1,61 @@
 "use client";
 
-import { User } from "@repo/data/client-models";
-import { getCsrfToken, getSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useUser } from "@/lib/client-utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
+import {
+  PushRequest,
+  PusherResult,
+  Replicache,
+  WriteTransaction,
+} from "replicache";
+import { useSubscribe } from "replicache-react";
 
 function MePage() {
-  const [isLocalStorageSet, setIsLocalStorageSet] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const user = useUser();
+  const name = useSubscribe(user?.store, async (tx) =>
+    tx.get("user:UeIhmvODYEV461nI6mmm8"),
+  );
 
-  // console.log({ searchParams });
-  const usr = User.getInstance();
-  console.log(usr);
+  const input = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    async function fn() {
-      const session = await getSession();
-      const csrf = await getCsrfToken();
+  if (!user) return null;
 
-      localStorage.setItem("session", JSON.stringify({ session, csrf }));
-      setIsLocalStorageSet(true);
-    }
-    if (searchParams.has("newLogin") && !isLocalStorageSet) fn();
-  }, []);
+  // if (searchParams.has("login")) {
+  //   (async () => {
+  //     const res = await user.persistId();
+  //     if (!res) router.push("/login/error");
+  //   })();
+  // }
 
   return (
     <div>
       Me page
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          user.store?.mutate.createUser(input.current!.value);
+        }}
+      >
+        <input type="text" ref={input} />
+        <button type="submit">Create user</button>
+      </form>
       <button
         onClick={async () => {
           const res = await fetch(
-            "http://localhost:1999/parties/main/id",
-            // "https://backend.amr-21.partykit.dev/parties/main/id",
+            "http://localhost:1999/parties/user/" + "L-LrwqIbUxx0qBu5KS3eF",
             {
-              // credentials: "include",
               credentials: "include",
             },
           );
-          console.log(await res.text());
+          console.log(await res.json());
         }}
       >
-        click
+        amr
       </button>
+      {name && <p>{JSON.stringify(name)}</p>}
     </div>
   );
 }

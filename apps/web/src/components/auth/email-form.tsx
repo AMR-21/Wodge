@@ -39,7 +39,7 @@ export function EmailForm() {
     startTransition(() => {
       signIn("email", {
         email: values.email,
-        callbackUrl: DEFAULT_LOGIN_REDIRECT + "?newLogin=true",
+        callbackUrl: DEFAULT_LOGIN_REDIRECT + "?login=true",
         redirect: false,
       }).then((res) => {
         if (!res) return toast.error("An error occurred. Please try again.");

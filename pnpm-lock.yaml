@@ -30,6 +30,31 @@ importers:
         specifier: ^3.25.0
         version: 3.28.1(@cloudflare/workers-types@4.20240208.0)
 
+  apps/backend:
+    dependencies:
+      partysocket:
+        specifier: ^0.0.25
+        version: 0.0.25
+      replicache:
+        specifier: ^14.1.0
+        version: 14.1.0
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@repo/data':
+        specifier: workspace:*
+        version: link:../../core/data
+      '@repo/ts':
+        specifier: workspace:*
+        version: link:../../config/ts
+      partykit:
+        specifier: ^0.0.89
+        version: 0.0.89
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   apps/web:
     dependencies:
       '@auth/core':
@@ -104,6 +129,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      usehooks-ts:
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -171,28 +199,6 @@ importers:
 
   config/ts: {}
 
-  core/backend:
-    dependencies:
-      partysocket:
-        specifier: ^0.0.25
-        version: 0.0.25
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@repo/data':
-        specifier: workspace:*
-        version: link:../data
-      '@repo/ts':
-        specifier: workspace:*
-        version: link:../../config/ts
-      partykit:
-        specifier: ^0.0.89
-        version: 0.0.89
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
   core/data:
     dependencies:
       drizzle-orm:
@@ -201,6 +207,9 @@ importers:
       drizzle-zod:
         specifier: ^0.5.1
         version: 0.5.1(drizzle-orm@0.29.3)(zod@3.22.4)
+      next-auth:
+        specifier: ^5.0.0-beta.4
+        version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       replicache:
         specifier: ^14.1.0
         version: 14.1.0
@@ -6013,6 +6022,10 @@ packages:
     resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
     dev: true
 
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
+
   /lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
     dev: true
@@ -8320,6 +8333,16 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+
+  /usehooks-ts@2.14.0(react@18.2.0):
+    resolution: {integrity: sha512-jnhrjTRJoJS7cFxz63tRYc5mzTKf/h+Ii8P0PDHymT9qDe4ZA2/gzDRmDR4WGausg5X8wMIdghwi3BBCN9JKow==}
+    engines: {node: '>=16.15.0'}
+    peerDependencies:
+      react: ^16.8.0  || ^17 || ^18
+    dependencies:
+      lodash.debounce: 4.0.8
+      react: 18.2.0
+    dev: false
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
