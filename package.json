@@ -10,7 +10,8 @@
     "migrate": "turbo db:migration",
     "migrate:local": "turbo db:migration:local",
     "drop": "turbo db:drop",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "add:comp": "turbo add:comp"
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",

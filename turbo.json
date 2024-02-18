@@ -27,6 +27,9 @@
     },
     "db:studio": {
       "cache": false
+    },
+    "add:comp": {
+      "cache": false
     }
   }
 }
