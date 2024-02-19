@@ -24,7 +24,7 @@ CREATE TABLE `sessions` (
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
-	`name` text,
+	`display_name` text,
 	`avatar` text,
 	`username` text,
 	`email_verified` integer,
@@ -39,4 +39,5 @@ CREATE TABLE `verification_tokens` (
 	PRIMARY KEY(`id`, `token`)
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_username_unique` ON `users` (`username`);

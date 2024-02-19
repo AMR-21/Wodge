@@ -54,7 +54,7 @@ export const {
   session: {
     strategy: "database",
     generateSessionToken() {
-      return nanoid();
+      return nanoid(36);
     },
   },
 

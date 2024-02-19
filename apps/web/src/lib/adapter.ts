@@ -26,7 +26,6 @@ export function DbAdapter(
 ): Adapter {
   return {
     async createUser(data) {
-      // TODO: Populate User DO
       return await client
         .insert(users)
         .values({

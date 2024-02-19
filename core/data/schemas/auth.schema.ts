@@ -5,12 +5,15 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { nanoid } from "nanoid";
 
 export const users = sqliteTable("users", {
-  id: text("id").notNull().primaryKey(),
-  email: text("email").notNull(),
-  // hasProfile: integer("has_profile", { mode: "boolean" }).default(false),
-  displayName: text("name"),
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$default(() => nanoid()),
+  email: text("email").unique().notNull(),
+  displayName: text("display_name"),
   avatar: text("avatar"),
   username: text("username").unique(),
   emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
@@ -20,8 +23,6 @@ export const users = sqliteTable("users", {
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .$default(() => new Date())
     .notNull(),
-  deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
-  lastModifiedVersion: integer("version").notNull().default(1),
 });
 
 export const accounts = sqliteTable(
@@ -67,18 +68,3 @@ export const verificationTokens = sqliteTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
-
-export const replicacheServer = sqliteTable("replicache_server", {
-  id: text("id").notNull().primaryKey().default("1234"),
-  version: integer("version").default(1),
-});
-
-export const replicacheClient = sqliteTable("replicache_client", {
-  id: text("id").notNull().primaryKey(),
-  lastMutationID: integer("last_mutation_id").notNull(),
-  client_group_id: text("client_group_id").notNull(),
-  version: integer("version").notNull(),
-});
-
-export type UserType = typeof users.$inferSelect;
-export type NewUserType = typeof users.$inferInsert;

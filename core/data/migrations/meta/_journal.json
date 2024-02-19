@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707663211323,
-      "tag": "0000_faithful_hercules",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1707663848199,
-      "tag": "0001_talented_the_professor",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707944496137,
-      "tag": "0002_tranquil_centennial",
+      "when": 1708373059258,
+      "tag": "0000_eager_the_spike",
       "breakpoints": true
     }
   ]

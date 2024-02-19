@@ -18,22 +18,22 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { UserPublicInfoSchema } from "@repo/data/schemas";
-import { updateProfile } from "@/actions/users";
+import { UpdateUserSchema } from "@repo/data/schemas";
+import { updateProfile } from "@/actions/user-actions";
 import { useOnboarding } from "./onboarding-context";
 import { getCsrfToken, getSession } from "next-auth/react";
 import { User } from "@repo/data/client-models";
-import { useCurrentUser } from "@/lib/client-utils";
+import { ne } from "drizzle-orm";
 
 export function CompleteProfileForm() {
-  const currentUser = useCurrentUser();
   const { user, startTransition } = useOnboarding();
+  const localUser = User.getInstance();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof UserPublicInfoSchema>>({
-    resolver: zodResolver(UserPublicInfoSchema),
+  const form = useForm<z.infer<typeof UpdateUserSchema>>({
+    resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
       displayName: user?.displayName ?? "",
       username: user?.username ?? "",
@@ -63,28 +63,15 @@ export function CompleteProfileForm() {
     form.setValue("avatar", url);
   }
 
-  async function onSubmit(data: z.infer<typeof UserPublicInfoSchema>) {
+  async function onSubmit(data: z.infer<typeof UpdateUserSchema>) {
     startTransition(() => {
       updateProfile(data).then(async (res) => {
         if (res?.error) {
           toast.error(res.error);
         }
         if (res?.success) {
-          // populate user DO with user data
-          const postRes = await fetch(
-            `http://localhost:1999/parties/user/${currentUser?.id}/populate`,
-            {
-              method: "POST",
-              body: JSON.stringify(res.user[0]),
-              credentials: "include",
-            },
-          );
-
-          if (postRes.ok || postRes.status === 304) {
-            nextStep();
-          } else {
-            toast.error("Something went wrong. Please try again.");
-          }
+          localUser.cacheUser(res.user);
+          nextStep();
         }
       });
     });

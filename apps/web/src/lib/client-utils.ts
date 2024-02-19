@@ -13,17 +13,13 @@ export function useCurrentUser() {
 export function uploadAvatar(file: File) {
   console.log(file);
 }
-
 /**
  * Get local user data
  */
 export function useUser() {
   const [user, setUser] = useState<User>();
   useEffect(() => {
-    // User.
-    (async () => {
-      setUser(await User.getInstance());
-    })();
+    setUser(User.getInstance());
   }, []);
 
   return user;

@@ -3,7 +3,8 @@ import "server-only";
 
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { UserType, users } from "../../schemas/auth.schema";
+import { users } from "../../schemas/auth.schema";
+import { UserType } from "../../schemas";
 
 /**
  * Get user by userId
@@ -15,7 +16,7 @@ export async function getUserById(id: string) {
       where: eq(users.id, id),
     });
 
-    return user;
+    return user as UserType;
   } catch (e) {
     return null;
   }
@@ -46,7 +47,7 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
       .where(eq(users.id, userId))
       .returning();
 
-    return { user };
+    return { user: user[0] as UserType };
   } catch (e) {
     if (!(e instanceof Error)) return { error: "Internal server error" };
 
