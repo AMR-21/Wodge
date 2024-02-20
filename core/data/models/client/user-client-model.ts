@@ -15,10 +15,7 @@ export type Session = {
   sessionToken: string;
   userId: string;
   expires: string;
-  user: {
-    id: string;
-    username: string;
-  };
+  user: CacheUserType;
 };
 
 export class User {
@@ -45,22 +42,23 @@ export class User {
     // });
   }
 
-  cacheUser({ id, email, avatar, displayName }: CacheUserType) {
-    const userObj = { id, email, avatar, displayName };
+  cacheUser({ id, email, avatar, displayName, username }: CacheUserType) {
+    const userObj = { id, email, avatar, displayName, username };
 
     localStorage.setItem("user", JSON.stringify(userObj));
   }
 
-  get data() {
-    if (!localStorage.getItem("user")) throw Error("User data not found");
+  async getData(): Promise<CacheUserType> {
+    if (!localStorage.getItem("user")) {
+      const res = await fetch("/api/auth/session");
+      const { user } = (await res.json()) as Session;
+      this.cacheUser(user);
+    }
+    return JSON.parse(localStorage.getItem("user")!);
+  }
+
+  get data(): CacheUserType | null {
+    if (!localStorage.getItem("user")) return null;
     return JSON.parse(localStorage.getItem("user")!);
   }
 }
-
-// const mutators = {
-//   async createUser(tx: WriteTransaction, name: string) {
-//     await tx.set("name", name);
-//   },
-// };
-
-// export type UserMutators = typeof mutators;

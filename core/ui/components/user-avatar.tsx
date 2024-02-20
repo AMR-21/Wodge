@@ -21,6 +21,7 @@ interface ProfileAvatarProps {
   inputRef?: React.RefObject<HTMLInputElement>;
   onRemoveAvatar?: () => void;
   className?: string;
+  interactive?: boolean;
 }
 
 export function UserAvatar({
@@ -30,11 +31,33 @@ export function UserAvatar({
   inputRef,
   onRemoveAvatar,
   className,
+  interactive = true,
 }: ProfileAvatarProps) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isClearHovered, setIsClearHovered] = React.useState(false);
 
   const hasAvatar = !!localUrl || !!avatar;
+
+  if (!interactive) {
+    return (
+      <Avatar
+        className={cn(
+          "peer h-20 w-20  ring-2 ring-border ring-offset-2 ring-offset-background",
+          className,
+        )}
+      >
+        <AvatarImage
+          src={localUrl || avatar || "/avatar.jpeg"}
+          alt={`${fallback}'s avatar`}
+        />
+        <AvatarFallback>
+          {fallback.length >= 2
+            ? fallback.slice(0, 2).toUpperCase()
+            : fallback.toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+    );
+  }
 
   return (
     <div className="flex justify-center">

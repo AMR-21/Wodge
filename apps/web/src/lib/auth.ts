@@ -10,7 +10,7 @@ import { DbAdapter } from "./adapter";
 import { db } from "@repo/data/db";
 import { env } from "./env";
 import { users } from "@repo/data/schemas";
-import { sendMagicLink } from "./server-utils";
+import { sendMagicLink } from "./utils";
 
 export const {
   handlers: { GET, POST },
@@ -44,6 +44,9 @@ export const {
         user: {
           id: user.id,
           username: user?.username,
+          email: user?.email,
+          avatar: user?.avatar,
+          displayName: user?.displayName,
         },
       };
     },

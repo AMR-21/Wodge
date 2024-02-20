@@ -4,7 +4,7 @@ import "server-only";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 
-import { currentUser } from "@/lib/server-utils";
+import { currentUser } from "@/lib/utils";
 import { updateUserById } from "@repo/data/server-models";
 import { UpdateUserSchema } from "@repo/data/schemas";
 
