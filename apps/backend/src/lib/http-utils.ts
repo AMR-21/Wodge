@@ -16,7 +16,7 @@ export const CORS = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Headers":
-    "Authorization, Content-Type,X-Replicache-RequestID",
+    "Authorization, Content-Type, X-Replicache-RequestID",
 };
 
 /**
@@ -84,12 +84,6 @@ export const getRoute = (req: Party.Request) => {
   const routes = pathname.split("/");
   return routes.length > 3 ? "/" + routes.slice(4).join("/") : "/";
 };
-
-/**
- * Helper function to get the party id from the url
- */
-export const getPartyId = (req: Party.Request) =>
-  new URL(req.url).pathname.split("/")[3];
 
 /**
  * End of HTTP Helpers

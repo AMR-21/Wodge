@@ -15,6 +15,7 @@ import {
   Input,
   UserAvatar,
   toast,
+  useLocalUser,
   useStepper,
 } from "@repo/ui";
 
@@ -27,7 +28,7 @@ import { ne } from "drizzle-orm";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
-  const localUser = User.getInstance();
+  const localUser = useLocalUser();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
@@ -70,7 +71,7 @@ export function CompleteProfileForm() {
           toast.error(res.error);
         }
         if (res?.success) {
-          localUser.cacheUser(res.user);
+          localUser?.cacheUser(res.user);
           nextStep();
         }
       });

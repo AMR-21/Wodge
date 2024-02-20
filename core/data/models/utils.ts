@@ -1,6 +1,3 @@
-import { request } from "http";
-import { PullRequest, PullerResult, PusherResult } from "replicache";
-
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
   id: string

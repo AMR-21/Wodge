@@ -27,13 +27,11 @@ export const isSessionValid = (
   );
 };
 
-const AUTH_DOMAIN = "http://localhost:3000";
-
 /**
  * Get the current session by the cookie in the request and from the
  * next-auth endpoint
  */
-export const getSession = async (req: Party.Request) => {
+export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
   // Extract auth cookies from the request
   // Should be on the same domain in order to work
   const cookie = req.headers.get("cookie");
@@ -41,7 +39,7 @@ export const getSession = async (req: Party.Request) => {
   if (!cookie) throw new Error("No cookie found");
 
   // Fetch the session from the auth endpoint validated by the CSRF token
-  const res = await fetch(`${AUTH_DOMAIN}/api/auth/session`, {
+  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/auth/session`, {
     headers: {
       Accept: "application/json",
       Cookie: cookie,

@@ -42,7 +42,7 @@ export function UserAvatar({
     return (
       <Avatar
         className={cn(
-          "peer h-20 w-20  ring-2 ring-border ring-offset-2 ring-offset-background",
+          "h-20 w-20  ring-2 ring-border ring-offset-2 ring-offset-background",
           className,
         )}
       >

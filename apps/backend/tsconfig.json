@@ -1,3 +1,6 @@
 {
-  "extends": "@repo/ts/tsconfig.json"
+  "extends": "@repo/ts/tsconfig.json",
+  "compilerOptions": {
+    "strictPropertyInitialization": false
+  }
 }

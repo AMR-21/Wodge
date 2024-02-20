@@ -43,9 +43,9 @@ export default auth((req) => {
   }
 
   // // User is authentic, has profile, and trying to access onboarding route
-  // if (isOnboardingRoute && hasUsername) {
-  //   return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  // }
+  if (isOnboardingRoute && hasUsername) {
+    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  }
 
   return;
 });

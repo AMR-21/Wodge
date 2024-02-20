@@ -20,6 +20,6 @@ export * from "./components/ui/accordion";
 export * from "./components/user-avatar";
 export * from "./components/user-card";
 
-export * from "./hooks/use-local-user";
-export * from "./hooks/use-current-user";
-export * from "./hooks/use-login";
+export * from "../../apps/web/src/hooks/use-local-user";
+export * from "../../apps/web/src/hooks/use-current-user";
+export * from "../../apps/web/src/hooks/use-login";

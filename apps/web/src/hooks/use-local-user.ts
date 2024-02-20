@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 export function useLocalUser() {
   const [user, setUser] = useState<User>();
   useEffect(() => {
-    setUser(User.getInstance());
+    (async () => {
+      setUser(await User.getInstance());
+    })();
   }, []);
 
   return user;

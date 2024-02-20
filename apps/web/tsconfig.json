@@ -16,7 +16,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../core/ui/components/user-card.tsx"
+    "../../core/ui/components/user-card.tsx",
+    "src/hooks/use-workspaces.ts"
   ],
   "exclude": ["node_modules"]
 }

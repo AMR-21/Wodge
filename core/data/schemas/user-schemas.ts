@@ -1,5 +1,10 @@
+import { version } from "os";
 import { z } from "zod";
 
+/**
+ * General user schema
+ * This identical to the one in the auth schema but with more evolved validation
+ */
 export const UserSchema = z.object({
   id: z.string().length(21),
   username: z
@@ -26,13 +31,20 @@ export const UserSchema = z.object({
   emailVerified: z.date(),
 });
 
+/**
+ * User schema for updating user info
+ * This is a subset of the UserSchema that only allows updating the avatar, username, and display name
+ */
 export const UpdateUserSchema = UserSchema.pick({
   avatar: true,
   username: true,
   displayName: true,
 });
 
-export const CacheUserSchema = UserSchema.pick({
+/**
+ * Schema for the user object that is stored in the local storage
+ */
+export const LocalUserSchema = UserSchema.pick({
   id: true,
   avatar: true,
   username: true,
@@ -40,8 +52,21 @@ export const CacheUserSchema = UserSchema.pick({
   email: true,
 });
 
+/**
+ * Schema for user memberships stored in the durable object
+ * {
+ *  spaces: {
+ *   "spaceId": ["role1", "role2"]
+ * }
+ * }
+ */
+export const UserSpaceStoreSchema = z.object({
+  spaces: z.record(z.array(z.string())),
+  // Fields for replicache storage
+  lastModifiedVersion: z.number(),
+  deleted: z.boolean(),
+});
+
 export type UserType = z.infer<typeof UserSchema>;
-export type CacheUserType = Pick<
-  UserType,
-  "id" | "username" | "email" | "avatar" | "displayName"
->;
+export type LocalUserType = z.infer<typeof LocalUserSchema>;
+export type UserSpaceStoreType = z.infer<typeof UserSpaceStoreSchema>;

@@ -16,9 +16,9 @@ export function useLogin() {
     if (searchParams.has("login")) {
       (async () => {
         try {
-          const user = User.getInstance();
+          const user = await User.getInstance();
           if (user.data) return router.replace("/");
-          await User.getInstance().getData();
+          await user.getData();
           router.replace("/");
         } catch (e) {
           // TODO better handling
