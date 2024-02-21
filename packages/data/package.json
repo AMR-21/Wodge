@@ -7,7 +7,7 @@
     "db:drop": "drizzle-kit drop"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.8.0",
+    "@repo/env": "workspace:*",
     "drizzle-orm": "^0.29.3",
     "drizzle-zod": "^0.5.1",
     "nanoid": "^5.0.5",

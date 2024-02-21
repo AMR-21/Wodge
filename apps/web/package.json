@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@repo/env": "workspace:*",
     "@auth/core": "^0.26.3",
     "@auth/drizzle-adapter": "^0.5.1",
     "@hookform/resolvers": "^3.3.4",
