@@ -66,9 +66,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 463.19973335974225,
-			"y": 507.0220349282837,
-			"lastActivityTimestamp": 1708473791743,
+			"x": 389.4788809460913,
+			"y": 544.2488864523516,
+			"lastActivityTimestamp": 1708477633072,
 			"meta": {}
 		},
 		{
@@ -123,8 +123,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 956,
-				"h": 713
+				"w": 721,
+				"h": 526
 			},
 			"insets": [
 				false,
@@ -160,20 +160,20 @@
 			"typeName": "page"
 		},
 		{
-			"x": 283.2540036891535,
-			"y": -76.50918193264152,
-			"z": 0.8640857001399805,
+			"x": -50.38234448804892,
+			"y": -372.37803920649446,
+			"z": 1.0763896435290272,
 			"meta": {},
 			"id": "camera:page:XhvkXCqAmwd75Nudbc6dy",
 			"typeName": "camera"
 		},
 		{
-			"editingShapeId": "shape:sErf3xvAH5W-JnREK6tzl",
+			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:sErf3xvAH5W-JnREK6tzl"
+				"shape:dZ-3vNeNA3O33fg3nt3X6"
 			],
-			"hoveredShapeId": "shape:sErf3xvAH5W-JnREK6tzl",
+			"hoveredShapeId": "shape:dZ-3vNeNA3O33fg3nt3X6",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -13761,26 +13761,72 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 11.956661592723549,
-			"y": 492.55901219712433,
+			"x": 30,
+			"y": 350,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:sErf3xvAH5W-JnREK6tzl",
+			"id": "shape:DkPIcsG96n8lD3BDqae2a",
 			"type": "text",
 			"props": {
 				"color": "black",
 				"size": "s",
-				"w": 701.75,
-				"text": "create space lc -> push on -> populate online -> pull (3 reqs to make sure)\ncreate space lc -> push on -> push from space online (2 reqs to make sure)",
+				"w": 470.75,
+				"text": "create lc -> pushed on -> populate on with owner",
 				"font": "draw",
 				"align": "start",
 				"autoSize": true,
 				"scale": 1
 			},
 			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
-			"index": "a8",
+			"index": "a9",
+			"typeName": "shape"
+		},
+		{
+			"x": 110,
+			"y": 440,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:dZ-3vNeNA3O33fg3nt3X6",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 549.09375,
+				"text": "1 create sp local with owner field and members\n2 when spaces data is pushed online run owner validation\nso it is never published except by the creator \n3 block space access with is verified flag",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"index": "aA",
+			"typeName": "shape"
+		},
+		{
+			"x": 130,
+			"y": 590,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:UbvyNzGwC87VpRRkNmBg8",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 564.078125,
+				"text": "\nmutators of space always check for is verified flag\nif false throw auth error\n\ncreate space flag reverse : check if is verified is not true to \nrun and validate the owner then sets the flag to true to \nallow later mutators to run",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"index": "aB",
 			"typeName": "shape"
 		},
 		{

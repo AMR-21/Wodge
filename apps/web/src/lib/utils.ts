@@ -1,4 +1,4 @@
-import { env } from "./env";
+import { env } from "@repo/env";
 import { auth } from "./auth";
 
 export type VerificationMail = {

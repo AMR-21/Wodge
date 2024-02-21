@@ -8,7 +8,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { DbAdapter } from "./adapter";
 import { db } from "../../../../packages/data/db";
-import { env } from "./env";
+import { env } from "@repo/env";
 import { users } from "../../../../packages/data/schemas";
 import { sendMagicLink } from "./utils";
 

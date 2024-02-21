@@ -45,8 +45,8 @@ export class User {
     this.store = new Replicache({
       name: id,
       licenseKey: "lc800451908284747976640672606f56d",
-      pusher: replicacheWrapper<PushRequest, PusherResult>("push", id),
-      puller: replicacheWrapper<PullRequest, PullerResult>("pull", id),
+      pusher: replicacheWrapper<PushRequest, PusherResult>("push", "user", id),
+      puller: replicacheWrapper<PullRequest, PullerResult>("pull", "user", id),
       mutators,
     });
   }

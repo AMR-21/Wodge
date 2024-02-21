@@ -82,7 +82,7 @@ export async function repPull(
       data: { cookie, clientGroupID: clientGroupId },
     } = validatedData;
 
-    const clientGroup = await getClientGroup(clientGroupId, userId, storage);
+    const c = await getClientGroup(clientGroupId, userId, storage, false);
     const fromVersion = cookie ?? 0;
     const globalVersion = versions.get("globalVersion")!;
 
@@ -95,7 +95,10 @@ export async function repPull(
           prefix: `${CLIENT_GROUP_PREFIX}${clientGroupId}:${CLIENT_PREFIX}`,
         })
       ).values(),
-    ].forEach((c) => (lastMutationIDChanges[c.id] = c.lastMutationID));
+    ].forEach((c) => {
+      if (c.lastModifiedVersion > fromVersion)
+        lastMutationIDChanges[extractClientID(c.id)!] = c.lastMutationID;
+    });
 
     // Get the operations
     const patch = await patcher(fromVersion, storage, versions);
@@ -124,7 +127,8 @@ export async function repPush(
   req: Request,
   storage: Storage,
   versions: Map<string, number>,
-  runner: ({ mutation, nextVersion, storage }: RunnerParams) => Promise<void>
+  runner: ({ mutation, nextVersion, storage }: RunnerParams) => Promise<void>,
+  poker?: () => Promise<void>
 ) {
   const userId = req.headers.get("x-user-id");
   const data = await req.json();
@@ -144,11 +148,13 @@ export async function repPush(
     // Step 1 and 2: Get/Create client group and verify that the user owns it
     const clientGroup = await getClientGroup(clientGroupID, userId, storage);
 
+    if (!clientGroup) throw new Error("Client group not found");
+
     const globalVersion = versions.get("globalVersion")!;
     const nextVersion = globalVersion + 1;
-
     // hashMap to avoid many reads
-    const clients: Record<string, ReplicacheClient> = {};
+
+    const clients = new Map<string, ReplicacheClient>();
 
     for (let i = 0; i < mutations.length; i++) {
       const mutation = mutations[i]!;
@@ -156,7 +162,8 @@ export async function repPush(
       const { id, clientID } = mutation;
 
       // Step 3 and 4: Get/Create client and verify that it belongs to the client group
-      let client = clients[makeClientId(clientID, clientGroup.id)];
+      // let client = clients[makeClientId(clientID, clientGroup.id)];
+      let client = clients.get(makeClientId(clientID, clientGroup.id));
 
       if (!client) {
         client = await getClient(
@@ -167,8 +174,7 @@ export async function repPush(
           storage
         );
 
-        // console.log(client);
-        clients[makeClientId(clientID, clientGroup.id)] = client;
+        clients.set(makeClientId(clientID, clientGroup.id), client);
       }
 
       // Step 5: Verify that the mutation id is the next expected mutation id from user
@@ -185,12 +191,17 @@ export async function repPush(
 
       client.lastMutationID = expectedMutationID;
       client.lastModifiedVersion = nextVersion;
+
+      clients.set(makeClientId(clientID, clientGroup.id), client);
     }
 
     versions.set("globalVersion", nextVersion);
 
-    await storage.put({ versions, ...clients });
+    // Step 7: Update the clients
+    await storage.put({ versions, ...Object.fromEntries(clients) });
 
+    // TODO - Step 8 send a poke or call passed poke function
+    poker?.();
     return ok();
   } catch (e) {
     switch (e) {
@@ -213,6 +224,7 @@ async function getClient(
   storage: Storage
 ) {
   const key = makeClientId(id, clientGroupID);
+
   const client = await storage.get<ReplicacheClient>(key);
 
   // If client exists, check if it belongs to the client group and returns it if it does
@@ -240,9 +252,11 @@ async function getClient(
 async function getClientGroup(
   clientGroupId: string,
   userId: string,
-  storage: Storage
+  storage: Storage,
+  withCreate = true
 ) {
   const key = makeClientGroupId(clientGroupId);
+
   // Check for existent client group
   const clientGroup = await storage.get<ReplicacheClientGroup>(key);
 
@@ -253,6 +267,7 @@ async function getClientGroup(
     return clientGroup;
   }
 
+  if (!withCreate) return null;
   // Client group does not exist, create it and return it
   await storage.put(key, {
     id: key,
@@ -263,7 +278,9 @@ async function getClientGroup(
 }
 
 export const makeClientId = (clientId: string, clientGroupId: string) =>
-  CLIENT_GROUP_PREFIX + clientGroupId + ":" + CLIENT_PREFIX + clientId;
+  clientGroupId + ":" + CLIENT_PREFIX + clientId;
 
 export const makeClientGroupId = (clientGroupId: string) =>
   CLIENT_GROUP_PREFIX + clientGroupId;
+
+export const extractClientID = (clientID: string) => clientID.split(":")[3];

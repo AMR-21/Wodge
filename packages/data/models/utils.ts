@@ -1,11 +1,15 @@
+import { env } from "@repo/env";
+import { User } from "../client-models";
+
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
+  domain: "user" | "workspace",
   id: string
 ) {
   return async (requestBody: Request, requestID: string) => {
     try {
       const res = await fetch(
-        `http://localhost:1999/parties/user/${id}/replicache-${mode === "push" ? "push" : "pull"}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/replicache-${mode === "push" ? "push" : "pull"}`,
         {
           method: "POST",
           credentials: "include",

@@ -75,6 +75,27 @@ function HomePage() {
         >
           xx
         </Button>
+        <Button
+          onClick={() => {
+            user.store.pull();
+          }}
+        >
+          pl
+        </Button>
+        <Button
+          onClick={async () => {
+            const res = await fetch(
+              `http://localhost:1999/parties/user/${user.data?.id}`,
+              {
+                credentials: "include",
+              },
+            );
+
+            console.log(await res.json());
+          }}
+        >
+          pl3
+        </Button>
         <Button className="mt-6 w-full" size="default">
           Join or create workspace
         </Button>

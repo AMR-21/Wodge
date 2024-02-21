@@ -12,3 +12,32 @@ export const NewWorkspaceSchema = z.object({
 });
 
 export type NewWorkspaceType = z.infer<typeof NewWorkspaceSchema>;
+
+// meta
+/**
+ * {
+ * owner
+ * avatar
+ * name
+ * createdAt
+ * invite link
+ * teams max 10
+ * settings*
+ * }
+ *
+ *
+ * roles 'by name': { max 10 + 2 base
+ * name
+ * permissions read/write/admin/team admin
+ * color
+ * }
+ *
+ * channels{
+ * id : {roles ,team}
+ * }
+ *
+ *
+ * members {
+ * id : {roles, data, teams}
+ * }
+ */

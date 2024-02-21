@@ -4,6 +4,7 @@ import { handlePost } from "./user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
 import { UserSpaceStoreType } from "@repo/data/schemas/user-schemas";
+import { CLIENT_GROUP_PREFIX } from "@repo/data/prefixes";
 
 export default class UserParty implements Party.Server {
   spaceStore: UserSpaceStoreType;
@@ -31,6 +32,9 @@ export default class UserParty implements Party.Server {
         return json({
           glob: "hi",
           versions: this.versions.get("globalVersion"),
+          cls: Object.fromEntries(
+            await this.room.storage.list({ prefix: "clientGroup" })
+          ),
           s: this.spaceStore,
         });
       case "OPTIONS":

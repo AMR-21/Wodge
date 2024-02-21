@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 import { mountStoreDevtool } from "simple-zustand-devtools";
+import { env } from "@repo/env";
 
 interface AppState {
   isSidebarOpen: boolean;
@@ -31,6 +32,6 @@ export const useStore = create(
 //   },
 // ),
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   mountStoreDevtool("Store", useStore);
 }

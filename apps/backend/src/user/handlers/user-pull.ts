@@ -4,8 +4,14 @@ import { repPull } from "../../lib/replicache";
 import { UserSpaceStoreType, UserType } from "@repo/data/schemas";
 import { PatchOperation } from "replicache";
 import { USER_PREFIX } from "@repo/data/prefixes";
+import { json } from "../../lib/http-utils";
 
 export async function userPull(req: Request, party: UserParty) {
+  // return json({
+  //   lastMutationIDChanges: {},
+  //   cookie: 42,
+  //   patch: [],
+  // });
   return await repPull(req, party.room.storage, party.versions, patcher);
 }
 
