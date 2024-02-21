@@ -12,10 +12,11 @@ import {
   LocalUserType,
   NewWorkspaceSchema,
   NewWorkspaceType,
-  UserSpaceStoreType,
+  UserWorkspacesStoreType,
 } from "../../schemas";
+import { WORKSPACES_STORE_PREFIX } from "../../prefixes";
 
-export type SpaceStore = UserSpaceStoreType["spaces"];
+export type WorkspacesStore = UserWorkspacesStoreType["workspaces"];
 
 export type Session = {
   sessionToken: string;
@@ -86,23 +87,22 @@ const mutators = {
 
     const newSpace = validatedFields.data;
 
-    const spaceStore = await tx.get<SpaceStore>("spaces");
+    const workspacesStore = (await tx.get<WorkspacesStore>(
+      WORKSPACES_STORE_PREFIX
+    )) as string[];
 
-    if (spaceStore) {
-      // Space already exists
-      try {
-        spaceStore[newSpace.id];
-      } catch (e) {
-        return;
-      }
+    if (!workspacesStore) {
+      return await tx.set(WORKSPACES_STORE_PREFIX, [newSpace.id]);
     }
 
-    const newSpaceStore = {
-      ...spaceStore,
-      [newSpace.id]: ["owner", "member"],
-    };
+    // spaces with similar id already exists
+    try {
+      if (workspacesStore.includes(newSpace.id)) return;
+    } catch (e) {
+      return;
+    }
 
-    await tx.set("spaces", newSpaceStore);
+    await tx.set(WORKSPACES_STORE_PREFIX, [...workspacesStore, newSpace.id]);
 
     // TODO: create a new workspace instance
   },

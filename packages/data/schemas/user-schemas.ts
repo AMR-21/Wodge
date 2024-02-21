@@ -1,12 +1,13 @@
 import { version } from "os";
 import { z } from "zod";
+import { ID_LENGTH } from "./config";
 
 /**
  * General user schema
  * This identical to the one in the auth schema but with more evolved validation
  */
 export const UserSchema = z.object({
-  id: z.string().length(21),
+  id: z.string().length(ID_LENGTH),
   username: z
     .string({
       required_error: "Username is required",
@@ -60,8 +61,8 @@ export const LocalUserSchema = UserSchema.pick({
  * }
  * }
  */
-export const UserSpaceStoreSchema = z.object({
-  spaces: z.record(z.array(z.string())),
+export const UserWorkspacesStoreSchema = z.object({
+  workspaces: z.array(z.string()),
   // Fields for replicache storage
   lastModifiedVersion: z.number(),
   deleted: z.boolean(),
@@ -69,4 +70,4 @@ export const UserSpaceStoreSchema = z.object({
 
 export type UserType = z.infer<typeof UserSchema>;
 export type LocalUserType = z.infer<typeof LocalUserSchema>;
-export type UserSpaceStoreType = z.infer<typeof UserSpaceStoreSchema>;
+export type UserWorkspacesStoreType = z.infer<typeof UserWorkspacesStoreSchema>;

@@ -1,9 +1,9 @@
 import { Request, Storage } from "partykit/server";
 import UserParty from "../user-party";
 import { repPull } from "../../lib/replicache";
-import { UserSpaceStoreType, UserType } from "@repo/data/schemas";
+import { UserWorkspacesStoreType } from "@repo/data/schemas";
 import { PatchOperation } from "replicache";
-import { USER_PREFIX } from "@repo/data/prefixes";
+import { USER_PREFIX, WORKSPACES_STORE_PREFIX } from "@repo/data/prefixes";
 import { json } from "../../lib/http-utils";
 
 export async function userPull(req: Request, party: UserParty) {
@@ -22,16 +22,18 @@ async function patcher(
   //   if (v > fromVersion) changedEntriesKeys.push(k);
   // });
 
-  const spaces = await storage.get<UserSpaceStoreType>("spaces");
+  const workspacesStore = await storage.get<UserWorkspacesStoreType>(
+    WORKSPACES_STORE_PREFIX
+  );
 
   const patch: PatchOperation[] = [];
 
-  if (spaces)
-    if (spaces.lastModifiedVersion > fromVersion) {
+  if (workspacesStore)
+    if (workspacesStore.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: "spaces",
-        value: spaces.spaces,
+        key: WORKSPACES_STORE_PREFIX,
+        value: workspacesStore.workspaces,
       });
     }
 

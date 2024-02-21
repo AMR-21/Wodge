@@ -1,4 +1,4 @@
-import { Replicache } from "replicache";
+import { Replicache, WriteTransaction } from "replicache";
 import { NewWorkspaceType } from "../../schemas";
 
 /**
@@ -31,4 +31,9 @@ export class Workspace {
   static createWorkspace(data: NewWorkspaceType) {}
 }
 
-const mutators = {};
+const mutators = {
+  async createSpace(tx: WriteTransaction, data: NewWorkspaceType) {
+    // 1. With the validated data,
+    // await tx.put("spaces", data.id, data);
+  },
+};

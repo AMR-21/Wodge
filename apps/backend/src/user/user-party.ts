@@ -3,11 +3,14 @@ import type * as Party from "partykit/server";
 import { handlePost } from "./user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
-import { UserSpaceStoreType } from "@repo/data/schemas/user-schemas";
-import { CLIENT_GROUP_PREFIX } from "@repo/data/prefixes";
+import { UserWorkspacesStoreType } from "@repo/data/schemas/user-schemas";
+import {
+  CLIENT_GROUP_PREFIX,
+  WORKSPACES_STORE_PREFIX,
+} from "@repo/data/prefixes";
 
 export default class UserParty implements Party.Server {
-  spaceStore: UserSpaceStoreType;
+  workspacesStore: UserWorkspacesStoreType;
   versions: Map<string, number>;
 
   constructor(readonly room: Party.Room) {}
@@ -17,11 +20,14 @@ export default class UserParty implements Party.Server {
       (await this.room.storage.get("versions")) ||
       new Map([["globalVersion", 0]]);
 
-    this.spaceStore = (await this.room.storage.get("spaces")) || {
-      spaces: {},
-      lastModifiedVersion: 0,
-      deleted: false,
-    };
+    this.workspacesStore =
+      (await this.room.storage.get<UserWorkspacesStoreType>(
+        WORKSPACES_STORE_PREFIX
+      )) || {
+        workspaces: [],
+        lastModifiedVersion: 0,
+        deleted: false,
+      };
   }
 
   async onRequest(req: Party.Request) {
@@ -35,7 +41,7 @@ export default class UserParty implements Party.Server {
           cls: Object.fromEntries(
             await this.room.storage.list({ prefix: "clientGroup" })
           ),
-          s: this.spaceStore,
+          s: this.workspacesStore,
         });
       case "OPTIONS":
         return ok();

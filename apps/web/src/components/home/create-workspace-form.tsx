@@ -18,6 +18,9 @@ export function CreateWorkspaceForm() {
   async function onSubmit(data: NewWorkspaceType) {
     // console.log(data);
     await user?.store.mutate.createSpace(data);
+
+    // for safety and avoiding duplicate ids
+    form.setValue("id", nanoid());
   }
 
   return (

@@ -283,4 +283,4 @@ export const makeClientId = (clientId: string, clientGroupId: string) =>
 export const makeClientGroupId = (clientGroupId: string) =>
   CLIENT_GROUP_PREFIX + clientGroupId;
 
-export const extractClientID = (clientID: string) => clientID.split(":")[3];
+export const extractClientID = (clientID: string) => clientID.split("/")[2];
