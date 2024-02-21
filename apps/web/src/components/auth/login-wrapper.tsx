@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
   Separator,
-} from "@repo/ui";
+} from "../../../../../packages/ui";
 import { EmailForm } from "./email-form";
 import { OAuth } from "./oauth";
 

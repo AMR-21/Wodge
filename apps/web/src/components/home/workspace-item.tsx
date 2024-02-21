@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, Button } from "@repo/ui";
+import { Avatar, AvatarImage, Button } from "../../../../../packages/ui";
 
 export function WorkspaceItem({ workspace }: { workspace?: any }) {
   return (

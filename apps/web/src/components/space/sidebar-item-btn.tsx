@@ -1,4 +1,4 @@
-import { Button, ButtonProps, cn } from "@repo/ui";
+import { Button, ButtonProps, cn } from "../../../../../packages/ui";
 import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
 

@@ -1,15 +1,14 @@
 "use client";
 export const runtime = "edge";
 
-import { Button } from "@repo/ui";
+import { Button } from "../../../../../../packages/ui";
 import { signOut, useSession } from "next-auth/react";
 
 function ProtectedPage() {
-  const session = useSession()
-  
+  const session = useSession();
+
   return (
     <div>
-
       protected
       {JSON.stringify(session)}
       <Button onClick={() => signOut({})}>sign out</Button>

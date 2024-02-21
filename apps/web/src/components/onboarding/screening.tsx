@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui";
+} from "../../../../../packages/ui";
 import { Logo } from "../logo";
 
 function Wrapper({

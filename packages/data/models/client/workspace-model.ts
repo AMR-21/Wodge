@@ -1,12 +1,12 @@
-import { ReplOptions } from "repl";
-import { Replicache, TEST_LICENSE_KEY, WriteTransaction } from "replicache";
+import { Replicache } from "replicache";
+import { NewWorkspaceType } from "../../schemas";
 
 /**
  * Client side spaces' data model
  */
 export class Workspace {
   private static registry: Map<string, Workspace> = new Map();
-  // dataStore: Replicache;
+  store: Replicache;
 
   private constructor(readonly id: string) {
     // this.dataStore = new Replicache({
@@ -27,4 +27,8 @@ export class Workspace {
   static hasInstance(id: string): boolean {
     return Workspace.registry.has(id);
   }
+
+  static createWorkspace(data: NewWorkspaceType) {}
 }
+
+const mutators = {};

@@ -1,9 +1,14 @@
 "use client";
 
 import { WorkspaceItem } from "@/components/home/workspace-item";
-import { Avatar, AvatarImage, UserCard, useLogin } from "@repo/ui";
-import { useLocalUser } from "@repo/ui";
-import { Button, Separator } from "@repo/ui";
+import {
+  Avatar,
+  AvatarImage,
+  UserCard,
+  useLogin,
+} from "../../../../../packages/ui";
+import { useLocalUser } from "../../../../../packages/ui";
+import { Button, Separator } from "../../../../../packages/ui";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";

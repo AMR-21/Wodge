@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import { Hash, LucideIcon } from "lucide-react";
-import { cn, buttonVariants, ButtonProps, Button } from "@repo/ui";
+import {
+  cn,
+  buttonVariants,
+  ButtonProps,
+  Button,
+} from "../../../../../packages/ui";
 import { forwardRef } from "react";
 import { IconType } from "react-icons/lib";
 

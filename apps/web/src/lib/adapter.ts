@@ -8,7 +8,7 @@ import {
   sessions,
   users,
   verificationTokens,
-} from "@repo/data/schemas";
+} from "../../../../packages/data/schemas";
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 type NonNullableProps<T> = {

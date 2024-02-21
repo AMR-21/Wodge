@@ -17,13 +17,13 @@ import {
   toast,
   useLocalUser,
   useStepper,
-} from "@repo/ui";
+} from "../../../../../packages/ui";
 
-import { UpdateUserSchema } from "@repo/data/schemas";
+import { UpdateUserSchema } from "../../../../../packages/data/schemas";
 import { updateProfile } from "@/actions/user-actions";
 import { useOnboarding } from "./onboarding-context";
 import { getCsrfToken, getSession } from "next-auth/react";
-import { User } from "@repo/data/client-models";
+import { User } from "../../../../../packages/data/client-models";
 import { ne } from "drizzle-orm";
 
 export function CompleteProfileForm() {

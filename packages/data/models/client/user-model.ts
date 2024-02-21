@@ -103,6 +103,8 @@ const mutators = {
     };
 
     await tx.set("spaces", newSpaceStore);
+
+    // TODO: create a new workspace instance
   },
 };
 

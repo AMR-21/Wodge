@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@repo/data/client-models";
+import { User } from "../../../../packages/data/client-models";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui";
+import { Button } from "../../../../packages/ui";
 import { signOut } from "next-auth/react";
 
 export function LogoutBtn() {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "partykit dev --live",
+    "dev": "infisical export > .env --path=/web && partykit dev --live",
     "deploy": "partykit deploy"
   },
   "dependencies": {

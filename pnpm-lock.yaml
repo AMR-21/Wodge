@@ -201,6 +201,9 @@ importers:
 
   core/data:
     dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       drizzle-orm:
         specifier: ^0.29.3
         version: 0.29.3(@types/react@18.2.56)(react@18.2.0)
@@ -3985,7 +3988,7 @@ packages:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
-      drizzle-orm: 0.29.3(@cloudflare/workers-types@4.20240208.0)(@types/react@18.2.55)(better-sqlite3@9.4.0)(react@18.2.0)
+      drizzle-orm: 0.29.3(@types/react@18.2.56)(react@18.2.0)
       zod: 3.22.4
     dev: false
 

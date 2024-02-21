@@ -6,7 +6,7 @@ import {
   AvatarImage,
   buttonVariants,
   cn,
-} from "@repo/ui";
+} from "../../../../../packages/ui";
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { useStore } from "@/store";

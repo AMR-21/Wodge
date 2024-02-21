@@ -4,7 +4,7 @@ import "@repo/ui/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth";
-import { Toaster } from "@repo/ui";
+import { Toaster } from "../../../../packages/ui";
 import { ModeToggle } from "@/components/toggle";
 
 /** Runtime = edge require in order to make next-auth works with cf-pages */

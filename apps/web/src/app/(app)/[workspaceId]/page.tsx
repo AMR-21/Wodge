@@ -1,6 +1,6 @@
 "use client";
 
-import { Workspace } from "@repo/data/client-models";
+import { Workspace } from "../../../../../../packages/data/client-models";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
