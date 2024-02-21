@@ -6,12 +6,12 @@ import {
   AvatarImage,
   buttonVariants,
   cn,
-} from "../../../../../packages/ui";
+} from "@repo/ui";
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { useStore } from "@/store";
 
-export function SpaceSwitcher() {
+export function WorkspaceSwitcher() {
   const toggleSidebar = useStore((state) => state.toggleSidebar);
   const isSidebarOpen = useStore((state) => state.isSidebarOpen);
 

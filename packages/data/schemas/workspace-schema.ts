@@ -11,10 +11,21 @@ export const NewWorkspaceSchema = z.object({
   avatar: z.optional(z.string().url()).or(z.literal("")),
 });
 
+export const JoinWorkspaceSchema = z.object({
+  url: z
+    .string({
+      required_error: "Invite link is required",
+    })
+    .url({
+      message: "Invalid URL",
+    }),
+});
+
 export type NewWorkspaceType = z.infer<typeof NewWorkspaceSchema>;
 
 // meta
 /**
+ * is_verified
  * {
  * owner
  * avatar
@@ -26,7 +37,8 @@ export type NewWorkspaceType = z.infer<typeof NewWorkspaceSchema>;
  * }
  *
  *
- * roles 'by name': { max 10 + 2 base
+ * roles : { max 10 + 2 base
+ * id
  * name
  * permissions read/write/admin/team admin
  * color

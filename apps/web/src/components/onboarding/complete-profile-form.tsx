@@ -15,16 +15,13 @@ import {
   Input,
   UserAvatar,
   toast,
-  useLocalUser,
   useStepper,
-} from "../../../../../packages/ui";
+} from "@repo/ui";
 
-import { UpdateUserSchema } from "../../../../../packages/data/schemas";
+import { UpdateUserSchema } from "@repo/data/schemas";
 import { updateProfile } from "@/actions/user-actions";
 import { useOnboarding } from "./onboarding-context";
-import { getCsrfToken, getSession } from "next-auth/react";
-import { User } from "../../../../../packages/data/client-models";
-import { ne } from "drizzle-orm";
+import { useLocalUser } from "@/hooks/use-local-user";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
@@ -123,10 +120,7 @@ export function CompleteProfileForm() {
                 <FormControl>
                   <Input {...field} placeholder="John Doe" className="peer" />
                 </FormControl>
-                <FormDescription
-                  withError
-                  className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
-                >
+                <FormDescription withError collapsible>
                   This how people will see you. Use whatever you want.
                 </FormDescription>
               </FormItem>
@@ -143,10 +137,7 @@ export function CompleteProfileForm() {
                 <FormControl>
                   <Input {...field} className="peer" placeholder="johndoe" />
                 </FormControl>
-                <FormDescription
-                  withError
-                  className="h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5"
-                >
+                <FormDescription withError collapsible>
                   Only letters, numbers, dashes, and underscores.
                 </FormDescription>
               </FormItem>

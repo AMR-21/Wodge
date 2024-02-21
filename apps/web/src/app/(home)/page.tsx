@@ -1,41 +1,23 @@
 "use client";
 
 import { WorkspaceItem } from "@/components/home/workspace-item";
-import {
-  Avatar,
-  AvatarImage,
-  UserCard,
-  useLogin,
-} from "../../../../../packages/ui";
-import { useLocalUser } from "../../../../../packages/ui";
-import { Button, Separator } from "../../../../../packages/ui";
+import { UserCard } from "@repo/ui";
+import { Button, Separator } from "@repo/ui";
 import { useWorkspaces } from "@/hooks/use-workspaces";
-import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
+import { useLogin } from "@/hooks/use-login";
+import { useLocalUser } from "@/hooks/use-local-user";
+import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
 
 function HomePage() {
   const user = useLocalUser();
   const router = useRouter();
-
-  // @ts-ignore
-  // const spaces = useWorkspaces();
-  const spaces = useWorkspaces();
   useLogin();
+  const spaces = useWorkspaces();
+
   if (!user) return null;
 
-  async function onClick() {
-    const res = await fetch(
-      `http://localhost:1999/parties/user/${user?.data?.id}`,
-      {
-        credentials: "include",
-      },
-    );
-
-    console.log(await res.json());
-  }
-
   console.log(spaces);
-
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
       <UserCard className="absolute right-10 top-10" />
@@ -65,40 +47,10 @@ function HomePage() {
           </p> */}
         </div>
 
-        <Button
-          onClick={() => {
-            user.store.mutate.createSpace({
-              id: nanoid(),
-              name: "new workspace",
-            });
-          }}
-        >
-          xx
-        </Button>
-        <Button
-          onClick={() => {
-            user.store.pull();
-          }}
-        >
-          pl
-        </Button>
-        <Button
-          onClick={async () => {
-            const res = await fetch(
-              `http://localhost:1999/parties/user/${user.data?.id}`,
-              {
-                credentials: "include",
-              },
-            );
-
-            console.log(await res.json());
-          }}
-        >
-          pl3
-        </Button>
-        <Button className="mt-6 w-full" size="default">
+        {/* <Button className="mt-6 w-full" size="default">
           Join or create workspace
-        </Button>
+        </Button> */}
+        <AddWorkspaceDialog />
       </div>
     </div>
   );

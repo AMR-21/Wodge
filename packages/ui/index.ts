@@ -16,10 +16,8 @@ export * from "./components/ui/tooltip";
 export * from "./components/ui/stepper";
 export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/accordion";
+export * from "./components/ui/dialog";
+export * from "./components/ui/tabs";
 
 export * from "./components/user-avatar";
 export * from "./components/user-card";
-
-export * from "../../apps/web/src/hooks/use-local-user";
-export * from "../../apps/web/src/hooks/use-current-user";
-export * from "../../apps/web/src/hooks/use-login";

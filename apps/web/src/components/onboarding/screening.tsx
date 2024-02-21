@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../../packages/ui";
+} from "@repo/ui";
 import { Logo } from "../logo";
 
 function Wrapper({
@@ -16,7 +16,7 @@ function Wrapper({
   description: string;
 }) {
   return (
-    <Card className="border-none text-center shadow-none">
+    <Card className="border-none bg-transparent text-center shadow-none">
       <CardHeader className="flex flex-col items-center">
         <Logo />
         <CardTitle className="text-4xl">{title}</CardTitle>

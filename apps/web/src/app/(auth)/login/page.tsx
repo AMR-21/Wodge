@@ -12,7 +12,7 @@ function LoginPage() {
   }, []);
 
   if (isMounted) {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
   }
 
   return (

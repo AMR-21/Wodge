@@ -125,10 +125,16 @@ const FormControl = React.forwardRef<
 });
 FormControl.displayName = "FormControl";
 
+/**
+ * For collapsible description, corresponding input must have peer class
+ */
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement> & { withError?: boolean }
->(({ className, withError, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & {
+    withError?: boolean;
+    collapsible?: boolean;
+  }
+>(({ className, withError, collapsible, ...props }, ref) => {
   const { formDescriptionId, error } = useFormField();
 
   return (
@@ -138,6 +144,8 @@ const FormDescription = React.forwardRef<
       className={cn(
         "text-[0.8rem] text-muted-foreground",
         withError && error && "text-destructive-muted-foreground",
+        collapsible &&
+          "h-0 overflow-hidden transition-all peer-focus:h-4 peer-focus:overflow-visible peer-focus:pb-5",
         className,
         withError && error && "h-4 pb-5",
       )}

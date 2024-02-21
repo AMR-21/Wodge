@@ -3,7 +3,7 @@
 import { RiGoogleFill as Google } from "react-icons/ri";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
-import { Button } from "../../../../../packages/ui";
+import { Button } from "@repo/ui";
 import { signIn } from "next-auth/react";
 
 export function OAuth() {

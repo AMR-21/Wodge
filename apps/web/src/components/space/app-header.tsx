@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/store";
-import { SpaceSwitcher } from "./space-switcher";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { PanelLeft } from "lucide-react";
 
@@ -11,7 +11,7 @@ export function AppHeader() {
 
   return (
     <div className="flex h-12 min-h-12 items-center border-b border-border/50">
-      {isSidebarOpen && <SpaceSwitcher />}
+      {isSidebarOpen && <WorkspaceSwitcher />}
 
       <div className="flex basis-full items-center px-1.5">
         {!isSidebarOpen && (

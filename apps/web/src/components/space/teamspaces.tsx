@@ -3,7 +3,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../../../../packages/ui";
+} from "@repo/ui";
 import { SidebarItem } from "./sidebar-item";
 import { ChevronRight, Component, MoreHorizontal } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";

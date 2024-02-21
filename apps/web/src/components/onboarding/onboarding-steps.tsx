@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Loader,
-  NextBtn,
-  Step,
-  Stepper,
-  StepperContainer,
-} from "../../../../../packages/ui";
+import { Loader, NextBtn, Step, Stepper, StepperContainer } from "@repo/ui";
 import { Outro, Welcome } from "./screening";
 import { CompleteProfileWrapper } from "./complete-profile-wrapper";
 import { useOnboarding } from "./onboarding-context";

@@ -1,6 +1,6 @@
 "use client";
 
-import { UserType } from "../../../../../packages/data/schemas";
+import { UserType } from "@repo/data/schemas";
 import { createContext, useContext, useTransition } from "react";
 
 interface ContextValues {

@@ -4,12 +4,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../../../packages/ui";
+} from "@repo/ui";
 import { CompleteProfileForm } from "./complete-profile-form";
 
 export function CompleteProfileWrapper() {
   return (
-    <Card className="flex w-full flex-col items-center border-none shadow-none">
+    <Card className="flex w-full flex-col items-center border-none bg-transparent shadow-none">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl">Complete your profile</CardTitle>
         <CardDescription>

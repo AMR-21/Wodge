@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 import { useStore } from "@/store";
-import { cn } from "../../../../../packages/ui";
-import { SpaceSwitcher } from "./space-switcher";
+import { cn } from "@repo/ui";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { Teamspaces } from "./teamspaces";
 import { UserCard } from "./user-card";
