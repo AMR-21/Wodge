@@ -16,7 +16,7 @@ import { CreateWorkspaceForm } from "./create-workspace-form";
 
 export function AddWorkspaceDialog() {
   return (
-    <Dialog defaultOpen>
+    <Dialog>
       <DialogTrigger className="mt-6 w-full" asChild>
         <Button className="w-full">Add a workspace</Button>
       </DialogTrigger>

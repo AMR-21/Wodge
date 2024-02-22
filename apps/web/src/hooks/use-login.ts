@@ -21,7 +21,7 @@ export function useLogin() {
           await user.getData();
           router.replace("/");
         } catch (e) {
-          // TODO better handling
+          // TODO better handling by toasts
           console.error("Error getting user data");
         }
       })();

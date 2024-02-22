@@ -15,6 +15,8 @@ import {
   UserWorkspacesStoreType,
 } from "../../schemas";
 import { WORKSPACES_STORE_PREFIX } from "../../prefixes";
+import { env } from "@repo/env";
+import { WorkspacesRegistry } from "./workspaces-model";
 
 export type WorkspacesStore = UserWorkspacesStoreType["workspaces"];
 
@@ -26,28 +28,33 @@ export type Session = {
 };
 
 export class User {
-  private static user: User;
+  static #user: User;
   // @ts-ignore
+  // TODO make store private by adding mutators' wrappers
   store: Replicache<UserMutators>;
 
-  private constructor() {}
-
-  static async getInstance() {
-    if (!User.user) {
-      User.user = new User();
-      await User.user.getData();
-      User.user.initStore();
+  private constructor() {
+    if (User.#user) {
+      throw new Error("User already exists");
     }
-    return User.user;
   }
 
-  initStore() {
+  static async getInstance() {
+    if (!User.#user) {
+      User.#user = new User();
+      await User.#user.getData();
+      User.#user.#initStore();
+    }
+    return User.#user;
+  }
+
+  #initStore() {
     const id = this.data!.id;
     this.store = new Replicache({
       name: id,
-      licenseKey: "lc800451908284747976640672606f56d",
-      pusher: replicacheWrapper<PushRequest, PusherResult>("push", "user", id),
-      puller: replicacheWrapper<PullRequest, PullerResult>("pull", "user", id),
+      licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
+      // pusher: replicacheWrapper<PushRequest, PusherResult>("push", "user", id),
+      // puller: replicacheWrapper<PullRequest, PullerResult>("pull", "user", id),
       mutators,
     });
   }
@@ -85,26 +92,35 @@ const mutators = {
 
     if (!validatedFields.success) throw new Error("Invalid data");
 
-    const newSpace = validatedFields.data;
+    const newWorkspace = validatedFields.data;
 
     const workspacesStore = (await tx.get<WorkspacesStore>(
       WORKSPACES_STORE_PREFIX
     )) as string[];
 
     if (!workspacesStore) {
-      return await tx.set(WORKSPACES_STORE_PREFIX, [newSpace.id]);
+      return await tx.set(WORKSPACES_STORE_PREFIX, [newWorkspace.id]);
     }
 
     // spaces with similar id already exists
     try {
-      if (workspacesStore.includes(newSpace.id)) return;
+      if (workspacesStore.includes(newWorkspace.id)) return;
     } catch (e) {
       return;
     }
 
-    await tx.set(WORKSPACES_STORE_PREFIX, [...workspacesStore, newSpace.id]);
+    await tx.set(WORKSPACES_STORE_PREFIX, [
+      ...workspacesStore,
+      newWorkspace.id,
+    ]);
 
     // TODO: create a new workspace instance
+    // Workspaces.createWorkspace();
+    const workspaceInstance =
+      WorkspacesRegistry.getInstance().getOrAddWorkspace(newWorkspace.id);
+
+    // Todo call mutator
+    console.log(workspaceInstance);
   },
 };
 

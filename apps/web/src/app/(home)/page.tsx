@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/use-login";
 import { useLocalUser } from "@/hooks/use-local-user";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
+import { nanoid } from "nanoid";
 
 function HomePage() {
   const user = useLocalUser();
@@ -17,7 +18,6 @@ function HomePage() {
 
   if (!user) return null;
 
-  console.log(spaces);
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
       <UserCard className="absolute right-10 top-10" />
@@ -50,6 +50,17 @@ function HomePage() {
         {/* <Button className="mt-6 w-full" size="default">
           Join or create workspace
         </Button> */}
+
+        <Button
+          onClick={async () => {
+            await user.store.mutate.createSpace({
+              id: nanoid(),
+              name: "amr",
+            });
+          }}
+        >
+          psh
+        </Button>
         <AddWorkspaceDialog />
       </div>
     </div>
