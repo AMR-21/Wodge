@@ -3,7 +3,7 @@
 import { WorkspaceItem } from "@/components/home/workspace-item";
 import { Button, Separator, UserCard } from "@repo/ui";
 import { useRouter } from "next/navigation";
-import { useCacheUser } from "@/hooks/use-cache-user";
+import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
 
 function HomePage() {

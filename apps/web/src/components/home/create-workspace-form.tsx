@@ -1,7 +1,15 @@
-import { useLocalUser } from "@/hooks/use-local-user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewWorkspaceSchema, NewWorkspaceType } from "@repo/data/schemas";
-import { Button, Form, FormField, FormItem, FormLabel, Input } from "@repo/ui";
+import {
+  Button,
+  DialogClose,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  Input,
+  useLocalUser,
+} from "@repo/ui";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 
@@ -41,9 +49,11 @@ export function CreateWorkspaceForm() {
         />
 
         <div className="flex gap-2">
-          <Button variant="outline" className="basis-1/3">
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant="outline" type="button" className="basis-1/3">
+              Cancel
+            </Button>
+          </DialogClose>
           <Button type="submit" className="basis-2/3">
             Create Workspace
           </Button>

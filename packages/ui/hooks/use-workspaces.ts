@@ -1,3 +1,5 @@
+"use client";
+
 import { WorkspacesStore } from "@repo/data/client-models";
 import { useLocalUser } from "./use-local-user";
 import { useSubscribe } from "replicache-react";
