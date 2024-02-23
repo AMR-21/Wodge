@@ -76,7 +76,7 @@ export class User {
   /**
    * Get the local user data from local storage
    */
-  get data(): LocalUserType | null {
+  get data(): LocalUserType {
     const localUser = localStorage.getItem("user");
 
     if (!localUser) throw new Error("User not found in local storage");

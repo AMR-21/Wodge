@@ -1,11 +1,11 @@
 import { cn } from "..";
-import { useLocalUser } from "../../../apps/web/src/hooks/use-local-user";
 import { UserAvatar } from "./user-avatar";
+import { useUserData } from "../hooks/use-user-data";
 
 export function UserCard({ className }: { className?: string }) {
-  const user = useLocalUser();
-  const data = user?.data;
+  const data = useUserData();
 
+  // TODO add skeleton
   if (!data) return null;
 
   return (

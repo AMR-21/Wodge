@@ -1,7 +1,7 @@
 "use client";
 
 import { WorkspaceItem } from "@/components/home/workspace-item";
-import { Button, Separator } from "@repo/ui";
+import { Button, Separator, UserCard } from "@repo/ui";
 import { useRouter } from "next/navigation";
 import { useCacheUser } from "@/hooks/use-cache-user";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
@@ -14,7 +14,7 @@ function HomePage() {
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
-      {/* <UserCard className="absolute right-10 top-10" /> */}
+      <UserCard className="absolute right-10 top-10" />
       <Button
         className="group absolute left-10 top-10 items-center text-sm"
         size="sm"
