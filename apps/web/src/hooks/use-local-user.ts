@@ -1,17 +1,11 @@
 "use client";
 
-import { User } from "../../../../packages/data/client-models";
-import { useEffect, useState } from "react";
+import { User } from "@repo/data/client-models";
+
 /**
  * Get local user data
  */
-export function useLocalUser() {
-  const [user, setUser] = useState<User>();
-  useEffect(() => {
-    (async () => {
-      setUser(await User.getInstance());
-    })();
-  }, []);
-
-  return user;
+export async function useLocalUser() {
+  const user = User.getInstance();
+  return user.data;
 }

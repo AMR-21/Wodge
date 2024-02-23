@@ -1,6 +1,7 @@
-import { Replicache, WriteTransaction } from "replicache";
+import { ReadTransaction, Replicache, WriteTransaction } from "replicache";
 import { NewWorkspaceType, WorkspaceType } from "../../schemas";
 import { env } from "@repo/env";
+import { User, WorkspacesStore } from "./user-model";
 
 export class WorkspacesRegistry {
   private static instance: WorkspacesRegistry;
@@ -22,7 +23,17 @@ export class WorkspacesRegistry {
     return this.registry.has(id);
   }
 
-  getOrAddWorkspace(id: string): Workspace {
+  async getOrAddWorkspace(id: string): Promise<Workspace> {
+    // Case where user trying to access space he does not have access to
+    const user = await User.getInstance();
+    const workspaces = await user.store.query((tx: ReadTransaction) =>
+      tx.get<WorkspacesStore>("workspaces")
+    );
+
+    if (!workspaces || !workspaces.includes(id)) {
+      throw new Error("No workspace found with the given id");
+    }
+
     if (!this.registry.has(id)) {
       this.registry.set(id, new Workspace(id));
     }

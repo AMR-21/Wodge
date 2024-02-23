@@ -34,49 +34,56 @@ export class User {
   store: Replicache<UserMutators>;
 
   private constructor() {
+    // Protect singleton during runtime
     if (User.#user) {
       throw new Error("User already exists");
     }
-  }
 
-  static async getInstance() {
-    if (!User.#user) {
-      User.#user = new User();
-      await User.#user.getData();
-      User.#user.#initStore();
-    }
-    return User.#user;
-  }
+    const userId = this.data?.id;
 
-  #initStore() {
-    const id = this.data!.id;
+    if (!userId) throw new Error("User id not found");
+
     this.store = new Replicache({
-      name: id,
+      name: userId,
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-      // pusher: replicacheWrapper<PushRequest, PusherResult>("push", "user", id),
-      // puller: replicacheWrapper<PullRequest, PullerResult>("pull", "user", id),
+      pusher: replicacheWrapper<PushRequest, PusherResult>(
+        "push",
+        "user",
+        userId
+      ),
+      puller: replicacheWrapper<PullRequest, PullerResult>(
+        "pull",
+        "user",
+        userId
+      ),
       mutators,
     });
   }
 
-  cacheUser({ id, email, avatar, displayName, username }: LocalUserType) {
-    const userObj = { id, email, avatar, displayName, username };
-
-    localStorage.setItem("user", JSON.stringify(userObj));
-  }
-
-  async getData(): Promise<LocalUserType> {
-    if (!localStorage.getItem("user")) {
-      const res = await fetch("/api/auth/session");
-      const { user } = (await res.json()) as Session;
-      this.cacheUser(user);
+  /** Static methods */
+  /**
+   * Get the user instance
+   */
+  static getInstance() {
+    if (!User.#user) {
+      User.#user = new User();
     }
-    return JSON.parse(localStorage.getItem("user")!);
+    return User.#user;
   }
+  /** End of static methods */
 
+  /** Getters */
+  /**
+   * Get the local user data from local storage
+   */
   get data(): LocalUserType | null {
-    if (!localStorage.getItem("user")) return null;
-    const data = JSON.parse(localStorage.getItem("user")!);
+    const localUser = localStorage.getItem("user");
+
+    if (!localUser) throw new Error("User not found in local storage");
+
+    const data = JSON.parse(localUser) as LocalUserType;
+
+    // exaggeration ?
     const validatedFields = LocalUserSchema.safeParse(data);
 
     if (!validatedFields.success)
@@ -84,6 +91,8 @@ export class User {
 
     return validatedFields.data;
   }
+
+  /** Methods */
 }
 
 const mutators = {
@@ -120,7 +129,6 @@ const mutators = {
       WorkspacesRegistry.getInstance().getOrAddWorkspace(newWorkspace.id);
 
     // Todo call mutator
-    console.log(workspaceInstance);
   },
 };
 

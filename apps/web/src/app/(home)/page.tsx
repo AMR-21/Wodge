@@ -1,26 +1,20 @@
 "use client";
 
 import { WorkspaceItem } from "@/components/home/workspace-item";
-import { UserCard } from "@repo/ui";
 import { Button, Separator } from "@repo/ui";
-import { useWorkspaces } from "@/hooks/use-workspaces";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@/hooks/use-login";
-import { useLocalUser } from "@/hooks/use-local-user";
+import { useCacheUser } from "@/hooks/use-cache-user";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
-import { nanoid } from "nanoid";
 
 function HomePage() {
-  const user = useLocalUser();
   const router = useRouter();
-  useLogin();
-  const spaces = useWorkspaces();
 
-  if (!user) return null;
+  // Cache the user data on login or sign up
+  useCacheUser();
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
-      <UserCard className="absolute right-10 top-10" />
+      {/* <UserCard className="absolute right-10 top-10" /> */}
       <Button
         className="group absolute left-10 top-10 items-center text-sm"
         size="sm"
@@ -50,7 +44,7 @@ function HomePage() {
         {/* <Button className="mt-6 w-full" size="default">
           Join or create workspace
         </Button> */}
-
+        {/* 
         <Button
           onClick={async () => {
             await user.store.mutate.createSpace({
@@ -60,7 +54,7 @@ function HomePage() {
           }}
         >
           psh
-        </Button>
+        </Button> */}
         <AddWorkspaceDialog />
       </div>
     </div>
