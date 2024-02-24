@@ -1,12 +1,7 @@
 "use client";
 
-import { WorkspacesRegistry, WorkspacesStore } from "@repo/data/client-models";
-import { useLocalUser } from "./use-local-user";
-import { useSubscribe } from "replicache-react";
-import {
-  USER_WORKSPACES_STORE_PREFIX,
-  makeWorkspaceKey,
-} from "@repo/data/prefixes";
+import { WorkspacesRegistry } from "@repo/data/client-models";
+import { makeWorkspaceKey } from "@repo/data/prefixes";
 import { ReadTransaction } from "replicache";
 import { useMemo, useState } from "react";
 import { WorkspaceType } from "@repo/data/schemas";
