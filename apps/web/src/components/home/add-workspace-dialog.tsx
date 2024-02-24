@@ -18,7 +18,7 @@ export function AddWorkspaceDialog() {
   return (
     <Dialog>
       <DialogTrigger className="mt-6 w-full" asChild>
-        <Button className="w-full">Add a workspace</Button>
+        <Button className="w-full">Add a Workspace</Button>
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <Tabs defaultValue="join" className="w-full">

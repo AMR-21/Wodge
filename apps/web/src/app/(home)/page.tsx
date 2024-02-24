@@ -1,16 +1,19 @@
 "use client";
 
-import { WorkspaceItem } from "@/components/home/workspace-item";
-import { Button, Separator, UserCard } from "@repo/ui";
+import { Button, UserCard } from "@repo/ui";
 import { useRouter } from "next/navigation";
 import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
+import { WorkspacesList } from "@/components/home/workspaces-list";
 
 function HomePage() {
   const router = useRouter();
 
   // Cache the user data on login or sign up
-  useCacheUser();
+  const isCached = useCacheUser();
+
+  // To avoid errors of accessing the local storage before it's initialized
+  if (!isCached) return null;
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
@@ -23,38 +26,15 @@ function HomePage() {
       >
         Back
       </Button>
-      {/* TODO read workspaces from local and render it */}
+
       <div className="w-full max-w-xs ">
-        <p className="mb-2 text-xs text-muted-foreground">Your workspaces</p>
+        <p className="mb-2 text-xs text-muted-foreground">Your Workspaces</p>
         <div className="min-h-0 rounded-md border border-border/50 bg-page">
           <div className="flex max-h-72 grow flex-col items-center overflow-y-scroll ">
-            <WorkspaceItem />
-            <Separator className="w-full bg-border/50" />
-            <WorkspaceItem />
-
-            {/* {spaces?.map((space: any) => <p>{space.id}</p>)} */}
-            {/* {JSON.stringify(Object.keys(spaces))} */}
+            <WorkspacesList />
           </div>
-
-          {/* <p className="p-5 text-center text-muted-foreground">
-            Join or create workspace to start using Wodge
-          </p> */}
         </div>
 
-        {/* <Button className="mt-6 w-full" size="default">
-          Join or create workspace
-        </Button> */}
-        {/* 
-        <Button
-          onClick={async () => {
-            await user.store.mutate.createSpace({
-              id: nanoid(),
-              name: "amr",
-            });
-          }}
-        >
-          psh
-        </Button> */}
         <AddWorkspaceDialog />
       </div>
     </div>

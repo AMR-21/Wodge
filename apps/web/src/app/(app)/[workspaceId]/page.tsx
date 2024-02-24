@@ -1,6 +1,7 @@
 "use client";
 
 import { Workspace } from "@repo/data/client-models";
+import { Button } from "@repo/ui";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -23,7 +24,12 @@ function SpacePage({ params }: { params: { workspaceId: string } }) {
   // const wrs = Workspace.getInstance("1");
 
   // console.log(Workspace);
-  return <div>hhhhhh</div>;
+  return (
+    <div>
+      hhhhhh
+      <Button onClick={() => router.back()}>bbb</Button>
+    </div>
+  );
 }
 
 export default SpacePage;

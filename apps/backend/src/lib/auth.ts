@@ -2,6 +2,7 @@
  * Credits to partykit nextjs chat template
  */
 import type * as Party from "partykit/server";
+import { ok, unauthorized } from "./http-utils";
 
 /**
  * Referenced from user client model
@@ -57,4 +58,23 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
   req.headers.set("x-user-id", session.userId);
 
   return session;
+};
+
+/**
+ *
+ */
+export const authenticate = async (req: Party.Request, lobby: Party.Lobby) => {
+  // CORS preflight response
+  if (req.method === "OPTIONS") {
+    return ok();
+  }
+
+  try {
+    await getSession(req, lobby);
+
+    // Request is authorized - forward it
+    return req;
+  } catch (e) {
+    return unauthorized();
+  }
 };

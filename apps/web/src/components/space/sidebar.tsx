@@ -11,7 +11,7 @@ import {
   User2,
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
-import { useStore } from "@/store";
+import { useAppState } from "@/store";
 import { cn } from "@repo/ui";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
@@ -42,7 +42,7 @@ const staticItems = [
 ];
 
 export function Sidebar() {
-  const isSidebarOpen = useStore((state) => state.isSidebarOpen);
+  const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
 
   return (
     <aside

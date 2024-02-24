@@ -1,5 +1,12 @@
 import { Request, Storage } from "partykit/server";
-import { CLIENT_GROUP_PREFIX, CLIENT_PREFIX } from "@repo/data/prefixes";
+import {
+  JOINER,
+  REPLICACHE_CLIENT_GROUP_PREFIX,
+  REPLICACHE_CLIENT_PREFIX,
+  extractClientId,
+  makeClientGroupKey,
+  makeClientKey,
+} from "@repo/data/prefixes";
 import { badRequest, error, json, ok, unauthorized } from "./http-utils";
 import { PatchOperation, PullResponse } from "replicache";
 import { z } from "zod";
@@ -92,12 +99,12 @@ export async function repPull(
     [
       ...(
         await storage.list<ReplicacheClient>({
-          prefix: `${CLIENT_GROUP_PREFIX}${clientGroupId}:${CLIENT_PREFIX}`,
+          prefix: `${REPLICACHE_CLIENT_GROUP_PREFIX}${clientGroupId}${JOINER}${REPLICACHE_CLIENT_PREFIX}`,
         })
       ).values(),
     ].forEach((c) => {
       if (c.lastModifiedVersion > fromVersion)
-        lastMutationIDChanges[extractClientID(c.id)!] = c.lastMutationID;
+        lastMutationIDChanges[extractClientId(c.id)!] = c.lastMutationID;
     });
 
     // Get the operations
@@ -162,8 +169,8 @@ export async function repPush(
       const { id, clientID } = mutation;
 
       // Step 3 and 4: Get/Create client and verify that it belongs to the client group
-      // let client = clients[makeClientId(clientID, clientGroup.id)];
-      let client = clients.get(makeClientId(clientID, clientGroup.id));
+      // let client = clients[makeClientKey(clientID, clientGroup.id)];
+      let client = clients.get(makeClientKey(clientID, clientGroup.id));
 
       if (!client) {
         client = await getClient(
@@ -174,7 +181,7 @@ export async function repPush(
           storage
         );
 
-        clients.set(makeClientId(clientID, clientGroup.id), client);
+        clients.set(makeClientKey(clientID, clientGroup.id), client);
       }
 
       // Step 5: Verify that the mutation id is the next expected mutation id from user
@@ -192,7 +199,7 @@ export async function repPush(
       client.lastMutationID = expectedMutationID;
       client.lastModifiedVersion = nextVersion;
 
-      clients.set(makeClientId(clientID, clientGroup.id), client);
+      clients.set(makeClientKey(clientID, clientGroup.id), client);
     }
 
     versions.set("globalVersion", nextVersion);
@@ -223,7 +230,7 @@ async function getClient(
   mutationId: number,
   storage: Storage
 ) {
-  const key = makeClientId(id, clientGroupID);
+  const key = makeClientKey(id, clientGroupID);
 
   const client = await storage.get<ReplicacheClient>(key);
 
@@ -255,7 +262,7 @@ async function getClientGroup(
   storage: Storage,
   withCreate = true
 ) {
-  const key = makeClientGroupId(clientGroupId);
+  const key = makeClientGroupKey(clientGroupId);
 
   // Check for existent client group
   const clientGroup = await storage.get<ReplicacheClientGroup>(key);
@@ -276,11 +283,3 @@ async function getClientGroup(
 
   return { id: key, userID: userId };
 }
-
-export const makeClientId = (clientId: string, clientGroupId: string) =>
-  clientGroupId + ":" + CLIENT_PREFIX + clientId;
-
-export const makeClientGroupId = (clientGroupId: string) =>
-  CLIENT_GROUP_PREFIX + clientGroupId;
-
-export const extractClientID = (clientID: string) => clientID.split("/")[2];

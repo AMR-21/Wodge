@@ -9,11 +9,11 @@ import {
 } from "@repo/ui";
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { useStore } from "@/store";
+import { useAppState } from "@/store";
 
 export function WorkspaceSwitcher() {
-  const toggleSidebar = useStore((state) => state.toggleSidebar);
-  const isSidebarOpen = useStore((state) => state.isSidebarOpen);
+  const toggleSidebar = useAppState((state) => state.toggleSidebar);
+  const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
 
   return (
     <div

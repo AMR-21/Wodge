@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 import { mountStoreDevtool } from "simple-zustand-devtools";
-import { env } from "@repo/env";
 
 interface AppState {
   isSidebarOpen: boolean;
@@ -10,7 +9,7 @@ interface AppState {
   toggleSidebar: () => void;
 }
 
-export const useStore = create(
+export const useAppState = create(
   persist<AppState>(
     (set, get) => ({
       isSidebarOpen: true,
@@ -22,16 +21,7 @@ export const useStore = create(
     },
   ),
 );
-// persist(
-//   (set, get) => ({
-//     isSidebarOpen: true,
-//     toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
-//   }),
-//   {
-//     name: "app-state",
-//   },
-// ),
 
-if (env.NODE_ENV === "development") {
-  mountStoreDevtool("Store", useStore);
+if (process.env.NODE_ENV === "development") {
+  mountStoreDevtool("Store", useAppState);
 }

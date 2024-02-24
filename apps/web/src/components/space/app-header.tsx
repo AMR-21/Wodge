@@ -1,13 +1,13 @@
 "use client";
 
-import { useStore } from "@/store";
+import { useAppState } from "@/store";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { PanelLeft } from "lucide-react";
 
 export function AppHeader() {
-  const isSidebarOpen = useStore((state) => state.isSidebarOpen);
-  const toggleSidebar = useStore((state) => state.toggleSidebar);
+  const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
+  const toggleSidebar = useAppState((state) => state.toggleSidebar);
 
   return (
     <div className="flex h-12 min-h-12 items-center border-b border-border/50">

@@ -54,20 +54,12 @@ export const LocalUserSchema = UserSchema.pick({
 });
 
 /**
- * Schema for user memberships stored in the durable object
- * {
- *  spaces: {
- *   "spaceId": ["role1", "role2"]
- * }
- * }
+ * User workspaces store type
  */
-export const UserWorkspacesStoreSchema = z.object({
-  workspaces: z.array(z.string()),
-  // Fields for replicache storage
-  lastModifiedVersion: z.number(),
-  deleted: z.boolean(),
-});
-
+export type UserWorkspacesStore = {
+  workspaces: string[];
+  lastModifiedVersion: number;
+  deleted: boolean;
+};
 export type UserType = z.infer<typeof UserSchema>;
 export type LocalUserType = z.infer<typeof LocalUserSchema>;
-export type UserWorkspacesStoreType = z.infer<typeof UserWorkspacesStoreSchema>;

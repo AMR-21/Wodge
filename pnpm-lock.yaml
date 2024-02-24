@@ -207,6 +207,9 @@ importers:
       '@repo/env':
         specifier: workspace:*
         version: link:../env
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../ui
       drizzle-orm:
         specifier: ^0.29.3
         version: 0.29.3(@types/react@18.2.56)(react@18.2.0)
@@ -225,6 +228,9 @@ importers:
       replicache:
         specifier: ^14.1.0
         version: 14.1.0
+      replicache-react:
+        specifier: ^5.0.1
+        version: 5.0.1(react-dom@18.2.0)(react@18.2.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -353,9 +359,15 @@ importers:
       react-icons:
         specifier: ^5.0.1
         version: 5.0.1(react@18.2.0)
+      react-resizable-panels:
+        specifier: ^2.0.10
+        version: 2.0.10(react-dom@18.2.0)(react@18.2.0)
       react-spinners:
         specifier: ^0.13.8
         version: 0.13.8(react-dom@18.2.0)(react@18.2.0)
+      replicache:
+        specifier: ^14.1.0
+        version: 14.1.0
       replicache-react:
         specifier: ^5.0.1
         version: 5.0.1(react-dom@18.2.0)(react@18.2.0)
@@ -7469,6 +7481,16 @@ packages:
       tslib: 2.6.2
       use-callback-ref: 1.3.1(@types/react@18.2.56)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.2.56)(react@18.2.0)
+    dev: false
+
+  /react-resizable-panels@2.0.10(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-1cQl5rp3VDWRL04XXX92lzM1hej2Fe5x+vpjYXcldfOjKwLV5JVrt5T6q0cTB5yfp4Wh+JIdYQ9A5EnZypO1DQ==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-spinners@0.13.8(react-dom@18.2.0)(react@18.2.0):

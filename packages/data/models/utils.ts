@@ -1,5 +1,5 @@
 import { env } from "@repo/env";
-import { User } from "../client-models";
+import { toast } from "@repo/ui";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
@@ -17,6 +17,8 @@ export function replicacheWrapper<Request, Result>(
         }
       );
 
+      if (!res.ok) throw new Error("Network response was not ok");
+
       const response = await res.json();
 
       return {
@@ -28,6 +30,7 @@ export function replicacheWrapper<Request, Result>(
         ...(mode === "pull" && { response }),
       } as Result;
     } catch {
+      toast.error("Sync failed");
       return {
         httpRequestInfo: {
           httpStatusCode: 500,

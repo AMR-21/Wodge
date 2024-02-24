@@ -2,7 +2,7 @@ import { Request } from "partykit/server";
 import UserParty from "../user-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { NewWorkspaceSchema } from "@repo/data/schemas";
-import { WORKSPACES_STORE_PREFIX } from "@repo/data/prefixes";
+import { USER_WORKSPACES_STORE_PREFIX } from "@repo/data/prefixes";
 
 export async function userPush(req: Request, party: UserParty) {
   return await repPush(req, party.room.storage, party.versions, runner(party));
@@ -11,7 +11,7 @@ export async function userPush(req: Request, party: UserParty) {
 function runner(party: UserParty) {
   return async ({ mutation, nextVersion, storage }: RunnerParams) => {
     switch (mutation.name) {
-      case "createSpace":
+      case "createWorkspace":
         const validatedFields = NewWorkspaceSchema.safeParse(mutation.args);
 
         // Skip invalid mutations
@@ -34,7 +34,7 @@ function runner(party: UserParty) {
         party.workspacesStore.lastModifiedVersion = nextVersion;
 
         // Update the user's space store
-        await storage.put(WORKSPACES_STORE_PREFIX, party.workspacesStore);
+        await storage.put(USER_WORKSPACES_STORE_PREFIX, party.workspacesStore);
 
         break;
       default:

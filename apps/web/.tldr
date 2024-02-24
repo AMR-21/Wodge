@@ -38,7 +38,7 @@
 					"draw": 1,
 					"geo": 8,
 					"note": 5,
-					"line": 1,
+					"line": 4,
 					"frame": 0,
 					"arrow": 3,
 					"highlight": 0,
@@ -66,9 +66,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 635.2798321843702,
-			"y": 953.8166970076493,
-			"lastActivityTimestamp": 1708549362215,
+			"x": 1380.5615080400605,
+			"y": 144.41069838340314,
+			"lastActivityTimestamp": 1708711185132,
 			"meta": {}
 		},
 		{
@@ -123,7 +123,7 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1566,
+				"w": 1011,
 				"h": 669
 			},
 			"insets": [
@@ -160,9 +160,9 @@
 			"typeName": "page"
 		},
 		{
-			"x": 287.9837328974512,
-			"y": -586.7360024570456,
-			"z": 0.8989848959613648,
+			"x": -804.4395979907715,
+			"y": 65.99904267807631,
+			"z": 0.7984421213222833,
 			"meta": {},
 			"id": "camera:page:XhvkXCqAmwd75Nudbc6dy",
 			"typeName": "camera"
@@ -2085,21 +2085,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 138.3747403569339,
 						"y": 0
@@ -2124,21 +2118,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 138.3747403569339,
 						"y": 0
@@ -2163,21 +2151,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 138.3747403569339,
 						"y": 0
@@ -3220,21 +3202,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 1.0400014183176154e-13,
 						"y": 0.4016680865663602
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1.930400284066991e-13,
 						"y": 578.4691295888186
@@ -3259,21 +3235,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 1.0400014183176154e-13,
 						"y": 0.4016680865663602
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1.930400284066991e-13,
 						"y": 578.4691295888186
@@ -3298,21 +3268,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 1.0400014183176154e-13,
 						"y": 0.4016680865663602
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1.930400284066991e-13,
 						"y": 578.4691295888186
@@ -3337,21 +3301,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1118.881620231199,
 						"y": 0
@@ -3376,21 +3334,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1118.881620231199,
 						"y": 0
@@ -3415,21 +3367,15 @@
 				"size": "m",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 1118.881620231199,
 						"y": 0
@@ -3978,21 +3924,15 @@
 				"size": "s",
 				"color": "grey",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 3.1086244689504383e-15,
 						"y": 20.9207831447449
@@ -4017,21 +3957,15 @@
 				"size": "s",
 				"color": "grey",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 3.1086244689504383e-15,
 						"y": 20.9207831447449
@@ -4056,21 +3990,15 @@
 				"size": "s",
 				"color": "grey",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 3.1086244689504383e-15,
 						"y": 20.9207831447449
@@ -4716,21 +4644,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -4755,21 +4677,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -4794,21 +4710,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -4833,21 +4743,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -4872,21 +4776,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -4911,21 +4809,15 @@
 				"size": "s",
 				"color": "black",
 				"spline": "line",
-				"handles": {
-					"start": {
-						"id": "start",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+				"points": {
+					"a1": {
+						"id": "a1",
 						"index": "a1",
 						"x": 0,
 						"y": 0
 					},
-					"end": {
-						"id": "end",
-						"type": "vertex",
-						"canBind": false,
-						"canSnap": true,
+					"a2": {
+						"id": "a2",
 						"index": "a2",
 						"x": 178.44196799262568,
 						"y": 0
@@ -13780,7 +13672,6 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:JhLeBU9g4ML7kz_-w8PRl",
 			"type": "text",
 			"props": {
 				"color": "black",
@@ -13794,6 +13685,7 @@
 			},
 			"parentId": "page:PQ8BXGBvvi6a_VlL2k4AV",
 			"index": "aQ",
+			"id": "shape:JhLeBU9g4ML7kz_-w8PRl",
 			"typeName": "shape"
 		},
 		{
@@ -13803,7 +13695,6 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:V0YWZTc-Z2QwoQAT7CdJ2",
 			"type": "text",
 			"props": {
 				"color": "black",
@@ -13817,6 +13708,7 @@
 			},
 			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
 			"index": "aC",
+			"id": "shape:V0YWZTc-Z2QwoQAT7CdJ2",
 			"typeName": "shape"
 		},
 		{
@@ -13826,7 +13718,6 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:TFegU8BFjWBSst7LYS_jl",
 			"type": "text",
 			"props": {
 				"color": "black",
@@ -13840,6 +13731,76 @@
 			},
 			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
 			"index": "aD",
+			"id": "shape:TFegU8BFjWBSst7LYS_jl",
+			"typeName": "shape"
+		},
+		{
+			"x": 310.4634254274988,
+			"y": 1031.3259679062992,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 504.03125,
+				"text": "user instance has user ws\n\nworkspace page has ws connection to the workspace \nusing th hook\n\nsimilarly the channel has a ws connection",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"index": "aE",
+			"id": "shape:xBjMgshEXeBor9jHD2ZN5",
+			"typeName": "shape"
+		},
+		{
+			"x": 1154.2982233934613,
+			"y": 207.02635261386035,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:u1JGiwXFS_o4X1TOz0GlG",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 803.234375,
+				"text": "Create space handling\nin client \nif the request body in push has a createspace mutaion add a query param\n\nin do \npass the request without membership verification if the request has the query param\n\ncheck if the space was already verified , if so throw error\n\ncheck if the requesting user is the owner of the space  if not throw auth error\n\nif all checks passed create the space meta data and assign is verified flag",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"index": "aF",
+			"typeName": "shape"
+		},
+		{
+			"x": 1154.2982233934613,
+			"y": 573.1207659645981,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:S7o5bqZwCE8i-Xx0Vrc3h",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 679.75,
+				"text": "if ws connection send request on repli-push-create instead of repli-push",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:XhvkXCqAmwd75Nudbc6dy",
+			"index": "aG",
 			"typeName": "shape"
 		},
 		{

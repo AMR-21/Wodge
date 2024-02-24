@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewWorkspaceSchema, NewWorkspaceType } from "@repo/data/schemas";
+import { NewWorkspaceSchema, NewWorkspace } from "@repo/data/schemas";
 import {
   Button,
   DialogClose,
@@ -11,10 +11,12 @@ import {
   useLocalUser,
 } from "@repo/ui";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 export function CreateWorkspaceForm() {
   const user = useLocalUser();
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(NewWorkspaceSchema),
     defaultValues: {
@@ -23,12 +25,13 @@ export function CreateWorkspaceForm() {
     },
   });
 
-  async function onSubmit(data: NewWorkspaceType) {
-    // console.log(data);
-    await user?.store.mutate.createSpace(data);
+  async function onSubmit(data: NewWorkspace) {
+    await user?.createWorkspace(data);
 
     // for safety and avoiding duplicate ids
     form.setValue("id", nanoid());
+
+    router.replace("/" + data.id);
   }
 
   return (

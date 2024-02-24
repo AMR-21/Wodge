@@ -3,22 +3,25 @@ import {
   PullerResult,
   PushRequest,
   PusherResult,
+  ReadTransaction,
   Replicache,
   WriteTransaction,
 } from "replicache";
+
+import { useSubscribe } from "replicache-react";
 import { replicacheWrapper } from "../utils";
 import {
   LocalUserSchema,
   LocalUserType,
   NewWorkspaceSchema,
-  NewWorkspaceType,
-  UserWorkspacesStoreType,
+  NewWorkspace,
+  UserWorkspacesStore,
 } from "../../schemas";
-import { WORKSPACES_STORE_PREFIX } from "../../prefixes";
+import { USER_WORKSPACES_STORE_PREFIX } from "../../prefixes";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspaces-model";
 
-export type WorkspacesStore = UserWorkspacesStoreType["workspaces"];
+export type WorkspacesStore = UserWorkspacesStore["workspaces"];
 
 export type Session = {
   sessionToken: string;
@@ -29,8 +32,6 @@ export type Session = {
 
 export class User {
   static #user: User;
-  // @ts-ignore
-  // TODO make store private by adding mutators' wrappers
   store: Replicache<UserMutators>;
 
   private constructor() {
@@ -93,42 +94,54 @@ export class User {
   }
 
   /** Methods */
+
+  /**
+   * Create a new workspace
+   */
+  async createWorkspace(data: NewWorkspace) {
+    await this.store.mutate.createWorkspace(data);
+
+    const workspacesRegistry = WorkspacesRegistry.getInstance();
+    const workspace = workspacesRegistry.getWorkspace(data.id);
+
+    await workspace.createWorkspace(data);
+  }
+
+  /**
+   * Get workspaces store
+   */
+  async getWorkspaces() {
+    return await this.store.query(
+      (tx: ReadTransaction) =>
+        tx.get<WorkspacesStore>(USER_WORKSPACES_STORE_PREFIX)!
+    );
+  }
 }
 
 const mutators = {
-  async createSpace(tx: WriteTransaction, data: NewWorkspaceType) {
+  async createWorkspace(tx: WriteTransaction, data: NewWorkspace) {
     const validatedFields = NewWorkspaceSchema.safeParse(data);
 
     if (!validatedFields.success) throw new Error("Invalid data");
 
-    const newWorkspace = validatedFields.data;
+    const { data: newWorkspace } = validatedFields;
 
     const workspacesStore = (await tx.get<WorkspacesStore>(
-      WORKSPACES_STORE_PREFIX
+      USER_WORKSPACES_STORE_PREFIX
     )) as string[];
 
     if (!workspacesStore) {
-      return await tx.set(WORKSPACES_STORE_PREFIX, [newWorkspace.id]);
+      return await tx.set(USER_WORKSPACES_STORE_PREFIX, [newWorkspace.id]);
     }
 
-    // spaces with similar id already exists
-    try {
-      if (workspacesStore.includes(newWorkspace.id)) return;
-    } catch (e) {
-      return;
-    }
+    // workspaces with similar id already exists
+    if (workspacesStore.includes(newWorkspace.id))
+      throw new Error("Workspace already exists");
 
-    await tx.set(WORKSPACES_STORE_PREFIX, [
+    await tx.set(USER_WORKSPACES_STORE_PREFIX, [
       ...workspacesStore,
       newWorkspace.id,
     ]);
-
-    // TODO: create a new workspace instance
-    // Workspaces.createWorkspace();
-    const workspaceInstance =
-      WorkspacesRegistry.getInstance().getOrAddWorkspace(newWorkspace.id);
-
-    // Todo call mutator
   },
 };
 

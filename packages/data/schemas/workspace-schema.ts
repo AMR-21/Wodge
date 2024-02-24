@@ -89,5 +89,12 @@ export const JoinWorkspaceSchema = z.object({
 });
 
 export type WorkspaceType = z.infer<typeof WorkspaceSchema>;
-export type NewWorkspaceType = z.infer<typeof NewWorkspaceSchema>;
-export type RolesType = z.infer<typeof RolesSchema>;
+export type WorkspaceMetadata = {
+  data: WorkspaceType;
+  lastMoDifiedVersion: number;
+  deleted: boolean;
+  isVerified: boolean;
+};
+
+export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
+export type Roles = z.infer<typeof RolesSchema>;
