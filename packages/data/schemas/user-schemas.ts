@@ -61,5 +61,6 @@ export type UserWorkspacesStore = {
   lastModifiedVersion: number;
   deleted: boolean;
 };
+
 export type UserType = z.infer<typeof UserSchema>;
 export type PublicUserType = z.infer<typeof PublicUserSchema>;

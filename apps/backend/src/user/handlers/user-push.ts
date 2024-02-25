@@ -19,6 +19,7 @@ function runner(party: UserParty) {
         if (!validatedFields.success) return;
 
         // TODO check that the space doesn't already exist by checking that the context has no spaces with the same id
+        // Simply use the workspace members data as source of truth
         // This only possible if the client did not create a space using truly random id - also its creation will be blocked
         // by space do owner validation scheme and is_verified flag so we may not need to check for this
 
@@ -29,11 +30,10 @@ function runner(party: UserParty) {
           return;
         }
 
-        // Default roles for the owner
+        // Update the user's space store
         party.workspacesStore.workspaces.push(data.id);
         party.workspacesStore.lastModifiedVersion = nextVersion;
 
-        // Update the user's space store
         await storage.put(USER_WORKSPACES_STORE_KEY, party.workspacesStore);
 
         break;

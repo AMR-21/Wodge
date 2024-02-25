@@ -7,7 +7,7 @@
 
 import type * as Party from "partykit/server";
 
-import { handlePost } from "./user-party-post";
+import { handlePost } from "./handlers/user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authenticate } from "../lib/auth";
 import { UserWorkspacesStore } from "@repo/data/schemas/user-schemas";
@@ -45,15 +45,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     switch (req.method) {
       case "POST":
         return await handlePost(req, this);
-      case "GET":
-        return json({
-          glob: "hi",
-          versions: this.versions.get("globalVersion"),
-          cls: Object.fromEntries(
-            await this.room.storage.list({ prefix: "clientGroup" })
-          ),
-          s: this.workspacesStore,
-        });
       case "OPTIONS":
         return ok();
       default:
