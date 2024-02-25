@@ -1,8 +1,11 @@
 import type * as Party from "partykit/server";
 import { ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
+import { WorkspacePartyInterface } from "../types";
 
-export default class WorkspaceParty implements Party.Server {
+export default class WorkspaceParty
+  implements Party.Server, WorkspacePartyInterface
+{
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
     // CORS preflight response
     if (req.method === "OPTIONS") {

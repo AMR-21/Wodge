@@ -26,12 +26,12 @@ function runner(party: UserParty) {
         const { data } = validatedFields;
 
         // Space already exists on user store
-        if (party.workspacesStore.workspaces.includes(data.id)) {
+        if (party.workspacesStore.data.includes(data.id)) {
           return;
         }
 
         // Update the user's space store
-        party.workspacesStore.workspaces.push(data.id);
+        party.workspacesStore.data.push(data.id);
         party.workspacesStore.lastModifiedVersion = nextVersion;
 
         await storage.put(USER_WORKSPACES_STORE_KEY, party.workspacesStore);

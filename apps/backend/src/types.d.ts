@@ -1,13 +1,48 @@
-import { WorkspaceMetadata } from "@repo/data/schemas";
+import {
+  UserWorkspacesStore,
+  WorkspaceMembers,
+  WorkspaceStructure,
+  WorkspaceType,
+} from "@repo/data/schemas";
+import WorkspaceParty from "./workspace/workspace-party";
 
+/**
+ * General
+ */
 interface Party {
   versions: Map<string, number>;
 }
 
-export interface UserPartyInterface extends Party {
-  workspacesStore: UserWorkspacesStore;
+interface ReplicacheFields {
+  lastModifiedVersion: number;
+  deleted: boolean;
 }
 
+/**
+ * User
+ */
+export type ServerWorkspacesStore = {
+  data: UserWorkspacesStore;
+} & ReplicacheFields;
+
+export interface UserPartyInterface extends Party {
+  workspacesStore: ServerWorkspacesStore;
+}
+
+/**
+ * Workspace
+ */
+export type ServerWorkspaceStore = { data: WorkspaceType } & ReplicacheFields;
+
+export type ServerWorkspaceMembers = {
+  data: WorkspaceMembers;
+} & ReplicacheFields;
+
+export type ServerWorkspaceStructure = {
+  data: WorkspaceStructure;
+} & ReplicacheFields;
 export interface WorkspacePartyInterface extends Party {
-  workspaceMetadata: WorkspaceMetadata;
+  workspaceMetadata: ServerWorkspaceStore;
+  workspaceMembers: ServerWorkspaceMembers;
+  workspaceStructure: ServerWorkspaceStructure;
 }

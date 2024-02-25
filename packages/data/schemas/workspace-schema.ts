@@ -146,27 +146,27 @@ export type Role = z.infer<typeof RoleSchema>;
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
-export type WorkspaceStructureType = z.infer<typeof WorkspaceStructureSchema>;
-export type WorkspaceMembersType = z.infer<typeof WorkspaceMembersSchema>;
+export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
+export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 export type inviteLink = z.infer<typeof InviteLinkSchema>;
 
 /** Replicache */
-export type WorkspaceMetadata = {
-  data: WorkspaceType;
-  lastMoDifiedVersion: number;
-  deleted: boolean;
-  isVerified: boolean;
-};
+// export type WorkspaceMetadata = {
+//   data: WorkspaceType;
+//   lastMoDifiedVersion: number;
+//   deleted: boolean;
+//   isVerified: boolean;
+// };
 
-export type WorkspaceStructure = {
-  data: WorkspaceStructureType;
-  lastMoDifiedVersion: number;
-  deleted: boolean;
-};
+// export type WorkspaceStructure = {
+//   data: WorkspaceStructureType;
+//   lastMoDifiedVersion: number;
+//   deleted: boolean;
+// };
 
-export type WorkspaceMembers = {
-  data: WorkspaceMembersType;
-  lastMoDifiedVersion: number;
-  deleted: boolean;
-};
+// export type WorkspaceMembers = {
+//   data: WorkspaceMembersType;
+//   lastMoDifiedVersion: number;
+//   deleted: boolean;
+// };

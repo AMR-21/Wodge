@@ -21,8 +21,6 @@ import { USER_WORKSPACES_STORE_KEY } from "../../keys";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspaces-model";
 
-export type WorkspacesStore = UserWorkspacesStore["workspaces"];
-
 export type Session = {
   sessionToken: string;
   userId: string;
@@ -114,7 +112,7 @@ export class User {
   async getWorkspaces() {
     return await this.store.query(
       (tx: ReadTransaction) =>
-        tx.get<WorkspacesStore>(USER_WORKSPACES_STORE_KEY)!
+        tx.get<UserWorkspacesStore>(USER_WORKSPACES_STORE_KEY)!
     );
   }
 }
@@ -127,7 +125,7 @@ const mutators = {
 
     const { data: newWorkspace } = validatedFields;
 
-    const workspacesStore = (await tx.get<WorkspacesStore>(
+    const workspacesStore = (await tx.get<UserWorkspacesStore>(
       USER_WORKSPACES_STORE_KEY
     )) as string[];
 

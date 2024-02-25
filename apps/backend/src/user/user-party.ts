@@ -9,13 +9,13 @@ import type * as Party from "partykit/server";
 
 import { handlePost } from "./handlers/user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { authenticate } from "../lib/auth";
+import { authenticate, getSession } from "../lib/auth";
 import { UserWorkspacesStore } from "@repo/data/schemas/user-schemas";
 import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
-import { UserPartyInterface } from "../types";
+import { ServerWorkspacesStore, UserPartyInterface } from "../types";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
-  workspacesStore: UserWorkspacesStore;
+  workspacesStore: ServerWorkspacesStore;
   versions: Map<string, number>;
 
   constructor(readonly room: Party.Room) {}
@@ -25,23 +25,16 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       (await this.room.storage.get("versions")) ||
       new Map([["globalVersion", 0]]);
 
-    this.workspacesStore = (await this.room.storage.get<UserWorkspacesStore>(
+    this.workspacesStore = (await this.room.storage.get<ServerWorkspacesStore>(
       USER_WORKSPACES_STORE_KEY
     )) || {
-      workspaces: [],
+      data: [],
       lastModifiedVersion: 0,
       deleted: false,
     };
   }
 
   async onRequest(req: Party.Request) {
-    // Authorize user
-    const userId = req.headers.get("x-user-id");
-
-    if (!userId || userId !== this.room.id) {
-      return unauthorized();
-    }
-
     switch (req.method) {
       case "POST":
         return await handlePost(req, this);
@@ -53,7 +46,22 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
-    return await authenticate(req, lobby);
+    // CORS preflight response
+    if (req.method === "OPTIONS") {
+      return ok();
+    }
+
+    try {
+      const session = await getSession(req, lobby);
+
+      // Authorize the user by checking that session.userId matches the target user id (party id)
+      if (session.userId !== lobby.id) throw new Error("Unauthorized");
+
+      // Request is authorized - forward it
+      return req;
+    } catch (e) {
+      return unauthorized();
+    }
   }
 }
 UserParty satisfies Party.Worker;
