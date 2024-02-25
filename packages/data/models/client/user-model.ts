@@ -17,7 +17,7 @@ import {
   NewWorkspace,
   UserWorkspacesStore,
 } from "../../schemas";
-import { USER_WORKSPACES_STORE_KEY } from "../../keys";
+import { makeWorkspacesStoreKey } from "../../keys";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspaces-model";
 
@@ -112,7 +112,7 @@ export class User {
   async getWorkspaces() {
     return await this.store.query(
       (tx: ReadTransaction) =>
-        tx.get<UserWorkspacesStore>(USER_WORKSPACES_STORE_KEY)!
+        tx.get<UserWorkspacesStore>(makeWorkspacesStoreKey())!
     );
   }
 }
@@ -126,18 +126,18 @@ const mutators = {
     const { data: newWorkspace } = validatedFields;
 
     const workspacesStore = (await tx.get<UserWorkspacesStore>(
-      USER_WORKSPACES_STORE_KEY
+      makeWorkspacesStoreKey()
     )) as string[];
 
     if (!workspacesStore) {
-      return await tx.set(USER_WORKSPACES_STORE_KEY, [newWorkspace.id]);
+      return await tx.set(makeWorkspacesStoreKey(), [newWorkspace.id]);
     }
 
     // workspaces with similar id already exists
     if (workspacesStore.includes(newWorkspace.id))
       throw new Error("Workspace already exists");
 
-    await tx.set(USER_WORKSPACES_STORE_KEY, [
+    await tx.set(makeWorkspacesStoreKey(), [
       ...workspacesStore,
       newWorkspace.id,
     ]);

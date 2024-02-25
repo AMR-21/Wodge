@@ -2,7 +2,7 @@ import { Request } from "partykit/server";
 import UserParty from "../user-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { NewWorkspaceSchema } from "@repo/data/schemas";
-import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
+import { makeWorkspacesStoreKey } from "@repo/data/keys";
 
 export async function userPush(req: Request, party: UserParty) {
   return await repPush(req, party.room.storage, party.versions, runner(party));
@@ -34,7 +34,7 @@ function runner(party: UserParty) {
         party.workspacesStore.data.push(data.id);
         party.workspacesStore.lastModifiedVersion = nextVersion;
 
-        await storage.put(USER_WORKSPACES_STORE_KEY, party.workspacesStore);
+        await storage.put(makeWorkspacesStoreKey(), party.workspacesStore);
 
         break;
       default:

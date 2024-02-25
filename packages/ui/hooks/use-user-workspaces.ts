@@ -1,15 +1,16 @@
 import { useLocalUser } from "./use-local-user";
-import { WorkspacesStore } from "@repo/data/client-models";
 import { ReadTransaction } from "replicache";
-import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
+import { makeWorkspacesStoreKey } from "@repo/data/keys";
 import { useSubscribe } from "./use-subscribe";
+import { UserWorkspacesStore } from "@repo/data/schemas";
 
 export function useUserWorkspaces() {
   const user = useLocalUser();
 
-  const { data: workspaces, isPending } = useSubscribe<WorkspacesStore>(
+  const { data: workspaces, isPending } = useSubscribe<UserWorkspacesStore>(
     user?.store,
-    (tx: ReadTransaction) => tx.get<WorkspacesStore>(USER_WORKSPACES_STORE_KEY),
+    (tx: ReadTransaction) =>
+      tx.get<UserWorkspacesStore>(makeWorkspacesStoreKey()),
   );
 
   return { workspaces, isPending };

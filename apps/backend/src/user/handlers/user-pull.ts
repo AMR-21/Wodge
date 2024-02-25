@@ -1,9 +1,8 @@
 import { Request, Storage } from "partykit/server";
 import UserParty from "../user-party";
 import { repPull } from "../../lib/replicache";
-import { UserWorkspacesStore } from "@repo/data/schemas";
 import { PatchOperation } from "replicache";
-import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
+import { makeWorkspacesStoreKey } from "@repo/data/keys";
 import { ServerWorkspaceStore } from "../../types";
 
 export async function userPull(req: Request, party: UserParty) {
@@ -16,7 +15,7 @@ async function patcher(
   versions: Map<string, number>
 ) {
   const workspacesStore = await storage.get<ServerWorkspaceStore>(
-    USER_WORKSPACES_STORE_KEY
+    makeWorkspacesStoreKey()
   );
 
   const patch: PatchOperation[] = [];
@@ -25,7 +24,7 @@ async function patcher(
     if (workspacesStore.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: USER_WORKSPACES_STORE_KEY,
+        key: makeWorkspacesStoreKey(),
         value: workspacesStore.data,
       });
     }

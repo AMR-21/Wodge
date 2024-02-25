@@ -11,7 +11,7 @@ import { handlePost } from "./handlers/user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authenticate, getSession } from "../lib/auth";
 import { UserWorkspacesStore } from "@repo/data/schemas/user-schemas";
-import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
+import { makeWorkspacesStoreKey } from "@repo/data/keys";
 import { ServerWorkspacesStore, UserPartyInterface } from "../types";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
@@ -26,7 +26,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       new Map([["globalVersion", 0]]);
 
     this.workspacesStore = (await this.room.storage.get<ServerWorkspacesStore>(
-      USER_WORKSPACES_STORE_KEY
+      makeWorkspacesStoreKey()
     )) || {
       data: [],
       lastModifiedVersion: 0,

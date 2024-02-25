@@ -33,6 +33,7 @@ import { PublicUserSchema } from "./user-schemas";
  *    name
  *    avatar
  *    moderators
+ *    tags
  *    channels:[
  *    ]
  *  ],
@@ -87,7 +88,7 @@ export const RoleSchema = z.object({
     write: z.boolean(),
     admin: z.boolean(),
   }),
-  color: z.string().default(BRAND_COLOR),
+  color: z.string().default(BRAND_COLOR).optional(),
 });
 
 export const ChannelSchema = z.object({
@@ -98,11 +99,17 @@ export const ChannelSchema = z.object({
   type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });
 
+export const TagSchema = z.object({
+  name: z.string().max(70),
+  color: z.string().default(BRAND_COLOR).optional(),
+});
+
 export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70),
   moderators: z.array(z.string().length(ID_LENGTH)),
   channels: z.array(ChannelSchema),
+  tags: z.array(TagSchema),
 });
 
 export const WorkspaceStructureSchema = z.object({
@@ -146,27 +153,10 @@ export type Role = z.infer<typeof RoleSchema>;
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
+export type Tag = z.infer<typeof TagSchema>;
+
 export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
+
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 export type inviteLink = z.infer<typeof InviteLinkSchema>;
-
-/** Replicache */
-// export type WorkspaceMetadata = {
-//   data: WorkspaceType;
-//   lastMoDifiedVersion: number;
-//   deleted: boolean;
-//   isVerified: boolean;
-// };
-
-// export type WorkspaceStructure = {
-//   data: WorkspaceStructureType;
-//   lastMoDifiedVersion: number;
-//   deleted: boolean;
-// };
-
-// export type WorkspaceMembers = {
-//   data: WorkspaceMembersType;
-//   lastMoDifiedVersion: number;
-//   deleted: boolean;
-// };
