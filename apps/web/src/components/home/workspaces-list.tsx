@@ -23,6 +23,7 @@ export function WorkspacesList() {
       </div>
     );
 
+  const length = Object.values(workspaces).length;
   return (
     <>
       {workspaces &&
@@ -31,7 +32,7 @@ export function WorkspacesList() {
             <div className="w-full" key={workspace.id}>
               {/* Bug in id */}
               <WorkspaceItem workspace={workspace} />
-              {i !== Object.values(workspaces).length - 1 && <Separator />}
+              {i !== length - 1 && <Separator className="bg-border/50" />}
             </div>
           );
         })}

@@ -45,7 +45,7 @@ export const UpdateUserSchema = UserSchema.pick({
 /**
  * Schema for the user object that is stored in the local storage
  */
-export const LocalUserSchema = UserSchema.pick({
+export const PublicUserSchema = UserSchema.pick({
   id: true,
   avatar: true,
   username: true,
@@ -62,4 +62,4 @@ export type UserWorkspacesStore = {
   deleted: boolean;
 };
 export type UserType = z.infer<typeof UserSchema>;
-export type LocalUserType = z.infer<typeof LocalUserSchema>;
+export type PublicUserType = z.infer<typeof PublicUserSchema>;

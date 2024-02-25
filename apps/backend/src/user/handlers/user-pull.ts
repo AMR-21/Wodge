@@ -3,7 +3,7 @@ import UserParty from "../user-party";
 import { repPull } from "../../lib/replicache";
 import { UserWorkspacesStore } from "@repo/data/schemas";
 import { PatchOperation } from "replicache";
-import { USER_PREFIX, USER_WORKSPACES_STORE_PREFIX } from "@repo/data/prefixes";
+import { USER_PREFIX, USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
 import { json } from "../../lib/http-utils";
 
 export async function userPull(req: Request, party: UserParty) {
@@ -23,7 +23,7 @@ async function patcher(
   // });
 
   const workspacesStore = await storage.get<UserWorkspacesStore>(
-    USER_WORKSPACES_STORE_PREFIX
+    USER_WORKSPACES_STORE_KEY
   );
 
   const patch: PatchOperation[] = [];
@@ -32,7 +32,7 @@ async function patcher(
     if (workspacesStore.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: USER_WORKSPACES_STORE_PREFIX,
+        key: USER_WORKSPACES_STORE_KEY,
         value: workspacesStore.workspaces,
       });
     }

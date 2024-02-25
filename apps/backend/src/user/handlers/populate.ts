@@ -2,7 +2,7 @@ import { UserSchema, UserType } from "@repo/data/schemas";
 import { Request, Room } from "partykit/server";
 import { badRequest, json, notChanged } from "../../lib/http-utils";
 import UserParty from "../user-party";
-import { USER_PREFIX } from "@repo/data/prefixes";
+import { USER_PREFIX } from "@repo/data/keys";
 
 // TODO Remove this function and use KV
 /**

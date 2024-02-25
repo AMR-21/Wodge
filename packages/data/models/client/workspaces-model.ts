@@ -2,7 +2,7 @@ import { ReadTransaction, Replicache, WriteTransaction } from "replicache";
 import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "../../schemas";
 import { env } from "@repo/env";
 import { User, WorkspacesStore } from "./user-model";
-import { makeWorkspaceKey } from "../../prefixes";
+import { makeWorkspaceKey } from "../../keys";
 
 // Note on any mutation modify the global state
 export class WorkspacesRegistry {
@@ -70,9 +70,7 @@ export class Workspace {
     // 2. Run the mutation
     await this.store.mutate.createWorkspace(workspaceData);
 
-    // 3. Save state in global state store
-
-    // 4. if the mutation succeeds, run add member mutation with the creator
+    // 3. if the mutation succeeds, run add member mutation with the creator
   }
 }
 

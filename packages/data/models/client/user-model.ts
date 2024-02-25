@@ -11,13 +11,13 @@ import {
 import { useSubscribe } from "replicache-react";
 import { replicacheWrapper } from "../utils";
 import {
-  LocalUserSchema,
-  LocalUserType,
+  PublicUserSchema,
+  PublicUserType,
   NewWorkspaceSchema,
   NewWorkspace,
   UserWorkspacesStore,
 } from "../../schemas";
-import { USER_WORKSPACES_STORE_PREFIX } from "../../prefixes";
+import { USER_WORKSPACES_STORE_KEY } from "../../keys";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspaces-model";
 
@@ -27,7 +27,7 @@ export type Session = {
   sessionToken: string;
   userId: string;
   expires: string;
-  user: LocalUserType;
+  user: PublicUserType;
 };
 
 export class User {
@@ -57,6 +57,7 @@ export class User {
         "user",
         userId
       ),
+      pullInterval: null,
       mutators,
     });
   }
@@ -77,15 +78,15 @@ export class User {
   /**
    * Get the local user data from local storage
    */
-  get data(): LocalUserType {
+  get data(): PublicUserType {
     const localUser = localStorage.getItem("user");
 
     if (!localUser) throw new Error("User not found in local storage");
 
-    const data = JSON.parse(localUser) as LocalUserType;
+    const data = JSON.parse(localUser) as PublicUserType;
 
     // exaggeration ?
-    const validatedFields = LocalUserSchema.safeParse(data);
+    const validatedFields = PublicUserSchema.safeParse(data);
 
     if (!validatedFields.success)
       throw new Error("Invalid user data in local storage");
@@ -113,7 +114,7 @@ export class User {
   async getWorkspaces() {
     return await this.store.query(
       (tx: ReadTransaction) =>
-        tx.get<WorkspacesStore>(USER_WORKSPACES_STORE_PREFIX)!
+        tx.get<WorkspacesStore>(USER_WORKSPACES_STORE_KEY)!
     );
   }
 }
@@ -127,18 +128,18 @@ const mutators = {
     const { data: newWorkspace } = validatedFields;
 
     const workspacesStore = (await tx.get<WorkspacesStore>(
-      USER_WORKSPACES_STORE_PREFIX
+      USER_WORKSPACES_STORE_KEY
     )) as string[];
 
     if (!workspacesStore) {
-      return await tx.set(USER_WORKSPACES_STORE_PREFIX, [newWorkspace.id]);
+      return await tx.set(USER_WORKSPACES_STORE_KEY, [newWorkspace.id]);
     }
 
     // workspaces with similar id already exists
     if (workspacesStore.includes(newWorkspace.id))
       throw new Error("Workspace already exists");
 
-    await tx.set(USER_WORKSPACES_STORE_PREFIX, [
+    await tx.set(USER_WORKSPACES_STORE_KEY, [
       ...workspacesStore,
       newWorkspace.id,
     ]);

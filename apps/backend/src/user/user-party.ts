@@ -9,14 +9,12 @@ import type * as Party from "partykit/server";
 
 import { handlePost } from "./user-party-post";
 import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { authenticate, getSession } from "../lib/auth";
+import { authenticate } from "../lib/auth";
 import { UserWorkspacesStore } from "@repo/data/schemas/user-schemas";
-import {
-  REPLICACHE_CLIENT_GROUP_PREFIX,
-  USER_WORKSPACES_STORE_PREFIX,
-} from "@repo/data/prefixes";
+import { USER_WORKSPACES_STORE_KEY } from "@repo/data/keys";
+import { UserPartyInterface } from "../types";
 
-export default class UserParty implements Party.Server {
+export default class UserParty implements Party.Server, UserPartyInterface {
   workspacesStore: UserWorkspacesStore;
   versions: Map<string, number>;
 
@@ -28,7 +26,7 @@ export default class UserParty implements Party.Server {
       new Map([["globalVersion", 0]]);
 
     this.workspacesStore = (await this.room.storage.get<UserWorkspacesStore>(
-      USER_WORKSPACES_STORE_PREFIX
+      USER_WORKSPACES_STORE_KEY
     )) || {
       workspaces: [],
       lastModifiedVersion: 0,

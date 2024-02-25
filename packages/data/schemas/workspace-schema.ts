@@ -5,34 +5,63 @@ import {
   WORKSPACE_ROLE_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
+import { PublicUserSchema } from "./user-schemas";
 
 /**
- * is_verified
- * {
- * owner
- * avatar
- * name
- * createdAt
- * invite link
- * teams max 10
- * settings*
+ * Workspace {
+ *  id
+ *  owner
+ *  name
+ *  avatar
+ *  createdAt
+ *  settings
+ * }
+ *
+
+ *
+ * structure {
+ *  publicChannels:[
+ *    chan :{
+ *      name
+ *      avatar
+ *      roles
+ *      type
+ *   }
+ *  ],
+ *  teams:[
+ *   teamId:{
+ *    name
+ *    avatar
+ *    moderators
+ *    channels:[
+ *    ]
+ *  ],
+ *  roles: [
+ *    name
+ *    color
+ *    rules {read write admin manage_resources }
+ *    color
+ * ]
  * }
  *
  *
- * roles : { max 10
- * id
- * name
- * permissions read/write/admin/team admin
- * color
- * }
+ * members:[
+ *  {
+ *    id
+ *    teams
+ *    roles
+ *    data:{
+ *      displayName
+ *      avatar
+ *      username
+ *      id
+ *    }
+ *  }
+ * ]
  *
- * channels{
- * id : {roles ,team}
- * }
- *
- *
- * members {
- * id : {roles, data, teams}
+ * inviteLink:{
+ *  url
+ *  expires
  * }
  */
 
@@ -47,30 +76,54 @@ export const WorkspaceSchema = z.object({
     .min(1, "Workspace name is required"),
   avatar: z.optional(z.string().url()).or(z.literal("")),
   createdAt: z.string().datetime(),
-  inviteLink: z
-    .object({
-      url: z.string().url(),
-      expires: z.string().datetime(),
-    })
-    .optional(),
-  // TODO
   settings: z.any().optional(),
-  teams: z.any().optional(),
 });
 
-export const RolesSchema = z.record(
-  z.object({
-    id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
-    name: z.string().max(70),
-    rules: z.object({
-      read: z.boolean(),
-      write: z.boolean(),
-      admin: z.boolean(),
-      teamAdmin: z.string().length(WORKSPACE_TEAM_ID_LENGTH).optional(),
-    }),
-    color: z.string().default(BRAND_COLOR),
-  })
-);
+export const RoleSchema = z.object({
+  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  name: z.string().max(70),
+  rules: z.object({
+    read: z.boolean(),
+    write: z.boolean(),
+    admin: z.boolean(),
+  }),
+  color: z.string().default(BRAND_COLOR),
+});
+
+export const ChannelSchema = z.object({
+  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  name: z.string().max(70),
+  avatar: z.optional(z.string().url()).or(z.literal("")),
+  roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  type: z.enum(["text", "voice", "page", "threads", "stage"]),
+});
+
+export const TeamSchema = z.object({
+  id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
+  name: z.string().max(70),
+  moderators: z.array(z.string().length(ID_LENGTH)),
+  channels: z.array(ChannelSchema),
+});
+
+export const WorkspaceStructureSchema = z.object({
+  publicChannels: z.array(ChannelSchema),
+  teams: z.array(TeamSchema),
+  roles: z.array(RoleSchema),
+});
+
+export const MemberSchema = z.object({
+  id: z.string().length(ID_LENGTH),
+  teams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
+  roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  data: PublicUserSchema,
+});
+
+export const WorkspaceMembersSchema = z.array(MemberSchema);
+
+export const InviteLinkSchema = z.object({
+  url: z.string().url(),
+  expires: z.date(),
+});
 
 export const NewWorkspaceSchema = WorkspaceSchema.pick({
   id: true,
@@ -89,6 +142,16 @@ export const JoinWorkspaceSchema = z.object({
 });
 
 export type WorkspaceType = z.infer<typeof WorkspaceSchema>;
+export type Role = z.infer<typeof RoleSchema>;
+export type Channel = z.infer<typeof ChannelSchema>;
+export type Team = z.infer<typeof TeamSchema>;
+export type Member = z.infer<typeof MemberSchema>;
+export type WorkspaceStructureType = z.infer<typeof WorkspaceStructureSchema>;
+export type WorkspaceMembersType = z.infer<typeof WorkspaceMembersSchema>;
+export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
+export type inviteLink = z.infer<typeof InviteLinkSchema>;
+
+/** Replicache */
 export type WorkspaceMetadata = {
   data: WorkspaceType;
   lastMoDifiedVersion: number;
@@ -96,5 +159,14 @@ export type WorkspaceMetadata = {
   isVerified: boolean;
 };
 
-export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
-export type Roles = z.infer<typeof RolesSchema>;
+export type WorkspaceStructure = {
+  data: WorkspaceStructureType;
+  lastMoDifiedVersion: number;
+  deleted: boolean;
+};
+
+export type WorkspaceMembers = {
+  data: WorkspaceMembersType;
+  lastMoDifiedVersion: number;
+  deleted: boolean;
+};

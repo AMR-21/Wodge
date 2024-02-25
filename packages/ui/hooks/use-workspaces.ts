@@ -1,7 +1,7 @@
 "use client";
 
 import { WorkspacesRegistry } from "@repo/data/client-models";
-import { makeWorkspaceKey } from "@repo/data/prefixes";
+import { makeWorkspaceKey } from "@repo/data/keys";
 import { ReadTransaction } from "replicache";
 import { useMemo, useState } from "react";
 import { WorkspaceType } from "@repo/data/schemas";
