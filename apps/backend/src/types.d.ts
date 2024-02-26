@@ -32,7 +32,7 @@ export interface UserPartyInterface extends Party {
 /**
  * Workspace
  */
-export type ServerWorkspaceStore = { data: WorkspaceType } & ReplicacheFields;
+export type ServerWorkspaceData = { data: WorkspaceType } & ReplicacheFields;
 
 export type ServerWorkspaceMembers = {
   data: WorkspaceMembers;
@@ -42,7 +42,7 @@ export type ServerWorkspaceStructure = {
   data: WorkspaceStructure;
 } & ReplicacheFields;
 export interface WorkspacePartyInterface extends Party {
-  workspaceMetadata: ServerWorkspaceStore;
+  workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
 }

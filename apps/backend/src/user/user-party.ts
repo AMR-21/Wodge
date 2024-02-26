@@ -8,30 +8,35 @@
 import type * as Party from "partykit/server";
 
 import { handlePost } from "./handlers/user-party-post";
-import { json, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { authenticate, getSession } from "../lib/auth";
-import { UserWorkspacesStore } from "@repo/data/schemas/user-schemas";
+import { notImplemented, ok, unauthorized } from "../lib/http-utils";
+import { getSession } from "../lib/auth";
 import { makeWorkspacesStoreKey } from "@repo/data/keys";
 import { ServerWorkspacesStore, UserPartyInterface } from "../types";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
+  options: Party.ServerOptions = {
+    hibernate: true,
+  };
+
   workspacesStore: ServerWorkspacesStore;
   versions: Map<string, number>;
 
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
-    this.versions =
-      (await this.room.storage.get("versions")) ||
-      new Map([["globalVersion", 0]]);
+    const map = await this.room.storage.get([
+      "versions",
+      makeWorkspacesStoreKey(),
+    ]);
 
-    this.workspacesStore = (await this.room.storage.get<ServerWorkspacesStore>(
-      makeWorkspacesStoreKey()
-    )) || {
+    this.versions = (map.get("versions") ||
+      new Map([["globalVersion", 0]])) as typeof this.versions;
+
+    this.workspacesStore = (map.get(makeWorkspacesStoreKey()) || {
       data: [],
       lastModifiedVersion: 0,
       deleted: false,
-    };
+    }) as ServerWorkspacesStore;
   }
 
   async onRequest(req: Party.Request) {

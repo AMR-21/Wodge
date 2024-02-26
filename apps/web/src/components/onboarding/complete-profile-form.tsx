@@ -18,14 +18,13 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { UpdateUserSchema } from "@repo/data/schemas";
+import { PublicUserType, UpdateUserSchema } from "@repo/data/schemas";
 import { updateProfile } from "@/actions/user-actions";
 import { useOnboarding } from "./onboarding-context";
-import { useLocalUser } from "@/hooks/use-local-user";
+import { User } from "@repo/data/client-models";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
-  const localUser = useLocalUser();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
   const avatarFileRef = useRef<HTMLInputElement>(null);
@@ -68,7 +67,15 @@ export function CompleteProfileForm() {
           toast.error(res.error);
         }
         if (res?.success) {
-          localUser?.cacheUser(res.user);
+          const cacheData: PublicUserType = {
+            id: res.user.id,
+            displayName: res.user.displayName,
+            username: res.user.username,
+            avatar: res.user?.avatar,
+            email: res.user.email,
+          };
+
+          User.cacheUser(cacheData);
           nextStep();
         }
       });

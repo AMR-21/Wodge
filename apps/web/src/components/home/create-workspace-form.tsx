@@ -4,12 +4,21 @@ import {
   Button,
   DialogClose,
   Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   Input,
+  Switch,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   useLocalUser,
 } from "@repo/ui";
+import { on } from "events";
+import { HelpCircle } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -22,6 +31,7 @@ export function CreateWorkspaceForm() {
     defaultValues: {
       id: nanoid(),
       name: "",
+      onCloud: false,
     },
   });
 
@@ -31,7 +41,7 @@ export function CreateWorkspaceForm() {
     // for safety and avoiding duplicate ids
     form.setValue("id", nanoid());
 
-    router.replace("/" + data.id);
+    // router.push("/" + data.id);
   }
 
   return (
@@ -47,6 +57,37 @@ export function CreateWorkspaceForm() {
             <FormItem>
               <FormLabel>Workspace name</FormLabel>
               <Input {...field} placeholder="Workspace name" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="onCloud"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-row items-center gap-1 space-y-0">
+              <FormLabel>Enable cloud access</FormLabel>
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-64" sideOffset={6}>
+                    <FormDescription className="text-pretty">
+                      By default a workspace is created locally, enabling cloud
+                      access will allow you to save your workspace to the cloud,
+                      access it from anywhere, and invite collaborators.
+                    </FormDescription>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              {/* */}
+              <FormControl className="ml-auto">
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
             </FormItem>
           )}
         />

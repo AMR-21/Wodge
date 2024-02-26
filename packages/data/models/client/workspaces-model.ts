@@ -1,7 +1,7 @@
 import { ReadTransaction, Replicache, WriteTransaction } from "replicache";
 import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "../../schemas";
 import { env } from "@repo/env";
-import { User, WorkspacesStore } from "./user-model";
+import { User } from "./user-model";
 import { makeWorkspaceKey } from "../../keys";
 
 // Note on any mutation modify the global state
@@ -58,7 +58,7 @@ export class Workspace {
   /**
    * Create a new workspace
    */
-  async createWorkspace(data: NewWorkspace) {
+  async init(data: NewWorkspace) {
     // TODO CHECK IF THE WORKSPACE HAS ALREADY BEEN CREATED
     // 1. build the workspace object
     const workspaceData: WorkspaceType = {
@@ -68,14 +68,14 @@ export class Workspace {
     };
 
     // 2. Run the mutation
-    await this.store.mutate.createWorkspace(workspaceData);
+    await this.store.mutate.initWorkspace(workspaceData);
 
     // 3. if the mutation succeeds, run add member mutation with the creator
   }
 }
 
 const mutators = {
-  async createWorkspace(tx: WriteTransaction, data: WorkspaceType) {
+  async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
     // 1. Validate the data,
     const validatedFields = WorkspaceSchema.safeParse(data);
 

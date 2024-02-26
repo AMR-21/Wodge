@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { ReadTransaction, Replicache, DeepReadonly } from "replicache";
 
@@ -11,9 +13,9 @@ export function useSubscribe<T>(
   store?.subscribe(query, {
     onData: function (data) {
       if (data) {
-        setIsPending(false);
         setData(data);
       }
+      setIsPending(false);
     },
   });
 

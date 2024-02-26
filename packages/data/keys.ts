@@ -4,7 +4,7 @@
 export const JOINER = "/";
 
 /** User */
-export const USER_KEY = "user/";
+export const USER_KEY = "user";
 export const USER_WORKSPACES_STORE_KEY = "workspaces";
 export const makeWorkspacesStoreKey = () =>
   USER_KEY + JOINER + USER_WORKSPACES_STORE_KEY;

@@ -36,9 +36,7 @@ export function OnboardingSteps() {
         <Step index={3}>
           <Outro />
           <NextBtn className="w-4/6" asChild>
-            <Link href={DEFAULT_LOGIN_REDIRECT + "?login=true"}>
-              Get started
-            </Link>
+            <Link href={DEFAULT_LOGIN_REDIRECT}>Get started</Link>
           </NextBtn>
         </Step>
       </StepperContainer>

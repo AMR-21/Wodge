@@ -56,6 +56,10 @@ export const PublicUserSchema = UserSchema.pick({
 /**
  * User workspaces store type
  */
-export type UserWorkspacesStore = string[];
+export type UserWorkspacesStore = {
+  workspaceId: string;
+  environment: "local" | "cloud";
+}[];
+
 export type UserType = z.infer<typeof UserSchema>;
 export type PublicUserType = z.infer<typeof PublicUserSchema>;

@@ -1,6 +1,7 @@
 "use client";
 
 import { UserType } from "@repo/data/schemas";
+import { useCacheUser } from "@repo/ui";
 import { createContext, useContext, useTransition } from "react";
 
 interface ContextValues {
@@ -19,6 +20,8 @@ export function OnboardingProvider({
   user: Partial<UserType>;
 }) {
   const [isPending, startTransition] = useTransition();
+
+  useCacheUser();
 
   return (
     <Context.Provider

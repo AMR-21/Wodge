@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../../../../packages/ui";
+import { Button } from "@repo/ui";
 import { useRouter } from "next/navigation";
 
 export function RedirectBtn() {

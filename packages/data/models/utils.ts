@@ -1,5 +1,4 @@
 import { env } from "@repo/env";
-import { toast } from "@repo/ui";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
@@ -30,7 +29,6 @@ export function replicacheWrapper<Request, Result>(
         ...(mode === "pull" && { response }),
       } as Result;
     } catch {
-      toast.error("Sync failed");
       return {
         httpRequestInfo: {
           httpStatusCode: 500,

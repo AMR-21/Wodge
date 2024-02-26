@@ -46,24 +46,28 @@ import { PublicUserSchema } from "./user-schemas";
  * }
  *
  *
- * members:[
- *  {
+ * members:{
+ *  owner
+ *  enabled // check if the workspace is published to the cloud
+ *  members: [{
  *    id
  *    teams
  *    roles
+ *    joinToken 
  *    data:{
  *      displayName
  *      avatar
  *      username
- *      id
  *    }
- *  }
- * ]
+ *  }]
+ * }
  *
- * inviteLink:{
+ * invites:[{
  *  url
  *  expires
- * }
+ *  limit
+ *  createdBy
+ * }]
  */
 
 export const WorkspaceSchema = z.object({
@@ -77,6 +81,7 @@ export const WorkspaceSchema = z.object({
     .min(1, "Workspace name is required"),
   avatar: z.optional(z.string().url()).or(z.literal("")),
   createdAt: z.string().datetime(),
+  environment: z.enum(["local", "cloud"]),
   settings: z.any().optional(),
 });
 
@@ -122,10 +127,15 @@ export const MemberSchema = z.object({
   id: z.string().length(ID_LENGTH),
   teams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
   roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
-  data: PublicUserSchema,
+  data: PublicUserSchema.omit({ id: true }),
+  joinToken: z.string().optional(),
 });
 
-export const WorkspaceMembersSchema = z.array(MemberSchema);
+export const WorkspaceMembersSchema = z.object({
+  owner: z.string().length(ID_LENGTH),
+  enabled: z.boolean(),
+  members: z.array(MemberSchema),
+});
 
 export const InviteLinkSchema = z.object({
   url: z.string().url(),
@@ -136,6 +146,8 @@ export const NewWorkspaceSchema = WorkspaceSchema.pick({
   id: true,
   name: true,
   avatar: true,
+}).extend({
+  onCloud: z.boolean(),
 });
 
 export const JoinWorkspaceSchema = z.object({

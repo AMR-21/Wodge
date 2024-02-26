@@ -70,6 +70,14 @@ export class User {
     }
     return User.#user;
   }
+
+  /**
+   * Cache user data locally on sign up
+   */
+
+  static cacheUser(data: PublicUserType) {
+    localStorage.setItem("user", JSON.stringify(data));
+  }
   /** End of static methods */
 
   /** Getters */
@@ -98,12 +106,14 @@ export class User {
    * Create a new workspace
    */
   async createWorkspace(data: NewWorkspace) {
-    await this.store.mutate.createWorkspace(data);
+    console.log(data);
+    // await this.store.mutate.createWorkspace(data);
 
-    const workspacesRegistry = WorkspacesRegistry.getInstance();
-    const workspace = workspacesRegistry.getWorkspace(data.id);
+    // // Add a workspace instance
+    // const workspacesRegistry = WorkspacesRegistry.getInstance();
+    // const workspace = workspacesRegistry.getWorkspace(data.id);
 
-    await workspace.createWorkspace(data);
+    // await workspace.init(data);
   }
 
   /**
@@ -125,9 +135,9 @@ const mutators = {
 
     const { data: newWorkspace } = validatedFields;
 
-    const workspacesStore = (await tx.get<UserWorkspacesStore>(
+    const workspacesStore = await tx.get<UserWorkspacesStore>(
       makeWorkspacesStoreKey()
-    )) as string[];
+    );
 
     if (!workspacesStore) {
       return await tx.set(makeWorkspacesStoreKey(), [newWorkspace.id]);

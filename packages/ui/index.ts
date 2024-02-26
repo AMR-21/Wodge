@@ -18,6 +18,7 @@ export * from "./components/ui/dialog";
 export * from "./components/ui/tabs";
 export * from "./components/ui/skeleton";
 export * from "./components/ui/resizable";
+export * from "./components/ui/switch";
 
 export * from "./components/user-avatar";
 export * from "./components/user-card";
@@ -25,5 +26,7 @@ export * from "./components/user-card";
 export * from "./hooks/use-cache-user";
 export * from "./hooks/use-current-user";
 export * from "./hooks/use-local-user";
+export * from "./hooks/use-subscribe";
 export * from "./hooks/use-user-data";
+export * from "./hooks/use-user-workspaces";
 export * from "./hooks/use-workspaces";

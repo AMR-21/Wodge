@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@repo/data/client-models";
-import { useCacheUser } from "./use-cache-user";
 
 /**
  * Get user instance

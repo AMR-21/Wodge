@@ -1,3 +1,6 @@
+"use client";
+
+
 import { useLocalUser } from "./use-local-user";
 import { ReadTransaction } from "replicache";
 import { makeWorkspacesStoreKey } from "@repo/data/keys";
