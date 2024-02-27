@@ -17,6 +17,7 @@ import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { Teamspaces } from "./teamspaces";
 import { UserCard } from "./user-card";
+import { usePathname } from "next/navigation";
 
 const staticItems = [
   {
@@ -38,11 +39,14 @@ const staticItems = [
   {
     label: "Settings",
     Icon: Settings,
+    href: "settings",
   },
 ];
 
 export function Sidebar() {
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
+  // const router
+  const pathName = usePathname();
 
   return (
     <aside
@@ -60,6 +64,7 @@ export function Sidebar() {
               label={item.label}
               Icon={item.Icon}
               className="capitalize"
+              href={pathName + "/" + item.href}
             />
           ))}
         </ul>

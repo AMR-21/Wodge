@@ -106,8 +106,6 @@ export class User {
    * Create a new workspace
    */
   async createWorkspace(data: NewWorkspace) {
-    console.log(data);
-
     // 1. if the workspace is to be created on the cloud, init the cloud db
     if (data.onCloud) {
       // post request to the space with owner id
@@ -119,7 +117,7 @@ export class User {
         }
       );
 
-      const response = await res.json();
+      if (!res.ok) throw new Error("Failed to create workspace on cloud");
     }
 
     // 2. Run the mutation
@@ -129,7 +127,7 @@ export class User {
     const workspacesRegistry = WorkspacesRegistry.getInstance();
     const workspace = workspacesRegistry.getWorkspace(data.id);
 
-    await workspace.init(data);
+    await workspace?.init(data);
   }
 
   /**
@@ -173,7 +171,6 @@ const mutators = {
       },
     ];
 
-    console.log(updatedStore);
     await tx.set(makeWorkspacesStoreKey(), updatedStore);
   },
 };
