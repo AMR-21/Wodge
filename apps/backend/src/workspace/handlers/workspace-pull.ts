@@ -45,8 +45,6 @@ function patcher(party: WorkspaceParty) {
       });
     }
 
-    console.log(patch);
-
     return patch;
   };
 }
