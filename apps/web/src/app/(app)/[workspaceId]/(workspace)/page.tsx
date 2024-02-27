@@ -24,7 +24,7 @@ function SpacePage({ params }: { params: { workspaceId: string } }) {
   // const wrs = Workspace.getInstance("1");
 
   // console.log(Workspace);
-  return <div className="basis-full">hhhhhh</div>;
+  return <div className="basis-full bg-page">hhhhhh</div>;
 }
 
 export default SpacePage;

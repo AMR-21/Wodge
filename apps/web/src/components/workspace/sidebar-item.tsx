@@ -12,11 +12,23 @@ interface SidebarItemProps {
   className?: string;
   isActive?: boolean;
   href?: string;
+  onClick?: () => void;
+  noIcon?: boolean;
 }
 
 const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
   function SidebarItem(
-    { label, Icon, children, className, isActive = false, href, ...props },
+    {
+      label,
+      Icon,
+      children,
+      className,
+      isActive = false,
+      href,
+      onClick,
+      noIcon = false,
+      ...props
+    },
     ref,
   ) {
     if (!Icon) Icon = Hash;
@@ -37,10 +49,12 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
           isActive && "bg-accent text-accent-foreground dark:bg-accent",
           className,
         )}
+        onClick={onClick}
         {...props}
       >
         {/* 8px margin of the switcher + 12px half space avatar width - 8px half icon width */}
-        <Icon className="mr-3 h-4 w-4 shrink-0 transition-all" />
+
+        {!noIcon && <Icon className="mr-3 h-4 w-4 shrink-0 transition-all" />}
         <span>{label}</span>
 
         {children}
