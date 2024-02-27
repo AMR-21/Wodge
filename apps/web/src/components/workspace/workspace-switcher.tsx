@@ -7,7 +7,6 @@ import {
   buttonVariants,
   cn,
   useCurrentWsData,
-  useMetaData,
 } from "@repo/ui";
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
@@ -18,13 +17,8 @@ import { useParams } from "next/navigation";
 export function WorkspaceSwitcher() {
   const toggleSidebar = useAppState((state) => state.toggleSidebar);
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
-  const { workspaceId } = useParams();
 
-  // const data = useCurrentWsData();
-
-  // if (!data) return null;
-
-  // const { metadata } = data;
+  const { metadata } = useCurrentWorkspace();
 
   return (
     <div
@@ -43,12 +37,12 @@ export function WorkspaceSwitcher() {
         role="button"
       >
         <Avatar className="mr-2 h-6 w-6 rounded-md text-xs">
-          <AvatarImage src={"metadata?.avatar"} />
+          <AvatarImage src={metadata?.avatar} />
           <AvatarFallback className=" rounded-md text-lg uppercase">
-            {"metadata?.name[0]"}
+            {metadata?.name[0]}
           </AvatarFallback>
         </Avatar>
-        <span className="mr-1 truncate text-sm">{"metadata?.name"}</span>
+        <span className="mr-1 truncate text-sm">{metadata?.name}</span>
         <ChevronsUpDown className="mr-4 h-3.5 min-h-3.5 w-3.5 min-w-3.5 opacity-60 group-hover:opacity-100" />
 
         <SidebarItemBtn
