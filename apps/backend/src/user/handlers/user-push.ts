@@ -36,11 +36,14 @@ function runner(party: UserParty) {
           throw new Error("Workspace already exists");
         }
 
+        // if the workspace is local skip saving it but update the version
         // Update the user's space store
-        workspacesStore.data.push({
-          workspaceId: data.id,
-          environment: "cloud",
-        });
+
+        if (data.onCloud)
+          workspacesStore.data.push({
+            workspaceId: data.id,
+            environment: "cloud",
+          });
 
         workspacesStore.lastModifiedVersion = nextVersion;
 

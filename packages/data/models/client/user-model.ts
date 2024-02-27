@@ -120,8 +120,6 @@ export class User {
       );
 
       const response = await res.json();
-
-      console.log(response);
     }
 
     // 2. Run the mutation
@@ -132,6 +130,17 @@ export class User {
     const workspace = workspacesRegistry.getWorkspace(data.id);
 
     await workspace.init(data);
+  }
+
+  /**
+   * Get the user workspaces
+   */
+  async getWorkspaces() {
+    const workspacesStore = await this.store.query((tx: ReadTransaction) =>
+      tx.get<UserWorkspacesStore>(makeWorkspacesStoreKey())
+    );
+
+    return workspacesStore;
   }
 }
 
@@ -164,6 +173,7 @@ const mutators = {
       },
     ];
 
+    console.log(updatedStore);
     await tx.set(makeWorkspacesStoreKey(), updatedStore);
   },
 };

@@ -47,7 +47,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex shrink-0 grow flex-col justify-between space-y-6 transition-all",
+        "flex shrink-0 grow flex-col justify-between space-y-6 transition-all duration-1000",
         isSidebarOpen && "w-56 max-w-56 border-r border-border/50",
         !isSidebarOpen && " invisible w-0 overflow-hidden",
       )}

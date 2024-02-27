@@ -41,7 +41,7 @@ export function CreateWorkspaceForm() {
     // for safety and avoiding duplicate ids
     form.setValue("id", nanoid());
 
-    // router.push("/" + data.id);
+    router.push("/" + data.id);
   }
 
   return (

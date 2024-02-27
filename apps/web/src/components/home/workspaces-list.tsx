@@ -4,17 +4,15 @@ import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
 
 export function WorkspacesList() {
-  const workspaces = useWorkspaces();
-  const { isPending, workspaces: userWorkspaces } = useUserWorkspaces();
+  const { workspaces, isPending } = useWorkspaces();
+  const userWorkspaces = useUserWorkspaces();
 
-  if (!isPending && (!userWorkspaces || userWorkspaces.length === 0))
-    return (
-      <p className="p-5 text-center text-muted-foreground">
-        Join or create workspace to start using Wodge
-      </p>
-    );
+  const noUserWorkspaces = !userWorkspaces;
 
-  if (!workspaces)
+  const workspacesLoading = !workspaces && isPending;
+  const noWorkspacesData = !workspaces && !isPending;
+
+  if (workspacesLoading)
     return (
       <div className="w-full">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -23,7 +21,14 @@ export function WorkspacesList() {
       </div>
     );
 
-  const length = Object.values(workspaces).length;
+  if ((!workspacesLoading && noUserWorkspaces) || noWorkspacesData)
+    return (
+      <p className="p-5 text-center text-muted-foreground">
+        Join or create workspace to start using Wodge
+      </p>
+    );
+
+  const length = Object.values(workspaces || {}).length;
   return (
     <>
       {workspaces &&

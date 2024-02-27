@@ -10,7 +10,7 @@ import {
 import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "../../schemas";
 import { env } from "@repo/env";
 import { User } from "./user-model";
-import { makeWorkspaceKey } from "../../keys";
+import { WORKSPACE_PREFIX, makeWorkspaceKey } from "../../keys";
 import { replicacheWrapper } from "../utils";
 
 // Note on any mutation modify the global state
@@ -38,11 +38,13 @@ export class WorkspacesRegistry {
   }
 
   getWorkspace(id: string) {
+    if (typeof navigator === "undefined") return null;
+
     if (!this.registry.has(id)) {
       this.registry.set(id, new Workspace(id));
     }
 
-    return this.registry.get(id)!;
+    return this.registry.get(id);
   }
 }
 
@@ -53,28 +55,31 @@ export class Workspace {
     this.store = new Replicache({
       name: id,
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-
       mutators,
     });
 
     // Add push/pull endpoints for cloud workspaces
-    this.store
-      .query(async (tx: ReadTransaction) =>
-        tx.get<WorkspaceType>(makeWorkspaceKey(id))
-      )
+    User.getInstance()
+      .getWorkspaces()
+      .then((data) => {
+        if (data) return data.find((ws) => ws.workspaceId === id);
+      })
       .then((data) => {
         if (data && data.environment === "cloud") {
           this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
             "push",
             "workspace",
-            data.id
+            id
           );
 
           this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
             "pull",
             "workspace",
-            data.id
+            id
           );
+
+          this.store.pull();
+          this.store.push();
         }
       });
   }
@@ -113,6 +118,9 @@ export class Workspace {
         "workspace",
         data.id
       );
+
+      this.store.pull();
+      this.store.push();
     }
   }
 }

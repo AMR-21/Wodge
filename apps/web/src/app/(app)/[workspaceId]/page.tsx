@@ -1,14 +1,14 @@
 "use client";
 
+import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
 import { Workspace } from "@repo/data/client-models";
-import { Button } from "@repo/ui";
+// import { Button, useCurrentWsMetadata } from "@repo/ui";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 function SpacePage({ params }: { params: { workspaceId: string } }) {
-  const router = useRouter();
-
-  const { workspaceId } = params;
+  // TODO Protect undefined workspaceId
+  // useCurrentWsMetadata();
 
   // const { workspaceId } = useParams();
 
@@ -20,16 +20,11 @@ function SpacePage({ params }: { params: { workspaceId: string } }) {
   //   router.replace("/me");
   // }
 
-  console.log(params);
+  // console.log(params);
   // const wrs = Workspace.getInstance("1");
 
   // console.log(Workspace);
-  return (
-    <div>
-      hhhhhh
-      <Button onClick={() => router.back()}>bbb</Button>
-    </div>
-  );
+  return <div className="basis-full">hhhhhh</div>;
 }
 
 export default SpacePage;

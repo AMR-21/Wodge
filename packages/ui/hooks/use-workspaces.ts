@@ -11,20 +11,22 @@ import { useUserWorkspaces } from "./use-user-workspaces";
  * A hook to return workspaces' meta data
  */
 export function useWorkspaces() {
+  const [isPending, setIsPending] = useState(true);
   const [workspaces, setWorkspaces] = useState<Record<string, WorkspaceType>>();
 
-  const { workspaces: userWorkspaces } = useUserWorkspaces();
+  const userWorkspaces = useUserWorkspaces();
 
   const workspacesRegistry = WorkspacesRegistry.getInstance();
 
   useMemo(() => {
-    if (userWorkspaces)
+    setIsPending(true);
+    if (userWorkspaces) {
       // 1. Loop over each workspace store
-      userWorkspaces.map(({ workspaceId }) => {
+      userWorkspaces?.map(({ workspaceId }) => {
         const workspace = workspacesRegistry.getWorkspace(workspaceId);
 
         // 2. Add subscription to each workspace in order to be reactive
-        workspace.store.subscribe(
+        workspace?.store.subscribe(
           (tx: ReadTransaction) =>
             tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId)),
           {
@@ -36,7 +38,9 @@ export function useWorkspaces() {
           },
         );
       });
+    }
+    setIsPending(false);
   }, [userWorkspaces]);
 
-  return workspaces;
+  return { workspaces, isPending };
 }
