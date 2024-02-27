@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
 import { WorkspacesList } from "@/components/home/workspaces-list";
+import { env } from "@repo/env";
 
 function HomePage() {
   const router = useRouter();
@@ -35,6 +36,22 @@ function HomePage() {
           </div>
         </div>
 
+        <Button
+          onClick={async () => {
+            const res = await fetch(
+              `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${"RNy1Q96o-cRwwTV10VEbI"}`,
+              {
+                credentials: "include",
+              },
+            );
+
+            const data = await res.json();
+
+            console.log({ data });
+          }}
+        >
+          get
+        </Button>
         <AddWorkspaceDialog />
       </div>
     </div>

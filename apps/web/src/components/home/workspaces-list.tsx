@@ -30,7 +30,6 @@ export function WorkspacesList() {
         Object.values(workspaces).map((workspace: WorkspaceType, i) => {
           return (
             <div className="w-full" key={workspace.id}>
-              {/* Bug in id */}
               <WorkspaceItem workspace={workspace} />
               {i !== length - 1 && <Separator className="bg-border/50" />}
             </div>

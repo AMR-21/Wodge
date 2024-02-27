@@ -20,16 +20,18 @@ export function useWorkspaces() {
   useMemo(() => {
     if (userWorkspaces)
       // 1. Loop over each workspace store
-      userWorkspaces.map((wid) => {
-        const workspace = workspacesRegistry.getWorkspace(wid);
+      userWorkspaces.map(({ workspaceId }) => {
+        const workspace = workspacesRegistry.getWorkspace(workspaceId);
 
         // 2. Add subscription to each workspace in order to be reactive
         workspace.store.subscribe(
-          (tx: ReadTransaction) => tx.get<WorkspaceType>(makeWorkspaceKey(wid)),
+          (tx: ReadTransaction) =>
+            tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId)),
           {
             // 3. On data change update the state
             onData: function (data?: WorkspaceType) {
-              if (data) setWorkspaces((prev) => ({ ...prev, [wid]: data }));
+              if (data)
+                setWorkspaces((prev) => ({ ...prev, [workspaceId]: data }));
             },
           },
         );

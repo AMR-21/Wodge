@@ -1,8 +1,17 @@
-import { ReadTransaction, Replicache, WriteTransaction } from "replicache";
+import {
+  PullRequest,
+  PullerResult,
+  PushRequest,
+  PusherResult,
+  ReadTransaction,
+  Replicache,
+  WriteTransaction,
+} from "replicache";
 import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "../../schemas";
 import { env } from "@repo/env";
 import { User } from "./user-model";
 import { makeWorkspaceKey } from "../../keys";
+import { replicacheWrapper } from "../utils";
 
 // Note on any mutation modify the global state
 export class WorkspacesRegistry {
@@ -44,13 +53,30 @@ export class Workspace {
     this.store = new Replicache({
       name: id,
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-      // pushURL: "/api/replicache-push",
-      // pullURL: "/api/pull",
+
       mutators,
     });
 
-    // subscribe for workspace meta data changes and add to global state
-    // this.store.
+    // Add push/pull endpoints for cloud workspaces
+    this.store
+      .query(async (tx: ReadTransaction) =>
+        tx.get<WorkspaceType>(makeWorkspaceKey(id))
+      )
+      .then((data) => {
+        if (data && data.environment === "cloud") {
+          this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
+            "push",
+            "workspace",
+            data.id
+          );
+
+          this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
+            "pull",
+            "workspace",
+            data.id
+          );
+        }
+      });
   }
 
   /** Methods */
@@ -62,7 +88,10 @@ export class Workspace {
     // TODO CHECK IF THE WORKSPACE HAS ALREADY BEEN CREATED
     // 1. build the workspace object
     const workspaceData: WorkspaceType = {
-      ...data,
+      id: data.id,
+      name: data.name,
+      avatar: data.avatar,
+      environment: data.onCloud ? "cloud" : "local",
       owner: User.getInstance().data.id,
       createdAt: new Date().toISOString(),
     };
@@ -70,12 +99,28 @@ export class Workspace {
     // 2. Run the mutation
     await this.store.mutate.initWorkspace(workspaceData);
 
-    // 3. if the mutation succeeds, run add member mutation with the creator
+    // 3. If it is cloud workspace, then re-init the store
+    // Add push/pull endpoints for cloud workspaces
+    if (data.onCloud) {
+      this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
+        "push",
+        "workspace",
+        data.id
+      );
+
+      this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
+        "pull",
+        "workspace",
+        data.id
+      );
+    }
   }
 }
 
 const mutators = {
   async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
+    // validation is an extra needless effort but for purpose of adding extra validation
+    // Typically where the case user bypass the function and call the mutation directly
     // 1. Validate the data,
     const validatedFields = WorkspaceSchema.safeParse(data);
 

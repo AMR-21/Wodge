@@ -55,7 +55,7 @@ export class User {
         "user",
         userId
       ),
-      pullInterval: null,
+      // pullInterval: null,
       mutators,
     });
   }
@@ -107,23 +107,31 @@ export class User {
    */
   async createWorkspace(data: NewWorkspace) {
     console.log(data);
-    // await this.store.mutate.createWorkspace(data);
 
-    // // Add a workspace instance
-    // const workspacesRegistry = WorkspacesRegistry.getInstance();
-    // const workspace = workspacesRegistry.getWorkspace(data.id);
+    // 1. if the workspace is to be created on the cloud, init the cloud db
+    if (data.onCloud) {
+      // post request to the space with owner id
+      const res = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${data.id}/create`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
-    // await workspace.init(data);
-  }
+      const response = await res.json();
 
-  /**
-   * Get workspaces store
-   */
-  async getWorkspaces() {
-    return await this.store.query(
-      (tx: ReadTransaction) =>
-        tx.get<UserWorkspacesStore>(makeWorkspacesStoreKey())!
-    );
+      console.log(response);
+    }
+
+    // 2. Run the mutation
+    await this.store.mutate.createWorkspace(data);
+
+    // 3. if the mutation succeed, init the workspace
+    const workspacesRegistry = WorkspacesRegistry.getInstance();
+    const workspace = workspacesRegistry.getWorkspace(data.id);
+
+    await workspace.init(data);
   }
 }
 
@@ -135,22 +143,28 @@ const mutators = {
 
     const { data: newWorkspace } = validatedFields;
 
-    const workspacesStore = await tx.get<UserWorkspacesStore>(
+    const workspacesStore = (await tx.get<UserWorkspacesStore>(
       makeWorkspacesStoreKey()
-    );
+    )) as UserWorkspacesStore;
 
-    if (!workspacesStore) {
-      return await tx.set(makeWorkspacesStoreKey(), [newWorkspace.id]);
+    // check if workspace already exists
+    if (
+      !!workspacesStore &&
+      workspacesStore?.some((ws) => ws.workspaceId === newWorkspace.id)
+    ) {
+      throw new Error("Workspace already exists");
     }
 
-    // workspaces with similar id already exists
-    if (workspacesStore.includes(newWorkspace.id))
-      throw new Error("Workspace already exists");
+    // add the new workspace to the store
+    const updatedStore: UserWorkspacesStore = [
+      ...(!!workspacesStore ? workspacesStore : []),
+      {
+        workspaceId: newWorkspace.id,
+        environment: newWorkspace.onCloud ? "cloud" : "local",
+      },
+    ];
 
-    await tx.set(makeWorkspacesStoreKey(), [
-      ...workspacesStore,
-      newWorkspace.id,
-    ]);
+    await tx.set(makeWorkspacesStoreKey(), updatedStore);
   },
 };
 

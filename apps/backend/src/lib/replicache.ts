@@ -3,6 +3,7 @@ import {
   JOINER,
   REPLICACHE_CLIENT_GROUP_PREFIX,
   REPLICACHE_CLIENT_PREFIX,
+  REPLICACHE_VERSIONS_KEY,
   extractClientId,
   makeClientGroupKey,
   makeClientKey,
@@ -10,6 +11,7 @@ import {
 import { badRequest, error, json, ok, unauthorized } from "./http-utils";
 import { PatchOperation, PullResponse } from "replicache";
 import { z } from "zod";
+import { Versions } from "../types";
 
 export type ReplicacheSpace = {
   id: string;
@@ -51,14 +53,9 @@ export const PullRequestSchema = z.object({
 export type PullRequest = z.infer<typeof PullRequestSchema>;
 
 export interface RunnerParams {
-  mutation: {
-    id: number;
-    clientID: string;
-    name: string;
-    args?: any;
-  };
+  mutation: z.infer<typeof MutationSchema>;
   nextVersion: number;
-  storage: Storage;
+  userId: string;
 }
 
 const authError = {};
@@ -67,11 +64,10 @@ const clientStateNotFoundError = {};
 export async function repPull(
   req: Request,
   storage: Storage,
-  versions: Map<string, number>,
+  versions: Versions,
   patcher: (
     fromVersion: number,
-    storage: Storage,
-    versions: Map<string, number>
+    versions: Versions
   ) => Promise<PatchOperation[]>
 ) {
   const userId = req.headers.get("x-user-id");
@@ -89,9 +85,10 @@ export async function repPull(
       data: { cookie, clientGroupID: clientGroupId },
     } = validatedData;
 
-    const c = await getClientGroup(clientGroupId, userId, storage, false);
-    const fromVersion = cookie ?? 0;
+    await getClientGroup(clientGroupId, userId, storage, false);
+
     const globalVersion = versions.get("globalVersion")!;
+    const fromVersion = cookie ?? 0;
 
     const lastMutationIDChanges: Record<string, number> = {};
 
@@ -108,7 +105,7 @@ export async function repPull(
     });
 
     // Get the operations
-    const patch = await patcher(fromVersion, storage, versions);
+    const patch = await patcher(fromVersion, versions);
 
     return json(
       {
@@ -133,8 +130,8 @@ export async function repPull(
 export async function repPush(
   req: Request,
   storage: Storage,
-  versions: Map<string, number>,
-  runner: ({ mutation, nextVersion, storage }: RunnerParams) => Promise<void>,
+  versions: Versions,
+  runner: (params: RunnerParams) => Promise<void>,
   poker?: () => Promise<void>
 ) {
   const userId = req.headers.get("x-user-id");
@@ -194,7 +191,7 @@ export async function repPush(
       if (id > expectedMutationID) throw new Error("Mutation from the future");
 
       // Step 6: Run the mutation
-      await runner({ mutation, nextVersion, storage });
+      await runner({ mutation, nextVersion, userId });
 
       client.lastMutationID = expectedMutationID;
       client.lastModifiedVersion = nextVersion;
@@ -205,7 +202,10 @@ export async function repPush(
     versions.set("globalVersion", nextVersion);
 
     // Step 7: Update the clients
-    await storage.put({ versions, ...Object.fromEntries(clients) });
+    await storage.put({
+      [REPLICACHE_VERSIONS_KEY]: versions,
+      ...Object.fromEntries(clients),
+    });
 
     // TODO - Step 8 send a poke or call passed poke function
     poker?.();

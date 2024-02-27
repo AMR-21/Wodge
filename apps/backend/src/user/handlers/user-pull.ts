@@ -1,33 +1,28 @@
-import { Request, Storage } from "partykit/server";
+import { Request } from "partykit/server";
 import UserParty from "../user-party";
 import { repPull } from "../../lib/replicache";
 import { PatchOperation } from "replicache";
 import { makeWorkspacesStoreKey } from "@repo/data/keys";
-import { ServerWorkspaceStore } from "../../types";
 
 export async function userPull(req: Request, party: UserParty) {
-  return await repPull(req, party.room.storage, party.versions, patcher);
+  return await repPull(req, party.room.storage, party.versions, patcher(party));
 }
 
-async function patcher(
-  fromVersion: number,
-  storage: Storage,
-  versions: Map<string, number>
-) {
-  const workspacesStore = await storage.get<ServerWorkspaceStore>(
-    makeWorkspacesStoreKey()
-  );
+function patcher(party: UserParty) {
+  return async function (fromVersion: number) {
+    const { workspacesStore } = party;
 
-  const patch: PatchOperation[] = [];
+    const patch: PatchOperation[] = [];
 
-  if (workspacesStore)
-    if (workspacesStore.lastModifiedVersion > fromVersion) {
-      patch.push({
-        op: "put",
-        key: makeWorkspacesStoreKey(),
-        value: workspacesStore.data,
-      });
-    }
+    if (workspacesStore)
+      if (workspacesStore.lastModifiedVersion > fromVersion) {
+        patch.push({
+          op: "put",
+          key: makeWorkspacesStoreKey(),
+          value: workspacesStore.data,
+        });
+      }
 
-  return patch;
+    return patch;
+  };
 }

@@ -9,7 +9,9 @@ export async function userPush(req: Request, party: UserParty) {
 }
 
 function runner(party: UserParty) {
-  return async ({ mutation, nextVersion, storage }: RunnerParams) => {
+  return async ({ mutation, nextVersion }: RunnerParams) => {
+    const { storage } = party.room;
+    const { workspacesStore } = party;
     switch (mutation.name) {
       case "createWorkspace":
         const validatedFields = NewWorkspaceSchema.safeParse(mutation.args);
@@ -26,15 +28,23 @@ function runner(party: UserParty) {
         const { data } = validatedFields;
 
         // Space already exists on user store
-        if (party.workspacesStore.data.includes(data.id)) {
-          return;
+
+        if (
+          workspacesStore &&
+          workspacesStore.data.some((ws) => ws.workspaceId === data.id)
+        ) {
+          throw new Error("Workspace already exists");
         }
 
         // Update the user's space store
-        party.workspacesStore.data.push(data.id);
-        party.workspacesStore.lastModifiedVersion = nextVersion;
+        workspacesStore.data.push({
+          workspaceId: data.id,
+          environment: "cloud",
+        });
 
-        await storage.put(makeWorkspacesStoreKey(), party.workspacesStore);
+        workspacesStore.lastModifiedVersion = nextVersion;
+
+        await storage.put(makeWorkspacesStoreKey(), workspacesStore);
 
         break;
       default:

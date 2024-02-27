@@ -10,13 +10,15 @@ import WorkspaceParty from "./workspace/workspace-party";
  * General
  */
 interface Party {
-  versions: Map<string, number>;
+  versions: Versions;
 }
 
 interface ReplicacheFields {
   lastModifiedVersion: number;
   deleted: boolean;
 }
+
+export type Versions = Map<string, number>;
 
 /**
  * User

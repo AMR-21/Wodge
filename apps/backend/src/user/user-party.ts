@@ -10,8 +10,11 @@ import type * as Party from "partykit/server";
 import { handlePost } from "./handlers/user-party-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
-import { makeWorkspacesStoreKey } from "@repo/data/keys";
-import { ServerWorkspacesStore, UserPartyInterface } from "../types";
+import {
+  REPLICACHE_VERSIONS_KEY,
+  makeWorkspacesStoreKey,
+} from "@repo/data/keys";
+import { ServerWorkspacesStore, UserPartyInterface, Versions } from "../types";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -19,24 +22,27 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   };
 
   workspacesStore: ServerWorkspacesStore;
-  versions: Map<string, number>;
+  versions: Versions;
 
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
     const map = await this.room.storage.get([
-      "versions",
+      REPLICACHE_VERSIONS_KEY,
       makeWorkspacesStoreKey(),
     ]);
 
-    this.versions = (map.get("versions") ||
-      new Map([["globalVersion", 0]])) as typeof this.versions;
+    this.versions =
+      <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
+      new Map([["globalVersion", 0]]);
 
-    this.workspacesStore = (map.get(makeWorkspacesStoreKey()) || {
+    this.workspacesStore = <ServerWorkspacesStore>(
+      map.get(makeWorkspacesStoreKey())
+    ) || {
       data: [],
       lastModifiedVersion: 0,
       deleted: false,
-    }) as ServerWorkspacesStore;
+    };
   }
 
   async onRequest(req: Party.Request) {
@@ -58,6 +64,8 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
     try {
       const session = await getSession(req, lobby);
+
+      // service key requests for updating user data in parties
 
       // Authorize the user by checking that session.userId matches the target user id (party id)
       if (session.userId !== lobby.id) throw new Error("Unauthorized");

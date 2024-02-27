@@ -26,6 +26,7 @@ export const makeWorkspaceMembersKey = () =>
 /** Replicache */
 export const REPLICACHE_CLIENT_GROUP_PREFIX = "clientGroup/";
 export const REPLICACHE_CLIENT_PREFIX = "client/";
+export const REPLICACHE_VERSIONS_KEY = "versions";
 
 export const makeClientKey = (clientId: string, clientGroupId: string) =>
   clientGroupId + JOINER + REPLICACHE_CLIENT_PREFIX + clientId;

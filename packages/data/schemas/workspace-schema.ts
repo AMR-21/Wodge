@@ -133,7 +133,6 @@ export const MemberSchema = z.object({
 
 export const WorkspaceMembersSchema = z.object({
   owner: z.string().length(ID_LENGTH),
-  enabled: z.boolean(),
   members: z.array(MemberSchema),
 });
 

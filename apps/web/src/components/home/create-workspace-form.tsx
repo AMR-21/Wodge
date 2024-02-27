@@ -73,15 +73,15 @@ export function CreateWorkspaceForm() {
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-64" sideOffset={6}>
-                    <FormDescription className="text-pretty">
+                    <p className="text-pretty">
                       By default a workspace is created locally, enabling cloud
                       access will allow you to save your workspace to the cloud,
                       access it from anywhere, and invite collaborators.
-                    </FormDescription>
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              {/* */}
+
               <FormControl className="ml-auto">
                 <Switch
                   checked={field.value}
