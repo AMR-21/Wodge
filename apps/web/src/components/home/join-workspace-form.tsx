@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { JoinWorkspaceSchema } from "@repo/data/schemas";
+import { JoinWorkspaceSchema } from "@repo/data";
 import {
   Button,
   DialogClose,

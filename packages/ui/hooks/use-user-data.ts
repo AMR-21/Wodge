@@ -1,7 +1,7 @@
 "use client";
 
-import { User } from "@repo/data/client-models";
-import { PublicUserType } from "@repo/data/schemas";
+import { User } from "@repo/data";
+import { PublicUserType } from "@repo/data";
 import { useEffect, useState } from "react";
 
 /**

@@ -1,8 +1,8 @@
 import { Request } from "partykit/server";
 import UserParty from "../user-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
-import { NewWorkspaceSchema } from "@repo/data/schemas";
-import { makeWorkspacesStoreKey } from "@repo/data/keys";
+import { NewWorkspaceSchema } from "@repo/data";
+import { makeWorkspacesStoreKey } from "@repo/data";
 
 export async function userPush(req: Request, party: UserParty) {
   return await repPush(req, party.room.storage, party.versions, runner(party));

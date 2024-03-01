@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "./use-current-user";
-import { User } from "@repo/data/client-models";
+import { User } from "@repo/data";
 import { set } from "react-hook-form";
 
 export function useCacheUser() {

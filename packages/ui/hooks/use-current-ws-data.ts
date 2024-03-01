@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkspacesRegistry } from "@repo/data/client-models";
+import { WorkspacesRegistry } from "@repo/data";
 import { useParams } from "next/navigation";
 import { useUserWorkspaces } from "./use-user-workspaces";
 import { ReadTransaction } from "replicache";
@@ -8,7 +8,7 @@ import {
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
-} from "@repo/data/keys";
+} from "@repo/data";
 // import { useSubscribe } from "./use-subscribe";
 
 import { useSubscribe } from "replicache-react";
@@ -16,7 +16,7 @@ import {
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
-} from "@repo/data/schemas";
+} from "@repo/data";
 import { useEffect, useState } from "react";
 
 export function useCurrentWsData() {

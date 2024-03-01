@@ -7,9 +7,9 @@ import { eq } from "drizzle-orm";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 import { DbAdapter } from "./adapter";
-import { db } from "@repo/data/db";
+import { db } from "@repo/data/server";
 import { env } from "@repo/env";
-import { users } from "@repo/data/schemas";
+import { users } from "@repo/data";
 import { sendMagicLink } from "./utils";
 
 export const {
@@ -52,6 +52,7 @@ export const {
     },
   },
 
+  // @ts-ignore
   adapter: DbAdapter(db) as Adapter,
 
   session: {

@@ -5,8 +5,7 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@/lib/utils";
-import { updateUserById } from "@repo/data/server-models";
-import { UpdateUserSchema } from "@repo/data/schemas";
+import { updateUserById, UpdateUserSchema } from "@repo/data";
 
 export async function updateProfile(rawData: z.infer<typeof UpdateUserSchema>) {
   // 1. Authenticate access

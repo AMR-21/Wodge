@@ -7,11 +7,11 @@ import {
   Replicache,
   WriteTransaction,
 } from "replicache";
-import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "../../schemas";
+import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "..";
 import { env } from "@repo/env";
-import { User } from "./user-model";
-import { WORKSPACE_PREFIX, makeWorkspaceKey } from "../../keys";
-import { replicacheWrapper } from "../utils";
+import { User } from "./user";
+import { WORKSPACE_PREFIX, makeWorkspaceKey } from "../keys";
+import { replicacheWrapper } from "./utils";
 
 // Note on any mutation modify the global state
 export class WorkspacesRegistry {

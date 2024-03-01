@@ -7,7 +7,7 @@ import {
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
-} from "@repo/data/keys";
+} from "@repo/data";
 
 export async function workspacePull(req: Party.Request, party: WorkspaceParty) {
   return await repPull(req, party.room.storage, party.versions, patcher(party));

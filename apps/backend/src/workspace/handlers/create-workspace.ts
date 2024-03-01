@@ -1,11 +1,8 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { error, ok, unauthorized } from "../../lib/http-utils";
-import { PublicUserType } from "@repo/data/schemas";
-import {
-  REPLICACHE_VERSIONS_KEY,
-  makeWorkspaceMembersKey,
-} from "@repo/data/keys";
+import { PublicUserType } from "@repo/data";
+import { REPLICACHE_VERSIONS_KEY, makeWorkspaceMembersKey } from "@repo/data";
 
 export async function createWorkspace(
   req: Party.Request,

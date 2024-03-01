@@ -3,7 +3,7 @@ import {
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
-} from "@repo/data/schemas";
+} from "@repo/data";
 import WorkspaceParty from "./workspace/workspace-party";
 
 /**

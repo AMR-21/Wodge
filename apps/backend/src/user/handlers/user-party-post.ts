@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 import { badRequest, getRoute, json, notChanged } from "../../lib/http-utils";
-import { UserSchema, UserType } from "@repo/data/schemas";
+import { UserSchema, UserType } from "@repo/data";
 import UserParty from "../user-party";
 import { userPush } from "./user-push";
 import { userPull } from "./user-pull";

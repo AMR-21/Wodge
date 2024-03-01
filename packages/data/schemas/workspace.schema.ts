@@ -5,7 +5,7 @@ import {
   WORKSPACE_ROLE_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
-import { PublicUserSchema } from "./user-schemas";
+import { PublicUserSchema } from "./user.schema";
 
 /**
  * Workspace {

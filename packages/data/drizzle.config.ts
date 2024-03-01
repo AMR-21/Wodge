@@ -1,7 +1,7 @@
 import type { Config } from "drizzle-kit";
 
 export default {
-  schema: "./schemas/*.schema.ts",
+  schema: "./schemas/auth.schema.ts",
   out: "./migrations",
   driver: "d1",
 } satisfies Config;

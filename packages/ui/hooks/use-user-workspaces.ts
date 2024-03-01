@@ -2,8 +2,8 @@
 
 import { useLocalUser } from "./use-local-user";
 import { ReadTransaction } from "replicache";
-import { makeWorkspacesStoreKey } from "@repo/data/keys";
-import { UserWorkspacesStore } from "@repo/data/schemas";
+import { makeWorkspacesStoreKey } from "@repo/data";
+import { UserWorkspacesStore } from "@repo/data";
 import { useSubscribe } from "replicache-react";
 
 export function useUserWorkspaces() {

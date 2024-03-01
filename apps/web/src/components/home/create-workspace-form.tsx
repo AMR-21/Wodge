@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewWorkspaceSchema, NewWorkspace } from "@repo/data/schemas";
+import { NewWorkspaceSchema, type NewWorkspace } from "@repo/data";
+
 import {
   Button,
   DialogClose,
@@ -17,7 +18,7 @@ import {
   TooltipTrigger,
   useLocalUser,
 } from "@repo/ui";
-import { on } from "events";
+
 import { HelpCircle } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";

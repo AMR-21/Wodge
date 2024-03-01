@@ -24,9 +24,9 @@ import {
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
-} from "@repo/data/keys";
+} from "@repo/data";
 
-import { defaultWorkspaceMembers } from "@repo/data/schemas";
+import { defaultWorkspaceMembers } from "@repo/data";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface

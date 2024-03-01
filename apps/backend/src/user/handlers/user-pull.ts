@@ -2,7 +2,7 @@ import { Request } from "partykit/server";
 import UserParty from "../user-party";
 import { repPull } from "../../lib/replicache";
 import { PatchOperation } from "replicache";
-import { makeWorkspacesStoreKey } from "@repo/data/keys";
+import { makeWorkspacesStoreKey } from "@repo/data";
 
 export async function userPull(req: Request, party: UserParty) {
   return await repPull(req, party.room.storage, party.versions, patcher(party));

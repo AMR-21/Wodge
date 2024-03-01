@@ -2,8 +2,8 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { badRequest, unauthorized } from "../../lib/http-utils";
-import { WorkspaceSchema } from "@repo/data/schemas";
-import { makeWorkspaceKey } from "@repo/data/keys";
+import { WorkspaceSchema } from "@repo/data";
+import { makeWorkspaceKey } from "@repo/data";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   return await repPush(req, party.room.storage, party.versions, runner(party));

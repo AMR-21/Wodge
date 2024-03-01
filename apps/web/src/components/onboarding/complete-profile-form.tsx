@@ -18,10 +18,10 @@ import {
   useStepper,
 } from "@repo/ui";
 
-import { PublicUserType, UpdateUserSchema } from "@repo/data/schemas";
+import { PublicUserType, UpdateUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/user-actions";
 import { useOnboarding } from "./onboarding-context";
-import { User } from "@repo/data/client-models";
+import { User } from "@repo/data";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();

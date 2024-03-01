@@ -1,7 +1,7 @@
 "use client";
 
 import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
-import { Workspace } from "@repo/data/client-models";
+import { Workspace } from "@repo/data";
 // import { Button, useCurrentWsMetadata } from "@repo/ui";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";

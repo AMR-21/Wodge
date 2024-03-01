@@ -1,4 +1,4 @@
-import { WorkspaceType } from "@repo/data/schemas";
+import { WorkspaceType } from "@repo/data";
 import { Avatar, AvatarFallback, AvatarImage, Skeleton } from "@repo/ui";
 import { ChevronRight, Cloud, Laptop } from "lucide-react";
 import Link from "next/link";

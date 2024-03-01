@@ -1,10 +1,10 @@
 "use client";
 
-import { WorkspacesRegistry } from "@repo/data/client-models";
-import { makeWorkspaceKey } from "@repo/data/keys";
+import { WorkspacesRegistry } from "@repo/data";
+import { makeWorkspaceKey } from "@repo/data";
 import { ReadTransaction } from "replicache";
 import { useMemo, useState } from "react";
-import { WorkspaceType } from "@repo/data/schemas";
+import { WorkspaceType } from "@repo/data";
 import { useUserWorkspaces } from "./use-user-workspaces";
 
 /**

@@ -1,4 +1,4 @@
-import { WorkspaceType } from "@repo/data/schemas";
+import { WorkspaceType } from "@repo/data";
 import { Separator, useWorkspaces } from "@repo/ui";
 import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";

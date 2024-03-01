@@ -1,6 +1,6 @@
 "use client";
 
-import { UserType } from "@repo/data/schemas";
+import { UserType } from "@repo/data";
 import { useCacheUser } from "@repo/ui";
 import { createContext, useContext, useTransition } from "react";
 

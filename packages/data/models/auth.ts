@@ -1,10 +1,17 @@
+/**
+ * This module contains functions to interact with
+ * the user data on server side.
+ *
+ * Used in server actions only
+ */
+
 "use server";
 import "server-only";
 
 import { eq } from "drizzle-orm";
-import { db } from "../../db";
-import { users } from "../../schemas/auth.schema";
-import { UserType } from "../../schemas";
+import { db } from "../db";
+import { users } from "../schemas/auth.schema";
+import { UserType } from "../schemas";
 
 /**
  * Get user by userId

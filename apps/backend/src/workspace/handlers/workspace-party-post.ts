@@ -9,8 +9,8 @@ import {
 import WorkspaceParty from "../workspace-party";
 import { workspacePull } from "./workspace-pull";
 import { workspacePush } from "./workspace-push";
-import { makeWorkspaceMembersKey } from "@repo/data/keys";
-import { PublicUserType } from "@repo/data/schemas";
+import { makeWorkspaceMembersKey } from "@repo/data";
+import { PublicUserType } from "@repo/data";
 import { createWorkspace } from "./create-workspace";
 
 export async function handlePost(req: Party.Request, party: WorkspaceParty) {

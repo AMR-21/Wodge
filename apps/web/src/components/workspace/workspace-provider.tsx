@@ -4,7 +4,7 @@ import {
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
-} from "@repo/data/schemas";
+} from "@repo/data";
 import { useCurrentWsData } from "@repo/ui";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";

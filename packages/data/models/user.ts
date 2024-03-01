@@ -8,18 +8,17 @@ import {
   WriteTransaction,
 } from "replicache";
 
-import { useSubscribe } from "replicache-react";
-import { replicacheWrapper } from "../utils";
+import { replicacheWrapper } from "./utils";
 import {
   PublicUserSchema,
   PublicUserType,
   NewWorkspaceSchema,
   NewWorkspace,
   UserWorkspacesStore,
-} from "../../schemas";
-import { makeWorkspacesStoreKey } from "../../keys";
+} from "..";
+import { makeWorkspacesStoreKey } from "../keys";
 import { env } from "@repo/env";
-import { WorkspacesRegistry } from "./workspaces-model";
+import { WorkspacesRegistry } from "./workspace";
 
 export type Session = {
   sessionToken: string;

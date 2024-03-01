@@ -1,5 +1,4 @@
 import { env } from "@repo/env";
-import { Replicache } from "replicache";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",

@@ -10,10 +10,7 @@ import type * as Party from "partykit/server";
 import { handlePost } from "./handlers/user-party-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
-import {
-  REPLICACHE_VERSIONS_KEY,
-  makeWorkspacesStoreKey,
-} from "@repo/data/keys";
+import { REPLICACHE_VERSIONS_KEY, makeWorkspacesStoreKey } from "@repo/data";
 import { ServerWorkspacesStore, UserPartyInterface, Versions } from "../types";
 
 export default class UserParty implements Party.Server, UserPartyInterface {

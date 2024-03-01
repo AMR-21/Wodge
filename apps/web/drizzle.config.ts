@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 const DB_HOST = "local";
 
 const baseConfig: Partial<Config> = {
-  schema: "./node_modules/@repo/data/schemas/*.schema.ts",
+  schema: "./node_modules/@repo/data/auth.schema.ts",
   out: "./node_modules/@repo/data/migrations",
 };
 
