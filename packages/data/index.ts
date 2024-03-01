@@ -26,8 +26,18 @@ export * from "./schemas/config";
  * Keys
  */
 
-export * from "./keys";
+export * from "./lib/keys";
 
 /**
  * End of keys
+ */
+
+/**
+ * RBAC
+ */
+
+export * from "./lib/rbac";
+
+/**
+ * End of RBAC
  */

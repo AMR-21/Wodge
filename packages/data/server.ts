@@ -14,7 +14,7 @@ export * from "./models/auth";
  * Drizzle db instance
  */
 
-export * from "./db";
+export * from "./lib/db";
 
 /**
  * End of drizzle db instance

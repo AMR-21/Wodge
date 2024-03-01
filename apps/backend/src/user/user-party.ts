@@ -7,7 +7,7 @@
 
 import type * as Party from "partykit/server";
 
-import { handlePost } from "./handlers/user-party-post";
+import { handlePost } from "./endpoints/user-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
 import { REPLICACHE_VERSIONS_KEY, makeWorkspacesStoreKey } from "@repo/data";

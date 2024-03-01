@@ -7,7 +7,7 @@ import {
   unauthorized,
 } from "../lib/http-utils";
 
-import { getSession } from "../lib/auth";
+import { checkMembership, getSession } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -17,16 +17,18 @@ import {
   Versions,
 } from "../types";
 
-import { handlePost } from "./handlers/workspace-party-post";
+import { handlePost } from "./endpoints/workspace-post";
 
 import {
   REPLICACHE_VERSIONS_KEY,
+  WORKSPACE_INVITE_LINK_KEY,
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
+  defaultWorkspaceMembers,
+  InviteLink,
 } from "@repo/data";
-
-import { defaultWorkspaceMembers } from "@repo/data";
+import { handleGet } from "./endpoints/workspace-get";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -34,6 +36,8 @@ export default class WorkspaceParty
   workspaceMembers: ServerWorkspaceMembers;
   workspaceMetadata: ServerWorkspaceData;
   workspaceStructure: ServerWorkspaceStructure;
+  inviteLink: InviteLink;
+  // emailInvites: InviteLink[];
   versions: Versions;
 
   constructor(readonly room: Party.Room) {}
@@ -47,6 +51,7 @@ export default class WorkspaceParty
       membersKey,
       metadataKey,
       structureKey,
+      WORKSPACE_INVITE_LINK_KEY,
       REPLICACHE_VERSIONS_KEY,
     ]);
 
@@ -73,6 +78,8 @@ export default class WorkspaceParty
     this.versions =
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
       new Map([["globalVersion", 0]]);
+
+    this.inviteLink = <InviteLink>map.get(WORKSPACE_INVITE_LINK_KEY) || {};
   }
 
   async onRequest(req: Party.Request) {
@@ -82,72 +89,7 @@ export default class WorkspaceParty
       case "OPTIONS":
         return ok();
       case "GET":
-        // this.workspaceStructure.data = {
-        //   publicChannels: [
-        //     {
-        //       id: "1",
-        //       name: "General",
-        //       avatar: "",
-        //       roles: [],
-        //       type: "text",
-        //     },
-        //   ],
-        //   teams: [
-        //     {
-        //       id: "1",
-        //       name: "Team 1",
-        //       avatar: "",
-        //       moderators: [],
-        //       tags: [],
-        //       dirs: [
-        //         {
-        //           name: "none",
-        //           channels: [
-        //             {
-        //               id: "1",
-        //               name: "General",
-        //               avatar: "",
-        //               roles: [],
-        //               type: "text",
-        //             },
-        //           ],
-        //         },
-        //         {
-        //           name: "dirName",
-        //           channels: [
-        //             {
-        //               id: "1",
-        //               name: "General",
-        //               avatar: "",
-        //               roles: [],
-        //               type: "text",
-        //             },
-        //           ],
-        //         },
-        //       ],
-        //     },
-        //   ],
-        //   roles: [
-        //     {
-        //       id: "1",
-        //       name: "Admin",
-        //       color: "red",
-        //       rules: {
-        //         read: true,
-        //         write: true,
-        //         admin: true,
-        //       },
-        //     },
-        //   ],
-        //   tags: [],
-        // };
-
-        return json({
-          global: this.versions.get("globalVersion"),
-          workspaceMembers: this.workspaceMembers,
-          workspaceMetadata: this.workspaceMetadata,
-          workspaceStructure: this.workspaceStructure,
-        });
+        return await handleGet(req, this);
       default:
         return notImplemented();
     }
@@ -162,14 +104,21 @@ export default class WorkspaceParty
     try {
       const session = await getSession(req, lobby);
 
-      // Check if the request is to create the workspace then put user data in the headers
-      if (getRoute(req) === "/create") {
+      const route = getRoute(req);
+      // Check if the request is to create or join the workspace then put user data in the headers
+      if (route === "/create" || route === "/join") {
         req.headers.set("x-user-data", JSON.stringify(session.user));
         return req;
       }
 
+      // skip membership check for join request
+      if (route === "/join") return req;
+
       // Check if the user is authorized to access the workspace
       // i.e. is member of the workspace
+      const isMember = await checkMembership(session.userId, lobby);
+
+      if (!isMember) throw new Error("Unauthorized");
 
       // Request is authorized - forward it
       return req;

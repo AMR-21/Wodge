@@ -8,7 +8,7 @@ import {
   WriteTransaction,
 } from "replicache";
 
-import { replicacheWrapper } from "./utils";
+import { replicacheWrapper } from "../lib/utils";
 import {
   PublicUserSchema,
   PublicUserType,
@@ -16,7 +16,7 @@ import {
   NewWorkspace,
   UserWorkspacesStore,
 } from "..";
-import { makeWorkspacesStoreKey } from "../keys";
+import { makeWorkspacesStoreKey } from "../lib/keys";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspace";
 

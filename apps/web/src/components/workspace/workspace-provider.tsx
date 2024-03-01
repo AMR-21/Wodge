@@ -20,7 +20,6 @@ interface WorkspaceContext {
 const Context = createContext<WorkspaceContext | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const data = useCurrentWsData();
 
   return (

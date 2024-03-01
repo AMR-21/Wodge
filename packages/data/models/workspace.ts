@@ -10,8 +10,8 @@ import {
 import { NewWorkspace, WorkspaceSchema, WorkspaceType } from "..";
 import { env } from "@repo/env";
 import { User } from "./user";
-import { WORKSPACE_PREFIX, makeWorkspaceKey } from "../keys";
-import { replicacheWrapper } from "./utils";
+import { WORKSPACE_PREFIX, makeWorkspaceKey } from "../lib/keys";
+import { replicacheWrapper } from "../lib/utils";
 
 // Note on any mutation modify the global state
 export class WorkspacesRegistry {

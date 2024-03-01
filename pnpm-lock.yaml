@@ -32,6 +32,9 @@ importers:
 
   apps/backend:
     dependencies:
+      nanoid:
+        specifier: ^5.0.5
+        version: 5.0.6
       object-sizeof:
         specifier: ^2.6.4
         version: 2.6.4

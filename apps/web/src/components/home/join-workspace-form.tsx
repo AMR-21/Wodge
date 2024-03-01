@@ -10,6 +10,8 @@ import {
   Input,
 } from "@repo/ui";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -21,8 +23,25 @@ export function JoinWorkspaceForm() {
     },
   });
 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
-    console.log(data);
+    startTransition(async () => {
+      const res = await fetch(data.url, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        console.error("Failed to join workspace");
+        return;
+      }
+
+      const { workspaceId } = (await res.json()) as { workspaceId: string };
+
+      router.push(`/${workspaceId}`);
+    });
   }
 
   return (
@@ -52,7 +71,7 @@ export function JoinWorkspaceForm() {
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" className="basis-2/3">
+          <Button type="submit" className="basis-2/3" isPending={isPending}>
             Join Workspace
           </Button>
         </div>

@@ -9,7 +9,7 @@ export async function createWorkspace(
   party: WorkspaceParty
 ) {
   // 1. Check that the workspace has not been created i.e no owner
-  if (party.workspaceMembers.data.owner) {
+  if (party.workspaceMembers.data.owner !== "") {
     return error("Workspace already exists", 401);
   }
 

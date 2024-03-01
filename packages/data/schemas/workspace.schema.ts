@@ -6,6 +6,7 @@ import {
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
 import { PublicUserSchema } from "./user.schema";
+import { create } from "domain";
 
 /**
  * Workspace {
@@ -103,11 +104,7 @@ export const WorkspaceSchema = z.object({
 export const RoleSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70),
-  rules: z.object({
-    read: z.boolean(),
-    write: z.boolean(),
-    admin: z.boolean(),
-  }),
+  permissions: z.array(z.enum(["read", "write", "admin"])),
   color: z.string().default(BRAND_COLOR).optional(),
 });
 
@@ -163,8 +160,10 @@ export const WorkspaceMembersSchema = z.object({
 });
 
 export const InviteLinkSchema = z.object({
-  url: z.string().url(),
-  expires: z.date(),
+  token: z.string(),
+  limit: z.number().int().or(z.literal(Infinity)),
+  enabled: z.boolean(),
+  createdBy: z.string().length(ID_LENGTH),
 });
 
 export const NewWorkspaceSchema = WorkspaceSchema.pick({
@@ -196,7 +195,7 @@ export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
-export type inviteLink = z.infer<typeof InviteLinkSchema>;
+export type InviteLink = z.infer<typeof InviteLinkSchema>;
 
 export function defaultWorkspaceMembers(): WorkspaceMembers {
   return {

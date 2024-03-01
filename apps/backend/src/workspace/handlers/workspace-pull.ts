@@ -18,8 +18,6 @@ function patcher(party: WorkspaceParty) {
     const patch: PatchOperation[] = [];
 
     const { workspaceMembers, workspaceMetadata, workspaceStructure } = party;
-    // 1. Get the patched keys
-    // if( )
 
     if (workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({

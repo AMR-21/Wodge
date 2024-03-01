@@ -2,7 +2,7 @@
  * Credits to partykit nextjs chat template
  */
 import type * as Party from "partykit/server";
-import { ok, unauthorized } from "./http-utils";
+import { error, ok, unauthorized } from "./http-utils";
 
 /**
  * Referenced from user client model
@@ -61,20 +61,29 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
 };
 
 /**
- *
+ *  Check if the user is authorized to access the workspace
  */
-export const authenticate = async (req: Party.Request, lobby: Party.Lobby) => {
-  // CORS preflight response
-  if (req.method === "OPTIONS") {
-    return ok();
-  }
 
-  try {
-    await getSession(req, lobby);
+export const checkMembership = async (userId: string, lobby: Party.Lobby) => {
+  // 1. Get the party instance
+  const workspaceParty = lobby.parties.workspace;
 
-    // Request is authorized - forward it
-    return req;
-  } catch (e) {
-    return unauthorized();
-  }
+  if (!workspaceParty) return false;
+
+  // 2. Get the workspace instance
+  const workspace = workspaceParty.get(lobby.id);
+
+  if (!workspace) return false;
+
+  // 3. Get the current user membership
+  const res = await workspace.fetch("/get-membership", {
+    headers: {
+      authorization: lobby.env.SERVICE_KEY as string,
+      "x-user-id": userId,
+    },
+  });
+
+  const data = await res.json();
+
+  return !!data?.success;
 };

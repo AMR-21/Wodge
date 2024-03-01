@@ -22,6 +22,7 @@ import {
 import { HelpCircle } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 export function CreateWorkspaceForm() {
@@ -35,14 +36,17 @@ export function CreateWorkspaceForm() {
       onCloud: false,
     },
   });
+  const [isPending, startTransition] = useTransition();
 
   async function onSubmit(data: NewWorkspace) {
-    await user?.createWorkspace(data);
+    startTransition(async () => {
+      await user?.createWorkspace(data);
 
-    // for safety and avoiding duplicate ids
-    form.setValue("id", nanoid());
+      // for safety and avoiding duplicate ids
+      form.setValue("id", nanoid());
 
-    router.push("/" + data.id);
+      router.push("/" + data.id);
+    });
   }
 
   return (
@@ -99,7 +103,7 @@ export function CreateWorkspaceForm() {
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" className="basis-2/3">
+          <Button type="submit" className="basis-2/3" isPending={isPending}>
             Create Workspace
           </Button>
         </div>

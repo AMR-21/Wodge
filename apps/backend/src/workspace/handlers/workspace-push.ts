@@ -9,6 +9,7 @@ export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   return await repPush(req, party.room.storage, party.versions, runner(party));
 }
 
+//verify room id
 function runner(party: WorkspaceParty) {
   return async ({ mutation, nextVersion, userId }: RunnerParams) => {
     const { storage } = party.room;
@@ -34,6 +35,7 @@ function runner(party: WorkspaceParty) {
         }
 
         const { data: workspaceData } = validatedFields;
+
         // 4. persist the data
         workspaceMetadata.data = workspaceData;
         workspaceMetadata.lastModifiedVersion = nextVersion;
