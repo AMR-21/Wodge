@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { JoinWorkspaceSchema } from "@repo/data";
+import { JoinWorkspaceSchema, WorkspacesRegistry } from "@repo/data";
 import {
   Button,
   DialogClose,
@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   Input,
+  useCurrentUser,
 } from "@repo/ui";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
@@ -25,6 +26,7 @@ export function JoinWorkspaceForm() {
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const user = useCurrentUser();
 
   async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
     startTransition(async () => {
@@ -40,6 +42,9 @@ export function JoinWorkspaceForm() {
 
       const { workspaceId } = (await res.json()) as { workspaceId: string };
 
+      WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
+      // To update data - will be remove by pokes
+      await user?.store.pull();
       router.push(`/${workspaceId}`);
     });
   }

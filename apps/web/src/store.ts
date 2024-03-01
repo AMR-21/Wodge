@@ -5,8 +5,9 @@ import { mountStoreDevtool } from "simple-zustand-devtools";
 
 interface AppState {
   isSidebarOpen: boolean;
-
+  isSettingsSidebarOpen: boolean;
   toggleSidebar: () => void;
+  toggleSettingsSidebar: () => void;
 }
 
 export const useAppState = create(
@@ -14,6 +15,9 @@ export const useAppState = create(
     (set, get) => ({
       isSidebarOpen: true,
       toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
+      isSettingsSidebarOpen: true,
+      toggleSettingsSidebar: () =>
+        set({ isSettingsSidebarOpen: !get().isSettingsSidebarOpen }),
     }),
     {
       name: "app-state",

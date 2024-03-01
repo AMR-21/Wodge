@@ -1,15 +1,17 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { User } from "@repo/data";
 
-/*
- * Get remote session's user data
+/**
+ * Get user instance
  */
 export function useCurrentUser() {
-  const session = useSession();
+  const [user, setUser] = useState<User>();
 
-  if (!session.data || !session.data.user)
-    throw new Error("Error getting user data from session");
+  useEffect(() => {
+    setUser(User.getInstance());
+  }, []);
 
-  return session.data.user;
+  return user;
 }

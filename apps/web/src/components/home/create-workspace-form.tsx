@@ -16,7 +16,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  useLocalUser,
+  useCurrentUser,
 } from "@repo/ui";
 
 import { HelpCircle } from "lucide-react";
@@ -26,7 +26,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 export function CreateWorkspaceForm() {
-  const user = useLocalUser();
+  const user = useCurrentUser();
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(NewWorkspaceSchema),

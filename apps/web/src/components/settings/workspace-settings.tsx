@@ -24,27 +24,22 @@ import {
   SettingsContentHeader,
   SettingsContentSection,
 } from "./settings";
+import { Gate } from "../gate";
 
-export function WorkspaceGeneralForm() {
+export function WorkspaceSettings() {
   const { metadata } = useCurrentWorkspace();
   const form = useForm({
-    resolver: zodResolver(WorkspaceSchema),
+    resolver: zodResolver(WorkspaceSchema.pick({ name: true })),
     defaultValues: {
-      id: "",
-      owner: "",
       name: "",
-      avatar: "",
-      createdAt: new Date().toISOString(),
-      environment: "local" as "cloud" | "local",
-      settings: {},
-    } satisfies WorkspaceType | undefined,
+    },
   });
 
   useEffect(() => {
     if (metadata) form.reset(metadata);
   }, [metadata]);
 
-  function onSubmit(data: WorkspaceType) {
+  function onSubmit(data: Pick<WorkspaceType, "name">) {
     console.log(data);
   }
 
@@ -117,15 +112,16 @@ export function WorkspaceGeneralForm() {
       )}
 
       <SettingsContentSection header="Danger Zone">
-        <div className="space-y-4">
-          <SettingsContentDescription>
-            Deleting a workspace is irreversible and will permanently delete all
-            data and settings.
-          </SettingsContentDescription>
-
-          <SettingsContentAction variant="destructive">
-            Delete Workspace
+        <div className="flex gap-4 ">
+          <SettingsContentAction variant="outline">
+            Leave Workspace
           </SettingsContentAction>
+
+          <Gate permissions={["admin"]}>
+            <SettingsContentAction variant="destructive">
+              Delete Workspace
+            </SettingsContentAction>
+          </Gate>
         </div>
       </SettingsContentSection>
     </div>

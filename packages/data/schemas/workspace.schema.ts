@@ -98,6 +98,7 @@ export const WorkspaceSchema = z.object({
   avatar: z.optional(z.string().url()).or(z.literal("")),
   createdAt: z.string().datetime(),
   environment: z.enum(["local", "cloud"]),
+  inviteLink: z.string().url().optional(),
   settings: z.any().optional(),
 });
 
@@ -161,7 +162,7 @@ export const WorkspaceMembersSchema = z.object({
 
 export const InviteLinkSchema = z.object({
   token: z.string(),
-  limit: z.number().int().or(z.literal(Infinity)),
+  limit: z.number().int().positive().or(z.literal(Infinity)),
   enabled: z.boolean(),
   createdBy: z.string().length(ID_LENGTH),
 });

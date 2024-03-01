@@ -1,9 +1,10 @@
-import { cn } from "..";
+import { cn, useCurrentUser } from "..";
 import { UserAvatar } from "./user-avatar";
-import { useUserData } from "../hooks/use-user-data";
 
 export function UserCard({ className }: { className?: string }) {
-  const data = useUserData();
+  const user = useCurrentUser();
+
+  const data = user?.data;
 
   // TODO add skeleton
   if (!data) return null;

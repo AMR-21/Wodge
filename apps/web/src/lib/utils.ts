@@ -6,6 +6,10 @@ export type VerificationMail = {
   url: string;
 };
 
+export type Mutable<Type> = {
+  -readonly [Key in keyof Type]: Type[Key];
+};
+
 /**
  * A function that sends email magic link to the user using Resend api.
  */

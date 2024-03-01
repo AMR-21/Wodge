@@ -86,7 +86,9 @@ export class User {
   get data(): PublicUserType {
     const localUser = localStorage.getItem("user");
 
-    if (!localUser) throw new Error("User not found in local storage");
+    if (!localUser) {
+      throw new Error("User not found in local storage");
+    }
 
     const data = JSON.parse(localUser) as PublicUserType;
 

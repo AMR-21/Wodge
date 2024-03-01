@@ -1,5 +1,6 @@
 "use client";
 
+import { MembersSettings } from "@/components/settings/members/members-settings";
 import {
   Settings,
   SettingsClose,
@@ -9,13 +10,14 @@ import {
   SettingsSidebarItem,
   SettingsSidebarList,
 } from "@/components/settings/settings";
-import { WorkspaceGeneralForm } from "@/components/settings/workspace-general-form";
+import { TeamsSettings } from "@/components/settings/teams/teams-settings";
+import { WorkspaceSettings } from "@/components/settings/workspace-settings";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {
   return (
-    <div className="flex h-full">
-      <Settings defaultActive="general">
+    <div className="flex h-full w-full">
+      <Settings defaultActive="members">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />
@@ -23,19 +25,25 @@ function WorkspaceSettingsPage() {
           </SettingsSidebarHeader>
           <SettingsSidebarList>
             <SettingsSidebarItem value="general" />
+            <SettingsSidebarItem value="members" />
             <SettingsSidebarItem value="teams" />
             <SettingsSidebarItem value="roles" />
-            <SettingsSidebarItem value="members" />
             <SettingsSidebarItem value="upgrade" />
           </SettingsSidebarList>
         </SettingsSidebar>
 
         <SettingsContent id="general">
-          <WorkspaceGeneralForm />
+          <WorkspaceSettings />
         </SettingsContent>
-        <SettingsContent id="teams">teams</SettingsContent>
+
+        <SettingsContent id="teams">
+          <TeamsSettings />
+        </SettingsContent>
+
         <SettingsContent id="roles">roles</SettingsContent>
-        <SettingsContent id="members">members</SettingsContent>
+        <SettingsContent id="members">
+          <MembersSettings />
+        </SettingsContent>
         <SettingsContent id="upgrade">upgrade</SettingsContent>
 
         <SettingsClose />

@@ -78,7 +78,7 @@ const config = {
           foreground: "rgb(var(--accent-foreground))",
         },
         popover: {
-          DEFAULT: "rgb(var(--surface)/0.7)",
+          DEFAULT: "rgb(var(--surface))",
           foreground: "rgb(var(--surface-foreground))",
         },
         page: {

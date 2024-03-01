@@ -36,11 +36,9 @@ export function isAllowed(req: Party.Request, party: WorkspaceParty) {
 
   if (!requestingMember) return false;
 
-  const roles = getRoles(requestingMember.roles, party);
+  const roles = getRoles(requestingMember.roles, party) as Role[];
 
-  if (!roles) return false;
-
-  if (!isOwner && !grant(<Role[]>roles, ["admin"])) return false;
+  if (!isOwner && !grant(roles, ["admin"])) return false;
 
   return true;
 }

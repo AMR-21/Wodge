@@ -3,9 +3,11 @@ import WorkspaceParty from "../workspace-party";
 import {
   InviteLink,
   InviteLinkSchema,
+  REPLICACHE_VERSIONS_KEY,
   Role,
   WORKSPACE_INVITE_LINK_KEY,
   grant,
+  makeWorkspaceKey,
 } from "@repo/data";
 import { nanoid } from "nanoid";
 import { badRequest, json, unauthorized } from "../../lib/http-utils";
@@ -31,15 +33,27 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
 
   const { data } = validatedFields;
 
-  await party.room.storage.put(WORKSPACE_INVITE_LINK_KEY, data);
+  const inviteLink =
+    party.room.env.BACKEND_DOMAIN +
+    "/parties/workspace/" +
+    party.room.id +
+    "/join?token=" +
+    data.token;
+
+  const nextVersion = party.versions.get("globalVersion")! + 1;
+  party.workspaceMetadata.data.inviteLink = inviteLink;
+
+  party.workspaceMetadata.lastModifiedVersion = nextVersion;
+  party.versions.set("globalVersion", nextVersion);
+
+  await party.room.storage.put({
+    [WORKSPACE_INVITE_LINK_KEY]: data,
+    [REPLICACHE_VERSIONS_KEY]: party.versions,
+    [makeWorkspaceKey(party.room.id)]: party.workspaceMetadata,
+  });
 
   return json({
-    inviteLink:
-      party.room.env.BACKEND_DOMAIN +
-      "/parties/workspace/" +
-      party.room.id +
-      "/join?token=" +
-      data.token,
+    inviteLink,
     ...data,
   });
 }

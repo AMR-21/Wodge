@@ -6,15 +6,20 @@ import { createContext, useContext, useState } from "react";
 import { PanelLeft, Settings as SettingsIcon, X } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
+import { useAppState } from "@/store";
 
 interface Settings {
   active: string;
   setActive: React.Dispatch<React.SetStateAction<string>>;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsContext = createContext<Settings>({
   active: "",
   setActive: () => {},
+  isSidebarOpen: true,
+  setIsSidebarOpen: () => {},
 });
 
 function Settings({
@@ -25,23 +30,49 @@ function Settings({
   children: React.ReactNode;
 }) {
   const [active, setActive] = useState<string>(defaultActive);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <SettingsContext.Provider value={{ active, setActive }}>
+    <SettingsContext.Provider
+      value={{ active, setActive, isSidebarOpen, setIsSidebarOpen }}
+    >
       {children}
     </SettingsContext.Provider>
   );
 }
 
 function SettingsSidebar({ children }: { children: React.ReactNode }) {
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { isSidebarOpen, setIsSidebarOpen } = useContext(SettingsContext);
+
   return (
-    <div className="flex h-dvh min-h-0 w-56 max-w-56 shrink-0 grow flex-col border-r border-border/50 px-6 py-10">
-      <div className="flex justify-between pb-6 text-muted-foreground">
-        <h2 className="">Settings</h2>
-        <SidebarItemBtn Icon={PanelLeft} />
+    <>
+      <div
+        className={cn(
+          "flex h-dvh min-h-0  shrink-0 grow flex-col border-r border-border/50  py-10 transition-all ",
+          isSidebarOpen && "w-56 max-w-56 px-6",
+
+          !isSidebarOpen && "invisible w-0 max-w-0 border-0 px-0",
+        )}
+      >
+        <div className="flex justify-between pb-6 text-muted-foreground">
+          <h2 className={(!isSidebarOpen && "invisible") || ""}>Settings</h2>
+          <SidebarItemBtn
+            Icon={PanelLeft}
+            onClick={() => setIsSidebarOpen((s) => !s)}
+            className={(!isSidebarOpen && "invisible") || ""}
+          />
+        </div>
+        <div className="flex-1 overflow-y-scroll">{children}</div>
       </div>
-      <div className="flex-1 overflow-y-scroll">{children}</div>
-    </div>
+      {!isSidebarOpen && (
+        <SidebarItemBtn
+          Icon={PanelLeft}
+          className="fixed left-6 top-10"
+          onClick={() => setIsSidebarOpen((s) => !s)}
+        />
+      )}
+    </>
   );
 }
 
@@ -87,8 +118,8 @@ function SettingsContent({
   if (active !== id) return null;
 
   return (
-    <div className="flex basis-full justify-center overflow-y-scroll bg-page px-2 py-[5.25rem]">
-      <div className="max-w-lg">{children}</div>
+    <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-2 py-[5.25rem]">
+      <div className="max-w-2xl shrink-0 grow">{children}</div>
     </div>
   );
 }
@@ -114,13 +145,18 @@ function SettingsContentHeader({
 function SettingsContentSection({
   children,
   header,
+  action,
 }: {
   children: React.ReactNode;
+  action?: React.ReactNode;
   header: string;
 }) {
   return (
     <div className="my-6">
-      <h3 className="pb-4 text-base">{header}</h3>
+      <div className="flex items-center justify-between pb-4">
+        <h3 className=" text-base">{header}</h3>
+        {action}
+      </div>
       <div>{children}</div>
     </div>
   );
@@ -144,7 +180,7 @@ function SettingsClose() {
 
   return (
     <Button
-      className="fixed right-4 top-4 rounded-full text-muted-foreground/70 transition-all
+      className="fixed right-4 top-10 rounded-full text-muted-foreground/70 transition-all
        hover:text-foreground"
       size="icon"
       variant="secondary"

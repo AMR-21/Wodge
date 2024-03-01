@@ -2,15 +2,14 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useCurrentUser } from "./use-current-user";
+import { useSessionUser } from "./use-session-user";
 import { User } from "@repo/data";
-import { set } from "react-hook-form";
 
 export function useCacheUser() {
   const [isCached, setIsCached] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const sessionUser = useCurrentUser();
+  const sessionUser = useSessionUser();
 
   useEffect(() => {
     // if the user has just logged in, cache the user data
