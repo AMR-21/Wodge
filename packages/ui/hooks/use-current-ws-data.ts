@@ -27,7 +27,7 @@ export function useCurrentWsData() {
 
   const metadata = useSubscribe(workspace?.store, async (tx: ReadTransaction) =>
     tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId as string)),
-  );
+  ) as WorkspaceType | undefined;
 
   const members = useSubscribe(workspace?.store, async (tx: ReadTransaction) =>
     tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),

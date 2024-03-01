@@ -6,7 +6,6 @@ import {
   REPLICACHE_VERSIONS_KEY,
   makeWorkspaceMembersKey,
 } from "@repo/data/keys";
-import { version } from "replicache";
 
 export async function createWorkspace(
   req: Party.Request,
@@ -37,6 +36,11 @@ export async function createWorkspace(
           data: publicData,
           roles: [],
           teams: [],
+          joinInfo: {
+            joined_at: new Date().toISOString(),
+            token: "",
+            created_by: "",
+          },
         },
       ],
     },

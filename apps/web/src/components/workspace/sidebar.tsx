@@ -49,12 +49,12 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex shrink-0 grow flex-col justify-between space-y-6 transition-all duration-1000",
+        "flex h-full min-h-0 shrink-0 grow flex-col justify-between space-y-6 overflow-y-scroll transition-all",
         isSidebarOpen && "w-56 max-w-56 border-r border-border/50",
         !isSidebarOpen && " invisible w-0 overflow-hidden",
       )}
     >
-      <div className="flex h-dvh min-h-0 flex-col space-y-6 px-1.5 py-2.5">
+      <div className="flex-1 space-y-6 overflow-y-scroll px-1.5 py-2.5">
         <ul className="shrink-0 grow-0 space-y-0.5">
           {staticItems.map((item, index) => (
             <SidebarItem
@@ -62,11 +62,11 @@ export function Sidebar() {
               label={item.label}
               Icon={item.Icon}
               className="capitalize"
-              href={pathName + "/" + item.href}
+              {...(item.href && { href: pathName + "/" + item.href })}
             />
           ))}
         </ul>
-        <ul className="flex-1 overflow-y-scroll">
+        <ul className="">
           <Teamspaces />
           <Teamspaces />
         </ul>

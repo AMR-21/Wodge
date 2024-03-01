@@ -28,14 +28,26 @@ import { PublicUserSchema } from "./user-schemas";
  *      type
  *   }
  *  ],
+ *  tags
  *  teams:[
  *   teamId:{
  *    name
  *    avatar
  *    moderators
  *    tags
- *    channels:[
- *    ]
+ *    dirs:[
+ *      none: {
+ *        channels:[
+ *        
+ *        ]  
+ *      },
+ *      dirName :{
+ *       channels:[
+ * 
+ *       ]
+ *      }
+ *    ] 
+ *    
  *  ],
  *  roles: [
  *    name
@@ -48,12 +60,15 @@ import { PublicUserSchema } from "./user-schemas";
  *
  * members:{
  *  owner
- *  enabled // check if the workspace is published to the cloud
  *  members: [{
  *    id
  *    teams
  *    roles
- *    joinToken 
+ *    joinInfo: {
+ *      token
+ *      created_by
+ *      joined_at
+ *    } 
  *    data:{
  *      displayName
  *      avatar
@@ -109,11 +124,17 @@ export const TagSchema = z.object({
   color: z.string().default(BRAND_COLOR).optional(),
 });
 
+export const DirSchema = z.object({
+  channels: z.array(ChannelSchema),
+  name: z.string().max(70),
+});
+
 export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70),
+  avatar: z.optional(z.string()),
   moderators: z.array(z.string().length(ID_LENGTH)),
-  channels: z.array(ChannelSchema),
+  dirs: z.array(DirSchema),
   tags: z.array(TagSchema),
 });
 
@@ -121,6 +142,7 @@ export const WorkspaceStructureSchema = z.object({
   publicChannels: z.array(ChannelSchema),
   teams: z.array(TeamSchema),
   roles: z.array(RoleSchema),
+  tags: z.array(TagSchema),
 });
 
 export const MemberSchema = z.object({
@@ -128,7 +150,11 @@ export const MemberSchema = z.object({
   teams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
   roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
   data: PublicUserSchema.omit({ id: true }),
-  joinToken: z.string().optional(),
+  joinInfo: z.object({
+    token: z.string(),
+    created_by: z.string().length(ID_LENGTH),
+    joined_at: z.string().datetime(),
+  }),
 });
 
 export const WorkspaceMembersSchema = z.object({
@@ -171,3 +197,10 @@ export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 export type inviteLink = z.infer<typeof InviteLinkSchema>;
+
+export function defaultWorkspaceMembers(): WorkspaceMembers {
+  return {
+    owner: "",
+    members: [],
+  };
+}

@@ -50,11 +50,7 @@ export function UserAvatar({
           src={localUrl || avatar || "/avatar.jpeg"}
           alt={`${fallback}'s avatar`}
         />
-        <AvatarFallback>
-          {fallback.length >= 2
-            ? fallback.slice(0, 2).toUpperCase()
-            : fallback.toUpperCase()}
-        </AvatarFallback>
+        <AvatarFallback className="uppercase">{fallback?.[0]}</AvatarFallback>
       </Avatar>
     );
   }

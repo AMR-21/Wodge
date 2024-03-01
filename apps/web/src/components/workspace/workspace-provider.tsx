@@ -12,7 +12,7 @@ import { DeepReadonly } from "replicache";
 import { set } from "zod";
 
 interface WorkspaceContext {
-  metadata?: DeepReadonly<WorkspaceType>;
+  metadata?: WorkspaceType;
   members?: DeepReadonly<WorkspaceMembers>;
   structure?: DeepReadonly<WorkspaceStructure>;
 }

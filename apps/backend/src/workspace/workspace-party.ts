@@ -6,7 +6,9 @@ import {
   ok,
   unauthorized,
 } from "../lib/http-utils";
+
 import { getSession } from "../lib/auth";
+
 import {
   ServerWorkspaceMembers,
   ServerWorkspaceData,
@@ -14,13 +16,17 @@ import {
   ServerWorkspaceStructure,
   Versions,
 } from "../types";
+
 import { handlePost } from "./handlers/workspace-party-post";
+
 import {
   REPLICACHE_VERSIONS_KEY,
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data/keys";
+
+import { defaultWorkspaceMembers } from "@repo/data/schemas";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -45,10 +51,7 @@ export default class WorkspaceParty
     ]);
 
     this.workspaceMembers = <ServerWorkspaceMembers>map.get(membersKey) || {
-      data: {
-        owner: "",
-        members: [],
-      },
+      data: { ...defaultWorkspaceMembers() },
       lastModifiedVersion: 0,
       deleted: false,
     };
@@ -79,9 +82,68 @@ export default class WorkspaceParty
       case "OPTIONS":
         return ok();
       case "GET":
-        console.log(this.workspaceMembers);
+        // this.workspaceStructure.data = {
+        //   publicChannels: [
+        //     {
+        //       id: "1",
+        //       name: "General",
+        //       avatar: "",
+        //       roles: [],
+        //       type: "text",
+        //     },
+        //   ],
+        //   teams: [
+        //     {
+        //       id: "1",
+        //       name: "Team 1",
+        //       avatar: "",
+        //       moderators: [],
+        //       tags: [],
+        //       dirs: [
+        //         {
+        //           name: "none",
+        //           channels: [
+        //             {
+        //               id: "1",
+        //               name: "General",
+        //               avatar: "",
+        //               roles: [],
+        //               type: "text",
+        //             },
+        //           ],
+        //         },
+        //         {
+        //           name: "dirName",
+        //           channels: [
+        //             {
+        //               id: "1",
+        //               name: "General",
+        //               avatar: "",
+        //               roles: [],
+        //               type: "text",
+        //             },
+        //           ],
+        //         },
+        //       ],
+        //     },
+        //   ],
+        //   roles: [
+        //     {
+        //       id: "1",
+        //       name: "Admin",
+        //       color: "red",
+        //       rules: {
+        //         read: true,
+        //         write: true,
+        //         admin: true,
+        //       },
+        //     },
+        //   ],
+        //   tags: [],
+        // };
+
         return json({
-          global: this.versions,
+          global: this.versions.get("globalVersion"),
           workspaceMembers: this.workspaceMembers,
           workspaceMetadata: this.workspaceMetadata,
           workspaceStructure: this.workspaceStructure,

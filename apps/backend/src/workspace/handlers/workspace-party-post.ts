@@ -22,7 +22,7 @@ export async function handlePost(req: Party.Request, party: WorkspaceParty) {
     case "/replicache-pull":
       return workspacePull(req, party);
     case "/create":
-      return await createWorkspace(req, party);
+      return createWorkspace(req, party);
     default:
       return badRequest();
   }
