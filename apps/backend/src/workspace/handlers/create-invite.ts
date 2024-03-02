@@ -14,7 +14,7 @@ import { badRequest, json, unauthorized } from "../../lib/http-utils";
 import { getMember, getRoles, isAllowed, isUserOwner } from "../../lib/utils";
 
 export async function createInvite(req: Party.Request, party: WorkspaceParty) {
-  if (!isAllowed(req, party)) return unauthorized();
+  if (!isAllowed(req, party, ["admin"])) return unauthorized();
 
   const userId = req.headers.get("x-user-id")!;
 

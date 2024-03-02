@@ -1,19 +1,17 @@
 import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
 import { DataTable } from "@repo/ui";
-import { columns } from "./members-columns";
 import { Mutable } from "@/lib/utils";
-import { DeepReadonly } from "replicache";
+import { membersColumns } from "./members-columns";
 
 export function MembersTable() {
-  const { members } = useCurrentWorkspace();
+  const { members, inviters } = useCurrentWorkspace();
 
-  if (!members) return null;
+  if (!members || !inviters) return null;
 
-  console.log(members);
   return (
     <div>
       <DataTable
-        columns={columns}
+        columns={membersColumns(inviters)}
         data={members.members as Mutable<typeof members.members>}
       />
     </div>

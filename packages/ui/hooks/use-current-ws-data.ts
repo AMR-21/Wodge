@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkspacesRegistry } from "@repo/data";
+import { Member, PublicUserType, WorkspacesRegistry } from "@repo/data";
 import { useParams } from "next/navigation";
 import { useUserWorkspaces } from "./use-user-workspaces";
 import { ReadTransaction } from "replicache";
@@ -17,7 +17,7 @@ import {
   WorkspaceStructure,
   WorkspaceType,
 } from "@repo/data";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 export function useCurrentWsData() {
   const { workspaceId } = useParams();
@@ -33,11 +33,36 @@ export function useCurrentWsData() {
     tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),
   );
 
+  const inviters = useMemo(() => {
+    if (!members) return [];
+
+    const hash: Record<string, Pick<Member, "id" | "data">> = {};
+
+    const result = members.members.map((member) => {
+      if (!member.joinInfo.token) return;
+
+      const createdBy = member.joinInfo.created_by;
+
+      if (hash[createdBy]) return;
+
+      const inviter = members.members.find((m) => m.id === createdBy);
+
+      if (!inviter) return;
+
+      const inviterData = { id: inviter.id, data: inviter.data };
+      hash[createdBy] = inviterData;
+
+      return inviterData;
+    });
+
+    return result.filter((r) => !!r);
+  }, [members]);
+
   const structure = useSubscribe(
     workspace?.store,
     async (tx: ReadTransaction) =>
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
   );
 
-  return { metadata, members, structure };
+  return { metadata, members, structure, inviters };
 }

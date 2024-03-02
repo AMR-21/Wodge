@@ -25,7 +25,11 @@ export function getRoles(rolesIds: string[], party: WorkspaceParty) {
   );
 }
 
-export function isAllowed(req: Party.Request, party: WorkspaceParty) {
+export function isAllowed(
+  req: Party.Request,
+  party: WorkspaceParty,
+  permissions: Role["permissions"]
+) {
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return false;
@@ -38,7 +42,7 @@ export function isAllowed(req: Party.Request, party: WorkspaceParty) {
 
   const roles = getRoles(requestingMember.roles, party) as Role[];
 
-  if (!isOwner && !grant(roles, ["admin"])) return false;
+  if (!isOwner && !grant(roles, permissions)) return false;
 
   return true;
 }

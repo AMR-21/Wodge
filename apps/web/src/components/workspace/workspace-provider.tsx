@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  Member,
+  PublicUserType,
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
@@ -15,6 +17,7 @@ interface WorkspaceContext {
   metadata?: WorkspaceType;
   members?: DeepReadonly<WorkspaceMembers>;
   structure?: DeepReadonly<WorkspaceStructure>;
+  inviters?: (Pick<Member, "id" | "data"> | undefined)[];
 }
 
 const Context = createContext<WorkspaceContext | null>(null);
