@@ -87,6 +87,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
     [REPLICACHE_VERSIONS_KEY]: party.versions,
   });
 
+  party.poke();
   return json({
     workspaceId: party.room.id,
   });

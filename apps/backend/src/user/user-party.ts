@@ -46,6 +46,9 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     switch (req.method) {
       case "POST":
         return await handlePost(req, this);
+      // case "GET":
+      //   this.poke();
+      //   return ok();
       case "OPTIONS":
         return ok();
       default:
@@ -72,6 +75,34 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     } catch (e) {
       return unauthorized();
     }
+  }
+
+  static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
+    // CORS preflight response
+    if (req.method === "OPTIONS") {
+      return ok();
+    }
+
+    try {
+      const session = await getSession(req, lobby);
+
+      // service key requests for updating user data in parties
+
+      // Authorize the user by checking that session.userId matches the target user id (party id)
+      if (session.userId !== lobby.id) throw new Error("Unauthorized");
+
+      console.log(
+        `User ${session.user.username} connected to party ${lobby.id}`
+      );
+      // Request is authorized - forward it
+      return req;
+    } catch (e) {
+      return unauthorized();
+    }
+  }
+
+  poke() {
+    this.room.broadcast("poke");
   }
 }
 UserParty satisfies Party.Worker;

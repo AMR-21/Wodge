@@ -43,8 +43,7 @@ export function JoinWorkspaceForm() {
       const { workspaceId } = (await res.json()) as { workspaceId: string };
 
       WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
-      // To update data - will be remove by pokes
-      await user?.store.pull();
+
       router.push(`/${workspaceId}`);
     });
   }

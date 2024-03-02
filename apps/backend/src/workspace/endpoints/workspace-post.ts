@@ -9,7 +9,6 @@ import { joinWorkspace } from "../handlers/join-workspace";
 
 export async function handlePost(req: Party.Request, party: WorkspaceParty) {
   const route = getRoute(req);
-  console.log(route);
 
   switch (route) {
     case "/replicache-push":

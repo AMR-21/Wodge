@@ -6,7 +6,7 @@ import { Workspace } from "@repo/data";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-function SpacePage({ params }: { params: { workspaceId: string } }) {
+function WorkspacePage({ params }: { params: { workspaceId: string } }) {
   // TODO Protect undefined workspaceId
   // useCurrentWsMetadata();
 
@@ -27,4 +27,4 @@ function SpacePage({ params }: { params: { workspaceId: string } }) {
   return <div className="basis-full bg-page">hhhhhh</div>;
 }
 
-export default SpacePage;
+export default WorkspacePage;

@@ -19,6 +19,7 @@ import {
 import { makeWorkspacesStoreKey } from "../lib/keys";
 import { env } from "@repo/env";
 import { WorkspacesRegistry } from "./workspace";
+import PartySocket from "partysocket";
 
 export type Session = {
   sessionToken: string;
@@ -30,6 +31,7 @@ export type Session = {
 export class User {
   static #user: User;
   store: Replicache<UserMutators>;
+  ws: PartySocket;
 
   private constructor() {
     // Protect singleton during runtime
@@ -54,8 +56,18 @@ export class User {
         "user",
         userId
       ),
-      // pullInterval: null,
+      pullInterval: null,
       mutators,
+    });
+
+    this.ws = new PartySocket({
+      host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
+      party: "user",
+      room: userId,
+    });
+
+    this.ws.addEventListener("message", (e) => {
+      if (e.data === "poke") this.store.pull();
     });
   }
 

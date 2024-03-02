@@ -51,7 +51,7 @@ export function MembersSettings() {
           </TooltipWrapper>
         }
       >
-        {checked && (
+        {
           <pre className="flex items-center justify-between overflow-hidden rounded-md bg-surface p-3">
             <code className="truncate text-xs">
               {link ? (
@@ -71,6 +71,7 @@ export function MembersSettings() {
                 <PopoverContent>
                   <NewInviteForm setLink={setLink} />
                 </PopoverContent>
+                {/* <PopoverC */}
               </Popover>
               <SidebarItemBtn
                 Icon={copied ? Check : Copy}
@@ -84,7 +85,7 @@ export function MembersSettings() {
               />
             </div>
           </pre>
-        )}
+        }
       </SettingsContentSection>
 
       <Separator />

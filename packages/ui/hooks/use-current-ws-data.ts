@@ -17,10 +17,15 @@ import {
   WorkspaceStructure,
   WorkspaceType,
 } from "@repo/data";
-import { useMemo } from "react";
+import usePartySocket from "partysocket/react";
+import { useEffect, useMemo, useState } from "react";
+import { env } from "../../env";
+import PartySocket from "partysocket";
 
 export function useCurrentWsData() {
-  const { workspaceId } = useParams();
+  // const { workspaceId } = useParams();
+
+  const { workspaceId }: { workspaceId: string } = useParams();
 
   const registry = WorkspacesRegistry.getInstance();
   const workspace = registry.getWorkspace(workspaceId as string);
@@ -64,5 +69,5 @@ export function useCurrentWsData() {
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
   );
 
-  return { metadata, members, structure, inviters };
+  return { metadata, members, structure, inviters, workspaceId };
 }

@@ -51,6 +51,7 @@ export async function handlePost(req: Party.Request, party: UserParty) {
         [REPLICACHE_VERSIONS_KEY]: party.versions,
       });
 
+      party.poke();
       return ok();
 
     default:

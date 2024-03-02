@@ -13,7 +13,7 @@ import type * as Party from "partykit/server";
  */
 export const CORS = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PATCH",
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Headers":
     "Authorization, Content-Type, X-Replicache-RequestID",

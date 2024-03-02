@@ -6,7 +6,18 @@ import { WorkspaceSchema } from "@repo/data";
 import { makeWorkspaceKey } from "@repo/data";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
-  return await repPush(req, party.room.storage, party.versions, runner(party));
+  const res = await repPush(
+    req,
+    party.room.storage,
+    party.versions,
+    runner(party)
+  );
+
+  if (res.status === 200) {
+    party.poke();
+  }
+
+  return res;
 }
 
 //verify room id
@@ -35,6 +46,11 @@ function runner(party: WorkspaceParty) {
         }
 
         const { data: workspaceData } = validatedFields;
+
+        // Validate the target workspace
+        if (workspaceData.id !== party.room.id) {
+          return;
+        }
 
         // 4. persist the data
         workspaceMetadata.data = workspaceData;

@@ -56,6 +56,7 @@ export class Workspace {
       name: id,
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
       mutators,
+      pullInterval: null,
     });
 
     // Add push/pull endpoints for cloud workspaces

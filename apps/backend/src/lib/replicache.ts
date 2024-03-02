@@ -131,8 +131,7 @@ export async function repPush(
   req: Request,
   storage: Storage,
   versions: Versions,
-  runner: (params: RunnerParams) => Promise<void>,
-  poker?: () => Promise<void>
+  runner: (params: RunnerParams) => Promise<void>
 ) {
   const userId = req.headers.get("x-user-id");
   const data = await req.json();
@@ -207,8 +206,6 @@ export async function repPush(
       ...Object.fromEntries(clients),
     });
 
-    // TODO - Step 8 send a poke or call passed poke function
-    poker?.();
     return ok();
   } catch (e) {
     switch (e) {

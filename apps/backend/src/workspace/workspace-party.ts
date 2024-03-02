@@ -90,8 +90,36 @@ export default class WorkspaceParty
         return ok();
       case "GET":
         return await handleGet(req, this);
+      case "PATCH":
+        this.poke();
+        return ok();
       default:
         return notImplemented();
+    }
+  }
+
+  static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
+    // CORS preflight response
+    if (req.method === "OPTIONS") {
+      return ok();
+    }
+
+    try {
+      const session = await getSession(req, lobby);
+
+      // Check if the user is authorized to access the workspace
+      // i.e. is member of the workspace
+      const isMember = await checkMembership(session.userId, lobby);
+
+      if (!isMember) throw new Error("Unauthorized");
+
+      console.log(
+        `User ${session.user.username} is connected to workspace ${lobby.id}`
+      );
+      // Request is authorized - forward it
+      return req;
+    } catch (e) {
+      return unauthorized();
     }
   }
 
@@ -126,5 +154,9 @@ export default class WorkspaceParty
       return unauthorized();
     }
   }
-  static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {}
+
+  poke() {
+    this.room.broadcast("poke");
+  }
 }
+WorkspaceParty satisfies Party.Worker;

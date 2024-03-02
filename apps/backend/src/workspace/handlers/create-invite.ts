@@ -52,6 +52,8 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
     [makeWorkspaceKey(party.room.id)]: party.workspaceMetadata,
   });
 
+  party.poke();
+
   return json({
     inviteLink,
     ...data,
