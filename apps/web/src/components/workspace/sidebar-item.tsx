@@ -45,7 +45,7 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
 
           // Center the icon with the space avatar by adding padding left of 12px + 4px - 8px = 8px
           // 12px half of the avatar width - 4px padding of the space switcher - 8px half of the icon width
-          "w-full items-center justify-start pl-2 text-muted-foreground hover:text-accent-foreground",
+          "w-full grow items-center justify-start pl-2 text-muted-foreground hover:text-accent-foreground",
           isActive && "bg-accent text-accent-foreground dark:bg-accent",
           className,
         )}
@@ -64,7 +64,7 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
     if (href) jsx = <Link href={href}>{jsx}</Link>;
 
     return (
-      <li ref={ref} className="grow">
+      <li ref={ref} className="grow list-none">
         {jsx}
       </li>
     );

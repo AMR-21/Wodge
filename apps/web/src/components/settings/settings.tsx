@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, ButtonProps, Separator, cn } from "@repo/ui";
+import { Button, ButtonProps, Separator, cn, useIsDesktop } from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { PanelLeft, Settings as SettingsIcon, X } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { useAppState } from "@/store";
+import { set } from "zod";
 
 interface Settings {
   active: string;
@@ -30,7 +31,12 @@ function Settings({
   children: React.ReactNode;
 }) {
   const [active, setActive] = useState<string>(defaultActive);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const isDesktop = useIsDesktop();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
+
+  useEffect(() => {
+    setIsSidebarOpen(isDesktop);
+  }, [isDesktop]);
 
   return (
     <SettingsContext.Provider
@@ -89,7 +95,8 @@ function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
 }
 
 function SettingsSidebarItem({ value }: { value: string }) {
-  const { setActive, active } = useContext(SettingsContext);
+  const { setActive, active, setIsSidebarOpen } = useContext(SettingsContext);
+  const isDesktop = useIsDesktop();
 
   return (
     <SidebarItem
@@ -100,6 +107,7 @@ function SettingsSidebarItem({ value }: { value: string }) {
         active === value && "bg-accent text-accent-foreground",
       )}
       onClick={() => {
+        if (!isDesktop) setIsSidebarOpen(false);
         setActive(value);
       }}
     />
@@ -119,7 +127,7 @@ function SettingsContent({
 
   return (
     <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-2 py-[5.25rem]">
-      <div className="max-w-2xl shrink-0 grow">{children}</div>
+      <div className="max-w-xl shrink-0 grow">{children}</div>
     </div>
   );
 }

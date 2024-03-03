@@ -12,6 +12,8 @@ import {
 } from "@/components/settings/settings";
 import { TeamsSettings } from "@/components/settings/teams/teams-settings";
 import { WorkspaceSettings } from "@/components/settings/workspace-settings";
+import { SidebarItem } from "@/components/workspace/sidebar-item";
+import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {

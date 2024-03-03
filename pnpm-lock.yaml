@@ -404,6 +404,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.1)
+      usehooks-ts:
+        specifier: ^2.14.0
+        version: 2.15.1(react@18.2.0)
     devDependencies:
       '@repo/ts':
         specifier: workspace:*

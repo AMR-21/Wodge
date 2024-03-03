@@ -34,3 +34,4 @@ export * from "./hooks/use-current-user";
 export * from "./hooks/use-user-workspaces";
 export * from "./hooks/use-workspaces";
 export * from "./hooks/use-current-ws-data";
+export * from "./hooks/use-is-desktop";

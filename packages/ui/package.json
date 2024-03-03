@@ -41,7 +41,8 @@
     "replicache-react": "^5.0.1",
     "sonner": "^1.4.0",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^2.14.0"
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",

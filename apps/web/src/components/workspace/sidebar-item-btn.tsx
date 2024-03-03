@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
 
 interface SidebarItemBtnProps extends ButtonProps {
-  Icon: LucideIcon | IconType;
+  Icon?: LucideIcon | IconType;
   iconClassName?: string;
   isVisible?: () => boolean;
 }
@@ -13,6 +13,7 @@ export function SidebarItemBtn({
   Icon,
   iconClassName,
   isVisible = () => true,
+  children,
   ...props
 }: SidebarItemBtnProps) {
   return (
@@ -26,12 +27,16 @@ export function SidebarItemBtn({
       )}
       {...props}
     >
-      <Icon
-        className={cn(
-          "h-4 w-4 opacity-60 transition-opacity group-hover/sidebtn:opacity-100",
-          iconClassName,
-        )}
-      />
+      {Icon && (
+        <Icon
+          className={cn(
+            "h-4 w-4 opacity-60 transition-opacity group-hover/sidebtn:opacity-100",
+            iconClassName,
+          )}
+        />
+      )}
+
+      {children}
     </Button>
   );
 }

@@ -107,8 +107,6 @@ export function membersColumns(
 
         const token = member.joinInfo.token;
 
-        console.log({ inviter });
-
         return (
           <div className="flex flex-col">
             <div className="truncate">

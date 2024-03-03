@@ -14,17 +14,19 @@ export function Gate({
 
   const currentMember = members?.members.find((m) => m.id === user?.data?.id);
 
-  if (!members || !structure) return null;
+  // console.log(members, structure);
+  if (!members) return null;
 
   if (!currentMember) {
     return null;
   }
 
   const roles = currentMember.roles.map((roleId) =>
-    structure.roles.find((r) => r.id === roleId),
+    structure?.roles.find((r) => r.id === roleId),
   ) as Role[];
 
   const isOwner = members.owner === user?.data?.id;
+
   const hasPermission = grant(roles, permissions);
 
   if (isOwner || hasPermission) return <>{children}</>;
