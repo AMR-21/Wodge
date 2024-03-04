@@ -18,7 +18,7 @@ interface ReplicacheFields {
   deleted: boolean;
 }
 
-export type Versions = Map<string, number>;
+export type Versions = Map<string, number | boolean>;
 
 /**
  * User
@@ -47,4 +47,5 @@ export interface WorkspacePartyInterface extends Party {
   workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
+  presenceList: string[];
 }

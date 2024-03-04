@@ -6,6 +6,7 @@ export function getMembership(req: Party.Request, party: WorkspaceParty) {
   const serviceKey = req.headers.get("authorization");
   const userId = req.headers.get("x-user-id");
 
+  // Verify service key
   if (serviceKey !== party.room.env.SERVICE_KEY)
     return json({
       success: false,

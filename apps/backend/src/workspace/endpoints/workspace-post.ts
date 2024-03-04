@@ -6,6 +6,7 @@ import { workspacePush } from "../handlers/workspace-push";
 import { createWorkspace } from "../handlers/create-workspace";
 import { createInvite } from "../handlers/create-invite";
 import { joinWorkspace } from "../handlers/join-workspace";
+import { handlePresence } from "../handlers/presence";
 
 export async function handlePost(req: Party.Request, party: WorkspaceParty) {
   const route = getRoute(req);
@@ -21,6 +22,8 @@ export async function handlePost(req: Party.Request, party: WorkspaceParty) {
       return createInvite(req, party);
     case "/join":
       return joinWorkspace(req, party);
+    case "/presence":
+      return handlePresence(req, party);
     default:
       return badRequest();
   }

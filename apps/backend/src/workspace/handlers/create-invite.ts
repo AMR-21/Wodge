@@ -40,7 +40,7 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
     "/join?token=" +
     data.token;
 
-  const nextVersion = party.versions.get("globalVersion")! + 1;
+  const nextVersion = (party.versions.get("globalVersion") as number) + 1;
   party.workspaceMetadata.data.inviteLink = inviteLink;
 
   party.workspaceMetadata.lastModifiedVersion = nextVersion;

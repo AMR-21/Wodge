@@ -6,7 +6,6 @@ import {
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
 import { PublicUserSchema } from "./user.schema";
-import { create } from "domain";
 
 /**
  * Workspace {
@@ -183,6 +182,11 @@ export const JoinWorkspaceSchema = z.object({
     .url({
       message: "Invalid URL",
     }),
+});
+
+export const PresenceRequestSchema = z.object({
+  userId: z.string().length(ID_LENGTH),
+  connect: z.boolean(),
 });
 
 export type WorkspaceType = z.infer<typeof WorkspaceSchema>;

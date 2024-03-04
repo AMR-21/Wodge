@@ -34,7 +34,7 @@ export async function handlePost(req: Party.Request, party: UserParty) {
       if (!workspaceId) return badRequest();
 
       // Update store and versions
-      const nextVersion = party.versions.get("globalVersion")! + 1;
+      const nextVersion = (party.versions.get("globalVersion") as number) + 1;
 
       party.versions.set("globalVersion", nextVersion);
 

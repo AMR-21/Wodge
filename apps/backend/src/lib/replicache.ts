@@ -87,7 +87,7 @@ export async function repPull(
 
     await getClientGroup(clientGroupId, userId, storage, false);
 
-    const globalVersion = versions.get("globalVersion")!;
+    const globalVersion = versions.get("globalVersion") as number;
     const fromVersion = cookie ?? 0;
 
     const lastMutationIDChanges: Record<string, number> = {};
@@ -153,7 +153,7 @@ export async function repPush(
 
     if (!clientGroup) throw new Error("Client group not found");
 
-    const globalVersion = versions.get("globalVersion")!;
+    const globalVersion = versions.get("globalVersion") as number;
     const nextVersion = globalVersion + 1;
     // hashMap to avoid many reads
 

@@ -3,6 +3,7 @@
  */
 import type * as Party from "partykit/server";
 import { error, ok, unauthorized } from "./http-utils";
+import WorkspaceParty from "../workspace/workspace-party";
 
 /**
  * Referenced from user client model
@@ -64,7 +65,13 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
  *  Check if the user is authorized to access the workspace
  */
 
-export const checkMembership = async (userId: string, lobby: Party.Lobby) => {
+/**
+ * Edge network version
+ */
+export const checkMembershipEdge = async (
+  userId: string,
+  lobby: Party.Lobby
+) => {
   // 1. Get the party instance
   const workspaceParty = lobby.parties.workspace;
 
@@ -86,4 +93,11 @@ export const checkMembership = async (userId: string, lobby: Party.Lobby) => {
   const data = await res.json();
 
   return !!data?.success;
+};
+
+/**
+ * Normal version
+ */
+export const checkMembership = (userId: string, party: WorkspaceParty) => {
+  return party.workspaceMembers.data.members.some((m) => m.id === userId);
 };

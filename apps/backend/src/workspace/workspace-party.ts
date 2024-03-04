@@ -7,7 +7,7 @@ import {
   unauthorized,
 } from "../lib/http-utils";
 
-import { checkMembership, getSession } from "../lib/auth";
+import { checkMembershipEdge, getSession } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -27,6 +27,7 @@ import {
   makeWorkspaceStructureKey,
   defaultWorkspaceMembers,
   InviteLink,
+  WORKSPACE_PRESENCE_KEY,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -37,8 +38,11 @@ export default class WorkspaceParty
   workspaceMetadata: ServerWorkspaceData;
   workspaceStructure: ServerWorkspaceStructure;
   inviteLink: InviteLink;
-  // emailInvites: InviteLink[];
   versions: Versions;
+
+  // Map to track the presence of users in the workspace
+  // Number count the connected user devices - may use the user-agent header instead
+  presenceList: string[];
 
   constructor(readonly room: Party.Room) {}
 
@@ -53,6 +57,7 @@ export default class WorkspaceParty
       structureKey,
       WORKSPACE_INVITE_LINK_KEY,
       REPLICACHE_VERSIONS_KEY,
+      WORKSPACE_PRESENCE_KEY,
     ]);
 
     this.workspaceMembers = <ServerWorkspaceMembers>map.get(membersKey) || {
@@ -80,6 +85,8 @@ export default class WorkspaceParty
       new Map([["globalVersion", 0]]);
 
     this.inviteLink = <InviteLink>map.get(WORKSPACE_INVITE_LINK_KEY) || {};
+
+    this.presenceList = <string[]>map.get(WORKSPACE_PRESENCE_KEY) || [];
   }
 
   async onRequest(req: Party.Request) {
@@ -99,28 +106,7 @@ export default class WorkspaceParty
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
-    // CORS preflight response
-    if (req.method === "OPTIONS") {
-      return ok();
-    }
-
-    try {
-      const session = await getSession(req, lobby);
-
-      // Check if the user is authorized to access the workspace
-      // i.e. is member of the workspace
-      const isMember = await checkMembership(session.userId, lobby);
-
-      if (!isMember) throw new Error("Unauthorized");
-
-      console.log(
-        `User ${session.user.username} is connected to workspace ${lobby.id}`
-      );
-      // Request is authorized - forward it
-      return req;
-    } catch (e) {
-      return unauthorized();
-    }
+    return notImplemented();
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
@@ -144,7 +130,7 @@ export default class WorkspaceParty
 
       // Check if the user is authorized to access the workspace
       // i.e. is member of the workspace
-      const isMember = await checkMembership(session.userId, lobby);
+      const isMember = await checkMembershipEdge(session.userId, lobby);
 
       if (!isMember) throw new Error("Unauthorized");
 

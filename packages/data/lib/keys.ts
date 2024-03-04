@@ -5,6 +5,7 @@ export const JOINER = "/";
 
 /** User */
 export const USER_KEY = "user";
+export const USER_IS_CONNECTED_KEY = "isConnected";
 export const USER_WORKSPACES_STORE_KEY = "workspaces";
 export const makeWorkspacesStoreKey = () =>
   USER_KEY + JOINER + USER_WORKSPACES_STORE_KEY;
@@ -15,6 +16,7 @@ export const WORKSPACE_STRUCTURE_KEY = "structure";
 export const WORKSPACE_ROLES_KEY = "roles";
 export const WORKSPACE_MEMBERS_KEY = "members";
 export const WORKSPACE_INVITE_LINK_KEY = "invite";
+export const WORKSPACE_PRESENCE_KEY = "presence";
 
 export const makeWorkspaceKey = (id: string) => WORKSPACE_PREFIX + JOINER + id;
 export const makeWorkspaceStructureKey = () =>

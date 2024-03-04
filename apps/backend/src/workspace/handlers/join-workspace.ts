@@ -71,7 +71,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   });
 
   // 6. Update Replicache versions
-  const nextVersion = party.versions.get("globalVersion")! + 1;
+  const nextVersion = (party.versions.get("globalVersion") as number) + 1;
 
   party.workspaceMembers.lastModifiedVersion = nextVersion;
 
@@ -88,6 +88,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   });
 
   party.poke();
+
   return json({
     workspaceId: party.room.id,
   });
