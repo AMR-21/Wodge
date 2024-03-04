@@ -46,6 +46,12 @@ export class WorkspacesRegistry {
 
     return this.registry.get(id);
   }
+
+  reInit(id: string) {
+    if (typeof navigator === "undefined") return null;
+
+    this.registry.set(id, new Workspace(id));
+  }
 }
 
 export class Workspace {
@@ -67,20 +73,7 @@ export class Workspace {
       })
       .then((data) => {
         if (data && data.environment === "cloud") {
-          this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
-            "push",
-            "workspace",
-            id
-          );
-
-          this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
-            "pull",
-            "workspace",
-            id
-          );
-
-          this.store.pull();
-          this.store.push();
+          this.#makeCloud(id);
         }
       });
   }
@@ -108,21 +101,28 @@ export class Workspace {
     // 3. If it is cloud workspace, then re-init the store
     // Add push/pull endpoints for cloud workspaces
     if (data.onCloud) {
-      this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
-        "push",
-        "workspace",
-        data.id
-      );
-
-      this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
-        "pull",
-        "workspace",
-        data.id
-      );
-
-      this.store.pull();
-      this.store.push();
+      this.#makeCloud(data.id);
     }
+  }
+
+  /**
+   * Make the workspace a cloud workspace
+   */
+  #makeCloud(id: string) {
+    this.store.pusher = replicacheWrapper<PushRequest, PusherResult>(
+      "push",
+      "workspace",
+      id
+    );
+
+    this.store.puller = replicacheWrapper<PullRequest, PullerResult>(
+      "pull",
+      "workspace",
+      id
+    );
+
+    this.store.pull();
+    this.store.push();
   }
 }
 

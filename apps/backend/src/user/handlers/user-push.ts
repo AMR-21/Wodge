@@ -56,6 +56,9 @@ function runner(party: UserParty) {
 
         await storage.put(makeWorkspacesStoreKey(), workspacesStore);
 
+        // Announce presence
+        if (data.onCloud) await party.handlePresence(data.id);
+
         break;
       default:
         throw new Error("Unknown mutation: " + mutation.name);

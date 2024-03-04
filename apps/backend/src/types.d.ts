@@ -43,9 +43,11 @@ export type ServerWorkspaceMembers = {
 export type ServerWorkspaceStructure = {
   data: WorkspaceStructure;
 } & ReplicacheFields;
+
+export type PresenceMap = Map<string, boolean>;
 export interface WorkspacePartyInterface extends Party {
   workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
-  presenceList: string[];
+  presenceMap: PresenceMap;
 }

@@ -33,6 +33,8 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
 
   const { data } = validatedFields;
 
+  party.inviteLink = data;
+
   const inviteLink =
     party.room.env.BACKEND_DOMAIN +
     "/parties/workspace/" +

@@ -11,6 +11,7 @@ import { handlePost } from "./endpoints/user-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getSession } from "../lib/auth";
 import {
+  PokeMessage,
   REPLICACHE_VERSIONS_KEY,
   USER_IS_CONNECTED_KEY,
   makeWorkspacesStoreKey,
@@ -173,8 +174,8 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     }
   }
 
-  poke(msg = {}) {
-    this.room.broadcast(JSON.stringify({ sub: "poke", msg }));
+  poke(data?: PokeMessage) {
+    this.room.broadcast(JSON.stringify({ sub: "poke", ...data }));
   }
 }
 UserParty satisfies Party.Worker;

@@ -5,9 +5,10 @@ import {
   PublicUserType,
   REPLICACHE_VERSIONS_KEY,
   WORKSPACE_INVITE_LINK_KEY,
+  WORKSPACE_PRESENCE_KEY,
   makeWorkspaceMembersKey,
 } from "@repo/data";
-import { getMember, isMemberInWorkspace } from "../../lib/utils";
+import { isMemberInWorkspace } from "../../lib/utils";
 
 export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   const token = new URL(req.url).searchParams.get("token");
@@ -80,13 +81,18 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // 7. update the invite link
   party.inviteLink.limit -= 1;
 
-  // 8. persist updates
+  // 8. Update presence
+  party.presenceMap.set(id, true);
+
+  // 9. persist updates
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [WORKSPACE_INVITE_LINK_KEY]: party.inviteLink,
     [REPLICACHE_VERSIONS_KEY]: party.versions,
+    [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
   });
 
+  // Inform current member of the current user
   await party.poke();
 
   return json({

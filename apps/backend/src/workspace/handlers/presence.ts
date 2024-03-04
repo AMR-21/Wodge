@@ -33,12 +33,12 @@ export async function handlePresence(
   }
 
   if (connect) {
-    party.presenceList.push(userId);
+    party.presenceMap.set(userId, true);
   } else {
-    party.presenceList = party.presenceList.filter((id) => id !== userId);
+    party.presenceMap.delete(userId);
   }
 
-  await party.room.storage.put(WORKSPACE_PRESENCE_KEY, party.presenceList);
+  await party.room.storage.put(WORKSPACE_PRESENCE_KEY, party.presenceMap);
 
   return ok();
 }

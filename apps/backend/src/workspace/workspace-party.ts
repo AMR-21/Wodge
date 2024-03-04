@@ -15,6 +15,7 @@ import {
   WorkspacePartyInterface,
   ServerWorkspaceStructure,
   Versions,
+  PresenceMap,
 } from "../types";
 
 import { handlePost } from "./endpoints/workspace-post";
@@ -28,6 +29,7 @@ import {
   defaultWorkspaceMembers,
   InviteLink,
   WORKSPACE_PRESENCE_KEY,
+  PokeMessage,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -42,7 +44,7 @@ export default class WorkspaceParty
 
   // Map to track the presence of users in the workspace
   // Number count the connected user devices - may use the user-agent header instead
-  presenceList: string[];
+  presenceMap: PresenceMap;
 
   constructor(readonly room: Party.Room) {}
 
@@ -86,7 +88,8 @@ export default class WorkspaceParty
 
     this.inviteLink = <InviteLink>map.get(WORKSPACE_INVITE_LINK_KEY) || {};
 
-    this.presenceList = <string[]>map.get(WORKSPACE_PRESENCE_KEY) || [];
+    this.presenceMap =
+      <PresenceMap>map.get(WORKSPACE_PRESENCE_KEY) || new Map();
   }
 
   async onRequest(req: Party.Request) {
@@ -141,19 +144,20 @@ export default class WorkspaceParty
     }
   }
 
-  async poke(msg?: any, type = "workspace") {
+  async poke(type = "workspace", id = this.room.id) {
     const userParty = this.room.context.parties.user!;
 
+    console.log("Poking", type, id, this.presenceMap);
     await Promise.all(
-      this.presenceList.map((id) => {
-        return userParty.get(id).fetch("/poke", {
+      Object.keys(Object.fromEntries(this.presenceMap)).map((userId) => {
+        return userParty.get(userId).fetch("/poke", {
           method: "POST",
+          headers: {
+            authorization: this.room.env.SERVICE_KEY as string,
+          },
           body: JSON.stringify({
-            msg: {
-              type,
-              ...msg,
-            },
-            workspaceId: this.room.id,
+            type,
+            id: id || this.room.id,
           }),
         });
       })

@@ -30,9 +30,8 @@ export async function addWorkspace(req: Party.Request, party: UserParty) {
     [REPLICACHE_VERSIONS_KEY]: party.versions,
   });
 
-  // Register presence
-  await party.handlePresence(workspaceId);
+  // // Poke update data
+  // party.poke({ type: "user" });
 
-  party.poke();
   return ok();
 }

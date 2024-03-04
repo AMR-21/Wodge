@@ -22,7 +22,7 @@ interface WorkspaceContext {
   members?: DeepReadonly<WorkspaceMembers>;
   structure?: DeepReadonly<WorkspaceStructure>;
   inviters?: (Pick<Member, "id" | "data"> | undefined)[];
-  ws: PartySocket;
+  // ws: PartySocket;
 }
 
 const Context = createContext<WorkspaceContext | null>(null);
@@ -30,25 +30,25 @@ const Context = createContext<WorkspaceContext | null>(null);
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const data = useCurrentWsData();
   const { workspaceId }: { workspaceId: string } = useParams();
-  const workspace = WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
+  // const workspace = WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
 
-  const ws = usePartySocket({
-    host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
-    party: "workspace",
-    room: workspaceId,
+  // const ws = usePartySocket({
+  //   host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
+  //   party: "workspace",
+  //   room: workspaceId,
 
-    onMessage: (e) => {
-      if (e.data === "poke") {
-        workspace!.store.pull();
-      }
-    },
-  });
+  //   onMessage: (e) => {
+  //     if (e.data === "poke") {
+  //       workspace!.store.pull();
+  //     }
+  //   },
+  // });
 
   return (
     <Context.Provider
       value={{
         ...data,
-        ws,
+        // ws,
       }}
     >
       {children}

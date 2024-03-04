@@ -15,6 +15,7 @@ import {
   NewWorkspaceSchema,
   NewWorkspace,
   UserWorkspacesStore,
+  PokeMessage,
 } from "..";
 import { makeWorkspacesStoreKey } from "../lib/keys";
 import { env } from "@repo/env";
@@ -67,7 +68,21 @@ export class User {
     });
 
     this.ws.addEventListener("message", (e) => {
-      if (e.data === "poke") this.store.pull();
+      const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
+
+      if (data.sub === "poke") {
+        switch (data.type) {
+          case "workspace":
+            const workspacesRegistry = WorkspacesRegistry.getInstance();
+            const workspace = workspacesRegistry.getWorkspace(data.id!);
+            return workspace?.store.pull();
+
+          case "channel":
+            return;
+          default:
+            this.store.pull();
+        }
+      }
     });
   }
 

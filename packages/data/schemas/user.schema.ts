@@ -61,5 +61,10 @@ export type UserWorkspacesStore = {
   environment: "local" | "cloud";
 }[];
 
+export type PokeMessage = {
+  type: "user" | "workspace" | "channel";
+  id?: string;
+};
+
 export type UserType = z.infer<typeof UserSchema>;
 export type PublicUserType = z.infer<typeof PublicUserSchema>;

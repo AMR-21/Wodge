@@ -8,7 +8,7 @@ export function replicacheWrapper<Request, Result>(
   return async (requestBody: Request, requestID: string) => {
     try {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/replicache-${mode === "push" ? "push" : "pull"}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/replicache-${mode}`,
         {
           method: "POST",
           credentials: "include",

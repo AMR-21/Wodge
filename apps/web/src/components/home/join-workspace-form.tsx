@@ -9,6 +9,7 @@ import {
   FormLabel,
   Input,
   useCurrentUser,
+  useUserWorkspaces,
 } from "@repo/ui";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
@@ -42,7 +43,11 @@ export function JoinWorkspaceForm() {
 
       const { workspaceId } = (await res.json()) as { workspaceId: string };
 
-      WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
+      // Update the user workspaces
+      await user?.store.pull();
+
+      // Ensure that the workspace is create with cloud mode
+      WorkspacesRegistry.getInstance().reInit(workspaceId);
 
       router.push(`/${workspaceId}`);
     });
