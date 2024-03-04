@@ -141,8 +141,24 @@ export default class WorkspaceParty
     }
   }
 
-  poke() {
-    this.room.broadcast("poke");
+  async poke(msg?: any, type = "workspace") {
+    const userParty = this.room.context.parties.user!;
+
+    await Promise.all(
+      this.presenceList.map((id) => {
+        return userParty.get(id).fetch("/poke", {
+          method: "POST",
+          body: JSON.stringify({
+            msg: {
+              type,
+              ...msg,
+            },
+            workspaceId: this.room.id,
+          }),
+        });
+      })
+    );
   }
 }
+
 WorkspaceParty satisfies Party.Worker;

@@ -14,7 +14,7 @@ export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   );
 
   if (res.status === 200) {
-    party.poke();
+    await party.poke();
   }
 
   return res;

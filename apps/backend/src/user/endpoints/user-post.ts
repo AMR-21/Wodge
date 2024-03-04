@@ -15,6 +15,8 @@ import {
 import UserParty from "../user-party";
 import { userPush } from "../handlers/user-push";
 import { userPull } from "../handlers/user-pull";
+import { addWorkspace } from "../handlers/add-workspace";
+import { poke } from "../handlers/poke";
 
 export async function handlePost(req: Party.Request, party: UserParty) {
   const route = getRoute(req);
@@ -23,37 +25,10 @@ export async function handlePost(req: Party.Request, party: UserParty) {
       return userPush(req, party);
     case "/replicache-pull":
       return userPull(req, party);
-
     case "/add-workspace":
-      const { workspaceId } = <
-        {
-          workspaceId: string;
-        }
-      >await req.json();
-
-      if (!workspaceId) return badRequest();
-
-      // Update store and versions
-      const nextVersion = (party.versions.get("globalVersion") as number) + 1;
-
-      party.versions.set("globalVersion", nextVersion);
-
-      party.workspacesStore.data.push({
-        workspaceId,
-        environment: "cloud",
-      });
-
-      party.workspacesStore.lastModifiedVersion = nextVersion;
-
-      // Persist data
-      await party.room.storage.put({
-        [makeWorkspacesStoreKey()]: party.workspacesStore,
-        [REPLICACHE_VERSIONS_KEY]: party.versions,
-      });
-
-      party.poke();
-      return ok();
-
+      return await addWorkspace(req, party);
+    case "/poke":
+      return await poke(req, party);
     default:
       return badRequest();
   }

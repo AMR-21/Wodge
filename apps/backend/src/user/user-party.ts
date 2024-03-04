@@ -163,8 +163,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     try {
       const session = await getSession(req, lobby);
 
-      // service key requests for updating user data in parties
-
       // Authorize the user by checking that session.userId matches the target user id (party id)
       if (session.userId !== lobby.id) throw new Error("Unauthorized");
 
@@ -175,8 +173,8 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     }
   }
 
-  poke() {
-    this.room.broadcast("poke");
+  poke(msg = {}) {
+    this.room.broadcast(JSON.stringify({ sub: "poke", msg }));
   }
 }
 UserParty satisfies Party.Worker;

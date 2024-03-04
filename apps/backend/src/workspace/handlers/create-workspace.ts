@@ -54,7 +54,7 @@ export async function createWorkspace(
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
   });
 
-  party.poke();
+  await party.poke();
 
   return ok();
 }
