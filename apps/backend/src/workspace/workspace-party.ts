@@ -10,7 +10,6 @@ import {
   ServerWorkspaceStructure,
   Versions,
   PresenceMap,
-  Invites,
 } from "../types";
 
 import { handlePost } from "./endpoints/workspace-post";
@@ -24,6 +23,7 @@ import {
   defaultWorkspaceMembers,
   Invite,
   WORKSPACE_PRESENCE_KEY,
+  Invites,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 

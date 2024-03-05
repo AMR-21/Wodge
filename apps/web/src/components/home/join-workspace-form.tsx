@@ -49,7 +49,7 @@ export function JoinWorkspaceForm() {
       // Ensure that the workspace is create with cloud mode
       WorkspacesRegistry.getInstance().reInit(workspaceId);
 
-      router.push(`/${workspaceId}`);
+      router.push(`/workspaces/${workspaceId}`);
     });
   }
 

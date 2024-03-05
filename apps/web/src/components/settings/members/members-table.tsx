@@ -8,7 +8,6 @@ export function MembersTable() {
 
   if (!members || !inviters) return null;
 
-  console.log(members);
   return (
     <div>
       <DataTable

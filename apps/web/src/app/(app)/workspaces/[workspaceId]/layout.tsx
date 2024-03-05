@@ -1,7 +1,7 @@
-import { WorkspaceProvider } from "@/components/workspace/workspace-context";
+import { Providers } from "@/components/providers";
 
 function AppProviders({ children }: { children: React.ReactNode }) {
-  return <WorkspaceProvider>{children}</WorkspaceProvider>;
+  return <Providers>{children}</Providers>;
 }
 
 export default AppProviders;

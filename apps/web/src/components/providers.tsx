@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "./theme-provider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { WorkspaceProvider } from "./workspace/workspace-context";
 
 const queryClient = new QueryClient({
@@ -15,14 +15,8 @@ const queryClient = new QueryClient({
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <WorkspaceProvider>{children}</WorkspaceProvider>
-      </ThemeProvider>
+      <WorkspaceProvider>{children}</WorkspaceProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

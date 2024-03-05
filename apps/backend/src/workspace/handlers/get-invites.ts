@@ -7,6 +7,6 @@ export async function getInvites(req: Party.Request, party: WorkspaceParty) {
   if (!isAllowed(req, party, ["admin"])) return unauthorized();
 
   return json({
-    invites: Object.fromEntries(party.invites),
+    ...Object.fromEntries(party.invites),
   });
 }
