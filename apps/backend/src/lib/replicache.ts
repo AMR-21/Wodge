@@ -58,18 +58,29 @@ export interface RunnerParams {
   userId: string;
 }
 
+export interface PatcherParams {
+  fromVersion: number;
+  versions: Versions;
+}
+
+export interface PushProps {
+  req: Request;
+  storage: Storage;
+  versions: Versions;
+  runner: (params: RunnerParams) => Promise<void>;
+}
+
+export interface PullProps {
+  req: Request;
+  storage: Storage;
+  versions: Versions;
+  patcher: (params: PatcherParams) => Promise<PatchOperation[]>;
+}
+
 const authError = {};
 const clientStateNotFoundError = {};
 
-export async function repPull(
-  req: Request,
-  storage: Storage,
-  versions: Versions,
-  patcher: (
-    fromVersion: number,
-    versions: Versions
-  ) => Promise<PatchOperation[]>
-) {
+export async function repPull({ req, storage, versions, patcher }: PullProps) {
   const userId = req.headers.get("x-user-id");
   if (!userId) return unauthorized();
 
@@ -105,7 +116,7 @@ export async function repPull(
     });
 
     // Get the operations
-    const patch = await patcher(fromVersion, versions);
+    const patch = await patcher({ fromVersion, versions });
 
     return json(
       {
@@ -127,12 +138,7 @@ export async function repPull(
   }
 }
 
-export async function repPush(
-  req: Request,
-  storage: Storage,
-  versions: Versions,
-  runner: (params: RunnerParams) => Promise<void>
-) {
+export async function repPush({ req, storage, versions, runner }: PushProps) {
   const userId = req.headers.get("x-user-id");
   const data = await req.json();
 

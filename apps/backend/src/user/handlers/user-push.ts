@@ -5,12 +5,12 @@ import { NewWorkspaceSchema } from "@repo/data";
 import { makeWorkspacesStoreKey } from "@repo/data";
 
 export async function userPush(req: Request, party: UserParty) {
-  const res = await repPush(
+  const res = await repPush({
     req,
-    party.room.storage,
-    party.versions,
-    runner(party)
-  );
+    storage: party.room.storage,
+    versions: party.versions,
+    runner: runner(party),
+  });
 
   if (res.status === 200) {
     party.poke();

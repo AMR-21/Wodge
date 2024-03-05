@@ -10,12 +10,12 @@ import {
 import { makeWorkspaceKey } from "@repo/data";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
-  const res = await repPush(
+  const res = await repPush({
     req,
-    party.room.storage,
-    party.versions,
-    runner(party)
-  );
+    storage: party.room.storage,
+    versions: party.versions,
+    runner: runner(party),
+  });
 
   if (res.status === 200) {
     await party.poke();

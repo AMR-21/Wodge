@@ -1,8 +1,7 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
-import { repPull } from "../../lib/replicache";
+import { PatcherParams, repPull } from "../../lib/replicache";
 import { PatchOperation } from "replicache";
-import { Versions } from "../../types";
 import {
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
@@ -10,11 +9,16 @@ import {
 } from "@repo/data";
 
 export async function workspacePull(req: Party.Request, party: WorkspaceParty) {
-  return await repPull(req, party.room.storage, party.versions, patcher(party));
+  return await repPull({
+    req,
+    storage: party.room.storage,
+    versions: party.versions,
+    patcher: patcher(party),
+  });
 }
 
 function patcher(party: WorkspaceParty) {
-  return async function (fromVersion: number, versions: Versions) {
+  return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
     const { workspaceMembers, workspaceMetadata, workspaceStructure } = party;
