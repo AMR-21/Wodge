@@ -8,7 +8,7 @@ import {
   WriteTransaction,
 } from "replicache";
 
-import { replicacheWrapper } from "../lib/utils";
+import { getWorkspace, replicacheWrapper } from "../../lib/utils";
 import {
   PublicUserSchema,
   PublicUserType,
@@ -16,11 +16,12 @@ import {
   NewWorkspace,
   UserWorkspacesStore,
   PokeMessage,
-} from "..";
-import { makeWorkspacesStoreKey } from "../lib/keys";
+  WorkspacesRegistry,
+} from "../..";
+import { makeWorkspacesStoreKey } from "../../lib/keys";
 import { env } from "@repo/env";
-import { WorkspacesRegistry } from "./workspace";
 import PartySocket from "partysocket";
+import { userMutators } from "./user-mutators";
 
 export type Session = {
   sessionToken: string;
@@ -31,8 +32,8 @@ export type Session = {
 
 export class User {
   static #user: User;
-  store: Replicache<UserMutators>;
-  ws: PartySocket;
+  store: Replicache<typeof userMutators>;
+  webSocket: PartySocket;
 
   private constructor() {
     // Protect singleton during runtime
@@ -58,32 +59,10 @@ export class User {
         userId
       ),
       pullInterval: null,
-      mutators,
+      mutators: userMutators,
     });
 
-    this.ws = new PartySocket({
-      host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
-      party: "user",
-      room: userId,
-    });
-
-    this.ws.addEventListener("message", (e) => {
-      const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
-
-      if (data.sub === "poke") {
-        switch (data.type) {
-          case "workspace":
-            const workspacesRegistry = WorkspacesRegistry.getInstance();
-            const workspace = workspacesRegistry.getWorkspace(data.id!);
-            return workspace?.store.pull();
-
-          case "channel":
-            return;
-          default:
-            this.store.pull();
-        }
-      }
-    });
+    this.webSocket = this.#initWebSocket(userId);
   }
 
   /** Static methods */
@@ -128,6 +107,41 @@ export class User {
     return validatedFields.data;
   }
 
+  get ws(): PartySocket {
+    return this.webSocket;
+  }
+
+  /**
+   * helpers
+   */
+
+  #initWebSocket(userId: string) {
+    const ws = new PartySocket({
+      host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
+      party: "user",
+      room: userId,
+    });
+
+    ws.addEventListener("message", (e) => {
+      const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
+
+      if (data.sub === "poke") {
+        switch (data.type) {
+          case "workspace":
+            const workspace = getWorkspace(data.id!);
+            return workspace?.store.pull();
+
+          case "channel":
+            return;
+          default:
+            this.store.pull();
+        }
+      }
+    });
+
+    return ws;
+  }
+
   /** Methods */
 
   /**
@@ -169,38 +183,3 @@ export class User {
     return workspacesStore;
   }
 }
-
-const mutators = {
-  async createWorkspace(tx: WriteTransaction, data: NewWorkspace) {
-    const validatedFields = NewWorkspaceSchema.safeParse(data);
-
-    if (!validatedFields.success) throw new Error("Invalid data");
-
-    const { data: newWorkspace } = validatedFields;
-
-    const workspacesStore = (await tx.get<UserWorkspacesStore>(
-      makeWorkspacesStoreKey()
-    )) as UserWorkspacesStore;
-
-    // check if workspace already exists
-    if (
-      !!workspacesStore &&
-      workspacesStore?.some((ws) => ws.workspaceId === newWorkspace.id)
-    ) {
-      throw new Error("Workspace already exists");
-    }
-
-    // add the new workspace to the store
-    const updatedStore: UserWorkspacesStore = [
-      ...(!!workspacesStore ? workspacesStore : []),
-      {
-        workspaceId: newWorkspace.id,
-        environment: newWorkspace.onCloud ? "cloud" : "local",
-      },
-    ];
-
-    await tx.set(makeWorkspacesStoreKey(), updatedStore);
-  },
-};
-
-type UserMutators = typeof mutators;

@@ -15,11 +15,10 @@ import { Check, Copy, Repeat } from "lucide-react";
 import { useState } from "react";
 import { NewInviteForm } from "./new-invite-form";
 import { MembersTable } from "./members-table";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { env } from "@repo/env";
 import { Invite, Invites } from "@repo/data";
-import { get } from "http";
+import { useInvites } from "./use-invites";
 
 function getInviteLink(invites?: Invites) {
   if (!invites) return;
@@ -43,22 +42,9 @@ export function MembersSettings() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [copied, setCopied] = useState(false);
+  const { invites, inviteLink, isPending } = useInvites();
 
-  const { isPending, data } = useQuery<Invites>({
-    queryKey: ["invites", workspaceId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/invites`,
-        {
-          credentials: "include",
-        },
-      );
-      return res.json();
-    },
-  });
-
-  const inviteLink = getInviteLink(data);
-
+  // Todo render email invites
   return (
     <div>
       <SettingsContentHeader

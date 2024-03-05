@@ -1,7 +1,6 @@
 import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Invite, NewInvite, NewInviteSchema } from "@repo/data";
-import { env } from "@repo/env";
+import { NewInvite, NewInviteSchema } from "@repo/data";
 import {
   Button,
   Form,
@@ -12,11 +11,9 @@ import {
   Input,
   toast,
 } from "@repo/ui";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useCreateInvite } from "./use-create-invite";
 
 export function NewInviteForm({
   setIsOpen,
@@ -31,33 +28,13 @@ export function NewInviteForm({
     },
   });
   const { metadata } = useCurrentWorkspace();
-  const { workspaceId } = useParams() as { workspaceId: string };
 
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: Pick<Invite, "limit">) => {
-      await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${metadata?.id}/create-invite`,
-        { method: "POST", credentials: "include", body: JSON.stringify(data) },
-      );
-
-      queryClient.invalidateQueries({
-        queryKey: ["invites", workspaceId],
-      });
-    },
-    onSuccess: () => {
-      toast.success("Invite link generated successfully");
-      setIsOpen(false);
-    },
-    onError: () => {
-      toast.error("Failed to generate invite link");
-    },
-  });
+  const { createInvite, isPending } = useCreateInvite(setIsOpen);
 
   if (!metadata) return null;
 
   async function onSubmit(data: NewInvite) {
-    mutate(data);
+    createInvite(data);
   }
 
   return (

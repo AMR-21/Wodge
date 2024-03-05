@@ -3,8 +3,8 @@
 import { Button, UserCard } from "@repo/ui";
 import { useRouter } from "next/navigation";
 import { useCacheUser } from "@repo/ui";
-import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
-import { WorkspacesList } from "@/components/home/workspaces-list";
+import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog";
+import { WorkspacesList } from "@/components/workspaces/workspaces-list";
 
 function WorkspacesPage() {
   const router = useRouter();

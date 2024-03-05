@@ -5,7 +5,7 @@ import { makeWorkspaceKey } from "@repo/data";
 import { ReadTransaction } from "replicache";
 import { useMemo, useState } from "react";
 import { WorkspaceType } from "@repo/data";
-import { useUserWorkspaces } from "./use-user-workspaces";
+import { useUserWorkspaces } from "../user/use-user-workspaces";
 
 /**
  * A hook to return workspaces' meta data

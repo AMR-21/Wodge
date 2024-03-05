@@ -1,7 +1,7 @@
 import { WorkspaceType } from "@repo/data";
 import { Separator, useWorkspaces } from "@repo/ui";
 import { WorkspaceItem } from "./workspace-item";
-import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
+import { useUserWorkspaces } from "@repo/ui";
 
 export function WorkspacesList() {
   const { workspaces, isPending } = useWorkspaces();

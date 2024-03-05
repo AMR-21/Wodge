@@ -127,11 +127,11 @@ export const DirSchema = z.object({
 
 export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
-  name: z.string().max(70),
+  name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
-  moderators: z.array(z.string().length(ID_LENGTH)),
-  dirs: z.array(DirSchema),
-  tags: z.array(TagSchema),
+  moderators: z.array(z.string().length(ID_LENGTH)).optional(),
+  dirs: z.array(DirSchema).optional(),
+  tags: z.array(TagSchema).optional(),
 });
 
 export const WorkspaceStructureSchema = z.object({
@@ -226,5 +226,14 @@ export function defaultWorkspaceMembers(): WorkspaceMembers {
   return {
     owner: "",
     members: [],
+  };
+}
+
+export function defaultWorkspaceStructure(): WorkspaceStructure {
+  return {
+    publicChannels: [],
+    teams: [],
+    roles: [],
+    tags: [],
   };
 }

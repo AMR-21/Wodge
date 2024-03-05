@@ -18,29 +18,28 @@ import {
 
 import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
-import { SidebarItemBtn } from "../sidebar-item-btn";
+import { Button } from "../ui/button";
 import { Check, Plus, X } from "lucide-react";
 import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { FormCell } from "./form-cell";
-import { FormRowControl } from "./form-row-control";
+import { SidebarItemBtn } from "../sidebar-item-btn";
+import { set } from "react-hook-form";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  withForm?: boolean;
+  children?: React.ReactNode;
   formId?: string;
   label?: string;
   formIsSubmitted?: boolean;
 }
 
-function DataTable<TData, TValue>({
+function EditableDataTable<TData, TValue>({
   columns,
   data,
   label,
   formId,
   formIsSubmitted,
-  withForm,
+  children,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [rowPinning, setRowPinning] = React.useState<RowPinningState>({
@@ -61,13 +60,6 @@ function DataTable<TData, TValue>({
       rowPinning,
     },
   });
-
-  React.useEffect(() => {
-    if (withForm) {
-      const rows = table.getRowModel().rows;
-      rows[rows.length - 1]?.pin("bottom");
-    }
-  }, []);
 
   return (
     <div className="rounded-md border">
@@ -119,25 +111,49 @@ function DataTable<TData, TValue>({
                     key={cell.id}
                     className={cn("invisible", isEditing && "visible")}
                   >
-                    {withForm && cell.id.endsWith("actions") ? (
-                      <FormRowControl
-                        formId={formId}
-                        formIsSubmitted={formIsSubmitted}
-                        setIsEditing={setIsEditing}
-                      />
+                    {cell.id.endsWith("actions") ? (
+                      <div className="flex">
+                        <SidebarItemBtn
+                          Icon={Check}
+                          className="hover:text-success-base"
+                          form={formId}
+                          type="submit"
+                          onClick={() => {
+                            if (formIsSubmitted) setIsEditing(false);
+                          }}
+                        />
+                        <SidebarItemBtn
+                          Icon={X}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsEditing(false);
+                          }}
+                          className="hover:text-destructive-base"
+                        />
+                      </div>
                     ) : (
                       flexRender(cell.column.columnDef.cell, cell.getContext())
                     )}
                   </TableCell>
                 ))}
-
-                {withForm && (
-                  <FormCell
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    label={label}
-                  />
-                )}
+                <TableCell
+                  className={cn(
+                    "absolute left-0 top-1/2 z-50 flex  w-full -translate-y-1/2 text-muted-foreground",
+                    isEditing && "invisible right-0",
+                  )}
+                >
+                  {!isEditing && (
+                    <Button
+                      size="fit"
+                      variant="ghost"
+                      className="w-full justify-center gap-1 p-1.5 text-sm"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span className="text-sm">New {label}</span>
+                    </Button>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -148,4 +164,4 @@ function DataTable<TData, TValue>({
   );
 }
 
-export { DataTable };
+export { EditableDataTable };

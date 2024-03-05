@@ -1,4 +1,5 @@
 import { env } from "@repo/env";
+import { WorkspacesRegistry } from "../models/workspace/workspace-registry";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
@@ -37,4 +38,11 @@ export function replicacheWrapper<Request, Result>(
       } as Result;
     }
   };
+}
+
+export function getWorkspace(id: string) {
+  const workspacesRegistry = WorkspacesRegistry.getInstance();
+  const workspace = workspacesRegistry.getWorkspace(id);
+
+  return workspace;
 }

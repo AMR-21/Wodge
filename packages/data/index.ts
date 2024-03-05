@@ -2,8 +2,9 @@
  * Client modules
  */
 
-export * from "./models/user";
-export * from "./models/workspace";
+export * from "./models/user/user";
+export * from "./models/workspace/workspace";
+export * from "./models/workspace/workspace-registry";
 
 /**
  * End of client modules
@@ -41,3 +42,9 @@ export * from "./lib/rbac";
 /**
  * End of RBAC
  */
+
+/**
+ * Utils
+ */
+
+export * from "./lib/utils";

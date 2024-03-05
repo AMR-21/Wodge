@@ -4,7 +4,7 @@ import "server-only";
  * Server modules
  */
 
-export * from "./models/auth";
+export * from "./models/auth/auth";
 
 /**
  * End of server modules

@@ -2,7 +2,11 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { badRequest, unauthorized } from "../../lib/http-utils";
-import { WorkspaceSchema } from "@repo/data";
+import {
+  WorkspaceSchema,
+  defaultWorkspaceStructure,
+  makeWorkspaceStructureKey,
+} from "@repo/data";
 import { makeWorkspaceKey } from "@repo/data";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
@@ -56,7 +60,14 @@ function runner(party: WorkspaceParty) {
         workspaceMetadata.data = workspaceData;
         workspaceMetadata.lastModifiedVersion = nextVersion;
 
-        await storage.put(makeWorkspaceKey(party.room.id), workspaceMetadata);
+        // 5. create default workspace structure
+        workspaceStructure.data = defaultWorkspaceStructure();
+        workspaceStructure.lastModifiedVersion = nextVersion;
+
+        await storage.put({
+          [makeWorkspaceKey(party.room.id)]: workspaceMetadata,
+          [makeWorkspaceStructureKey()]: workspaceStructure.data,
+        });
 
         break;
       default:

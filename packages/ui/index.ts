@@ -28,10 +28,11 @@ export * from "./components/user-avatar";
 export * from "./components/user-card";
 export * from "./components/tooltip-wrapper";
 
-export * from "./hooks/use-cache-user";
-export * from "./hooks/use-session-user";
-export * from "./hooks/use-current-user";
-export * from "./hooks/use-user-workspaces";
-export * from "./hooks/use-workspaces";
-export * from "./hooks/use-current-ws-data";
-export * from "./hooks/use-is-desktop";
+export * from "./hooks/user/use-cache-user";
+export * from "./hooks/user/use-session-user";
+export * from "./hooks/user/use-current-user";
+export * from "./hooks/user/use-user-workspaces";
+export * from "./hooks/workspace/use-workspaces";
+export * from "./hooks/workspace/use-current-ws-data";
+export * from "./hooks/ui/use-is-desktop";
+export * from "./hooks/ui/use-workspace-id";

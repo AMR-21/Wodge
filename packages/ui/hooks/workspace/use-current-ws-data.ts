@@ -9,7 +9,7 @@ import {
   makeWorkspaceStructureKey,
 } from "@repo/data";
 
-import { useSubscribe } from "./use-subscribe";
+import { useSubscribe } from "../use-subscribe";
 import {
   WorkspaceMembers,
   WorkspaceStructure,

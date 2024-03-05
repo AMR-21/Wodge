@@ -9,9 +9,9 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
-import { db } from "../lib/db";
-import { users } from "../schemas/auth.schema";
-import { UserType } from "..";
+import { db } from "../../lib/db";
+import { users } from "../../schemas/auth.schema";
+import { UserType } from "../..";
 
 /**
  * Get user by userId
