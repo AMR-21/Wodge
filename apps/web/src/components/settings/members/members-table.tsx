@@ -1,4 +1,4 @@
-import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
+import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { DataTable } from "@repo/ui";
 import { Mutable } from "@/lib/utils";
 import { membersColumns } from "./members-columns";
@@ -8,6 +8,7 @@ export function MembersTable() {
 
   if (!members || !inviters) return null;
 
+  console.log(members);
   return (
     <div>
       <DataTable

@@ -11,7 +11,7 @@ import {
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { useAppState } from "@/store";
-import { useCurrentWorkspace } from "./workspace-provider";
+import { useCurrentWorkspace } from "./workspace-context";
 import { useParams } from "next/navigation";
 
 export function WorkspaceSwitcher() {

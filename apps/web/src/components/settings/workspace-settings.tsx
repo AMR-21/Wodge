@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useCurrentWorkspace } from "../workspace/workspace-provider";
+import { useCurrentWorkspace } from "../workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WorkspaceSchema, WorkspaceType } from "@repo/data";
 import {

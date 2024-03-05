@@ -1,11 +1,5 @@
 import type * as Party from "partykit/server";
-import {
-  getRoute,
-  json,
-  notImplemented,
-  ok,
-  unauthorized,
-} from "../lib/http-utils";
+import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
 
 import { checkMembershipEdge, getSession } from "../lib/auth";
 
@@ -16,20 +10,20 @@ import {
   ServerWorkspaceStructure,
   Versions,
   PresenceMap,
+  Invites,
 } from "../types";
 
 import { handlePost } from "./endpoints/workspace-post";
 
 import {
   REPLICACHE_VERSIONS_KEY,
-  WORKSPACE_INVITE_LINK_KEY,
+  WORKSPACE_INVITES_KEY,
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
   defaultWorkspaceMembers,
-  InviteLink,
+  Invite,
   WORKSPACE_PRESENCE_KEY,
-  PokeMessage,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -39,7 +33,7 @@ export default class WorkspaceParty
   workspaceMembers: ServerWorkspaceMembers;
   workspaceMetadata: ServerWorkspaceData;
   workspaceStructure: ServerWorkspaceStructure;
-  inviteLink: InviteLink;
+  invites: Invites;
   versions: Versions;
 
   // Map to track the presence of users in the workspace
@@ -57,7 +51,7 @@ export default class WorkspaceParty
       membersKey,
       metadataKey,
       structureKey,
-      WORKSPACE_INVITE_LINK_KEY,
+      WORKSPACE_INVITES_KEY,
       REPLICACHE_VERSIONS_KEY,
       WORKSPACE_PRESENCE_KEY,
     ]);
@@ -86,7 +80,8 @@ export default class WorkspaceParty
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
       new Map([["globalVersion", 0]]);
 
-    this.inviteLink = <InviteLink>map.get(WORKSPACE_INVITE_LINK_KEY) || {};
+    // remove
+    this.invites = <Invites>map.get(WORKSPACE_INVITES_KEY) || new Map();
 
     this.presenceMap =
       <PresenceMap>map.get(WORKSPACE_PRESENCE_KEY) || new Map();
@@ -147,7 +142,6 @@ export default class WorkspaceParty
   async poke(type = "workspace", id = this.room.id) {
     const userParty = this.room.context.parties.user!;
 
-    console.log("Poking", type, id, this.presenceMap);
     await Promise.all(
       Object.keys(Object.fromEntries(this.presenceMap)).map((userId) => {
         return userParty.get(userId).fetch("/poke", {

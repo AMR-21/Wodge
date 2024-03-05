@@ -5,7 +5,8 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "@tanstack/eslint-plugin-query"
   ],
   "plugins": ["eslint-plugin-next-on-pages"]
 }

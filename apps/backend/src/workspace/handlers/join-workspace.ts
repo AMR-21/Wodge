@@ -4,7 +4,7 @@ import WorkspaceParty from "../workspace-party";
 import {
   PublicUserType,
   REPLICACHE_VERSIONS_KEY,
-  WORKSPACE_INVITE_LINK_KEY,
+  WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
   makeWorkspaceMembersKey,
 } from "@repo/data";
@@ -19,17 +19,11 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   if (!token) return badRequest();
 
   // 1. validate the token
-  const inviteLink = party.inviteLink;
+  const invite = party.invites.get(token);
 
-  if (!inviteLink.enabled) {
-    return badRequest();
-  }
+  if (!invite) return badRequest();
 
-  if (inviteLink.token !== token) {
-    return badRequest();
-  }
-
-  if (inviteLink.limit === 0) {
+  if (invite.limit === 0) {
     return badRequest();
   }
 
@@ -43,7 +37,12 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   if (isMember) return badRequest();
 
-  // 4. Add workspace to user data
+  // 4. If the invite method is a email, verify that the requesting user email is included in the invite
+  if (invite.method === "email") {
+    if (!invite.emails!.includes(userData.email)) return badRequest();
+  }
+
+  // 5. Add workspace to user data
   const userParty = party.room.context.parties.user!;
 
   const userInstance = userParty.get(userId);
@@ -58,28 +57,35 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   if (res.status !== 200) return badRequest();
 
-  // 5. add the user to the workspace
+  // 6. add the user to the workspace
   party.workspaceMembers.data.members.push({
     id,
     data: publicData,
     joinInfo: {
       joined_at: new Date().toISOString(),
       token,
-      created_by: inviteLink.createdBy,
+      created_by: invite.createdBy,
+      method: invite.method,
     },
     roles: [],
     teams: [],
   });
 
-  // 6. Update Replicache versions
+  // 7. Update Replicache versions
   const nextVersion = (party.versions.get("globalVersion") as number) + 1;
 
   party.workspaceMembers.lastModifiedVersion = nextVersion;
 
   party.versions.set("globalVersion", nextVersion);
 
-  // 7. update the invite link
-  party.inviteLink.limit -= 1;
+  // 8. update the invite
+  // if(invite.limit !== -1)
+  if (invite.method === "link") invite.limit -= 1;
+
+  if (invite.method === "email")
+    invite.emails = invite.emails?.filter((email) => email !== userData.email);
+
+  party.invites.set(token, invite);
 
   // 8. Update presence
   party.presenceMap.set(id, true);
@@ -87,12 +93,12 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // 9. persist updates
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
-    [WORKSPACE_INVITE_LINK_KEY]: party.inviteLink,
+    [WORKSPACE_INVITES_KEY]: party.invites,
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
   });
 
-  // Inform current member of the current user
+  // Inform current members of the new user
   await party.poke();
 
   return json({

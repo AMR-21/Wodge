@@ -1,63 +1,68 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
-import {
-  InviteLink,
-  InviteLinkSchema,
-  REPLICACHE_VERSIONS_KEY,
-  Role,
-  WORKSPACE_INVITE_LINK_KEY,
-  grant,
-  makeWorkspaceKey,
-} from "@repo/data";
+import { Invite, NewInviteSchema, WORKSPACE_INVITES_KEY } from "@repo/data";
 import { nanoid } from "nanoid";
 import { badRequest, json, unauthorized } from "../../lib/http-utils";
-import { getMember, getRoles, isAllowed, isUserOwner } from "../../lib/utils";
+import { isAllowed } from "../../lib/utils";
 
 export async function createInvite(req: Party.Request, party: WorkspaceParty) {
   if (!isAllowed(req, party, ["admin"])) return unauthorized();
 
   const userId = req.headers.get("x-user-id")!;
 
-  const body = <Pick<InviteLink, "limit">>await req.json();
+  const body = await req.json();
 
-  const newInvite: InviteLink = {
-    token: nanoid(),
-    limit: body?.limit ?? Infinity,
-    enabled: true,
-    createdBy: userId,
-  };
-
-  const validatedFields = InviteLinkSchema.safeParse(newInvite);
+  const validatedFields = NewInviteSchema.safeParse(body);
 
   if (!validatedFields.success) return badRequest();
 
-  const { data } = validatedFields;
+  const {
+    data: { limit, method, emails },
+  } = validatedFields;
 
-  party.inviteLink = data;
+  const newInvite: Invite = {
+    createdBy: userId,
+    token: nanoid(),
+    limit: method === "link" ? limit : Infinity,
+    method,
+    emails,
+  };
 
-  const inviteLink =
-    party.room.env.BACKEND_DOMAIN +
-    "/parties/workspace/" +
-    party.room.id +
-    "/join?token=" +
-    data.token;
+  // If method is link, check if there exist and invite link with link method and remove it
+  if (method === "link") {
+    Object.entries(Object.fromEntries(party.invites)).forEach(
+      ([key, value]) => {
+        if (value.method === "link") {
+          party.invites.delete(key);
+        }
+      }
+    );
 
-  const nextVersion = (party.versions.get("globalVersion") as number) + 1;
-  party.workspaceMetadata.data.inviteLink = inviteLink;
+    party.invites.set(newInvite.token, newInvite);
+  }
 
-  party.workspaceMetadata.lastModifiedVersion = nextVersion;
-  party.versions.set("globalVersion", nextVersion);
+  // If method is email, send the emails then add the new invite to the list
+  if (method === "email") {
+    // Todo: send emails
+    party.invites.set(newInvite.token, newInvite);
+  }
 
   await party.room.storage.put({
-    [WORKSPACE_INVITE_LINK_KEY]: data,
-    [REPLICACHE_VERSIONS_KEY]: party.versions,
-    [makeWorkspaceKey(party.room.id)]: party.workspaceMetadata,
+    [WORKSPACE_INVITES_KEY]: party.invites,
   });
 
-  await party.poke();
+  if (method === "link") {
+    const inviteLink =
+      party.room.env.BACKEND_DOMAIN +
+      "/parties/workspace/" +
+      party.room.id +
+      "/join?token=" +
+      newInvite.token;
+
+    return json({ inviteLink, invites: Object.fromEntries(party.invites) });
+  }
 
   return json({
-    inviteLink,
-    ...data,
+    invites: Object.fromEntries(party.invites),
   });
 }

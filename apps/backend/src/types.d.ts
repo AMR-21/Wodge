@@ -1,4 +1,5 @@
 import {
+  Invite,
   UserWorkspacesStore,
   WorkspaceMembers,
   WorkspaceStructure,
@@ -45,9 +46,11 @@ export type ServerWorkspaceStructure = {
 } & ReplicacheFields;
 
 export type PresenceMap = Map<string, boolean>;
+export type Invites = Map<string, Invite>;
 export interface WorkspacePartyInterface extends Party {
   workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
+  invites: Invites;
   presenceMap: PresenceMap;
 }

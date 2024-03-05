@@ -40,6 +40,8 @@ export class WorkspacesRegistry {
   getWorkspace(id: string) {
     if (typeof navigator === "undefined") return null;
 
+    if (!id) return null;
+
     if (!this.registry.has(id)) {
       this.registry.set(id, new Workspace(id));
     }

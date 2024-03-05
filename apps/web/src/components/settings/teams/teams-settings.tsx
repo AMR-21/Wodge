@@ -1,5 +1,5 @@
 import { Mutable } from "@/lib/utils";
-import { useCurrentWorkspace } from "../../workspace/workspace-provider";
+import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import {
   SettingsContentDescription,
   SettingsContentHeader,

@@ -7,7 +7,7 @@ export function WorkspaceItem({ workspace }: { workspace: WorkspaceType }) {
   const Icon = workspace.environment === "local" ? Laptop : Cloud;
 
   return (
-    <Link href={"/" + workspace.id} className="w-full">
+    <Link href={"/workspaces/" + workspace.id} className="w-full">
       <div className="group flex w-full shrink-0 items-center gap-2 overflow-hidden py-3 pl-4 transition-all hover:bg-background dark:hover:bg-surface">
         <Avatar className="h-10 w-10 rounded-md">
           <AvatarImage src={workspace.avatar} />

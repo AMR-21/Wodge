@@ -48,7 +48,7 @@ function WorkspaceSettingsPage() {
         </SettingsContent>
         <SettingsContent id="upgrade">upgrade</SettingsContent>
 
-        <SettingsClose />
+        {/* <SettingsClose /> */}
       </Settings>
     </div>
   );

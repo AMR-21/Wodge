@@ -97,7 +97,6 @@ export const WorkspaceSchema = z.object({
   avatar: z.optional(z.string().url()).or(z.literal("")),
   createdAt: z.string().datetime(),
   environment: z.enum(["local", "cloud"]),
-  inviteLink: z.string().url().optional(),
   settings: z.any().optional(),
 });
 
@@ -151,6 +150,7 @@ export const MemberSchema = z.object({
     token: z.string(),
     created_by: z.string().length(ID_LENGTH),
     joined_at: z.string().datetime(),
+    method: z.enum(["link", "email"]),
   }),
 });
 
@@ -159,12 +159,26 @@ export const WorkspaceMembersSchema = z.object({
   members: z.array(MemberSchema),
 });
 
-export const InviteLinkSchema = z.object({
-  token: z.string(),
-  limit: z.number().int().positive().or(z.literal(Infinity)),
-  enabled: z.boolean(),
-  createdBy: z.string().length(ID_LENGTH),
-});
+export const NewInviteSchema = z
+  .object({
+    limit: z.number().int().positive().default(Infinity),
+    method: z.enum(["link", "email"]),
+    emails: z.array(z.string().email()).optional(),
+  })
+  .refine(
+    (data) => {
+      if (
+        data.method === "email" &&
+        (!data.emails || data.emails.length === 0)
+      ) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Emails are required",
+    }
+  );
 
 export const NewWorkspaceSchema = WorkspaceSchema.pick({
   id: true,
@@ -200,7 +214,11 @@ export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
-export type InviteLink = z.infer<typeof InviteLinkSchema>;
+export type Invite = z.infer<typeof NewInviteSchema> & {
+  createdBy: string;
+  token: string;
+};
+export type NewInvite = z.infer<typeof NewInviteSchema>;
 
 export function defaultWorkspaceMembers(): WorkspaceMembers {
   return {

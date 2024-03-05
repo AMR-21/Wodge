@@ -1,6 +1,6 @@
 "use client";
 
-import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
+import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { Workspace } from "@repo/data";
 // import { Button, useCurrentWsMetadata } from "@repo/ui";
 import { useParams, useRouter } from "next/navigation";

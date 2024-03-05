@@ -6,7 +6,7 @@ import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/home/add-workspace-dialog";
 import { WorkspacesList } from "@/components/home/workspaces-list";
 
-function HomePage() {
+function WorkspacesPage() {
   const router = useRouter();
 
   // Cache the user data on login or sign up
@@ -41,4 +41,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default WorkspacesPage;

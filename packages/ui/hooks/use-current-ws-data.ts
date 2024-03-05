@@ -1,41 +1,44 @@
 "use client";
 
-import { Member, PublicUserType, WorkspacesRegistry } from "@repo/data";
+import { Member, WorkspacesRegistry } from "@repo/data";
 import { useParams } from "next/navigation";
-import { useUserWorkspaces } from "./use-user-workspaces";
 import { ReadTransaction } from "replicache";
 import {
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
-// import { useSubscribe } from "./use-subscribe";
 
-import { useSubscribe } from "replicache-react";
+import { useSubscribe } from "./use-subscribe";
 import {
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
 } from "@repo/data";
-import usePartySocket from "partysocket/react";
-import { useEffect, useMemo, useState } from "react";
-import { env } from "../../env";
-import PartySocket from "partysocket";
+import { useMemo } from "react";
 
 export function useCurrentWsData() {
-  // const { workspaceId } = useParams();
-
   const { workspaceId }: { workspaceId: string } = useParams();
 
   const registry = WorkspacesRegistry.getInstance();
   const workspace = registry.getWorkspace(workspaceId as string);
 
-  const metadata = useSubscribe(workspace?.store, async (tx: ReadTransaction) =>
-    tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId as string)),
-  ) as WorkspaceType | undefined;
+  const { snapshot: metadata, isPending } = useSubscribe(
+    workspace?.store,
+    async (tx: ReadTransaction) =>
+      tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId as string)),
+  );
 
-  const members = useSubscribe(workspace?.store, async (tx: ReadTransaction) =>
-    tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),
+  const { snapshot: members } = useSubscribe(
+    workspace?.store,
+    async (tx: ReadTransaction) =>
+      tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),
+  );
+
+  const { snapshot: structure } = useSubscribe(
+    workspace?.store,
+    async (tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
   );
 
   const inviters = useMemo(() => {
@@ -63,11 +66,10 @@ export function useCurrentWsData() {
     return result.filter((r) => !!r);
   }, [members]);
 
-  const structure = useSubscribe(
-    workspace?.store,
-    async (tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
-  );
+  if (!workspaceId) return null;
+
+  // Workspace does not exist
+  if (!metadata && !isPending) return null;
 
   return { metadata, members, structure, inviters, workspaceId };
 }

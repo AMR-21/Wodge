@@ -29,26 +29,11 @@ const Context = createContext<WorkspaceContext | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const data = useCurrentWsData();
-  const { workspaceId }: { workspaceId: string } = useParams();
-  // const workspace = WorkspacesRegistry.getInstance().getWorkspace(workspaceId);
-
-  // const ws = usePartySocket({
-  //   host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
-  //   party: "workspace",
-  //   room: workspaceId,
-
-  //   onMessage: (e) => {
-  //     if (e.data === "poke") {
-  //       workspace!.store.pull();
-  //     }
-  //   },
-  // });
 
   return (
     <Context.Provider
       value={{
         ...data,
-        // ws,
       }}
     >
       {children}

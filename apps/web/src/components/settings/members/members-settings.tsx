@@ -9,7 +9,7 @@ import {
   toast,
 } from "@repo/ui";
 import { SettingsContentHeader, SettingsContentSection } from "../settings";
-import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
+import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 import { Check, Copy, Repeat } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,15 +17,16 @@ import { NewInviteForm } from "./new-invite-form";
 import { MembersTable } from "./members-table";
 
 export function MembersSettings() {
-  const { members, metadata } = useCurrentWorkspace();
-  const [checked, setChecked] = useState<boolean>(!!!metadata?.inviteLink);
-  const [link, setLink] = useState<string | undefined>(metadata?.inviteLink);
+  const { metadata } = useCurrentWorkspace();
+  const [checked, setChecked] = useState<boolean>(false);
+  const [link, setLink] = useState<string | undefined>();
+
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    setChecked(metadata?.inviteLink ? true : false);
-    setLink(metadata?.inviteLink!);
-  }, [metadata?.inviteLink]);
+  // useEffect(() => {
+  //   // setChecked(metadata?.inviteLink ? true : false);
+  //   // setLink(metadata?.inviteLink!);
+  // }, [metadata?.inviteLink]);
 
   return (
     <div>
@@ -71,7 +72,6 @@ export function MembersSettings() {
                 <PopoverContent>
                   <NewInviteForm setLink={setLink} />
                 </PopoverContent>
-                {/* <PopoverC */}
               </Popover>
               <SidebarItemBtn
                 Icon={copied ? Check : Copy}

@@ -1,4 +1,4 @@
-import { useCurrentWorkspace } from "@/components/workspace/workspace-provider";
+import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InviteLink, InviteLinkSchema } from "@repo/data";
 import { env } from "@repo/env";

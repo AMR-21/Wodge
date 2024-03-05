@@ -71,13 +71,6 @@ function SettingsSidebar({ children }: { children: React.ReactNode }) {
         </div>
         <div className="flex-1 overflow-y-scroll">{children}</div>
       </div>
-      {!isSidebarOpen && (
-        <SidebarItemBtn
-          Icon={PanelLeft}
-          className="fixed left-6 top-10"
-          onClick={() => setIsSidebarOpen((s) => !s)}
-        />
-      )}
     </>
   );
 }
@@ -121,13 +114,30 @@ function SettingsContent({
   id: string;
   children: React.ReactNode;
 }) {
-  const { active } = useContext(SettingsContext);
+  const { isSidebarOpen, setIsSidebarOpen, active } =
+    useContext(SettingsContext);
 
   if (active !== id) return null;
 
   return (
-    <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-2 py-[5.25rem]">
-      <div className="max-w-xl shrink-0 grow">{children}</div>
+    <div className="flex w-full basis-full justify-center  overflow-y-scroll bg-page px-2 py-10">
+      <div className="flex flex-col">
+        <div className="h-[2.75rem]">
+          <div className="flex items-start justify-between">
+            <SidebarItemBtn
+              Icon={PanelLeft}
+              className={cn(
+                "-ml-1 w-fit opacity-100  transition-all duration-300",
+                isSidebarOpen && "invisible opacity-0",
+              )}
+              onClick={() => setIsSidebarOpen((s) => !s)}
+            />
+
+            <SettingsClose />
+          </div>
+        </div>
+        <div className="max-w-xl shrink-0 grow">{children}</div>
+      </div>
     </div>
   );
 }
@@ -188,13 +198,13 @@ function SettingsClose() {
 
   return (
     <Button
-      className="fixed right-4 top-10 rounded-full text-muted-foreground/70 transition-all
-       hover:text-foreground"
-      size="icon"
-      variant="secondary"
+      className="-mr-1  items-start
+       p-0 text-muted-foreground/70 transition-all hover:text-foreground"
+      size="fit"
+      variant="link"
       onClick={() => router.push("/" + workspaceId)}
     >
-      <X />
+      <X className="h-6 w-6" />
     </Button>
   );
 }

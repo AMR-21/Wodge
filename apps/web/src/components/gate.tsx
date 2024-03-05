@@ -1,5 +1,5 @@
 import { useCurrentUser } from "@repo/ui";
-import { useCurrentWorkspace } from "./workspace/workspace-provider";
+import { useCurrentWorkspace } from "./workspace/workspace-context";
 import { Role, grant } from "@repo/data";
 
 export function Gate({
