@@ -19,13 +19,13 @@ export function Tag({
           className="mr-1 h-2 w-2 rounded-full text-xs"
         />
 
-        <span>{name}</span>
+        <span className="truncate">{name}</span>
       </div>
     );
 
   return (
     <div
-      className="flex items-center rounded-full px-1.5 py-1"
+      className="flex items-center rounded-full border border-border/40 px-1.5 py-1"
       style={{
         backgroundColor: `rgba(${hexToRgb(color)},0.2)`,
       }}
@@ -37,7 +37,7 @@ export function Tag({
         className="mr-1 h-2 w-2 rounded-full text-xs"
       />
 
-      <span>{name}</span>
+      <span className="truncate">{name}</span>
     </div>
   );
 }

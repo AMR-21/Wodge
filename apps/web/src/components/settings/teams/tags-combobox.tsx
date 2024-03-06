@@ -48,7 +48,7 @@ export function TagsComboBox({
         </CommandItem>
       ))}
 
-      <CommandItem className="px-0 py-0 hover:bg-transparent">
+      <CommandItem className="px-0 py-0 hover:bg-transparent aria-selected:bg-transparent">
         <NewTag handleNewTag={handleNewTag} />
       </CommandItem>
     </ComboboxCell>

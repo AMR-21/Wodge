@@ -45,7 +45,7 @@ export function WorkspaceSettings() {
   }
 
   return (
-    <div className="shrink-0 grow">
+    <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
         label="Workspace"
         description="Manage your workspace settings"
@@ -65,8 +65,6 @@ export function WorkspaceSettings() {
           </SettingsContentDescription>
         </div>
       </SettingsContentSection>
-
-      <Separator />
 
       <SettingsContentSection header="General">
         <Form {...form}>
@@ -93,7 +91,6 @@ export function WorkspaceSettings() {
           </form>
         </Form>
       </SettingsContentSection>
-      <Separator />
 
       {metadata?.environment === "local" && (
         <>
@@ -108,7 +105,6 @@ export function WorkspaceSettings() {
               <SettingsContentAction>Enable cloud access</SettingsContentAction>
             </div>
           </SettingsContentSection>
-          <Separator />
         </>
       )}
 

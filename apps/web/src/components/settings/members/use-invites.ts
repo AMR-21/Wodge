@@ -3,7 +3,7 @@ import { env } from "@repo/env";
 import { useWorkspaceId } from "@repo/ui";
 import { useQuery } from "@tanstack/react-query";
 
-function getInviteLink(invites?: Invites) {
+function getInviteLink(invites?: Invites): Invite | undefined {
   if (!invites) return;
   const invite: [string, Invite] | undefined = Object.entries(invites).find(
     ([k, v]) => v.method === "link",

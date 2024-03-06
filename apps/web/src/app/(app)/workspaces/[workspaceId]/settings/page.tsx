@@ -12,8 +12,6 @@ import {
 } from "@/components/settings/settings";
 import { TeamsSettings } from "@/components/settings/teams/teams-settings";
 import { WorkspaceSettings } from "@/components/settings/workspace-settings";
-import { SidebarItem } from "@/components/workspace/sidebar-item";
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {
@@ -42,11 +40,15 @@ function WorkspaceSettingsPage() {
           <TeamsSettings />
         </SettingsContent>
 
-        <SettingsContent id="roles">roles</SettingsContent>
+        <SettingsContent id="roles">
+          <p>roles</p>
+        </SettingsContent>
         <SettingsContent id="members">
           <MembersSettings />
         </SettingsContent>
-        <SettingsContent id="upgrade">upgrade</SettingsContent>
+        <SettingsContent id="upgrade">
+          <p>updgrade</p>
+        </SettingsContent>
 
         {/* <SettingsClose /> */}
       </Settings>

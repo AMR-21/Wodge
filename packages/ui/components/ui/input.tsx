@@ -65,7 +65,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           props["aria-invalid"] &&
             "border-destructive focus-visible:ring-destructive",
           inRow &&
-            "h-auto w-11/12 border-none bg-transparent focus-visible:border-none",
+            "h-auto w-11/12 min-w-28 border-none bg-transparent focus-visible:border-none",
           className,
         )}
         ref={ref}

@@ -46,7 +46,7 @@ export function MembersSettings() {
 
   // Todo render email invites
   return (
-    <div>
+    <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
         label="Members settings"
         description="Manage members in this workspace"
@@ -110,8 +110,6 @@ export function MembersSettings() {
           </pre>
         }
       </SettingsContentSection>
-
-      <Separator />
 
       <SettingsContentSection header="Manage Members">
         <MembersTable />

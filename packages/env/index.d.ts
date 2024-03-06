@@ -1,4 +1,4 @@
-export type env = Readonly<{
+type Env = Readonly<{
   NODE_ENV: "development" | "test" | "production";
   AUTH_SECRET: string;
   GITHUB_CLIENT_ID: string;
@@ -10,3 +10,7 @@ export type env = Readonly<{
   NEXT_PUBLIC_BACKEND_DOMAIN: string;
   NEXT_PUBLIC_REPLICACHE_KEY: string;
 }>;
+
+declare module "@repo/env" {
+  export const env: Env;
+}

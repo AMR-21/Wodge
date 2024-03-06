@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 import { ComboboxCell, Separator, SettingsDataTable } from "@repo/ui";
 
 export function TeamsSettings() {
-  const { structure } = useCurrentWorkspace();
+  const { structure, members } = useCurrentWorkspace();
   const [submitted, setSubmitted] = React.useState(false);
 
   const form = useForm({
@@ -22,7 +22,7 @@ export function TeamsSettings() {
     },
   });
 
-  if (!structure) return null;
+  if (!structure || !members) return null;
 
   async function onSubmit(data: Team) {
     console.log(data);
@@ -32,7 +32,7 @@ export function TeamsSettings() {
   }
 
   return (
-    <div>
+    <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
         label="Teams"
         description="Manage your workspace's teams"
@@ -40,14 +40,14 @@ export function TeamsSettings() {
 
       <SettingsContentSection header="Teams">
         <SettingsDataTable
-          columns={teamColumns()}
+          columns={teamColumns(members.members)}
           data={
             [
               ...structure.teams,
               {
                 id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
                 name: "Andriod",
-                moderators: [],
+                moderators: ["O1BdzI5H8tdsDOXELi_Sj"],
                 tags: [
                   {
                     name: "Mobile",
@@ -59,12 +59,12 @@ export function TeamsSettings() {
                   },
                 ],
               },
-              {
-                id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-                name: "Apple",
-                moderators: [],
-                tags: [],
-              },
+              // {
+              //   id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+              //   name: "Apple",
+              //   moderators: [],
+              //   tags: [],
+              // },
 
               {
                 id: "add-team",
@@ -79,8 +79,6 @@ export function TeamsSettings() {
           withForm
         />
       </SettingsContentSection>
-
-      <Separator />
     </div>
   );
 }

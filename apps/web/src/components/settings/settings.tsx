@@ -2,7 +2,7 @@
 
 import { Button, ButtonProps, Separator, cn, useIsDesktop } from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { PanelLeft, Settings as SettingsIcon, X } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
@@ -110,9 +110,11 @@ function SettingsSidebarItem({ value }: { value: string }) {
 function SettingsContent({
   id,
   children,
+  className = "max-w-2xl",
 }: {
   id: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   const { isSidebarOpen, setIsSidebarOpen, active } =
     useContext(SettingsContext);
@@ -120,10 +122,15 @@ function SettingsContent({
   if (active !== id) return null;
 
   return (
-    <div className="flex w-full basis-full justify-center  overflow-y-scroll bg-page px-2 py-10">
-      <div className="flex flex-col">
-        <div className="h-[2.75rem]">
-          <div className="flex items-start justify-between">
+    <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-4 py-10">
+      <div
+        className={cn(
+          "flex w-full shrink-0 grow flex-col items-center",
+          className,
+        )}
+      >
+        <div className="h-[2.75rem] w-full ">
+          <div className="flex w-full items-start justify-between">
             <SidebarItemBtn
               Icon={PanelLeft}
               className={cn(
@@ -136,7 +143,8 @@ function SettingsContent({
             <SettingsClose />
           </div>
         </div>
-        <div className="max-w-xl shrink-0 grow">{children}</div>
+
+        {children}
       </div>
     </div>
   );
@@ -150,12 +158,11 @@ function SettingsContentHeader({
   description: string;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="pb-6">
       <div className="space-y-1.5">
         <h2 className="text-xl">{label}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <Separator />
     </div>
   );
 }
@@ -170,7 +177,7 @@ function SettingsContentSection({
   header: string;
 }) {
   return (
-    <div className="my-6">
+    <div className="py-6">
       <div className="flex items-center justify-between pb-4">
         <h3 className=" text-base">{header}</h3>
         {action}

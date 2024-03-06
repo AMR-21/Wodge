@@ -23,7 +23,7 @@ interface ComboBoxCellProps {
   emptyMsg?: string;
   nData?: number;
   label?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   className?: string;
@@ -83,15 +83,6 @@ export function ComboboxCell({
                 )}
               />
             )}
-            {/* <SidebarItemBtn
-              description={labelText}
-              Icon={nData === 0 ? Plus : ChevronRight}
-              className="invisible group-hover/row:visible"
-              iconClassName={cn(
-                "transition-all",
-                nData > 0 && open && "visible rotate-90 transition-all ",
-                )}
-              /> */}
           </div>
         </PopoverTrigger>
       </TooltipWrapper>

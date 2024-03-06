@@ -1,10 +1,13 @@
 import * as React from "react";
-import { Tag as TagType, Team } from "@repo/data";
+import { Member, Tag as TagType, Team } from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Badge,
+  Checkbox,
+  ComboboxCell,
+  CommandItem,
   DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
@@ -19,9 +22,12 @@ import { enableMapSet } from "immer";
 
 import _ from "lodash";
 import { TagsComboBox } from "./tags-combobox";
+import { ModeratorsCombobox } from "./moderators-combox";
 enableMapSet();
 
-export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
+export const teamColumns = (
+  members: readonly DeepReadonly<Member>[],
+): ColumnDef<DeepReadonly<Team>>[] => {
   return [
     {
       id: "select",
@@ -102,7 +108,6 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
       accessorKey: "tags",
       header: () => <Header className="px-3">Tags</Header>,
       cell: ({ row, table }) => {
-        const [open, setOpen] = React.useState(false);
         if (!table.options.meta) return null;
 
         const { buffer, setBuffer, setEdited } = table.options.meta;
@@ -117,27 +122,33 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
               draft.get(row.index)!.tags = tags.filter(
                 (tag) => tag.name !== tagName,
               );
-            } else {
-              draft.set(row.index, {
-                tags: tags.filter((tag) => tag.name !== tagName),
-              });
+
+              return;
             }
 
-            setEdited((draft) => {
-              draft.add(row.index);
+            draft.set(row.index, {
+              tags: tags.filter((tag) => tag.name !== tagName),
             });
+          });
+
+          setEdited((draft) => {
+            draft.add(row.index);
           });
         }
 
         function handleNewTag({ name, color = "#1d4ed8" }: TagType) {
           setBuffer((draft) => {
             if (draft.has(row.index)) {
-              draft.get(row.index)!.tags?.push({ name, color });
-            } else {
-              draft.set(row.index, {
-                tags: [...tags, { name, color }],
-              });
+              const curTags = draft.get(row.index)!.tags;
+              curTags
+                ? curTags.push({ name, color })
+                : (draft.get(row.index)!.tags = [{ name, color }]);
+              return;
             }
+
+            draft.set(row.index, {
+              tags: [...tags, { name, color }],
+            });
           });
 
           setEdited((draft) => {
@@ -157,12 +168,64 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
 
     {
       accessorKey: "moderators",
-      header: () => <Header>Moderators</Header>,
-      cell: ({ row }) => (
-        <Badge className="cursor-pointer" onClick={() => console.log("hi2")}>
-          Show
-        </Badge>
-      ),
+      header: () => <Header className="px-3">Moderators</Header>,
+      cell: ({ row, table }) => {
+        // Todo:filter members
+        const teamId = row.original.id;
+        const teamMembers = members.filter((member) => member);
+
+        if (!table.options.meta) return null;
+
+        const { buffer, setBuffer, setEdited } = table.options.meta;
+
+        const moderators =
+          buffer.get(row.index)?.moderators || row.original.moderators!;
+
+        function handleToggleModerator(
+          isChecked: boolean | string,
+          memberId: string,
+        ) {
+          setBuffer((draft) => {
+            if (draft.has(row.index)) {
+              const curTeam = draft.get(row.index)!;
+
+              if (isChecked) {
+                curTeam.moderators
+                  ? curTeam.moderators.push(memberId)
+                  : (curTeam.moderators = [memberId]);
+              } else {
+                curTeam.moderators = moderators.filter(
+                  (mod) => mod !== memberId,
+                );
+              }
+              return;
+            }
+
+            if (isChecked) {
+              draft.set(row.index, {
+                moderators: [...moderators, memberId],
+              });
+            } else {
+              draft.set(row.index, {
+                moderators: moderators.filter((mod) => mod !== memberId),
+              });
+            }
+          });
+
+          setEdited((draft) => {
+            draft.add(row.index);
+          });
+        }
+
+        return (
+          <ModeratorsCombobox
+            members={members}
+            teamMembers={teamMembers}
+            moderators={moderators}
+            handleToggleModerator={handleToggleModerator}
+          />
+        );
+      },
     },
     {
       id: "actions",

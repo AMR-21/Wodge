@@ -36,7 +36,7 @@ export function NewTag<TData>({ handleNewTag }: NewTagProps<TData>) {
 
   if (isEditing)
     return (
-      <div className="flex items-center gap-1 p-1.5">
+      <div className="flex items-center gap-2 py-1.5">
         <Input
           ref={inputRef}
           inRow
@@ -59,14 +59,16 @@ export function NewTag<TData>({ handleNewTag }: NewTagProps<TData>) {
     );
 
   return (
-    <Button
-      size="fit"
-      variant="ghost"
-      className="w-full justify-center gap-1 px-1.5 py-2.5"
-      onClick={() => setIsEditing(true)}
-    >
-      <Plus className="h-4 w-4" />
-      <span>New tag</span>
-    </Button>
+    <div className="w-full p-1">
+      <Button
+        size="fit"
+        variant="ghost"
+        className="w-full justify-center gap-1 px-1.5 py-1.5"
+        onClick={() => setIsEditing(true)}
+      >
+        <Plus className="h-4 w-4" />
+        <span>New tag</span>
+      </Button>
+    </div>
   );
 }
