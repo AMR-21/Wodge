@@ -16,6 +16,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipWrapper,
   useCurrentUser,
 } from "@repo/ui";
 
@@ -24,11 +25,12 @@ import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function CreateWorkspaceForm() {
   const user = useCurrentUser();
   const router = useRouter();
-  const form = useForm({
+  const form = useForm<NewWorkspace>({
     resolver: zodResolver(NewWorkspaceSchema),
     defaultValues: {
       id: nanoid(),
@@ -61,7 +63,9 @@ export function CreateWorkspaceForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Workspace name</FormLabel>
-              <Input {...field} placeholder="Workspace name" />
+              <FormControl>
+                <Input {...field} placeholder="Workspace name" />
+              </FormControl>
             </FormItem>
           )}
         />
@@ -72,20 +76,19 @@ export function CreateWorkspaceForm() {
           render={({ field }) => (
             <FormItem className="flex w-full flex-row items-center gap-1 space-y-0">
               <FormLabel>Enable cloud access</FormLabel>
-              <TooltipProvider delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-64" sideOffset={6}>
-                    <p className="text-pretty">
-                      By default a workspace is created locally, enabling cloud
-                      access will allow you to save your workspace to the cloud,
-                      access it from anywhere, and invite collaborators.
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <TooltipWrapper
+                className="max-w-64"
+                sideOffset={6}
+                content={
+                  <p className="text-pretty">
+                    By default a workspace is created locally, enabling cloud
+                    access will allow you to save your workspace to the cloud,
+                    access it from anywhere, and invite collaborators.
+                  </p>
+                }
+              >
+                <HelpCircle className="h-4 w-4 text-muted-foreground" />
+              </TooltipWrapper>
 
               <FormControl className="ml-auto">
                 <Switch

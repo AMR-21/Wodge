@@ -1,13 +1,16 @@
 "use client";
 
+import * as React from "react";
 import {
   ColumnDef,
   RowData,
   RowPinningState,
-  flexRender,
   getCoreRowModel,
-  useReactTable,
 } from "@tanstack/react-table";
+import { useReactTable } from "@tanstack/react-table";
+
+import { flexRender } from "@tanstack/react-table";
+import { enableMapSet, produce } from "immer";
 import {
   Table,
   TableBody,
@@ -16,60 +19,49 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
-import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
-import { SidebarItemBtn } from "../sidebar-item-btn";
-import { Check, Plus, X } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { FormCell } from "./form-cell";
-import { FormRowControl } from "./form-row-control";
-import { ComboboxCell } from "./combobox-cell";
-import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
-import { Form } from "../ui/form";
-import { Team } from "@repo/data";
 
-interface DataTableProps<
-  TData extends { id: string },
-  TValue,
-  T extends FieldValues,
-> {
+import { Updater, useImmer } from "use-immer";
+
+enableMapSet();
+
+interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   withForm?: boolean;
-  formId?: string;
   label?: string;
-  formIsSubmitted?: boolean;
-  form: UseFormReturn<T>;
-  updateHandler?: (data: TData) => void;
+  updateHandler?: (data: Partial<TData>) => void;
 }
 
-function DataTable<
-  TData extends { id: string },
-  TValue,
-  T extends FieldValues,
->({
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData extends RowData> {
+    edited: Set<number>;
+    setEdited: Updater<Set<number>>;
+
+    buffer: Map<number, Partial<TData>>;
+    setBuffer: Updater<Map<number, Partial<TData>>>;
+    submitRow: (idx: number) => void;
+    updateRow: (idx: number, data: Partial<TData>) => void;
+    discard: (idx: number) => void;
+  }
+}
+
+export function SettingsDataTable<TData extends { id: string }, TValue>({
   columns,
   data,
-  label,
-  formId,
-  formIsSubmitted,
-  form,
   updateHandler,
+  label,
   withForm,
-}: DataTableProps<TData, TValue, T>) {
+}: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [rowPinning, setRowPinning] = React.useState<RowPinningState>({
     top: [],
     bottom: [],
   });
-  const [isEditing, setIsEditing] = React.useState(false);
 
-  const [edited, setEdited] = React.useState<Set<number>>(new Set());
-  const [updateQueue, setUpdateQueue] = React.useState<Map<number, TData>>(
-    new Map(),
-  );
+  const [edited, setEdited] = useImmer<Set<number>>(new Set());
+
+  const [buffer, setBuffer] = useImmer<Map<number, Partial<TData>>>(new Map());
 
   const table = useReactTable({
     data,
@@ -82,17 +74,40 @@ function DataTable<
       rowSelection,
       rowPinning,
     },
-    // meta: {
-    //   edited,
-    //   setEdited,
-    //   updateQueue,
-    //   setUpdateQueue,
-    //   updateRow: (idx: number) => {
-    //     const updateData = updateQueue.get(idx);
-    //     console.log("updating", updateQueue.get(idx));
-    //     if (updateData) updateHandler?.(updateData);
-    //   },
-    // },
+    meta: {
+      edited,
+      setEdited,
+      buffer,
+      setBuffer,
+      submitRow: (idx: number) => {
+        const updateData = buffer.get(idx);
+        console.log("updating", buffer.get(idx));
+        if (updateData) updateHandler?.(updateData);
+      },
+      updateRow: (idx: number, data: Partial<TData>) => {
+        // setBuffer((base) =>
+        //   produce(base, (draft) => {
+        //     if (draft.has(idx)) {
+        //       const oldData = base.get(idx)!;
+        //       draft.set(idx, { ...oldData, ...data });
+        //     }
+        //   }),
+        // );
+      },
+      discard: (idx: number) => {
+        setBuffer(
+          produce((draft) => {
+            draft.delete(idx);
+          }),
+        );
+
+        setEdited(
+          produce((draft) => {
+            draft.delete(idx);
+          }),
+        );
+      },
+    },
   });
 
   React.useEffect(() => {
@@ -138,7 +153,7 @@ function DataTable<
                 ))}
               </TableRow>
             ))}
-          {table.getBottomRows()?.length > 0 &&
+          {/* {table.getBottomRows()?.length > 0 &&
             table.getBottomRows().map((row) => (
               <TableRow
                 key={row.id}
@@ -151,11 +166,7 @@ function DataTable<
                     className={cn("invisible", isEditing && "visible")}
                   >
                     {withForm && cell.id.endsWith("actions") ? (
-                      <FormRowControl
-                        formId={formId}
-                        formIsSubmitted={formIsSubmitted}
-                        setIsEditing={setIsEditing}
-                      />
+                      <FormRowControl setIsEditing={setIsEditing} />
                     ) : (
                       flexRender(cell.column.columnDef.cell, cell.getContext())
                     )}
@@ -170,15 +181,11 @@ function DataTable<
                   />
                 )}
               </TableRow>
-            ))}
+            ))} */}
         </TableBody>
       </Table>
 
       <DataTablePagination table={table} />
-
-      {/* <ComboboxCell /> */}
     </div>
   );
 }
-
-export { DataTable };

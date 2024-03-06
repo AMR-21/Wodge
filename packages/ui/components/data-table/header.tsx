@@ -1,3 +1,9 @@
-export function Header({ children }: { children: React.ReactNode }) {
-  return <h3>{children}</h3>;
+export function Header({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <h3 className={className}>{children}</h3>;
 }

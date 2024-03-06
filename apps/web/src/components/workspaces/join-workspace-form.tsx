@@ -4,6 +4,7 @@ import {
   Button,
   DialogClose,
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -18,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export function JoinWorkspaceForm() {
-  const form = useForm({
+  const form = useForm<z.infer<typeof JoinWorkspaceSchema>>({
     resolver: zodResolver(JoinWorkspaceSchema),
     defaultValues: {
       url: "",
@@ -65,11 +66,13 @@ export function JoinWorkspaceForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Invite link</FormLabel>
-              <Input
-                {...field}
-                className="w-full"
-                placeholder={"https://domain.com/" + nanoid(6)}
-              />
+              <FormControl>
+                <Input
+                  {...field}
+                  className="w-full"
+                  placeholder={"https://domain.com/" + nanoid(6)}
+                />
+              </FormControl>
             </FormItem>
           )}
         />

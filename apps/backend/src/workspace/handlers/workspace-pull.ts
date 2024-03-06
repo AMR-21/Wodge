@@ -34,7 +34,7 @@ function patcher(party: WorkspaceParty) {
     if (workspaceMetadata.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: makeWorkspaceKey(party.room.id),
+        key: makeWorkspaceKey(),
         value: workspaceMetadata.data,
       });
     }

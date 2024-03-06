@@ -8,6 +8,7 @@ import {
   makeWorkspaceStructureKey,
 } from "@repo/data";
 import { makeWorkspaceKey } from "@repo/data";
+import { isAllowed } from "../../lib/utils";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -65,11 +66,40 @@ function runner(party: WorkspaceParty) {
         workspaceStructure.lastModifiedVersion = nextVersion;
 
         await storage.put({
-          [makeWorkspaceKey(party.room.id)]: workspaceMetadata,
+          [makeWorkspaceKey()]: workspaceMetadata,
           [makeWorkspaceStructureKey()]: workspaceStructure.data,
         });
 
         break;
+
+      case "changeName":
+        // 1. validate that initiator of the request is the owner of the workspace
+
+        // 2. validate data
+
+        const validatedFields2 = WorkspaceSchema.pick({ name: true }).safeParse(
+          { name: mutation.args }
+        );
+
+        if (!validatedFields2.success) {
+          console.log(validatedFields2.error.flatten());
+          return;
+        }
+
+        const {
+          data: { name },
+        } = validatedFields2;
+
+        workspaceMetadata.data.name = name;
+        workspaceMetadata.lastModifiedVersion = nextVersion;
+
+        // 3. persist the data
+        await storage.put({
+          [makeWorkspaceKey()]: workspaceMetadata,
+        });
+
+        break;
+
       default:
         throw new Error("Unknown mutation: " + mutation.name);
     }

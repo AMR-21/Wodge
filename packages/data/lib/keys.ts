@@ -18,7 +18,7 @@ export const WORKSPACE_MEMBERS_KEY = "members";
 export const WORKSPACE_INVITES_KEY = "invite";
 export const WORKSPACE_PRESENCE_KEY = "presence";
 
-export const makeWorkspaceKey = (id: string) => WORKSPACE_PREFIX + JOINER + id;
+export const makeWorkspaceKey = () => WORKSPACE_PREFIX;
 export const makeWorkspaceStructureKey = () =>
   WORKSPACE_PREFIX + JOINER + WORKSPACE_STRUCTURE_KEY;
 export const makeWorkspaceRolesKey = () =>

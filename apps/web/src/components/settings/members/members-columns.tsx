@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
   TooltipWrapper,
 } from "@repo/ui";
+import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { ColumnDef } from "@tanstack/react-table";
 import { Crown, MoreHorizontal } from "lucide-react";
 import { DeepReadonly } from "replicache";
@@ -168,10 +169,7 @@ export function membersColumns(
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
+              <SidebarItemBtn Icon={MoreHorizontal} className="z-50" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>

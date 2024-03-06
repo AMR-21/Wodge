@@ -44,7 +44,7 @@ export default class WorkspaceParty
 
   async onStart() {
     const membersKey = makeWorkspaceMembersKey();
-    const metadataKey = makeWorkspaceKey(this.room.id);
+    const metadataKey = makeWorkspaceKey();
     const structureKey = makeWorkspaceStructureKey();
 
     const map = await this.room.storage.get([

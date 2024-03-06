@@ -7,6 +7,7 @@ import { cva } from "class-variance-authority";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  inRow?: boolean;
 }
 
 const inputVariants = cva(
@@ -15,13 +16,14 @@ const inputVariants = cva(
     variants: {
       variant: {
         withLabel: "peer h-12 pt-[1.45rem] text-sm ",
+        row: "h-auto w-11/12 border-none bg-transparent focus-visible:border-none",
       },
     },
   },
 );
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, ...props }, ref) => {
+  ({ className, type, label, inRow = false, ...props }, ref) => {
     if (label) {
       return (
         <div className="relative">
@@ -31,6 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               inputVariants({ variant: "withLabel" }),
               props["aria-invalid"] &&
                 "border-destructive focus-visible:ring-destructive",
+
               className,
             )}
             ref={ref}
@@ -61,6 +64,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           inputVariants(),
           props["aria-invalid"] &&
             "border-destructive focus-visible:ring-destructive",
+          inRow &&
+            "h-auto w-11/12 border-none bg-transparent focus-visible:border-none",
           className,
         )}
         ref={ref}

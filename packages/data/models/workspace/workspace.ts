@@ -67,6 +67,10 @@ export class Workspace {
     }
   }
 
+  async changeName(name: string) {
+    return this.store.mutate.changeName(name);
+  }
+
   /**
    * Make the workspace a cloud workspace
    */
@@ -91,6 +95,6 @@ export class Workspace {
    * Query the workspace metadata
    */
   async getMetadata(tx: ReadTransaction) {
-    return tx.get<WorkspaceType>(makeWorkspaceKey(this.id));
+    return tx.get<WorkspaceType>(makeWorkspaceKey());
   }
 }

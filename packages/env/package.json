@@ -4,6 +4,7 @@
   "private": true,
   "main": "index.js",
   "type": "module",
+  "types": "index.d.ts",
   "scripts": {},
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.8.0",
@@ -11,7 +12,7 @@
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",
-    "@types/node": "^20",
+    "@types/node": "^20.11.20",
     "eslint": "^8",
     "typescript": "^5"
   }

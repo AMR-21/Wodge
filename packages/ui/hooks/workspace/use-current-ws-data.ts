@@ -25,8 +25,7 @@ export function useCurrentWsData() {
 
   const { snapshot: metadata, isPending } = useSubscribe(
     workspace?.store,
-    async (tx: ReadTransaction) =>
-      tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId as string)),
+    async (tx: ReadTransaction) => tx.get<WorkspaceType>(makeWorkspaceKey()),
   );
 
   const { snapshot: members } = useSubscribe(
@@ -71,5 +70,5 @@ export function useCurrentWsData() {
   // Workspace does not exist
   if (!metadata && !isPending) return null;
 
-  return { metadata, members, structure, inviters, workspaceId };
+  return { metadata, members, structure, inviters, workspaceId, workspace };
 }

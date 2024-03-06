@@ -28,6 +28,7 @@ export const SidebarItemBtn = React.forwardRef<
   ) => {
     return (
       <Button
+        ref={ref}
         variant="ghost"
         size="fit"
         className={cn(

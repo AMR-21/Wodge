@@ -28,8 +28,7 @@ export function useWorkspaces() {
 
         // 2. Add subscription to each workspace in order to be reactive
         workspace?.store.subscribe(
-          (tx: ReadTransaction) =>
-            tx.get<WorkspaceType>(makeWorkspaceKey(workspaceId)),
+          (tx: ReadTransaction) => tx.get<WorkspaceType>(makeWorkspaceKey()),
           {
             // 3. On data change update the state
             onData: function (data?: WorkspaceType) {

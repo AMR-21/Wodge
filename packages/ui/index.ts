@@ -22,11 +22,13 @@ export * from "./components/ui/table";
 export * from "./components/ui/badge";
 export * from "./components/ui/checkbox";
 export * from "./components/ui/popover";
+export * from "./components/ui/command";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";
 export * from "./components/user-card";
 export * from "./components/tooltip-wrapper";
+export * from "./components/tag";
 
 export * from "./hooks/user/use-cache-user";
 export * from "./hooks/user/use-session-user";

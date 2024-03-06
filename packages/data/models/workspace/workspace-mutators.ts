@@ -20,9 +20,17 @@ export const workspaceMutators = {
     const { data: workspace } = validatedFields;
 
     // 2. Create the workspace
-    await tx.set(makeWorkspaceKey(data.id), workspace);
+    await tx.set(makeWorkspaceKey(), workspace);
 
     // 3. Create empty workspace structure
     await tx.set(makeWorkspaceStructureKey(), defaultWorkspaceStructure());
+  },
+
+  async changeName(tx: WriteTransaction, name: string) {
+    // 1. Get the workspace
+    const workspace = await tx.get<WorkspaceType>(makeWorkspaceKey());
+
+    // 2. Update the workspace
+    await tx.set(makeWorkspaceKey(), { ...workspace, name });
   },
 };

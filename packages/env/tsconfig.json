@@ -1,3 +1,4 @@
 {
-  "extends": "@repo/ts/tsconfig.json"
+  "extends": "@repo/ts/tsconfig.json",
+  "include": ["./index.d.ts"]
 }

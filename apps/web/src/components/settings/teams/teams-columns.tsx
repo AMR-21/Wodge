@@ -1,75 +1,35 @@
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
-import { Team } from "@repo/data";
+import * as React from "react";
+import { Tag as TagType, Team } from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Badge,
-  Button,
-  Checkbox,
-  DataTableColumnHeader,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  FormField,
-  FormItem,
-  FormMessage,
+  ComboboxCell,
+  CommandItem,
+  DataTableActions,
+  DataTableHeaderSelect,
+  DataTableRowSelect,
   Header,
   Input,
+  Tag,
 } from "@repo/ui";
+import { produce } from "immer";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check, MoreHorizontal } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
 import { DeepReadonly } from "replicache";
+import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
+import { X } from "lucide-react";
+import { NewTag } from "./new-tag";
+import { enableMapSet } from "immer";
+import { set } from "zod";
+enableMapSet();
 
-export const teamColumns = (
-  form: UseFormReturn<
-    {
-      name: string;
-      id: string;
-    },
-    any,
-    {
-      name: string;
-      id: string;
-    }
-  >,
-): ColumnDef<DeepReadonly<Team>>[] => {
+export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
   return [
     {
       id: "select",
-      header: ({ table }) => (
-        <div className="flex items-center">
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        </div>
-      ),
-      cell: ({ row }) => {
-        if (row.original.id === "add-team") return null;
-        return (
-          <div className="flex items-center">
-            <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={(value) => {
-                row.toggleSelected(!!value);
-                row.pin("bottom");
-              }}
-              aria-label="Select row"
-            />
-          </div>
-        );
-      },
+      header: ({ table }) => <DataTableHeaderSelect table={table} />,
+      cell: ({ row }) => <DataTableRowSelect row={row} />,
       enableSorting: false,
       enableHiding: false,
     },
@@ -77,19 +37,19 @@ export const teamColumns = (
     {
       accessorKey: "avatar",
       header: () => <Header>Avatar</Header>,
-      cell: ({ row }) => {
-        const team = row.original;
+      cell: ({ row, table }) => {
+        const name =
+          table.options?.meta?.buffer.get(row.index)?.name || row.original.name;
+        const avatar =
+          table.options?.meta?.buffer.get(row.index)?.avatar ||
+          row.original.avatar;
 
         return (
           <div className="w-fit">
             <Avatar className="h-8 w-8 rounded-md ">
-              <AvatarImage
-                src={team.avatar}
-                alt={team.name}
-                className="rounded-md"
-              />
+              <AvatarImage src={avatar} alt={name} className="rounded-md" />
               <AvatarFallback className="rounded-md capitalize">
-                {team.name[0]}
+                {name[0]}
               </AvatarFallback>
             </Avatar>
           </div>
@@ -98,38 +58,133 @@ export const teamColumns = (
     },
     {
       accessorKey: "name",
-      header: () => <Header>Team name</Header>,
-      cell: ({ row }) => {
-        const team = row.original;
+      header: () => <Header className="px-3">Team name</Header>,
+      cell: ({ row, table }) => {
+        const initialValue =
+          table.options.meta?.buffer.get(row.index)?.name || row.original.name;
+        // We need to keep and update the state of the cell normally
+        const [value, setValue] = React.useState(initialValue);
 
-        if (team.id === "add-team")
-          return (
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <Input
-                    {...field}
-                    placeholder="Team name"
-                    className="h-3/4  w-3/4"
-                  />
-                </FormItem>
-              )}
-            />
-          );
+        // If the initialValue is changed external, sync it up with our state
+        React.useEffect(() => {
+          setValue(initialValue);
+        }, [initialValue]);
 
-        return <p>{team.name}</p>;
+        if (!table.options.meta) return null;
+
+        const { buffer, setBuffer, setEdited } = table.options.meta;
+
+        // When the input is blurred, we'll call our table meta's updateData function
+        const onBlur = () => {
+          if (value === initialValue) return;
+
+          if (buffer.has(row.index))
+            return setBuffer((draft) => {
+              draft.get(row.index)!.name = value;
+            });
+
+          setBuffer((draft) => {
+            draft.set(row.index, { name: value });
+          });
+        };
+
+        return (
+          <Input
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setEdited(produce((draft) => draft.add(row.index)));
+            }}
+            onBlur={onBlur}
+            inRow
+          />
+        );
       },
     },
     {
       accessorKey: "tags",
-      header: () => <Header>Tags</Header>,
-      cell: ({ row }) => (
-        <Badge className="cursor-pointer" onClick={() => console.log("hi")}>
-          Show
-        </Badge>
-      ),
+      header: () => <Header className="px-3">Tags</Header>,
+      cell: ({ row, table }) => {
+        const [open, setOpen] = React.useState(false);
+        if (!table.options.meta) return null;
+
+        const { buffer, setBuffer, setEdited } = table.options.meta;
+
+        const orgTags = row.original.tags!;
+        const bufferedTags = buffer.get(row.index)?.tags || [];
+        const tags = [...orgTags, ...bufferedTags];
+
+        function handleDelete(tagName: string) {
+          setBuffer((draft) => {
+            if (draft.has(row.index)) {
+              return (draft.get(row.index)!.tags = tags?.filter(
+                (tag) => tag.name !== tagName,
+              ));
+            }
+
+            draft.set(row.index, {
+              tags: tags?.filter((tag) => tag.name !== tagName),
+            });
+          });
+        }
+
+        function handleNewTag({ name, color = "#1d4ed8" }: TagType) {
+          setBuffer((draft) => {
+            if (draft.has(row.index)) {
+              draft.get(row.index)!.tags?.push({ name, color });
+              return;
+            }
+
+            draft.set(row.index, {
+              tags: [{ name, color }],
+            });
+          });
+
+          setEdited((draft) => {
+            draft.add(row.index);
+          });
+        }
+
+        return (
+          <ComboboxCell
+            open={open}
+            onOpenChange={setOpen}
+            label={
+              tags?.length && tags.length > 0 ? (
+                <Tag name={tags[0]?.name!} color={tags[0]?.color} />
+              ) : (
+                "No tags"
+              )
+            }
+            placeholder="Search for tags"
+            emptyMsg="No tags found"
+            description="Manage tags"
+            className="w-[240px]"
+            nData={tags?.length}
+          >
+            {tags?.map((tag, i) => (
+              <CommandItem
+                key={i}
+                value={tag.name}
+                className="flex justify-between"
+              >
+                <Tag name={tag.name} color={tag.color} noBg />
+                <SidebarItemBtn
+                  Icon={X}
+                  destructive
+                  side="right"
+                  description="Delete tag"
+                  onClick={handleDelete.bind(null, tag.name)}
+                />
+              </CommandItem>
+            ))}
+
+            <CommandItem className="px-0 py-0 hover:bg-transparent">
+              <NewTag handleNewTag={handleNewTag} />
+            </CommandItem>
+          </ComboboxCell>
+        );
+      },
     },
 
     {
@@ -143,37 +198,12 @@ export const teamColumns = (
     },
     {
       id: "actions",
-      cell: ({ row }) => {
+      cell: ({ row, table }) => {
         const team = row.original;
 
         if (team.id === "add-team") return null;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarItemBtn Icon={MoreHorizontal} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-              // onClick={() =>
-              //   navigator.clipboard.writeText(member.data.username)
-              // }
-              >
-                Copy username
-              </DropdownMenuItem>
-              <DropdownMenuItem
-              // onClick={() => navigator.clipboard.writeText(member.data.email)}
-              >
-                Copy email
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem destructive>
-                Remove from workspace
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+        return <DataTableActions row={row} table={table} menuItems={[]} />;
       },
     },
   ];

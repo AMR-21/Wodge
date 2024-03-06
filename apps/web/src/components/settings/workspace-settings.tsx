@@ -25,10 +25,11 @@ import {
   SettingsContentSection,
 } from "./settings";
 import { Gate } from "../gate";
+import { z } from "zod";
 
 export function WorkspaceSettings() {
-  const { metadata } = useCurrentWorkspace();
-  const form = useForm({
+  const { metadata, workspace } = useCurrentWorkspace();
+  const form = useForm<WorkspaceType>({
     resolver: zodResolver(WorkspaceSchema.pick({ name: true })),
     defaultValues: {
       name: "",
@@ -39,8 +40,8 @@ export function WorkspaceSettings() {
     if (metadata) form.reset(metadata);
   }, [metadata]);
 
-  function onSubmit(data: Pick<WorkspaceType, "name">) {
-    console.log(data);
+  async function onSubmit(data: Pick<WorkspaceType, "name">) {
+    await workspace?.changeName(data.name);
   }
 
   return (

@@ -3,6 +3,7 @@
 import {
   Member,
   PublicUserType,
+  Workspace,
   WorkspaceMembers,
   WorkspaceStructure,
   WorkspaceType,
@@ -23,6 +24,7 @@ interface WorkspaceContext {
   structure?: DeepReadonly<WorkspaceStructure>;
   inviters?: (Pick<Member, "id" | "data"> | undefined)[];
   // ws: PartySocket;
+  workspace?: Workspace;
 }
 
 const Context = createContext<WorkspaceContext | null>(null);
