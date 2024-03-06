@@ -41,7 +41,6 @@ declare module "@tanstack/react-table" {
     buffer: Map<number, Partial<TData>>;
     setBuffer: Updater<Map<number, Partial<TData>>>;
     submitRow: (idx: number) => void;
-    updateRow: (idx: number, data: Partial<TData>) => void;
     discard: (idx: number) => void;
   }
 }
@@ -84,16 +83,7 @@ export function SettingsDataTable<TData extends { id: string }, TValue>({
         console.log("updating", buffer.get(idx));
         if (updateData) updateHandler?.(updateData);
       },
-      updateRow: (idx: number, data: Partial<TData>) => {
-        // setBuffer((base) =>
-        //   produce(base, (draft) => {
-        //     if (draft.has(idx)) {
-        //       const oldData = base.get(idx)!;
-        //       draft.set(idx, { ...oldData, ...data });
-        //     }
-        //   }),
-        // );
-      },
+
       discard: (idx: number) => {
         setBuffer(
           produce((draft) => {

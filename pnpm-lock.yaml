@@ -105,6 +105,9 @@ importers:
       immer:
         specifier: ^10.0.3
         version: 10.0.3
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       lucide-react:
         specifier: ^0.330.0
         version: 0.330.0(react@18.2.0)
@@ -153,6 +156,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      use-immer:
+        specifier: ^0.9.0
+        version: 0.9.0(immer@10.0.3)(react@18.2.0)
       usehooks-ts:
         specifier: ^2.14.0
         version: 2.15.1(react@18.2.0)
@@ -178,6 +184,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.24.8
         version: 5.24.8(@tanstack/react-query@5.24.8)(react@18.2.0)
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.14.202
       '@types/node':
         specifier: ^20
         version: 20.11.20
@@ -3178,6 +3187,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/lodash@4.14.202:
+    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
     dev: true
 
   /@types/node-forge@1.3.11:
@@ -6508,6 +6521,10 @@ packages:
   /lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
     dev: true
+
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}

@@ -5,23 +5,20 @@ import {
   AvatarFallback,
   AvatarImage,
   Badge,
-  ComboboxCell,
-  CommandItem,
   DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
   Header,
   Input,
-  Tag,
 } from "@repo/ui";
 import { produce } from "immer";
 import { ColumnDef } from "@tanstack/react-table";
 import { DeepReadonly } from "replicache";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
-import { X } from "lucide-react";
-import { NewTag } from "./new-tag";
 import { enableMapSet } from "immer";
-import { set } from "zod";
+
+import _ from "lodash";
+import { TagsComboBox } from "./tags-combobox";
 enableMapSet();
 
 export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
@@ -110,20 +107,24 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
 
         const { buffer, setBuffer, setEdited } = table.options.meta;
 
-        const orgTags = row.original.tags!;
-        const bufferedTags = buffer.get(row.index)?.tags || [];
-        const tags = [...orgTags, ...bufferedTags];
+        // const orgTags = row.original.tags!;
+        const tags = buffer.get(row.index)?.tags || row.original.tags!;
+        // const tags = [...bufferedTags];
 
-        function handleDelete(tagName: string) {
+        function handleDeleteTag(tagName: string) {
           setBuffer((draft) => {
             if (draft.has(row.index)) {
-              return (draft.get(row.index)!.tags = tags?.filter(
+              draft.get(row.index)!.tags = tags.filter(
                 (tag) => tag.name !== tagName,
-              ));
+              );
+            } else {
+              draft.set(row.index, {
+                tags: tags.filter((tag) => tag.name !== tagName),
+              });
             }
 
-            draft.set(row.index, {
-              tags: tags?.filter((tag) => tag.name !== tagName),
+            setEdited((draft) => {
+              draft.add(row.index);
             });
           });
         }
@@ -132,12 +133,11 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
           setBuffer((draft) => {
             if (draft.has(row.index)) {
               draft.get(row.index)!.tags?.push({ name, color });
-              return;
+            } else {
+              draft.set(row.index, {
+                tags: [...tags, { name, color }],
+              });
             }
-
-            draft.set(row.index, {
-              tags: [{ name, color }],
-            });
           });
 
           setEdited((draft) => {
@@ -146,43 +146,11 @@ export const teamColumns = (): ColumnDef<DeepReadonly<Team>>[] => {
         }
 
         return (
-          <ComboboxCell
-            open={open}
-            onOpenChange={setOpen}
-            label={
-              tags?.length && tags.length > 0 ? (
-                <Tag name={tags[0]?.name!} color={tags[0]?.color} />
-              ) : (
-                "No tags"
-              )
-            }
-            placeholder="Search for tags"
-            emptyMsg="No tags found"
-            description="Manage tags"
-            className="w-[240px]"
-            nData={tags?.length}
-          >
-            {tags?.map((tag, i) => (
-              <CommandItem
-                key={i}
-                value={tag.name}
-                className="flex justify-between"
-              >
-                <Tag name={tag.name} color={tag.color} noBg />
-                <SidebarItemBtn
-                  Icon={X}
-                  destructive
-                  side="right"
-                  description="Delete tag"
-                  onClick={handleDelete.bind(null, tag.name)}
-                />
-              </CommandItem>
-            ))}
-
-            <CommandItem className="px-0 py-0 hover:bg-transparent">
-              <NewTag handleNewTag={handleNewTag} />
-            </CommandItem>
-          </ComboboxCell>
+          <TagsComboBox
+            tags={tags}
+            handleDeleteTag={handleDeleteTag}
+            handleNewTag={handleNewTag}
+          />
         );
       },
     },
