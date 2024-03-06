@@ -51,18 +51,15 @@ export function ComboboxCell({
           <div
             className={cn(
               buttonVariants({
-                size: "sm",
+                size: "fit",
                 variant: "ghost",
               }),
-              "group w-[10rem] max-w-[10rem] cursor-pointer justify-start gap-1 ",
+              "group w-36 max-w-36 cursor-pointer justify-start gap-1 font-normal",
             )}
           >
-            {nData > 0 && <span className="truncate">{renderer}</span>}
-            {nData > 1 ? (
-              <span className="rounded-md border border-border/50 bg-surface p-1 text-xs">
-                +{nData - 1}
-              </span>
-            ) : null}
+            {nData > 0 && (
+              <span className="relative w-full truncate">{renderer}</span>
+            )}
 
             {nData === 0 && (
               <div
@@ -71,15 +68,15 @@ export function ComboboxCell({
                   placeholderClassName,
                 )}
               >
-                <Plus className="h-4 w-4" />
-                <span>Add {label}</span>
+                <Plus className="h-3.5 w-3.5" />
+                <span className="text-[0.875rem] font-normal">Add {label}</span>
               </div>
             )}
-            {nData > 1 && (
+            {nData > 0 && (
               <ChevronRight
                 className={cn(
-                  "h-4 w-4 opacity-50 transition-all group-hover:opacity-100",
-                  open && "visible rotate-90",
+                  "ml-auto h-4 w-4 shrink-0 opacity-50 transition-all group-hover:opacity-100",
+                  open && "rotate-90",
                 )}
               />
             )}

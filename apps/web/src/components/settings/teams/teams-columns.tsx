@@ -5,12 +5,16 @@ import {
   AvatarFallback,
   AvatarImage,
   Badge,
+  Button,
   Checkbox,
   ComboboxCell,
   CommandItem,
   DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
+  Dialog,
+  DialogContent,
+  DialogTrigger,
   Header,
   Input,
 } from "@repo/ui";
@@ -23,6 +27,8 @@ import { enableMapSet } from "immer";
 import _ from "lodash";
 import { TagsComboBox } from "./tags-combobox";
 import { ModeratorsCombobox } from "./moderators-combox";
+import { ChevronRight, User, UserRoundCog, Users2 } from "lucide-react";
+import { TeamMembersDialog } from "./team-members-dialog";
 enableMapSet();
 
 export const teamColumns = (
@@ -106,7 +112,7 @@ export const teamColumns = (
     },
     {
       accessorKey: "tags",
-      header: () => <Header className="px-3">Tags</Header>,
+      header: () => <Header className="px-1">Tags</Header>,
       cell: ({ row, table }) => {
         if (!table.options.meta) return null;
 
@@ -142,7 +148,7 @@ export const teamColumns = (
               const curTags = draft.get(row.index)!.tags;
               curTags
                 ? curTags.push({ name, color })
-                : (draft.get(row.index)!.tags = [{ name, color }]);
+                : (draft.get(row.index)!.tags = [...tags, { name, color }]);
               return;
             }
 
@@ -166,75 +172,129 @@ export const teamColumns = (
       },
     },
 
-    {
-      accessorKey: "moderators",
-      header: () => <Header className="px-3">Moderators</Header>,
-      cell: ({ row, table }) => {
-        // Todo:filter members
-        const teamId = row.original.id;
-        const teamMembers = members.filter((member) => member);
+    // {
+    //   accessorKey: "moderators",
+    //   header: () => <Header className="px-3">Moderators</Header>,
+    //   cell: ({ row, table }) => {
+    //     // Todo:filter members
+    //     const teamId = row.original.id;
+    //     const teamMembers = members.filter((member) => member);
 
-        if (!table.options.meta) return null;
+    //     if (!table.options.meta) return null;
 
-        const { buffer, setBuffer, setEdited } = table.options.meta;
+    //     const { buffer, setBuffer, setEdited } = table.options.meta;
 
-        const moderators =
-          buffer.get(row.index)?.moderators || row.original.moderators!;
+    //     const moderators =
+    //       buffer.get(row.index)?.moderators || row.original.moderators!;
 
-        function handleToggleModerator(
-          isChecked: boolean | string,
-          memberId: string,
-        ) {
-          setBuffer((draft) => {
-            if (draft.has(row.index)) {
-              const curTeam = draft.get(row.index)!;
+    //     function handleToggleModerator(
+    //       isChecked: boolean | string,
+    //       memberId: string,
+    //     ) {
+    //       setBuffer((draft) => {
+    //         if (draft.has(row.index)) {
+    //           const curTeam = draft.get(row.index)!;
 
-              if (isChecked) {
-                curTeam.moderators
-                  ? curTeam.moderators.push(memberId)
-                  : (curTeam.moderators = [memberId]);
-              } else {
-                curTeam.moderators = moderators.filter(
-                  (mod) => mod !== memberId,
-                );
-              }
-              return;
-            }
+    //           if (isChecked) {
+    //             curTeam.moderators
+    //               ? curTeam.moderators.push(memberId)
+    //               : (curTeam.moderators = [memberId]);
+    //           } else {
+    //             curTeam.moderators = moderators.filter(
+    //               (mod) => mod !== memberId,
+    //             );
+    //           }
+    //           return;
+    //         }
 
-            if (isChecked) {
-              draft.set(row.index, {
-                moderators: [...moderators, memberId],
-              });
-            } else {
-              draft.set(row.index, {
-                moderators: moderators.filter((mod) => mod !== memberId),
-              });
-            }
-          });
+    //         if (isChecked) {
+    //           draft.set(row.index, {
+    //             moderators: [...moderators, memberId],
+    //           });
+    //         } else {
+    //           draft.set(row.index, {
+    //             moderators: moderators.filter((mod) => mod !== memberId),
+    //           });
+    //         }
+    //       });
 
-          setEdited((draft) => {
-            draft.add(row.index);
-          });
-        }
+    //       setEdited((draft) => {
+    //         draft.add(row.index);
+    //       });
+    //     }
 
-        return (
-          <ModeratorsCombobox
-            members={members}
-            teamMembers={teamMembers}
-            moderators={moderators}
-            handleToggleModerator={handleToggleModerator}
-          />
-        );
-      },
-    },
+    //     return (
+    //       <ModeratorsCombobox
+    //         members={members}
+    //         teamMembers={teamMembers}
+    //         moderators={moderators}
+    //         handleToggleModerator={handleToggleModerator}
+    //       />
+    //     );
+    //   },
+    // },
+    // {
+    //   id: "members",
+    //   header: () => <Header className="px-1">Members</Header>,
+    //   cell: ({ row }) => {
+    //     return (
+    //       <Dialog>
+    //         <DialogTrigger asChild>
+    //           <Button
+    //             size="fit"
+    //             variant="ghost"
+    //             className="w-20 justify-between font-normal"
+    //           >
+    //             Manage
+    //             <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+    //           </Button>
+    //         </DialogTrigger>
+
+    //         <DialogContent></DialogContent>
+    //       </Dialog>
+    //     );
+    //   },
+    // },
     {
       id: "actions",
       cell: ({ row, table }) => {
         const team = row.original;
 
-        if (team.id === "add-team") return null;
+        // function addMember(id){}
 
-        return <DataTableActions row={row} table={table} menuItems={[]} />;
+        return (
+          <Dialog open>
+            <DialogContent>
+              <TeamMembersDialog
+                members={members}
+                // addMember={}
+                moderators={team.moderators}
+                // removeMember={}
+                teamId={team.id}
+              />
+            </DialogContent>
+            <DataTableActions
+              row={row}
+              table={table}
+              menuItems={[
+                {
+                  label: "Delete",
+                  action: () => {
+                    console.log("delete team:", team.id);
+                  },
+                  destructive: true,
+                },
+              ]}
+            >
+              <DialogTrigger asChild>
+                <SidebarItemBtn
+                  Icon={UserRoundCog}
+                  description="Members settings"
+                />
+              </DialogTrigger>
+            </DataTableActions>
+          </Dialog>
+        );
       },
     },
   ];

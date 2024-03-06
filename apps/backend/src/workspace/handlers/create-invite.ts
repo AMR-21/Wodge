@@ -17,7 +17,7 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
   if (!validatedFields.success) return badRequest();
 
   const {
-    data: { limit, method, emails },
+    data: { limit, method },
   } = validatedFields;
 
   const newInvite: Invite = {
@@ -25,7 +25,7 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
     token: nanoid(),
     limit: method === "link" ? limit : Infinity,
     method,
-    emails,
+    // emails,
   };
 
   // If method is link, check if there exist and invite link with link method and remove it

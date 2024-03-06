@@ -100,13 +100,6 @@ export const WorkspaceSchema = z.object({
   settings: z.any().optional(),
 });
 
-export const RoleSchema = z.object({
-  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
-  name: z.string().max(70),
-  permissions: z.array(z.enum(["read", "write", "admin"])),
-  color: z.string().default(BRAND_COLOR).optional(),
-});
-
 export const ChannelSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70),
@@ -125,13 +118,33 @@ export const DirSchema = z.object({
   name: z.string().max(70),
 });
 
+export const MemberSchema = z.object({
+  id: z.string().length(ID_LENGTH),
+  data: PublicUserSchema.omit({ id: true }),
+  joinInfo: z.object({
+    token: z.string(),
+    created_by: z.string().length(ID_LENGTH),
+    joined_at: z.string().datetime(),
+    method: z.enum(["link", "email", "owner"]),
+  }),
+});
+
+export const RoleSchema = z.object({
+  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  name: z.string().max(70),
+  members: z.array(z.string().length(ID_LENGTH)),
+  permissions: z.array(z.enum(["read", "write", "admin"])),
+  color: z.string().default(BRAND_COLOR).optional(),
+});
+
 export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
-  moderators: z.array(z.string().length(ID_LENGTH)).optional(),
-  dirs: z.array(DirSchema).optional(),
-  tags: z.array(TagSchema).optional(),
+  members: z.array(z.string().length(ID_LENGTH)),
+  moderators: z.array(z.string().length(ID_LENGTH)),
+  dirs: z.array(DirSchema),
+  tags: z.array(TagSchema),
 });
 
 export const WorkspaceStructureSchema = z.object({
@@ -141,19 +154,6 @@ export const WorkspaceStructureSchema = z.object({
   tags: z.array(TagSchema),
 });
 
-export const MemberSchema = z.object({
-  id: z.string().length(ID_LENGTH),
-  teams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
-  roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
-  data: PublicUserSchema.omit({ id: true }),
-  joinInfo: z.object({
-    token: z.string(),
-    created_by: z.string().length(ID_LENGTH),
-    joined_at: z.string().datetime(),
-    method: z.enum(["link", "email"]),
-  }),
-});
-
 export const WorkspaceMembersSchema = z.object({
   owner: z.string().length(ID_LENGTH),
   members: z.array(MemberSchema),
@@ -161,7 +161,7 @@ export const WorkspaceMembersSchema = z.object({
 
 export const NewInviteSchema = z.object({
   limit: z.number().int().positive().default(Infinity),
-  method: z.enum(["link", "email"]),
+  method: z.enum(["link", "email", "owner"]),
   // emails: z.array(z.string().email()).optional(),
 });
 // .refine(

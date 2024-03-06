@@ -37,39 +37,19 @@ interface DataTableProps<
 > {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  withForm?: boolean;
-  formId?: string;
-  label?: string;
-  formIsSubmitted?: boolean;
-  form: UseFormReturn<T>;
-  updateHandler?: (data: TData) => void;
 }
 
 function DataTable<
   TData extends { id: string },
   TValue,
   T extends FieldValues,
->({
-  columns,
-  data,
-  label,
-  formId,
-  formIsSubmitted,
-  form,
-  updateHandler,
-  withForm,
-}: DataTableProps<TData, TValue, T>) {
+>({ columns, data }: DataTableProps<TData, TValue, T>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [rowPinning, setRowPinning] = React.useState<RowPinningState>({
     top: [],
     bottom: [],
   });
   const [isEditing, setIsEditing] = React.useState(false);
-
-  const [edited, setEdited] = React.useState<Set<number>>(new Set());
-  const [updateQueue, setUpdateQueue] = React.useState<Map<number, TData>>(
-    new Map(),
-  );
 
   const table = useReactTable({
     data,
@@ -82,27 +62,7 @@ function DataTable<
       rowSelection,
       rowPinning,
     },
-    // meta: {
-    //   edited,
-    //   setEdited,
-    //   updateQueue,
-    //   setUpdateQueue,
-    //   updateRow: (idx: number) => {
-    //     const updateData = updateQueue.get(idx);
-    //     console.log("updating", updateQueue.get(idx));
-    //     if (updateData) updateHandler?.(updateData);
-    //   },
-    // },
   });
-
-  React.useEffect(() => {
-    if (withForm) {
-      const rows = table.getRowModel().rows;
-      const lastRow = rows[rows.length - 1];
-
-      if (lastRow?.original?.id.startsWith("add")) lastRow?.pin("bottom");
-    }
-  }, [table.options.data]);
 
   return (
     <div className="rounded-md border">
@@ -136,39 +96,6 @@ function DataTable<
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
-              </TableRow>
-            ))}
-          {table.getBottomRows()?.length > 0 &&
-            table.getBottomRows().map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className="relative"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={cn("invisible", isEditing && "visible")}
-                  >
-                    {withForm && cell.id.endsWith("actions") ? (
-                      <FormRowControl
-                        formId={formId}
-                        formIsSubmitted={formIsSubmitted}
-                        setIsEditing={setIsEditing}
-                      />
-                    ) : (
-                      flexRender(cell.column.columnDef.cell, cell.getContext())
-                    )}
-                  </TableCell>
-                ))}
-
-                {withForm && (
-                  <FormCell
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    label={label}
-                  />
-                )}
               </TableRow>
             ))}
         </TableBody>

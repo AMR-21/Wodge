@@ -8,8 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarItemBtn } from "../sidebar-item-btn";
-import { Check, MoreHorizontal, X } from "lucide-react";
+import { Check, MoreHorizontal, Users2, X } from "lucide-react";
 import { Row, RowData, Table } from "@tanstack/react-table";
+import { Children } from "react";
 
 interface DataTableActionsProps<TData> {
   table: Table<TData>;
@@ -20,21 +21,35 @@ interface DataTableActionsProps<TData> {
     destructive?: boolean;
     type?: "separator" | "item";
   }[];
+
+  children?: React.ReactNode;
 }
 
 export function DataTableActions<TData>({
   table,
   row,
+  children,
   menuItems,
 }: DataTableActionsProps<TData>) {
   const isEdited = table.options.meta?.edited.has(row.index);
 
+  const nActions = Children.count(children) || 0;
+
   return (
-    <div className={cn(" flex w-[3.25rem] overflow-hidden ")}>
+    <div
+      className={cn("flex gap-1 overflow-hidden transition-all")}
+      style={{
+        width: `calc( ${nActions * 1.75}rem + 1.5rem )`,
+        ...(isEdited && {
+          width: `calc(${nActions * 1.75}rem + 1.75rem + 1.5rem)`,
+        }),
+      }}
+    >
+      {children}
       <div
         className={cn(
-          "ml-0.5 translate-x-1/2 transition-all",
-          isEdited && "ml-0 -translate-x-full",
+          "transition-transform",
+          isEdited && "invisible translate-x-full opacity-0",
         )}
       >
         <DropdownMenu>
@@ -64,29 +79,27 @@ export function DataTableActions<TData>({
         </DropdownMenu>
       </div>
 
-      <div className={cn("flex w-[3.25rem] min-w-[3.25rem] gap-1")}>
-        <SidebarItemBtn
-          Icon={Check}
-          onClick={() => table.options.meta?.submitRow(row.index)}
-          className={cn(
-            "translate-x-[200%] transition-all",
-            isEdited && " -translate-x-full",
-          )}
-          success
-        />
-        <SidebarItemBtn
-          key={"btn"}
-          Icon={X}
-          className={cn(
-            "translate-x-full transition-all",
-            isEdited && "-translate-x-full",
-          )}
-          onClick={() => {
-            table.options.meta?.discard(row.index);
-          }}
-          destructive
-        />
-      </div>
+      <SidebarItemBtn
+        Icon={Check}
+        onClick={() => table.options.meta?.submitRow(row.index)}
+        className={cn(
+          "invisible  transition-all",
+          isEdited && "visible -translate-x-7 ",
+        )}
+        success
+      />
+
+      <SidebarItemBtn
+        Icon={X}
+        className={cn(
+          "invisible transition-all",
+          isEdited && "visible -translate-x-7",
+        )}
+        onClick={() => {
+          table.options.meta?.discard(row.index);
+        }}
+        destructive
+      />
     </div>
   );
 }

@@ -9,26 +9,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { nanoid } from "nanoid";
 import { ComboboxCell, Separator, SettingsDataTable } from "@repo/ui";
+import { DeepReadonlyObject } from "replicache";
 
 export function TeamsSettings() {
   const { structure, members } = useCurrentWorkspace();
-  const [submitted, setSubmitted] = React.useState(false);
-
-  const form = useForm({
-    resolver: zodResolver(TeamSchema),
-    defaultValues: {
-      name: "",
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-    },
-  });
 
   if (!structure || !members) return null;
 
-  async function onSubmit(data: Team) {
-    console.log(data);
-    form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
-    form.reset();
-    setSubmitted(true);
+  async function updateHandler({
+    data,
+    id,
+  }: {
+    data: Partial<DeepReadonlyObject<Team>>;
+    id: string;
+  }) {
+    console.log(data, id);
   }
 
   return (
@@ -76,6 +71,7 @@ export function TeamsSettings() {
             ] as Mutable<typeof structure.teams>
           }
           label="team"
+          updateHandler={updateHandler}
           withForm
         />
       </SettingsContentSection>

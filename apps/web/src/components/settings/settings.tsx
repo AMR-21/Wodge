@@ -171,10 +171,12 @@ function SettingsContentSection({
   children,
   header,
   action,
+  className,
 }: {
   children: React.ReactNode;
   action?: React.ReactNode;
-  header: string;
+  header?: string;
+  className?: string;
 }) {
   return (
     <div className="py-6">
@@ -182,7 +184,7 @@ function SettingsContentSection({
         <h3 className=" text-base">{header}</h3>
         {action}
       </div>
-      <div>{children}</div>
+      <div className={className}>{children}</div>
     </div>
   );
 }

@@ -26,8 +26,12 @@ export function TagsComboBox({
       open={open}
       onOpenChange={setOpen}
       renderer={
-        tags?.length &&
-        tags.length > 0 && <Tag name={tags[0]?.name!} color={tags[0]?.color} />
+        <div className=" flex gap-0.5 overflow-hidden">
+          {/* <div className="absolute right-0 h-full w-2/12  bg-gradient-to-r from-transparent to-background " /> */}
+          {tags?.map((tag, i) => (
+            <Tag key={i} name={tag.name} color={tag.color} />
+          ))}
+        </div>
       }
       placeholder="Search for tags"
       emptyMsg="No tags found"

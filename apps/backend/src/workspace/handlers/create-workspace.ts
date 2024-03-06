@@ -31,12 +31,11 @@ export async function createWorkspace(
         {
           id: userId,
           data: publicData,
-          roles: [],
-          teams: [],
           joinInfo: {
             joined_at: new Date().toISOString(),
             token: "",
             created_by: "",
+            method: "owner",
           },
         },
       ],

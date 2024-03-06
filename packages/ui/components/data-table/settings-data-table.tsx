@@ -30,7 +30,7 @@ interface DataTableProps<TData extends { id: string }, TValue> {
   data: TData[];
   withForm?: boolean;
   label?: string;
-  updateHandler?: (data: Partial<TData>) => void;
+  updateHandler?: ({ data, id }: { data: Partial<TData>; id: string }) => void;
 }
 
 declare module "@tanstack/react-table" {
@@ -80,8 +80,9 @@ export function SettingsDataTable<TData extends { id: string }, TValue>({
       setBuffer,
       submitRow: (idx: number) => {
         const updateData = buffer.get(idx);
-        console.log("updating", buffer.get(idx));
-        if (updateData) updateHandler?.(updateData);
+        const { id } = data[idx]!;
+
+        if (updateData) updateHandler?.({ data: updateData, id });
       },
 
       discard: (idx: number) => {
@@ -176,6 +177,38 @@ export function SettingsDataTable<TData extends { id: string }, TValue>({
       </Table>
 
       <DataTablePagination table={table} />
+      {/* modal content here */}
     </div>
   );
 }
+
+// function FormRow({}) {
+//   return (
+//     <TableRow
+//       key={row.id}
+//       data-state={row.getIsSelected() && "selected"}
+//       className="relative group/row"
+//     >
+//       {row.getVisibleCells().map((cell) => (
+//         <TableCell
+//           key={cell.id}
+//           className={cn("invisible", isEditing && "visible")}
+//         >
+//           {withForm && cell.id.endsWith("actions") ? (
+//             <FormRowControl setIsEditing={setIsEditing} />
+//           ) : (
+//             flexRender(cell.column.columnDef.cell, cell.getContext())
+//           )}
+//         </TableCell>
+//       ))}
+
+//       {withForm && (
+//         <FormCell
+//           isEditing={isEditing}
+//           setIsEditing={setIsEditing}
+//           label={label}
+//         />
+//       )}
+//     </TableRow>
+//   );
+// }

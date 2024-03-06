@@ -25,7 +25,7 @@ export function Tag({
 
   return (
     <div
-      className="flex items-center rounded-full border border-border/40 px-1.5 py-1"
+      className="flex items-center rounded-full border border-border/40 px-1.5 py-0.5 text-xs"
       style={{
         backgroundColor: `rgba(${hexToRgb(color)},0.2)`,
       }}

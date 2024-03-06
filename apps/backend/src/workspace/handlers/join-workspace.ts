@@ -39,7 +39,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   // 4. If the invite method is a email, verify that the requesting user email is included in the invite
   if (invite.method === "email") {
-    if (!invite.emails!.includes(userData.email)) return badRequest();
+    // if (!invite.emails!.includes(userData.email)) return badRequest();
   }
 
   // 5. Add workspace to user data
@@ -67,8 +67,6 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
       created_by: invite.createdBy,
       method: invite.method,
     },
-    roles: [],
-    teams: [],
   });
 
   // 7. Update Replicache versions
@@ -82,8 +80,8 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // if(invite.limit !== -1)
   if (invite.method === "link") invite.limit -= 1;
 
-  if (invite.method === "email")
-    invite.emails = invite.emails?.filter((email) => email !== userData.email);
+  // if (invite.method === "email")
+  //   invite.emails = invite.emails?.filter((email) => email !== userData.email);
 
   party.invites.set(token, invite);
 
