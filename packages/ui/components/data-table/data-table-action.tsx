@@ -20,6 +20,7 @@ interface DataTableActionsProps<TData> {
     action?: () => void;
     destructive?: boolean;
     type?: "separator" | "item";
+    disabled?: boolean;
   }[];
 
   children?: React.ReactNode;
@@ -76,6 +77,7 @@ export function DataTableActions<TData>({
                     key={idx}
                     destructive={!!item?.destructive}
                     onClick={item?.action}
+                    disabled={item?.disabled}
                   >
                     {item?.label}
                   </DropdownMenuItem>

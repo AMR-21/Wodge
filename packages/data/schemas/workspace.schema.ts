@@ -134,7 +134,9 @@ export const RoleSchema = z.object({
   name: z.string().max(70),
   members: z.array(z.string().length(ID_LENGTH)),
   permissions: z.array(z.enum(["read", "write", "admin"])),
+  linkedTo: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
   color: z.string().default(BRAND_COLOR).optional(),
+  createdBy: z.string().length(ID_LENGTH),
 });
 
 export const TeamSchema = z.object({
@@ -142,9 +144,9 @@ export const TeamSchema = z.object({
   name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
   members: z.array(z.string().length(ID_LENGTH)),
-  moderators: z.array(z.string().length(ID_LENGTH)),
   dirs: z.array(DirSchema),
   tags: z.array(TagSchema),
+  createdBy: z.string().length(ID_LENGTH),
 });
 
 export const WorkspaceStructureSchema = z.object({

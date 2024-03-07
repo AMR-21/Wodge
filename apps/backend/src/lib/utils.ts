@@ -40,9 +40,10 @@ export function isAllowed(
 
   if (!requestingMember) return false;
 
-  const roles = getRoles(requestingMember.roles, party) as Role[];
+  // const roles = getRoles(requestingMember.roles, party) as Role[];
 
-  if (!isOwner && !grant(roles, permissions)) return false;
+  // if (!isOwner && !grant(roles, permissions)) return false;
+  if (!isOwner) return false;
 
   return true;
 }

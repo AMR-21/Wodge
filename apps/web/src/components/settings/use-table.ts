@@ -1,8 +1,10 @@
 import * as React from "react";
 import {
   ColumnDef,
+  ColumnFiltersState,
   RowPinningState,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -37,7 +39,7 @@ export interface DataTableProps<TData, TValue> {
   withForm?: boolean;
 }
 
-export function useTable<TData extends { id: string }, TValue>({
+export function useTable<TData, TValue>({
   data,
   columns,
   updateHandler,
@@ -51,7 +53,9 @@ export function useTable<TData extends { id: string }, TValue>({
 
   const [edited, setEdited] = useImmer<Set<number>>(new Set());
   const [isEditing, setIsEditing] = React.useState(false);
-
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   const [buffer, setBuffer] = useImmer<Map<number, Partial<TData>>>(new Map());
 
   const table = useReactTable({
@@ -59,12 +63,15 @@ export function useTable<TData extends { id: string }, TValue>({
     columns,
 
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
     onRowPinningChange: setRowPinning,
+    onColumnFiltersChange: setColumnFilters,
     state: {
       rowSelection,
       rowPinning,
+      columnFilters,
     },
     meta: {
       edited,
@@ -102,7 +109,6 @@ export function useTable<TData extends { id: string }, TValue>({
       const row =
         table.getCoreRowModel().rows[data.length > 0 ? data.length - 1 : 0];
 
-      console.log(table.getPaginationRowModel(), table.getCoreRowModel());
       setRowPinning({
         top: [],
         bottom: [],
@@ -114,8 +120,6 @@ export function useTable<TData extends { id: string }, TValue>({
 
   React.useEffect(() => {
     if (withForm) {
-      // if(rowSelection[])
-
       const formRowIndex = table.getRowCount() - 1;
 
       const row = table.getCoreRowModel().rows[formRowIndex];

@@ -4,6 +4,7 @@ import {
   AvatarFallback,
   AvatarImage,
   Checkbox,
+  DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
   Header,
@@ -11,7 +12,8 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 
 export const teamMembersColumns = (
-  moderators: Readonly<string[]>,
+  removeMember: (memberId: string) => void,
+  creatorId: string,
 ): ColumnDef<DrObj<Member>>[] => [
   {
     id: "select",
@@ -53,15 +55,25 @@ export const teamMembersColumns = (
   },
 
   {
-    id: "moderator",
-    header: () => <Header>Moderator</Header>,
-    cell: ({ row }) => {
+    id: "actions",
+    cell: ({ row, table }) => {
       const memberId = row.original.id;
-
+      const disabled = table.getRowCount() === 1 || creatorId === memberId;
       return (
-        <div className="flex justify-center">
-          <Checkbox defaultChecked={moderators.includes(memberId)} />
-        </div>
+        <DataTableActions
+          row={row}
+          table={table}
+          menuItems={[
+            {
+              label: "Remove from team",
+              action: () => {
+                removeMember(memberId);
+              },
+              destructive: true,
+              disabled,
+            },
+          ]}
+        />
       );
     },
   },

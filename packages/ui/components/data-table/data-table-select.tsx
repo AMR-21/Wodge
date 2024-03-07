@@ -9,7 +9,8 @@ export function DataTableHeaderSelect<TData>({
   withForm?: boolean;
 }) {
   const checked = withForm
-    ? table.getSelectedRowModel().rows.length === table.getRowCount() - 1
+    ? table.getSelectedRowModel().rows.length === table.getRowCount() - 1 &&
+      table.getRowCount() > 1
     : !!table.getIsAllRowsSelected();
 
   return (

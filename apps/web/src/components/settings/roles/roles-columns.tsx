@@ -1,9 +1,8 @@
-import * as React from "react";
-import { DrObj, Member, Tag as TagType, Team } from "@repo/data";
+import { DrObj, Member, Role } from "@repo/data";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+  Checkbox,
+  ComboboxCell,
+  CommandItem,
   DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
@@ -13,35 +12,30 @@ import {
   Header,
   Input,
 } from "@repo/ui";
-import { produce } from "immer";
-import { ColumnDef } from "@tanstack/react-table";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
-import _, { set } from "lodash";
-import { enableMapSet } from "immer";
+import { ColumnDef } from "@tanstack/react-table";
+import { produce } from "immer";
+import _ from "lodash";
+import { Check, UserRoundCog } from "lucide-react";
+import * as React from "react";
+import { TeamMembersDialog } from "../teams/team-members-dialog";
 
-import { TagsComboBox } from "./tags-combobox";
-import { UserRoundCog } from "lucide-react";
-import { TeamMembersDialog } from "./team-members-dialog";
-
-enableMapSet();
-
-export const teamColumns = (
+export const rolesColumns = (
   members: readonly DrObj<Member>[],
-  deleteTeam: (teamId: string) => void,
-): ColumnDef<DrObj<Team>>[] => {
+  deleteRole: (roleId: string) => void,
+): ColumnDef<DrObj<Role>>[] => {
   return [
     {
       id: "select",
       header: ({ table }) => <DataTableHeaderSelect withForm table={table} />,
-      cell: ({ row, table }) => <DataTableRowSelect row={row} />,
+      cell: ({ row }) => <DataTableRowSelect row={row} />,
       enableSorting: false,
       enableHiding: false,
     },
-
     {
-      accessorFn: (team) => team.name,
-      id: "team",
-      header: () => <Header>Team</Header>,
+      accessorKey: "name",
+      id: "name",
+      header: () => <Header className="px-3">Role</Header>,
       cell: ({ row, table }) => {
         const initialValue =
           table.options.meta?.buffer.get(row.index)?.name || row.original.name;
@@ -85,29 +79,17 @@ export const teamColumns = (
         };
 
         return (
-          <div className="flex gap-2">
-            <Avatar className="h-8 w-8 rounded-md ">
-              <AvatarImage
-                src={row.original.avatar}
-                alt={value}
-                className="rounded-md"
-              />
-              <AvatarFallback className="rounded-md capitalize">
-                {value?.[0] || ""}
-              </AvatarFallback>
-            </Avatar>
-            <Input
-              value={value}
-              ref={inputRef}
-              placeholder="Team name"
-              onChange={(e) => {
-                setValue(e.target.value);
-                setEdited(produce((draft) => draft.add(row.index)));
-              }}
-              onBlur={onBlur}
-              inRow
-            />
-          </div>
+          <Input
+            value={value}
+            ref={inputRef}
+            placeholder="Role name"
+            onChange={(e) => {
+              setValue(e.target.value);
+              setEdited(produce((draft) => draft.add(row.index)));
+            }}
+            onBlur={onBlur}
+            inRow
+          />
         );
       },
     },
@@ -124,79 +106,108 @@ export const teamColumns = (
       },
     },
     {
-      accessorKey: "tags",
-      header: () => <Header className="px-1">Tags</Header>,
+      id: "permissions",
+      header: () => <Header className="px-1">Permissions</Header>,
       cell: ({ row, table }) => {
+        const [open, setOpen] = React.useState(false);
+
         if (!table.options.meta) return null;
 
         const { buffer, setBuffer, setEdited } = table.options.meta;
 
         // const orgTags = row.original.tags!;
-        const tags = buffer.get(row.index)?.tags || row.original.tags!;
-        // const tags = [...bufferedTags];
+        const permissions =
+          buffer.get(row.index)?.permissions || row.original.permissions;
 
-        function handleDeleteTag(tagName: string) {
+        const basePerms = [
+          "read",
+          "write",
+          "admin",
+        ] satisfies Role["permissions"];
+
+        function handlePerm(
+          checked: string | boolean,
+          name: "admin" | "read" | "write",
+        ) {
+          setEdited((draft) => {
+            draft.add(row.index);
+          });
+
           setBuffer((draft) => {
             if (draft.has(row.index)) {
-              draft.get(row.index)!.tags = tags.filter(
-                (tag) => tag.name !== tagName,
-              );
+              const cur = draft.get(row.index)!;
+              if (checked === false) {
+                cur.permissions = cur.permissions
+                  ? (draft.get(row.index)!.permissions = permissions.filter(
+                      (perm) => perm !== name,
+                    ))
+                  : [
+                      ...row.original.permissions.filter(
+                        (perm) => perm !== name,
+                      ),
+                    ];
+              } else {
+                cur.permissions && cur.permissions.push(name);
+                !cur.permissions && [...row.original.permissions, name];
+              }
 
               return;
             }
 
             draft.set(row.index, {
-              tags: tags.filter((tag) => tag.name !== tagName),
+              permissions: [...permissions, name],
             });
-          });
-
-          setEdited((draft) => {
-            draft.add(row.index);
-          });
-        }
-
-        function handleNewTag({ name, color = "#1d4ed8" }: TagType) {
-          setBuffer((draft) => {
-            if (draft.has(row.index)) {
-              const curTags = draft.get(row.index)!.tags;
-              curTags
-                ? curTags.push({ name, color })
-                : (draft.get(row.index)!.tags = [...tags, { name, color }]);
-              return;
-            }
-
-            draft.set(row.index, {
-              tags: [...tags, { name, color }],
-            });
-          });
-
-          setEdited((draft) => {
-            draft.add(row.index);
           });
         }
 
         return (
-          <TagsComboBox
-            tags={tags}
-            handleDeleteTag={handleDeleteTag}
-            handleNewTag={handleNewTag}
-          />
+          <ComboboxCell
+            open={open}
+            onOpenChange={setOpen}
+            renderer={
+              <div className=" flex gap-1 overflow-hidden">
+                {permissions?.map((permission, i) => (
+                  <p key={i}>{permission}</p>
+                ))}
+              </div>
+            }
+            placeholder="Search for permissions"
+            emptyMsg="No tags found"
+            label="permissions"
+            className="w-[240px]"
+            nData={permissions?.length}
+          >
+            {basePerms?.map((permission, i) => (
+              <CommandItem
+                key={i}
+                value={permission}
+                className="flex justify-between"
+              >
+                <p>{permission}</p>
+                <Checkbox
+                  defaultChecked={permissions.some(
+                    (perm) => perm === permission,
+                  )}
+                  onCheckedChange={(e) => handlePerm(e, permission)}
+                />
+              </CommandItem>
+            ))}
+          </ComboboxCell>
         );
       },
     },
-
     {
       id: "actions",
       cell: ({ row, table }) => {
-        const team = row.original;
+        const role = row.original;
         if (!table.options.meta) return null;
 
         const { buffer, setBuffer, setEdited } = table.options.meta;
 
-        const curMembersIds = buffer.get(row.index)?.members || team.members;
+        const curMembersIds = buffer.get(row.index)?.members || role.members;
 
         function addMember(member: DrObj<Member>) {
-          if (team.members.includes(member.id)) return;
+          if (role.members.includes(member.id)) return;
 
           setEdited((draft) => {
             draft.add(row.index);
@@ -244,7 +255,7 @@ export const teamColumns = (
                 curMembersIds={curMembersIds}
                 addMember={addMember}
                 removeMember={removeMember}
-                creatorId={team.createdBy}
+                creatorId={role.createdBy}
               />
             </DialogContent>
             <DataTableActions
@@ -254,7 +265,7 @@ export const teamColumns = (
                 {
                   label: "Delete",
                   action: () => {
-                    deleteTeam(team.id);
+                    deleteRole(role.id);
                   },
                   destructive: true,
                 },

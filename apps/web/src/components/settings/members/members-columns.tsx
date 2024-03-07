@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  Header,
   TooltipWrapper,
 } from "@repo/ui";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
@@ -51,15 +52,17 @@ export function membersColumns(
       enableSorting: false,
       enableHiding: false,
     },
+
     {
-      id: "avatar",
-      header: () => <p>Avatar</p>,
+      id: "info",
+      header: () => <Header>Member</Header>,
+
       cell: ({ row }) => {
         const member = row.original;
 
         return (
-          <div className="w-fit">
-            <Avatar className="h-8 w-8">
+          <div className="flex gap-4">
+            <Avatar className="h-8 w-8 rounded-md">
               <AvatarImage
                 src={member.data.avatar}
                 alt={member.data.displayName}
@@ -69,28 +72,14 @@ export function membersColumns(
                 {member.data.displayName[0]}
               </AvatarFallback>
             </Avatar>
-          </div>
-        );
-      },
-    },
-
-    {
-      id: "info",
-      header: () => <p>Information</p>,
-
-      cell: ({ row }) => {
-        const member = row.original;
-
-        return (
-          <div className="flex flex-col">
-            <div className="flex gap-1">
-              <p>{member.data.displayName}</p>
-              <span>-</span>
-              <p>{member.data.username}</p>
+            <div className="flex flex-col">
+              <div className="flex gap-1">
+                <p>{member.data.displayName}</p>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {member.data.email}
+              </span>
             </div>
-            <span className="text-xs text-muted-foreground">
-              {member.data.email}
-            </span>
           </div>
         );
       },
@@ -134,33 +123,7 @@ export function membersColumns(
         );
       },
     },
-    {
-      id: "teams",
-      header: () => <p>Teams</p>,
-      cell: ({ row }) => {
-        const member = row.original;
 
-        return (
-          <Badge className="cursor-pointer" onClick={() => console.log("hi2")}>
-            View
-          </Badge>
-        );
-      },
-    },
-
-    {
-      id: "roles",
-      header: () => <p>Roles</p>,
-      cell: ({ row }) => {
-        const member = row.original;
-
-        return (
-          <Badge className="cursor-pointer" onClick={() => console.log("hi2")}>
-            View
-          </Badge>
-        );
-      },
-    },
     {
       id: "actions",
       cell: ({ row }) => {

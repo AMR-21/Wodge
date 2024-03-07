@@ -6,16 +6,13 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Button,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
   Input,
-  Separator,
 } from "@repo/ui";
 import { useEffect } from "react";
 import {
@@ -25,7 +22,6 @@ import {
   SettingsContentSection,
 } from "./settings";
 import { Gate } from "../gate";
-import { z } from "zod";
 
 export function WorkspaceSettings() {
   const { metadata, workspace } = useCurrentWorkspace();

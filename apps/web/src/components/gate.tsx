@@ -12,7 +12,7 @@ export function Gate({
   const { members, structure } = useCurrentWorkspace();
   const user = useCurrentUser();
 
-  const currentMember = members?.members.find((m) => m.id === user?.data?.id);
+  const currentMember = { roles: [] };
 
   // console.log(members, structure);
   if (!members) return null;

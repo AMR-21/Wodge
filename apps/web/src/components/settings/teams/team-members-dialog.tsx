@@ -10,22 +10,18 @@ import * as React from "react";
 import { useTable } from "../use-table";
 interface TeamMembersDialogProps {
   members: readonly DrObj<Member>[];
-  teamId: string;
-  moderators: readonly string[];
+  creatorId: string;
   addMember: (member: DrObj<Member>) => void;
-  // removeMember: (memberId: string) => void;
-  // makeModerator: (memberId: string) => void;
+  removeMember: (memberId: string) => void;
   curMembersIds: readonly string[];
-  parentTable: Table<DeepReadonlyObject<Team>>;
 }
 
 export function TeamMembersDialog({
   addMember,
-  // makeModerator,
-  // removeMember,
+  removeMember,
   members,
-  moderators,
   curMembersIds,
+  creatorId,
 }: TeamMembersDialogProps) {
   // TODO
 
@@ -41,7 +37,7 @@ export function TeamMembersDialog({
 
   const { table } = useTable({
     data: teamMembers as Mutable<DrObj<Member>[]>,
-    columns: teamMembersColumns(moderators),
+    columns: teamMembersColumns(removeMember, creatorId),
   });
 
   return (

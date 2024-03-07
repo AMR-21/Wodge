@@ -5,7 +5,7 @@ import { SettingsContentHeader, SettingsContentSection } from "../settings";
 import { teamColumns } from "./teams-columns";
 import { DrObj, Team, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { nanoid } from "nanoid";
-import { DataTable } from "@repo/ui";
+import { DataTable, useCurrentUser } from "@repo/ui";
 import { UpdateHandlerProps, useTable } from "../use-table";
 
 const teamsX = [
@@ -31,7 +31,11 @@ const teamsX = [
 export function TeamsSettings() {
   const { structure, members, workspace } = useCurrentWorkspace();
 
-  const columns = React.useMemo(() => teamColumns(members.members), [members]);
+  const columns = React.useMemo(
+    () => teamColumns(members.members, deleteTeam),
+    [members],
+  );
+  const user = useCurrentUser();
   const teams = React.useMemo(() => {
     return [
       ...structure.teams,
@@ -40,19 +44,23 @@ export function TeamsSettings() {
         id: "add",
         dirs: [],
         name: "",
-        moderators: [],
         tags: [],
-        members: [],
+        members: [user?.data.id!],
+        createdBy: user?.data.id!,
       },
     ];
-  }, [structure]);
+  }, [structure, user]);
 
-  const { table, setEdited, setBuffer } = useTable({
-    data: teams as Mutable<typeof structure.teams>,
+  const { table } = useTable<Mutable<DrObj<Team>>, DrObj<Team>>({
+    data: teams,
     columns: columns,
     updateHandler: onUpdate,
     withForm: true,
   });
+
+  async function deleteTeam(teamId: string) {
+    console.log("delete", teamId);
+  }
 
   async function onUpdate({ data, idx }: UpdateHandlerProps<DrObj<Team>>) {
     console.log("onUpdate", data, idx);
