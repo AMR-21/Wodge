@@ -1,13 +1,7 @@
 "use client";
+import * as React from "react";
 
-import {
-  ColumnDef,
-  RowData,
-  RowPinningState,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { Table as TableType, flexRender } from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -17,53 +11,14 @@ import {
   TableRow,
 } from "../ui/table";
 
-import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
-import { SidebarItemBtn } from "../sidebar-item-btn";
-import { Check, Plus, X } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { FormCell } from "./form-cell";
-import { FormRowControl } from "./form-row-control";
-import { ComboboxCell } from "./combobox-cell";
-import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
-import { Form } from "../ui/form";
-import { Team } from "@repo/data";
 
-interface DataTableProps<
-  TData extends { id: string },
-  TValue,
-  T extends FieldValues,
-> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TData> {
+  table: TableType<TData>;
+  withPagination?: boolean;
 }
 
-function DataTable<
-  TData extends { id: string },
-  TValue,
-  T extends FieldValues,
->({ columns, data }: DataTableProps<TData, TValue, T>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [rowPinning, setRowPinning] = React.useState<RowPinningState>({
-    top: [],
-    bottom: [],
-  });
-  const [isEditing, setIsEditing] = React.useState(false);
-
-  const table = useReactTable({
-    data,
-    columns,
-
-    getCoreRowModel: getCoreRowModel(),
-    onRowSelectionChange: setRowSelection,
-    onRowPinningChange: setRowPinning,
-    state: {
-      rowSelection,
-      rowPinning,
-    },
-  });
-
+function DataTable<TData>({ table }: DataTableProps<TData>) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -102,8 +57,6 @@ function DataTable<
       </Table>
 
       <DataTablePagination table={table} />
-
-      {/* <ComboboxCell /> */}
     </div>
   );
 }

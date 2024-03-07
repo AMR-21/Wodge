@@ -2,6 +2,8 @@
  * Client modules
  */
 
+import { DeepReadonlyObject } from "replicache";
+
 export * from "./models/user/user";
 export * from "./models/workspace/workspace";
 export * from "./models/workspace/workspace-registry";
@@ -48,3 +50,5 @@ export * from "./lib/rbac";
  */
 
 export * from "./lib/utils";
+
+export type DrObj<T> = DeepReadonlyObject<T>;

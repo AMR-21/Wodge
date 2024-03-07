@@ -33,18 +33,6 @@ interface DataTableProps<TData extends { id: string }, TValue> {
   updateHandler?: ({ data, id }: { data: Partial<TData>; id: string }) => void;
 }
 
-declare module "@tanstack/react-table" {
-  interface TableMeta<TData extends RowData> {
-    edited: Set<number>;
-    setEdited: Updater<Set<number>>;
-
-    buffer: Map<number, Partial<TData>>;
-    setBuffer: Updater<Map<number, Partial<TData>>>;
-    submitRow: (idx: number) => void;
-    discard: (idx: number) => void;
-  }
-}
-
 export function SettingsDataTable<TData extends { id: string }, TValue>({
   columns,
   data,

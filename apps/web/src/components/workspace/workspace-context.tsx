@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  DrObj,
   Member,
   PublicUserType,
   Workspace,
@@ -17,13 +18,13 @@ import usePartySocket from "partysocket/react";
 import { env } from "@repo/env";
 import { useParams, useRouter } from "next/navigation";
 import PartySocket from "partysocket";
+import { Mutable } from "@/lib/utils";
 
 interface WorkspaceContext {
-  metadata?: WorkspaceType;
-  members?: DeepReadonly<WorkspaceMembers>;
-  structure?: DeepReadonly<WorkspaceStructure>;
+  metadata: WorkspaceType;
+  members: Mutable<DrObj<WorkspaceMembers>>;
+  structure: Mutable<DrObj<WorkspaceStructure>>;
   inviters?: (Pick<Member, "id" | "data"> | undefined)[];
-  // ws: PartySocket;
   workspace?: Workspace;
 }
 

@@ -1,4 +1,4 @@
-import { Member } from "@repo/data";
+import { DrObj, Member } from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
@@ -9,12 +9,11 @@ import {
   Header,
 } from "@repo/ui";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check } from "lucide-react";
-import { DeepReadonly, DeepReadonlyObject } from "replicache";
+import { DeepReadonlyObject } from "replicache";
 
 export const teamMembersColumns = (
   moderators: Readonly<string[]>,
-): ColumnDef<DeepReadonly<Member>>[] => [
+): ColumnDef<DrObj<Member>>[] => [
   {
     id: "select",
     header: ({ table }) => <DataTableHeaderSelect table={table} />,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Member, Tag as TagType, Team } from "@repo/data";
+import { DrObj, Member, Tag as TagType, Team } from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
@@ -20,7 +20,7 @@ import {
 } from "@repo/ui";
 import { produce } from "immer";
 import { ColumnDef } from "@tanstack/react-table";
-import { DeepReadonly } from "replicache";
+import { DeepReadonly, DeepReadonlyObject } from "replicache";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { enableMapSet } from "immer";
 
@@ -32,7 +32,7 @@ import { TeamMembersDialog } from "./team-members-dialog";
 enableMapSet();
 
 export const teamColumns = (
-  members: readonly DeepReadonly<Member>[],
+  members: readonly DrObj<Member>[],
 ): ColumnDef<DeepReadonly<Team>>[] => {
   return [
     {
@@ -259,18 +259,22 @@ export const teamColumns = (
       id: "actions",
       cell: ({ row, table }) => {
         const team = row.original;
-
         // function addMember(id){}
 
+        function addMember(member: DrObj<Member>) {
+          console.log("add member:", member);
+        }
+
         return (
-          <Dialog open>
+          <Dialog>
             <DialogContent>
               <TeamMembersDialog
                 members={members}
-                // addMember={}
+                addMember={addMember}
                 moderators={team.moderators}
                 // removeMember={}
                 teamId={team.id}
+                table={table}
               />
             </DialogContent>
             <DataTableActions

@@ -6,24 +6,65 @@ import { teamColumns } from "./teams-columns";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
+import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { nanoid } from "nanoid";
-import { ComboboxCell, Separator, SettingsDataTable } from "@repo/ui";
+import {
+  ComboboxCell,
+  DataTable,
+  Separator,
+  SettingsDataTable,
+} from "@repo/ui";
 import { DeepReadonlyObject } from "replicache";
+import {
+  ColumnFiltersState,
+  getFilteredRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { getCoreRowModel } from "@tanstack/react-table";
+import { UpdateHandlerProps, useTable } from "../use-table";
+import { produce } from "immer";
+import { useImmer } from "use-immer";
 
 export function TeamsSettings() {
   const { structure, members } = useCurrentWorkspace();
 
-  if (!structure || !members) return null;
+  const columns = React.useMemo(
+    () => teamColumns(members.members),
+    [members.members],
+  );
 
-  async function updateHandler({
-    data,
-    id,
-  }: {
-    data: Partial<DeepReadonlyObject<Team>>;
-    id: string;
-  }) {
-    console.log(data, id);
+  const teams = React.useMemo(
+    () => [
+      ...structure.teams,
+      {
+        id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        dirs: [],
+        name: "Andriod",
+        moderators: [],
+        tags: [
+          {
+            name: "Mobile",
+            color: "#FF0000",
+          },
+          {
+            name: "Google",
+            color: "#00FF00",
+          },
+        ],
+        members: [],
+      },
+    ],
+    [structure.teams],
+  );
+
+  const { table } = useTable({
+    data: teams as Mutable<typeof structure.teams>,
+    columns: columns,
+    updateHandler: onUpdate,
+  });
+
+  function onUpdate({ data, idx }: UpdateHandlerProps<DrObj<Team>>) {
+    console.log("onUpdate", data, idx);
   }
 
   return (
@@ -34,46 +75,7 @@ export function TeamsSettings() {
       />
 
       <SettingsContentSection header="Teams">
-        <SettingsDataTable
-          columns={teamColumns(members.members)}
-          data={
-            [
-              ...structure.teams,
-              {
-                id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-                name: "Andriod",
-                moderators: ["O1BdzI5H8tdsDOXELi_Sj"],
-                tags: [
-                  {
-                    name: "Mobile",
-                    color: "#FF0000",
-                  },
-                  {
-                    name: "Google",
-                    color: "#00FF00",
-                  },
-                ],
-              },
-              // {
-              //   id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-              //   name: "Apple",
-              //   moderators: [],
-              //   tags: [],
-              // },
-
-              {
-                id: "add-team",
-                name: "",
-                avatar: "",
-                moderators: [],
-                tags: [],
-              },
-            ] as Mutable<typeof structure.teams>
-          }
-          label="team"
-          updateHandler={updateHandler}
-          withForm
-        />
+        <DataTable table={table} />
       </SettingsContentSection>
     </div>
   );

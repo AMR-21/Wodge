@@ -16,12 +16,13 @@ import {
   WorkspaceType,
 } from "@repo/data";
 import { useMemo } from "react";
+import { useWorkspaceId } from "../ui/use-workspace-id";
 
 export function useCurrentWsData() {
-  const { workspaceId }: { workspaceId: string } = useParams();
+  const workspaceId = useWorkspaceId();
 
   const registry = WorkspacesRegistry.getInstance();
-  const workspace = registry.getWorkspace(workspaceId as string);
+  const workspace = registry.getWorkspace(workspaceId);
 
   const { snapshot: metadata, isPending } = useSubscribe(
     workspace?.store,
@@ -32,12 +33,26 @@ export function useCurrentWsData() {
     workspace?.store,
     async (tx: ReadTransaction) =>
       tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),
+    {
+      default: {
+        members: [],
+        owner: "",
+      },
+    } satisfies { default: WorkspaceMembers },
   );
 
   const { snapshot: structure } = useSubscribe(
     workspace?.store,
     async (tx: ReadTransaction) =>
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
+    {
+      default: {
+        publicChannels: [],
+        roles: [],
+        teams: [],
+        tags: [],
+      },
+    } satisfies { default: WorkspaceStructure },
   );
 
   const inviters = useMemo(() => {
@@ -65,10 +80,7 @@ export function useCurrentWsData() {
     return result.filter((r) => !!r);
   }, [members]);
 
-  if (!workspaceId) return null;
-
   // Workspace does not exist
-  if (!metadata && !isPending) return null;
 
   return { metadata, members, structure, inviters, workspaceId, workspace };
 }

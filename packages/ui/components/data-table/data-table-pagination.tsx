@@ -22,6 +22,7 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  if (!table) return null;
   return (
     <div className="flex items-center justify-between border-t bg-muted/50 px-2 font-medium [&>tr]:last:border-b-0">
       <div className="flex-1 text-sm text-muted-foreground">
