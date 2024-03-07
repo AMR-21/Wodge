@@ -10,6 +10,7 @@ export function useCacheUser() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionUser = useSessionUser();
+  // const setUser = useAppSate
 
   useEffect(() => {
     // if the user has just logged in, cache the user data

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:drop": "drizzle-kit drop"
+    "db:drop": "drizzle-kit drop",
+    "test": "infisical run --env=dev --path=/web -- vitest"
   },
   "dependencies": {
     "@repo/env": "workspace:*",
@@ -25,10 +26,15 @@
     "@cloudflare/next-on-pages": "^1.8.6",
     "@cloudflare/workers-types": "^4.20240129.0",
     "@repo/ts": "workspace:*",
+    "@testing-library/react": "^14.2.1",
     "@types/node": "^20",
     "@types/react": "^18.2.56",
+    "@vitejs/plugin-react": "^4.2.1",
     "drizzle-kit": "^0.20.13",
     "eslint": "^8",
-    "typescript": "^5"
+    "fake-indexeddb": "^5.0.2",
+    "jsdom": "^24.0.0",
+    "typescript": "^5",
+    "vitest": "^1.3.1"
   }
 }

@@ -38,3 +38,5 @@ export * from "./hooks/workspace/use-workspaces";
 export * from "./hooks/workspace/use-current-ws-data";
 export * from "./hooks/ui/use-is-desktop";
 export * from "./hooks/ui/use-workspace-id";
+
+export * from "./store";

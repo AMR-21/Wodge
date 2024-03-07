@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppState } from "@/store";
+import { useAppState } from "@repo/ui";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { PanelLeft } from "lucide-react";

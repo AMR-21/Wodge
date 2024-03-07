@@ -6,7 +6,7 @@ import {
   ReadTransaction,
   Replicache,
 } from "replicache";
-import { NewWorkspace, WorkspaceType } from "../..";
+import { DrObj, NewWorkspace, Team, TeamSchema, WorkspaceType } from "../..";
 import { env } from "@repo/env";
 import { User } from "../user/user";
 import { makeWorkspaceKey } from "../../lib/keys";
@@ -34,7 +34,7 @@ export class Workspace {
       })
       .then((data) => {
         if (data && data.environment === "cloud") {
-          // this.#makeCloud(id);
+          this.#makeCloud(id);
         }
       });
 
@@ -67,8 +67,8 @@ export class Workspace {
     }
   }
 
-  async changeName(name: string) {
-    return this.store.mutate.changeName(name);
+  async createTeam(data: DrObj<Team>) {
+    await this.store.mutate.createTeam(data);
   }
 
   /**

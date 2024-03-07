@@ -1,13 +1,14 @@
 import { WriteTransaction } from "replicache";
 import {
   Team,
+  TeamSchema,
   WorkspaceSchema,
   WorkspaceStructure,
   WorkspaceType,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
 import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
-import { DrObj } from "../..";
+import { DrObj, User } from "../..";
 import { produce } from "immer";
 
 export const workspaceMutators = {
@@ -18,7 +19,8 @@ export const workspaceMutators = {
     const validatedFields = WorkspaceSchema.safeParse(data);
 
     if (!validatedFields.success) {
-      throw new Error("Invalid workspace data");
+      // throw new Error("Invalid workspace data");
+      return;
     }
 
     const { data: workspace } = validatedFields;
@@ -30,29 +32,42 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), defaultWorkspaceStructure());
   },
 
-  async changeName(tx: WriteTransaction, name: string) {
-    // 1. Get the workspace
-    const workspace = await tx.get<WorkspaceType>(makeWorkspaceKey());
+  async createTeam(tx: WriteTransaction, team: DrObj<Team>) {
+    //1. Validate the data
+    const validatedFields = TeamSchema.safeParse(team);
 
-    // 2. Update the workspace
-    await tx.set(makeWorkspaceKey(), { ...workspace, name });
-  },
-  async createTeam(tx: WriteTransaction, team: Partial<DrObj<Team>>) {
-    // 1. Get the workspace structure
-    const structure = await tx.get<WorkspaceStructure>(
+    //  Bug: Should throw an error if the data is invalid
+    if (!validatedFields.success) {
+      return;
+    }
+
+    const { data: newTeam } = validatedFields;
+
+    // 2. validate owner
+    const { id } = User.getInstance().data!;
+
+    //  Bug: Should throw an error if the data is invalid
+    if (newTeam.createdBy !== id || !newTeam.members.includes(id)) {
+      return;
+    }
+
+    const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
-    );
+    )) as WorkspaceStructure;
 
-    // 2. Create the team
+    // 3. Validate if the team is already existing
+    const teamExists = structure.teams.some((t) => t.id === newTeam.id);
+
+    if (teamExists) {
+      return;
+    }
+
+    // 4. Create the team
     const newStructure = produce(structure, (draft) => {
-      //@ts-ignore
-      draft!.teams.push(team);
+      draft.teams.push(newTeam);
     });
 
-    console.log(newStructure);
-    // 3. Update the structure
-    await tx.set(makeWorkspaceStructureKey(), {
-      ...newStructure,
-    });
+    // 5. Persist the mutation
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 };

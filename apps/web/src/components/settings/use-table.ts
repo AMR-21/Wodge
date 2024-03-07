@@ -104,28 +104,31 @@ export function useTable<TData, TValue>({
     },
   });
 
-  React.useEffect(() => {
-    if (withForm) {
-      const row =
-        table.getCoreRowModel().rows[data.length > 0 ? data.length - 1 : 0];
+  // React.useEffect(() => {
+  //   setRowPinning({
+  //     top: [],
+  //     bottom: [],
+  //   });
 
-      setRowPinning({
-        top: [],
-        bottom: [],
-      });
+  //   if (withForm) {
+  //     const row = table.getCoreRowModel().rows.at(-1)!;
 
-      if (row) row.pin("bottom");
-    }
-  }, [data]);
+  //     if (row?.original.id === "add") {
+  //       row.pin("bottom");
+  //     }
 
-  React.useEffect(() => {
-    if (withForm) {
-      const formRowIndex = table.getRowCount() - 1;
+  //     // if (row?.original.id === "add") row.pin("bottom");
+  //   }
+  // }, [data]);
 
-      const row = table.getCoreRowModel().rows[formRowIndex];
-      if (row?.getIsSelected()) row.toggleSelected(false);
-    }
-  }, [rowSelection]);
+  // React.useEffect(() => {
+  //   if (withForm) {
+  //     const formRowIndex = table.getRowCount() - 1;
+
+  //     const row = table.getCoreRowModel().rows[formRowIndex];
+  //     if (row?.getIsSelected()) row.toggleSelected(false);
+  //   }
+  // }, [rowSelection]);
 
   return { table, edited, buffer, setBuffer, setEdited };
 }

@@ -17,12 +17,13 @@ import {
 } from "@repo/data";
 import { useMemo } from "react";
 import { useWorkspaceId } from "../ui/use-workspace-id";
+import { useCurrentWorkspace } from "../use-current-workspace";
 
 export function useCurrentWsData() {
   const workspaceId = useWorkspaceId();
 
   const registry = WorkspacesRegistry.getInstance();
-  const workspace = registry.getWorkspace(workspaceId);
+  const workspace = useCurrentWorkspace();
 
   const { snapshot: metadata, isPending } = useSubscribe(
     workspace?.store,

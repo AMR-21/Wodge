@@ -10,7 +10,7 @@ import {
 } from "@repo/ui";
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { useAppState } from "@/store";
+import { useAppState } from "@repo/ui";
 import { useCurrentWorkspace } from "./workspace-context";
 import { useParams } from "next/navigation";
 

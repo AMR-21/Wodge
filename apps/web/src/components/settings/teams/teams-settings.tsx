@@ -7,6 +7,7 @@ import { DrObj, Team, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { nanoid } from "nanoid";
 import { DataTable, useCurrentUser } from "@repo/ui";
 import { UpdateHandlerProps, useTable } from "../use-table";
+import { useMutation } from "@tanstack/react-query";
 
 const teamsX = [
   {
@@ -51,6 +52,10 @@ export function TeamsSettings() {
     ];
   }, [structure, user]);
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (team: DrObj<Team>) => await workspace?.createTeam(team),
+  });
+
   const { table } = useTable<Mutable<DrObj<Team>>, DrObj<Team>>({
     data: teams,
     columns: columns,
@@ -70,7 +75,7 @@ export function TeamsSettings() {
     if (!affectedTeam) return;
 
     if (!structure.teams.some((t) => t.id === affectedTeam.id)) {
-      await workspace?.store.mutate.createTeam({
+      mutate({
         ...affectedTeam,
         ...data,
         id: nanoid(WORKSPACE_TEAM_ID_LENGTH),

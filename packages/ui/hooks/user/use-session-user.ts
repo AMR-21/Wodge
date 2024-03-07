@@ -1,5 +1,6 @@
 "use client";
 
+import { PublicUserType } from "@repo/data";
 import { useSession } from "next-auth/react";
 
 /*
@@ -11,5 +12,5 @@ export function useSessionUser() {
   if (!session.data || !session.data.user)
     throw new Error("Error getting user data from session");
 
-  return session.data.user;
+  return session.data.user as PublicUserType;
 }

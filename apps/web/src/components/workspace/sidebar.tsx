@@ -11,7 +11,7 @@ import {
   User2,
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
-import { useAppState } from "@/store";
+import { useAppState } from "@repo/ui";
 import { cn } from "@repo/ui";
 import { Teamspaces } from "./teamspaces";
 import { UserCard } from "./user-card";

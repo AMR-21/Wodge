@@ -37,7 +37,7 @@ export function WorkspaceSettings() {
   }, [metadata]);
 
   async function onSubmit(data: Pick<WorkspaceType, "name">) {
-    await workspace?.changeName(data.name);
+    // await workspace?.changeName(data.name);
   }
 
   return (

@@ -18,7 +18,7 @@ import { Building2 } from "lucide-react";
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="roles">
+      <Settings defaultActive="teams">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />
@@ -30,6 +30,9 @@ function WorkspaceSettingsPage() {
             <SettingsSidebarItem value="teams" />
             <SettingsSidebarItem value="roles" />
             <SettingsSidebarItem value="upgrade" />
+            <SettingsSidebarItem value="test" accordion>
+              <p>hello</p>
+            </SettingsSidebarItem>
           </SettingsSidebarList>
         </SettingsSidebar>
 

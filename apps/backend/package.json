@@ -7,6 +7,7 @@
     "deploy": "partykit deploy"
   },
   "dependencies": {
+    "immer": "^10.0.3",
     "nanoid": "^5.0.5",
     "object-sizeof": "^2.6.4",
     "partysocket": "^0.0.25",
@@ -17,6 +18,8 @@
     "@repo/data": "workspace:*",
     "@repo/ts": "workspace:*",
     "partykit": "^0.0.89",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1",
+    "vitest-environment-miniflare": "^2.14.2"
   }
 }

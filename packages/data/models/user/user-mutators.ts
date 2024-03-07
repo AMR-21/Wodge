@@ -5,6 +5,7 @@ import {
 } from "../../schemas/workspace.schema";
 import { UserWorkspacesStore } from "../../schemas/user.schema";
 import { makeWorkspacesStoreKey } from "../../lib/keys";
+import u from "partysocket/use-ws";
 
 export const userMutators = {
   async createWorkspace(tx: WriteTransaction, data: NewWorkspace) {

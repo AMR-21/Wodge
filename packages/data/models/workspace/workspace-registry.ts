@@ -1,3 +1,5 @@
+"use client";
+
 import { Workspace } from "./workspace";
 
 export class WorkspacesRegistry {
@@ -24,15 +26,15 @@ export class WorkspacesRegistry {
   }
 
   getWorkspace(id: string) {
-    if (typeof navigator === "undefined") return;
+    // if (typeof navigator === "undefined") return;
 
-    if (!id) return;
+    // if (!id) return;
 
     if (!this.registry.has(id)) {
       this.registry.set(id, new Workspace(id));
     }
 
-    return this.registry.get(id);
+    return this.registry.get(id)!;
   }
 
   reInit(id: string) {

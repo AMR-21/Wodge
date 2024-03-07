@@ -1,6 +1,15 @@
 "use client";
 
-import { Button, ButtonProps, cn, useIsDesktop } from "@repo/ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+  ButtonProps,
+  cn,
+  useIsDesktop,
+} from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { PanelLeft, X } from "lucide-react";
@@ -85,9 +94,41 @@ function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SettingsSidebarItem({ value }: { value: string }) {
+function SettingsSidebarItem({
+  value,
+  accordion,
+  children,
+}: {
+  value: string;
+  accordion?: boolean;
+  children?: React.ReactNode;
+}) {
   const { setActive, active, setIsSidebarOpen } = useContext(SettingsContext);
   const isDesktop = useIsDesktop();
+
+  if (accordion) {
+    return (
+      <Accordion type="single" collapsible>
+        <AccordionItem value="i-1">
+          <AccordionTrigger asChild>
+            <SidebarItem
+              noIcon
+              label={value}
+              className={cn(
+                "justify-start py-1.5 pl-7 pr-1.5 capitalize",
+                active === value && "bg-accent text-accent-foreground",
+              )}
+              // onClick={() => {
+              //   if (!isDesktop) setIsSidebarOpen(false);
+              //   setActive(value);
+              // }}
+            />
+          </AccordionTrigger>
+          <AccordionContent>{children}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+  }
 
   return (
     <SidebarItem
