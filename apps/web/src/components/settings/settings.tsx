@@ -1,13 +1,11 @@
 "use client";
 
-import { Button, ButtonProps, Separator, cn, useIsDesktop } from "@repo/ui";
+import { Button, ButtonProps, cn, useIsDesktop } from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { PanelLeft, Settings as SettingsIcon, X } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { PanelLeft, X } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
-import { useAppState } from "@/store";
-import { set } from "zod";
 
 interface Settings {
   active: string;

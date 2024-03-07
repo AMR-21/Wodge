@@ -37,69 +37,76 @@ export function DataTableActions<TData>({
 
   return (
     <div
-      className={cn("flex gap-1 overflow-hidden transition-all")}
+      className="flex justify-end"
       style={{
-        width: `calc( ${nActions * 1.75}rem + 1.5rem )`,
-        ...(isEdited && {
-          width: `calc(${nActions * 1.75}rem + 1.75rem + 1.5rem)`,
-        }),
+        width: `calc(${nActions * 1.75}rem + 1.75rem + 1.5rem)`,
       }}
     >
-      {children}
       <div
-        className={cn(
-          "transition-transform",
-          isEdited && "invisible translate-x-full opacity-0",
-        )}
-      >
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarItemBtn
-              Icon={MoreHorizontal}
-              className={cn(menuItems?.length === 0 && "invisible")}
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {menuItems?.map((item, idx) => {
-              if (item.type === "separator") {
-                return <DropdownMenuSeparator key={idx} />;
-              }
-              return (
-                <DropdownMenuItem
-                  key={idx}
-                  destructive={!!item?.destructive}
-                  onClick={item?.action}
-                >
-                  {item?.label}
-                </DropdownMenuItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <SidebarItemBtn
-        Icon={Check}
-        onClick={() => table.options.meta?.submitRow(row.index)}
-        className={cn(
-          "invisible  transition-all",
-          isEdited && "visible -translate-x-7 ",
-        )}
-        success
-      />
-
-      <SidebarItemBtn
-        Icon={X}
-        className={cn(
-          "invisible transition-all",
-          isEdited && "visible -translate-x-7",
-        )}
-        onClick={() => {
-          table.options.meta?.discard(row.index);
+        className={cn("flex gap-1 overflow-hidden transition-all")}
+        style={{
+          width: `calc( ${nActions * 1.75}rem + 1.5rem )`,
+          ...(isEdited && {
+            width: `calc(${nActions * 1.75}rem + 1.75rem + 1.5rem)`,
+          }),
         }}
-        destructive
-      />
+      >
+        {children}
+        <div
+          className={cn(
+            "transition-transform",
+            isEdited && "invisible translate-x-full opacity-0",
+          )}
+        >
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarItemBtn
+                Icon={MoreHorizontal}
+                className={cn(menuItems?.length === 0 && "invisible")}
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              {menuItems?.map((item, idx) => {
+                if (item.type === "separator") {
+                  return <DropdownMenuSeparator key={idx} />;
+                }
+                return (
+                  <DropdownMenuItem
+                    key={idx}
+                    destructive={!!item?.destructive}
+                    onClick={item?.action}
+                  >
+                    {item?.label}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <SidebarItemBtn
+          Icon={Check}
+          onClick={() => table.options.meta?.submitRow(row.index)}
+          className={cn(
+            "invisible  text-success-base transition-all",
+            isEdited && "visible -translate-x-7  ",
+          )}
+          success
+        />
+
+        <SidebarItemBtn
+          Icon={X}
+          className={cn(
+            "invisible transition-all",
+            isEdited && "visible -translate-x-7",
+          )}
+          onClick={() => {
+            table.options.meta?.discard(row.index);
+          }}
+          destructive
+        />
+      </div>
     </div>
   );
 }

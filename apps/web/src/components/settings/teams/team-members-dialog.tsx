@@ -1,18 +1,12 @@
 import { DrObj, Member, Team } from "@repo/data";
-import { Button, DataTable, Input } from "@repo/ui";
+import { DataTable, Input } from "@repo/ui";
 import { DeepReadonlyObject } from "replicache";
 import { teamMembersColumns } from "./teams-members-columns";
 import { Mutable } from "@/lib/utils";
 import { SettingsContentSection } from "../settings";
 import { MembersCombobox } from "./members-combobox";
-import {
-  ColumnFiltersState,
-  Table,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { Table } from "@tanstack/react-table";
 import * as React from "react";
-import { getFilteredRowModel } from "@tanstack/react-table";
 import { useTable } from "../use-table";
 interface TeamMembersDialogProps {
   members: readonly DrObj<Member>[];
@@ -21,7 +15,8 @@ interface TeamMembersDialogProps {
   addMember: (member: DrObj<Member>) => void;
   // removeMember: (memberId: string) => void;
   // makeModerator: (memberId: string) => void;
-  table: Table<DeepReadonlyObject<Team>>;
+  curMembersIds: readonly string[];
+  parentTable: Table<DeepReadonlyObject<Team>>;
 }
 
 export function TeamMembersDialog({
@@ -30,13 +25,19 @@ export function TeamMembersDialog({
   // removeMember,
   members,
   moderators,
-  teamId,
-  // table,
+  curMembersIds,
 }: TeamMembersDialogProps) {
   // TODO
-  // const teamMembers = members.filter((member) => member.teams.includes(teamId));
-  // + non team members
-  const teamMembers = members;
+
+  const nonTeamMembers = React.useMemo(
+    () => members.filter((m) => !curMembersIds.includes(m.id)),
+    [curMembersIds, members],
+  );
+
+  const teamMembers = React.useMemo(
+    () => members.filter((m) => curMembersIds.includes(m.id)),
+    [curMembersIds, members],
+  );
 
   const { table } = useTable({
     data: teamMembers as Mutable<DrObj<Member>[]>,
@@ -61,7 +62,7 @@ export function TeamMembersDialog({
             }}
           />
 
-          <MembersCombobox members={members} onClick={addMember} />
+          <MembersCombobox members={nonTeamMembers} onClick={addMember} />
         </div>
         <DataTable table={table} />
       </SettingsContentSection>

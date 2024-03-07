@@ -17,17 +17,22 @@ import {
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  withForm?: boolean;
 }
 
 export function DataTablePagination<TData>({
   table,
+  withForm,
 }: DataTablePaginationProps<TData>) {
-  if (!table) return null;
+  const nRows = withForm
+    ? table.getFilteredRowModel().rows.length - 1
+    : table.getFilteredRowModel().rows.length;
+
   return (
     <div className="flex items-center justify-between border-t bg-muted/50 px-2 font-medium [&>tr]:last:border-b-0">
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {table.getFilteredSelectedRowModel().rows.length} of {nRows} row(s)
+        selected.
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         {/* <div className="flex items-center space-x-2">

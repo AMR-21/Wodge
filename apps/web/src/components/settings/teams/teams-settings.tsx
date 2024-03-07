@@ -3,68 +3,75 @@ import * as React from "react";
 import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { SettingsContentHeader, SettingsContentSection } from "../settings";
 import { teamColumns } from "./teams-columns";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
+import { DrObj, Team, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { nanoid } from "nanoid";
-import {
-  ComboboxCell,
-  DataTable,
-  Separator,
-  SettingsDataTable,
-} from "@repo/ui";
-import { DeepReadonlyObject } from "replicache";
-import {
-  ColumnFiltersState,
-  getFilteredRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { getCoreRowModel } from "@tanstack/react-table";
+import { DataTable } from "@repo/ui";
 import { UpdateHandlerProps, useTable } from "../use-table";
-import { produce } from "immer";
-import { useImmer } from "use-immer";
 
-export function TeamsSettings() {
-  const { structure, members } = useCurrentWorkspace();
-
-  const columns = React.useMemo(
-    () => teamColumns(members.members),
-    [members.members],
-  );
-
-  const teams = React.useMemo(
-    () => [
-      ...structure.teams,
+const teamsX = [
+  {
+    id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+    dirs: [],
+    name: "Andriod",
+    moderators: [],
+    tags: [
       {
-        id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-        dirs: [],
-        name: "Andriod",
-        moderators: [],
-        tags: [
-          {
-            name: "Mobile",
-            color: "#FF0000",
-          },
-          {
-            name: "Google",
-            color: "#00FF00",
-          },
-        ],
-        members: [],
+        name: "Mobile",
+        color: "#FF0000",
+      },
+      {
+        name: "Google",
+        color: "#00FF00",
       },
     ],
-    [structure.teams],
-  );
+    members: [],
+  },
+];
 
-  const { table } = useTable({
+export function TeamsSettings() {
+  const { structure, members, workspace } = useCurrentWorkspace();
+
+  const columns = React.useMemo(() => teamColumns(members.members), [members]);
+  const teams = React.useMemo(() => {
+    return [
+      ...structure.teams,
+
+      {
+        id: "add",
+        dirs: [],
+        name: "",
+        moderators: [],
+        tags: [],
+        members: [],
+      },
+    ];
+  }, [structure]);
+
+  const { table, setEdited, setBuffer } = useTable({
     data: teams as Mutable<typeof structure.teams>,
     columns: columns,
     updateHandler: onUpdate,
+    withForm: true,
   });
 
-  function onUpdate({ data, idx }: UpdateHandlerProps<DrObj<Team>>) {
+  async function onUpdate({ data, idx }: UpdateHandlerProps<DrObj<Team>>) {
     console.log("onUpdate", data, idx);
+
+    const affectedTeam = teams[idx];
+
+    if (!affectedTeam) return;
+
+    if (!structure.teams.some((t) => t.id === affectedTeam.id)) {
+      await workspace?.store.mutate.createTeam({
+        ...affectedTeam,
+        ...data,
+        id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      });
+
+      // Remain in the current page
+    }
+
+    table.options.meta?.discard(idx);
   }
 
   return (
@@ -75,7 +82,7 @@ export function TeamsSettings() {
       />
 
       <SettingsContentSection header="Teams">
-        <DataTable table={table} />
+        <DataTable table={table} label="team" withForm />
       </SettingsContentSection>
     </div>
   );

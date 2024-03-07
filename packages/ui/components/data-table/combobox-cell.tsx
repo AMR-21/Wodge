@@ -54,11 +54,11 @@ export function ComboboxCell({
                 size: "fit",
                 variant: "ghost",
               }),
-              "group w-36 max-w-36 cursor-pointer justify-start gap-1 font-normal",
+              "group w-48 max-w-48 cursor-pointer justify-start gap-1 font-normal",
             )}
           >
             {nData > 0 && (
-              <span className="relative w-full truncate">{renderer}</span>
+              <span className="relative  truncate">{renderer}</span>
             )}
 
             {nData === 0 && (
@@ -72,10 +72,11 @@ export function ComboboxCell({
                 <span className="text-[0.875rem] font-normal">Add {label}</span>
               </div>
             )}
+
             {nData > 0 && (
               <ChevronRight
                 className={cn(
-                  "ml-auto h-4 w-4 shrink-0 opacity-50 transition-all group-hover:opacity-100",
+                  "h-4 w-4 shrink-0 opacity-50 transition-all group-hover:opacity-100",
                   open && "rotate-90",
                 )}
               />

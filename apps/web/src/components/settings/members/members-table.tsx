@@ -6,14 +6,14 @@ import { membersColumns } from "./members-columns";
 export function MembersTable() {
   const { members, inviters } = useCurrentWorkspace();
 
-  if (!members || !inviters) return null;
+  if (!inviters) return null;
 
   return (
     <div>
-      <DataTable
+      {/* <DataTable
         columns={membersColumns(inviters)}
         data={members.members as Mutable<typeof members.members>}
-      />
+      /> */}
     </div>
   );
 }

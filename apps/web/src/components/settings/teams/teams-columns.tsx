@@ -4,11 +4,6 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Badge,
-  Button,
-  Checkbox,
-  ComboboxCell,
-  CommandItem,
   DataTableActions,
   DataTableHeaderSelect,
   DataTableRowSelect,
@@ -20,54 +15,32 @@ import {
 } from "@repo/ui";
 import { produce } from "immer";
 import { ColumnDef } from "@tanstack/react-table";
-import { DeepReadonly, DeepReadonlyObject } from "replicache";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
+import _ from "lodash";
 import { enableMapSet } from "immer";
 
-import _ from "lodash";
 import { TagsComboBox } from "./tags-combobox";
-import { ModeratorsCombobox } from "./moderators-combox";
-import { ChevronRight, User, UserRoundCog, Users2 } from "lucide-react";
+import { UserRoundCog } from "lucide-react";
 import { TeamMembersDialog } from "./team-members-dialog";
+
 enableMapSet();
 
 export const teamColumns = (
   members: readonly DrObj<Member>[],
-): ColumnDef<DeepReadonly<Team>>[] => {
+): ColumnDef<DrObj<Team>>[] => {
   return [
     {
       id: "select",
-      header: ({ table }) => <DataTableHeaderSelect table={table} />,
-      cell: ({ row }) => <DataTableRowSelect row={row} />,
+      header: ({ table }) => <DataTableHeaderSelect withForm table={table} />,
+      cell: ({ row, table }) => <DataTableRowSelect row={row} />,
       enableSorting: false,
       enableHiding: false,
     },
 
     {
-      accessorKey: "avatar",
-      header: () => <Header>Avatar</Header>,
-      cell: ({ row, table }) => {
-        const name =
-          table.options?.meta?.buffer.get(row.index)?.name || row.original.name;
-        const avatar =
-          table.options?.meta?.buffer.get(row.index)?.avatar ||
-          row.original.avatar;
-
-        return (
-          <div className="w-fit">
-            <Avatar className="h-8 w-8 rounded-md ">
-              <AvatarImage src={avatar} alt={name} className="rounded-md" />
-              <AvatarFallback className="rounded-md capitalize">
-                {name[0]}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "name",
-      header: () => <Header className="px-3">Team name</Header>,
+      accessorFn: (team) => team.name,
+      id: "team",
+      header: () => <Header>Team</Header>,
       cell: ({ row, table }) => {
         const initialValue =
           table.options.meta?.buffer.get(row.index)?.name || row.original.name;
@@ -79,6 +52,17 @@ export const teamColumns = (
           setValue(initialValue);
         }, [initialValue]);
 
+        React.useEffect(() => {
+          if (
+            row.index === table.getRowModel().rows.length - 1 &&
+            table.options.meta?.isEditing
+          ) {
+            inputRef.current?.focus();
+          }
+        }, [table.options.meta?.isEditing]);
+
+        const inputRef = React.useRef<HTMLInputElement>(null);
+
         if (!table.options.meta) return null;
 
         const { buffer, setBuffer, setEdited } = table.options.meta;
@@ -86,6 +70,8 @@ export const teamColumns = (
         // When the input is blurred, we'll call our table meta's updateData function
         const onBlur = () => {
           if (value === initialValue) return;
+
+          if (value === "") return setValue(initialValue);
 
           if (buffer.has(row.index))
             return setBuffer((draft) => {
@@ -98,15 +84,29 @@ export const teamColumns = (
         };
 
         return (
-          <Input
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              setEdited(produce((draft) => draft.add(row.index)));
-            }}
-            onBlur={onBlur}
-            inRow
-          />
+          <div className="flex gap-2">
+            <Avatar className="h-8 w-8 rounded-md ">
+              <AvatarImage
+                src={row.original.avatar}
+                alt={value}
+                className="rounded-md"
+              />
+              <AvatarFallback className="rounded-md capitalize">
+                {value?.[0] || ""}
+              </AvatarFallback>
+            </Avatar>
+            <Input
+              value={value}
+              ref={inputRef}
+              placeholder="Team name"
+              onChange={(e) => {
+                setValue(e.target.value);
+                setEdited(produce((draft) => draft.add(row.index)));
+              }}
+              onBlur={onBlur}
+              inRow
+            />
+          </div>
         );
       },
     },
@@ -172,97 +172,37 @@ export const teamColumns = (
       },
     },
 
-    // {
-    //   accessorKey: "moderators",
-    //   header: () => <Header className="px-3">Moderators</Header>,
-    //   cell: ({ row, table }) => {
-    //     // Todo:filter members
-    //     const teamId = row.original.id;
-    //     const teamMembers = members.filter((member) => member);
-
-    //     if (!table.options.meta) return null;
-
-    //     const { buffer, setBuffer, setEdited } = table.options.meta;
-
-    //     const moderators =
-    //       buffer.get(row.index)?.moderators || row.original.moderators!;
-
-    //     function handleToggleModerator(
-    //       isChecked: boolean | string,
-    //       memberId: string,
-    //     ) {
-    //       setBuffer((draft) => {
-    //         if (draft.has(row.index)) {
-    //           const curTeam = draft.get(row.index)!;
-
-    //           if (isChecked) {
-    //             curTeam.moderators
-    //               ? curTeam.moderators.push(memberId)
-    //               : (curTeam.moderators = [memberId]);
-    //           } else {
-    //             curTeam.moderators = moderators.filter(
-    //               (mod) => mod !== memberId,
-    //             );
-    //           }
-    //           return;
-    //         }
-
-    //         if (isChecked) {
-    //           draft.set(row.index, {
-    //             moderators: [...moderators, memberId],
-    //           });
-    //         } else {
-    //           draft.set(row.index, {
-    //             moderators: moderators.filter((mod) => mod !== memberId),
-    //           });
-    //         }
-    //       });
-
-    //       setEdited((draft) => {
-    //         draft.add(row.index);
-    //       });
-    //     }
-
-    //     return (
-    //       <ModeratorsCombobox
-    //         members={members}
-    //         teamMembers={teamMembers}
-    //         moderators={moderators}
-    //         handleToggleModerator={handleToggleModerator}
-    //       />
-    //     );
-    //   },
-    // },
-    // {
-    //   id: "members",
-    //   header: () => <Header className="px-1">Members</Header>,
-    //   cell: ({ row }) => {
-    //     return (
-    //       <Dialog>
-    //         <DialogTrigger asChild>
-    //           <Button
-    //             size="fit"
-    //             variant="ghost"
-    //             className="w-20 justify-between font-normal"
-    //           >
-    //             Manage
-    //             <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-    //           </Button>
-    //         </DialogTrigger>
-
-    //         <DialogContent></DialogContent>
-    //       </Dialog>
-    //     );
-    //   },
-    // },
     {
       id: "actions",
       cell: ({ row, table }) => {
         const team = row.original;
-        // function addMember(id){}
+        if (!table.options.meta) return null;
+
+        const { buffer, setBuffer, setEdited } = table.options.meta;
+
+        const curMembersIds = buffer.get(row.index)?.members || team.members;
 
         function addMember(member: DrObj<Member>) {
-          console.log("add member:", member);
+          if (team.members.includes(member.id)) return;
+
+          setEdited((draft) => {
+            draft.add(row.index);
+          });
+
+          setBuffer((draft) => {
+            if (draft.has(row.index)) {
+              const cur = draft.get(row.index)!;
+              cur.members
+                ? cur.members.push(member.id)
+                : (cur.members = [...row.original.members, member.id]);
+
+              return;
+            }
+
+            draft.set(row.index, {
+              members: [...row.original.members, member.id],
+            });
+          });
         }
 
         return (
@@ -270,11 +210,12 @@ export const teamColumns = (
             <DialogContent>
               <TeamMembersDialog
                 members={members}
+                curMembersIds={curMembersIds}
                 addMember={addMember}
                 moderators={team.moderators}
                 // removeMember={}
                 teamId={team.id}
-                table={table}
+                parentTable={table}
               />
             </DialogContent>
             <DataTableActions

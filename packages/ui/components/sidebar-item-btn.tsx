@@ -52,7 +52,6 @@ export const SidebarItemBtn = React.forwardRef<
           <Icon
             className={cn(
               "h-4 w-4 opacity-60 transition-opacity group-hover/sidebtn:opacity-100",
-
               iconClassName,
             )}
           />

@@ -1,15 +1,13 @@
-import { Tag as TagType, Team } from "@repo/data";
-import { ColumnDef, Row, Table } from "@tanstack/react-table";
-import _ from "lodash";
 import * as React from "react";
-import { DeepReadonly, DeepReadonlyObject } from "replicache";
+import { DrObj, Tag as TagType } from "@repo/data";
+import _ from "lodash";
 import { NewTag } from "./new-tag";
 import { ComboboxCell, CommandItem, Tag } from "@repo/ui";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { X } from "lucide-react";
 
 interface TagComboBoxProps {
-  tags: readonly DeepReadonlyObject<TagType>[];
+  tags: readonly DrObj<TagType>[];
   handleDeleteTag: (tagName: string) => void;
   handleNewTag: (tag: TagType) => void;
 }
@@ -27,7 +25,6 @@ export function TagsComboBox({
       onOpenChange={setOpen}
       renderer={
         <div className=" flex gap-0.5 overflow-hidden">
-          {/* <div className="absolute right-0 h-full w-2/12  bg-gradient-to-r from-transparent to-background " /> */}
           {tags?.map((tag, i) => (
             <Tag key={i} name={tag.name} color={tag.color} />
           ))}

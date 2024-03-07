@@ -1,10 +1,14 @@
 import { WriteTransaction } from "replicache";
 import {
+  Team,
   WorkspaceSchema,
+  WorkspaceStructure,
   WorkspaceType,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
 import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
+import { DrObj } from "../..";
+import { produce } from "immer";
 
 export const workspaceMutators = {
   async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
@@ -32,5 +36,23 @@ export const workspaceMutators = {
 
     // 2. Update the workspace
     await tx.set(makeWorkspaceKey(), { ...workspace, name });
+  },
+  async createTeam(tx: WriteTransaction, team: Partial<DrObj<Team>>) {
+    // 1. Get the workspace structure
+    const structure = await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    );
+
+    // 2. Create the team
+    const newStructure = produce(structure, (draft) => {
+      //@ts-ignore
+      draft!.teams.push(team);
+    });
+
+    console.log(newStructure);
+    // 3. Update the structure
+    await tx.set(makeWorkspaceStructureKey(), {
+      ...newStructure,
+    });
   },
 };

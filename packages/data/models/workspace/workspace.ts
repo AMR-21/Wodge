@@ -34,7 +34,7 @@ export class Workspace {
       })
       .then((data) => {
         if (data && data.environment === "cloud") {
-          this.#makeCloud(id);
+          // this.#makeCloud(id);
         }
       });
 

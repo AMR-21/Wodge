@@ -9,7 +9,6 @@ import {
   Header,
 } from "@repo/ui";
 import { ColumnDef } from "@tanstack/react-table";
-import { DeepReadonlyObject } from "replicache";
 
 export const teamMembersColumns = (
   moderators: Readonly<string[]>,
