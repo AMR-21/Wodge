@@ -192,38 +192,7 @@ export const workspaceMutators = {
     } else {
       throw new Error("Workspace structure not found");
     }
-<<<<<<< HEAD
-  } else {
-    throw new Error("Workspace structure not found");
-  }
-  const deletedRole = role.id
-  // 3. Delete the role
-  const newStructure = produce((await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!, (draft) => {
-    draft.roles = draft.roles.filter((r) => r.id !== deletedRole);
-  });
-  // 4. Persist the mutation
-  await tx.set(makeWorkspaceStructureKey(), newStructure);
-},
-async deleteWorkspace (tx: WriteTransaction) {
-//1.check that the user deleting is the owner 
-const deletinguser = User.getInstance().data!;
-const workspace = await tx.get<WorkspaceType>(makeWorkspaceKey());
-if (workspace?.owner !== deletinguser.id) {
-  return;
-}
-//1. delete workspace
-const result = await tx.del(makeWorkspaceKey());
-if (!result) {
-  return;
-}
-//3. delete workspace structure
-const result2 = await tx.del(makeWorkspaceStructureKey());
-if (!result2) {
-  return;
-}
-},
-}
-=======
+
     const deletedRole = role.id;
     // 3. Delete the role
     const newStructure = produce(
@@ -236,4 +205,3 @@ if (!result2) {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 };
->>>>>>> 4d1e418d198b1fa505f5f1059bc3347eeb6d3f80
