@@ -67,12 +67,17 @@ export class Workspace {
     }
   }
 
+  // * teams mutators
   async createTeam(data: DrObj<Team>) {
     await this.store.mutate.createTeam(data);
   }
 
   async deleteTeam(data: DrObj<Team>) {
     await this.store.mutate.deleteTeam(data);
+  }
+
+  async updateTeam(data: DrObj<Team>) {
+    await this.store.mutate.updateTeam(data);
   }
 
   /**

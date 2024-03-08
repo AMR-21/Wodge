@@ -27,6 +27,8 @@ export async function deleteTeam(
   // 3. Validate if the team is already existing
   const teamExists = structure.data.teams.some((t) => t.id === theTeam.id);
 
+  // !Bug: throw an error
+
   if (!teamExists) {
     return;
   }
