@@ -1,3 +1,5 @@
+"use client";
+
 import {
   PullRequest,
   PullerResult,
@@ -36,11 +38,6 @@ export class User {
   webSocket: PartySocket;
 
   private constructor() {
-    // Protect singleton during runtime
-    if (User.#user) {
-      throw new Error("User already exists");
-    }
-
     const userId = this.data?.id;
 
     if (!userId) throw new Error("User id not found");
@@ -90,26 +87,10 @@ export class User {
    * Get the local user data from local storage
    */
   get data(): PublicUserType {
-    let localUser = localStorage.getItem("user");
-
-    if (!localUser) {
-      fetch("/api/auth/session")
-        .then((data) => {
-          if (!data.ok) throw new Error("Unauthorized");
-          return data.json() as Promise<Session>;
-        })
-        .then(({ user }: { user: PublicUserType }) => {
-          User.cacheUser(user);
-          localUser = localStorage.getItem("user")!;
-        })
-        .catch((e) => {
-          throw new Error(e);
-        });
-    }
+    const localUser = localStorage.getItem("user");
 
     const data = JSON.parse(localUser!) as PublicUserType;
 
-    // exaggeration ?
     const validatedFields = PublicUserSchema.safeParse(data);
 
     if (!validatedFields.success)

@@ -26,9 +26,9 @@ export class WorkspacesRegistry {
   }
 
   getWorkspace(id: string) {
-    // if (typeof navigator === "undefined") return;
+    if (typeof navigator === "undefined") return;
 
-    // if (!id) return;
+    if (!id) return;
 
     if (!this.registry.has(id)) {
       this.registry.set(id, new Workspace(id));

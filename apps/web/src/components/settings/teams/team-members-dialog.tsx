@@ -4,7 +4,7 @@ import { DeepReadonlyObject } from "replicache";
 import { teamMembersColumns } from "./teams-members-columns";
 import { Mutable } from "@/lib/utils";
 import { SettingsContentSection } from "../settings";
-import { MembersCombobox } from "./members-combobox";
+import { MembersCombobox } from "../members-combobox";
 import { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { useTable } from "../use-table";

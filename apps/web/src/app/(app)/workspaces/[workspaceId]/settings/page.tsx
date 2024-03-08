@@ -7,18 +7,21 @@ import {
   SettingsClose,
   SettingsContent,
   SettingsSidebar,
+  SettingsSidebarAccordionItem,
   SettingsSidebarHeader,
   SettingsSidebarItem,
   SettingsSidebarList,
 } from "@/components/settings/settings";
-import { TeamsSettings } from "@/components/settings/teams/teams-settings";
+import { TeamSettings } from "@/components/settings/team/team-settings";
+import { TeamsSidebar } from "@/components/settings/team/teams-sidebar";
+
 import { WorkspaceSettings } from "@/components/settings/workspace-settings";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="teams">
+      <Settings defaultActive="general">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />
@@ -27,12 +30,11 @@ function WorkspaceSettingsPage() {
           <SettingsSidebarList>
             <SettingsSidebarItem value="general" />
             <SettingsSidebarItem value="members" />
-            <SettingsSidebarItem value="teams" />
             <SettingsSidebarItem value="roles" />
+            <SettingsSidebarAccordionItem value="teams">
+              <TeamsSidebar />
+            </SettingsSidebarAccordionItem>
             <SettingsSidebarItem value="upgrade" />
-            <SettingsSidebarItem value="test" accordion>
-              <p>hello</p>
-            </SettingsSidebarItem>
           </SettingsSidebarList>
         </SettingsSidebar>
 
@@ -41,7 +43,8 @@ function WorkspaceSettingsPage() {
         </SettingsContent>
 
         <SettingsContent id="teams">
-          <TeamsSettings />
+          {/* <TeamsSettings /> */}
+          <TeamSettings />
         </SettingsContent>
 
         <SettingsContent id="roles">
@@ -54,6 +57,9 @@ function WorkspaceSettingsPage() {
           <p>updgrade</p>
         </SettingsContent>
 
+        <SettingsContent id="add-teams">
+          <p>add</p>
+        </SettingsContent>
         {/* <SettingsClose /> */}
       </Settings>
     </div>
