@@ -12,6 +12,7 @@ import {
 } from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
 import React, {
+  Children,
   createContext,
   useContext,
   useEffect,
@@ -37,6 +38,12 @@ interface SettingsState {
   isSidebarOpen: boolean;
   activeItemId: string;
   accordionActive: string;
+}
+
+interface SettingsAccordionItemProps {
+  value: string;
+  children?: React.ReactNode;
+  actionIcon?: LucideIcon | IconType;
 }
 
 const SettingsContext = createContext<Settings>({
@@ -78,7 +85,7 @@ function reducer(state: SettingsState, action: any) {
 
     case "openAdd":
       return produce(state, (draft) => {
-        draft.activeItemId = "add";
+        draft.activeItemId = "add-" + action.payload.value;
         draft.active = action.payload.value;
 
         draft.isSidebarOpen = action.payload.isSidebarOpen;
@@ -107,10 +114,10 @@ function Settings({
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: "teams",
+      active: defaultActive,
       isSidebarOpen: isDesktop,
-      activeItemId: "2",
-      accordionActive: "teams",
+      activeItemId: "",
+      accordionActive: "",
     });
 
   useEffect(() => {
@@ -206,17 +213,18 @@ function SettingsSidebarItem({ value }: { value: string }) {
 function SettingsSidebarAccordionItem({
   value,
   children,
-  action,
   actionIcon,
-}: {
-  value: string;
-  children?: React.ReactNode;
-  action?: () => void;
-  actionIcon?: LucideIcon | IconType;
-}) {
-  const { activeItemId, accordionActive, dispatch } =
+}: SettingsAccordionItemProps) {
+  const { activeItemId, accordionActive, dispatch, active } =
     useContext(SettingsContext);
   const isDesktop = useIsDesktop();
+
+  console.log("accordionActive", {
+    accordionActive,
+    value,
+    activeItemId,
+    active,
+  });
 
   return (
     <AccordionItem value={value}>
@@ -226,7 +234,9 @@ function SettingsSidebarAccordionItem({
           label={value}
           className={cn(
             "justify-start gap-1 py-1.5 pl-7 pr-1.5 capitalize",
-            activeItemId && "bg-accent text-accent-foreground",
+            accordionActive === value &&
+              activeItemId &&
+              "bg-accent text-accent-foreground",
           )}
           onClick={() => {
             if (accordionActive === value)
@@ -261,6 +271,14 @@ function SettingsSidebarAccordionItem({
       <AccordionContent className="py-1.5 pl-7">{children}</AccordionContent>
     </AccordionItem>
   );
+}
+
+function SettingsSidebarAccordionPlaceHolder({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <p className="pl-2 text-sm text-muted-foreground">{children}</p>;
 }
 
 function SettingsContent({
@@ -379,6 +397,7 @@ export {
   SettingsSidebar,
   SettingsSidebarList,
   SettingsSidebarHeader,
+  SettingsSidebarAccordionPlaceHolder,
   SettingsSidebarItem,
   SettingsContent,
   SettingsClose,

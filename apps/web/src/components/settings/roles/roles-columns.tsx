@@ -1,4 +1,4 @@
-import { DrObj, Member, Role } from "@repo/data";
+import { DrObj, Member, Role, Team } from "@repo/data";
 import {
   Checkbox,
   ComboboxCell,
@@ -14,20 +14,28 @@ import {
 } from "@repo/ui";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { ColumnDef } from "@tanstack/react-table";
-import { produce } from "immer";
+import { enableMapSet, produce } from "immer";
 import _ from "lodash";
 import { Check, UserRoundCog } from "lucide-react";
 import * as React from "react";
 import { TeamMembersDialog } from "../teams/team-members-dialog";
 
-export const rolesColumns = (
-  members: readonly DrObj<Member>[],
-  deleteRole: (roleId: string) => void,
-): ColumnDef<DrObj<Role>>[] => {
+enableMapSet();
+
+interface RoleColumnsProps {
+  members: readonly DrObj<Member>[];
+  teams: readonly DrObj<Team>[];
+  deleteRole: (roleId: string) => void;
+}
+export const rolesColumns = ({
+  members,
+  teams,
+  deleteRole,
+}: RoleColumnsProps): ColumnDef<DrObj<Role>>[] => {
   return [
     {
       id: "select",
-      header: ({ table }) => <DataTableHeaderSelect withForm table={table} />,
+      header: ({ table }) => <DataTableHeaderSelect table={table} />,
       cell: ({ row }) => <DataTableRowSelect row={row} />,
       enableSorting: false,
       enableHiding: false,
@@ -166,9 +174,7 @@ export const rolesColumns = (
             onOpenChange={setOpen}
             renderer={
               <div className=" flex gap-1 overflow-hidden">
-                {permissions?.map((permission, i) => (
-                  <p key={i}>{permission}</p>
-                ))}
+                {permissions.join(" - ")}
               </div>
             }
             placeholder="Search for permissions"
@@ -193,6 +199,19 @@ export const rolesColumns = (
               </CommandItem>
             ))}
           </ComboboxCell>
+        );
+      },
+    },
+
+    {
+      id: "assignedTo",
+      header: () => <Header>Assigned To</Header>,
+      cell: ({ row }) => {
+        const id = row.original.linkedTeams;
+        return (
+          <div className="flex flex-col">
+            <p className="max-w-32 truncate">{id}</p>
+          </div>
         );
       },
     },

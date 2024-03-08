@@ -18,23 +18,26 @@ export function RolesSettings() {
   const { structure, members, workspace } = useCurrentWorkspace();
 
   const columns = React.useMemo(
-    () => rolesColumns(members.members, deleteRole),
+    () =>
+      rolesColumns({
+        members: members.members,
+        deleteRole,
+        teams: structure.teams,
+      }),
     [members],
   );
   const user = useCurrentUser();
   const roles = React.useMemo(() => {
     return [
-      ...structure.roles,
       {
         id: nanoid(WORKSPACE_ROLE_ID_LENGTH),
-        name: "",
-        createdBy: user?.data.id!,
-        members: [],
-        linkedTo: [],
+        name: "Admin",
         permissions: [],
-        color: "#000000",
-      } satisfies Role,
-    ];
+        members: [],
+        createdBy: user?.data.id || "",
+        linkedTeams: [],
+      },
+    ] satisfies DrObj<Role>[];
   }, [structure, user]);
 
   const { table } = useTable<Mutable<DrObj<Role>>, DrObj<Role>>({

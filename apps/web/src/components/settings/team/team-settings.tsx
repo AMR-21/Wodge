@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import {
   SettingsContentHeader,
   SettingsContentSection,
@@ -15,21 +15,24 @@ import { generalMembersColumns } from "../general-members-columns";
 
 export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
-  const isAddition = activeItemId === "add";
+  const isAddition = activeItemId.startsWith("add-");
 
   const { structure } = useCurrentWorkspace();
 
-  const teams = [
-    ...structure.teams,
-    {
-      id: "add",
-      name: "",
-      members: ["kueXSygx5naiwy_5XSRns"],
-      tags: [],
-      createdBy: "kueXSygx5naiwy_5XSRns",
-      dirs: [],
-    },
-  ];
+  const teams = useMemo(
+    () => [
+      ...structure.teams,
+      {
+        id: "add-teams",
+        name: "",
+        members: ["kueXSygx5naiwy_5XSRns"],
+        tags: [],
+        createdBy: "kueXSygx5naiwy_5XSRns",
+        dirs: [],
+      },
+    ],
+    [structure.teams],
+  );
 
   const team = teams.find((team) => team.id === activeItemId);
 

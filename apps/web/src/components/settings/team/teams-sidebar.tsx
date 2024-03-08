@@ -1,6 +1,9 @@
 import { cn, useIsDesktop } from "@repo/ui";
 import { useContext } from "react";
-import { SettingsContext } from "../settings";
+import {
+  SettingsContext,
+  SettingsSidebarAccordionPlaceHolder,
+} from "../settings";
 import { Team } from "@repo/data";
 import { SidebarItem } from "../../workspace/sidebar-item";
 import { is } from "drizzle-orm";
@@ -13,6 +16,13 @@ export function TeamsSidebar() {
   const { structure } = useCurrentWorkspace();
 
   const teams = structure.teams;
+
+  if (teams.length === 0)
+    return (
+      <SettingsSidebarAccordionPlaceHolder>
+        No teams
+      </SettingsSidebarAccordionPlaceHolder>
+    );
 
   return (
     <div className="flex flex-col gap-1">

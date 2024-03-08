@@ -115,6 +115,7 @@ export const TagSchema = z.object({
 
 export const DirSchema = z.object({
   channels: z.array(ChannelSchema),
+  id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70),
 });
 
@@ -134,7 +135,7 @@ export const RoleSchema = z.object({
   name: z.string().max(70),
   members: z.array(z.string().length(ID_LENGTH)),
   permissions: z.array(z.enum(["read", "write", "admin"])),
-  linkedTo: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
+  linkedTeams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
   color: z.string().default(BRAND_COLOR).optional(),
   createdBy: z.string().length(ID_LENGTH),
 });

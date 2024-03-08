@@ -33,7 +33,7 @@ export function NewInviteForm({
 
   if (!metadata) return null;
 
-  async function onSubmit(data: NewInvite) {
+  function onSubmit(data: NewInvite) {
     createInvite(data);
   }
 

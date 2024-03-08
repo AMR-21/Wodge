@@ -5,18 +5,18 @@ import { cn, buttonVariants, ButtonProps, Button } from "@repo/ui";
 import { forwardRef } from "react";
 import { IconType } from "react-icons/lib";
 
-interface SidebarItemProps {
+export interface SidebarItemProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
   Icon?: LucideIcon | IconType | null;
   children?: React.ReactNode;
   className?: string;
   isActive?: boolean;
   href?: string;
-  onClick?: () => void;
+  handler?: () => void;
   noIcon?: boolean;
 }
 
-const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
+const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
   function SidebarItem(
     {
       label,
@@ -25,7 +25,7 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
       className,
       isActive = false,
       href,
-      onClick,
+      handler,
       noIcon = false,
       ...props
     },
@@ -35,6 +35,7 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
 
     let jsx = (
       <div
+        ref={ref}
         tabIndex={0}
         role="button"
         className={cn(
@@ -45,11 +46,11 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
 
           // Center the icon with the space avatar by adding padding left of 12px + 4px - 8px = 8px
           // 12px half of the avatar width - 4px padding of the space switcher - 8px half of the icon width
-          "w-full grow items-center justify-start pl-2 text-muted-foreground hover:text-accent-foreground",
+          "w-full grow items-center justify-start pl-2 text-muted-foreground hover:text-accent-foreground ",
           isActive && "bg-accent text-accent-foreground dark:bg-accent",
           className,
         )}
-        onClick={onClick}
+        onClick={handler}
         {...props}
       >
         {/* 8px margin of the switcher + 12px half space avatar width - 8px half icon width */}
@@ -63,11 +64,7 @@ const SidebarItem = forwardRef<HTMLLIElement, SidebarItemProps>(
 
     if (href) jsx = <Link href={href}>{jsx}</Link>;
 
-    return (
-      <li ref={ref} className="grow list-none">
-        {jsx}
-      </li>
-    );
+    return jsx;
   },
 );
 

@@ -61,6 +61,7 @@ export function membersColumns({
 
     {
       id: "member",
+      accessorFn: (row) => row.data.email,
       header: () => <Header>Member</Header>,
 
       cell: ({ row }) => {

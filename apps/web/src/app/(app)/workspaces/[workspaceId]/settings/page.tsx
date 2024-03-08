@@ -4,7 +4,6 @@ import { MembersSettings } from "@/components/settings/members/members-settings"
 import { RolesSettings } from "@/components/settings/roles/role-settings";
 import {
   Settings,
-  SettingsClose,
   SettingsContent,
   SettingsSidebar,
   SettingsSidebarAccordionItem,
@@ -21,7 +20,7 @@ import { Building2 } from "lucide-react";
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="general">
+      <Settings defaultActive="roles">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />
@@ -30,7 +29,8 @@ function WorkspaceSettingsPage() {
           <SettingsSidebarList>
             <SettingsSidebarItem value="general" />
             <SettingsSidebarItem value="members" />
-            <SettingsSidebarItem value="roles" />
+            <SettingsSidebarAccordionItem value="roles"></SettingsSidebarAccordionItem>
+            {/* <SettingsSidebarItem value="roles" /> */}
             <SettingsSidebarAccordionItem value="teams">
               <TeamsSidebar />
             </SettingsSidebarAccordionItem>
@@ -57,9 +57,6 @@ function WorkspaceSettingsPage() {
           <p>updgrade</p>
         </SettingsContent>
 
-        <SettingsContent id="add-teams">
-          <p>add</p>
-        </SettingsContent>
         {/* <SettingsClose /> */}
       </Settings>
     </div>

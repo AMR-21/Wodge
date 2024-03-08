@@ -22,6 +22,7 @@ export const SidebarItemBtn = React.forwardRef<
       isVisible = () => true,
       children,
       sr,
+      onClick,
       ...props
     },
     ref,
@@ -36,6 +37,10 @@ export const SidebarItemBtn = React.forwardRef<
           !isVisible() && "invisible",
           className,
         )}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick?.(e);
+        }}
         {...props}
       >
         <span className="sr-only">{sr || "sidebar item action"}</span>
