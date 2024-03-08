@@ -1,21 +1,17 @@
-import { Settings } from "lucide-react";
 import { useContext } from "react";
 import {
   SettingsContentHeader,
   SettingsContentSection,
   SettingsContext,
 } from "../settings";
-import { DrObj, Member, Team, TeamSchema } from "@repo/data";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DataTable, Form, Input } from "@repo/ui";
+import { DrObj, Member } from "@repo/data";
+import { Button } from "@repo/ui";
 import { TeamGeneralForm } from "./team-general-form";
 import { useCurrentWorkspace } from "../../workspace/workspace-context";
-import { MembersTable } from "../members-table";
-import { MembersCombobox } from "../members-combobox";
+import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
-import { membersColumns } from "../members-columns";
+import { generalMembersColumns } from "../general-members-columns";
 
 export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
@@ -37,12 +33,12 @@ export function TeamSettings() {
 
   const team = teams.find((team) => team.id === activeItemId);
 
-  // To do filter members by team
+  // Todo filter members by team
   const { members } = useCurrentWorkspace();
 
   const { table } = useTable({
     data: members.members as Mutable<DrObj<Member>[]>,
-    columns: membersColumns({
+    columns: generalMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
     }),
@@ -72,7 +68,7 @@ export function TeamSettings() {
       {!isAddition && (
         <>
           <SettingsContentSection header="Manage Members">
-            <MembersTable
+            <GeneralMembersTable
               table={table}
               members={members.members}
               addMember={addMember}

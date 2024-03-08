@@ -1,6 +1,5 @@
 import { DrObj, Member } from "@repo/data";
 import { DataTable, Input } from "@repo/ui";
-import { membersColumns } from "./members-columns";
 import { useTable } from "./use-table";
 import { Mutable } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
@@ -9,10 +8,10 @@ import { MembersCombobox } from "./members-combobox";
 interface MembersTableProps<TData> {
   table: Table<TData>;
   members: readonly DrObj<Member>[];
-  addMember: (member: DrObj<Member>) => void;
+  addMember?: (member: DrObj<Member>) => void;
 }
 
-export function MembersTable<TData>({
+export function GeneralMembersTable<TData>({
   table,
   members,
   addMember,
@@ -28,7 +27,7 @@ export function MembersTable<TData>({
             table.getColumn("member")?.setFilterValue(e.target.value);
           }}
         />
-        <MembersCombobox members={members} onClick={addMember} />
+        {addMember && <MembersCombobox members={members} onClick={addMember} />}
       </div>
 
       <DataTable table={table} />

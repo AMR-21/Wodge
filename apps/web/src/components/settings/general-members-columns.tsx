@@ -17,7 +17,7 @@ interface MembersColumnsProps {
   allowAllRemove?: boolean;
 }
 
-export const membersColumns = ({
+export const generalMembersColumns = ({
   creatorId,
   removeMember,
   allowRemoveCreator = false,
