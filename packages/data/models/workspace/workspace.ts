@@ -71,6 +71,10 @@ export class Workspace {
     await this.store.mutate.createTeam(data);
   }
 
+  async deleteTeam(data: DrObj<Team>) {
+    await this.store.mutate.deleteTeam(data);
+  }
+
   /**
    * Make the workspace a cloud workspace
    */

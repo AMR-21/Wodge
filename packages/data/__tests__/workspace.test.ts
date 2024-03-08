@@ -94,7 +94,7 @@ describe("Team mutators", () => {
       dirs: [],
       id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
       members: [],
-      name: "Test name",
+      name: "Test1 name",
       tags: [],
     };
 
@@ -105,5 +105,41 @@ describe("Team mutators", () => {
     );
 
     expect(structure?.teams).not.toContain(team);
+  });
+  test("delete a team", async () => {
+    const team1: Team = {
+      createdBy: "-5oxKtIB8FXvYZL0AXjXp",
+      dirs: [],
+      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      members: [UserId],
+      name: "Test name",
+      tags: [],
+    };
+    const team2: Team = {
+      createdBy: "-5oxKtIB8FXvYZL0AXjXp",
+      dirs: [],
+      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      members: [UserId],
+      name: "Test2 name",
+      tags: [],
+    };
+    await rep.mutate.createTeam(team1);
+    await rep.mutate.createTeam(team2);
+
+    const structure = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+
+    console.log(structure?.teams);
+
+    await rep.mutate.deleteTeam(team2);
+
+    const structure2 = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+
+    console.log(structure2?.teams);
+
+    expect(structure2?.teams).not.contain(team2);
   });
 });
