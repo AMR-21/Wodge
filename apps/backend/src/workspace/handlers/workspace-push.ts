@@ -11,6 +11,9 @@ import { makeWorkspaceKey } from "@repo/data";
 import { isAllowed } from "../../lib/utils";
 import { initWorkspace } from "../mutators/init-workspace";
 import { createTeam } from "../mutators/create-team";
+import { createRole } from "../mutators/create-role";
+import { updateTeam } from "../mutators/update-team";
+import { daleteRole } from "../mutators/delete-role";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -35,6 +38,12 @@ function runner(party: WorkspaceParty) {
         return initWorkspace(party, params);
       case "createTeam":
         return createTeam(party, params);
+      case "createRole":
+        return createRole(party, params);
+      case "updateTeam":
+       return updateTeam(party, params);
+      case "deleteRole":
+        return daleteRole(party, params);
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }
