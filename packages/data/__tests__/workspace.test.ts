@@ -130,7 +130,7 @@ describe("Team mutators", () => {
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
     );
 
-    console.log(structure?.teams);
+    // console.log(structure?.teams);
 
     await rep.mutate.deleteTeam(team2);
 
@@ -138,8 +138,42 @@ describe("Team mutators", () => {
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
     );
 
-    console.log(structure2?.teams);
+    // console.log(structure2?.teams);
 
-    expect(structure2?.teams).not.contain(team2);
+    //?will fail
+    // expect(structure2?.teams).not.toContainEqual(team1);
+    //?will pass
+    expect(structure2?.teams).not.toContainEqual(team2);
+  });
+  test("update a team", async () => {
+    const team1: Team = {
+      createdBy: "-5oxKtIB8FXvYZL0AXjXp",
+      dirs: [],
+      id: "8IccbrnIPFJqs9ic",
+      members: [UserId],
+      name: "Test name",
+      tags: [],
+    };
+    const team2: Team = {
+      createdBy: "-5oxKtIB8FXvYZL0AXjXp",
+      dirs: [],
+      id: "8IccbrnIPFJqs9ic",
+      members: [UserId, "-4oxKtIB8FXvYZL0AXjXp"],
+      name: "Test name",
+      tags: [],
+    };
+
+    await rep.mutate.createTeam(team1);
+
+    const structure = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+    console.log(structure?.teams);
+
+    await rep.mutate.updateTeam(team2);
+    const structure2 = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+    console.log(structure2?.teams);
   });
 });
