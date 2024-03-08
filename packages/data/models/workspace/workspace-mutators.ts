@@ -70,4 +70,45 @@ export const workspaceMutators = {
     // 5. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
+  async deleteTeam(tx: WriteTransaction, team: DrObj<Team>) {
+    // 1.Validate the Data
+    const validatedFields = TeamSchema.safeParse(team);
+
+    //  Bug: Should throw an error if the data is invalid
+    if (!validatedFields.success) {
+      return;
+    }
+
+    const { data: theTeam } = validatedFields;
+
+    // 2. validate owner
+    const { id } = User.getInstance().data!;
+
+    //  !: Should throw an error if the data is invalid
+    if (theTeam.createdBy !== id || !theTeam.members.includes(id)) {
+      return;
+    }
+
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    // 3. Validate if the team is already existing
+    const teamExists = structure.teams.some((t) => t.id === theTeam.id);
+
+    if (!teamExists) {
+      return;
+    }
+
+    // 4. delete the team
+    const afterDelete = structure.teams.filter(
+      (team) => team.id !== theTeam.id
+    );
+    const newStructure = produce(structure, (draft) => {
+      draft.teams = afterDelete;
+    });
+
+    // 5.presist the data
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
 };
