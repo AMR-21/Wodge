@@ -189,7 +189,7 @@ describe("Workspace teams' mutators", () => {
     await rep.mutate.createTeam(team1);
 
     await expect(rep.mutate.updateTeam(update)).rejects.toThrow(
-      "Invalid update target"
+      "Invalid team update data"
     );
   });
 

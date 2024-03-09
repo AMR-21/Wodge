@@ -52,3 +52,9 @@ export * from "./lib/rbac";
 export * from "./lib/utils";
 
 export type DrObj<T> = DeepReadonlyObject<T>;
+
+/**
+ * Mutators
+ */
+
+export * from "./models/workspace/mutators/update-team";
