@@ -131,10 +131,10 @@ export const MemberSchema = z.object({
 
 export const RoleSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
-  name: z.string().max(70),
+  name: z.string().max(70).min(1),
   members: z.array(z.string().length(ID_LENGTH)),
   permissions: z.array(z.enum(["read", "write", "admin"])),
-  linkedTo: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
+  linkedTeams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
   color: z.string().default(BRAND_COLOR).optional(),
   createdBy: z.string().length(ID_LENGTH),
 });

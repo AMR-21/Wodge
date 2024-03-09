@@ -13,6 +13,7 @@ import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
 import { DrObj, User, UserSchema, Workspace } from "../..";
 import { produce } from "immer";
 import lodash from "lodash";
+import { R } from "vitest/dist/reporters-MmQN-57K.js";
 
 export interface TeamUpdate {
   target:
@@ -26,6 +27,25 @@ export interface TeamUpdate {
     | "avatar";
   value: Team["name"] | Team["members"] | Team["dirs"] | Team["tags"];
   teamId: Team["id"];
+}
+
+export interface RoleUpdate {
+  target:
+    | "name"
+    | "addMembers"
+    | "removeMembers"
+    | "color"
+    | "linkTeam"
+    | "unlinkTeam"
+    | "addPermissions"
+    | "removePermissions";
+  value:
+    | Role["name"]
+    | Role["members"]
+    | Role["color"]
+    | Role["linkedTeams"]
+    | Role["permissions"];
+  roleId: Role["id"];
 }
 
 export const workspaceMutators = {
@@ -208,18 +228,18 @@ export const workspaceMutators = {
   async createRole(tx: WriteTransaction, role: DrObj<Role>) {
     //1. Validate the data
     const validatedFields = RoleSchema.safeParse(role);
-    //  Bug: Should throw an error if the data is invalid
-    if (!validatedFields.success) {
-      return;
-    }
+
+    if (!validatedFields.success) throw new Error("Invalid role data");
+
     const { data: newRole } = validatedFields;
+
     //2. Validate if the role is already existing
     const roleExists = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
     ))!.roles.some((r) => r.id === role.id);
-    if (roleExists) {
-      return;
-    }
+
+    if (roleExists) throw new Error("Role already exists");
+
     //3. Create the role
     const newStructure = produce(
       (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
@@ -231,38 +251,96 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  async updateRole(tx: WriteTransaction, role: DrObj<Role>) {
-    // 1. Validate data
-    const validatedFields = RoleSchema.safeParse(role);
-    //  Bug: Should throw an error if the data is invalid
-    if (!validatedFields.success) {
-      return;
-    }
-    const { data: newRole } = validatedFields;
-    // check if the role exists once with lodash
-    const membersNoDuplicates = lodash.uniq(newRole.members);
-    // replace the members with the new array
-    newRole.members = membersNoDuplicates;
-    // 2. Validate if the role is already existing
-    const roleExists = (await tx.get<WorkspaceStructure>(
-      makeWorkspaceStructureKey()
-    ))!.roles.some((r) => r.id === role.id);
+  //fixme
+  async updateRole(tx: WriteTransaction, update: RoleUpdate) {
+    // 1. pick update key
+    const { target, value, roleId } = update;
+    let key = target as string;
 
-    if (!roleExists) {
-      return;
-    }
-    //3. Update the role
-    const newStructure = produce(
-      (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
-      (draft) => {
-        const index = draft.roles.findIndex((role) => role.id === newRole.id);
-        if (index != -1) {
-          draft.roles[index] = newRole;
-        } else {
-          return;
-        }
+    if (target.startsWith("add")) key = target.slice(3).toLowerCase();
+    if (target.startsWith("remove")) key = target.slice(6).toLowerCase();
+
+    // 2. Validate the data , with strict the received field must exist on parsed data
+    // instead of stripping unknown fields
+    const validatedFields = RoleSchema.pick({ [key]: true })
+      .strict()
+      .safeParse({
+        [key]: value,
+      });
+
+    if (!validatedFields.success) throw new Error("Invalid role data");
+
+    const { data: updatedData } = validatedFields;
+
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    ))!;
+
+    const curIdx = structure.roles.findIndex((r) => r.id === roleId);
+
+    if (curIdx === -1) throw new Error("Team not found");
+
+    const newStructure = produce(structure, (draft) => {
+      const cur = draft.roles[curIdx]!;
+      switch (target) {
+        case "name":
+          cur.name = updatedData.name;
+          break;
+        case "addMembers":
+          updatedData.members.forEach((m) => {
+            if (!cur.members.includes(m)) {
+              cur.members.push(m);
+            }
+          });
+          break;
+        case "removeMembers":
+          cur.members = cur.members.filter(
+            (m) => !updatedData.members.includes(m)
+          );
+          break;
+        case "addPermissions":
+          updatedData.permissions.forEach((d) => {
+            if (!cur.permissions.includes(d)) {
+              cur.permissions.push(d);
+            }
+          });
+          break;
+        case "removePermissions":
+          cur.permissions = cur.permissions.filter(
+            (d) => !updatedData.permissions.includes(d)
+          );
+          break;
+        case "linkTeam":
+          updatedData.linkedTeams.forEach((t) => {
+            if (!cur.linkedTeams.includes(t)) {
+              cur.linkedTeams.push(t);
+            }
+          });
+          break;
+        case "unlinkTeam":
+          cur.linkedTeams = cur.linkedTeams.filter(
+            (t) => !updatedData.linkedTeams.includes(t)
+          );
+          break;
+        case "color":
+          cur.color = updatedData.color;
+          break;
+        default:
+          throw new Error("Invalid update target");
       }
-    );
+    });
+    // //3. Update the role
+    // const newStructure = produce(
+    //   (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
+    //   (draft) => {
+    //     const index = draft.roles.findIndex((role) => role.id === newRole.id);
+    //     if (index != -1) {
+    //       draft.roles[index] = newRole;
+    //     } else {
+    //       return;
+    //     }
+    //   }
+    // );
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
