@@ -30,7 +30,7 @@ export function RolesSettings() {
         name: "",
         createdBy: user?.data.id!,
         members: [],
-        linkedTo: [],
+        linkedTeams: [],
         permissions: [],
         color: "#000000",
       } satisfies Role,
