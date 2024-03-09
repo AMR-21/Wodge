@@ -12,6 +12,7 @@ import {
 import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
 import { DrObj, User, UserSchema, Workspace } from "../..";
 import { produce } from "immer";
+import lodash from "lodash";
 import { index } from "drizzle-orm/mysql-core";
 
 export const workspaceMutators = {
@@ -147,6 +148,7 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
+  // *Roles mutators
   async createRole(tx: WriteTransaction, role: DrObj<Role>) {
     //1. Validate the data
     const validatedFields = RoleSchema.safeParse(role);
@@ -171,6 +173,40 @@ export const workspaceMutators = {
     );
     //4. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async updateRole(tx: WriteTransaction, role: DrObj<Role>) {
+    // 1. Validate data
+    const validatedFields = RoleSchema.safeParse(role);
+    //  Bug: Should throw an error if the data is invalid
+    if (!validatedFields.success) {
+      return;
+    }
+    const { data: newRole } = validatedFields;
+    // check if the role exists once with lodash
+    const membersNoDuplicates = lodash.uniq(newRole.members);
+    // replace the members with the new array
+    newRole.members = membersNoDuplicates;
+    // 2. Validate if the role is already existing
+    const roleExists = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    ))!.roles.some((r) => r.id === role.id);
+
+    if (!roleExists) {
+      return;
+    }
+    //3. Update the role
+    const newStructure = produce(
+      (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
+      (draft) => {
+        const index = draft.roles.findIndex((role) => role.id === newRole.id);
+        if (index != -1) {
+          draft.roles[index] = newRole;
+        } else {
+          return;
+        }
+      }
+    );
   },
 
   async deleteRole(tx: WriteTransaction, role: DrObj<Role>) {

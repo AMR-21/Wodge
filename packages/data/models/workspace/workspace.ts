@@ -6,7 +6,14 @@ import {
   ReadTransaction,
   Replicache,
 } from "replicache";
-import { DrObj, NewWorkspace, Team, TeamSchema, WorkspaceType } from "../..";
+import {
+  DrObj,
+  NewWorkspace,
+  Role,
+  Team,
+  TeamSchema,
+  WorkspaceType,
+} from "../..";
 import { env } from "@repo/env";
 import { User } from "../user/user";
 import { makeWorkspaceKey } from "../../lib/keys";
@@ -78,6 +85,10 @@ export class Workspace {
 
   async updateTeam(data: DrObj<Team>) {
     await this.store.mutate.updateTeam(data);
+  }
+
+  async createRole(data: DrObj<Role>) {
+    await this.store.mutate.createRole(data);
   }
 
   /**

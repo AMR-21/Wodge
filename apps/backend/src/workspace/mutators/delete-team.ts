@@ -28,10 +28,10 @@ export async function deleteTeam(
   const teamExists = structure.data.teams.some((t) => t.id === theTeam.id);
 
   // !Bug: throw an error
-
   if (!teamExists) {
     return;
   }
+
   // 4. Delete the team
   const newStructure = produce(structure, (draft) => {
     draft.data.teams = draft.data.teams.filter(
