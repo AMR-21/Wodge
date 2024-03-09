@@ -26,6 +26,8 @@ import { generalMembersColumns } from "../general-members-columns";
 import { nanoid } from "nanoid";
 import { RoleMembersSettings } from "./role-members-settings";
 import { RoleGeneralForm } from "./role-general-form";
+import { RolePermissions } from "./role-permissions";
+import { LinkedTeams } from "./linked-teams";
 
 export function RoleSettings() {
   const { activeItemId } = React.useContext(SettingsContext);
@@ -71,6 +73,11 @@ export function RoleSettings() {
     console.log("remove member", memberId);
   }
 
+  function changePermissions(permission: string, add: boolean) {}
+
+  function linkTeam(teamId: string) {}
+  function unLinkTeam(teamId: string) {}
+
   return (
     <div className="w-full shrink-0 grow ">
       <SettingsContentHeader
@@ -83,10 +90,18 @@ export function RoleSettings() {
           <TabsTrigger className="grow" value="general">
             General
           </TabsTrigger>
-          <TabsTrigger disabled={isAddition} className="grow" value="i">
+          <TabsTrigger
+            disabled={isAddition}
+            className="grow"
+            value="permissions"
+          >
             Permissions
           </TabsTrigger>
-          <TabsTrigger disabled={isAddition} className="grow" value="h">
+          <TabsTrigger
+            disabled={isAddition}
+            className="grow"
+            value="linked-teams"
+          >
             Linked Teams
           </TabsTrigger>
           <TabsTrigger disabled={isAddition} className="grow" value="members">
@@ -99,37 +114,32 @@ export function RoleSettings() {
             <RoleGeneralForm role={role} />
           </SettingsContentSection>
         </TabsContent>
+
+        <TabsContent value="permissions">
+          <SettingsContentSection>
+            <RolePermissions
+              permissions={role.permissions}
+              changePermissions={changePermissions}
+            />
+          </SettingsContentSection>
+        </TabsContent>
+
+        <TabsContent value="linked-teams">
+          <SettingsContentSection>
+            <LinkedTeams
+              linkTeam={linkTeam}
+              linkedTeams={role.linkedTeams}
+              unLinkTeam={unLinkTeam}
+            />
+          </SettingsContentSection>
+        </TabsContent>
+
         <TabsContent value="members">
           <SettingsContentSection>
             <RoleMembersSettings role={role} />
           </SettingsContentSection>
         </TabsContent>
       </Tabs>
-      {/* <SettingsContentSection header="General">
-        <TeamGeneralForm team={team} />
-      </SettingsContentSection> */}
-
-      {/* {!isAddition && (
-        <>
-          <SettingsContentSection header="Manage Members">
-            <GeneralMembersTable
-              table={table}
-              members={members.members}
-              addMember={addMember}
-            />
-          </SettingsContentSection>
-
-          <SettingsContentSection header="Manage Tags">
-            <p>To do</p>
-          </SettingsContentSection>
-
-          <SettingsContentSection header="Danger Zone">
-            <Button size="sm" variant="destructive">
-              Delete Workspace
-            </Button>
-          </SettingsContentSection>
-        </>
-      )} */}
     </div>
   );
 }
