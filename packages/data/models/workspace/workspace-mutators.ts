@@ -13,7 +13,20 @@ import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
 import { DrObj, User, UserSchema, Workspace } from "../..";
 import { produce } from "immer";
 import lodash from "lodash";
-import { index } from "drizzle-orm/mysql-core";
+
+export interface TeamUpdate {
+  target:
+    | "name"
+    | "addMembers"
+    | "removeMembers"
+    | "addDirs"
+    | "removeDirs"
+    | "addTags"
+    | "removeTags"
+    | "avatar";
+  value: Team["name"] | Team["members"] | Team["dirs"] | Team["tags"];
+  teamId: Team["id"];
+}
 
 export const workspaceMutators = {
   // *Initiate workspace mutator
@@ -42,20 +55,15 @@ export const workspaceMutators = {
     //1. Validate the data
     const validatedFields = TeamSchema.safeParse(team);
 
-    //  Bug: Should throw an error if the data is invalid
-    if (!validatedFields.success) {
-      return;
-    }
+    if (!validatedFields.success) throw new Error("Invalid team data");
 
     const { data: newTeam } = validatedFields;
 
     // 2. validate owner
     const { id } = User.getInstance().data!;
 
-    //  Bug: Should throw an error if the data is invalid
-    if (newTeam.createdBy !== id || !newTeam.members.includes(id)) {
-      return;
-    }
+    if (newTeam.createdBy !== id || !newTeam.members.includes(id))
+      throw new Error("Invalid team data");
 
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
@@ -64,9 +72,7 @@ export const workspaceMutators = {
     // 3. Validate if the team is already existing
     const teamExists = structure.teams.some((t) => t.id === newTeam.id);
 
-    if (teamExists) {
-      return;
-    }
+    if (teamExists) throw new Error("Team already exists");
 
     // 4. Create the team
     const newStructure = produce(structure, (draft) => {
@@ -77,74 +83,124 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  async updateTeam(tx: WriteTransaction, team: DrObj<Team>) {
-    //1. Validate the data
-    const validatedFields = TeamSchema.safeParse(team);
-    //  Bug: Should throw an error if the data is invalid
-    if (!validatedFields.success) {
-      return;
-    }
-    const { data: newTeam } = validatedFields;
-    // 2. validate owner
-    const { id } = User.getInstance().data!;
+  //fixme
+  async updateTeam(tx: WriteTransaction, update: TeamUpdate) {
+    // 1. pick update key
+    const { target, value, teamId } = update;
+    let key = target as string;
 
-    //  Bug: Should throw an error if the data is invalid
-    if (newTeam.createdBy !== id || !newTeam.members.includes(id)) {
-      return;
-    }
+    if (target.startsWith("add")) key = target.slice(3).toLowerCase();
+    if (target.startsWith("remove")) key = target.slice(6).toLowerCase();
 
-    //3. Update the team
-    const newStructure = produce(
-      (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
-      (draft) => {
-        const index = draft.teams.findIndex((t) => t.id === newTeam.id);
-        if (index != -1) {
-          draft.teams[index] = newTeam;
-        } else {
-          return;
-        }
+    // 2. Validate the data , with strict the received field must exist on parsed data
+    // instead of stripping unknown fields
+    const validatedFields = TeamSchema.pick({ [key]: true })
+      .strict()
+      .safeParse({
+        [key]: value,
+      });
+
+    if (!validatedFields.success) throw new Error("Invalid team data");
+
+    const { data: updatedData } = validatedFields;
+
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    ))!;
+
+    const curIdx = structure.teams.findIndex((t) => t.id === teamId);
+
+    if (curIdx === -1) throw new Error("Team not found");
+
+    const newStructure = produce(structure, (draft) => {
+      const cur = draft.teams[curIdx]!;
+      switch (target) {
+        case "name":
+          cur.name = updatedData.name;
+          break;
+        case "addMembers":
+          updatedData.members.forEach((m) => {
+            if (!cur.members.includes(m)) {
+              cur.members.push(m);
+            }
+          });
+          break;
+        case "removeMembers":
+          if (updatedData.members.includes(cur.createdBy))
+            throw new Error("Cannot remove the owner");
+
+          cur.members = cur.members.filter(
+            (m) => !updatedData.members.includes(m)
+          );
+          break;
+        case "addDirs":
+          updatedData.dirs.forEach((d) => {
+            if (!cur.dirs.includes(d)) {
+              cur.dirs.push(d);
+            }
+          });
+          break;
+        case "removeDirs":
+          cur.dirs = cur.dirs.filter((d) => !updatedData.dirs.includes(d));
+          break;
+        case "addTags":
+          updatedData.tags.forEach((t) => {
+            if (!cur.tags.includes(t)) {
+              cur.tags.push(t);
+            }
+          });
+          break;
+        case "removeTags":
+          cur.tags = cur.tags.filter((t) => !updatedData.tags.includes(t));
+          break;
+        case "avatar":
+          cur.avatar = updatedData.avatar;
+          break;
+        default:
+          throw new Error("Invalid update target");
       }
-    );
+    });
+
     //4. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  async deleteTeam(tx: WriteTransaction, team: DrObj<Team>) {
+  async deleteTeam(tx: WriteTransaction, teamId: string) {
+    //Fixme - no need to validate the team id
     // 1.Validate the team
-    const validatedFields = TeamSchema.safeParse(team);
+    // const validatedFields = TeamSchema.safeParse(team);
     //  !Bug: Should throw an error if the data is invalid
 
-    if (!validatedFields.success) {
-      return;
-    }
+    // if (!validatedFields.success) {
+    //   return;
+    // }
 
-    const { data: theTeam } = validatedFields;
+    // const { data: theTeam } = validatedFields;
 
-    // 2. validate owner
-    const { id } = User.getInstance().data!;
+    // fixme No need
+    // // 2. validate owner
+    // const { id } = User.getInstance().data!;
 
-    //  !Bug: Should throw an error if the data is invalid
-    if (theTeam.createdBy !== id || !theTeam.members.includes(id)) {
-      return;
-    }
+    // //  !Bug: Should throw an error if the data is invalid
+    // if (theTeam.createdBy !== id || !theTeam.members.includes(id)) {
+    //   return;
+    // }
 
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
     )) as WorkspaceStructure;
 
-    // check if the team not existing
-    const teamExists = structure.teams.some((t) => t.id === theTeam.id);
-    // !Bug: throw error
-    if (!teamExists) {
-      return;
-    }
+    // 1. check if the team not existing
+    const teamExists = structure.teams.some((t) => t.id === teamId);
 
-    //3. Delete the team
+    if (!teamExists) throw new Error("Team not found");
+
+    // 2. Delete the team
     const newStructure = produce(structure, (draft) => {
-      draft.teams = draft.teams.filter((team) => team.id !== theTeam.id);
+      draft.teams = draft.teams.filter((team) => team.id !== teamId);
     });
 
-    // 5.presist data
+    // 3.persist data
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
