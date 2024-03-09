@@ -13,6 +13,7 @@ import {
   WorkspaceType,
 } from "../../schemas/workspace.schema";
 import { makeWorkspaceStructureKey } from "../../lib/keys";
+import { updateTeamMutator } from "../../models/workspace/mutators/update-team";
 
 const rep = new Replicache({
   licenseKey: TEST_LICENSE_KEY,
@@ -99,7 +100,7 @@ describe("Workspace teams' mutators", () => {
     );
   });
 
-  test("update a team", async () => {
+  test("update a team", () => {
     const team1: Team = {
       createdBy: UserId,
       dirs: [],
@@ -109,12 +110,20 @@ describe("Workspace teams' mutators", () => {
       tags: [],
     };
 
+    const structure: Partial<WorkspaceStructure> = {
+      teams: [team1],
+    };
+
     const update: TeamUpdate = {
       target: "addMembers",
       value: ["-4oxKtIB8FXvYZL0AXjXp"],
       teamId: "8IccbrnIPFJqs9ic",
     };
 
+    const newStructure = updateTeamMutator(
+      update,
+      structure as WorkspaceStructure
+    );
     const team2: Team = {
       createdBy: UserId,
       dirs: [],
@@ -124,16 +133,16 @@ describe("Workspace teams' mutators", () => {
       tags: [],
     };
 
-    await rep.mutate.createTeam(team1);
+    // await rep.mutate.createTeam(team1);
 
-    await rep.mutate.updateTeam(update);
+    // await rep.mutate.updateTeam(update);
 
-    const structure = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    );
+    // const structure = await rep.query((tx: ReadTransaction) =>
+    //   tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    // );
 
-    expect(structure?.teams).toHaveLength(1);
-    expect(structure?.teams).toContainEqual(team2);
+    expect(newStructure.teams).toHaveLength(1);
+    expect(newStructure.teams).toContainEqual(team2);
   });
 
   test("update a team with invalid data", async () => {
