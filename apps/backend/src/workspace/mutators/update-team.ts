@@ -26,17 +26,16 @@ export async function updateTeam(
     return;
   }
   const structure = party.workspaceStructure;
-  //3.update team 
-  const newStructure = produce(structure.data, (draft) => {
-    const index = draft.teams.findIndex((t) => t.id === newTeam.id);
+  //3.update team
+  const newStructure = produce(structure, (draft) => {
+    const index = draft.data.teams.findIndex((t) => t.id === newTeam.id);
     if (index != -1) {
-      draft.teams[index] = newTeam;
-    }
-    else {
+      draft.data.teams[index] = newTeam;
+      draft.lastModifiedVersion = nextVersion;
+    } else {
       return;
     }
   });
   //4. Persist the mutation
   await party.room.storage.put(makeWorkspaceStructureKey(), newStructure);
-
 }

@@ -207,6 +207,7 @@ export const workspaceMutators = {
         }
       }
     );
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
   async deleteRole(tx: WriteTransaction, role: DrObj<Role>) {
@@ -239,5 +240,23 @@ export const workspaceMutators = {
     );
     // 4. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+  async deleteWorkspace(tx: WriteTransaction) {
+    //1.check that the user deleting is the owner
+    const deletinguser = User.getInstance().data!;
+    const workspace = await tx.get<WorkspaceType>(makeWorkspaceKey());
+    if (workspace?.owner !== deletinguser.id) {
+      return;
+    }
+    //1. delete workspace
+    const result = await tx.del(makeWorkspaceKey());
+    if (!result) {
+      return;
+    }
+    //3. delete workspace structure
+    const result2 = await tx.del(makeWorkspaceStructureKey());
+    if (!result2) {
+      return;
+    }
   },
 };

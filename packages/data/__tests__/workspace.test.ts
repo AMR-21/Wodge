@@ -289,6 +289,7 @@ describe("Team mutators", () => {
       name: "Test name",
       tags: [],
     };
+
     const team2: Team = {
       createdBy: UserId,
       dirs: [],
@@ -443,22 +444,69 @@ describe("Team mutators", () => {
     expect(structure?.roles).not.toContainEqual(role1);
   });
 
-  // test("update Role", async () => {
-  //   const role1: Role = {
-  //     createdBy: UserId,
-  //     id: "8IccbrnIPFJqs9ic",
-  //     members: [UserId],
-  //     name: "Test name",
-  //     permissions: ["read"],
-  //     linkedTo: [],
-  //   };
+  test("update Role", async () => {
+    const role1: Role = {
+      createdBy: UserId,
+      id: "8IccbrnIPFJqs9ib",
+      members: [UserId],
+      name: "Test name",
+      permissions: ["read"],
+      linkedTo: [],
+    };
+    const role2: Role = {
+      createdBy: UserId,
+      id: "8IccbrnIPFJqs9ib",
+      members: [UserId, "-4oxKtIB8FXvYZL0AXjXp"],
+      name: "Test name",
+      permissions: ["read"],
+      linkedTo: [],
+    };
 
-  //   await rep.mutate.createRole(role1);
+    await rep.mutate.createRole(role1);
 
-  //   const structure = await rep.query((tx: ReadTransaction) =>
-  //     tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-  //   );
+    await rep.mutate.updateRole(role2);
 
-  //   expect(structure?.roles).toContainEqual(role1);
-  // });
+    const structure = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+
+    expect(structure?.roles).toContainEqual(role2);
+  });
+
+  test("update Role with invalid data", async () => {
+    const role1: Role = {
+      createdBy: UserId,
+      id: "8IccbrnIPFJqs9ib",
+      members: [UserId],
+      name: "Test name",
+      permissions: ["read"],
+      linkedTo: [],
+    };
+    const role2: Role = {
+      createdBy: UserId,
+      id: "8IccbrnIPFJqs9ib",
+      members: [UserId, "-4oxKtIB8FXvYZL0AXjXp"],
+      name: "",
+      permissions: ["read"],
+      linkedTo: [],
+    };
+
+    await rep.mutate.createRole(role1);
+
+    const structure1 = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+
+    console.log(structure1?.roles);
+
+    await rep.mutate.updateRole(role2);
+
+    const structure = await rep.query((tx: ReadTransaction) =>
+      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
+    );
+
+    console.log(structure?.roles);
+
+    expect(structure?.roles).toContainEqual(role2);
+  });
 });

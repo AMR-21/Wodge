@@ -8,12 +8,20 @@ export async function updateRole(
   party: WorkspaceParty,
   { mutation, nextVersion, userId }: RunnerParams
 ) {
+  // 1. Validate the data
   const validatedFields = RoleSchema.safeParse(mutation.args);
+
   if (!validatedFields.success) {
     return;
   }
 
   const { data: newRole } = validatedFields;
+
+  //  Bug: Should throw an error if the data is invalid
+  if (newRole.createdBy !== userId || !newRole.members.includes(userId)) {
+    return;
+  }
+
   // check if the role exists once with lodash
   const membersNoDuplicates = lodash.uniq(newRole.members);
   // replace the members with the new array
@@ -21,17 +29,21 @@ export async function updateRole(
 
   const structure = party.workspaceStructure;
 
-  // 3. Validate if the team is already existing
+  // 3. Validate if the role is already existing
   const roleExists = structure.data.roles.some((t) => t.id === newRole.id);
 
-  if (roleExists) {
+  if (!roleExists) {
     return;
   }
 
   // 4. update the role
   const newStructure = produce(structure, (draft) => {
-    draft.data.roles.push(newRole);
-    draft.lastModifiedVersion = nextVersion;
+    const index = draft.data.roles.findIndex((r) => r.id === newRole.id);
+
+    if (index !== -1) {
+      draft.data.roles[index] = newRole;
+      draft.lastModifiedVersion = nextVersion;
+    }
   });
 
   // 5. Persist the mutation
