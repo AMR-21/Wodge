@@ -1,5 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
+import {
+  DrObj,
+  Team,
+  TeamSchema,
+  User,
+  WORKSPACE_TEAM_ID_LENGTH,
+} from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
@@ -44,10 +50,15 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   }, [team]);
 
   async function onSubmit(data: Partial<DrObj<Team>>) {
-    if (team.id === "add") console.log("add team", data.id);
+    if (team.id.startsWith("add")) console.log("add team", data.id);
     // console.log("update team general", { ...team, data });
 
-    await workspace?.createTeam({ ...team, ...data });
+    await workspace?.createTeam({
+      ...team,
+      ...data,
+      members: [User.getInstance().data.id],
+      createdBy: User.getInstance().data.id,
+    });
 
     // update/create the team
     // if new team dispatch action to switch to the new team settings

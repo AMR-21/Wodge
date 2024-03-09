@@ -114,10 +114,10 @@ function Settings({
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: "roles",
+      active: defaultActive,
       isSidebarOpen: isDesktop,
-      activeItemId: "nanoid(WORKSPACE_ROLE_ID_LENGTH)",
-      accordionActive: "roles",
+      activeItemId: "",
+      accordionActive: "",
     });
 
   useEffect(() => {

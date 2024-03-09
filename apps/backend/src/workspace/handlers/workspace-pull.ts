@@ -23,7 +23,7 @@ function patcher(party: WorkspaceParty) {
 
     const { workspaceMembers, workspaceMetadata, workspaceStructure } = party;
 
-    if (workspaceMembers.lastModifiedVersion > fromVersion) {
+    if (party.workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
         key: makeWorkspaceMembersKey(),
@@ -31,7 +31,7 @@ function patcher(party: WorkspaceParty) {
       });
     }
 
-    if (workspaceMetadata.lastModifiedVersion > fromVersion) {
+    if (party.workspaceMetadata.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
         key: makeWorkspaceKey(),
@@ -39,13 +39,15 @@ function patcher(party: WorkspaceParty) {
       });
     }
 
-    if (workspaceStructure.lastModifiedVersion > fromVersion) {
+    if (party.workspaceStructure.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
         key: makeWorkspaceStructureKey(),
         value: workspaceStructure.data,
       });
     }
+
+    console.log(party.workspaceStructure, fromVersion);
 
     return patch;
   };

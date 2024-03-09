@@ -34,7 +34,7 @@ export class Workspace {
       })
       .then((data) => {
         if (data && data.environment === "cloud") {
-          // this.#makeCloud(id);
+          this.#makeCloud(id);
         }
       });
 
@@ -56,15 +56,14 @@ export class Workspace {
       owner: User.getInstance().data.id,
       createdAt: new Date().toISOString(),
     };
-
-    // 2. Run the mutation
-    await this.store.mutate.initWorkspace(workspaceData);
-
     // 3. If it is cloud workspace, then re-init the store
     // Add push/pull endpoints for cloud workspaces
     if (data.onCloud) {
       this.#makeCloud(data.id);
     }
+
+    // 2. Run the mutation
+    await this.store.mutate.initWorkspace(workspaceData);
   }
 
   async createTeam(data: DrObj<Team>) {
@@ -87,8 +86,8 @@ export class Workspace {
       id
     );
 
-    this.store.push();
-    this.store.pull();
+    // this.store.push();
+    // this.store.pull();
   }
 
   /**

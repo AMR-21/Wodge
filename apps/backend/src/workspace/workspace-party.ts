@@ -24,6 +24,7 @@ import {
   Invite,
   WORKSPACE_PRESENCE_KEY,
   Invites,
+  defaultWorkspaceStructure,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -71,7 +72,7 @@ export default class WorkspaceParty
     this.workspaceStructure = <ServerWorkspaceStructure>(
       map.get(structureKey)
     ) || {
-      data: {},
+      data: defaultWorkspaceStructure(),
       lastModifiedVersion: 0,
       deleted: false,
     };

@@ -182,6 +182,8 @@ export default function App() {
     }
   }
 
+  return <div>Workspace</div>;
+
   return (
     <DndContext
       sensors={sensors}

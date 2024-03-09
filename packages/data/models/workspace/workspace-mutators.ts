@@ -55,6 +55,8 @@ export const workspaceMutators = {
       makeWorkspaceStructureKey()
     )) as WorkspaceStructure;
 
+    console.log({ structure });
+
     // 3. Validate if the team is already existing
     const teamExists = structure.teams.some((t) => t.id === newTeam.id);
 
