@@ -13,7 +13,6 @@ import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
 import { DrObj, User, UserSchema, Workspace } from "../..";
 import { produce } from "immer";
 import lodash from "lodash";
-import { R } from "vitest/dist/reporters-MmQN-57K.js";
 
 export interface TeamUpdate {
   target:
