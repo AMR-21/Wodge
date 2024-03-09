@@ -205,3 +205,27 @@ body,
     @apply backdrop-blur-[10px] backdrop-saturate-200;
   }
 }
+.color-picker .react-colorful__saturation-pointer {
+  @apply h-2.5 w-2.5 rounded-full;
+}
+
+.color-picker .react-colorful__hue-pointer,
+.color-picker .react-colorful__alpha-pointer {
+  @apply h-4 w-2.5 rounded-lg border border-border/50 shadow-2xl;
+}
+
+.color-picker .react-colorful__pointer-fill {
+  @apply !bg-white;
+}
+.color-picker .react-colorful {
+  @apply w-full;
+}
+
+.color-picker .react-colorful__saturation {
+  @apply mb-4 w-full rounded-sm;
+}
+
+.color-picker .react-colorful__hue,
+.color-picker .react-colorful__alpha {
+  @apply h-2 rounded-md;
+}

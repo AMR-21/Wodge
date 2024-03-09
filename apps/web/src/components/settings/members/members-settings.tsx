@@ -7,7 +7,9 @@ import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { membersColumns } from "./members-columns";
 import { Mutable } from "@/lib/utils";
 import { DrObj, Member } from "@repo/data";
-import { GeneralMembersTable } from "../general-members-table";
+import { SettingsSearchInput } from "../settings-search-input";
+import { MembersCombobox } from "../members-combobox";
+import { DataTable } from "@repo/ui";
 
 export function MembersSettings() {
   const { invites, inviteLink, isPending } = useInvites();
@@ -34,8 +36,21 @@ export function MembersSettings() {
       </SettingsContentSection>
 
       <SettingsContentSection header="Manage Members">
-        {/* <MembersTable /> */}
-        <GeneralMembersTable table={table} members={members.members} />
+        <div className="space-y-4">
+          <div className="flex justify-between">
+            <SettingsSearchInput
+              table={table}
+              searchColumn="member"
+              placeHolder="Search members by email"
+            />
+
+            <MembersCombobox
+              members={members.members}
+              onClick={(d) => console.log({ d })}
+            />
+          </div>
+          <DataTable table={table} />
+        </div>
       </SettingsContentSection>
     </div>
   );

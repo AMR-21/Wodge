@@ -22,7 +22,7 @@ import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const { dispatch } = useContext(SettingsContext);
   const { workspace } = useCurrentWorkspace();
-  const isAddition = team.id === "add";
+  const isAddition = team.id.startsWith("add-");
 
   const isDesktop = useIsDesktop();
   const form = useForm<DrObj<Team>>({

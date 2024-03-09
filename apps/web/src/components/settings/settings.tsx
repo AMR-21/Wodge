@@ -114,10 +114,10 @@ function Settings({
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: defaultActive,
+      active: "roles",
       isSidebarOpen: isDesktop,
-      activeItemId: "",
-      accordionActive: "",
+      activeItemId: "nanoid(WORKSPACE_ROLE_ID_LENGTH)",
+      accordionActive: "roles",
     });
 
   useEffect(() => {
@@ -218,13 +218,6 @@ function SettingsSidebarAccordionItem({
   const { activeItemId, accordionActive, dispatch, active } =
     useContext(SettingsContext);
   const isDesktop = useIsDesktop();
-
-  console.log("accordionActive", {
-    accordionActive,
-    value,
-    activeItemId,
-    active,
-  });
 
   return (
     <AccordionItem value={value}>
@@ -352,11 +345,13 @@ function SettingsContentSection({
   className?: string;
 }) {
   return (
-    <div className="py-6">
-      <div className="flex items-center justify-between pb-4">
-        <h3 className=" text-base">{header}</h3>
-        {action}
-      </div>
+    <div className={cn("py-6")}>
+      {header && (
+        <div className="flex items-center justify-between pb-4">
+          <h3 className=" text-base">{header}</h3>
+          {action}
+        </div>
+      )}
       <div className={className}>{children}</div>
     </div>
   );
