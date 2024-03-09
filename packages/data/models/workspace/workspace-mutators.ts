@@ -375,6 +375,7 @@ export const workspaceMutators = {
     // 4. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
+  // fixme - need more deletions
   async deleteWorkspace(tx: WriteTransaction) {
     //1.check that the user deleting is the owner
     const deletinguser = User.getInstance().data!;
