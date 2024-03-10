@@ -107,7 +107,7 @@ importers:
         version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@tanstack/react-query':
         specifier: ^5.24.8
-        version: 5.24.8(react@18.2.0)
+        version: 5.25.0(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.13.2
         version: 8.13.2(react-dom@18.2.0)(react@18.2.0)
@@ -201,7 +201,7 @@ importers:
         version: 5.20.1(eslint@8.57.0)(typescript@5.3.3)
       '@tanstack/react-query-devtools':
         specifier: ^5.24.8
-        version: 5.24.8(@tanstack/react-query@5.24.8)(react@18.2.0)
+        version: 5.25.0(@tanstack/react-query@5.25.0)(react@18.2.0)
       '@types/lodash':
         specifier: ^4.14.202
         version: 4.14.202
@@ -216,7 +216,7 @@ importers:
         version: 18.2.19
       autoprefixer:
         specifier: ^10.0.1
-        version: 10.4.17(postcss@8.4.35)
+        version: 10.4.18(postcss@8.4.35)
       better-sqlite3:
         specifier: ^9.3.0
         version: 9.4.3
@@ -231,7 +231,7 @@ importers:
         version: 14.1.0(eslint@8.57.0)(typescript@5.3.3)
       eslint-plugin-next-on-pages:
         specifier: ^1.8.5
-        version: 1.9.0(eslint@8.57.0)
+        version: 1.10.0(eslint@8.57.0)
       eslint-plugin-react:
         specifier: ^7.33.2
         version: 7.33.2(eslint@8.57.0)
@@ -3639,30 +3639,30 @@ packages:
       - typescript
     dev: true
 
-  /@tanstack/query-core@5.24.8:
-    resolution: {integrity: sha512-yH7KnfXMf10p1U5GffTQzFi2Miiw6WJZImGYGdV7eqa5ZbKO8qVx9lOA9SfhIaJXomrMp1Yz5w/CBhVM3yWeTA==}
+  /@tanstack/query-core@5.25.0:
+    resolution: {integrity: sha512-vlobHP64HTuSE68lWF1mEhwSRC5Q7gaT+a/m9S+ItuN+ruSOxe1rFnR9j0ACWQ314BPhBEVKfBQ6mHL0OWfdbQ==}
 
   /@tanstack/query-devtools@5.24.0:
     resolution: {integrity: sha512-pThim455t69zrZaQKa7IRkEIK8UBTS+gHVAdNfhO72Xh4rWpMc63ovRje5/n6iw63+d6QiJzVadsJVdPoodSeQ==}
     dev: true
 
-  /@tanstack/react-query-devtools@5.24.8(@tanstack/react-query@5.24.8)(react@18.2.0):
-    resolution: {integrity: sha512-OfNbyOF07/3PXH1fdLs/2BxjpXv2hFI777iym2L0lVGQbyVSJAUbGXYaCvgjZIdan/vfiXf3sjCVkO8mD9hf0Q==}
+  /@tanstack/react-query-devtools@5.25.0(@tanstack/react-query@5.25.0)(react@18.2.0):
+    resolution: {integrity: sha512-bqtr1Bwvo/jspJXb2l4R1DSZ848TvIzGBk4V0b6YGS5EQ3015dhm3mPqyTgh0DquK5ZR0h1yP/4DpzhhvTnFHA==}
     peerDependencies:
-      '@tanstack/react-query': ^5.24.8
+      '@tanstack/react-query': ^5.25.0
       react: ^18.0.0
     dependencies:
       '@tanstack/query-devtools': 5.24.0
-      '@tanstack/react-query': 5.24.8(react@18.2.0)
+      '@tanstack/react-query': 5.25.0(react@18.2.0)
       react: 18.2.0
     dev: true
 
-  /@tanstack/react-query@5.24.8(react@18.2.0):
-    resolution: {integrity: sha512-jB3JS9SzDmBySk9VVOTPt/0ixWEb3K3dy9IExlVl/1NouY3N7HzAqG/1d4m6E9eFfKJoLvA/hBksaLu0lw627A==}
+  /@tanstack/react-query@5.25.0(react@18.2.0):
+    resolution: {integrity: sha512-u+n5R7mLO7RmeiIonpaCRVXNRWtZEef/aVZ/XGWRPa7trBIvGtzlfo0Ah7ZtnTYfrKEVwnZ/tzRCBcoiqJ/tFw==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.24.8
+      '@tanstack/query-core': 5.25.0
       react: 18.2.0
 
   /@tanstack/react-table@8.13.2(react-dom@18.2.0)(react@18.2.0):
@@ -4461,15 +4461,15 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: true
 
-  /autoprefixer@10.4.17(postcss@8.4.35):
-    resolution: {integrity: sha512-/cpVNRLSfhOtcGflT13P2794gVSgmPgTR+erw5ifnMLZb0UnSlkK4tquLmkd3BhA+nLo5tX8Cu0upUsGKvKbmg==}
+  /autoprefixer@10.4.18(postcss@8.4.35):
+    resolution: {integrity: sha512-1DKbDfsr6KUElM6wg+0zRNkB/Q7WcKYAaK+pzXn+Xqmszm/5Xa9coeNdtP88Vi+dPzZnMjhge8GIV49ZQkDa+g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.23.0
-      caniuse-lite: 1.0.30001589
+      caniuse-lite: 1.0.30001596
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -4506,7 +4506,7 @@ packages:
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
-      prebuild-install: 7.1.1
+      prebuild-install: 7.1.2
 
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -4551,7 +4551,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001589
+      caniuse-lite: 1.0.30001596
       electron-to-chromium: 1.4.681
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
@@ -4626,6 +4626,10 @@ packages:
 
   /caniuse-lite@1.0.30001589:
     resolution: {integrity: sha512-vNQWS6kI+q6sBlHbh71IIeC+sRwK2N3EDySc/updIGhIee2x5z00J4c1242/5/d6EpEMdOnk/m+6tuk4/tcsqg==}
+    dev: false
+
+  /caniuse-lite@1.0.30001596:
+    resolution: {integrity: sha512-zpkZ+kEr6We7w63ORkoJ2pOfBwBkY/bJrG/UZ90qNb45Isblu8wzDgevEOrRL1r9dWayHjYiiyCMEXPn4DweGQ==}
 
   /capnp-ts@0.7.0:
     resolution: {integrity: sha512-XKxXAC3HVPv7r674zP0VC3RTXz+/JKhfyw94ljvF80yynK6VkTnqE3jMuN8b3dUVmmc43TjyxjW4KTsmB3c86g==}
@@ -6233,8 +6237,8 @@ packages:
       object.fromentries: 2.0.7
     dev: true
 
-  /eslint-plugin-next-on-pages@1.9.0(eslint@8.57.0):
-    resolution: {integrity: sha512-Iq1kTKlHRWKkvg4PV7vFMs/wLjmyyuTsOAa7O8JdmrRPbev3rlfoKaDgDGFmkxvgHRnxEFlVJ1BTZzHJwPe/Ew==}
+  /eslint-plugin-next-on-pages@1.10.0(eslint@8.57.0):
+    resolution: {integrity: sha512-T3pQ1s8lq0VHLyalbzBDnUEgVgEPDqmD3P5CXNgSPJUOlh1y5SHhxWvtNRf+9LcoE9a4rKPDRoFbHj8n+eU+lw==}
     peerDependencies:
       eslint: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
@@ -8485,8 +8489,8 @@ packages:
   /preact@10.11.3:
     resolution: {integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==}
 
-  /prebuild-install@7.1.1:
-    resolution: {integrity: sha512-jAXscXWMcCK8GgCoHOfIr0ODh5ai8mj63L2nWrjuAgXE6tDyYGnx4/8o/rCgU+B4JSyZBKbeZqzhtwtC3ovxjw==}
+  /prebuild-install@7.1.2:
+    resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -9385,7 +9389,7 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.4
+      '@jridgewell/gen-mapping': 0.3.5
       commander: 4.1.1
       glob: 10.3.10
       lines-and-columns: 1.2.4
