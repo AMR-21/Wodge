@@ -8,7 +8,7 @@ interface UpdateRoleArgs extends WorkspaceRoleMutation {
   };
 }
 
-export function addRoleMembers({
+export function addRoleMembersMutation({
   update,
   structure,
   roleId,
@@ -47,7 +47,7 @@ export function addRoleMembers({
   return newStructure;
 }
 
-export function removeRoleMembers({
+export function removeRoleMembersMutation({
   update,
   structure,
   roleId,

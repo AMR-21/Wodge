@@ -1,16 +1,20 @@
 import { describe, expect, test } from "vitest";
 import { createTestRole, createTestStructure } from "../utils";
-import { createRole } from "../../models/workspace/mutators/create-role";
 import { UserId } from "../../tests";
 import { WORKSPACE_ROLE_ID_LENGTH } from "../..";
 
 import { nanoid } from "nanoid";
-import { updateRoleInfo } from "../../models/workspace/mutators/role-info";
+import { createRoleMutation } from "../../models/workspace/mutators/create-role";
+import { updateRoleInfoMutation } from "../../models/workspace/mutators/role-info";
 import {
-  addRoleMembers,
-  removeRoleMembers,
+  addRoleMembersMutation,
+  removeRoleMembersMutation,
 } from "../../models/workspace/mutators/role-members";
-import { addRolePermissions } from "../../models/workspace/mutators/role-permissions";
+import {
+  addRolePermissionsMutation,
+  removeRolePermissionsMutation,
+} from "../../models/workspace/mutators/role-permissions";
+import { deleteRoleMutation } from "../../models/workspace/mutators/delete-role";
 
 describe("Workspace teams' unit mutations", () => {
   test("create a role", async () => {
@@ -20,41 +24,42 @@ describe("Workspace teams' unit mutations", () => {
     const role1 = createTestRole();
 
     expect(
-      createRole({ role: role1, structure, currentUserId: UserId }).roles
+      createRoleMutation({ role: role1, structure, currentUserId: UserId })
+        .roles
     ).toContainEqual(role1);
 
     // TEST: Create a team with invalid data
     const role2 = createTestRole({ name: "" });
 
     expect(() =>
-      createRole({ role: role2, structure, currentUserId: UserId })
+      createRoleMutation({ role: role2, structure, currentUserId: UserId })
     ).toThrowError(/^Invalid role data$/);
 
     const role3 = createTestRole({ createdBy: "" });
 
     expect(() =>
-      createRole({ role: role3, structure, currentUserId: UserId })
+      createRoleMutation({ role: role3, structure, currentUserId: UserId })
     ).toThrowError(/^Invalid role data$/);
 
     // Test: Create a team with invalid owner
     const role4 = createTestRole({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
     expect(() =>
-      createRole({ role: role4, structure, currentUserId: UserId })
+      createRoleMutation({ role: role4, structure, currentUserId: UserId })
     ).toThrowError(/^Unauthorized role creation$/);
 
     // Test: Create a team that already exists
     const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
     const role5 = createTestRole({ id: roleId });
 
-    const newStructure = createRole({
+    const newStructure = createRoleMutation({
       role: role5,
       structure,
       currentUserId: UserId,
     });
 
     expect(() =>
-      createRole({
+      createRoleMutation({
         role: role5,
         structure: newStructure,
         currentUserId: UserId,
@@ -69,7 +74,8 @@ describe("Workspace teams' unit mutations", () => {
     });
 
     expect(
-      createRole({ role: role6, structure, currentUserId: UserId }).roles
+      createRoleMutation({ role: role6, structure, currentUserId: UserId })
+        .roles
     ).toContainEqual({
       ...role6,
       members: [],
@@ -80,14 +86,14 @@ describe("Workspace teams' unit mutations", () => {
   test("update a role", () => {
     const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
     const role = createTestRole({ id: roleId });
-    const structure = createRole({
+    const structure = createRoleMutation({
       role,
       structure: createTestStructure(),
       currentUserId: UserId,
     });
 
     // Test: Basic role update
-    const s1 = updateRoleInfo({
+    const s1 = updateRoleInfoMutation({
       structure,
       roleId,
       update: { name: "New Name", color: "#121313" },
@@ -100,7 +106,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // update a team with invalid data
     expect(() =>
-      updateRoleInfo({
+      updateRoleInfoMutation({
         structure,
         roleId,
         //@ts-ignore
@@ -112,7 +118,7 @@ describe("Workspace teams' unit mutations", () => {
   test("update role members", () => {
     const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
     const role = createTestRole({ id: roleId });
-    const structure = createRole({
+    const structure = createRoleMutation({
       role,
       structure: createTestStructure(),
       currentUserId: UserId,
@@ -126,7 +132,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update role members
     expect(
-      addRoleMembers({
+      addRoleMembersMutation({
         structure,
         roleId,
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -137,7 +143,7 @@ describe("Workspace teams' unit mutations", () => {
       roles: [{ ...role, members: ["-4oxKtIB8FXvYZL0AXjXp"] }],
     });
 
-    const s2 = addRoleMembers({
+    const s2 = addRoleMembersMutation({
       structure,
       roleId,
       update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -145,7 +151,7 @@ describe("Workspace teams' unit mutations", () => {
     });
 
     expect(
-      removeRoleMembers({
+      removeRoleMembersMutation({
         structure: s2,
         roleId,
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -157,7 +163,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update role members with invalid data
     expect(() =>
-      addRoleMembers({
+      addRoleMembersMutation({
         structure,
         roleId,
         //@ts-ignore
@@ -168,7 +174,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // non existence role
     expect(() =>
-      addRoleMembers({
+      addRoleMembersMutation({
         structure,
         roleId: "non existence id",
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -177,7 +183,7 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Role does not exist$/);
 
     expect(() =>
-      addRoleMembers({
+      addRoleMembersMutation({
         structure,
         roleId,
         update: { members: ["-9oxKtIB8FXvYZL0AXjXp"] },
@@ -189,7 +195,7 @@ describe("Workspace teams' unit mutations", () => {
   test("update role permissions", () => {
     const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
     const role = createTestRole({ id: roleId });
-    const structure = createRole({
+    const structure = createRoleMutation({
       role,
       structure: createTestStructure(),
       currentUserId: UserId,
@@ -197,7 +203,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update role permissions
     expect(
-      addRolePermissions({
+      addRolePermissionsMutation({
         structure,
         roleId,
         update: {
@@ -216,7 +222,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update team permissions with invalid data
     expect(() =>
-      addRolePermissions({
+      addRolePermissionsMutation({
         structure,
         roleId: nanoid(WORKSPACE_ROLE_ID_LENGTH),
         //@ts-ignore
@@ -225,12 +231,52 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Role does not exist$/);
 
     expect(() =>
-      addRolePermissions({
+      addRolePermissionsMutation({
         structure,
         roleId,
         //@ts-ignore
         update: { permissions: ["manager"] },
       })
     ).toThrowError(/^Invalid role update data$/);
+
+    expect(
+      removeRolePermissionsMutation({
+        structure,
+        roleId,
+        update: { permissions: ["admin"] },
+      })
+    ).toEqual({
+      ...structure,
+      roles: [{ ...role, permissions: [] }],
+    });
+  });
+
+  test("delete a role", () => {
+    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const role = createTestRole({ id: roleId });
+    const structure = createRoleMutation({
+      role,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
+
+    // Test: delete a role
+    expect(
+      deleteRoleMutation({
+        structure,
+        roleId,
+      })
+    ).toEqual({
+      ...structure,
+      roles: [],
+    });
+
+    // Test: delete a role with invalid data
+    expect(() =>
+      deleteRoleMutation({
+        structure,
+        roleId: "non existence id",
+      })
+    ).toThrowError(/^Role not found$/);
   });
 });

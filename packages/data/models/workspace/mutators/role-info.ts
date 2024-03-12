@@ -9,7 +9,11 @@ export interface RoleInfoUpdate extends WorkspaceRoleMutation {
   };
 }
 
-export function updateRoleInfo({ structure, update, roleId }: RoleInfoUpdate) {
+export function updateRoleInfoMutation({
+  structure,
+  update,
+  roleId,
+}: RoleInfoUpdate) {
   // 1. Validate the update request
   const validatedFields = RoleSchema.pick({
     color: true,

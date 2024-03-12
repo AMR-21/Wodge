@@ -9,7 +9,11 @@ export interface TeamInfoUpdate extends WorkspaceTeamMutation {
   };
 }
 
-export function updateTeamInfo({ structure, update, teamId }: TeamInfoUpdate) {
+export function updateTeamInfoMutation({
+  structure,
+  update,
+  teamId,
+}: TeamInfoUpdate) {
   // 1. Validate the update request
   const validatedFields = TeamSchema.pick({
     avatar: true,

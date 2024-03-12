@@ -65,10 +65,10 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
 
     // update/create the team
     // if new team dispatch action to switch to the new team settings
-    // dispatch({
-    //   type: "openAccordionItem",
-    //   payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
-    // });
+    dispatch({
+      type: "openAccordionItem",
+      payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
+    });
 
     // form.reset(team);
     // form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));

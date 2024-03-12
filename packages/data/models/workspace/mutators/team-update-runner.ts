@@ -1,7 +1,7 @@
 import { Team } from "../../..";
-import { addTeamDirs, deleteTeamDirs } from "./team-dirs";
-import { TeamInfoUpdate, updateTeamInfo } from "./team-info";
-import { addTeamMembers, removeTeamMembers } from "./team-members";
+import { addTeamDirsMutation, deleteTeamDirsMutation } from "./team-dirs";
+import { updateTeamInfoMutation } from "./team-info";
+import { addTeamMembersMutation, removeTeamMembers } from "./team-members";
 import { WorkspaceTeamMutation } from "./types";
 
 export type UpdatableTeamFields = Omit<Team, "id" | "createdBy">;
@@ -19,8 +19,12 @@ export type TeamUpdate =
       update: { members: Team["members"] };
     }
   | {
-      action: "addDirs" | "removeDirs";
+      action: "addDirs";
       update: { dirs: Team["dirs"] };
+    }
+  | {
+      action: "removeDirs";
+      update: { dirs: string[] };
     };
 
 export interface TeamUpdateArgs extends WorkspaceTeamMutation {
@@ -40,10 +44,10 @@ export function teamUpdateRunner({
 
   switch (action) {
     case "updateInfo":
-      return updateTeamInfo({ update, teamId, structure });
+      return updateTeamInfoMutation({ update, teamId, structure });
 
     case "addMembers":
-      return addTeamMembers({
+      return addTeamMembersMutation({
         update,
         teamId,
         structure,
@@ -54,10 +58,10 @@ export function teamUpdateRunner({
       return removeTeamMembers({ update, teamId, structure });
 
     case "addDirs":
-      return addTeamDirs({ update, teamId, structure });
+      return addTeamDirsMutation({ update, teamId, structure });
 
     case "removeDirs":
-      return deleteTeamDirs({ update, teamId, structure });
+      return deleteTeamDirsMutation({ update, teamId, structure });
 
     default:
       throw new Error("Invalid update action");

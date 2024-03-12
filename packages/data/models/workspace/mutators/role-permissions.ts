@@ -6,7 +6,7 @@ interface UpdateRolePermissionsArgs extends WorkspaceRoleMutation {
   update: { permissions: Role["permissions"] };
 }
 
-export function addRolePermissions({
+export function addRolePermissionsMutation({
   structure,
   update,
   roleId,
@@ -40,7 +40,7 @@ export function addRolePermissions({
   return newStructure;
 }
 
-export function removeRolePermissions({
+export function removeRolePermissionsMutation({
   structure,
   update,
   roleId,

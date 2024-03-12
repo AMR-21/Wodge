@@ -8,7 +8,7 @@ interface UpdateTeamMembersArgs extends WorkspaceTeamMutation {
   };
 }
 
-export function addTeamMembers({
+export function addTeamMembersMutation({
   update,
   structure,
   teamId,

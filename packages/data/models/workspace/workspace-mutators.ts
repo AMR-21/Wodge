@@ -15,11 +15,11 @@ import {
 } from "../../lib/keys";
 import { DrObj, User } from "../..";
 import { produce } from "immer";
-import { createWorkspace } from "./mutators/create-workspace";
-import { createTeam } from "./mutators/create-team";
 import { teamUpdateRunner } from "./mutators/team-update-runner";
 
 import type { TeamUpdate } from "./mutators/team-update-runner";
+import { createWorkspaceMutation } from "./mutators/create-workspace";
+import { createTeamMutation } from "./mutators/create-team";
 
 type TeamUpdateArgs = {
   teamUpdate: TeamUpdate;
@@ -29,7 +29,7 @@ type TeamUpdateArgs = {
 export const workspaceMutators = {
   async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
     // 1. Create the workspace
-    const workspace = createWorkspace(data);
+    const workspace = createWorkspaceMutation(data);
 
     const userData = User.getInstance().data!;
 
@@ -67,7 +67,7 @@ export const workspaceMutators = {
 
     if (!structure) throw new Error("Bad data");
 
-    const newStructure = createTeam({
+    const newStructure = createTeamMutation({
       team: data,
       structure,
       currentUserId,
@@ -100,6 +100,8 @@ export const workspaceMutators = {
     // 3. Persist the mutation
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
+
+  async deleteTeam(tx: WriteTransaction, teamId: string) {},
 
   // async deleteTeam(tx: WriteTransaction, teamId: string) {
   //   //Fixme - no need to validate the team id

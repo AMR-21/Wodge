@@ -1,15 +1,20 @@
 import { UserId } from "../../tests";
 import { createTestStructure, createTestTeam } from "../utils";
-import { createTeam } from "../../models/workspace/mutators/create-team";
+import { createTeamMutation } from "../../models/workspace/mutators/create-team";
 import { describe, expect, test } from "vitest";
 import { nanoid } from "nanoid";
 import { WORKSPACE_TEAM_ID_LENGTH } from "../..";
-import { updateTeamInfo } from "../../models/workspace/mutators/team-info";
+import { updateTeamInfoMutation } from "../../models/workspace/mutators/team-info";
 import {
-  addTeamMembers,
+  addTeamMembersMutation,
   removeTeamMembers,
 } from "../../models/workspace/mutators/team-members";
-import { addTeamDirs } from "../../models/workspace/mutators/team-dirs";
+import {
+  addTeamDirsMutation,
+  deleteTeamDirsMutation,
+} from "../../models/workspace/mutators/team-dirs";
+import exp from "constants";
+import { deleteTeamMutation } from "../../models/workspace/mutators/delete-team";
 
 describe("Workspace teams' unit mutations", () => {
   test("create a team", async () => {
@@ -19,41 +24,42 @@ describe("Workspace teams' unit mutations", () => {
     const team1 = createTestTeam();
 
     expect(
-      createTeam({ team: team1, structure, currentUserId: UserId }).teams
+      createTeamMutation({ team: team1, structure, currentUserId: UserId })
+        .teams
     ).toContainEqual(team1);
 
     // TEST: Create a team with invalid data
     const team2 = createTestTeam({ name: "" });
 
     expect(() =>
-      createTeam({ team: team2, structure, currentUserId: UserId })
+      createTeamMutation({ team: team2, structure, currentUserId: UserId })
     ).toThrowError(/^Invalid team data$/);
 
     const team3 = createTestTeam({ createdBy: "" });
 
     expect(() =>
-      createTeam({ team: team3, structure, currentUserId: UserId })
+      createTeamMutation({ team: team3, structure, currentUserId: UserId })
     ).toThrowError(/^Invalid team data$/);
 
     // Test: Create a team with invalid owner
     const team4 = createTestTeam({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
     expect(() =>
-      createTeam({ team: team4, structure, currentUserId: UserId })
+      createTeamMutation({ team: team4, structure, currentUserId: UserId })
     ).toThrowError(/^Unauthorized team creation$/);
 
     // Test: Create a team that already exists
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const team5 = createTestTeam({ id: teamId });
 
-    const newStructure = createTeam({
+    const newStructure = createTeamMutation({
       team: team5,
       structure,
       currentUserId: UserId,
     });
 
     expect(() =>
-      createTeam({
+      createTeamMutation({
         team: team5,
         structure: newStructure,
         currentUserId: UserId,
@@ -72,7 +78,8 @@ describe("Workspace teams' unit mutations", () => {
     });
 
     expect(
-      createTeam({ team: team6, structure, currentUserId: UserId }).teams
+      createTeamMutation({ team: team6, structure, currentUserId: UserId })
+        .teams
     ).toContainEqual({
       ...team6,
       members: [],
@@ -83,14 +90,14 @@ describe("Workspace teams' unit mutations", () => {
   test("update a team", () => {
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const team = createTestTeam({ id: teamId });
-    const structure = createTeam({
+    const structure = createTeamMutation({
       team,
       structure: createTestStructure(),
       currentUserId: UserId,
     });
 
     // Test: Basic team update
-    const s1 = updateTeamInfo({
+    const s1 = updateTeamInfoMutation({
       structure,
       teamId,
       update: { name: "New Name" },
@@ -103,7 +110,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update a team with invalid data
     expect(() =>
-      updateTeamInfo({
+      updateTeamInfoMutation({
         structure,
         teamId,
         update: { name: "" },
@@ -114,7 +121,7 @@ describe("Workspace teams' unit mutations", () => {
   test("update team members", () => {
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const team = createTestTeam({ id: teamId });
-    const structure = createTeam({
+    const structure = createTeamMutation({
       team,
       structure: createTestStructure(),
       currentUserId: UserId,
@@ -128,7 +135,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update team members
     expect(
-      addTeamMembers({
+      addTeamMembersMutation({
         structure,
         teamId,
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -139,7 +146,7 @@ describe("Workspace teams' unit mutations", () => {
       teams: [{ ...team, members: ["-4oxKtIB8FXvYZL0AXjXp"] }],
     });
 
-    const s2 = addTeamMembers({
+    const s2 = addTeamMembersMutation({
       structure,
       teamId,
       update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -159,7 +166,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update team members with invalid data
     expect(() =>
-      addTeamMembers({
+      addTeamMembersMutation({
         structure,
         teamId,
         //@ts-ignore
@@ -170,7 +177,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // non existence team
     expect(() =>
-      addTeamMembers({
+      addTeamMembersMutation({
         structure,
         teamId: "non existing id",
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
@@ -179,7 +186,7 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Team does not exist$/);
 
     expect(() =>
-      addTeamMembers({
+      addTeamMembersMutation({
         structure,
         teamId,
         update: { members: ["-9oxKtIB8FXvYZL0AXjXp"] },
@@ -191,7 +198,7 @@ describe("Workspace teams' unit mutations", () => {
   test("update team dirs", () => {
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const team = createTestTeam({ id: teamId });
-    const structure = createTeam({
+    const structure = createTeamMutation({
       team,
       structure: createTestStructure(),
       currentUserId: UserId,
@@ -201,7 +208,7 @@ describe("Workspace teams' unit mutations", () => {
     const dirId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
 
     expect(
-      addTeamDirs({
+      addTeamDirsMutation({
         structure,
         teamId,
         update: {
@@ -233,7 +240,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update team dirs with invalid data
     expect(() =>
-      addTeamDirs({
+      addTeamDirsMutation({
         structure,
         teamId,
         //@ts-ignore
@@ -241,7 +248,7 @@ describe("Workspace teams' unit mutations", () => {
       })
     ).toThrowError(/^Invalid team update data$/);
 
-    const s2 = addTeamDirs({
+    const s2 = addTeamDirsMutation({
       structure,
       teamId,
       update: {
@@ -257,7 +264,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // non existence team
     expect(() =>
-      addTeamDirs({
+      addTeamDirsMutation({
         structure: s2,
         teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
         update: {
@@ -273,7 +280,7 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Team does not exist$/);
 
     expect(() =>
-      addTeamDirs({
+      addTeamDirsMutation({
         structure: s2,
         teamId,
         update: {
@@ -287,5 +294,45 @@ describe("Workspace teams' unit mutations", () => {
         },
       })
     ).toThrowError(/^Dir already exists in team$/);
+
+    expect(
+      deleteTeamDirsMutation({
+        structure: s2,
+        teamId,
+        update: { dirs: [dirId] },
+      })
+    ).toEqual({
+      ...s2,
+      teams: [{ ...team, dirs: [{ id: "root", name: "root", channels: [] }] }],
+    });
+  });
+
+  test("delete a team", () => {
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const team = createTestTeam({ id: teamId });
+    const structure = createTeamMutation({
+      team,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
+
+    // Test: delete a team
+    expect(
+      deleteTeamMutation({
+        structure,
+        teamId,
+      })
+    ).toEqual({
+      ...structure,
+      teams: [],
+    });
+
+    // Test: delete a non existing team
+    expect(() =>
+      deleteTeamMutation({
+        structure,
+        teamId: "non existing id",
+      })
+    ).toThrowError(/^Team not found$/);
   });
 });

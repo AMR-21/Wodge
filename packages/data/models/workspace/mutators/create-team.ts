@@ -8,7 +8,11 @@ interface CreateTeamArgs {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
-export function createTeam({ team, structure, currentUserId }: CreateTeamArgs) {
+export function createTeamMutation({
+  team,
+  structure,
+  currentUserId,
+}: CreateTeamArgs) {
   //1. Validate the data
   const validatedFields = TeamSchema.pick({
     id: true,

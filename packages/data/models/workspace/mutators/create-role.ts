@@ -8,7 +8,11 @@ interface CreateRoleArgs {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
-export function createRole({ role, structure, currentUserId }: CreateRoleArgs) {
+export function createRoleMutation({
+  role,
+  structure,
+  currentUserId,
+}: CreateRoleArgs) {
   //1. Validate the data
   const validatedFields = RoleSchema.pick({
     id: true,
