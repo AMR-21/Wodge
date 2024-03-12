@@ -27,20 +27,20 @@ describe("Workspace teams' unit mutations", () => {
 
     expect(() =>
       createTeam({ team: team2, structure, currentUserId: UserId })
-    ).toThrowError("Invalid team data");
+    ).toThrowError(/^Invalid team data$/);
 
     const team3 = createTestTeam({ createdBy: "" });
 
     expect(() =>
       createTeam({ team: team3, structure, currentUserId: UserId })
-    ).toThrowError("Invalid team data");
+    ).toThrowError(/^Invalid team data$/);
 
     // Test: Create a team with invalid owner
     const team4 = createTestTeam({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
     expect(() =>
       createTeam({ team: team4, structure, currentUserId: UserId })
-    ).toThrowError("Unauthorized team creation");
+    ).toThrowError(/^Unauthorized team creation$/);
 
     // Test: Create a team that already exists
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
@@ -58,7 +58,7 @@ describe("Workspace teams' unit mutations", () => {
         structure: newStructure,
         currentUserId: UserId,
       })
-    ).toThrowError("Team already exists");
+    ).toThrowError(/^Team already exists$/);
 
     // Test: Team creation sanitization
     const team6 = createTestTeam({

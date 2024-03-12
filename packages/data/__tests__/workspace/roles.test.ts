@@ -28,20 +28,20 @@ describe("Workspace teams' unit mutations", () => {
 
     expect(() =>
       createRole({ role: role2, structure, currentUserId: UserId })
-    ).toThrowError("Invalid role data");
+    ).toThrowError(/^Invalid role data$/);
 
     const role3 = createTestRole({ createdBy: "" });
 
     expect(() =>
       createRole({ role: role3, structure, currentUserId: UserId })
-    ).toThrowError("Invalid role data");
+    ).toThrowError(/^Invalid role data$/);
 
     // Test: Create a team with invalid owner
     const role4 = createTestRole({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
     expect(() =>
       createRole({ role: role4, structure, currentUserId: UserId })
-    ).toThrowError("Unauthorized role creation");
+    ).toThrowError(/^Unauthorized role creation$/);
 
     // Test: Create a team that already exists
     const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
@@ -59,7 +59,7 @@ describe("Workspace teams' unit mutations", () => {
         structure: newStructure,
         currentUserId: UserId,
       })
-    ).toThrowError("Role already exists");
+    ).toThrowError(/^Role already exists$/);
 
     // Test: Team creation sanitization
     const role6 = createTestRole({
@@ -106,7 +106,7 @@ describe("Workspace teams' unit mutations", () => {
         //@ts-ignore
         update: { name: "" },
       })
-    ).toThrowError("Invalid role update data");
+    ).toThrowError(/^Invalid role update data$/);
   });
 
   test("update role members", () => {
@@ -164,17 +164,26 @@ describe("Workspace teams' unit mutations", () => {
         update: { members: [""], createdBy: "" },
         curMembers,
       })
-    ).toThrowError("Invalid role update data");
+    ).toThrowError(/^Invalid role update data$/);
+
+    // non existence role
+    expect(() =>
+      addRoleMembers({
+        structure,
+        roleId: "non existence id",
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
+      })
+    ).toThrowError(/^Role does not exist$/);
 
     expect(() =>
       addRoleMembers({
         structure,
         roleId,
-        //@ts-ignore
         update: { members: ["-9oxKtIB8FXvYZL0AXjXp"] },
         curMembers,
       })
-    ).toThrowError("Invalid members");
+    ).toThrowError(/^Invalid members$/);
   });
 
   test("update role permissions", () => {
@@ -213,7 +222,7 @@ describe("Workspace teams' unit mutations", () => {
         //@ts-ignore
         update: { permissions: ["write"] },
       })
-    ).toThrowError("Role does not exist");
+    ).toThrowError(/^Role does not exist$/);
 
     expect(() =>
       addRolePermissions({
@@ -222,6 +231,6 @@ describe("Workspace teams' unit mutations", () => {
         //@ts-ignore
         update: { permissions: ["manager"] },
       })
-    ).toThrowError("Invalid role update data");
+    ).toThrowError(/^Invalid role update data$/);
   });
 });
