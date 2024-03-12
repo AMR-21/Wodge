@@ -56,5 +56,3 @@ export type DrObj<T> = DeepReadonlyObject<T>;
 /**
  * Mutators
  */
-
-export * from "./models/workspace/mutators/update-team";

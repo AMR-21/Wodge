@@ -115,6 +115,7 @@ export const TagSchema = z.object({
 
 export const DirSchema = z.object({
   channels: z.array(ChannelSchema),
+  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70),
 });
 

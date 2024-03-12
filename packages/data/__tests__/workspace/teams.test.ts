@@ -1,354 +1,216 @@
-import { ReadTransaction, Replicache, TEST_LICENSE_KEY } from "replicache";
-import { beforeAll, beforeEach, describe, expect, test } from "vitest";
-import {
-  TeamUpdate,
-  workspaceMutators,
-} from "../../models/workspace/workspace-mutators";
-import { nanoid } from "nanoid";
-import { ID_LENGTH, WORKSPACE_TEAM_ID_LENGTH } from "../../schemas/config";
 import { UserId } from "../../tests";
+import { createTestStructure, createTestTeam } from "../utils";
+import { createTeam } from "../../models/workspace/mutators/create-team";
+import { describe, expect, test } from "vitest";
+import { nanoid } from "nanoid";
+import { WORKSPACE_TEAM_ID_LENGTH } from "../..";
+import { updateTeamInfo } from "../../models/workspace/mutators/team-info";
 import {
-  Team,
-  WorkspaceStructure,
-  WorkspaceType,
-} from "../../schemas/workspace.schema";
-import { makeWorkspaceStructureKey } from "../../lib/keys";
-import { updateTeamMutator } from "../../models/workspace/mutators/update-team";
+  addTeamMembers,
+  removeTeamMembers,
+} from "../../models/workspace/mutators/team-members";
+import { addTeamDirs } from "../../models/workspace/mutators/team-dirs";
 
-const rep = new Replicache({
-  licenseKey: TEST_LICENSE_KEY,
-  name: "test-user",
-  pullURL: undefined,
-  pushURL: undefined,
-  mutators: workspaceMutators,
-});
-
-describe("Workspace teams' mutators", () => {
-  beforeEach(async () => {
-    const newWorkspace: WorkspaceType = {
-      id: nanoid(ID_LENGTH),
-      name: "Test Workspace",
-      owner: UserId,
-      environment: "local",
-      createdAt: new Date().toISOString(),
-    };
-
-    await rep.mutate.initWorkspace(newWorkspace);
-  });
-
+describe("Workspace teams' unit mutations", () => {
   test("create a team", async () => {
-    const team: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "Test Team",
-      tags: [],
-    };
+    const structure = createTestStructure();
 
-    await rep.mutate.createTeam(team);
+    // TEST: Create a valid team
+    const team1 = createTestTeam();
 
-    const structure = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    );
+    expect(
+      createTeam({ team: team1, structure, currentUserId: UserId }).teams
+    ).toContainEqual(team1);
 
-    expect(structure?.teams).toContainEqual(team);
-  });
+    // TEST: Create a team with invalid data
+    const team2 = createTestTeam({ name: "" });
 
-  test("create a team with invalid data", async () => {
-    const team: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "",
-      tags: [],
-    };
+    expect(() =>
+      createTeam({ team: team2, structure, currentUserId: UserId })
+    ).toThrowError("Invalid team data");
 
-    await expect(rep.mutate.createTeam(team)).rejects.toThrow(
-      "Invalid team data"
-    );
-  });
+    const team3 = createTestTeam({ createdBy: "" });
 
-  test("create a team with invalid owner", async () => {
-    const team: Team = {
-      createdBy: "-5oxKtIB8FXvYZL0ajjXp",
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "Test name",
-      tags: [],
-    };
+    expect(() =>
+      createTeam({ team: team3, structure, currentUserId: UserId })
+    ).toThrowError("Invalid team data");
 
-    await expect(rep.mutate.createTeam(team)).rejects.toThrow(
-      "Invalid team data"
-    );
-  });
+    // Test: Create a team with invalid owner
+    const team4 = createTestTeam({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
-  test("create a team with invalid members", async () => {
-    const team: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+    expect(() =>
+      createTeam({ team: team4, structure, currentUserId: UserId })
+    ).toThrowError("Unauthorized team creation");
+
+    // Test: Create a team that already exists
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const team5 = createTestTeam({ id: teamId });
+
+    const newStructure = createTeam({
+      team: team5,
+      structure,
+      currentUserId: UserId,
+    });
+
+    expect(() =>
+      createTeam({
+        team: team5,
+        structure: newStructure,
+        currentUserId: UserId,
+      })
+    ).toThrowError("Team already exists");
+
+    // Test: Team creation sanitization
+    const team6 = createTestTeam({
+      members: ["-4oxKtIB8FXvYZL0AXjXp"],
+      tags: [
+        {
+          name: "test",
+          color: "#000000",
+        },
+      ],
+    });
+
+    expect(
+      createTeam({ team: team6, structure, currentUserId: UserId }).teams
+    ).toContainEqual({
+      ...team6,
       members: [],
-      name: "Test1 name",
       tags: [],
-    };
-
-    await expect(rep.mutate.createTeam(team)).rejects.toThrow(
-      "Invalid team data"
-    );
+    });
   });
 
   test("update a team", () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: "8IccbrnIPFJqs9ic",
-      members: [UserId],
-      name: "Test name",
-      tags: [],
-    };
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const team = createTestTeam({ id: teamId });
+    const structure = createTeam({
+      team,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-    const structure: Partial<WorkspaceStructure> = {
-      teams: [team1],
-    };
+    // Test: Basic team update
+    const s1 = updateTeamInfo({
+      structure,
+      teamId,
+      update: { name: "New Name" },
+    });
 
-    const update: TeamUpdate = {
-      target: "addMembers",
-      value: ["-4oxKtIB8FXvYZL0AXjXp"],
-      teamId: "8IccbrnIPFJqs9ic",
-    };
+    expect(s1).toEqual({
+      ...structure,
+      teams: [{ ...team, name: "New Name" }],
+    });
 
-    const newStructure = updateTeamMutator(
-      update,
-      structure as WorkspaceStructure
-    );
-    const team2: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: "8IccbrnIPFJqs9ic",
-      members: [UserId, "-4oxKtIB8FXvYZL0AXjXp"],
-      name: "Test name",
-      tags: [],
-    };
-
-    // await rep.mutate.createTeam(team1);
-
-    // await rep.mutate.updateTeam(update);
-
-    // const structure = await rep.query((tx: ReadTransaction) =>
-    //   tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    // );
-
-    expect(newStructure.teams).toHaveLength(1);
-    expect(newStructure.teams).toContainEqual(team2);
+    // update a team with invalid data
+    expect(() =>
+      updateTeamInfo({
+        structure,
+        teamId,
+        update: { name: "" },
+      })
+    ).toThrowError("Invalid team update data");
   });
 
-  test("update a team with invalid data", async () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: "8IccbrnIPFJqs9ic",
-      members: [UserId],
-      name: "Test name",
-      tags: [],
-    };
+  test("update team members", () => {
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const team = createTestTeam({ id: teamId });
+    const structure = createTeam({
+      team,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-    const update: TeamUpdate = {
-      target: "name",
-      value: "",
-      teamId: "8IccbrnIPFJqs9ic",
-    };
-    await rep.mutate.createTeam(team1);
+    // Test: update team members
+    expect(
+      addTeamMembers({
+        structure,
+        teamId,
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+      })
+    ).toEqual({
+      ...structure,
+      teams: [{ ...team, members: ["-4oxKtIB8FXvYZL0AXjXp"] }],
+    });
 
-    await expect(rep.mutate.updateTeam(update)).rejects.toThrow(
-      "Invalid team data"
-    );
+    const s2 = addTeamMembers({
+      structure,
+      teamId,
+      update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+    });
+
+    expect(
+      removeTeamMembers({
+        structure: s2,
+        teamId,
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+      })
+    ).toEqual({
+      ...structure,
+      teams: [{ ...team, members: [] }],
+    });
+
+    // Test: update team members with invalid data
+    expect(() =>
+      addTeamMembers({
+        structure,
+        teamId,
+        //@ts-ignore
+        update: { members: [""], createdBy: "" },
+      })
+    ).toThrowError("Invalid team update data");
   });
 
-  // fixme important - Need to test the attempt to change a restricted field like createdBy
-  test("update a team with invalid owner", async () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: "8IccbrnIPFJqs9ic",
-      members: [UserId],
-      name: "Test name",
-      tags: [],
-    };
+  test("update team dirs", () => {
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const team = createTestTeam({ id: teamId });
+    const structure = createTeam({
+      team,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-    // Ignoring the type error on purpose
-    const update: TeamUpdate = {
-      // @ts-ignore
-      target: "createdBy",
-      value: "-4oxKtIB8FXvYZL0AXjXp",
-      teamId: "8IccbrnIPFJqs9ic",
-    };
+    // Test: update team dirs
+    const dirId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
 
-    await rep.mutate.createTeam(team1);
+    expect(
+      addTeamDirs({
+        structure,
+        teamId,
+        update: {
+          dirs: [
+            {
+              name: "Account",
+              id: dirId,
+              channels: [],
+            },
+          ],
+        },
+      })
+    ).toEqual({
+      ...structure,
+      teams: [
+        {
+          ...team,
+          dirs: [
+            ...team.dirs,
+            {
+              name: "Account",
+              id: dirId,
+              channels: [],
+            },
+          ],
+        },
+      ],
+    });
 
-    await expect(rep.mutate.updateTeam(update)).rejects.toThrow(
-      "Invalid team update data"
-    );
-  });
-
-  // fixme - No need to test this now, what we can test is the attempt to remove the owner from the members
-  test("update a team with invalid members", async () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: "8IccbrnIPFJqs9ic",
-      members: [UserId, "-3oxKtIB8FXvYZL0AXjXp"],
-      name: "Test name",
-      tags: [],
-    };
-
-    const update: TeamUpdate = {
-      target: "removeMembers",
-      value: [UserId],
-      teamId: "8IccbrnIPFJqs9ic",
-    };
-
-    await rep.mutate.createTeam(team1);
-
-    await expect(rep.mutate.updateTeam(update)).rejects.toThrow(
-      "Cannot remove the owner"
-    );
-  });
-
-  test("delete a team", async () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "Test name",
-      tags: [],
-    };
-
-    await rep.mutate.createTeam(team1);
-
-    await rep.mutate.deleteTeam(team1.id);
-
-    const structure = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    );
-
-    // console.log(structure2?.teams);
-
-    //?will fail
-    // expect(structure?.teams).toContainEqual(team1);
-    //?will pass
-    expect(structure?.teams).not.toContainEqual(team1);
-  });
-
-  test("delete team with non existence id", async () => {
-    const teamid = "QmuRKvadzm0EhC8i";
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "test",
-      tags: [],
-    };
-
-    // *Will fail the test
-    // const team2: Team = {
-    //   createdBy: UserId,
-    //   dirs: [],
-    //   id: teamid,
-    //   members: [UserId],
-    //   name: "test",
-    //   tags: [],
-    // };
-
-    await rep.mutate.createTeam(team1);
-    await expect(rep.mutate.deleteTeam(teamid)).rejects.toThrow(
-      "Team not found"
-    );
-  });
-
-  // fixme - No need to test these cases
-  test.skip("delete team with invalid owner", async () => {
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "test",
-      tags: [],
-    };
-    const team2: Team = {
-      createdBy: "-4oxKtIB8FXvYZL0AXjXp",
-      dirs: [],
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-      members: [UserId],
-      name: "test",
-      tags: [],
-    };
-
-    //* Will fail the test
-    // const team2: Team = {
-    //   createdBy: UserId,
-    //   dirs: [],
-    //   id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-    //   members: [UserId],
-    //   name: "test",
-    //   tags: [],
-    // };
-
-    await rep.mutate.createTeam(team1);
-
-    // await rep.mutate.deleteTeam(team2);
-
-    const structure = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    );
-
-    expect(structure?.teams).toContainEqual(team1);
-  });
-  // todo: should validate if the members are not the same
-  test.skip("delete team with invalid members", async () => {
-    const teamid = "Y5Dop7ToRgfQBWJO";
-    const teamid2 = "Y5Dop7ToRgfQBWJs";
-
-    const team1: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: teamid,
-      members: [UserId],
-      name: "test8",
-      tags: [],
-    };
-    const team2: Team = {
-      createdBy: UserId,
-      dirs: [],
-      id: teamid2,
-      members: [],
-      name: "test8",
-      tags: [],
-    };
-
-    //* Will fail the test
-    // const team2: Team = {
-    //   createdBy: UserId,
-    //   dirs: [],
-    //   id: teamid,
-    //   members: [UserId],
-    //   name: "test8",
-    //   tags: [],
-    // };
-
-    await rep.mutate.createTeam(team1);
-
-    // await rep.mutate.deleteTeam(team2);
-
-    const structure = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-    );
-
-    expect(structure?.teams).toContainEqual(team1);
+    // Test: update team dirs with invalid data
+    expect(() =>
+      addTeamDirs({
+        structure,
+        teamId,
+        //@ts-ignore
+        update: { dirs: [{ name: "" }] },
+      })
+    ).toThrowError("Invalid team update data");
   });
 });

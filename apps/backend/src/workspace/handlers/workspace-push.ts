@@ -3,7 +3,7 @@ import WorkspaceParty from "../workspace-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { badRequest, unauthorized } from "../../lib/http-utils";
 import {
-  TeamUpdate,
+  WorkspaceTeamMutation,
   WorkspaceSchema,
   defaultWorkspaceStructure,
   makeWorkspaceStructureKey,
@@ -41,7 +41,7 @@ function runner(party: WorkspaceParty) {
         return createTeam(party, params);
       case "updateTeam":
         const newStructure = updateTeamMutator(
-          params.mutation.args as TeamUpdate,
+          params.mutation.args as WorkspaceTeamMutation,
           party.workspaceStructure.data
         );
 
