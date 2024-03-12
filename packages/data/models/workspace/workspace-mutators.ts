@@ -2,12 +2,17 @@ import { WriteTransaction } from "replicache";
 import {
   Team,
   TeamSchema,
+  WorkspaceMembers,
   WorkspaceSchema,
   WorkspaceStructure,
   WorkspaceType,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
-import { makeWorkspaceKey, makeWorkspaceStructureKey } from "../../lib/keys";
+import {
+  makeWorkspaceKey,
+  makeWorkspaceMembersKey,
+  makeWorkspaceStructureKey,
+} from "../../lib/keys";
 import { DrObj, User } from "../..";
 import { produce } from "immer";
 import { createWorkspace } from "./mutators/create-workspace";
@@ -26,8 +31,26 @@ export const workspaceMutators = {
     // 1. Create the workspace
     const workspace = createWorkspace(data);
 
+    const userData = User.getInstance().data!;
+
     // 2. Run the mutation
     await tx.set(makeWorkspaceKey(), workspace);
+    await tx.set(makeWorkspaceStructureKey(), defaultWorkspaceStructure());
+    await tx.set(makeWorkspaceMembersKey(), {
+      owner: userData.id,
+      members: [
+        {
+          id: userData.id,
+          data: userData,
+          joinInfo: {
+            joined_at: new Date().toISOString(),
+            token: "",
+            created_by: "",
+            method: "owner",
+          },
+        },
+      ],
+    });
   },
 
   async createTeam(tx: WriteTransaction, data: Team) {
@@ -55,15 +78,19 @@ export const workspaceMutators = {
       makeWorkspaceStructureKey()
     ))!;
 
+    const members = await tx.get<WorkspaceMembers>(makeWorkspaceMembersKey());
 
+    if (!members) throw new Error("Bad data");
     if (!structure) throw new Error("Bad data");
 
     const { teamId, teamUpdate } = update;
+    const curMembers = members.members.map((m) => m.id);
 
     const newStructure = teamUpdateRunner({
       structure,
       teamUpdate,
       teamId,
+      curMembers,
     });
 
     // 3. Persist the mutation

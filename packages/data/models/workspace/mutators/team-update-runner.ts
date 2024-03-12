@@ -25,12 +25,14 @@ export type TeamUpdate =
 
 export interface TeamUpdateArgs extends WorkspaceTeamMutation {
   teamUpdate: TeamUpdate;
+  curMembers: string[];
 }
 
 export function teamUpdateRunner({
   teamUpdate,
   structure,
   teamId,
+  curMembers,
 }: TeamUpdateArgs) {
   if (!teamUpdate.action) throw new Error("Invalid update action");
 
@@ -41,7 +43,12 @@ export function teamUpdateRunner({
       return updateTeamInfo({ update, teamId, structure });
 
     case "addMembers":
-      return addTeamMembers({ update, teamId, structure });
+      return addTeamMembers({
+        update,
+        teamId,
+        structure,
+        curMembers,
+      });
 
     case "removeMembers":
       return removeTeamMembers({ update, teamId, structure });

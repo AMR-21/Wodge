@@ -5,7 +5,7 @@
   "scripts": {
     "db:generate": "drizzle-kit generate:sqlite",
     "db:drop": "drizzle-kit drop",
-    "test": "infisical run --env=dev --path=/web -- vitest"
+    "test": "vitest"
   },
   "dependencies": {
     "@repo/env": "workspace:*",
@@ -13,7 +13,7 @@
     "drizzle-zod": "^0.5.1",
     "immer": "^10.0.3",
     "lodash": "^4.17.21",
-    "nanoid": "^5.0.5",
+    "nanoid": "^5.0.6",
     "next-auth": "^5.0.0-beta.4",
     "partysocket": "^1.0.0",
     "react": "^18.2.0",

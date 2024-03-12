@@ -1,199 +1,227 @@
-// import { nanoid } from "nanoid";
-// import { ReadTransaction, Replicache, TEST_LICENSE_KEY } from "replicache";
-// import { beforeEach, describe, expect, test } from "vitest";
-// import {
-//   RoleUpdate,
-//   workspaceMutators,
-// } from "../../models/workspace/workspace-mutators";
-// import { ID_LENGTH } from "../../schemas/config";
-// import { UserId } from "../../tests";
-// import { Role, WorkspaceStructure } from "../../schemas/workspace.schema";
-// import { makeWorkspaceStructureKey } from "../../lib/keys";
+import { describe, expect, test } from "vitest";
+import { createTestRole, createTestStructure } from "../utils";
+import { createRole } from "../../models/workspace/mutators/create-role";
+import { UserId } from "../../tests";
+import { WORKSPACE_ROLE_ID_LENGTH } from "../..";
 
-// const rep = new Replicache({
-//   licenseKey: TEST_LICENSE_KEY,
-//   name: "test-user",
-//   pullURL: undefined,
-//   pushURL: undefined,
-//   mutators: workspaceMutators,
-// });
+import { nanoid } from "nanoid";
+import { updateRoleInfo } from "../../models/workspace/mutators/role-info";
+import {
+  addRoleMembers,
+  removeRoleMembers,
+} from "../../models/workspace/mutators/role-members";
+import { addRolePermissions } from "../../models/workspace/mutators/role-permissions";
 
-// describe("Workspace Roles' mutators", () => {
-//   beforeEach(async () => {
-//     await rep.mutate.initWorkspace({
-//       id: nanoid(ID_LENGTH),
-//       name: "Test Workspace",
-//       owner: UserId,
+describe("Workspace teams' unit mutations", () => {
+  test("create a role", async () => {
+    const structure = createTestStructure();
 
-//       environment: "local",
-//       createdAt: new Date().toISOString(),
-//     });
-//   });
+    // TEST: Create a valid team
+    const role1 = createTestRole();
 
-//   test("create Role", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ic",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    expect(
+      createRole({ role: role1, structure, currentUserId: UserId }).roles
+    ).toContainEqual(role1);
 
-//     await rep.mutate.createRole(role1);
+    // TEST: Create a team with invalid data
+    const role2 = createTestRole({ name: "" });
 
-//     const structure = await rep.query((tx: ReadTransaction) =>
-//       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-//     );
+    expect(() =>
+      createRole({ role: role2, structure, currentUserId: UserId })
+    ).toThrowError("Invalid role data");
 
-//     expect(structure?.roles).toContainEqual(role1);
-//   });
+    const role3 = createTestRole({ createdBy: "" });
 
-//   test("create Role with invalid data", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ic",
-//       members: [UserId],
-//       name: "",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    expect(() =>
+      createRole({ role: role3, structure, currentUserId: UserId })
+    ).toThrowError("Invalid role data");
 
-//     await expect(rep.mutate.createRole(role1)).rejects.toThrow(
-//       "Invalid role data"
-//     );
-//   });
+    // Test: Create a team with invalid owner
+    const role4 = createTestRole({ createdBy: "-4oxKtIB8FXvYZL0AXjXp" });
 
-//   // fixme - no need for this test - the creator has not to be a member
-//   // fixme - already check not covered in the code so it should pass the test below
-//   test.skip("create Role with invalid owner", async () => {
-//     const role1: Role = {
-//       createdBy: "-4oxKtIB8FXvYZL0AXjXp",
-//       id: "8IccbrnIPFJqs9ic",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    expect(() =>
+      createRole({ role: role4, structure, currentUserId: UserId })
+    ).toThrowError("Unauthorized role creation");
 
-//     await rep.mutate.createRole(role1);
+    // Test: Create a team that already exists
+    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const role5 = createTestRole({ id: roleId });
 
-//     const structure = await rep.query((tx: ReadTransaction) =>
-//       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-//     );
+    const newStructure = createRole({
+      role: role5,
+      structure,
+      currentUserId: UserId,
+    });
 
-//     // fixme fails because the role is created normally
-//     expect(structure?.roles).not.toContainEqual(role1);
-//   });
+    expect(() =>
+      createRole({
+        role: role5,
+        structure: newStructure,
+        currentUserId: UserId,
+      })
+    ).toThrowError("Role already exists");
 
-//   test("create Role with invalid members", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ic",
-//       // fixme - to have invalid member pass invalid member id
-//       members: ["failure id"],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    // Test: Team creation sanitization
+    const role6 = createTestRole({
+      members: ["-4oxKtIB8FXvYZL0AXjXp"],
 
-//     await expect(rep.mutate.createRole(role1)).rejects.toThrow(
-//       "Invalid role data"
-//     );
-//   });
+      permissions: ["admin"],
+    });
 
-//   test("update Role", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ib",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    expect(
+      createRole({ role: role6, structure, currentUserId: UserId }).roles
+    ).toContainEqual({
+      ...role6,
+      members: [],
+      permissions: [],
+    });
+  });
 
-//     const update: RoleUpdate = {
-//       roleId: "8IccbrnIPFJqs9ib",
-//       target: "addMembers",
-//       value: ["-4oxKtIB8FXvYZL0AXjXp"],
-//     };
+  test("update a role", () => {
+    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const role = createTestRole({ id: roleId });
+    const structure = createRole({
+      role,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-//     const role2: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ib",
-//       members: [UserId, "-4oxKtIB8FXvYZL0AXjXp"],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    // Test: Basic role update
+    const s1 = updateRoleInfo({
+      structure,
+      roleId,
+      update: { name: "New Name", color: "#121313" },
+    });
 
-//     await rep.mutate.createRole(role1);
+    expect(s1).toEqual({
+      ...structure,
+      roles: [{ ...role, name: "New Name", color: "#121313" }],
+    });
 
-//     await rep.mutate.updateRole(update);
+    // update a team with invalid data
+    expect(() =>
+      updateRoleInfo({
+        structure,
+        roleId,
+        //@ts-ignore
+        update: { name: "" },
+      })
+    ).toThrowError("Invalid role update data");
+  });
 
-//     const structure = await rep.query((tx: ReadTransaction) =>
-//       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-//     );
+  test("update role members", () => {
+    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const role = createTestRole({ id: roleId });
+    const structure = createRole({
+      role,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-//     expect(structure?.roles).toContainEqual(role2);
-//   });
+    const curMembers = [
+      "-4oxKtIB8FXvYZL0AXjXp",
+      "-2oxKtIB8FXvYZL0AXjXp",
+      "-3oxKtIB8FXvYZL0AXjXp",
+    ];
 
-//   test("update role with duplicate permissions", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ib",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    // Test: update role members
+    expect(
+      addRoleMembers({
+        structure,
+        roleId,
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
+      })
+    ).toEqual({
+      ...structure,
+      roles: [{ ...role, members: ["-4oxKtIB8FXvYZL0AXjXp"] }],
+    });
 
-//     const update: RoleUpdate = {
-//       roleId: "8IccbrnIPFJqs9ib",
-//       target: "addPermissions",
-//       value: ["read", "write"],
-//     };
+    const s2 = addRoleMembers({
+      structure,
+      roleId,
+      update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+      curMembers,
+    });
 
-//     const role2: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ib",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read", "write"],
-//       linkedTeams: [],
-//     };
+    expect(
+      removeRoleMembers({
+        structure: s2,
+        roleId,
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+      })
+    ).toEqual({
+      ...structure,
+      roles: [{ ...role, members: [] }],
+    });
 
-//     await rep.mutate.createRole(role1);
+    // Test: update role members with invalid data
+    expect(() =>
+      addRoleMembers({
+        structure,
+        roleId,
+        //@ts-ignore
+        update: { members: [""], createdBy: "" },
+        curMembers,
+      })
+    ).toThrowError("Invalid role update data");
 
-//     await rep.mutate.updateRole(update);
+    expect(() =>
+      addRoleMembers({
+        structure,
+        roleId,
+        //@ts-ignore
+        update: { members: ["-9oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
+      })
+    ).toThrowError("Invalid members");
+  });
 
-//     const structure = await rep.query((tx: ReadTransaction) =>
-//       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey())
-//     );
+  test("update role permissions", () => {
+    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const role = createTestRole({ id: roleId });
+    const structure = createRole({
+      role,
+      structure: createTestStructure(),
+      currentUserId: UserId,
+    });
 
-//     expect(structure?.roles).toContainEqual(role2);
-//   });
+    // Test: update role permissions
+    expect(
+      addRolePermissions({
+        structure,
+        roleId,
+        update: {
+          permissions: ["admin"],
+        },
+      })
+    ).toEqual({
+      ...structure,
+      roles: [
+        {
+          ...role,
+          permissions: ["admin"],
+        },
+      ],
+    });
 
-//   test("update Role with invalid data", async () => {
-//     const role1: Role = {
-//       createdBy: UserId,
-//       id: "8IccbrnIPFJqs9ib",
-//       members: [UserId],
-//       name: "Test name",
-//       permissions: ["read"],
-//       linkedTeams: [],
-//     };
+    // Test: update team permissions with invalid data
+    expect(() =>
+      addRolePermissions({
+        structure,
+        roleId: nanoid(WORKSPACE_ROLE_ID_LENGTH),
+        //@ts-ignore
+        update: { permissions: ["write"] },
+      })
+    ).toThrowError("Role does not exist");
 
-//     const update: RoleUpdate = {
-//       roleId: "8IccbrnIPFJqs9ib",
-//       target: "name",
-//       value: "",
-//     };
-
-//     await rep.mutate.createRole(role1);
-
-//     await expect(rep.mutate.updateRole(update)).rejects.toThrow(
-//       "Invalid role data"
-//     );
-//   });
-// });
+    expect(() =>
+      addRolePermissions({
+        structure,
+        roleId,
+        //@ts-ignore
+        update: { permissions: ["manager"] },
+      })
+    ).toThrowError("Invalid role update data");
+  });
+});

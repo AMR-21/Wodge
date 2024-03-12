@@ -1,4 +1,4 @@
-import { Team, TeamSchema } from "../../..";
+import { Team, TeamSchema, WorkspaceStructure } from "../../..";
 import { WorkspaceTeamMutation } from "./types";
 import { produce } from "immer";
 
@@ -12,7 +12,8 @@ export function addTeamMembers({
   update,
   structure,
   teamId,
-}: UpdateTeamMembersArgs) {
+  curMembers,
+}: UpdateTeamMembersArgs & { curMembers: string[] }) {
   // 1. Validate the update request
   const validatedFields = TeamSchema.pick({ members: true })
     .strict()
@@ -20,17 +21,22 @@ export function addTeamMembers({
 
   if (!validatedFields.success) throw new Error("Invalid team update data");
 
-  // 1. Pick update key
+  // 2. Pick update key
   const {
     data: { members },
   } = validatedFields;
 
-  // 2. Check if team already exists
-  const teamIdx = structure.teams.findIndex((team) => team.id === teamId);
+  // 3. Check if the added members exist in the current workspace
+  const invalidMembers = members.filter((m) => !curMembers.includes(m));
+
+  if (invalidMembers.length > 0) throw new Error("Invalid members");
+
+  // 4. Check if team already exists
+  const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 
-  // 3. Update the team
+  // 5. Update the team
   const newStructure = produce(structure, (draft) => {
     const curTeam = draft.teams[teamIdx]!;
 
@@ -53,17 +59,17 @@ export function removeTeamMembers({
 
   if (!validatedFields.success) throw new Error("Invalid team update data");
 
-  // 1. Pick update key
+  // 2. Pick update key
   const {
     data: { members },
   } = validatedFields;
 
-  // 2. Check if team already exists
-  const teamIdx = structure.teams.findIndex((team) => team.id === teamId);
+  // 3. Check if team already exists
+  const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 
-  // 3. Update the team
+  // 4. Update the team
   const newStructure = produce(structure, (draft) => {
     const curTeam = draft.teams[teamIdx]!;
 

@@ -21,11 +21,18 @@ export function addTeamDirs({ structure, update, teamId }: UpdateTeamDirArgs) {
   } = validatedFields;
 
   // 2. Check if team already exists
-  const teamIdx = structure.teams.findIndex((team) => team.id === teamId);
+  const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 
-  // 3. Update the dir
+  if (
+    structure.teams[teamIdx]!.dirs.some((dir) =>
+      dirs.some((d) => d.id === dir.id)
+    )
+  )
+    throw new Error("Dir already exists in team");
+
+  // 3. Update the dirs
   const newStructure = produce(structure, (draft) => {
     draft.teams[teamIdx]!.dirs.push(...dirs);
   });
@@ -52,13 +59,13 @@ export function deleteTeamDirs({
   } = validatedFields;
 
   // 2. Check if team already exists
-  const teamIdx = structure.teams.findIndex((team) => team.id === teamId);
+  const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 
   const removalIds = dirs.map((dir) => dir.id);
 
-  // 3. Update the dir
+  // 3. Update the dirs
   const newStructure = produce(structure, (draft) => {
     const curTeam = draft.teams[teamIdx]!;
     curTeam.dirs = curTeam.dirs.filter((dir) => !removalIds.includes(dir.id));

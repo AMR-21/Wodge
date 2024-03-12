@@ -25,7 +25,7 @@ export function updateTeamInfo({ structure, update, teamId }: TeamInfoUpdate) {
   } = validatedFields;
 
   // 2. Check if team already exists
-  const teamIdx = structure.teams.findIndex((team) => team.id === teamId);
+  const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 

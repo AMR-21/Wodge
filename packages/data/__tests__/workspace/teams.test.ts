@@ -101,14 +101,14 @@ describe("Workspace teams' unit mutations", () => {
       teams: [{ ...team, name: "New Name" }],
     });
 
-    // update a team with invalid data
+    // Test: update a team with invalid data
     expect(() =>
       updateTeamInfo({
         structure,
         teamId,
         update: { name: "" },
       })
-    ).toThrowError("Invalid team update data");
+    ).toThrowError(/^Invalid team update data$/);
   });
 
   test("update team members", () => {
@@ -120,12 +120,19 @@ describe("Workspace teams' unit mutations", () => {
       currentUserId: UserId,
     });
 
+    const curMembers = [
+      "-4oxKtIB8FXvYZL0AXjXp",
+      "-2oxKtIB8FXvYZL0AXjXp",
+      "-3oxKtIB8FXvYZL0AXjXp",
+    ];
+
     // Test: update team members
     expect(
       addTeamMembers({
         structure,
         teamId,
         update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
       })
     ).toEqual({
       ...structure,
@@ -136,6 +143,7 @@ describe("Workspace teams' unit mutations", () => {
       structure,
       teamId,
       update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+      curMembers,
     });
 
     expect(
@@ -155,9 +163,29 @@ describe("Workspace teams' unit mutations", () => {
         structure,
         teamId,
         //@ts-ignore
-        update: { members: [""], createdBy: "" },
+        update: { members: "", created_by: "" },
+        curMembers,
       })
-    ).toThrowError("Invalid team update data");
+    ).toThrowError(/^Invalid team update data$/);
+
+    // non existence team
+    expect(() =>
+      addTeamMembers({
+        structure,
+        teamId: "non existing id",
+        update: { members: ["-4oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
+      })
+    ).toThrowError(/^Team does not exist$/);
+
+    expect(() =>
+      addTeamMembers({
+        structure,
+        teamId,
+        update: { members: ["-9oxKtIB8FXvYZL0AXjXp"] },
+        curMembers,
+      })
+    ).toThrowError(/^Invalid members$/);
   });
 
   test("update team dirs", () => {
@@ -211,6 +239,53 @@ describe("Workspace teams' unit mutations", () => {
         //@ts-ignore
         update: { dirs: [{ name: "" }] },
       })
-    ).toThrowError("Invalid team update data");
+    ).toThrowError(/^Invalid team update data$/);
+
+    const s2 = addTeamDirs({
+      structure,
+      teamId,
+      update: {
+        dirs: [
+          {
+            name: "Account",
+            id: dirId,
+            channels: [],
+          },
+        ],
+      },
+    });
+
+    // non existence team
+    expect(() =>
+      addTeamDirs({
+        structure: s2,
+        teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        update: {
+          dirs: [
+            {
+              name: "Account",
+              id: dirId,
+              channels: [],
+            },
+          ],
+        },
+      })
+    ).toThrowError(/^Team does not exist$/);
+
+    expect(() =>
+      addTeamDirs({
+        structure: s2,
+        teamId,
+        update: {
+          dirs: [
+            {
+              name: "Account",
+              id: dirId,
+              channels: [],
+            },
+          ],
+        },
+      })
+    ).toThrowError(/^Dir already exists in team$/);
   });
 });
