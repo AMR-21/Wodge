@@ -21,8 +21,6 @@ export function replicacheWrapper<Request, Result>(
 
       const response = await res.json();
 
-      console.log({ response });
-
       return {
         httpRequestInfo: {
           httpStatusCode: res.status,

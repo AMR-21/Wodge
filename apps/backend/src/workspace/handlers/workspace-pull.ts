@@ -23,7 +23,6 @@ function patcher(party: WorkspaceParty) {
 
     const { workspaceMembers, workspaceMetadata, workspaceStructure } = party;
 
-    console.log(workspaceStructure.data);
     if (party.workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
@@ -48,7 +47,6 @@ function patcher(party: WorkspaceParty) {
       });
     }
 
-    console.log(patch);
     return patch;
   };
 }

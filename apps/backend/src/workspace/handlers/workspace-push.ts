@@ -13,10 +13,12 @@ import {
 } from "@repo/data";
 import { makeWorkspaceKey } from "@repo/data";
 import { isAllowed } from "../../lib/utils";
-import { initWorkspace } from "../mutators/init-workspace";
+import { initWorkspace } from "./init-workspace";
 import { deleteWorkspace } from "../mutators/delete-workspace";
 import { produce } from "immer";
-import { createTeam } from "@repo/data/models/workspace/mutators/create-team";
+import { createTeamMutation } from "@repo/data/models/workspace/mutators/create-team";
+import { createTeam } from "../mutators/create-team";
+import { updateTeam } from "../mutators/update-team";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -45,24 +47,10 @@ function runner(party: WorkspaceParty, req: Party.Request) {
         return initWorkspace(party, params, userData);
 
       case "createTeam":
-        const str = await party.room.storage.get(makeWorkspaceStructureKey());
-        console.log({ str });
-        party.workspaceStructure.data = createTeam({
-          currentUserId: params.userId,
-          structure: str.data,
-          team: params.mutation.args as Team,
-        });
+        return await createTeam(party, params);
 
-        party.workspaceStructure.lastModifiedVersion = params.nextVersion;
-
-        await party.room.storage.put(
-          makeWorkspaceStructureKey(),
-          party.workspaceStructure
-        );
-
-        return;
-
-      // case "updateTeam":
+      case "updateTeam":
+        return await updateTeam(party, params);
 
       case "DeleteWorkspace":
         return deleteWorkspace(party, params);

@@ -1,41 +1,32 @@
-import { TeamSchema, makeWorkspaceStructureKey } from "@repo/data";
+import {
+  TeamUpdate,
+  teamUpdateRunner,
+} from "@repo/data/models/workspace/mutators/team-update-runner";
 import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
+import { WorkspaceStructure, makeWorkspaceStructureKey } from "@repo/data";
+import { TeamUpdateArgs } from "@repo/data/models/workspace/workspace-mutators";
 
-import { produce } from "immer";
+export async function updateTeam(party: WorkspaceParty, params: RunnerParams) {
+  try {
+    const { teamId, teamUpdate } = params.mutation.args as TeamUpdateArgs;
 
-export async function updateTeam(
-  party: WorkspaceParty,
-  { mutation, nextVersion, userId }: RunnerParams
-) {
-  // 1. check if is allowed -> rbac
+    const curMembers = party.workspaceMembers.data.members.map((m) => m.id);
 
-  // 2. validate the data
-  const validatedFields = TeamSchema.safeParse(mutation.args);
+    party.workspaceStructure.data = teamUpdateRunner({
+      structure: party.workspaceStructure.data,
+      teamUpdate,
+      teamId,
+      curMembers,
+    }) as WorkspaceStructure;
 
-  //  Bug: Should throw an error if the data is invalid
-  if (!validatedFields.success) {
+    party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+
+    await party.room.storage.put(
+      makeWorkspaceStructureKey(),
+      party.workspaceStructure
+    );
+  } catch (e) {
     return;
   }
-  const { data: newTeam } = validatedFields;
-
-  // 2. validate owner
-
-  //  Bug: Should throw an error if the data is invalid
-  if (newTeam.createdBy !== userId || !newTeam.members.includes(userId)) {
-    return;
-  }
-  const structure = party.workspaceStructure;
-  //3.update team
-  const newStructure = produce(structure, (draft) => {
-    const index = draft.data.teams.findIndex((t) => t.id === newTeam.id);
-    if (index != -1) {
-      draft.data.teams[index] = newTeam;
-      draft.lastModifiedVersion = nextVersion;
-    } else {
-      return;
-    }
-  });
-  //4. Persist the mutation
-  await party.room.storage.put(makeWorkspaceStructureKey(), newStructure);
 }

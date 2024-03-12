@@ -20,8 +20,9 @@ import { teamUpdateRunner } from "./mutators/team-update-runner";
 import type { TeamUpdate } from "./mutators/team-update-runner";
 import { createWorkspaceMutation } from "./mutators/create-workspace";
 import { createTeamMutation } from "./mutators/create-team";
+import { deleteTeamMutation } from "./mutators/delete-team";
 
-type TeamUpdateArgs = {
+export type TeamUpdateArgs = {
   teamUpdate: TeamUpdate;
   teamId: string;
 };
@@ -101,7 +102,20 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  async deleteTeam(tx: WriteTransaction, teamId: string) {},
+  async deleteTeam(tx: WriteTransaction, teamId: string) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    if (!structure) throw new Error("Bad data");
+
+    const newStructure = deleteTeamMutation({
+      structure,
+      teamId,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
 
   // async deleteTeam(tx: WriteTransaction, teamId: string) {
   //   //Fixme - no need to validate the team id

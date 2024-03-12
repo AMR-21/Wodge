@@ -58,20 +58,26 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   async function onSubmit(
     data: Pick<Team, "id" | "name" | "createdBy" | "avatar">,
   ) {
-    if (team.id.startsWith("add")) console.log("add team", data.id);
-    // console.log("update team general", { ...team, data });
+    if (isAddition) {
+      await workspace?.store.mutate.createTeam(data);
+      form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
 
-    await workspace?.store.mutate.createTeam(data);
+      return dispatch({
+        type: "openAccordionItem",
+        payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
+      });
+    }
 
-    // update/create the team
-    // if new team dispatch action to switch to the new team settings
-    dispatch({
-      type: "openAccordionItem",
-      payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
+    await workspace?.store.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "updateInfo",
+        update: {
+          name: data.name,
+          avatar: data.avatar,
+        },
+      },
     });
-
-    // form.reset(team);
-    // form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
   }
 
   return (

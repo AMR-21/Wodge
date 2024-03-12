@@ -73,12 +73,6 @@ export async function initWorkspace(
     draft.lastModifiedVersion = nextVersion;
   });
 
-  console.log(
-    party.workspaceMetadata,
-    party.workspaceStructure,
-    party.workspaceMembers
-  );
-
   await party.room.storage.put({
     [makeWorkspaceKey()]: party.workspaceMetadata,
     [makeWorkspaceMembersKey()]: party.workspaceMembers,

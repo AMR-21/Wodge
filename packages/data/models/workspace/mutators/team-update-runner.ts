@@ -1,4 +1,4 @@
-import { Team } from "../../..";
+import { DrObj, Team, WorkspaceStructure } from "../../..";
 import { addTeamDirsMutation, deleteTeamDirsMutation } from "./team-dirs";
 import { updateTeamInfoMutation } from "./team-info";
 import { addTeamMembersMutation, removeTeamMembers } from "./team-members";
@@ -27,7 +27,7 @@ export type TeamUpdate =
       update: { dirs: string[] };
     };
 
-export interface TeamUpdateArgs extends WorkspaceTeamMutation {
+export interface TeamUpdateRunnerArgs extends WorkspaceTeamMutation {
   teamUpdate: TeamUpdate;
   curMembers: string[];
 }
@@ -37,7 +37,7 @@ export function teamUpdateRunner({
   structure,
   teamId,
   curMembers,
-}: TeamUpdateArgs) {
+}: TeamUpdateRunnerArgs): WorkspaceStructure | DrObj<WorkspaceStructure> {
   if (!teamUpdate.action) throw new Error("Invalid update action");
 
   const { action, update } = teamUpdate;
