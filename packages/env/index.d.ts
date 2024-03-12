@@ -9,6 +9,7 @@ type Env = Readonly<{
   RESEND_EMAIL_FROM: string;
   NEXT_PUBLIC_BACKEND_DOMAIN: string;
   NEXT_PUBLIC_REPLICACHE_KEY: string;
+  USER_AVATAR_BUCKET: string;
 }>;
 
 declare module "@repo/env" {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, UserCard } from "@repo/ui";
+import { Button, UserCard, useUserData } from "@repo/ui";
 import { useRouter } from "next/navigation";
 import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog";

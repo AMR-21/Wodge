@@ -55,6 +55,7 @@ export const workspaceMutators = {
       makeWorkspaceStructureKey()
     ))!;
 
+
     if (!structure) throw new Error("Bad data");
 
     const { teamId, teamUpdate } = update;

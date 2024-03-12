@@ -3,21 +3,15 @@ import { Checkbox } from "../ui/checkbox";
 
 export function DataTableHeaderSelect<TData>({
   table,
-  withForm,
 }: {
   table: Table<TData>;
-  withForm?: boolean;
 }) {
-  const checked = withForm
-    ? table.getSelectedRowModel().rows.length === table.getRowCount() - 1 &&
-      table.getRowCount() > 1
-    : !!table.getIsAllRowsSelected();
-
   return (
     <div className="flex items-center px-2">
       <Checkbox
         checked={
-          checked || (table.getIsSomePageRowsSelected() && "indeterminate")
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"

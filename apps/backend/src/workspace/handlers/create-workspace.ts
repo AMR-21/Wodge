@@ -24,6 +24,8 @@ export async function createWorkspace(
 
   const { id, ...publicData } = userData;
 
+  const globalVersion = (party.versions.get("globalVersion") as number) || 0;
+
   party.workspaceMembers = {
     data: {
       owner: userId,
@@ -40,12 +42,12 @@ export async function createWorkspace(
         },
       ],
     },
-    lastModifiedVersion: 1,
+    lastModifiedVersion: globalVersion + 1,
     deleted: false,
   };
 
   // 3. update global version
-  party.versions.set("globalVersion", 1);
+  party.versions.set("globalVersion", globalVersion + 1);
 
   // 3. persist updates
   await party.room.storage.put({

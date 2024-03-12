@@ -160,7 +160,7 @@ export async function repPush({ req, storage, versions, runner }: PushProps) {
     if (!clientGroup) throw new Error("Client group not found");
 
     const globalVersion = versions.get("globalVersion") as number;
-    const nextVersion = globalVersion + 1;
+    let nextVersion = globalVersion + 1;
     // hashMap to avoid many reads
 
     const clients = new Map<string, ReplicacheClient>();
@@ -197,6 +197,8 @@ export async function repPush({ req, storage, versions, runner }: PushProps) {
 
       // Step 6: Run the mutation
       await runner({ mutation, nextVersion, userId });
+
+      // if (mutation.name === "initWorkspace") nextVersion++;
 
       client.lastMutationID = expectedMutationID;
       client.lastModifiedVersion = nextVersion;

@@ -40,3 +40,5 @@ export * from "./hooks/ui/use-is-desktop";
 export * from "./hooks/ui/use-workspace-id";
 
 export * from "./store";
+
+export * from "./hooks/useUserData";

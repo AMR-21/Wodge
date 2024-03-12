@@ -43,6 +43,5 @@ export async function createTeam(
   });
 
   // 5. Persist the mutation
-
   await party.room.storage.put(makeWorkspaceStructureKey(), newStructure);
 }

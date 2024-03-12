@@ -11,24 +11,97 @@ import {
   useIsDesktop,
 } from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { PanelLeft, X } from "lucide-react";
+import React, {
+  Children,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
+import { ChevronRight, LucideIcon, PanelLeft, Plus, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
+import { IconType } from "react-icons/lib";
+import { produce } from "immer";
 
 interface Settings {
   active: string;
-  setActive: React.Dispatch<React.SetStateAction<string>>;
   isSidebarOpen: boolean;
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeItemId: string;
+  accordionActive: string;
+  dispatch: React.Dispatch<any>;
+}
+
+interface SettingsState {
+  active: string;
+  isSidebarOpen: boolean;
+  activeItemId: string;
+  accordionActive: string;
+}
+
+interface SettingsAccordionItemProps {
+  value: string;
+  children?: React.ReactNode;
+  actionIcon?: LucideIcon | IconType;
 }
 
 const SettingsContext = createContext<Settings>({
   active: "",
-  setActive: () => {},
   isSidebarOpen: true,
-  setIsSidebarOpen: () => {},
+  activeItemId: "",
+  accordionActive: "",
+  dispatch: () => {},
 });
+
+function reducer(state: SettingsState, action: any) {
+  switch (action.type) {
+    case "setSidebar":
+      return produce(state, (draft) => {
+        draft.isSidebarOpen = action.payload;
+      });
+    case "toggleSidebar":
+      return produce(state, (draft) => {
+        draft.isSidebarOpen = !draft.isSidebarOpen;
+      });
+    case "openNormalItem":
+      return produce(state, (draft) => {
+        draft.active = action.payload.value;
+        draft.activeItemId = "";
+        draft.accordionActive = "";
+        draft.isSidebarOpen = action.payload.isSidebarOpen;
+      });
+    case "activateAccordion":
+      return produce(state, (draft) => {
+        draft.accordionActive = action.payload;
+      });
+    case "openAccordionItem":
+      return produce(state, (draft) => {
+        draft.activeItemId = action.payload.id;
+        draft.active = action.payload.value;
+        draft.accordionActive = action.payload.value;
+        draft.isSidebarOpen = action.payload.isSidebarOpen;
+      });
+
+    case "openAdd":
+      return produce(state, (draft) => {
+        draft.activeItemId = "add-" + action.payload.value;
+        draft.active = action.payload.value;
+
+        draft.isSidebarOpen = action.payload.isSidebarOpen;
+      });
+
+    case "closeAccordion":
+      return produce(state, (draft) => {
+        // draft.activeItemId = "";
+        // draft.active = "";
+        draft.accordionActive = "";
+      });
+
+    default:
+      return state;
+  }
+}
 
 function Settings({
   children,
@@ -37,17 +110,29 @@ function Settings({
   defaultActive?: string;
   children: React.ReactNode;
 }) {
-  const [active, setActive] = useState<string>(defaultActive);
   const isDesktop = useIsDesktop();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
+
+  const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
+    useReducer(reducer, {
+      active: defaultActive,
+      isSidebarOpen: isDesktop,
+      activeItemId: "",
+      accordionActive: "",
+    });
 
   useEffect(() => {
-    setIsSidebarOpen(isDesktop);
+    dispatch({ type: "setSidebar", payload: isDesktop });
   }, [isDesktop]);
 
   return (
     <SettingsContext.Provider
-      value={{ active, setActive, isSidebarOpen, setIsSidebarOpen }}
+      value={{
+        active,
+        isSidebarOpen,
+        activeItemId,
+        accordionActive,
+        dispatch,
+      }}
     >
       {children}
     </SettingsContext.Provider>
@@ -56,7 +141,7 @@ function Settings({
 
 function SettingsSidebar({ children }: { children: React.ReactNode }) {
   // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { isSidebarOpen, setIsSidebarOpen } = useContext(SettingsContext);
+  const { isSidebarOpen, dispatch } = useContext(SettingsContext);
 
   return (
     <>
@@ -72,7 +157,7 @@ function SettingsSidebar({ children }: { children: React.ReactNode }) {
           <h2 className={(!isSidebarOpen && "invisible") || ""}>Settings</h2>
           <SidebarItemBtn
             Icon={PanelLeft}
-            onClick={() => setIsSidebarOpen((s) => !s)}
+            onClick={() => dispatch({ type: "toggleSidebar" })}
             className={(!isSidebarOpen && "invisible") || ""}
           />
         </div>
@@ -83,7 +168,12 @@ function SettingsSidebar({ children }: { children: React.ReactNode }) {
 }
 
 function SettingsSidebarList({ children }: { children: React.ReactNode }) {
-  return <ul className="flex flex-col gap-1 py-3">{children}</ul>;
+  const { active } = useContext(SettingsContext);
+  return (
+    <Accordion type="single" collapsible>
+      <ul className="flex flex-col gap-1 py-3">{children}</ul>
+    </Accordion>
+  );
 }
 
 function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
@@ -94,69 +184,106 @@ function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SettingsSidebarItem({
-  value,
-  accordion,
-  children,
-}: {
-  value: string;
-  accordion?: boolean;
-  children?: React.ReactNode;
-}) {
-  const { setActive, active, setIsSidebarOpen } = useContext(SettingsContext);
+function SettingsSidebarItem({ value }: { value: string }) {
+  const { active, activeItemId, dispatch } = useContext(SettingsContext);
   const isDesktop = useIsDesktop();
 
-  if (accordion) {
-    return (
-      <Accordion type="single" collapsible>
-        <AccordionItem value="i-1">
-          <AccordionTrigger asChild>
-            <SidebarItem
-              noIcon
-              label={value}
-              className={cn(
-                "justify-start py-1.5 pl-7 pr-1.5 capitalize",
-                active === value && "bg-accent text-accent-foreground",
-              )}
-              // onClick={() => {
-              //   if (!isDesktop) setIsSidebarOpen(false);
-              //   setActive(value);
-              // }}
-            />
-          </AccordionTrigger>
-          <AccordionContent>{children}</AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    );
-  }
+  return (
+    <AccordionItem value={value}>
+      <AccordionTrigger asChild>
+        <SidebarItem
+          noIcon
+          label={value}
+          className={cn(
+            "justify-start py-1.5 pl-7 pr-1.5 capitalize",
+            active === value && "bg-accent text-accent-foreground",
+          )}
+          onClick={() => {
+            dispatch({
+              type: "openNormalItem",
+              payload: { value, isSidebarOpen: isDesktop },
+            });
+          }}
+        />
+      </AccordionTrigger>
+    </AccordionItem>
+  );
+}
+
+function SettingsSidebarAccordionItem({
+  value,
+  children,
+  actionIcon,
+}: SettingsAccordionItemProps) {
+  const { activeItemId, accordionActive, dispatch, active } =
+    useContext(SettingsContext);
+  const isDesktop = useIsDesktop();
 
   return (
-    <SidebarItem
-      noIcon
-      label={value}
-      className={cn(
-        "justify-start py-1.5 pl-7 pr-1.5 capitalize",
-        active === value && "bg-accent text-accent-foreground",
-      )}
-      onClick={() => {
-        if (!isDesktop) setIsSidebarOpen(false);
-        setActive(value);
-      }}
-    />
+    <AccordionItem value={value}>
+      <AccordionTrigger asChild>
+        <SidebarItem
+          noIcon
+          label={value}
+          className={cn(
+            "justify-start gap-1 py-1.5 pl-7 pr-1.5 capitalize",
+            accordionActive === value &&
+              activeItemId &&
+              "bg-accent text-accent-foreground",
+          )}
+          onClick={() => {
+            if (accordionActive === value)
+              return dispatch({ type: "closeAccordion" });
+            dispatch({ type: "activateAccordion", payload: value });
+          }}
+        >
+          <ChevronRight
+            className={cn(
+              "h-4 w-4 rotate-0 transition-all",
+              accordionActive === value && "rotate-90",
+              // active === value && "rotate-90",
+            )}
+          />
+
+          <SidebarItemBtn
+            Icon={actionIcon || Plus}
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch({
+                type: "openAdd",
+                payload: { value, isSidebarOpen: isDesktop },
+              });
+            }}
+            className={cn(
+              "invisible -my-1 ml-auto transition-all",
+              accordionActive === value && "visible",
+            )}
+          />
+        </SidebarItem>
+      </AccordionTrigger>
+      <AccordionContent className="py-1.5 pl-7">{children}</AccordionContent>
+    </AccordionItem>
   );
+}
+
+function SettingsSidebarAccordionPlaceHolder({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <p className="pl-2 text-sm text-muted-foreground">{children}</p>;
 }
 
 function SettingsContent({
   id,
   children,
-  className = "max-w-2xl",
+  className,
 }: {
   id: string;
   children: React.ReactNode;
   className?: string;
 }) {
-  const { isSidebarOpen, setIsSidebarOpen, active } =
-    useContext(SettingsContext);
+  const { isSidebarOpen, dispatch, active } = useContext(SettingsContext);
 
   if (active !== id) return null;
 
@@ -164,11 +291,11 @@ function SettingsContent({
     <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-4 py-10">
       <div
         className={cn(
-          "flex w-full shrink-0 grow flex-col items-center",
+          "flex w-full max-w-2xl shrink-0 grow flex-col items-center",
           className,
         )}
       >
-        <div className="h-[2.75rem] w-full ">
+        <div className="h-[2.75rem] w-full shrink-0 ">
           <div className="flex w-full items-start justify-between">
             <SidebarItemBtn
               Icon={PanelLeft}
@@ -176,7 +303,7 @@ function SettingsContent({
                 "-ml-1 w-fit opacity-100  transition-all duration-300",
                 isSidebarOpen && "invisible opacity-0",
               )}
-              onClick={() => setIsSidebarOpen((s) => !s)}
+              onClick={() => dispatch({ type: "toggleSidebar" })}
             />
 
             <SettingsClose />
@@ -193,7 +320,7 @@ function SettingsContentHeader({
   label,
   description,
 }: {
-  label: string;
+  label?: string;
   description: string;
 }) {
   return (
@@ -218,11 +345,13 @@ function SettingsContentSection({
   className?: string;
 }) {
   return (
-    <div className="py-6">
-      <div className="flex items-center justify-between pb-4">
-        <h3 className=" text-base">{header}</h3>
-        {action}
-      </div>
+    <div className={cn("py-6", !header && "px-2 py-4")}>
+      {header && (
+        <div className="flex items-center justify-between pb-4">
+          <h3 className=" text-base">{header}</h3>
+          {action}
+        </div>
+      )}
       <div className={className}>{children}</div>
     </div>
   );
@@ -258,10 +387,12 @@ function SettingsClose() {
 }
 
 export {
+  SettingsContext,
   Settings,
   SettingsSidebar,
   SettingsSidebarList,
   SettingsSidebarHeader,
+  SettingsSidebarAccordionPlaceHolder,
   SettingsSidebarItem,
   SettingsContent,
   SettingsClose,
@@ -269,4 +400,5 @@ export {
   SettingsContentSection,
   SettingsContentDescription,
   SettingsContentAction,
+  SettingsSidebarAccordionItem,
 };

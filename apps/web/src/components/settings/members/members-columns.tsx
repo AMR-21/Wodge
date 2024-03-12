@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  DataTableActions,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -20,9 +21,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Crown, MoreHorizontal } from "lucide-react";
 import { DeepReadonly } from "replicache";
 
-export function membersColumns(
-  inviters: (Pick<Member, "id" | "data"> | undefined)[],
-): ColumnDef<DeepReadonly<Member>>[] {
+interface MembersColumnsProps {
+  removeMember: (memberId: string) => void;
+  inviters?: (Pick<Member, "id" | "data"> | undefined)[];
+}
+export function membersColumns({
+  removeMember,
+  inviters,
+}: MembersColumnsProps): ColumnDef<DeepReadonly<Member>>[] {
   return [
     {
       id: "select",
@@ -54,7 +60,8 @@ export function membersColumns(
     },
 
     {
-      id: "info",
+      id: "member",
+      accessorFn: (row) => row.data.email,
       header: () => <Header>Member</Header>,
 
       cell: ({ row }) => {
@@ -90,8 +97,7 @@ export function membersColumns(
       cell: ({ row }) => {
         const member = row.original;
 
-        // if(!inviters)
-        const inviter = inviters.find(
+        const inviter = inviters?.find(
           (i) => i?.id === member.joinInfo.created_by,
         );
 
@@ -101,9 +107,7 @@ export function membersColumns(
           <div className="flex flex-col">
             <div className="truncate">
               {token ? (
-                <TooltipWrapper
-                  content={`Created by ${inviter?.data.username}`}
-                >
+                <TooltipWrapper content={`Created by ${inviter?.data.email}`}>
                   <pre className="truncate rounded-md bg-surface p-1 text-center text-xs">
                     {token}
                   </pre>
@@ -115,10 +119,6 @@ export function membersColumns(
                 </div>
               )}
             </div>
-            {/* {member.data.joinMethod}? */}
-            {/* <span className="text-xs text-muted-foreground">
-            {member.joinInfo.created_by}
-          </span> */}
           </div>
         );
       },
@@ -126,34 +126,23 @@ export function membersColumns(
 
     {
       id: "actions",
-      cell: ({ row }) => {
+      cell: ({ row, table }) => {
         const member = row.original;
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarItemBtn Icon={MoreHorizontal} className="z-50" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(member.data.username)
-                }
-              >
-                Copy username
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(member.data.email)}
-              >
-                Copy email
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem destructive>
-                Remove from workspace
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DataTableActions
+            row={row}
+            table={table}
+            menuItems={[
+              {
+                label: "Delete",
+                action: () => {
+                  removeMember(member.id);
+                },
+                destructive: true,
+              },
+            ]}
+          ></DataTableActions>
         );
       },
     },

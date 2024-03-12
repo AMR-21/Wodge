@@ -136,7 +136,7 @@ export const RoleSchema = z.object({
   members: z.array(z.string().length(ID_LENGTH)),
   permissions: z.array(z.enum(["read", "write", "admin"])),
   linkedTeams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
-  color: z.string().default(BRAND_COLOR).optional(),
+  color: z.string().default(BRAND_COLOR),
   createdBy: z.string().length(ID_LENGTH),
 });
 
