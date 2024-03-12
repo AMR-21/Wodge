@@ -42,8 +42,8 @@ export function RoleSettings() {
         name: "Admin",
         permissions: [],
         members: [],
-        createdBy: user?.data.id || "",
         linkedTeams: [],
+        createdBy: user?.data.id || "",
         color: BRAND_COLOR,
       },
       {

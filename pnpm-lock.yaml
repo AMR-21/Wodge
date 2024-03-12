@@ -60,6 +60,12 @@ importers:
       '@repo/ts':
         specifier: workspace:*
         version: link:../../config/ts
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.14.202
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       partykit:
         specifier: ^0.0.89
         version: 0.0.89
@@ -273,6 +279,9 @@ importers:
       immer:
         specifier: ^10.0.3
         version: 10.0.3
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       nanoid:
         specifier: ^5.0.5
         version: 5.0.6
@@ -313,6 +322,9 @@ importers:
       '@testing-library/react':
         specifier: ^14.2.1
         version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.14.202
       '@types/node':
         specifier: ^20
         version: 20.11.20
@@ -7583,7 +7595,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
