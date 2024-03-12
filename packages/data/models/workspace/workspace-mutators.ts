@@ -35,9 +35,11 @@ export const workspaceMutators = {
 
     // 2. Run the mutation
     await tx.set(makeWorkspaceKey(), workspace);
-    await tx.set(makeWorkspaceStructureKey(), defaultWorkspaceStructure());
+    await tx.set(makeWorkspaceStructureKey(), {
+      ...defaultWorkspaceStructure(),
+    });
+
     await tx.set(makeWorkspaceMembersKey(), {
-      owner: userData.id,
       members: [
         {
           id: userData.id,
@@ -53,7 +55,10 @@ export const workspaceMutators = {
     });
   },
 
-  async createTeam(tx: WriteTransaction, data: Team) {
+  async createTeam(
+    tx: WriteTransaction,
+    data: Pick<Team, "id" | "name" | "createdBy" | "avatar">
+  ) {
     // 1. Create the team
     const currentUserId = User.getInstance().data.id;
     const structure = await tx.get<WorkspaceStructure>(
@@ -72,7 +77,6 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  //fixme
   async updateTeam(tx: WriteTransaction, update: TeamUpdateArgs) {
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
@@ -133,126 +137,6 @@ export const workspaceMutators = {
   //   });
 
   //   // 3.persist data
-  //   await tx.set(makeWorkspaceStructureKey(), newStructure);
-  // },
-
-  // // *Roles mutators
-  // async createRole(tx: WriteTransaction, role: DrObj<Role>) {
-  //   //1. Validate the data
-  //   const validatedFields = RoleSchema.safeParse(role);
-
-  //   if (!validatedFields.success) throw new Error("Invalid role data");
-
-  //   const { data: newRole } = validatedFields;
-
-  //   //2. Validate if the role is already existing
-  //   const roleExists = (await tx.get<WorkspaceStructure>(
-  //     makeWorkspaceStructureKey()
-  //   ))!.roles.some((r) => r.id === role.id);
-
-  //   if (roleExists) throw new Error("Role already exists");
-
-  //   //3. Create the role
-  //   const newStructure = produce(
-  //     (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
-  //     (draft) => {
-  //       draft.roles.push(newRole);
-  //     }
-  //   );
-  //   //4. Persist the mutation
-  //   await tx.set(makeWorkspaceStructureKey(), newStructure);
-  // },
-
-  // //fixme
-  // async updateRole(tx: WriteTransaction, update: RoleUpdate) {
-  //   // 1. pick update key
-  //   const { target, value, roleId } = update;
-  //   let key = target as string;
-
-  //   if (target.startsWith("add")) key = target.slice(3).toLowerCase();
-  //   if (target.startsWith("remove")) key = target.slice(6).toLowerCase();
-
-  //   // 2. Validate the data , with strict the received field must exist on parsed data
-  //   // instead of stripping unknown fields
-  //   const validatedFields = RoleSchema.pick({ [key]: true })
-  //     .strict()
-  //     .safeParse({
-  //       [key]: value,
-  //     });
-
-  //   if (!validatedFields.success) throw new Error("Invalid role data");
-
-  //   const { data: updatedData } = validatedFields;
-
-  //   const structure = (await tx.get<WorkspaceStructure>(
-  //     makeWorkspaceStructureKey()
-  //   ))!;
-
-  //   const curIdx = structure.roles.findIndex((r) => r.id === roleId);
-
-  //   if (curIdx === -1) throw new Error("Team not found");
-
-  //   const newStructure = produce(structure, (draft) => {
-  //     const cur = draft.roles[curIdx]!;
-  //     switch (target) {
-  //       case "name":
-  //         cur.name = updatedData.name;
-  //         break;
-  //       case "addMembers":
-  //         updatedData.members.forEach((m) => {
-  //           if (!cur.members.includes(m)) {
-  //             cur.members.push(m);
-  //           }
-  //         });
-  //         break;
-  //       case "removeMembers":
-  //         cur.members = cur.members.filter(
-  //           (m) => !updatedData.members.includes(m)
-  //         );
-  //         break;
-  //       case "addPermissions":
-  //         updatedData.permissions.forEach((d) => {
-  //           if (!cur.permissions.includes(d)) {
-  //             cur.permissions.push(d);
-  //           }
-  //         });
-  //         break;
-  //       case "removePermissions":
-  //         cur.permissions = cur.permissions.filter(
-  //           (d) => !updatedData.permissions.includes(d)
-  //         );
-  //         break;
-  //       case "linkTeam":
-  //         updatedData.linkedTeams.forEach((t) => {
-  //           if (!cur.linkedTeams.includes(t)) {
-  //             cur.linkedTeams.push(t);
-  //           }
-  //         });
-  //         break;
-  //       case "unlinkTeam":
-  //         cur.linkedTeams = cur.linkedTeams.filter(
-  //           (t) => !updatedData.linkedTeams.includes(t)
-  //         );
-  //         break;
-  //       case "color":
-  //         cur.color = updatedData.color;
-  //         break;
-  //       default:
-  //         throw new Error("Invalid update target");
-  //     }
-  //   });
-  //   // //3. Update the role
-  //   // const newStructure = produce(
-  //   //   (await tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()))!,
-  //   //   (draft) => {
-  //   //     const index = draft.roles.findIndex((role) => role.id === newRole.id);
-  //   //     if (index != -1) {
-  //   //       draft.roles[index] = newRole;
-  //   //     } else {
-  //   //       return;
-  //   //     }
-  //   //   }
-  //   // );
   //   await tx.set(makeWorkspaceStructureKey(), newStructure);
   // },
 

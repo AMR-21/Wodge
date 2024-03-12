@@ -222,6 +222,7 @@ export async function repPush({ req, storage, versions, runner }: PushProps) {
       case clientStateNotFoundError:
         return json({ error: "ClientStateNotFound" }, 200);
       default:
+        console.log(e);
         return error("Internal server error");
     }
   }

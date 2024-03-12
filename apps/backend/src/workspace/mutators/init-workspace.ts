@@ -1,15 +1,19 @@
 import {
+  PublicUserType,
   WorkspaceSchema,
   defaultWorkspaceStructure,
   makeWorkspaceKey,
+  makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
 import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
+import { produce } from "immer";
 
 export async function initWorkspace(
   party: WorkspaceParty,
-  { mutation, nextVersion, userId }: RunnerParams
+  { mutation, nextVersion, userId }: RunnerParams,
+  userData: PublicUserType
 ) {
   // 1. validate that initiator of the request is the owner of the workspace
   if (party.workspaceMembers.data.owner !== userId) {
@@ -36,15 +40,48 @@ export async function initWorkspace(
   }
 
   // 4. persist the data
-  party.workspaceMetadata.data = workspaceData;
-  party.workspaceMetadata.lastModifiedVersion = nextVersion;
+  party.workspaceMetadata = produce(party.workspaceMetadata, (draft) => {
+    draft.data = workspaceData;
+    draft.lastModifiedVersion = nextVersion;
+  });
 
   // 5. create default workspace structure
-  party.workspaceStructure.data = defaultWorkspaceStructure();
-  party.workspaceStructure.lastModifiedVersion = nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = {
+      publicChannels: [],
+      tags: [],
+      teams: [],
+      roles: [],
+    };
+    draft.lastModifiedVersion = nextVersion;
+  });
+
+  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
+    draft.data.members.push({
+      id: userId,
+      data: {
+        ...userData,
+      },
+      joinInfo: {
+        joined_at: new Date().toISOString(),
+        token: "",
+        created_by: "",
+        method: "owner",
+      },
+    });
+
+    draft.lastModifiedVersion = nextVersion;
+  });
+
+  console.log(
+    party.workspaceMetadata,
+    party.workspaceStructure,
+    party.workspaceMembers
+  );
 
   await party.room.storage.put({
     [makeWorkspaceKey()]: party.workspaceMetadata,
+    [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [makeWorkspaceStructureKey()]: party.workspaceStructure,
   });
 }

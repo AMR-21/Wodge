@@ -17,8 +17,6 @@ export function TeamsSidebar() {
 
   const teams = structure.teams;
 
-  console.log(structure);
-
   if (teams.length === 0)
     return (
       <SettingsSidebarAccordionPlaceHolder>

@@ -3,6 +3,7 @@ import WorkspaceParty from "../workspace-party";
 import { error, ok, unauthorized } from "../../lib/http-utils";
 import { PublicUserType } from "@repo/data";
 import { REPLICACHE_VERSIONS_KEY, makeWorkspaceMembersKey } from "@repo/data";
+import { produce } from "immer";
 
 export async function createWorkspace(
   req: Party.Request,
@@ -20,31 +21,12 @@ export async function createWorkspace(
     return unauthorized();
   }
 
-  const userData = <PublicUserType>JSON.parse(req.headers.get("x-user-data")!);
-
-  const { id, ...publicData } = userData;
-
   const globalVersion = (party.versions.get("globalVersion") as number) || 0;
 
-  party.workspaceMembers = {
-    data: {
-      owner: userId,
-      members: [
-        {
-          id: userId,
-          data: publicData,
-          joinInfo: {
-            joined_at: new Date().toISOString(),
-            token: "",
-            created_by: "",
-            method: "owner",
-          },
-        },
-      ],
-    },
-    lastModifiedVersion: globalVersion + 1,
-    deleted: false,
-  };
+  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
+    draft.data.owner = userId;
+    draft.lastModifiedVersion = globalVersion + 1;
+  });
 
   // 3. update global version
   party.versions.set("globalVersion", globalVersion + 1);

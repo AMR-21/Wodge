@@ -43,5 +43,5 @@ export function createTeam({ team, structure, currentUserId }: CreateTeamArgs) {
     draft.teams.push(newTeam);
   });
 
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }

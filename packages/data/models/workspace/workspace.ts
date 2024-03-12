@@ -65,30 +65,30 @@ export class Workspace {
     };
     // 3. If it is cloud workspace, then re-init the store
     // Add push/pull endpoints for cloud workspaces
-    if (data.onCloud) {
-      this.#makeCloud(data.id);
-    }
+    // if (data.onCloud) {
+    //   this.#makeCloud(data.id);
+    // }
 
     // 2. Run the mutation
     await this.store.mutate.initWorkspace(workspaceData);
   }
 
-  // * teams mutators
-  async createTeam(data: DrObj<Team>) {
-    await this.store.mutate.createTeam(data);
-  }
+  // // * teams mutators
+  // async createTeam(data: DrObj<Team>) {
+  //   await this.store.mutate.createTeam(data);
+  // }
 
-  async deleteTeam(data: DrObj<Team>) {
-    await this.store.mutate.deleteTeam(data);
-  }
+  // async deleteTeam(data: DrObj<Team>) {
+  //   await this.store.mutate.deleteTeam(data);
+  // }
 
-  async updateTeam(data: DrObj<Team>) {
-    await this.store.mutate.updateTeam(data);
-  }
+  // async updateTeam(data: DrObj<Team>) {
+  //   await this.store.mutate.updateTeam(data);
+  // }
 
-  async createRole(data: DrObj<Role>) {
-    await this.store.mutate.createRole(data);
-  }
+  // async createRole(data: DrObj<Role>) {
+  //   await this.store.mutate.createRole(data);
+  // }
 
   /**
    * Make the workspace a cloud workspace
@@ -106,8 +106,8 @@ export class Workspace {
       id
     );
 
-    // this.store.push();
-    // this.store.pull();
+    this.store.push();
+    this.store.pull();
   }
 
   /**

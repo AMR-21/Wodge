@@ -154,10 +154,10 @@ export class User {
       if (!res.ok) throw new Error("Failed to create workspace on cloud");
     }
 
-    // 2. Run the mutation
+    // // 2. Run the mutation
     await this.store.mutate.createWorkspace(data);
 
-    // 3. if the mutation succeed, init the workspace
+    // // 3. if the mutation succeed, init the workspace
     const workspacesRegistry = WorkspacesRegistry.getInstance();
     const workspace = workspacesRegistry.getWorkspace(data.id);
 

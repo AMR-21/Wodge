@@ -31,41 +31,44 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const isAddition = team.id.startsWith("add-");
 
   const isDesktop = useIsDesktop();
+
   const form = useForm<DrObj<Team>>({
     resolver: zodResolver(
-      TeamSchema.pick({ name: true, avatar: true, id: true }),
+      TeamSchema.pick({ name: true, avatar: true, id: true, createdBy: true }),
     ),
     defaultValues: {
       id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team.id,
       name: isAddition ? "" : team.name,
       avatar: isAddition ? "" : team?.avatar,
+      createdBy: isAddition ? User.getInstance().data.id : team.createdBy,
     },
   });
 
   useEffect(() => {
     if (isAddition)
-      return form.reset({ ...team, id: nanoid(WORKSPACE_TEAM_ID_LENGTH) });
+      return form.reset({
+        ...team,
+        id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        createdBy: User.getInstance().data.id,
+      });
 
     form.reset(team);
   }, [team]);
 
-  async function onSubmit(data: Partial<DrObj<Team>>) {
+  async function onSubmit(
+    data: Pick<Team, "id" | "name" | "createdBy" | "avatar">,
+  ) {
     if (team.id.startsWith("add")) console.log("add team", data.id);
     // console.log("update team general", { ...team, data });
 
-    await workspace?.createTeam({
-      ...team,
-      ...data,
-      members: [User.getInstance().data.id],
-      createdBy: User.getInstance().data.id,
-    });
+    await workspace?.store.mutate.createTeam(data);
 
     // update/create the team
     // if new team dispatch action to switch to the new team settings
-    dispatch({
-      type: "openAccordionItem",
-      payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
-    });
+    // dispatch({
+    //   type: "openAccordionItem",
+    //   payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
+    // });
 
     // form.reset(team);
     // form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
@@ -100,6 +103,18 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
           <FormField
             control={form.control}
             name="id"
+            render={({ field }) => (
+              <FormItem className="hidden">
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="createdBy"
             render={({ field }) => (
               <FormItem className="hidden">
                 <FormControl>

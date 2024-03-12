@@ -27,6 +27,8 @@ export async function handlePost(req: Party.Request, party: UserParty) {
       return userPull(req, party);
     case "/add-workspace":
       return await addWorkspace(req, party);
+    case "/create-workspace":
+
     case "/poke":
       return await poke(req, party);
     default:

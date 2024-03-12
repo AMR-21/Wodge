@@ -72,7 +72,7 @@ export default class WorkspaceParty
     this.workspaceStructure = <ServerWorkspaceStructure>(
       map.get(structureKey)
     ) || {
-      data: defaultWorkspaceStructure(),
+      data: { ...defaultWorkspaceStructure() },
       lastModifiedVersion: 0,
       deleted: false,
     };
@@ -119,8 +119,8 @@ export default class WorkspaceParty
 
       const route = getRoute(req);
       // Check if the request is to create or join the workspace then put user data in the headers
-      if (route === "/create" || route === "/join") {
-        req.headers.set("x-user-data", JSON.stringify(session.user));
+      if (route === "/create") {
+        // req.headers.set("x-user-data", JSON.stringify(session.user));
         return req;
       }
 

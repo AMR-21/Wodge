@@ -11,6 +11,7 @@ import { workspaceMutators } from "../../models/workspace/workspace-mutators";
 import { ReadTransaction, Replicache, TEST_LICENSE_KEY } from "replicache";
 
 import {
+  WorkspaceMembers,
   WorkspaceType,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
@@ -61,24 +62,21 @@ describe("Workspace initialization", () => {
     expect(workspace).toEqual(newWorkspace);
 
     const members = await rep.query((tx: ReadTransaction) =>
-      tx.get(makeWorkspaceMembersKey())
+      tx.get<WorkspaceMembers>(makeWorkspaceMembersKey())
     );
 
-    expect(members).toEqual({
-      owner: UserId,
-      members: [
-        {
-          id: UserId,
-          joinInfo: {
-            created_by: "",
-            joined_at: date.toISOString(),
-            method: "owner",
-            token: "",
-          },
-          data: JSON.parse(localStorage.getItem("user")!),
+    expect(members?.members).toEqual([
+      {
+        id: UserId,
+        joinInfo: {
+          created_by: "",
+          joined_at: date.toISOString(),
+          method: "owner",
+          token: "",
         },
-      ],
-    });
+        data: JSON.parse(localStorage.getItem("user")!),
+      },
+    ]);
 
     const structure = await rep.query((tx: ReadTransaction) =>
       tx.get(makeWorkspaceStructureKey())
