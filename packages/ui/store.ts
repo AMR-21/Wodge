@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, devtools } from "zustand/middleware";
 
 import { PublicUserType } from "@repo/data";
 
@@ -16,24 +16,27 @@ interface AppState {
   // setUser: (user: PublicUserType) => void;
 }
 
-export const useAppState = create(
-  persist<AppState>(
-    (set, get) => ({
-      isSidebarOpen: true,
-      toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
-      openTeams: [],
-      setOpenTeams: (teams: string[]) => set({ openTeams: teams }),
-      openDirs: [],
+export const useAppState = create<AppState>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        isSidebarOpen: true,
+        toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
+        openTeams: [],
+        setOpenTeams: (teams: string[]) => set({ openTeams: teams }),
+        openDirs: [],
+        setOpenDirs: (dirs: string[]) => set({ openDirs: dirs }),
+      }),
 
-      setOpenDirs: (dirs: string[]) => set({ openDirs: dirs }),
-
-      // user: get().user,
-      // setUser: (user: PublicUserType) => set({ user }),
-    }),
-
-    {
-      name: "app-state",
-      storage: createJSONStorage(() => localStorage),
-    },
+      {
+        name: "app-state",
+        storage: createJSONStorage(() => localStorage),
+        partialize: (state) => ({
+          isSidebarOpen: state.isSidebarOpen,
+          openTeams: state.openTeams,
+          openDirs: state.openDirs,
+        }),
+      },
+    ),
   ),
 );
