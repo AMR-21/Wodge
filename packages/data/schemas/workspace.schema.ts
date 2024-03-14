@@ -94,7 +94,7 @@ export const WorkspaceSchema = z.object({
     })
     .max(70, "Workspace name is too long")
     .min(1, "Workspace name is required"),
-  avatar: z.optional(z.string().url()).or(z.literal("")),
+  avatar: z.string(),
   createdAt: z.string().datetime(),
   environment: z.enum(["local", "cloud"]),
   settings: z.any().optional(),
@@ -103,7 +103,7 @@ export const WorkspaceSchema = z.object({
 export const ChannelSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70),
-  avatar: z.optional(z.string().url()).or(z.literal("")),
+  avatar: z.string(),
   roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
   type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });

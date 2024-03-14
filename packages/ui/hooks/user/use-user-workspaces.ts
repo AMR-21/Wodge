@@ -1,19 +1,26 @@
 "use client";
 
-import { useCurrentUser } from "./use-current-user";
 import { ReadTransaction } from "replicache";
-import { makeWorkspacesStoreKey } from "@repo/data";
+import { makeWorkspacesStoreKey, users } from "@repo/data";
 import { UserWorkspacesStore } from "@repo/data";
 import { useSubscribe } from "../use-subscribe";
+import { useUserStore } from "../../store/store";
+import { useUser } from "../use-user";
 
 export function useUserWorkspaces() {
-  const user = useCurrentUser();
+  // Make sure user store is created
+  useUser();
 
-  const { snapshot: workspaces } = useSubscribe(
-    user?.store,
+  const userStore = useUserStore();
+
+  const { snapshot: userWorkspaces, isPending } = useSubscribe(
+    userStore,
     (tx: ReadTransaction) =>
-      tx.get<UserWorkspacesStore>(makeWorkspacesStoreKey()),
+      tx.get<UserWorkspacesStore[]>(makeWorkspacesStoreKey()),
+    {
+      dependencies: [userStore],
+    },
   );
 
-  return workspaces;
+  return { userWorkspaces, isPending };
 }

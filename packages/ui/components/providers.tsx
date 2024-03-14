@@ -7,8 +7,7 @@ import {
   PersistQueryClientProvider,
   persistQueryClient,
 } from "@tanstack/react-query-persist-client";
-import { WorkspaceProvider } from "./workspace/workspace-context";
-import { StoreProvider } from "@repo/ui";
+// import { WorkspaceProvider } from "./workspace/workspace-context";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,17 +30,15 @@ const localStoragePersister = createSyncStoragePersister({
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <StoreProvider>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{
-          persister: localStoragePersister,
-          maxAge: Infinity,
-        }}
-      >
-        <WorkspaceProvider>{children}</WorkspaceProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </PersistQueryClientProvider>
-    </StoreProvider>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{
+        persister: localStoragePersister,
+        maxAge: Infinity,
+      }}
+    >
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </PersistQueryClientProvider>
   );
 }

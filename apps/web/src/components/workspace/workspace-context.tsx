@@ -31,7 +31,7 @@ interface WorkspaceContext {
 const Context = createContext<WorkspaceContext | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
-  const data = useCurrentWsData();
+  const data = {};
 
   return (
     <Context.Provider

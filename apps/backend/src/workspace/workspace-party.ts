@@ -120,7 +120,6 @@ export default class WorkspaceParty
       const route = getRoute(req);
       // Check if the request is to create or join the workspace then put user data in the headers
       if (route === "/create") {
-        // req.headers.set("x-user-data", JSON.stringify(session.user));
         return req;
       }
 

@@ -18,7 +18,6 @@ import { produce } from "immer";
 import { teamUpdateRunner } from "./mutators/team-update-runner";
 
 import type { TeamUpdate } from "./mutators/team-update-runner";
-import { createWorkspaceMutation } from "./mutators/create-workspace";
 import { createTeamMutation } from "./mutators/create-team";
 import { deleteTeamMutation } from "./mutators/delete-team";
 
@@ -30,7 +29,11 @@ export type TeamUpdateArgs = {
 export const workspaceMutators = {
   async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
     // 1. Create the workspace
-    const workspace = createWorkspaceMutation(data);
+    const validatedFields = WorkspaceSchema.safeParse(data);
+
+    if (!validatedFields.success) throw new Error("Invalid workspace data");
+
+    const { data: workspace } = validatedFields;
 
     const userData = User.getInstance().data!;
 

@@ -26,6 +26,11 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@repo/data": "workspace:*",
+    "@repo/env": "workspace:*",
+    "@tanstack/query-sync-storage-persister": "^5.27.5",
+    "@tanstack/react-query": "^5.27.5",
+    "@tanstack/react-query-devtools": "^5.27.8",
+    "@tanstack/react-query-persist-client": "^5.27.5",
     "@tanstack/react-table": "^8.13.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -35,7 +40,7 @@
     "lucide-react": "^0.330.0",
     "next": "14.1.0",
     "next-auth": "^5.0.0-beta.4",
-    "partysocket": "^1.0.0",
+    "partysocket": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18",
     "react-hook-form": "^7.50.0",
@@ -62,6 +67,6 @@
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3",
-    "typescript": "^5"
+    "typescript": "^5.3.3"
   }
 }

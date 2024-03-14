@@ -10,10 +10,10 @@ function WorkspacesPage() {
   const router = useRouter();
 
   // Cache the user data on login or sign up
-  const isCached = useCacheUser();
+  // const isCached = useCacheUser();
 
   // To avoid errors of accessing the local storage before it's initialized
-  if (!isCached) return null;
+  // if (!isCached) return null;
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">

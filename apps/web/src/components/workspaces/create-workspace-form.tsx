@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewWorkspaceSchema, type NewWorkspace } from "@repo/data";
+import { ID_LENGTH, NewWorkspaceSchema, type NewWorkspace } from "@repo/data";
+import { env } from "@repo/env";
 
 import {
   Button,
@@ -17,7 +18,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TooltipWrapper,
+  toast,
+  useAppState,
   useCurrentUser,
+  useUser,
+  useUserStore,
+  useWorkspacesStore,
 } from "@repo/ui";
 
 import { HelpCircle } from "lucide-react";
@@ -25,41 +31,99 @@ import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export function CreateWorkspaceForm() {
-  const user = useCurrentUser();
+  const user = useUser();
+  const userStore = useUserStore();
+  const workspacesStore = useWorkspacesStore();
+  const { addWorkspace } = useAppState((s) => s.actions);
   const router = useRouter();
+
+  console.log({ workspacesStore });
+
   const form = useForm<NewWorkspace>({
     resolver: zodResolver(NewWorkspaceSchema),
     defaultValues: {
-      id: nanoid(),
+      avatar: "https://wsdasda",
       name: "",
+      id: nanoid(ID_LENGTH),
       onCloud: false,
     },
   });
+
   const [isPending, startTransition] = useTransition();
 
   async function onSubmit(data: NewWorkspace) {
     startTransition(async () => {
-      await user?.createWorkspace(data);
+      if (data.onCloud) {
+        const res = await fetch(
+          `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${data.id}/create`,
+          {
+            method: "POST",
+            credentials: "include",
+          },
+        );
+
+        if (!res.ok) {
+          toast.error("Failed to create workspace on cloud");
+
+          return;
+        }
+      }
+
+      // Add workspace to user store
+      userStore?.mutate.createWorkspace(data);
+
+      // Create new workspace replicache instance
+      addWorkspace(data.id, data.onCloud ? "cloud" : "local");
+
+      // Init the workspace
+      workspacesStore?.[data.id]?.mutate.initWorkspace({
+        ...data,
+        createdAt: new Date().toISOString(),
+        environment: data.onCloud ? "cloud" : "local",
+        owner: user!.id,
+      });
 
       // for safety and avoiding duplicate ids
       form.setValue("id", nanoid());
 
-      router.push("/workspaces/" + data.id);
+      // router.push("/workspaces/" + data.id);
     });
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="mt-3 flex flex-col gap-4 px-2"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
+          name="avatar"
+          render={({ field }) => (
+            <FormControl>
+              <Input {...field} placeholder="Workspace avatar" type="hidden" />
+            </FormControl>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Workspace name</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Workspace name" />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Workspace name</FormLabel>

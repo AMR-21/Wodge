@@ -2,44 +2,47 @@ import { WorkspaceType } from "@repo/data";
 import { Separator, useWorkspaces } from "@repo/ui";
 import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function WorkspacesList() {
-  const { workspaces, isPending } = useWorkspaces();
+  // const { workspaces, isPending } = useWorkspaces();
   const userWorkspaces = useUserWorkspaces();
 
-  const noUserWorkspaces = !userWorkspaces;
+  // const workspacesLoading = !workspaces && isPending;
+  // const noWorkspacesData = !workspaces && !isPending;
 
-  const workspacesLoading = !workspaces && isPending;
-  const noWorkspacesData = !workspaces && !isPending;
+  // console.log(userWorkspaces);
 
-  if (workspacesLoading)
-    return (
-      <div className="w-full">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <WorkspaceItem.Skeleton key={i} />
-        ))}
-      </div>
-    );
+  return null;
 
-  if ((!workspacesLoading && noUserWorkspaces) || noWorkspacesData)
-    return (
-      <p className="p-5 text-center text-muted-foreground">
-        Join or create workspace to start using Wodge
-      </p>
-    );
+  // if (workspacesLoading)
+  //   return (
+  //     <div className="w-full">
+  //       {Array.from({ length: 4 }).map((_, i) => (
+  //         <WorkspaceItem.Skeleton key={i} />
+  //       ))}
+  //     </div>
+  //   );
 
-  const length = Object.values(workspaces || {}).length;
-  return (
-    <>
-      {workspaces &&
-        Object.values(workspaces).map((workspace: WorkspaceType, i) => {
-          return (
-            <div className="w-full" key={workspace.id}>
-              <WorkspaceItem workspace={workspace} />
-              {i !== length - 1 && <Separator className="bg-border/50" />}
-            </div>
-          );
-        })}
-    </>
-  );
+  // if ((!workspacesLoading && noUserWorkspaces) || noWorkspacesData)
+  //   return (
+  //     <p className="p-5 text-center text-muted-foreground">
+  //       Join or create workspace to start using Wodge
+  //     </p>
+  //   );
+
+  // const length = Object.values(workspaces || {}).length;
+  // return (
+  //   <>
+  //     {workspaces &&
+  //       Object.values(workspaces).map((workspace: WorkspaceType, i) => {
+  //         return (
+  //           <div className="w-full" key={workspace.id}>
+  //             <WorkspaceItem workspace={workspace} />
+  //             {i !== length - 1 && <Separator className="bg-border/50" />}
+  //           </div>
+  //         );
+  //       })}
+  //   </>
+  // );
 }

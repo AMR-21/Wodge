@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth";
 import { Toaster } from "@repo/ui";
 import { ModeToggle } from "@/components/toggle";
+import { Providers } from "@/components/providers";
 
 /** Runtime = edge require in order to make next-auth works with cf-pages */
 export const runtime = "edge";
@@ -25,12 +26,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
-    <SessionProvider session={session}>
-      <html lang="en" className={inter.variable} suppressHydrationWarning>
-        <body className="font-sans">
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body className="font-sans">
+        <Providers>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -39,9 +38,9 @@ export default async function RootLayout({
           >
             {children}
           </ThemeProvider>
-          <Toaster />
-        </body>
-      </html>
-    </SessionProvider>
+        </Providers>
+        <Toaster />
+      </body>
+    </html>
   );
 }

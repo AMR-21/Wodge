@@ -1,4 +1,3 @@
-import { version } from "os";
 import { z } from "zod";
 import { ID_LENGTH } from "./config";
 
@@ -59,7 +58,9 @@ export const PublicUserSchema = UserSchema.pick({
 export type UserWorkspacesStore = {
   workspaceId: string;
   environment: "local" | "cloud";
-}[];
+  workspaceName: string;
+  workspaceAvatar: string;
+};
 
 export type PokeMessage = {
   type: "user" | "workspace" | "channel" | "presence" | "welcome";

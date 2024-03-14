@@ -1,7 +1,6 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { error, ok, unauthorized } from "../../lib/http-utils";
-import { PublicUserType } from "@repo/data";
 import { REPLICACHE_VERSIONS_KEY, makeWorkspaceMembersKey } from "@repo/data";
 import { produce } from "immer";
 
@@ -36,8 +35,6 @@ export async function createWorkspace(
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
   });
-
-  await party.poke();
 
   return ok();
 }

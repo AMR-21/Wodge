@@ -100,5 +100,8 @@ export const checkMembershipEdge = async (
  * Normal version
  */
 export const checkMembership = (userId: string, party: WorkspaceParty) => {
-  return party.workspaceMembers.data.members.some((m) => m.id === userId);
+  return (
+    party.workspaceMembers.data.owner === userId ||
+    party.workspaceMembers.data.members.some((m) => m.id === userId)
+  );
 };

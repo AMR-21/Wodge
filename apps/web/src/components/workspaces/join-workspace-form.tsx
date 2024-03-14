@@ -28,30 +28,25 @@ export function JoinWorkspaceForm() {
 
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const user = useCurrentUser();
+  // const user = useCurrentUser();
 
   async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
-    startTransition(async () => {
-      const res = await fetch(data.url, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        console.error("Failed to join workspace");
-        return;
-      }
-
-      const { workspaceId } = (await res.json()) as { workspaceId: string };
-
-      // Update the user workspaces
-      await user?.store.pull();
-
-      // Ensure that the workspace is create with cloud mode
-      WorkspacesRegistry.getInstance().reInit(workspaceId);
-
-      router.push(`/workspaces/${workspaceId}`);
-    });
+    // startTransition(async () => {
+    //   const res = await fetch(data.url, {
+    //     method: "POST",
+    //     credentials: "include",
+    //   });
+    //   if (!res.ok) {
+    //     console.error("Failed to join workspace");
+    //     return;
+    //   }
+    //   const { workspaceId } = (await res.json()) as { workspaceId: string };
+    //   // Update the user workspaces
+    //   await user?.store.pull();
+    //   // Ensure that the workspace is create with cloud mode
+    //   WorkspacesRegistry.getInstance().reInit(workspaceId);
+    //   router.push(`/workspaces/${workspaceId}`);
+    // });
   }
 
   return (

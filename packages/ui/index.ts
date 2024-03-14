@@ -29,6 +29,8 @@ export * from "./components/user-avatar";
 export * from "./components/user-card";
 export * from "./components/tooltip-wrapper";
 export * from "./components/tag";
+export * from "./components/providers";
+export * from "./components/store-provider";
 
 export * from "./hooks/user/use-cache-user";
 export * from "./hooks/user/use-session-user";
@@ -38,7 +40,8 @@ export * from "./hooks/workspace/use-workspaces";
 export * from "./hooks/workspace/use-current-ws-data";
 export * from "./hooks/ui/use-is-desktop";
 export * from "./hooks/ui/use-workspace-id";
+export * from "./hooks/use-user";
 
-export * from "./store";
+export * from "./store/store";
 
 export * from "./hooks/useUserData";

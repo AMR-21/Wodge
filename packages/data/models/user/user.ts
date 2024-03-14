@@ -40,26 +40,26 @@ export class User {
   private constructor() {
     const userId = this.data?.id;
 
-    if (!userId) throw new Error("User id not found");
+    // if (!userId) throw new Error("User id not found");
 
-    this.store = new Replicache({
-      name: userId,
-      licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-      pusher: replicacheWrapper<PushRequest, PusherResult>(
-        "push",
-        "user",
-        userId
-      ),
-      puller: replicacheWrapper<PullRequest, PullerResult>(
-        "pull",
-        "user",
-        userId
-      ),
-      pullInterval: null,
-      mutators: userMutators,
-    });
+    // this.store = new Replicache({
+    //   name: userId,
+    //   licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
+    //   pusher: replicacheWrapper<PushRequest, PusherResult>(
+    //     "push",
+    //     "user",
+    //     userId
+    //   ),
+    //   puller: replicacheWrapper<PullRequest, PullerResult>(
+    //     "pull",
+    //     "user",
+    //     userId
+    //   ),
+    //   pullInterval: null,
+    //   mutators: userMutators,
+    // });
 
-    this.webSocket = this.#initWebSocket(userId);
+    // this.webSocket = this.#initWebSocket(userId);
   }
 
   /** Static methods */
@@ -93,8 +93,8 @@ export class User {
 
     const validatedFields = PublicUserSchema.safeParse(data);
 
-    if (!validatedFields.success)
-      throw new Error("Invalid user data in local storage");
+    // if (!validatedFields.success)
+    //   throw new Error("Invalid user data in local storage");
 
     return validatedFields.data;
   }

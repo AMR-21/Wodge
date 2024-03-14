@@ -26,7 +26,7 @@ export type Versions = Map<string, number | boolean>;
  * User
  */
 export type ServerWorkspacesStore = {
-  data: UserWorkspacesStore;
+  data: UserWorkspacesStore[];
 } & ReplicacheFields;
 
 export interface UserPartyInterface extends Party {

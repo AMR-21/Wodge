@@ -50,6 +50,8 @@ function runner(party: UserParty) {
         workspacesStore.data.push({
           workspaceId: data.id,
           environment: data.onCloud ? "cloud" : "local",
+          workspaceName: data.name,
+          workspaceAvatar: data.avatar,
         });
 
         workspacesStore.lastModifiedVersion = nextVersion;

@@ -5,7 +5,6 @@ import {
 } from "../../schemas/workspace.schema";
 import { UserWorkspacesStore } from "../../schemas/user.schema";
 import { makeWorkspacesStoreKey } from "../../lib/keys";
-import u from "partysocket/use-ws";
 
 export const userMutators = {
   async createWorkspace(tx: WriteTransaction, data: NewWorkspace) {
@@ -15,24 +14,25 @@ export const userMutators = {
 
     const { data: newWorkspace } = validatedFields;
 
-    const workspacesStore = (await tx.get<UserWorkspacesStore>(
+    const workspacesStore = await tx.get<UserWorkspacesStore[]>(
       makeWorkspacesStoreKey()
-    )) as UserWorkspacesStore;
+    );
+
+    if (!workspacesStore) throw new Error("Workspaces store not found");
 
     // check if workspace already exists
-    if (
-      !!workspacesStore &&
-      workspacesStore?.some((ws) => ws.workspaceId === newWorkspace.id)
-    ) {
+    if (workspacesStore.some((ws) => ws.workspaceId === newWorkspace.id)) {
       throw new Error("Workspace already exists");
     }
 
     // add the new workspace to the store
-    const updatedStore: UserWorkspacesStore = [
-      ...(!!workspacesStore ? workspacesStore : []),
+    const updatedStore: UserWorkspacesStore[] = [
+      ...(workspacesStore ?? []),
       {
         workspaceId: newWorkspace.id,
         environment: newWorkspace.onCloud ? "cloud" : "local",
+        workspaceName: newWorkspace.name,
+        workspaceAvatar: newWorkspace.avatar,
       },
     ];
 

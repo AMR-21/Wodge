@@ -1,15 +1,24 @@
-import { useMemo } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { useWorkspaceId } from "./ui/use-workspace-id";
-import { WorkspacesRegistry } from "@repo/data";
+import { useAppState, useUser, useUserWorkspaces } from "..";
 
 export function useCurrentWorkspace() {
-  // return workspace;
   const workspaceId = useWorkspaceId();
+  const user = useUser();
+  const workspaceStore = useAppState((s) => s.workspaces);
+  const { userWorkspaces } = useUserWorkspaces();
+  const curWorkspace = userWorkspaces?.find(
+    (w) => w.workspaceId === workspaceId,
+  );
+  const { addWorkspace } = useAppState((s) => s.actions);
 
-  const workspace = useMemo(() => {
-    const reg = WorkspacesRegistry.getInstance();
+  useEffect(() => {
+    if (curWorkspace && user && workspaceId && !workspaceStore?.[workspaceId]) {
+      addWorkspace(workspaceId, curWorkspace.environment, user.id);
+    }
+  }, [userWorkspaces, workspaceId, user, workspaceStore]);
 
-    return reg.getWorkspace(workspaceId);
-  }, [workspaceId]);
-  return workspace;
+  return workspaceStore?.[workspaceId];
 }
