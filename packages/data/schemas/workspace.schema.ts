@@ -205,7 +205,7 @@ export const PresenceRequestSchema = z.object({
   connect: z.boolean(),
 });
 
-export type WorkspaceType = z.infer<typeof WorkspaceSchema>;
+export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type Role = z.infer<typeof RoleSchema>;
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;

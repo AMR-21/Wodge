@@ -5,7 +5,7 @@ import {
   WorkspaceMembers,
   WorkspaceSchema,
   WorkspaceStructure,
-  WorkspaceType,
+  Workspace,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
 import {
@@ -13,13 +13,15 @@ import {
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "../../lib/keys";
-import { DrObj, User } from "../..";
-import { produce } from "immer";
-import { teamUpdateRunner } from "./mutators/team-update-runner";
 
-import type { TeamUpdate } from "./mutators/team-update-runner";
+import {
+  teamUpdateRunner,
+  type TeamUpdate,
+} from "./mutators/team-update-runner";
 import { createTeamMutation } from "./mutators/create-team";
 import { deleteTeamMutation } from "./mutators/delete-team";
+import { queryClient } from "../../lib/query-client";
+import { PublicUserType } from "../../schemas/user.schema";
 
 export type TeamUpdateArgs = {
   teamUpdate: TeamUpdate;
@@ -27,7 +29,7 @@ export type TeamUpdateArgs = {
 };
 
 export const workspaceMutators = {
-  async initWorkspace(tx: WriteTransaction, data: WorkspaceType) {
+  async initWorkspace(tx: WriteTransaction, data: Workspace) {
     // 1. Create the workspace
     const validatedFields = WorkspaceSchema.safeParse(data);
 
@@ -35,7 +37,9 @@ export const workspaceMutators = {
 
     const { data: workspace } = validatedFields;
 
-    const userData = User.getInstance().data!;
+    const userData = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!userData) throw new Error("User not found");
 
     // 2. Run the mutation
     await tx.set(makeWorkspaceKey(), workspace);
@@ -64,7 +68,11 @@ export const workspaceMutators = {
     data: Pick<Team, "id" | "name" | "createdBy" | "avatar">
   ) {
     // 1. Create the team
-    const currentUserId = User.getInstance().data.id;
+    // 1. Create the team
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
     const structure = await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
     );
@@ -74,7 +82,7 @@ export const workspaceMutators = {
     const newStructure = createTeamMutation({
       team: data,
       structure,
-      currentUserId,
+      currentUserId: user.id,
     });
 
     // 2. Persist the mutation
@@ -194,7 +202,7 @@ export const workspaceMutators = {
   // async deleteWorkspace(tx: WriteTransaction) {
   //   //1.check that the user deleting is the owner
   //   const deletinguser = User.getInstance().data!;
-  //   const workspace = await tx.get<WorkspaceType>(makeWorkspaceKey());
+  //   const workspace = await tx.get<Workspace>(makeWorkspaceKey());
   //   if (workspace?.owner !== deletinguser.id) {
   //     return;
   //   }

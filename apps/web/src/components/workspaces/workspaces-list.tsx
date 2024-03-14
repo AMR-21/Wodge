@@ -1,4 +1,4 @@
-import { WorkspaceType } from "@repo/data";
+import { Workspace } from "@repo/data";
 import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui/hooks/user/use-user-workspaces";
 
@@ -33,7 +33,7 @@ export function WorkspacesList() {
   // return (
   //   <>
   //     {workspaces &&
-  //       Object.values(workspaces).map((workspace: WorkspaceType, i) => {
+  //       Object.values(workspaces).map((workspace: Workspace, i) => {
   //         return (
   //           <div className="w-full" key={workspace.id}>
   //             <WorkspaceItem workspace={workspace} />

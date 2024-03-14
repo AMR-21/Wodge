@@ -1,4 +1,4 @@
-import { UserWorkspacesStore, WorkspaceType } from "@repo/data";
+import { UserWorkspacesStore, Workspace } from "@repo/data";
 import { ChevronRight, Cloud, Laptop } from "lucide-react";
 import Link from "next/link";
 import {

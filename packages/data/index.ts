@@ -4,10 +4,6 @@
 
 import { DeepReadonlyObject } from "replicache";
 
-export * from "./models/user/user";
-export * from "./models/workspace/workspace";
-export * from "./models/workspace/workspace-registry";
-
 /**
  * End of client modules
  */

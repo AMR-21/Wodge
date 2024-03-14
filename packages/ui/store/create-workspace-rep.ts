@@ -7,12 +7,12 @@ import {
   PusherResult,
   Replicache,
 } from "replicache";
-import { WorkspaceType, replicacheWrapper } from "@repo/data";
+import { Workspace, replicacheWrapper } from "@repo/data";
 
 export function createWorkspaceRep(
   userId: string,
   workspaceId: string,
-  environment: WorkspaceType["environment"],
+  environment: Workspace["environment"],
 ) {
   return new Replicache<typeof workspaceMutators>({
     name: `${userId}-${workspaceId}`,

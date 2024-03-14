@@ -33,7 +33,7 @@ interface RoleUpdateArgs extends WorkspaceRoleMutation {
   curMembers: string[];
 }
 
-export function teamUpdateRunner({
+export function roleUpdateRunner({
   roleUpdate,
   structure,
   roleId,

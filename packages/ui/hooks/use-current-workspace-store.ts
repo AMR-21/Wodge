@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useWorkspaceId } from "./use-workspace-id";
 import { useCurrentUser } from "./use-current-user";
 import { useAppState } from "../store/store";
 import { useUserWorkspaces } from "./use-user-workspaces";
+import { useCurrentWorkspaceId } from "./use-current-workspace-id";
 
 export function useCurrentWorkspaceStore() {
-  const workspaceId = useWorkspaceId();
+  const workspaceId = useCurrentWorkspaceId();
   const user = useCurrentUser();
   const workspaceStore = useAppState((s) => s.workspaces);
   const { userWorkspaces } = useUserWorkspaces();

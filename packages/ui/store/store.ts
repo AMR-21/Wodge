@@ -3,15 +3,13 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 
-import { WorkspaceType } from "@repo/data";
 import { Replicache } from "replicache";
-import { userMutators } from "@repo/data/models/user/user-mutators";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
 import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
 
-type Environment = WorkspaceType["environment"];
+type Environment = Workspace["environment"];
 
 export interface AppState {
   isSidebarOpen: boolean;
@@ -32,6 +30,11 @@ export interface AppState {
       userId: string,
     ) => Replicache<typeof workspaceMutators>;
     connectSocket: (userId: string) => void;
+    getWorkspace: (
+      workspaceId: string,
+      environment: Environment,
+      userId: string,
+    ) => Replicache<typeof workspaceMutators> | void;
   };
 }
 
@@ -65,7 +68,19 @@ export const useAppState = create<AppState>()(
 
             return rep;
           },
+          getWorkspace: (workspaceId, environment, userId) => {
+            if (!workspaceId) return;
+            const workspace = get().workspaces[workspaceId];
 
+            if (!workspace)
+              return get().actions.addWorkspace(
+                workspaceId,
+                environment,
+                userId,
+              );
+
+            return workspace;
+          },
           connectSocket: (userId: string) => {
             if (get().socket) return;
 

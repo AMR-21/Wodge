@@ -7,7 +7,7 @@ import {
   Workspace,
   WorkspaceMembers,
   WorkspaceStructure,
-  WorkspaceType,
+  Workspace,
   WorkspacesRegistry,
 } from "@repo/data";
 import { useCurrentWsData, useUserWorkspaces } from "@repo/ui";
@@ -21,7 +21,7 @@ import PartySocket from "partysocket";
 import { Mutable } from "@/lib/utils";
 
 interface WorkspaceContext {
-  metadata: WorkspaceType;
+  metadata: Workspace;
   members: Mutable<DrObj<WorkspaceMembers>>;
   structure: Mutable<DrObj<WorkspaceStructure>>;
   inviters?: (Pick<Member, "id" | "data"> | undefined)[];

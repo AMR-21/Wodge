@@ -12,7 +12,7 @@ import { ReadTransaction, Replicache, TEST_LICENSE_KEY } from "replicache";
 
 import {
   WorkspaceMembers,
-  WorkspaceType,
+  Workspace,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
 import { UserId } from "../../tests";
@@ -42,7 +42,7 @@ describe("Workspace initialization", () => {
   });
 
   test("Workspace initialization", async () => {
-    const newWorkspace: WorkspaceType = {
+    const newWorkspace: Workspace = {
       id: nanoid(ID_LENGTH),
       name: "Test Workspace",
       owner: UserId,
@@ -56,7 +56,7 @@ describe("Workspace initialization", () => {
     await rep.mutate.initWorkspace(newWorkspace);
 
     const workspace = await rep.query((tx: ReadTransaction) =>
-      tx.get<WorkspaceType>(makeWorkspaceKey())
+      tx.get<Workspace>(makeWorkspaceKey())
     );
 
     expect(workspace).toEqual(newWorkspace);

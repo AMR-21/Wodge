@@ -4,7 +4,7 @@ import {
   UserWorkspacesStore,
   WorkspaceMembers,
   WorkspaceStructure,
-  WorkspaceType,
+  Workspace,
 } from "@repo/data";
 import WorkspaceParty from "./workspace/workspace-party";
 
@@ -36,7 +36,7 @@ export interface UserPartyInterface extends Party {
 /**
  * Workspace
  */
-export type ServerWorkspaceData = { data: WorkspaceType } & ReplicacheFields;
+export type ServerWorkspaceData = { data: Workspace } & ReplicacheFields;
 
 export type ServerWorkspaceMembers = {
   data: WorkspaceMembers;

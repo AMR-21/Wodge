@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useCurrentWorkspace } from "../workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WorkspaceSchema, WorkspaceType } from "@repo/data";
+import { WorkspaceSchema, Workspace } from "@repo/data";
 import {
   Avatar,
   AvatarFallback,
@@ -25,7 +25,7 @@ import { Gate } from "../gate";
 
 export function WorkspaceSettings() {
   const { metadata, workspace } = useCurrentWorkspace();
-  const form = useForm<WorkspaceType>({
+  const form = useForm<Workspace>({
     resolver: zodResolver(WorkspaceSchema.pick({ name: true })),
     defaultValues: {
       name: "",
@@ -36,7 +36,7 @@ export function WorkspaceSettings() {
     if (metadata) form.reset(metadata);
   }, [metadata]);
 
-  async function onSubmit(data: Pick<WorkspaceType, "name">) {
+  async function onSubmit(data: Pick<Workspace, "name">) {
     // await workspace?.changeName(data.name);
   }
 

@@ -1,10 +1,17 @@
 "use client";
 
-import { Session } from "@repo/data";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { createUserRep } from "../store/create-user-rep";
+import { PublicUserType } from "@repo/data";
 import { useAppState } from "../store/store";
+
+type Session = {
+  sessionToken: string;
+  userId: string;
+  expires: string;
+  user: PublicUserType;
+};
 
 export function useCurrentUser() {
   const { connectSocket } = useAppState.getState().actions;
