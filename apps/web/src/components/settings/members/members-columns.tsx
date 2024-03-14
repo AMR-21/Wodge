@@ -1,22 +1,15 @@
 import { Member, PublicUserType } from "@repo/data";
+import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
+import { Header } from "@repo/ui/components/data-table/header";
+
+import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
+import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Badge,
-  Button,
-  Checkbox,
-  DataTableActions,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  Header,
-  TooltipWrapper,
-} from "@repo/ui";
-import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
+} from "@repo/ui/components/ui/avatar";
+import { Checkbox } from "@repo/ui/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Crown, MoreHorizontal } from "lucide-react";
 import { DeepReadonly } from "replicache";
@@ -70,11 +63,11 @@ export function membersColumns({
         return (
           <div className="flex gap-4">
             <Avatar className="h-8 w-8 rounded-md">
-              <AvatarImage
+              {/* <AvatarImage
                 src={member.data.avatar}
                 alt={member.data.displayName}
                 className="rounded-md"
-              />
+              /> */}
               <AvatarFallback className="rounded-md">
                 {member.data.displayName[0]}
               </AvatarFallback>
@@ -142,7 +135,7 @@ export function membersColumns({
                 destructive: true,
               },
             ]}
-          ></DataTableActions>
+          />
         );
       },
     },

@@ -2,18 +2,7 @@ import { useForm } from "react-hook-form";
 import { useCurrentWorkspace } from "../workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WorkspaceSchema, Workspace } from "@repo/data";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-} from "@repo/ui";
+
 import { useEffect } from "react";
 import {
   SettingsContentAction,
@@ -22,6 +11,20 @@ import {
   SettingsContentSection,
 } from "./settings";
 import { Gate } from "../gate";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/components/ui/form";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/ui/avatar";
+import { Input } from "@repo/ui/components/ui/input";
 
 export function WorkspaceSettings() {
   const { metadata, workspace } = useCurrentWorkspace();

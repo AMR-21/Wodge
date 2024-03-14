@@ -7,13 +7,7 @@ import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useUser } from "@repo/ui/hooks/use-user";
-import {
-  useAppState,
-  useUserStore,
-  useWorkspacesStore,
-} from "@repo/ui/store/store";
-import { toast } from "sonner";
+
 import {
   Form,
   FormControl,
@@ -26,12 +20,14 @@ import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 import { Switch } from "@repo/ui/components/ui/switch";
 import { DialogClose } from "@repo/ui/components/ui/dialog";
 import { Button } from "@repo/ui/components/ui/button";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { toast } from "@repo/ui/components/ui/toast";
+import { useActions, useUserStore } from "@repo/ui/store/store-hooks";
 
 export function CreateWorkspaceForm() {
-  const user = useUser();
+  const user = useCurrentUser();
   const userStore = useUserStore();
-  const workspacesStore = useWorkspacesStore();
-  const { addWorkspace } = useAppState((s) => s.actions);
+  const { addWorkspace } = useActions();
   const router = useRouter();
 
   const form = useForm<NewWorkspace>({
@@ -69,14 +65,18 @@ export function CreateWorkspaceForm() {
       userStore?.mutate.createWorkspace(data);
 
       // Create new workspace replicache instance
-      addWorkspace(data.id, data.onCloud ? "cloud" : "local", user.id);
+      const workspace = addWorkspace(
+        data.id,
+        data.onCloud ? "cloud" : "local",
+        user.id,
+      );
 
       // Init the workspace
-      workspacesStore?.[data.id]?.mutate.initWorkspace({
+      workspace.mutate.initWorkspace({
         ...data,
         createdAt: new Date().toISOString(),
         environment: data.onCloud ? "cloud" : "local",
-        owner: user!.id,
+        owner: user.id,
       });
 
       // for safety and avoiding duplicate ids

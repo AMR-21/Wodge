@@ -1,15 +1,5 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Button,
-  ButtonProps,
-  cn,
-  useIsDesktop,
-} from "@repo/ui";
 import { SidebarItem } from "../workspace/sidebar-item";
 import React, {
   Children,
@@ -24,6 +14,15 @@ import { useParams, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
 import { produce } from "immer";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/ui/accordion";
+import { cn } from "@repo/ui/lib/utils";
+import { Button, ButtonProps } from "@repo/ui/components/ui/button";
 
 interface Settings {
   active: string;
@@ -320,8 +319,8 @@ function SettingsContentHeader({
   label,
   description,
 }: {
-  label?: string;
-  description: string;
+  label: string;
+  description?: string;
 }) {
   return (
     <div className="pb-6">

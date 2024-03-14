@@ -9,7 +9,7 @@ import { Mutable } from "@/lib/utils";
 import { DrObj, Member } from "@repo/data";
 import { SettingsSearchInput } from "../settings-search-input";
 import { MembersCombobox } from "../members-combobox";
-import { DataTable } from "@repo/ui";
+import { DataTable } from "@repo/ui/components/data-table/data-table";
 
 export function MembersSettings() {
   const { invites, inviteLink, isPending } = useInvites();

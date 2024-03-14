@@ -8,6 +8,8 @@ import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutator
 import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
+import { userMutators } from "@repo/data/models/user/user-mutators";
+import { Workspace } from "@repo/data";
 
 type Environment = Workspace["environment"];
 

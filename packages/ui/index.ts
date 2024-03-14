@@ -33,7 +33,8 @@ export * from "./components/tag";
 export * from "./hooks/use-current-user";
 export * from "./hooks/use-user-workspaces";
 export * from "./hooks/use-is-desktop";
-export * from "./hooks/use-workspace-id";
+export * from "./hooks/use-current-workspace-id";
 export * from "./hooks/use-current-user";
+export * from "./hooks/use-current-workspace";
 
 export * from "./store/store";

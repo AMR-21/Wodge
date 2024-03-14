@@ -1,24 +1,24 @@
 "use client";
 
+import { ChevronsUpDown, PanelLeft } from "lucide-react";
+import { SidebarItemBtn } from "./sidebar-item-btn";
+import { useCurrentWorkspace } from "./workspace-context";
+import { useParams } from "next/navigation";
+import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
+import { useAppState } from "@repo/ui/store/store";
+import { buttonVariants } from "@repo/ui/components/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  buttonVariants,
-  cn,
-  useCurrentWsData,
-} from "@repo/ui";
-import { ChevronsUpDown, PanelLeft } from "lucide-react";
-import { SidebarItemBtn } from "./sidebar-item-btn";
-import { useAppState } from "@repo/ui";
-import { useCurrentWorkspace } from "./workspace-context";
-import { useParams } from "next/navigation";
+} from "@repo/ui/components/ui/avatar";
 
 export function WorkspaceSwitcher() {
-  const toggleSidebar = useAppState((state) => state.toggleSidebar);
+  const toggleSidebar = useAppState((state) => state.actions.toggleSidebar);
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
 
-  const { metadata } = useCurrentWorkspace();
+  const { workspace } = useCurrentWorkspace();
 
   return (
     <div
@@ -37,12 +37,12 @@ export function WorkspaceSwitcher() {
         role="button"
       >
         <Avatar className="mr-2 h-6 w-6 rounded-md text-xs">
-          <AvatarImage src={metadata?.avatar} />
+          <AvatarImage src={workspace?.avatar} />
           <AvatarFallback className=" rounded-md text-lg uppercase">
-            {metadata?.name[0]}
+            {workspace?.name[0]}
           </AvatarFallback>
         </Avatar>
-        <span className="mr-1 truncate text-sm">{metadata?.name}</span>
+        <span className="mr-1 truncate text-sm">{workspace?.name}</span>
         <ChevronsUpDown className="mr-4 h-3.5 min-h-3.5 w-3.5 min-w-3.5 opacity-60 group-hover:opacity-100" />
 
         <SidebarItemBtn

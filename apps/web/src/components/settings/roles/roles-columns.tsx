@@ -1,17 +1,5 @@
 import { DrObj, Member, Role, Team } from "@repo/data";
-import {
-  Checkbox,
-  ComboboxCell,
-  CommandItem,
-  DataTableActions,
-  DataTableHeaderSelect,
-  DataTableRowSelect,
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  Header,
-  Input,
-} from "@repo/ui";
+
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { ColumnDef } from "@tanstack/react-table";
 import { enableMapSet, produce } from "immer";
@@ -19,6 +7,14 @@ import _ from "lodash";
 import { Check, UserRoundCog } from "lucide-react";
 import * as React from "react";
 import { TeamMembersDialog } from "../teams/team-members-dialog";
+import { DataTableHeaderSelect, DataTableRowSelect } from "@repo/ui/components/data-table/data-table-select";
+import { Input } from "@repo/ui/components/ui/input";
+import { Header } from "@repo/ui/components/data-table/header";
+import { ComboboxCell } from "@repo/ui/components/data-table/combobox-cell";
+import { CommandItem } from "@repo/ui/components/ui/command";
+import { Checkbox } from "@repo/ui/components/ui/checkbox";
+import { Dialog, DialogContent, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
 
 enableMapSet();
 

@@ -1,5 +1,5 @@
 import { Raleway } from "next/font/google";
-import { cn } from "@repo/ui";
+import { cn } from "@repo/ui/lib/utils";
 
 const raleway = Raleway({
   subsets: ["latin"],

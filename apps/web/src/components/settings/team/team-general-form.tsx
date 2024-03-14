@@ -1,29 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DrObj,
-  Team,
-  TeamSchema,
-  User,
-  WORKSPACE_TEAM_ID_LENGTH,
-} from "@repo/data";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  Input,
-  cn,
-  useIsDesktop,
-} from "@repo/ui";
-import { useForm } from "react-hook-form";
+import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
+
+import {  useForm } from "react-hook-form";
 import { SettingsContext } from "../settings";
 import { use, useContext, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 
 export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const { dispatch } = useContext(SettingsContext);
@@ -31,6 +25,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const isAddition = team.id.startsWith("add-");
 
   const isDesktop = useIsDesktop();
+  const user = useCurrentUser()
 
   const form = useForm<DrObj<Team>>({
     resolver: zodResolver(
@@ -40,7 +35,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
       id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team.id,
       name: isAddition ? "" : team.name,
       avatar: isAddition ? "" : team?.avatar,
-      createdBy: isAddition ? User.getInstance().data.id : team.createdBy,
+      createdBy: isAddition ? user?.id : team.createdBy,
     },
   });
 
@@ -49,7 +44,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
       return form.reset({
         ...team,
         id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-        createdBy: User.getInstance().data.id,
+        createdBy: user?.id,
       });
 
     form.reset(team);
@@ -59,7 +54,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
     data: Pick<Team, "id" | "name" | "createdBy" | "avatar">,
   ) {
     if (isAddition) {
-      await workspace?.store.mutate.createTeam(data);
+      // await workspace?.store.mutate.createTeam(data);
       form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
 
       return dispatch({
@@ -68,16 +63,16 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
       });
     }
 
-    await workspace?.store.mutate.updateTeam({
-      teamId: team.id,
-      teamUpdate: {
-        action: "updateInfo",
-        update: {
-          name: data.name,
-          avatar: data.avatar,
-        },
-      },
-    });
+    // await workspace?.store.mutate.updateTeam({
+    //   teamId: team.id,
+    //   teamUpdate: {
+    //     action: "updateInfo",
+    //     update: {
+    //       name: data.name,
+    //       avatar: data.avatar,
+    //     },
+    //   },
+    // });
   }
 
   return (
@@ -89,7 +84,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
           className="flex w-full items-end gap-2"
         >
           <Avatar className="h-8 w-8 rounded-md">
-            <AvatarImage src={form.watch("avatar")} />
+            {/* <AvatarImage src={form.watch("avatar")} /> */}
             <AvatarFallback className="rounded-md capitalize">
               {form.watch("name")?.[0] || ""}
             </AvatarFallback>

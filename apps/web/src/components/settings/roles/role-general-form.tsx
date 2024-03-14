@@ -9,26 +9,18 @@ import {
   WORKSPACE_ROLE_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "@repo/data";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  Input,
-  cn,
-  useIsDesktop,
-} from "@repo/ui";
+
 import { useForm } from "react-hook-form";
 import { SettingsContext } from "../settings";
 import { use, useContext, useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { ColorPicker } from "../color-picker";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 
 export function RoleGeneralForm({ role }: { role: DrObj<Role> }) {
   const { dispatch } = useContext(SettingsContext);

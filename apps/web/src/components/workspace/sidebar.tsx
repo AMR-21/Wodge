@@ -11,11 +11,11 @@ import {
   User2,
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
-import { useAppState } from "@repo/ui";
-import { cn } from "@repo/ui";
+import { cn } from "@repo/ui/lib/utils";
 import { Teamspaces } from "./teamspaces";
 import { UserCard } from "./user-card";
 import { usePathname } from "next/navigation";
+import { useAppState } from "@repo/ui/store/store";
 
 const staticItems = [
   {
@@ -67,8 +67,8 @@ export function Sidebar() {
           ))}
         </ul>
         <ul className="">
-          <Teamspaces />
-          <Teamspaces />
+          {/* <Teamspaces />
+          <Teamspaces /> */}
         </ul>
       </div>
 

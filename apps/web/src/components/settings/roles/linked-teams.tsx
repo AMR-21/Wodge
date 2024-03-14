@@ -1,5 +1,4 @@
 import { DrObj, Member, Team } from "@repo/data";
-import { DataTable, Input } from "@repo/ui";
 import { Mutable } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 import { useTable } from "../use-table";
@@ -7,6 +6,7 @@ import { linkedTeamColumns } from "./linked-teams-columns";
 import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { TeamsCombobox } from "./teams-combobox";
 import { SettingsSearchInput } from "../settings-search-input";
+import { DataTable } from "@repo/ui/components/data-table/data-table";
 
 interface LinkedTeamsProps {
   unLinkTeam: (teamId: string) => void;

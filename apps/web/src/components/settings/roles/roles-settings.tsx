@@ -10,16 +10,16 @@ import {
   WORKSPACE_TEAM_ID_LENGTH,
 } from "@repo/data";
 import { nanoid } from "nanoid";
+
+import { UpdateHandlerProps, useTable } from "../use-table";
+import { rolesColumns } from "./roles-columns";
 import {
-  DataTable,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-  useCurrentUser,
-} from "@repo/ui";
-import { UpdateHandlerProps, useTable } from "../use-table";
-import { rolesColumns } from "./roles-columns";
+} from "@repo/ui/components/ui/tabs";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 export function RolesSettings() {
   const { structure, members, workspace } = useCurrentWorkspace();
@@ -41,8 +41,9 @@ export function RolesSettings() {
         name: "Admin",
         permissions: [],
         members: [],
-        createdBy: user?.data.id || "",
+        createdBy: user?.id || "",
         linkedTeams: [],
+        color: "#123131",
       },
     ] satisfies DrObj<Role>[];
   }, [structure, user]);
@@ -64,7 +65,7 @@ export function RolesSettings() {
 
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
-      <SettingsContentHeader title="Roles settings" />
+      <SettingsContentHeader label="Roles settings" />
       <Tabs>
         <TabsList className="w-full">
           <TabsTrigger className="grow" value="g">

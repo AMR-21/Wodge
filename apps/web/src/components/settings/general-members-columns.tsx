@@ -1,13 +1,9 @@
 import { DrObj, Member } from "@repo/data";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  DataTableActions,
-  DataTableHeaderSelect,
-  DataTableRowSelect,
-  Header,
-} from "@repo/ui";
+import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
+import { DataTableHeaderSelect, DataTableRowSelect } from "@repo/ui/components/data-table/data-table-select";
+import { Header } from "@repo/ui/components/data-table/header";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+
 import { ColumnDef } from "@tanstack/react-table";
 
 interface MembersColumnsProps {

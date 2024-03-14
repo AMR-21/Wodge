@@ -2,19 +2,19 @@ import { Member, Team } from "@repo/data";
 import { DeepReadonlyObject } from "replicache";
 import * as React from "react";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Command,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/ui/popover";
+import { Button } from "@repo/ui/components/ui/button";
+import { Command } from "lucide-react";
+import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui";
+} from "@repo/ui/components/ui/command";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 
 interface TeamsComboboxProps {
   teams: readonly DeepReadonlyObject<Team>[];
@@ -44,7 +44,7 @@ export function TeamsCombobox({ teams, onClick }: TeamsComboboxProps) {
                 className="flex items-center gap-3"
               >
                 <Avatar className="h-8 w-8 rounded-md">
-                  <AvatarImage src={team.avatar} />
+                  {/* <AvatarImage src={team.avatar} /> */}
                   <AvatarFallback>{team.name[0]}</AvatarFallback>
                 </Avatar>
 

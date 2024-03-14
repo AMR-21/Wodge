@@ -1,5 +1,5 @@
 import { Role } from "@repo/data";
-import { Checkbox, Input, Switch } from "@repo/ui";
+import { Switch } from "@repo/ui/components/ui/switch";
 import { number } from "zod";
 
 const defaultPermissions: {

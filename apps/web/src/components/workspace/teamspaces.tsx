@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  cn,
-} from "@repo/ui";
+
 import { SidebarItem } from "./sidebar-item";
 import {
   ChevronRight,
@@ -22,6 +16,12 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/ui/accordion";
+import { cn } from "@repo/ui/lib/utils";
 
 export function Teamspaces({ teams }: { teams: Team[] }) {
   const teamsId = useMemo(() => teams?.map((t) => t.id) || [], [teams]);

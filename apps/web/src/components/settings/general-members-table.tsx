@@ -1,9 +1,10 @@
 import { DrObj, Member } from "@repo/data";
-import { DataTable, Input } from "@repo/ui";
 import { useTable } from "./use-table";
 import { Mutable } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 import { MembersCombobox } from "./members-combobox";
+import { Input } from "@repo/ui/components/ui/input";
+import { DataTable } from "@repo/ui/components/data-table/data-table";
 
 interface MembersTableProps<TData> {
   table: Table<TData>;

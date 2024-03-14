@@ -11,14 +11,7 @@ import {
   Role,
   WORKSPACE_ROLE_ID_LENGTH,
 } from "@repo/data";
-import {
-  Button,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  useCurrentUser,
-} from "@repo/ui";
+
 import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
@@ -28,6 +21,13 @@ import { RoleMembersSettings } from "./role-members-settings";
 import { RoleGeneralForm } from "./role-general-form";
 import { RolePermissions } from "./role-permissions";
 import { LinkedTeams } from "./linked-teams";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/ui/tabs";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 export function RoleSettings() {
   const { activeItemId } = React.useContext(SettingsContext);
@@ -43,7 +43,7 @@ export function RoleSettings() {
         permissions: [],
         members: [],
         linkedTeams: [],
-        createdBy: user?.data.id || "",
+        createdBy: user?.id || "",
         color: BRAND_COLOR,
       },
       {
@@ -51,7 +51,7 @@ export function RoleSettings() {
         name: "",
         permissions: [],
         members: [],
-        createdBy: user?.data.id || "",
+        createdBy: user?.id || "",
         linkedTeams: [],
         color: BRAND_COLOR,
       },

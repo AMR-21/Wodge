@@ -1,18 +1,18 @@
 import * as React from "react";
 import { BRAND_COLOR } from "@repo/data";
-import {
-  Button,
-  ButtonProps,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Separator,
-  cn,
-  inputVariants,
-} from "@repo/ui";
+
 import { useState } from "react";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { Check } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/ui/popover";
+import { cn } from "@repo/ui/lib/utils";
+import { inputVariants } from "@repo/ui/components/ui/input";
+import { Separator } from "@repo/ui/components/ui/separator";
+import { Button, ButtonProps } from "@repo/ui/components/ui/button";
 
 const presetColors = [
   BRAND_COLOR,

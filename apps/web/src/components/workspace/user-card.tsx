@@ -8,7 +8,11 @@ import {
   Wifi,
   LogOut,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/ui/avatar";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 
 function UserCard() {

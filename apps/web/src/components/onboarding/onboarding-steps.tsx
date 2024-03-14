@@ -11,7 +11,7 @@ import {
   StepperContainer,
 } from "@repo/ui/components/ui/stepper";
 import { Loader } from "@repo/ui/components/ui/loader";
-import { DEFAULT_LOGIN_REDIRECT } from "@repo/ui/routes.ts";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export function OnboardingSteps() {
   const { isPending } = useOnboarding();

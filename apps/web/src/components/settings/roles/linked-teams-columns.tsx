@@ -1,14 +1,16 @@
 import { DrObj, Member, Team } from "@repo/data";
 import {
+  DataTableHeaderSelect,
+  DataTableRowSelect,
+} from "@repo/ui/components/data-table/data-table-select";
+import { Header } from "@repo/ui/components/data-table/header";
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Button,
-  DataTableActions,
-  DataTableHeaderSelect,
-  DataTableRowSelect,
-  Header,
-} from "@repo/ui";
+} from "@repo/ui/components/ui/avatar";
+import { Button } from "@repo/ui/components/ui/button";
+
 import { ColumnDef } from "@tanstack/react-table";
 
 export const linkedTeamColumns = (
@@ -32,7 +34,7 @@ export const linkedTeamColumns = (
       return (
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8 rounded-md ">
-            <AvatarImage src={avatar} alt={name} className="rounded-md" />
+            {/* <AvatarImage src={avatar} alt={name} className="rounded-md" /> */}
             <AvatarFallback className="rounded-md capitalize">
               {name?.[0] || ""}
             </AvatarFallback>

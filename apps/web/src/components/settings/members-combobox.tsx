@@ -2,19 +2,24 @@ import { Member } from "@repo/data";
 import { DeepReadonlyObject } from "replicache";
 import * as React from "react";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  PopoverClose,
+} from "@repo/ui/components/ui/popover";
+import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui";
+} from "@repo/ui/components/ui/command";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/ui/avatar";
+import { Button } from "@repo/ui/components/ui/button";
 
 interface MembersComboboxProps {
   members: readonly DeepReadonlyObject<Member>[];

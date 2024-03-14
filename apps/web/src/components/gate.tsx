@@ -1,4 +1,4 @@
-import { useCurrentUser } from "@repo/ui";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useCurrentWorkspace } from "./workspace/workspace-context";
 import { Role, grant } from "@repo/data";
 
@@ -25,7 +25,7 @@ export function Gate({
     structure?.roles.find((r) => r.id === roleId),
   ) as Role[];
 
-  const isOwner = members.owner === user?.data?.id;
+  const isOwner = members.owner === user?.id;
 
   const hasPermission = grant(roles, permissions);
 

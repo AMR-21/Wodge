@@ -1,9 +1,14 @@
 "use client";
 import Link from "next/link";
 import { Hash, LucideIcon } from "lucide-react";
-import { cn, buttonVariants, ButtonProps, Button } from "@repo/ui";
+import {
+  buttonVariants,
+  ButtonProps,
+  Button,
+} from "@repo/ui/components/ui/button";
 import { forwardRef } from "react";
 import { IconType } from "react-icons/lib";
+import { cn } from "@repo/ui/lib/utils";
 
 export interface SidebarItemProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;

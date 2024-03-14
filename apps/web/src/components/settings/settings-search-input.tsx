@@ -1,4 +1,4 @@
-import { Input } from "@repo/ui";
+import { Input } from "@repo/ui/components/ui/input";
 import { Table } from "@tanstack/react-table";
 
 interface SettingsSearchInputProps<TData> {

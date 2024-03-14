@@ -19,7 +19,7 @@ export function WorkspaceItem({
     <Link href={"/workspaces/" + workspace.workspaceId} className="w-full">
       <div className="group flex w-full shrink-0 items-center gap-2 overflow-hidden py-3 pl-4 transition-all hover:bg-background dark:hover:bg-surface">
         <Avatar className="h-10 w-10 rounded-md">
-          <AvatarImage src={workspace.workspaceAvatar} />
+          {/* <AvatarImage src={workspace.workspaceAvatar} /> */}
           <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
             {workspace.workspaceName?.[0]}
           </AvatarFallback>

@@ -1,4 +1,3 @@
-import { cn, useIsDesktop } from "@repo/ui";
 import { useContext } from "react";
 import {
   SettingsContext,
@@ -7,7 +6,9 @@ import {
 import { Team } from "@repo/data";
 import { SidebarItem } from "../../workspace/sidebar-item";
 import { is } from "drizzle-orm";
-import { useCurrentWorkspace } from "../../workspace/workspace-context";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
+import { cn } from "@repo/ui/lib/utils";
 
 export function TeamsSidebar() {
   const isDesktop = useIsDesktop();

@@ -1,5 +1,4 @@
 import { DrObj, Member, Team } from "@repo/data";
-import { DataTable, Input } from "@repo/ui";
 import { DeepReadonlyObject } from "replicache";
 import { teamMembersColumns } from "./teams-members-columns";
 import { Mutable } from "@/lib/utils";
@@ -8,6 +7,8 @@ import { MembersCombobox } from "../members-combobox";
 import { Table } from "@tanstack/react-table";
 import * as React from "react";
 import { useTable } from "../use-table";
+import { Input } from "@repo/ui/components/ui/input";
+import { DataTable } from "@repo/ui/components/data-table/data-table";
 interface TeamMembersDialogProps {
   members: readonly DrObj<Member>[];
   creatorId: string;
