@@ -1,15 +1,15 @@
 "use client";
 
 import { ReadTransaction } from "replicache";
-import { makeWorkspacesStoreKey, users } from "@repo/data";
+import { makeWorkspacesStoreKey } from "@repo/data";
 import { UserWorkspacesStore } from "@repo/data";
-import { useSubscribe } from "../use-subscribe";
-import { useUserStore } from "../../store/store";
-import { useUser } from "../use-user";
+import { useSubscribe } from "./use-subscribe";
+import { useCurrentUser } from "./use-current-user";
+import { useUserStore } from "../store/store-hooks";
 
 export function useUserWorkspaces() {
   // Make sure user store is created
-  useUser();
+  useCurrentUser();
 
   const userStore = useUserStore();
 

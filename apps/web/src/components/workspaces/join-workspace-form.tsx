@@ -1,22 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { JoinWorkspaceSchema, WorkspacesRegistry } from "@repo/data";
-import {
-  Button,
-  DialogClose,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  Input,
-  useCurrentUser,
-  useUserWorkspaces,
-} from "@repo/ui";
+
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { DialogClose } from "@repo/ui/components/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
 
 export function JoinWorkspaceForm() {
   const form = useForm<z.infer<typeof JoinWorkspaceSchema>>({

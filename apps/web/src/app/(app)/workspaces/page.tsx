@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, UserCard, useUserData } from "@repo/ui";
 import { useRouter } from "next/navigation";
-import { useCacheUser } from "@repo/ui";
 import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog";
 import { WorkspacesList } from "@/components/workspaces/workspaces-list";
+import { Button } from "@repo/ui/components/ui/button";
+import { UserCard } from "@repo/ui/components/user-card";
 
 function WorkspacesPage() {
   const router = useRouter();

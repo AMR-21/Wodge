@@ -3,7 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "index.ts",
+  "exports": {
+    "./components/*": "./components/*.tsx",
+    "./hooks/*": "./hooks/*.ts",
+    "./store/*": "./store/*.ts",
+    "./lib/*": "./lib/*.ts"
+  },
+  "types": "./index.ts",
   "scripts": {
     "add:comp": "pnpm dlx shadcn-ui add"
   },
@@ -38,6 +44,7 @@
     "embla-carousel-react": "8.0.0-rc22",
     "immer": "^10.0.3",
     "lucide-react": "^0.330.0",
+    "nanoid": "^5.0.6",
     "next": "14.1.0",
     "next-auth": "^5.0.0-beta.4",
     "partysocket": "^1.0.1",

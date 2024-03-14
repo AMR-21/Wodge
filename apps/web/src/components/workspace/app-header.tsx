@@ -1,15 +1,14 @@
 "use client";
-
-import { useAppState } from "@repo/ui";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { PanelLeft } from "lucide-react";
-import { cn } from "@repo/ui";
 import { useSubscribe } from "replicache-react";
+import { useAppState } from "@repo/ui/store/store";
+import { cn } from "@repo/ui/lib/utils";
 
 export function AppHeader() {
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
-  const toggleSidebar = useAppState((state) => state.toggleSidebar);
+  const toggleSidebar = useAppState((state) => state.actions.toggleSidebar);
   useSubscribe;
 
   return (

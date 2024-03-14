@@ -5,19 +5,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useTransition } from "react";
-
 import {
-  Button,
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  Input,
-  Loader,
-  toast,
-} from "@repo/ui";
-import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
+} from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { Loader } from "@repo/ui/components/ui/loader";
+import { toast } from "@repo/ui/components/ui/toast";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 const EmailFormSchema = z.object({
   email: z.string().email(),

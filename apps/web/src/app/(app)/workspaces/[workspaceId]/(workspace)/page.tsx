@@ -33,7 +33,7 @@ import { RiDraggable } from "react-icons/ri";
 import { clear } from "console";
 import { Teamspaces } from "@/components/workspace/teamspaces";
 import { Dir } from "@/components/workspace/dir";
-import { Accordion, useAppState } from "@repo/ui";
+import { useAppState } from "@repo/ui/store/store";
 
 const channels = [
   {
@@ -78,6 +78,7 @@ const teams: Team[] = [
             id: "1c1",
             name: "Channel 1",
             roles: [],
+            avatar: "https://i.imgur.com/7V9b0e3.jpg",
             type: "text",
           },
         ],
@@ -90,6 +91,7 @@ const teams: Team[] = [
             id: "1c2",
             name: "Channel 2",
             roles: [],
+            avatar: "https://i.imgur.com/7V9b0e3.jpg",
             type: "text",
           },
         ],
@@ -111,6 +113,7 @@ const teams: Team[] = [
             id: "2c1",
             name: "Channel 1",
             roles: [],
+            avatar: "https://i.imgur.com/7V9b0e3.jpg",
             type: "text",
           },
         ],
@@ -124,6 +127,7 @@ const teams: Team[] = [
             name: "Channel 2",
             roles: [],
             type: "text",
+            avatar: "https://i.imgur.com/7V9b0e3.jpg",
           },
         ],
       },
@@ -142,9 +146,9 @@ export default function App() {
   const teamsId = useMemo(() => teams.map((t) => t.id), [teams]);
 
   const openDirs = useAppState((s) => s.openDirs);
-  const setOpenDirs = useAppState((s) => s.setOpenDirs);
+  const setOpenDirs = useAppState((s) => s.actions.setOpenDirs);
   const openTeams = useAppState((s) => s.openTeams);
-  const setOpenTeams = useAppState((s) => s.setOpenTeams);
+  const setOpenTeams = useAppState((s) => s.actions.setOpenTeams);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

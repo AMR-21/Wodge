@@ -1,15 +1,16 @@
 import Link from "next/link";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  Separator,
-} from "@repo/ui";
+
 import { EmailForm } from "./email-form";
 import { OAuth } from "./oauth";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/ui/card";
+import { Separator } from "@repo/ui/components/ui/separator";
 
 export function LoginWrapper() {
   return (

@@ -1,18 +1,18 @@
+import { JoinWorkspaceForm } from "./join-workspace-form";
+import { CreateWorkspaceForm } from "./create-workspace-form";
 import {
-  Button,
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
+} from "@repo/ui/components/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
+import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@repo/ui";
-import { JoinWorkspaceForm } from "./join-workspace-form";
-import { CreateWorkspaceForm } from "./create-workspace-form";
+} from "@repo/ui/components/ui/tabs";
 
 export function AddWorkspaceDialog() {
   return (

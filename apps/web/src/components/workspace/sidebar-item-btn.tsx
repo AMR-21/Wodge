@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Button, ButtonProps, cn } from "@repo/ui";
 import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
+import { Button, ButtonProps } from "@repo/ui/components/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 
 interface SidebarItemBtnProps extends ButtonProps {
   Icon?: LucideIcon | IconType;

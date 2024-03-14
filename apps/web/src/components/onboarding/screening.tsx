@@ -1,12 +1,10 @@
+import { Logo } from "../logo";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui";
-import { Logo } from "../logo";
+} from "@repo/ui/components/ui/card";
 
 function Wrapper({
   title,

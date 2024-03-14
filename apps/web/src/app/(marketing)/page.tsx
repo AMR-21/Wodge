@@ -1,12 +1,11 @@
 "use client";
 
 import { makeWorkspacesStoreKey } from "@repo/data";
-import { useAppState, useUser } from "@repo/ui";
 import { ReadTransaction } from "replicache";
 import { useSubscribe } from "replicache-react";
 
 function Home() {
-  const user = useUser();
+  // const user = useUser();
 
   // const data = useSubscribe(
   //   useAppState((s) => s.userStore),
@@ -14,7 +13,7 @@ function Home() {
   // );
 
   // console.log(data);
-  console.log(user);
+  // console.log(user);
   return <div>Marketing omar</div>;
 }
 

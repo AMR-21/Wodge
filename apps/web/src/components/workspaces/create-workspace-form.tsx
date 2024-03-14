@@ -2,35 +2,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ID_LENGTH, NewWorkspaceSchema, type NewWorkspace } from "@repo/data";
 import { env } from "@repo/env";
 
-import {
-  Button,
-  DialogClose,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  Input,
-  Switch,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-  TooltipWrapper,
-  toast,
-  useAppState,
-  useCurrentUser,
-  useUser,
-  useUserStore,
-  useWorkspacesStore,
-} from "@repo/ui";
-
 import { HelpCircle } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { useUser } from "@repo/ui/hooks/use-user";
+import {
+  useAppState,
+  useUserStore,
+  useWorkspacesStore,
+} from "@repo/ui/store/store";
+import { toast } from "sonner";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
+import { Switch } from "@repo/ui/components/ui/switch";
+import { DialogClose } from "@repo/ui/components/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
 
 export function CreateWorkspaceForm() {
   const user = useUser();
@@ -38,8 +33,6 @@ export function CreateWorkspaceForm() {
   const workspacesStore = useWorkspacesStore();
   const { addWorkspace } = useAppState((s) => s.actions);
   const router = useRouter();
-
-  console.log({ workspacesStore });
 
   const form = useForm<NewWorkspace>({
     resolver: zodResolver(NewWorkspaceSchema),
@@ -54,6 +47,7 @@ export function CreateWorkspaceForm() {
   const [isPending, startTransition] = useTransition();
 
   async function onSubmit(data: NewWorkspace) {
+    if (!user) return;
     startTransition(async () => {
       if (data.onCloud) {
         const res = await fetch(
@@ -75,7 +69,7 @@ export function CreateWorkspaceForm() {
       userStore?.mutate.createWorkspace(data);
 
       // Create new workspace replicache instance
-      addWorkspace(data.id, data.onCloud ? "cloud" : "local");
+      addWorkspace(data.id, data.onCloud ? "cloud" : "local", user.id);
 
       // Init the workspace
       workspacesStore?.[data.id]?.mutate.initWorkspace({

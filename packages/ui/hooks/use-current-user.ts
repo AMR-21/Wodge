@@ -1,22 +1,12 @@
 "use client";
 
-import { Session, replicacheWrapper } from "@repo/data";
+import { Session } from "@repo/data";
 import { useQuery } from "@tanstack/react-query";
-import { useAppState } from "..";
-import {
-  PullRequest,
-  PullerResult,
-  PushRequest,
-  PusherResult,
-  Replicache,
-} from "replicache";
-import { userMutators } from "@repo/data/models/user/user-mutators";
-import { env } from "@repo/env";
 import { useEffect } from "react";
-import { create } from "domain";
 import { createUserRep } from "../store/create-user-rep";
+import { useAppState } from "../store/store";
 
-export function useUser() {
+export function useCurrentUser() {
   const { connectSocket } = useAppState.getState().actions;
   const { data, isPending } = useQuery({
     queryKey: ["user"],

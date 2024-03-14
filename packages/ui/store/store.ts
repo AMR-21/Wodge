@@ -1,20 +1,12 @@
 "use client";
 
-import { create, createStore } from "zustand";
+import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 
-import { PokeMessage, WorkspaceType, replicacheWrapper } from "@repo/data";
-import {
-  PullRequest,
-  PullerResult,
-  PushRequest,
-  PusherResult,
-  Replicache,
-} from "replicache";
+import { WorkspaceType } from "@repo/data";
+import { Replicache } from "replicache";
 import { userMutators } from "@repo/data/models/user/user-mutators";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
-import { env } from "@repo/env";
-import { useUser } from "../hooks/use-user";
 import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
@@ -77,13 +69,10 @@ export const useAppState = create<AppState>()(
           connectSocket: (userId: string) => {
             if (get().socket) return;
 
-            const socket = createSocket(userId);
-
-            set({ socket });
+            set({ socket: createSocket(userId) });
           },
         },
       }),
-
       {
         name: "app-state",
         storage: createJSONStorage(() => localStorage),
@@ -96,54 +85,3 @@ export const useAppState = create<AppState>()(
     ),
   ),
 );
-
-export const useUserStore = () => {
-  // make sure user store is created
-  useUser();
-  return useAppState((s) => s.userStore);
-};
-export const useWorkspacesStore = () => useAppState((s) => s.workspaces);
-
-export const useActions = () => useAppState((s) => s.actions);
-
-export const useWorkspaceStore = (
-  workspaceId: string,
-  environment: Environment,
-  userId: string,
-) => {
-  const workspaces = useAppState((s) => s.workspaces);
-  const { addWorkspace } = useAppState().actions;
-
-  if (!workspaces || !workspaces[workspaceId]) {
-    addWorkspace(workspaceId, environment, userId);
-  }
-
-  return workspaces?.[workspaceId];
-};
-
-export function createAppState() {
-  return createStore<AppState>()((set, get) => ({
-    isSidebarOpen: true,
-    openTeams: [],
-    openDirs: [],
-    userStore: undefined,
-    workspaces: {},
-
-    actions: {
-      setOpenTeams: (teams: string[]) => set({ openTeams: teams }),
-      setOpenDirs: (dirs: string[]) => set(() => ({ openDirs: dirs })),
-      toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
-      addWorkspace: (workspaceId, environment, userId) => {
-        if (get().workspaces?.[workspaceId] !== undefined)
-          get().workspaces?.[workspaceId]?.close();
-
-        return set({
-          workspaces: {
-            ...get().workspaces,
-            [workspaceId]: createWorkspaceRep(userId, workspaceId, environment),
-          },
-        });
-      },
-    },
-  }));
-}

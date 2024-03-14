@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui";
+} from "@repo/ui/components/ui/card";
 import { CompleteProfileForm } from "./complete-profile-form";
 
 export function CompleteProfileWrapper() {

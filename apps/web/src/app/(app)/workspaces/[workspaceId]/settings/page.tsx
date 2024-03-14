@@ -16,7 +16,6 @@ import { TeamSettings } from "@/components/settings/team/team-settings";
 import { TeamsSidebar } from "@/components/settings/team/teams-sidebar";
 
 import { WorkspaceSettings } from "@/components/settings/workspace-settings";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {

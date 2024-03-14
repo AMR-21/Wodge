@@ -5,6 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { PublicUserType, UpdateUserSchema, updateProfile } from "@repo/data";
+import { useOnboarding } from "./onboarding-context";
+import { User } from "@repo/data";
+import { useStepper } from "@repo/ui/components/ui/stepper";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -12,16 +17,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  Input,
-  UserAvatar,
-  toast,
-  useStepper,
-} from "@repo/ui";
-
-import { PublicUserType, UpdateUserSchema } from "@repo/data";
-import { updateProfile } from "@/actions/user-actions";
-import { useOnboarding } from "./onboarding-context";
-import { User } from "@repo/data";
+} from "@repo/ui/components/ui/form";
+import { UserAvatar } from "@repo/ui/components/user-avatar";
+import { Input } from "@repo/ui/components/ui/input";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();

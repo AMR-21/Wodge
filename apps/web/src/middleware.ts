@@ -3,7 +3,7 @@ import {
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
-} from "../routes";
+} from "./routes";
 import { auth } from "@/lib/auth";
 
 export default auth((req) => {

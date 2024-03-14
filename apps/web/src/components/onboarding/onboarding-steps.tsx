@@ -1,11 +1,17 @@
 "use client";
 
-import { Loader, NextBtn, Step, Stepper, StepperContainer } from "@repo/ui";
 import { Outro, Welcome } from "./screening";
 import { CompleteProfileWrapper } from "./complete-profile-wrapper";
 import { useOnboarding } from "./onboarding-context";
 import Link from "next/link";
-import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
+import {
+  NextBtn,
+  Step,
+  Stepper,
+  StepperContainer,
+} from "@repo/ui/components/ui/stepper";
+import { Loader } from "@repo/ui/components/ui/loader";
+import { DEFAULT_LOGIN_REDIRECT } from "@repo/ui/routes.ts";
 
 export function OnboardingSteps() {
   const { isPending } = useOnboarding();
