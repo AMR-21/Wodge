@@ -18,10 +18,8 @@ export const userMutators = {
       makeWorkspacesStoreKey()
     );
 
-    if (!workspacesStore) throw new Error("Workspaces store not found");
-
     // check if workspace already exists
-    if (workspacesStore.some((ws) => ws.workspaceId === newWorkspace.id)) {
+    if (workspacesStore?.some((ws) => ws.workspaceId === newWorkspace.id)) {
       throw new Error("Workspace already exists");
     }
 

@@ -66,7 +66,9 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
     if (connections === 0)
       await this.handlePresence(
-        this.workspacesStore.data.map((ws) => ws.workspaceId, false)
+        this.workspacesStore.data
+          .filter((ws) => ws.environment === "cloud")
+          .map((ws) => ws.workspaceId, false)
       );
   }
 
