@@ -2,7 +2,6 @@
 
 import { ChevronsUpDown, PanelLeft } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { useCurrentWorkspace } from "./workspace-context";
 import { useParams } from "next/navigation";
 import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { useAppState } from "@repo/ui/store/store";
@@ -13,6 +12,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function WorkspaceSwitcher() {
   const toggleSidebar = useAppState((state) => state.actions.toggleSidebar);
@@ -37,8 +37,8 @@ export function WorkspaceSwitcher() {
         role="button"
       >
         <Avatar className="mr-2 h-6 w-6 rounded-md text-xs">
-          <AvatarImage src={workspace?.avatar} />
-          <AvatarFallback className=" rounded-md text-lg uppercase">
+          {/* <AvatarImage src={workspace?.avatar} /> */}
+          <AvatarFallback className=" rounded-md text-base uppercase">
             {workspace?.name[0]}
           </AvatarFallback>
         </Avatar>

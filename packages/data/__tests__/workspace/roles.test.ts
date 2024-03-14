@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { createTestRole, createTestStructure } from "../utils";
-import { UserId } from "../../tests";
+import { UserId } from "../tests";
 import { WORKSPACE_ROLE_ID_LENGTH } from "../..";
 
 import { nanoid } from "nanoid";

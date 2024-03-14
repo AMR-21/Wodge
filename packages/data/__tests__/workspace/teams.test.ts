@@ -1,4 +1,4 @@
-import { UserId } from "../../tests";
+import { UserId } from "../tests";
 import { createTestStructure, createTestTeam } from "../utils";
 import { createTeamMutation } from "../../models/workspace/mutators/create-team";
 import { describe, expect, test } from "vitest";

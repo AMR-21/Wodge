@@ -1,12 +1,13 @@
 import { nanoid } from "nanoid";
 import {
   BRAND_COLOR,
+  Channel,
   Role,
   Team,
   WORKSPACE_TEAM_ID_LENGTH,
   WorkspaceStructure,
 } from "..";
-import { UserId } from "../tests";
+import { UserId } from "./tests";
 
 export function createTestTeam(data?: Partial<Team>) {
   const newTeam: Team = {
@@ -33,6 +34,18 @@ export function createTestRole(data?: Partial<Role>) {
     ...data,
   };
   return newTeam;
+}
+
+export function createTestChannel(data?: Partial<Channel>) {
+  const channel: Channel = {
+    id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+    name: "Test Channel",
+    type: "text",
+    roles: [],
+    avatar: "",
+    ...data,
+  };
+  return channel;
 }
 
 export function createTestStructure(data?: Partial<WorkspaceStructure>) {

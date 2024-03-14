@@ -15,7 +15,7 @@ import {
   Workspace,
   defaultWorkspaceStructure,
 } from "../../schemas/workspace.schema";
-import { UserId } from "../../tests";
+import { UserId } from "../tests";
 import { nanoid } from "nanoid";
 import { ID_LENGTH } from "../../schemas/config";
 import {
@@ -48,6 +48,7 @@ describe("Workspace initialization", () => {
       owner: UserId,
       environment: "local",
       createdAt: new Date().toISOString(),
+      avatar: "",
     };
 
     const date = new Date();

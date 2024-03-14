@@ -32,7 +32,7 @@ export function Teamspaces({ teams }: { teams: Team[] }) {
         <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
           <ul>
             {teams?.map((team) => (
-              <SortableTeamSpace key={team.id} team={team} />
+              <SortableTeamspace key={team.id} team={team} />
             ))}
           </ul>
         </SortableContext>
@@ -42,8 +42,7 @@ export function Teamspaces({ teams }: { teams: Team[] }) {
 }
 
 // Teamspace
-
-function SortableTeamSpace({ team }: { team: Team }) {
+function SortableTeamspace({ team }: { team: Team }) {
   const {
     attributes,
     listeners,
@@ -52,7 +51,12 @@ function SortableTeamSpace({ team }: { team: Team }) {
     transition,
     isDragging,
     activeIndex,
-  } = useSortable({ id: team.id });
+  } = useSortable({
+    id: team.id,
+    data: {
+      type: "team",
+    },
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -63,7 +67,7 @@ function SortableTeamSpace({ team }: { team: Team }) {
     <AccordionItem value={team.id}>
       <AccordionTrigger style={style} {...listeners} {...attributes} asChild>
         <div>
-          <TeamSpace
+          <Teamspace
             team={team}
             activeIndex={activeIndex}
             isDragging={isDragging}
@@ -80,7 +84,7 @@ interface DraggableProps {
   isDragging: boolean;
 }
 
-const TeamSpace = React.forwardRef<
+export const Teamspace = React.forwardRef<
   HTMLLIElement,
   { team: Team } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
 >(({ team, activeIndex, isDragging, ...props }, ref) => {
@@ -103,3 +107,5 @@ const TeamSpace = React.forwardRef<
     </li>
   );
 });
+
+Teamspace.displayName = "Teamspace";
