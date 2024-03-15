@@ -211,6 +211,7 @@ export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
 export type Tag = z.infer<typeof TagSchema>;
+export type Dir = z.infer<typeof DirSchema>;
 
 export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;

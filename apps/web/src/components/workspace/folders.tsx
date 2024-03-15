@@ -23,25 +23,26 @@ import {
   AccordionTrigger,
 } from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
-import { Directories } from "./folders";
+import { Channels } from "./channels";
 import { useAtom, useAtomValue } from "jotai";
 import {
-  isDraggingTeamAtom,
-  tempOpenTeamsAtom,
+  isDraggingFolderAtom,
+  tempOpenDirsAtom,
 } from "@/app/(app)/workspaces/[workspaceId]/(workspace)/atoms";
+import { DndContext } from "@dnd-kit/core";
 
-export function Teamspaces({ teams }: { teams: Team[] }) {
-  const teamsId = useMemo(() => teams?.map((t) => t.id) || [], [teams]);
-  const [openTeams, setOpenTeams] = useAtom(tempOpenTeamsAtom);
-  const isDraggingTeam = useAtomValue(isDraggingTeamAtom);
+export function Directories({ dirs, teamId }: { dirs: Dir[]; teamId: string }) {
+  const dirsIds = useMemo(() => dirs?.map((d) => d.id) || [], [dirs]);
+
+  const [openDirs, setOpenDirs] = useAtom(tempOpenDirsAtom);
 
   return (
-    <div className="h-full min-h-full shrink-0">
-      <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}>
-        <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
-          <ul>
-            {teams?.map((team) => (
-              <SortableTeamspace key={team.id} team={team} />
+    <div className="h-full">
+      <Accordion type="multiple" value={openDirs} onValueChange={setOpenDirs}>
+        <SortableContext items={dirsIds} strategy={verticalListSortingStrategy}>
+          <ul className="">
+            {dirs?.map((dir) => (
+              <SortableDirectory key={dir.id} dir={dir} teamId={teamId} />
             ))}
           </ul>
         </SortableContext>
@@ -51,7 +52,7 @@ export function Teamspaces({ teams }: { teams: Team[] }) {
 }
 
 // Teamspace
-function SortableTeamspace({ team }: { team: Team }) {
+function SortableDirectory({ dir, teamId }: { dir: Dir; teamId: string }) {
   const {
     attributes,
     listeners,
@@ -60,14 +61,16 @@ function SortableTeamspace({ team }: { team: Team }) {
     transition,
     isDragging,
     activeIndex,
+    isOver,
   } = useSortable({
-    id: team.id,
+    id: dir.id,
     data: {
-      type: "team",
+      type: "folder",
+      teamId: teamId,
     },
   });
 
-  const isDraggingTeam = useAtomValue(isDraggingTeamAtom);
+  const isDraggingFolder = useAtomValue(isDraggingFolderAtom);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -75,21 +78,22 @@ function SortableTeamspace({ team }: { team: Team }) {
   };
 
   return (
-    <AccordionItem value={team.id}>
+    <AccordionItem value={dir.id}>
       <AccordionTrigger style={style} {...listeners} {...attributes} asChild>
         <div>
-          <Teamspace
-            team={team}
+          <Directory
+            directory={dir}
             activeIndex={activeIndex}
             isDragging={isDragging}
+            isOver={isOver}
             ref={setNodeRef}
           />
         </div>
       </AccordionTrigger>
       <AccordionContent
-        className={cn("pl-3 transition-all", isDraggingTeam && "hidden")}
+        className={cn("pl-3 transition-all", isDraggingFolder && "hidden")}
       >
-        <Directories teamId={team.id} dirs={team.dirs} />
+        <Channels teamId={teamId} channels={dir.channels} folderId={dir.id} />
       </AccordionContent>
     </AccordionItem>
   );
@@ -98,12 +102,13 @@ function SortableTeamspace({ team }: { team: Team }) {
 interface DraggableProps {
   activeIndex?: number;
   isDragging: boolean;
+  isOver: boolean;
 }
 
-export const Teamspace = React.forwardRef<
+export const Directory = React.forwardRef<
   HTMLLIElement,
-  { team: Team } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
->(({ team, activeIndex, isDragging, ...props }, ref) => {
+  { directory: Dir } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
+>(({ directory, activeIndex, isOver, isDragging, ...props }, ref) => {
   return (
     <li ref={ref} className="group flex grow items-center" {...props}>
       <GripVertical
@@ -114,8 +119,9 @@ export const Teamspace = React.forwardRef<
       />
       <SidebarItem
         aria-disabled={isDragging}
-        label={team.name}
+        label={directory.name}
         Icon={Component}
+        className={cn(isOver && "text-red-500")}
       >
         <ChevronRight className=" ml-1.5 h-3.5 w-3.5 min-w-3.5 max-w-3.5 transition-transform group-data-[state=open]:rotate-90" />
         <SidebarItemBtn Icon={MoreHorizontal} className="-my-1 ml-auto" />
@@ -124,4 +130,4 @@ export const Teamspace = React.forwardRef<
   );
 });
 
-Teamspace.displayName = "Teamspace";
+Directory.displayName = "Directory";
