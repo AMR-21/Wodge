@@ -9,13 +9,13 @@ import {
 interface CreateTeamArgs {
   channel: Channel;
   teamId: string;
-  dirId: string;
+  folderId: string;
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
 export function createChannelMutation({
   channel,
-  dirId,
+  folderId,
   teamId,
   structure,
 }: CreateTeamArgs) {
@@ -24,7 +24,8 @@ export function createChannelMutation({
     id: true,
     name: true,
     avatar: true,
-    roles: true,
+    editRoles: true,
+    viewRoles: true,
     type: true,
   }).safeParse(channel);
 
@@ -35,7 +36,7 @@ export function createChannelMutation({
 
   const newStructure = produce(structure, (draft) => {
     const team = draft.teams.find((t) => t.id === teamId);
-    const der = team?.dirs.find((d) => d.id === dirId);
+    const der = team?.folders.find((f) => f.id === folderId);
     der?.channels.push(newChannel);
   });
   return newStructure;

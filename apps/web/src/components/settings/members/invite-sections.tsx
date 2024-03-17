@@ -1,19 +1,15 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Skeleton,
-  toast,
-  useWorkspaceId,
-} from "@repo/ui";
+
 import { useInvites } from "./use-invites";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { env } from "@repo/env";
 import { useState } from "react";
 import { Check, Copy, Repeat } from "lucide-react";
 import { NewInviteForm } from "./new-invite-form";
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
+import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { Invite } from "@repo/data";
+import { Skeleton } from "@repo/ui/components/ui/skeleton";
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/ui/popover";
+import { toast } from "@repo/ui/components/ui/toast";
 
 function makeLink(token: string, wid: string) {
   return `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/join?token=${token}`;
@@ -26,7 +22,7 @@ export function InviteLink({
   inviteLink: Invite | undefined;
   isPending: boolean;
 }) {
-  const workspaceId = useWorkspaceId();
+  const workspaceId = useCurrentWorkspaceId();
   const [checked, setChecked] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
 

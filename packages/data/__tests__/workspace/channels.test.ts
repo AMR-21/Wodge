@@ -22,17 +22,17 @@ describe("Workspace channels' unit mutations", () => {
       currentUserId: UserId,
     });
     const channel1 = createTestChannel();
-    const dirId1 = "root";
+    const folderId1 = "root";
 
     const chn = createChannelMutation({
       channel: channel1,
-      dirId: dirId1,
+      folderId: folderId1,
       teamId: team.id,
       structure: newStructure,
     });
 
     expect(
-      chn.teams[0]?.dirs.find((d) => d.id === dirId1)?.channels
+      chn.teams[0]?.folders.find((f) => f.id === folderId1)?.channels
     ).toContainEqual(channel1);
   });
 });

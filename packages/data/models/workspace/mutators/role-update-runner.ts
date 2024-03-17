@@ -4,10 +4,6 @@ import {
   addRoleMembersMutation,
   removeRoleMembersMutation,
 } from "./role-members";
-import {
-  addRolePermissionsMutation,
-  removeRolePermissionsMutation,
-} from "./role-permissions";
 
 import { WorkspaceRoleMutation } from "./types";
 
@@ -22,10 +18,6 @@ export type RoleUpdate =
   | {
       action: "addMembers" | "removeMembers";
       update: { members: Role["members"] };
-    }
-  | {
-      action: "addPermissions" | "removePermissions";
-      update: { permissions: Role["permissions"] };
     };
 
 interface RoleUpdateArgs extends WorkspaceRoleMutation {
@@ -57,12 +49,6 @@ export function roleUpdateRunner({
 
     case "removeMembers":
       return removeRoleMembersMutation({ update, roleId, structure });
-
-    case "addPermissions":
-      return addRolePermissionsMutation({ update, roleId, structure });
-
-    case "removePermissions":
-      return removeRolePermissionsMutation({ update, roleId, structure });
 
     default:
       throw new Error("Invalid update action");

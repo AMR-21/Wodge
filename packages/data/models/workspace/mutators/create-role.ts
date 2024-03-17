@@ -38,8 +38,6 @@ export function createRoleMutation({
   const newRole: Role = {
     ...newRoleBase,
     members: [],
-    linkedTeams: [],
-    permissions: [],
   };
 
   // 5. Create the role

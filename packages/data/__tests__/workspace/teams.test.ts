@@ -10,9 +10,9 @@ import {
   removeTeamMembers,
 } from "../../models/workspace/mutators/team-members";
 import {
-  addTeamDirsMutation,
-  deleteTeamDirsMutation,
-} from "../../models/workspace/mutators/team-dirs";
+  addTeamFoldersMutation,
+  deleteTeamFoldersMutation,
+} from "../../models/workspace/mutators/team-folders";
 import exp from "constants";
 import { deleteTeamMutation } from "../../models/workspace/mutators/delete-team";
 
@@ -195,7 +195,7 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Invalid members$/);
   });
 
-  test("update team dirs", () => {
+  test("update team folders", () => {
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const team = createTestTeam({ id: teamId });
     const structure = createTeamMutation({
@@ -204,19 +204,21 @@ describe("Workspace teams' unit mutations", () => {
       currentUserId: UserId,
     });
 
-    // Test: update team dirs
+    // Test: update team folders
     const dirId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
 
     expect(
-      addTeamDirsMutation({
+      addTeamFoldersMutation({
         structure,
         teamId,
         update: {
-          dirs: [
+          folders: [
             {
               name: "Account",
               id: dirId,
               channels: [],
+              editRoles: [],
+              viewRoles: [],
             },
           ],
         },
@@ -226,37 +228,41 @@ describe("Workspace teams' unit mutations", () => {
       teams: [
         {
           ...team,
-          dirs: [
-            ...team.dirs,
+          folders: [
+            ...team.folders,
             {
               name: "Account",
               id: dirId,
               channels: [],
+              editRoles: [],
+              viewRoles: [],
             },
           ],
         },
       ],
     });
 
-    // Test: update team dirs with invalid data
+    // Test: update team folders with invalid data
     expect(() =>
-      addTeamDirsMutation({
+      addTeamFoldersMutation({
         structure,
         teamId,
         //@ts-ignore
-        update: { dirs: [{ name: "" }] },
+        update: { folders: [{ name: "" }] },
       })
     ).toThrowError(/^Invalid team update data$/);
 
-    const s2 = addTeamDirsMutation({
+    const s2 = addTeamFoldersMutation({
       structure,
       teamId,
       update: {
-        dirs: [
+        folders: [
           {
             name: "Account",
             id: dirId,
             channels: [],
+            editRoles: [],
+            viewRoles: [],
           },
         ],
       },
@@ -264,15 +270,17 @@ describe("Workspace teams' unit mutations", () => {
 
     // non existence team
     expect(() =>
-      addTeamDirsMutation({
+      addTeamFoldersMutation({
         structure: s2,
         teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
         update: {
-          dirs: [
+          folders: [
             {
               name: "Account",
               id: dirId,
               channels: [],
+              editRoles: [],
+              viewRoles: [],
             },
           ],
         },
@@ -280,15 +288,17 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Team does not exist$/);
 
     expect(() =>
-      addTeamDirsMutation({
+      addTeamFoldersMutation({
         structure: s2,
         teamId,
         update: {
-          dirs: [
+          folders: [
             {
               name: "Account",
               id: dirId,
               channels: [],
+              editRoles: [],
+              viewRoles: [],
             },
           ],
         },
@@ -296,14 +306,16 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Dir already exists in team$/);
 
     expect(
-      deleteTeamDirsMutation({
+      deleteTeamFoldersMutation({
         structure: s2,
         teamId,
-        update: { dirs: [dirId] },
+        update: { folders: [dirId] },
       })
     ).toEqual({
       ...s2,
-      teams: [{ ...team, dirs: [{ id: "root", name: "root", channels: [] }] }],
+      teams: [
+        { ...team, folders: [{ id: "root", name: "root", channels: [] }] },
+      ],
     });
   });
 

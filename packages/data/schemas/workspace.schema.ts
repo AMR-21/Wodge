@@ -6,6 +6,7 @@ import {
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
 import { PublicUserSchema } from "./user.schema";
+import { view } from "drizzle-orm/sqlite-core";
 
 /**
  * Workspace {
@@ -97,14 +98,14 @@ export const WorkspaceSchema = z.object({
   avatar: z.string(),
   createdAt: z.string().datetime(),
   environment: z.enum(["local", "cloud"]),
-  settings: z.any().optional(),
 });
 
 export const ChannelSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
-  name: z.string().max(70),
+  name: z.string().max(70).min(1),
   avatar: z.string(),
-  roles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  viewRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  editRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
   type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });
 
@@ -113,10 +114,13 @@ export const TagSchema = z.object({
   color: z.string().default(BRAND_COLOR).optional(),
 });
 
-export const DirSchema = z.object({
-  channels: z.array(ChannelSchema),
+export const FolderSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
-  name: z.string().max(70),
+  name: z.string().max(70).min(1),
+  channels: z.array(ChannelSchema),
+  // As a preset of underline channels
+  viewRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  editRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
 });
 
 export const MemberSchema = z.object({
@@ -133,9 +137,7 @@ export const MemberSchema = z.object({
 export const RoleSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70).min(1),
-  members: z.array(z.string().length(ID_LENGTH).or(z.literal(""))),
-  permissions: z.array(z.enum(["read", "write", "admin"])),
-  linkedTeams: z.array(z.string().length(WORKSPACE_TEAM_ID_LENGTH)),
+  members: z.array(z.string().length(ID_LENGTH)),
   color: z.string().default(BRAND_COLOR),
   createdBy: z.string().length(ID_LENGTH),
 });
@@ -144,14 +146,13 @@ export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
-  members: z.array(z.string().length(ID_LENGTH).or(z.literal(""))),
-  dirs: z.array(DirSchema),
+  members: z.array(z.string().length(ID_LENGTH)),
+  folders: z.array(FolderSchema),
   tags: z.array(TagSchema),
   createdBy: z.string().length(ID_LENGTH),
 });
 
 export const WorkspaceStructureSchema = z.object({
-  publicChannels: z.array(ChannelSchema),
   teams: z.array(TeamSchema),
   roles: z.array(RoleSchema),
   tags: z.array(TagSchema),
@@ -211,7 +212,7 @@ export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
 export type Tag = z.infer<typeof TagSchema>;
-export type Dir = z.infer<typeof DirSchema>;
+export type Folder = z.infer<typeof FolderSchema>;
 
 export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
@@ -235,7 +236,6 @@ export function defaultWorkspaceMembers(): WorkspaceMembers {
 
 export function defaultWorkspaceStructure(): WorkspaceStructure {
   return {
-    publicChannels: [],
     teams: [],
     roles: [],
     tags: [],

@@ -1,5 +1,11 @@
 import { produce } from "immer";
-import { DrObj, Team, TeamSchema, WorkspaceStructure } from "../../..";
+import {
+  DrObj,
+  TEAM_MEMBERS_ROLE,
+  Team,
+  TeamSchema,
+  WorkspaceStructure,
+} from "../../..";
 
 interface CreateTeamArgs {
   // Any to account for the backend mutation runner - relay on zod to validate the data
@@ -38,7 +44,15 @@ export function createTeamMutation({
   const newTeam: Team = {
     ...newTeamBase,
     members: [],
-    dirs: [{ name: "root", channels: [], id: "root" }],
+    folders: [
+      {
+        name: "root",
+        channels: [],
+        id: "root",
+        editRoles: [TEAM_MEMBERS_ROLE],
+        viewRoles: [TEAM_MEMBERS_ROLE],
+      },
+    ],
     tags: [],
   };
 

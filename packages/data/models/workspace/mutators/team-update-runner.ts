@@ -1,5 +1,8 @@
 import { DrObj, Team, WorkspaceStructure } from "../../..";
-import { addTeamDirsMutation, deleteTeamDirsMutation } from "./team-dirs";
+import {
+  addTeamFoldersMutation,
+  deleteTeamFoldersMutation,
+} from "./team-folders";
 import { updateTeamInfoMutation } from "./team-info";
 import { addTeamMembersMutation, removeTeamMembers } from "./team-members";
 import { WorkspaceTeamMutation } from "./types";
@@ -19,12 +22,12 @@ export type TeamUpdate =
       update: { members: Team["members"] };
     }
   | {
-      action: "addDirs";
-      update: { dirs: Team["dirs"] };
+      action: "addFolders";
+      update: { folders: Team["folders"] };
     }
   | {
-      action: "removeDirs";
-      update: { dirs: string[] };
+      action: "removeFolders";
+      update: { folders: string[] };
     };
 
 export interface TeamUpdateRunnerArgs extends WorkspaceTeamMutation {
@@ -57,11 +60,11 @@ export function teamUpdateRunner({
     case "removeMembers":
       return removeTeamMembers({ update, teamId, structure });
 
-    case "addDirs":
-      return addTeamDirsMutation({ update, teamId, structure });
+    case "addFolders":
+      return addTeamFoldersMutation({ update, teamId, structure });
 
-    case "removeDirs":
-      return deleteTeamDirsMutation({ update, teamId, structure });
+    case "removeFolders":
+      return deleteTeamFoldersMutation({ update, teamId, structure });
 
     default:
       throw new Error("Invalid update action");

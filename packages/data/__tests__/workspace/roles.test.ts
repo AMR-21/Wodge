@@ -10,10 +10,7 @@ import {
   addRoleMembersMutation,
   removeRoleMembersMutation,
 } from "../../models/workspace/mutators/role-members";
-import {
-  addRolePermissionsMutation,
-  removeRolePermissionsMutation,
-} from "../../models/workspace/mutators/role-permissions";
+
 import { deleteRoleMutation } from "../../models/workspace/mutators/delete-role";
 
 describe("Workspace teams' unit mutations", () => {
@@ -69,8 +66,6 @@ describe("Workspace teams' unit mutations", () => {
     // Test: Team creation sanitization
     const role6 = createTestRole({
       members: ["-4oxKtIB8FXvYZL0AXjXp"],
-
-      permissions: ["admin"],
     });
 
     expect(
@@ -190,65 +185,6 @@ describe("Workspace teams' unit mutations", () => {
         curMembers,
       })
     ).toThrowError(/^Invalid members$/);
-  });
-
-  test("update role permissions", () => {
-    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
-    const role = createTestRole({ id: roleId });
-    const structure = createRoleMutation({
-      role,
-      structure: createTestStructure(),
-      currentUserId: UserId,
-    });
-
-    // Test: update role permissions
-    expect(
-      addRolePermissionsMutation({
-        structure,
-        roleId,
-        update: {
-          permissions: ["admin"],
-        },
-      })
-    ).toEqual({
-      ...structure,
-      roles: [
-        {
-          ...role,
-          permissions: ["admin"],
-        },
-      ],
-    });
-
-    // Test: update team permissions with invalid data
-    expect(() =>
-      addRolePermissionsMutation({
-        structure,
-        roleId: nanoid(WORKSPACE_ROLE_ID_LENGTH),
-        //@ts-ignore
-        update: { permissions: ["write"] },
-      })
-    ).toThrowError(/^Role does not exist$/);
-
-    expect(() =>
-      addRolePermissionsMutation({
-        structure,
-        roleId,
-        //@ts-ignore
-        update: { permissions: ["manager"] },
-      })
-    ).toThrowError(/^Invalid role update data$/);
-
-    expect(
-      removeRolePermissionsMutation({
-        structure,
-        roleId,
-        update: { permissions: ["admin"] },
-      })
-    ).toEqual({
-      ...structure,
-      roles: [{ ...role, permissions: [] }],
-    });
   });
 
   test("delete a role", () => {

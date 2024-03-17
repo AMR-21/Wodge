@@ -3,6 +3,7 @@ import {
   BRAND_COLOR,
   Channel,
   Role,
+  TEAM_MEMBERS_ROLE,
   Team,
   WORKSPACE_TEAM_ID_LENGTH,
   WorkspaceStructure,
@@ -12,7 +13,15 @@ import { UserId } from "./tests";
 export function createTestTeam(data?: Partial<Team>) {
   const newTeam: Team = {
     createdBy: UserId,
-    dirs: [{ name: "root", channels: [], id: "root" }],
+    folders: [
+      {
+        name: "root",
+        channels: [],
+        id: "root",
+        editRoles: [TEAM_MEMBERS_ROLE],
+        viewRoles: [TEAM_MEMBERS_ROLE],
+      },
+    ],
     id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
     members: [],
     name: "Test Team",
@@ -29,8 +38,6 @@ export function createTestRole(data?: Partial<Role>) {
     members: [],
     name: "Test Team",
     color: BRAND_COLOR,
-    linkedTeams: [],
-    permissions: [],
     ...data,
   };
   return newTeam;
@@ -41,8 +48,9 @@ export function createTestChannel(data?: Partial<Channel>) {
     id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
     name: "Test Channel",
     type: "text",
-    roles: [],
     avatar: "",
+    editRoles: [],
+    viewRoles: [],
     ...data,
   };
   return channel;
@@ -51,7 +59,6 @@ export function createTestChannel(data?: Partial<Channel>) {
 export function createTestStructure(data?: Partial<WorkspaceStructure>) {
   const structure: WorkspaceStructure = {
     teams: [],
-    publicChannels: [],
     roles: [],
     tags: [],
     ...data,
