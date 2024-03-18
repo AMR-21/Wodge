@@ -8,6 +8,7 @@ import {
 import { createChannelMutation } from "../../models/workspace/mutators/create-channel";
 import { nanoid } from "nanoid";
 import { WORKSPACE_TEAM_ID_LENGTH } from "../..";
+import { updateChannelInfoMutation } from "../../models/workspace/mutators/channel-info";
 
 describe("Workspace channels' unit mutations", () => {
   test("Create a channel", async () => {
@@ -88,5 +89,39 @@ describe("Workspace channels' unit mutations", () => {
         structure: chn3,
       })
     ).toThrowError(/^Channel already exists$/);
+  });
+
+  test("update a team", async () => {
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const folderId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const channelId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const channel = createTestChannel({ id: channelId, name: "Test" });
+    const team = createTestTeam({
+      id: teamId,
+      folders: [
+        {
+          id: folderId,
+          name: "fold test",
+          channels: [channel],
+          editRoles: [],
+          viewRoles: [],
+        },
+      ],
+    });
+    const structure = createTestStructure({ teams: [team] });
+
+    const s1 = updateChannelInfoMutation({
+      structure,
+      update: { name: "New Name" },
+      channelId: channel.id,
+      folderId,
+      teamId,
+    });
+
+    expect(
+      s1.teams
+        .find((t) => t.id === team.id)
+        ?.folders.find((f) => f.id === folderId)?.channels
+    ).toEqual([{ ...channel, name: "New Name" }]);
   });
 });
