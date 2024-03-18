@@ -50,7 +50,7 @@ export async function initWorkspace(
     draft.data = {
       tags: [],
       teams: [],
-      roles: [],
+      groups: [],
     };
     draft.lastModifiedVersion = nextVersion;
   });

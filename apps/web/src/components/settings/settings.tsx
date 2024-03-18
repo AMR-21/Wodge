@@ -113,7 +113,7 @@ function Settings({
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: defaultActive,
+      active: "groups",
       isSidebarOpen: isDesktop,
       activeItemId: "",
       accordionActive: "",
@@ -347,7 +347,7 @@ function SettingsContentSection({
     <div className={cn("py-6", !header && "px-2 py-4")}>
       {header && (
         <div className="flex items-center justify-between pb-4">
-          <h3 className=" text-base">{header}</h3>
+          <h3 className="text-base capitalize">{header}</h3>
           {action}
         </div>
       )}

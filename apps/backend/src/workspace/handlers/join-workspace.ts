@@ -66,7 +66,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   if (res.status !== 200) return badRequest();
 
   // 6. add the user to the workspace
-
+  // TODO add role invitation
   const newMember: Member = {
     id: userId,
     role: "member",

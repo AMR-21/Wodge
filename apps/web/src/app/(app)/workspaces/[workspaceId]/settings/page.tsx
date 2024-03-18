@@ -1,7 +1,7 @@
 "use client";
 
 import { MembersSettings } from "@/components/settings/members/members-settings";
-import { RoleSettings } from "@/components/settings/roles/role-settings";
+import { RoleSettings } from "@/components/settings/roles/group-settings";
 import { RolesSidebar } from "@/components/settings/roles/roles-sidebar";
 import {
   Settings,
@@ -21,7 +21,7 @@ import { Building2 } from "lucide-react";
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="members">
+      <Settings defaultActive="groups">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />
@@ -30,7 +30,7 @@ function WorkspaceSettingsPage() {
           <SettingsSidebarList>
             <SettingsSidebarItem value="general" />
             <SettingsSidebarItem value="members" />
-            <SettingsSidebarAccordionItem value="roles">
+            <SettingsSidebarAccordionItem value="groups">
               <RolesSidebar />
             </SettingsSidebarAccordionItem>
             {/* <SettingsSidebarItem value="roles" /> */}
@@ -49,7 +49,7 @@ function WorkspaceSettingsPage() {
           <TeamSettings />
         </SettingsContent>
 
-        <SettingsContent id="roles">
+        <SettingsContent id="groups">
           <RoleSettings />
         </SettingsContent>
         <SettingsContent id="members">

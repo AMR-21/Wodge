@@ -134,7 +134,7 @@ export const MemberSchema = z.object({
   }),
 });
 
-export const RoleSchema = z.object({
+export const GroupSchema = z.object({
   id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
   name: z.string().max(70).min(1),
   members: z.array(z.string().length(ID_LENGTH)),
@@ -147,6 +147,7 @@ export const TeamSchema = z.object({
   name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
   members: z.array(z.string().length(ID_LENGTH)),
+  moderators: z.array(z.string().length(ID_LENGTH)),
   folders: z.array(FolderSchema),
   tags: z.array(TagSchema),
   createdBy: z.string().length(ID_LENGTH),
@@ -154,7 +155,7 @@ export const TeamSchema = z.object({
 
 export const WorkspaceStructureSchema = z.object({
   teams: z.array(TeamSchema),
-  roles: z.array(RoleSchema),
+  groups: z.array(GroupSchema),
   tags: z.array(TagSchema),
 });
 
@@ -207,7 +208,7 @@ export const PresenceRequestSchema = z.object({
 });
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
-export type Role = z.infer<typeof RoleSchema>;
+export type Group = z.infer<typeof GroupSchema>;
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
@@ -237,7 +238,7 @@ export function defaultWorkspaceMembers(): WorkspaceMembers {
 export function defaultWorkspaceStructure(): WorkspaceStructure {
   return {
     teams: [],
-    roles: [],
+    groups: [],
     tags: [],
   };
 }

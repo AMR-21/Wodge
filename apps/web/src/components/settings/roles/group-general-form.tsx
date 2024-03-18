@@ -16,13 +16,19 @@ import { use, useContext, useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { ColorPicker } from "../color-picker";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 import { Button } from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
-export function RoleGeneralForm({ role }: { role: DrObj<Role> }) {
+export function GroupGeneralForm({ role }: { role: DrObj<Role> }) {
   const { dispatch } = useContext(SettingsContext);
   const { workspace } = useCurrentWorkspace();
   const isAddition = role.id.startsWith("add-");

@@ -4,14 +4,14 @@ import { UserId } from "../tests";
 import { WORKSPACE_ROLE_ID_LENGTH } from "../..";
 
 import { nanoid } from "nanoid";
-import { createRoleMutation } from "../../models/workspace/mutators/create-role";
-import { updateRoleInfoMutation } from "../../models/workspace/mutators/role-info";
+import { createRoleMutation } from "../../models/workspace/mutators/create-group";
+import { updateRoleInfoMutation } from "../../models/workspace/mutators/group-info";
 import {
   addRoleMembersMutation,
   removeRoleMembersMutation,
-} from "../../models/workspace/mutators/role-members";
+} from "../../models/workspace/mutators/group-members";
 
-import { deleteRoleMutation } from "../../models/workspace/mutators/delete-role";
+import { deleteRoleMutation } from "../../models/workspace/mutators/delete-group";
 
 describe("Workspace teams' unit mutations", () => {
   test("create a role", async () => {

@@ -17,7 +17,7 @@ import { Mutable } from "@/lib/utils";
 import { generalMembersColumns } from "../general-members-columns";
 import { nanoid } from "nanoid";
 import { RoleMembersSettings } from "./role-members-settings";
-import { RoleGeneralForm } from "./role-general-form";
+import { GroupGeneralForm } from "./group-general-form";
 import { RolePermissions } from "./role-permissions";
 import { LinkedTeams } from "./linked-teams";
 import {
@@ -40,7 +40,6 @@ export function RoleSettings() {
       {
         id: "nanoid(WORKSPACE_ROLE_ID_LENGTH)",
         name: "Admin",
-        permissions: [],
         members: [],
         linkedTeams: [],
         createdBy: user?.id || "",
@@ -79,13 +78,20 @@ export function RoleSettings() {
   function unLinkTeam(teamId: string) {}
 
   return (
-    <div className="w-full shrink-0 grow ">
+    <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
         label={`${isAddition ? "Add a new role" : role.name + " settings"}`}
         description={`${isAddition ? "Create a new role" : "Manage role settings"}`}
       />
 
-      <Tabs defaultValue="general">
+      <SettingsContentSection header="general">
+        <GroupGeneralForm role={role} />
+      </SettingsContentSection>
+
+      <SettingsContentSection header="manage members">
+        <RoleMembersSettings role={role} />
+      </SettingsContentSection>
+      {/* <Tabs defaultValue="general">
         <TabsList className="w-full">
           <TabsTrigger className="grow" value="general">
             General
@@ -111,7 +117,7 @@ export function RoleSettings() {
 
         <TabsContent value="general">
           <SettingsContentSection>
-            <RoleGeneralForm role={role} />
+            <GroupGeneralForm role={role} />
           </SettingsContentSection>
         </TabsContent>
 
@@ -139,7 +145,7 @@ export function RoleSettings() {
             <RoleMembersSettings role={role} />
           </SettingsContentSection>
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
     </div>
   );
 }

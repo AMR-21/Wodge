@@ -5,9 +5,9 @@ interface WorkspaceTeamMutation {
   teamId: string;
 }
 
-interface WorkspaceRoleMutation {
+interface WorkspaceGroupMutation {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
-  roleId: string;
+  groupId: string;
 }
 
 interface WorkspaceChannelMutation {

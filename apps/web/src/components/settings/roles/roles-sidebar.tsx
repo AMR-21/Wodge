@@ -15,7 +15,7 @@ export function RolesSidebar() {
   const isDesktop = useIsDesktop();
   const { activeItemId, dispatch } = useContext(SettingsContext);
 
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
   const { structure } = useCurrentWorkspace();
 
   const roles = [
@@ -52,7 +52,7 @@ export function RolesSidebar() {
             dispatch({
               type: "openAccordionItem",
               payload: {
-                value: "roles",
+                value: "groups",
                 id: role.id,
                 isSidebarOpen: isDesktop,
               },
