@@ -55,24 +55,25 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   ) {
     if (isAddition) {
       await workspaceRep?.mutate.createTeam(data);
-      form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
 
-      return dispatch({
+      dispatch({
         type: "openAccordionItem",
         payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
       });
     }
 
-    // await workspace?.store.mutate.updateTeam({
-    //   teamId: team.id,
-    //   teamUpdate: {
-    //     action: "updateInfo",
-    //     update: {
-    //       name: data.name,
-    //       avatar: data.avatar,
-    //     },
-    //   },
-    // });
+    if (!isAddition) {
+      await workspaceRep?.mutate.updateTeam({
+        teamId: team.id,
+        teamUpdate: {
+          action: "updateInfo",
+          update: {
+            name: data.name,
+            avatar: data.avatar,
+          },
+        },
+      });
+    }
   }
 
   return (

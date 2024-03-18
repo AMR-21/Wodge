@@ -12,12 +12,16 @@ import { GroupGeneralForm } from "./group-general-form";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useMember } from "@repo/ui/hooks/use-member";
+import { Button } from "@repo/ui/components/ui/button";
+import { toast } from "@repo/ui/components/ui/toast";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 
 export function GroupSettings() {
-  const { activeItemId } = React.useContext(SettingsContext);
+  const { activeItemId, dispatch } = React.useContext(SettingsContext);
   const isAddition = activeItemId.startsWith("add-");
-  const { structure } = useCurrentWorkspace();
+  const { structure, workspaceRep } = useCurrentWorkspace();
   const { user } = useCurrentUser();
+  const isDesktop = useIsDesktop();
 
   const groups = React.useMemo(() => {
     return [
@@ -30,11 +34,28 @@ export function GroupSettings() {
         color: BRAND_COLOR,
       },
     ] satisfies DrObj<Group>[];
-  }, [structure, user]);
+  }, [structure.teams, user]);
 
-  const group = groups.find((g) => g.id === activeItemId);
+  const group = React.useMemo(
+    () => groups.find((g) => g.id === activeItemId),
+    [activeItemId, groups],
+  );
 
   const { member } = useMember(group?.createdBy || "");
+
+  async function deleteGroup() {
+    if (!group) return;
+    await workspaceRep?.mutate.deleteGroup(group.id);
+    toast.success("Group deleted");
+    return dispatch({
+      type: "openAccordionItem",
+      payload: {
+        value: "groups",
+        id: groups.at(0)?.id,
+        isSidebarOpen: isDesktop,
+      },
+    });
+  }
 
   if (!group) return null;
 
@@ -50,9 +71,19 @@ export function GroupSettings() {
         <GroupGeneralForm group={group} />
       </SettingsContentSection>
 
-      <SettingsContentSection header="manage members">
-        <GroupMembersSettings group={group} />
-      </SettingsContentSection>
+      {!isAddition && (
+        <>
+          <SettingsContentSection header="manage members">
+            <GroupMembersSettings group={group} />
+          </SettingsContentSection>
+
+          <SettingsContentSection header="Danger Zone">
+            <Button size="sm" variant="destructive" onClick={deleteGroup}>
+              Delete Group
+            </Button>
+          </SettingsContentSection>
+        </>
+      )}
     </div>
   );
 }

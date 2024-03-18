@@ -28,6 +28,7 @@ import { removeMemberMutation } from "./mutators/remove-member";
 import { changeMemberRoleMutation } from "./mutators/change-member-role";
 import { createGroupMutation } from "./mutators/create-group";
 import { GroupUpdate, groupUpdateRunner } from "./mutators/group-update-runner";
+import { deleteGroupMutation } from "./mutators/delete-group";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -223,6 +224,21 @@ export const workspaceMutators = {
     });
 
     // 3. Persist the mutation
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async deleteGroup(tx: WriteTransaction, groupId: string) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    if (!structure) throw new Error("Bad data");
+
+    const newStructure = deleteGroupMutation({
+      structure,
+      groupId,
+    });
+
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
   // async deleteTeam(tx: WriteTransaction, teamId: string) {

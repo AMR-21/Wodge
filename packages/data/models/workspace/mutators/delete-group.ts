@@ -1,5 +1,6 @@
 import { produce } from "immer";
 import { WorkspaceGroupMutation } from "./types";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 export function deleteGroupMutation({
   structure,
@@ -15,5 +16,5 @@ export function deleteGroupMutation({
     draft.groups = draft.groups.filter((g) => g.id !== groupId);
   });
 
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }

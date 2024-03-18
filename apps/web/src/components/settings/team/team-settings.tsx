@@ -4,7 +4,7 @@ import {
   SettingsContentSection,
   SettingsContext,
 } from "../settings";
-import { DrObj, Member } from "@repo/data";
+import { DrObj, Member, Team } from "@repo/data";
 import { TeamGeneralForm } from "./team-general-form";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
@@ -12,6 +12,7 @@ import { Mutable } from "@/lib/utils";
 import { generalMembersColumns } from "../general-members-columns";
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
@@ -19,28 +20,41 @@ export function TeamSettings() {
 
   const { structure } = useCurrentWorkspace();
 
-  const teams = useMemo(
-    () => [
+  const { user } = useCurrentUser();
+
+  const teams = useMemo(() => {
+    return [
       ...structure.teams,
       {
         id: "add-teams",
         name: "",
-        members: ["kueXSygx5naiwy_5XSRns"],
-        tags: [],
-        createdBy: "kueXSygx5naiwy_5XSRns",
+        members: [],
+        createdBy: user?.id || "",
         folders: [],
+        moderators: [],
+        tags: [],
+        avatar: "",
       },
-    ],
-    [structure.teams],
+    ] satisfies DrObj<Team>[];
+  }, [structure.teams, user]);
+
+  const team = useMemo(
+    () => teams.find((t) => t.id === activeItemId),
+    [activeItemId, teams],
   );
 
-  const team = teams.find((team) => team.id === activeItemId);
-
-  // Todo filter members by team
   const { members } = useCurrentWorkspace();
 
+  const teamMembers = members.members.filter((m) =>
+    team?.members.includes(m.id),
+  );
+
+  const nonTeamMembers = members.members.filter(
+    (m) => !team?.members.includes(m.id),
+  );
+
   const { table } = useTable({
-    data: members.members as Mutable<DrObj<Member>[]>,
+    data: teamMembers as Mutable<DrObj<Member>[]>,
     columns: generalMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
@@ -49,8 +63,8 @@ export function TeamSettings() {
 
   if (!team) return null;
 
-  function addMember(member: Member) {
-    console.log("add member", member);
+  function addMember(memberId: string) {
+    console.log("add member", memberId);
   }
 
   function removeMember(memberId: string) {
@@ -73,7 +87,7 @@ export function TeamSettings() {
           <SettingsContentSection header="Manage Members">
             <GeneralMembersTable
               table={table}
-              members={members.members}
+              members={nonTeamMembers}
               addMember={addMember}
             />
           </SettingsContentSection>

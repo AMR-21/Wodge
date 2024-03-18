@@ -30,7 +30,6 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
   const { workspaceRep } = useCurrentWorkspace();
   const isAddition = group.id.startsWith("add-");
   const [colored, setColored] = useState(false);
-  const [defaultColor, setDefaultColor] = useState(group.color);
   const isDesktop = useIsDesktop();
 
   const form = useForm<DrObj<Group>>({
@@ -47,18 +46,18 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
       return form.reset({ ...group, id: nanoid(WORKSPACE_GROUP_ID_LENGTH) });
 
     form.reset(group);
-    setDefaultColor(group.color);
     setColored(false);
   }, [group, isAddition]);
 
   async function onSubmit(data: Omit<Group, "members" | "createdBy">) {
     if (isAddition) {
       await workspaceRep?.mutate.createGroup(data);
-      dispatch({
+      return dispatch({
         type: "openAccordionItem",
         payload: { value: "groups", id: data.id, isSidebarOpen: isDesktop },
       });
     }
+
     if (!isAddition)
       await workspaceRep?.mutate.updateGroup({
         groupId: data.id,
@@ -71,9 +70,7 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
         },
       });
 
-    form.setValue("id", nanoid(WORKSPACE_GROUP_ID_LENGTH));
     setColored(false);
-    setDefaultColor(data.color);
   }
 
   return (
