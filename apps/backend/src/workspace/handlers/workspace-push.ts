@@ -46,11 +46,7 @@ function runner(party: WorkspaceParty, req: Party.Request) {
   return async (params: RunnerParams) => {
     switch (params.mutation.name) {
       case "initWorkspace":
-        const userData = JSON.parse(
-          req.headers.get("x-user-data")!
-        ) as PublicUserType;
-
-        return initWorkspace(party, params, userData);
+        return initWorkspace(party, params);
 
       case "removeMember":
         return await removeMember(party, params);

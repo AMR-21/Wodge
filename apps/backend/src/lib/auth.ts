@@ -57,7 +57,7 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
 
   // Set user id in a header for some use cases
   req.headers.set("x-user-id", session.userId);
-  req.headers.set("x-user-data", JSON.stringify(session.user));
+  // req.headers.set("x-user-data", JSON.stringify(session.user));
 
   return session;
 };
