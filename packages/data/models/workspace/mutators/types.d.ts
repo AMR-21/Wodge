@@ -9,3 +9,10 @@ interface WorkspaceRoleMutation {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
   roleId: string;
 }
+
+interface WorkspaceChannelMutation {
+  structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
+  channelId: string;
+  folderId: string;
+  teamId: string;
+}

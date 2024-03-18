@@ -19,15 +19,8 @@ export function createChannelMutation({
   teamId,
   structure,
 }: CreateTeamArgs) {
-  //1. Validate the data
-  const validateFields = ChannelSchema.pick({
-    id: true,
-    name: true,
-    avatar: true,
-    editRoles: true,
-    viewRoles: true,
-    type: true,
-  }).safeParse(channel);
+  // Validate the data
+  const validateFields = ChannelSchema.safeParse(channel);
 
   if (!validateFields.success) throw new Error("Invalid channel data");
 
@@ -36,8 +29,17 @@ export function createChannelMutation({
 
   const newStructure = produce(structure, (draft) => {
     const team = draft.teams.find((t) => t.id === teamId);
-    const der = team?.folders.find((f) => f.id === folderId);
-    der?.channels.push(newChannel);
+    // Check if team not found
+    if (!team) throw new Error("Team not found");
+    // Check if folder not found
+    const fold = team?.folders.find((f) => f.id === folderId);
+    if (!fold) throw new Error("Folder not found");
+    // Check if channel already exists
+    if (fold.channels.find((ch) => ch.id === newChannel.id)) {
+      throw new Error("Channel already exists");
+    } else {
+      fold?.channels.push(newChannel); // Add channel
+    }
   });
   return newStructure;
 }

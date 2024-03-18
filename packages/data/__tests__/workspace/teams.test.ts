@@ -303,7 +303,7 @@ describe("Workspace teams' unit mutations", () => {
           ],
         },
       })
-    ).toThrowError(/^Dir already exists in team$/);
+    ).toThrowError(/^Folder already exists in team$/);
 
     expect(
       deleteTeamFoldersMutation({
