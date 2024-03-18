@@ -12,8 +12,7 @@ import { produce } from "immer";
 
 export async function initWorkspace(
   party: WorkspaceParty,
-  { mutation, nextVersion, userId }: RunnerParams,
-  userData: PublicUserType
+  { mutation, nextVersion, userId }: RunnerParams
 ) {
   // 1. validate that initiator of the request is the owner of the workspace
   if (party.workspaceMembers.data.owner !== userId) {

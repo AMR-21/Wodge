@@ -4,7 +4,7 @@ import {
   SettingsContentSection,
   SettingsContext,
 } from "../settings";
-import { DrObj, Member } from "@repo/data";
+import { DrObj, Member, Team } from "@repo/data";
 import { TeamGeneralForm } from "./team-general-form";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
@@ -12,50 +12,111 @@ import { Mutable } from "@/lib/utils";
 import { generalMembersColumns } from "../general-members-columns";
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { teamMembersColumns } from "./team-members-columns";
 
 export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
   const isAddition = activeItemId.startsWith("add-");
 
-  const { structure } = useCurrentWorkspace();
+  const { structure, members, workspaceRep } = useCurrentWorkspace();
 
-  const teams = useMemo(
-    () => [
+  const { user } = useCurrentUser();
+
+  const teams = useMemo(() => {
+    return [
       ...structure.teams,
       {
         id: "add-teams",
         name: "",
-        members: ["kueXSygx5naiwy_5XSRns"],
-        tags: [],
-        createdBy: "kueXSygx5naiwy_5XSRns",
+        members: [],
+        createdBy: user?.id || "",
         folders: [],
+        moderators: [],
+        tags: [],
+        avatar: "",
       },
-    ],
-    [structure.teams],
+    ] satisfies DrObj<Team>[];
+  }, [structure, members]);
+
+  const team = useMemo(
+    () => teams.find((t) => t.id === activeItemId),
+    [activeItemId, teams],
   );
 
-  const team = teams.find((team) => team.id === activeItemId);
+  const teamMembers = useMemo(() => {
+    return members.members.filter((member) =>
+      team?.members.includes(member.id),
+    );
+  }, [members, structure, team]);
 
-  // Todo filter members by team
-  const { members } = useCurrentWorkspace();
+  const nonTeamMembers = useMemo(() => {
+    return members.members.filter(
+      (member) => !team?.members.includes(member.id),
+    );
+  }, [members, structure, team]);
 
   const { table } = useTable({
-    data: members.members as Mutable<DrObj<Member>[]>,
-    columns: generalMembersColumns({
+    data: teamMembers as Mutable<DrObj<Member>[]>,
+    columns: teamMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
+      moderatorsIds: team?.moderators || [],
+      changeTeamMemberRole,
     }),
   });
 
-  if (!team) return null;
-
-  function addMember(member: Member) {
-    console.log("add member", member);
+  async function addMember(memberId: string) {
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "addMembers",
+        update: {
+          members: [memberId],
+        },
+      },
+    });
   }
 
-  function removeMember(memberId: string) {
-    console.log("remove member", memberId);
+  async function removeMember(memberId: string) {
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "removeMembers",
+        update: {
+          members: [memberId],
+        },
+      },
+    });
   }
+
+  async function changeTeamMemberRole(
+    memberId: string,
+    role: "teamMember" | "moderator",
+  ) {
+    console.log("changeTeamMemberRole", memberId, role);
+
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "changeTeamMemberRole",
+        update: {
+          memberId,
+          role,
+        },
+      },
+    });
+  }
+
+  async function deleteTeam() {
+    if (!team) return;
+    await workspaceRep?.mutate.deleteTeam(team.id);
+  }
+
+  if (!team) return <p>Placeholder</p>;
 
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
@@ -73,7 +134,7 @@ export function TeamSettings() {
           <SettingsContentSection header="Manage Members">
             <GeneralMembersTable
               table={table}
-              members={members.members}
+              members={nonTeamMembers}
               addMember={addMember}
             />
           </SettingsContentSection>
@@ -83,7 +144,7 @@ export function TeamSettings() {
           </SettingsContentSection>
 
           <SettingsContentSection header="Danger Zone">
-            <Button size="sm" variant="destructive">
+            <Button size="sm" variant="destructive" onClick={deleteTeam}>
               Delete Team
             </Button>
           </SettingsContentSection>

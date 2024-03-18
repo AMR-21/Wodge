@@ -1,5 +1,6 @@
 import { produce } from "immer";
 import { WorkspaceTeamMutation } from "./types";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 export function deleteTeamMutation({
   structure,
@@ -15,5 +16,5 @@ export function deleteTeamMutation({
     draft.teams = draft.teams.filter((t) => t.id !== teamId);
   });
 
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }
