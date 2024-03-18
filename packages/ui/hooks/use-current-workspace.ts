@@ -9,6 +9,8 @@ import {
   Workspace,
   WorkspaceMembers,
   WorkspaceStructure,
+  defaultWorkspaceMembers,
+  defaultWorkspaceStructure,
   makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
@@ -55,6 +57,7 @@ export function useCurrentWorkspace() {
       tx.get<WorkspaceStructure>(makeWorkspaceStructureKey()),
     {
       dependencies: [workspaceRep],
+      default: defaultWorkspaceStructure(),
     },
   );
 
@@ -64,6 +67,7 @@ export function useCurrentWorkspace() {
       tx.get<WorkspaceMembers>(makeWorkspaceMembersKey()),
     {
       dependencies: [workspaceRep],
+      default: defaultWorkspaceMembers(),
     },
   );
 

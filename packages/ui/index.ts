@@ -37,6 +37,7 @@ export * from "./hooks/use-is-desktop";
 export * from "./hooks/use-current-workspace-id";
 export * from "./hooks/use-current-user";
 export * from "./hooks/use-current-workspace";
-export * from "./hooks/use-member-info";
+export * from "./hooks/use-members-info";
+export * from "./hooks/use-member";
 
 export * from "./store/store";

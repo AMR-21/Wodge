@@ -1,9 +1,8 @@
 import { Member, PublicUserType } from "@repo/data";
+import { queryClient } from "@repo/data/lib/query-client";
 import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
 import { Header } from "@repo/ui/components/data-table/header";
 
-import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
-import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 import {
   Avatar,
   AvatarFallback,
@@ -19,18 +18,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/ui/select";
-import { useMemberInfo } from "@repo/ui/hooks/use-member-info";
+import { useMember } from "@repo/ui/hooks/use-member";
 import { cn } from "@repo/ui/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Crown, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
 import { DeepReadonly } from "replicache";
 
 interface MembersColumnsProps {
   removeMember: (memberId: string) => void;
+  changeMemberRole: (memberId: string, role: Member["role"]) => void;
+  workspaceId: string;
   inviters?: (Pick<Member, "id"> | undefined)[];
 }
 export function membersColumns({
   removeMember,
+  changeMemberRole,
+  workspaceId,
   inviters,
 }: MembersColumnsProps): ColumnDef<DeepReadonly<Member>>[] {
   return [
@@ -65,33 +68,41 @@ export function membersColumns({
 
     {
       id: "member",
-      // accessorFn: (row) => row.email,
+      accessorFn: (row) => {
+        const members = queryClient.getQueryData<PublicUserType[]>([
+          workspaceId,
+          "members",
+        ]);
+
+        const member = members?.find((m) => m.id === row.id);
+
+        return member?.email || "";
+      },
       header: () => <Header>Member</Header>,
 
       cell: ({ row }) => {
-        const member = row.original;
-        const { memberInfo, isMemberPending } = useMemberInfo(member.id);
+        const { member, isMembersPending } = useMember(row.original.id);
 
-        if (isMemberPending) return null;
+        if (isMembersPending) return null;
 
         return (
           <div className="flex gap-4">
             <Avatar className="h-8 w-8 rounded-md">
               <AvatarImage
-                src={memberInfo?.avatar}
-                alt={memberInfo?.displayName}
+                src={member?.avatar}
+                alt={member?.displayName}
                 className="rounded-md"
               />
               <AvatarFallback className="rounded-md">
-                {/* {memberInfo?.displayName[0]} */}
+                {/* {member?.displayName[0]} */}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <div className="flex gap-1">
-                <p>{memberInfo?.displayName}</p>
+                <p>{member?.displayName}</p>
               </div>
               <span className="text-xs text-muted-foreground">
-                {memberInfo?.email}
+                {member?.email}
               </span>
             </div>
           </div>
@@ -135,9 +146,17 @@ export function membersColumns({
       id: "role",
       header: () => <Header className="pl-3">Role</Header>,
       cell: ({ row }) => {
+        const [value, setValue] = useState<string>(row.original.role);
+
         return (
           <div className="flex w-28">
-            <Select disabled={row.original.role === "owner"}>
+            <Select
+              disabled={row.original.role === "owner"}
+              defaultValue={value}
+              onValueChange={(v) =>
+                changeMemberRole(row.original.id, v as Member["role"])
+              }
+            >
               <SelectTrigger
                 className={cn(
                   buttonVariants({
@@ -147,9 +166,12 @@ export function membersColumns({
                   "w-fit justify-end gap-1 border-none text-right capitalize",
                 )}
               >
-                <SelectValue placeholder={row.original.role} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                {row.original.role === "owner" && (
+                  <SelectItem value="owner">Owner</SelectItem>
+                )}
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="member">Member</SelectItem>
               </SelectContent>

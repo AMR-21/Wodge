@@ -9,13 +9,11 @@ export async function POST(req: Request) {
   if (env.SERVICE_KEY !== serviceKey)
     return new Response(null, { status: 401 });
 
-  const { memberId } = (await req.json()) as { memberId: string };
+  const { membersIds } = (await req.json()) as { membersIds: string[] };
 
-  if (typeof memberId !== "string") return new Response(null, { status: 400 });
+  const members = await getUserInfoById(membersIds);
 
-  const member = await getUserInfoById(memberId);
+  if (!members) return new Response(null, { status: 404 });
 
-  if (!member) return new Response(null, { status: 404 });
-
-  return Response.json(member);
+  return Response.json(members);
 }

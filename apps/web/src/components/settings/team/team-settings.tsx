@@ -28,7 +28,7 @@ export function TeamSettings() {
         members: ["kueXSygx5naiwy_5XSRns"],
         tags: [],
         createdBy: "kueXSygx5naiwy_5XSRns",
-        dirs: [],
+        folders: [],
       },
     ],
     [structure.teams],

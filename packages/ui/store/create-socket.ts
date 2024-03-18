@@ -18,35 +18,30 @@ export function createSocket(userId: string) {
     const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
 
     if (data.sub === "poke") {
-      try {
-        switch (data.type) {
-          case "workspace":
-            if (!data.id) return;
-            const workspaces = useAppState.getState().workspaces;
-            const workspace = workspaces?.[data.id];
-            let rep;
+      switch (data.type) {
+        case "workspace":
+          if (!data.id) return;
+          const workspaces = useAppState.getState().workspaces;
+          const workspace = workspaces?.[data.id];
+          let rep;
 
-            if (!workspace) {
-              rep = addWorkspace(data.id, "cloud", userId);
-            }
+          if (!workspace) {
+            rep = addWorkspace(data.id, "cloud", userId);
+          }
 
-            return rep ? rep.pull() : workspace?.pull();
+          return rep ? rep.pull() : workspace?.pull();
 
-          case "channel":
-            return;
+        case "channel":
+          return;
 
-          case "deleteWorkspace":
-            if (!data.id) return;
-            removeWorkspace(data.id);
-            if (window.location.href.includes(data.id))
-              toast.info("You have been removed from the current workspace");
-            return userStore?.pull();
-          default:
-            userStore?.pull();
-        }
-      } catch (e) {
-        console.log("amr");
-        console.error(e);
+        case "deleteWorkspace":
+          if (!data.id) return;
+          removeWorkspace(data.id);
+          if (window.location.href.includes(data.id))
+            toast.info("You have been removed from the current workspace");
+          return userStore?.pull();
+        default:
+          userStore?.pull();
       }
     }
   });

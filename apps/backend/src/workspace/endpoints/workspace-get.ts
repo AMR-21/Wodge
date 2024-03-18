@@ -4,7 +4,7 @@ import { badRequest, getRoute } from "../../lib/http-utils";
 import WorkspaceParty from "../workspace-party";
 import { getMembership } from "../handlers/get-membership";
 import { getInvites } from "../handlers/get-invites";
-import { getMemberInfo } from "../handlers/get-member-info";
+import { getMembersInfo } from "../handlers/get-members-info";
 
 export async function handleGet(req: Party.Request, party: WorkspaceParty) {
   const route = getRoute(req);
@@ -14,7 +14,8 @@ export async function handleGet(req: Party.Request, party: WorkspaceParty) {
       return getMembership(req, party);
     case "/invites":
       return getInvites(req, party);
-
+    case "/members-info":
+      return getMembersInfo(party);
     default:
       return badRequest();
   }

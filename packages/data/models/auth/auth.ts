@@ -8,7 +8,7 @@
 "use server";
 import "server-only";
 
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "../../lib/db";
 import { users } from "../../schemas/auth.schema";
 import { UserType } from "../..";
@@ -67,16 +67,15 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
   }
 }
 
-export async function getUserInfoById(userId: string) {
+export async function getUserInfoById(userIds: string[]) {
   try {
-    const user = await db.query.users.findFirst({
+    const user = await db.query.users.findMany({
       columns: {
-        id: false,
         emailVerified: false,
         updatedAt: false,
         createdAt: false,
       },
-      where: eq(users.id, userId),
+      where: inArray(users.id, userIds),
     });
 
     return user;

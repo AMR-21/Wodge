@@ -1,8 +1,16 @@
 import { DrObj, Member } from "@repo/data";
 import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
-import { DataTableHeaderSelect, DataTableRowSelect } from "@repo/ui/components/data-table/data-table-select";
+import {
+  DataTableHeaderSelect,
+  DataTableRowSelect,
+} from "@repo/ui/components/data-table/data-table-select";
 import { Header } from "@repo/ui/components/data-table/header";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/ui/avatar";
+import { useMember } from "@repo/ui/hooks/use-member";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -28,27 +36,30 @@ export const generalMembersColumns = ({
   },
 
   {
-    accessorFn: (member) => member.data.email,
+    // accessorFn: (member) => member.data.email,
     id: "member",
     header: () => <Header>Member</Header>,
     cell: ({ row }) => {
-      const { avatar, displayName, email } = row.original.data;
+      const memberId = row.original.id;
+      const { member, isMembersPending } = useMember(memberId);
+
+      if (isMembersPending) return null;
 
       return (
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8 rounded-md ">
             <AvatarImage
-              src={avatar}
-              alt={displayName}
+              src={member?.avatar}
+              alt={member?.displayName}
               className="rounded-md"
             />
             <AvatarFallback className="rounded-md capitalize">
-              {displayName?.[0] || ""}
+              {member?.displayName?.[0] || ""}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p>{displayName}</p>
-            <p className="text-xs text-muted-foreground">{email}</p>
+            <p>{member?.displayName}</p>
+            <p className="text-xs text-muted-foreground">{member?.email}</p>
           </div>
         </div>
       );

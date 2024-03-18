@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { SettingsContext } from "../settings";
 import { use, useContext, useEffect } from "react";
 import { nanoid } from "nanoid";
@@ -21,11 +21,11 @@ import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const { dispatch } = useContext(SettingsContext);
-  const { workspace } = useCurrentWorkspace();
+  const { workspaceRep } = useCurrentWorkspace();
   const isAddition = team.id.startsWith("add-");
 
   const isDesktop = useIsDesktop();
-  const user = useCurrentUser()
+  const { user } = useCurrentUser();
 
   const form = useForm<DrObj<Team>>({
     resolver: zodResolver(
@@ -54,7 +54,7 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
     data: Pick<Team, "id" | "name" | "createdBy" | "avatar">,
   ) {
     if (isAddition) {
-      // await workspace?.store.mutate.createTeam(data);
+      await workspaceRep?.mutate.createTeam(data);
       form.setValue("id", nanoid(WORKSPACE_TEAM_ID_LENGTH));
 
       return dispatch({

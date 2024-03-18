@@ -24,11 +24,17 @@ import { deleteTeamMutation } from "./mutators/delete-team";
 import { queryClient } from "../../lib/query-client";
 import { PublicUserType } from "../../schemas/user.schema";
 import { removeMemberMutation } from "./mutators/remove-member";
+import { changeMemberRoleMutation } from "./mutators/change-member-role";
 
-export type TeamUpdateArgs = {
+export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
   teamId: string;
-};
+}
+
+interface RoleUpdateArgs {
+  memberId: string;
+  role: Member["role"];
+}
 
 export const workspaceMutators = {
   async initWorkspace(tx: WriteTransaction, data: Workspace) {
@@ -77,6 +83,21 @@ export const workspaceMutators = {
 
     const updateMembers = removeMemberMutation({
       memberId,
+      members: workspaceMembers,
+    });
+
+    await tx.set(makeWorkspaceMembersKey(), updateMembers);
+  },
+
+  async changeMemberRole(tx: WriteTransaction, roleUpdate: RoleUpdateArgs) {
+    const workspaceMembers = await tx.get<WorkspaceMembers>(
+      makeWorkspaceMembersKey()
+    );
+
+    if (!workspaceMembers) throw new Error("Bad data");
+
+    const updateMembers = changeMemberRoleMutation({
+      ...roleUpdate,
       members: workspaceMembers,
     });
 

@@ -7,7 +7,7 @@ import { createWorkspace } from "../handlers/create-workspace";
 import { createInvite } from "../handlers/create-invite";
 import { joinWorkspace } from "../handlers/join-workspace";
 import { handlePresence } from "../handlers/presence";
-import { getMemberInfo } from "../handlers/get-member-info";
+import { getMembersInfo } from "../handlers/get-members-info";
 
 export async function handlePost(req: Party.Request, party: WorkspaceParty) {
   const route = getRoute(req);
@@ -25,8 +25,7 @@ export async function handlePost(req: Party.Request, party: WorkspaceParty) {
       return joinWorkspace(req, party);
     case "/presence":
       return handlePresence(req, party);
-    case "/member-info":
-      return getMemberInfo(req, party);
+
     default:
       return badRequest();
   }
