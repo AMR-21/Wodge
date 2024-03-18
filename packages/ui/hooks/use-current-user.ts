@@ -38,5 +38,5 @@ export function useCurrentUser() {
     }
   }, [data, isPending]);
 
-  return data;
+  return { user: data, isUserPending: isPending };
 }

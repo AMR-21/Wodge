@@ -15,13 +15,13 @@ import {
 import { TeamSettings } from "@/components/settings/team/team-settings";
 import { TeamsSidebar } from "@/components/settings/team/teams-sidebar";
 
-import { WorkspaceSettings } from "@/components/settings/workspace-settings";
+import { WorkspaceSettings } from "@/components/settings/general/workspace-settings";
 import { Building2 } from "lucide-react";
 
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="general">
+      <Settings defaultActive="members">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />

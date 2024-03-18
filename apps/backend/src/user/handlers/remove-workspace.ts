@@ -8,16 +8,16 @@ import {
 } from "@repo/data";
 import { produce } from "immer";
 
-export async function addWorkspace(req: Party.Request, party: UserParty) {
+export async function removeWorkspace(req: Party.Request, party: UserParty) {
   const serviceKey = req.headers.get("authorization");
 
   if (serviceKey !== party.room.env.SERVICE_KEY) {
     return badRequest();
   }
 
-  const workspace = <UserWorkspacesStore>await req.json();
+  const { workspaceId } = <{ workspaceId: string }>await req.json();
 
-  if (!workspace.workspaceId) return badRequest();
+  if (!workspaceId) return badRequest();
 
   // Update store and versions
   const nextVersion = (party.versions.get("globalVersion") as number) + 1;
@@ -25,7 +25,9 @@ export async function addWorkspace(req: Party.Request, party: UserParty) {
   party.versions.set("globalVersion", nextVersion);
 
   party.workspacesStore = produce(party.workspacesStore, (draft) => {
-    draft.data.push(workspace);
+    draft.data = party.workspacesStore.data.filter(
+      (w) => w.workspaceId !== workspaceId
+    );
     draft.lastModifiedVersion = nextVersion;
   });
 
@@ -36,7 +38,7 @@ export async function addWorkspace(req: Party.Request, party: UserParty) {
   });
 
   // Poke update data
-  party.poke({ type: "user" });
+  party.poke({ type: "deleteWorkspace", id: workspaceId });
 
   return ok();
 }

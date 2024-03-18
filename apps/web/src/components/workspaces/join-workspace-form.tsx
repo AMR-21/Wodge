@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { JoinWorkspaceSchema, WorkspacesRegistry } from "@repo/data";
+import { JoinWorkspaceSchema } from "@repo/data";
 
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
@@ -16,6 +16,7 @@ import {
 import { Input } from "@repo/ui/components/ui/input";
 import { DialogClose } from "@repo/ui/components/ui/dialog";
 import { Button } from "@repo/ui/components/ui/button";
+import { toast } from "@repo/ui/components/ui/toast";
 
 export function JoinWorkspaceForm() {
   const form = useForm<z.infer<typeof JoinWorkspaceSchema>>({
@@ -30,22 +31,18 @@ export function JoinWorkspaceForm() {
   // const user = useCurrentUser();
 
   async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
-    // startTransition(async () => {
-    //   const res = await fetch(data.url, {
-    //     method: "POST",
-    //     credentials: "include",
-    //   });
-    //   if (!res.ok) {
-    //     console.error("Failed to join workspace");
-    //     return;
-    //   }
-    //   const { workspaceId } = (await res.json()) as { workspaceId: string };
-    //   // Update the user workspaces
-    //   await user?.store.pull();
-    //   // Ensure that the workspace is create with cloud mode
-    //   WorkspacesRegistry.getInstance().reInit(workspaceId);
-    //   router.push(`/workspaces/${workspaceId}`);
-    // });
+    startTransition(async () => {
+      const res = await fetch(data.url, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        toast.error("Failed to join workspace");
+        return;
+      }
+      const { workspaceId } = (await res.json()) as { workspaceId: string };
+      // router.push(`/workspaces/${workspaceId}`);
+    });
   }
 
   return (

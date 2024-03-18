@@ -1,9 +1,9 @@
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
 import { DrObj, Member, Role } from "@repo/data";
 import { generalMembersColumns } from "../general-members-columns";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function RoleMembersSettings({ role }: { role: DrObj<Role> }) {
   const { members } = useCurrentWorkspace();

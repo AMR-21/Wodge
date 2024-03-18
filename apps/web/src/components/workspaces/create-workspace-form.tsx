@@ -25,7 +25,7 @@ import { toast } from "@repo/ui/components/ui/toast";
 import { useActions, useUserStore } from "@repo/ui/store/store-hooks";
 
 export function CreateWorkspaceForm() {
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
   const userStore = useUserStore();
   const { addWorkspace } = useActions();
   const router = useRouter();

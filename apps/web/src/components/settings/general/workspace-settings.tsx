@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useCurrentWorkspace } from "../workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WorkspaceSchema, Workspace } from "@repo/data";
 
@@ -9,8 +8,8 @@ import {
   SettingsContentDescription,
   SettingsContentHeader,
   SettingsContentSection,
-} from "./settings";
-import { Gate } from "../gate";
+} from "../settings";
+import { Gate } from "../../gate";
 import {
   Form,
   FormControl,
@@ -25,9 +24,11 @@ import {
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
 import { Input } from "@repo/ui/components/ui/input";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { WorkspaceDangerZone } from "./workspace-danger-zone";
 
 export function WorkspaceSettings() {
-  const { metadata, workspace } = useCurrentWorkspace();
+  const { workspace } = useCurrentWorkspace();
   const form = useForm<Workspace>({
     resolver: zodResolver(WorkspaceSchema.pick({ name: true })),
     defaultValues: {
@@ -36,11 +37,12 @@ export function WorkspaceSettings() {
   });
 
   useEffect(() => {
-    if (metadata) form.reset(metadata);
-  }, [metadata]);
+    if (workspace) form.reset(workspace);
+  }, [workspace]);
 
   async function onSubmit(data: Pick<Workspace, "name">) {
     // await workspace?.changeName(data.name);
+    console.log("update workspace", data);
   }
 
   return (
@@ -53,9 +55,9 @@ export function WorkspaceSettings() {
       <SettingsContentSection header="Avatar">
         <div className="space-y-3">
           <Avatar className="h-16 w-16 rounded-md">
-            <AvatarImage src={metadata?.avatar} />
+            <AvatarImage src={workspace?.avatar} />
             <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
-              {metadata?.name[0]}
+              {workspace?.name[0]}
             </AvatarFallback>
           </Avatar>
 
@@ -91,7 +93,7 @@ export function WorkspaceSettings() {
         </Form>
       </SettingsContentSection>
 
-      {metadata?.environment === "local" && (
+      {workspace?.environment === "local" && (
         <>
           <SettingsContentSection header="Enable Cloud Access">
             <div className="space-y-4">
@@ -108,17 +110,7 @@ export function WorkspaceSettings() {
       )}
 
       <SettingsContentSection header="Danger Zone">
-        <div className="flex gap-4 ">
-          <SettingsContentAction variant="outline">
-            Leave Workspace
-          </SettingsContentAction>
-
-          <Gate permissions={["admin"]}>
-            <SettingsContentAction variant="destructive">
-              Delete Workspace
-            </SettingsContentAction>
-          </Gate>
-        </div>
+        <WorkspaceDangerZone />
       </SettingsContentSection>
     </div>
   );

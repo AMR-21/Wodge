@@ -67,7 +67,6 @@ export function DataTableActions<TData>({
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
               {menuItems?.map((item, idx) => {
                 if (item.type === "separator") {
                   return <DropdownMenuSeparator key={idx} />;

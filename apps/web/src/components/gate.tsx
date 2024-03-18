@@ -1,6 +1,6 @@
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useCurrentWorkspace } from "./workspace/workspace-context";
 import { Role, grant } from "@repo/data";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function Gate({
   children,

@@ -1,6 +1,5 @@
 import { Mutable } from "@/lib/utils";
 import * as React from "react";
-import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { SettingsContentHeader, SettingsContentSection } from "../settings";
 import {
   DrObj,
@@ -20,6 +19,7 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function RolesSettings() {
   const { structure, members, workspace } = useCurrentWorkspace();

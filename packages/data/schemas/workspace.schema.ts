@@ -125,7 +125,7 @@ export const FolderSchema = z.object({
 
 export const MemberSchema = z.object({
   id: z.string().length(ID_LENGTH),
-  data: PublicUserSchema.omit({ id: true }),
+  role: z.enum(["owner", "admin", "member"]),
   joinInfo: z.object({
     token: z.string(),
     created_by: z.string().length(ID_LENGTH),

@@ -63,7 +63,13 @@ export type UserWorkspacesStore = {
 };
 
 export type PokeMessage = {
-  type: "user" | "workspace" | "channel" | "presence" | "welcome";
+  type:
+    | "user"
+    | "workspace"
+    | "channel"
+    | "presence"
+    | "welcome"
+    | "deleteWorkspace";
   id?: string;
 };
 

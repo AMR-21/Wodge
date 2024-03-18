@@ -14,6 +14,7 @@ import {
   makeWorkspaceStructureKey,
 } from "@repo/data";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
+import { useRouter } from "next/navigation";
 
 export function useCurrentWorkspace() {
   const [workspaceRep, setWorkspaceRep] = useState<Replicache<
@@ -21,14 +22,21 @@ export function useCurrentWorkspace() {
   > | null>(null);
 
   const workspaceId = useCurrentWorkspaceId();
-  const user = useCurrentUser();
+  const { user, isUserPending } = useCurrentUser();
   const { getWorkspace } = useActions();
-  const userWorkspace = useUserWorkspaces().userWorkspaces?.find(
+  const { userWorkspaces, isUserWorkspacesPending } = useUserWorkspaces();
+  const router = useRouter();
+
+  const userWorkspace = userWorkspaces?.find(
     (w) => w.workspaceId === workspaceId,
   );
 
+  const isPending = isUserPending || isUserWorkspacesPending;
+
   useEffect(() => {
-    if (!user || !workspaceId || !userWorkspace) return;
+    if (isPending) return;
+    if (!user || !workspaceId || !userWorkspace)
+      return router.replace("/workspaces");
 
     const workspaceStore = getWorkspace(
       workspaceId,
@@ -39,7 +47,7 @@ export function useCurrentWorkspace() {
     if (!workspaceStore) return;
 
     setWorkspaceRep(workspaceStore);
-  }, [user, workspaceId, userWorkspace]);
+  }, [user, workspaceId, userWorkspace, isPending]);
 
   const { snapshot: structure, isPending: isStructurePending } = useSubscribe(
     workspaceRep,

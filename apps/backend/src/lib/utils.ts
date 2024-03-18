@@ -25,11 +25,7 @@ export function getRoles(rolesIds: string[], party: WorkspaceParty) {
   );
 }
 
-export function isAllowed(
-  req: Party.Request,
-  party: WorkspaceParty,
-  permissions: Role["permissions"]
-) {
+export function isAllowed(req: Party.Request, party: WorkspaceParty) {
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return false;

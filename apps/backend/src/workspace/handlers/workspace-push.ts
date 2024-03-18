@@ -19,6 +19,7 @@ import { produce } from "immer";
 import { createTeamMutation } from "@repo/data/models/workspace/mutators/create-team";
 import { createTeam } from "../mutators/create-team";
 import { updateTeam } from "../mutators/update-team";
+import { removeMember } from "../mutators/remove-member";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -45,6 +46,9 @@ function runner(party: WorkspaceParty, req: Party.Request) {
         ) as PublicUserType;
 
         return initWorkspace(party, params, userData);
+
+      case "removeMember":
+        return await removeMember(party, params);
 
       case "createTeam":
         return await createTeam(party, params);

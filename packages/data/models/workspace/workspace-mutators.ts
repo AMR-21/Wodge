@@ -7,6 +7,7 @@ import {
   WorkspaceStructure,
   Workspace,
   defaultWorkspaceStructure,
+  Member,
 } from "../../schemas/workspace.schema";
 import {
   makeWorkspaceKey,
@@ -22,6 +23,7 @@ import { createTeamMutation } from "./mutators/create-team";
 import { deleteTeamMutation } from "./mutators/delete-team";
 import { queryClient } from "../../lib/query-client";
 import { PublicUserType } from "../../schemas/user.schema";
+import { removeMemberMutation } from "./mutators/remove-member";
 
 export type TeamUpdateArgs = {
   teamUpdate: TeamUpdate;
@@ -33,7 +35,10 @@ export const workspaceMutators = {
     // 1. Create the workspace
     const validatedFields = WorkspaceSchema.safeParse(data);
 
-    if (!validatedFields.success) throw new Error("Invalid workspace data");
+    if (!validatedFields.success) {
+      console.log(validatedFields.error.flatten());
+      throw new Error("Invalid workspace data");
+    }
 
     const { data: workspace } = validatedFields;
 
@@ -51,16 +56,31 @@ export const workspaceMutators = {
       members: [
         {
           id: userData.id,
-          data: userData,
+          role: "owner",
           joinInfo: {
             joined_at: new Date().toISOString(),
             token: "",
             created_by: "",
             method: "owner",
           },
-        },
+        } as Member,
       ],
     });
+  },
+
+  async removeMember(tx: WriteTransaction, memberId: string) {
+    const workspaceMembers = await tx.get<WorkspaceMembers>(
+      makeWorkspaceMembersKey()
+    );
+
+    if (!workspaceMembers) throw new Error("Bad data");
+
+    const updateMembers = removeMemberMutation({
+      memberId,
+      members: workspaceMembers,
+    });
+
+    await tx.set(makeWorkspaceMembersKey(), updateMembers);
   },
 
   async createTeam(

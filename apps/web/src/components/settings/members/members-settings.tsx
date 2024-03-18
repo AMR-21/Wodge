@@ -3,26 +3,27 @@ import { SettingsContentHeader, SettingsContentSection } from "../settings";
 import { useInvites } from "./use-invites";
 import { InviteLink } from "./invite-sections";
 import { useTable } from "../use-table";
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { membersColumns } from "./members-columns";
 import { Mutable } from "@/lib/utils";
 import { DrObj, Member } from "@repo/data";
 import { SettingsSearchInput } from "../settings-search-input";
 import { MembersCombobox } from "../members-combobox";
 import { DataTable } from "@repo/ui/components/data-table/data-table";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function MembersSettings() {
   const { invites, inviteLink, isPending } = useInvites();
-  const { members, inviters } = useCurrentWorkspace();
+  const { members, workspaceRep } = useCurrentWorkspace();
 
   const { table } = useTable({
-    data: members.members as Mutable<DrObj<Member>[]>,
-    columns: membersColumns({ inviters, removeMember }),
+    data: (members?.members as Mutable<DrObj<Member>[]>) || [],
+    columns: membersColumns({ removeMember }),
   });
 
-  function removeMember(memberId: string) {
-    console.log("remove member", memberId);
+  async function removeMember(memberId: string) {
+    await workspaceRep?.mutate.removeMember(memberId);
   }
+
   // Todo render email invites
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
@@ -45,7 +46,7 @@ export function MembersSettings() {
             />
 
             <MembersCombobox
-              members={members.members}
+              members={members?.members || []}
               onClick={(d) => console.log({ d })}
             />
           </div>

@@ -5,7 +5,6 @@ import {  useForm } from "react-hook-form";
 import { SettingsContext } from "../settings";
 import { use, useContext, useEffect } from "react";
 import { nanoid } from "nanoid";
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
@@ -18,6 +17,7 @@ import {
 import { Input } from "@repo/ui/components/ui/input";
 import { Button } from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   const { dispatch } = useContext(SettingsContext);

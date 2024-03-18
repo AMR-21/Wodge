@@ -3,10 +3,10 @@ import { Mutable } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 import { useTable } from "../use-table";
 import { linkedTeamColumns } from "./linked-teams-columns";
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { TeamsCombobox } from "./teams-combobox";
 import { SettingsSearchInput } from "../settings-search-input";
 import { DataTable } from "@repo/ui/components/data-table/data-table";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 interface LinkedTeamsProps {
   unLinkTeam: (teamId: string) => void;

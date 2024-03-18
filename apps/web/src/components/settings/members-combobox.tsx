@@ -40,7 +40,7 @@ export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
             {members.map((member) => (
               <CommandItem
                 key={member.id}
-                value={member.data.email + member.data.displayName}
+                value={member.email + member.displayName}
                 onSelect={() => {
                   onClick?.(member);
                   setOpen(false);
@@ -48,14 +48,14 @@ export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
                 className="flex items-center gap-3"
               >
                 <Avatar className="h-8 w-8 rounded-md">
-                  <AvatarImage src={member.data.avatar} />
-                  <AvatarFallback>{member.data.displayName[0]}</AvatarFallback>
+                  <AvatarImage src={member.avatar} />
+                  <AvatarFallback>{member?.displayName?.[0]}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex flex-col">
-                  <span>{member.data.displayName}</span>
+                  <span>{member.displayName}</span>
                   <span className="text-xs text-muted-foreground">
-                    {member.data.email}
+                    {member.email}
                   </span>
                 </div>
               </CommandItem>

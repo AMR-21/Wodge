@@ -66,3 +66,21 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
     }
   }
 }
+
+export async function getUserInfoById(userId: string) {
+  try {
+    const user = await db.query.users.findFirst({
+      columns: {
+        id: false,
+        emailVerified: false,
+        updatedAt: false,
+        createdAt: false,
+      },
+      where: eq(users.id, userId),
+    });
+
+    return user;
+  } catch (e) {
+    return null;
+  }
+}

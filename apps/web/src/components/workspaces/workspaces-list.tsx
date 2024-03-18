@@ -13,7 +13,7 @@ export function WorkspacesList() {
       </div>
     );
 
-  if (!isPending && (userWorkspaces?.length === 0 || !useUserWorkspaces))
+  if (!isPending && (userWorkspaces?.length === 0 || !userWorkspaces))
     return (
       <p className="p-5 text-center text-muted-foreground">
         Join or create workspace to start using Wodge

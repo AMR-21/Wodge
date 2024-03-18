@@ -12,7 +12,6 @@ import {
   WORKSPACE_ROLE_ID_LENGTH,
 } from "@repo/data";
 
-import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
 import { generalMembersColumns } from "../general-members-columns";
@@ -28,6 +27,7 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function RoleSettings() {
   const { activeItemId } = React.useContext(SettingsContext);

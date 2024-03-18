@@ -48,7 +48,6 @@ export async function initWorkspace(
   // 5. create default workspace structure
   party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
     draft.data = {
-      publicChannels: [],
       tags: [],
       teams: [],
       roles: [],
@@ -59,9 +58,7 @@ export async function initWorkspace(
   party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
     draft.data.members.push({
       id: userId,
-      data: {
-        ...userData,
-      },
+      role: "owner",
       joinInfo: {
         joined_at: new Date().toISOString(),
         token: "",

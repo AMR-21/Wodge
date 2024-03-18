@@ -2,13 +2,16 @@ import type * as Party from "partykit/server";
 import { badRequest, json, ok, unauthorized } from "../../lib/http-utils";
 import WorkspaceParty from "../workspace-party";
 import {
+  Member,
   PublicUserType,
   REPLICACHE_VERSIONS_KEY,
+  UserWorkspacesStore,
   WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
   makeWorkspaceMembersKey,
 } from "@repo/data";
 import { isMemberInWorkspace } from "../../lib/utils";
+import { produce } from "immer";
 
 export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   const token = new URL(req.url).searchParams.get("token");
@@ -30,10 +33,10 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // 2. get the user data
   const userData = <PublicUserType>JSON.parse(req.headers.get("x-user-data")!);
 
-  const { id, ...publicData } = userData;
+  // const { id, ...publicData } = userData;
 
   // 3. check if the user is already a member
-  const isMember = isMemberInWorkspace(id, party);
+  const isMember = isMemberInWorkspace(userData.id, party);
 
   if (isMember) return badRequest();
 
@@ -52,27 +55,38 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,
     },
-    body: JSON.stringify({ workspaceId: party.room.id }),
+    body: JSON.stringify({
+      workspaceId: party.room.id,
+      workspaceName: party.workspaceMetadata.data.name,
+      workspaceAvatar: party.workspaceMetadata.data.avatar,
+      environment: "cloud",
+    } satisfies UserWorkspacesStore),
   });
 
   if (res.status !== 200) return badRequest();
 
   // 6. add the user to the workspace
-  party.workspaceMembers.data.members.push({
-    id,
-    data: publicData,
+
+  const newMember: Member = {
+    id: userId,
+    role: "member",
     joinInfo: {
       joined_at: new Date().toISOString(),
       token,
       created_by: invite.createdBy,
       method: invite.method,
     },
-  });
+  };
 
   // 7. Update Replicache versions
   const nextVersion = (party.versions.get("globalVersion") as number) + 1;
 
-  party.workspaceMembers.lastModifiedVersion = nextVersion;
+  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
+    draft.data.members.push(newMember);
+    draft.lastModifiedVersion = nextVersion;
+  });
+
+  // party.workspaceMembers.lastModifiedVersion = nextVersion;
 
   party.versions.set("globalVersion", nextVersion);
 
@@ -86,7 +100,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   party.invites.set(token, invite);
 
   // 8. Update presence
-  party.presenceMap.set(id, true);
+  party.presenceMap.set(userData.id, true);
 
   // 9. persist updates
   await party.room.storage.put({

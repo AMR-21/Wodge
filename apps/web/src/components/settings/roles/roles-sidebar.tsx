@@ -4,12 +4,12 @@ import {
   SettingsSidebarAccordionPlaceHolder,
 } from "../settings";
 import { SidebarItem } from "../../workspace/sidebar-item";
-import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { nanoid } from "nanoid";
 import { WORKSPACE_ROLE_ID_LENGTH } from "@repo/data";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function RolesSidebar() {
   const isDesktop = useIsDesktop();

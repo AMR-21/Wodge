@@ -52,7 +52,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   // even with multiple connections from same user (multi-device)
   async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
     await this.ensurePresence();
-
     connection.send(
       JSON.stringify({
         type: "welcome",

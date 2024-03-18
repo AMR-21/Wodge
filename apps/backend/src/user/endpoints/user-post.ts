@@ -17,6 +17,7 @@ import { userPush } from "../handlers/user-push";
 import { userPull } from "../handlers/user-pull";
 import { addWorkspace } from "../handlers/add-workspace";
 import { poke } from "../handlers/poke";
+import { removeWorkspace } from "../handlers/remove-workspace";
 
 export async function handlePost(req: Party.Request, party: UserParty) {
   const route = getRoute(req);
@@ -27,7 +28,8 @@ export async function handlePost(req: Party.Request, party: UserParty) {
       return userPull(req, party);
     case "/add-workspace":
       return await addWorkspace(req, party);
-
+    case "/remove-workspace":
+      return await removeWorkspace(req, party);
     case "/poke":
       return await poke(req, party);
     default:

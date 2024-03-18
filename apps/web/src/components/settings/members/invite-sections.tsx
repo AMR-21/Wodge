@@ -1,5 +1,3 @@
-
-import { useInvites } from "./use-invites";
 import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { env } from "@repo/env";
 import { useState } from "react";
@@ -8,7 +6,11 @@ import { NewInviteForm } from "./new-invite-form";
 import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { Invite } from "@repo/data";
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/ui/components/ui/popover";
 import { toast } from "@repo/ui/components/ui/toast";
 
 function makeLink(token: string, wid: string) {
@@ -23,9 +25,7 @@ export function InviteLink({
   isPending: boolean;
 }) {
   const workspaceId = useCurrentWorkspaceId();
-  const [checked, setChecked] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
-
   const [copied, setCopied] = useState(false);
 
   return (

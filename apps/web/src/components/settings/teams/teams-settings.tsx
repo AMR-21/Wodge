@@ -1,6 +1,5 @@
 import { Mutable } from "@/lib/utils";
 import * as React from "react";
-import { useCurrentWorkspace } from "../../workspace/workspace-context";
 import { SettingsContentHeader, SettingsContentSection } from "../settings";
 import { teamColumns } from "./teams-columns";
 import { DrObj, Team, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
@@ -8,6 +7,7 @@ import { nanoid } from "nanoid";
 import { DataTable, useCurrentUser } from "@repo/ui";
 import { UpdateHandlerProps, useTable } from "../use-table";
 import { useMutation } from "@tanstack/react-query";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 const teamsX = [
   {

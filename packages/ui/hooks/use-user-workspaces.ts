@@ -21,5 +21,5 @@ export function useUserWorkspaces() {
     },
   );
 
-  return { userWorkspaces, isPending };
+  return { userWorkspaces, isUserWorkspacesPending: isPending };
 }

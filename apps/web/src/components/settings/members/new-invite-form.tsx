@@ -1,4 +1,3 @@
-import { useCurrentWorkspace } from "@/components/workspace/workspace-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewInvite, NewInviteSchema } from "@repo/data";
 
@@ -13,6 +12,7 @@ import {
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 import { Button } from "@repo/ui/components/ui/button";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function NewInviteForm({
   setIsOpen,
@@ -26,11 +26,11 @@ export function NewInviteForm({
       method: "link" as "link" | "email",
     },
   });
-  const { metadata } = useCurrentWorkspace();
+  const { workspace } = useCurrentWorkspace();
 
   const { createInvite, isPending } = useCreateInvite(setIsOpen);
 
-  if (!metadata) return null;
+  if (!workspace) return null;
 
   function onSubmit(data: NewInvite) {
     createInvite(data);

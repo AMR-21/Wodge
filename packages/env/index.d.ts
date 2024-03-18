@@ -10,6 +10,7 @@ type Env = Readonly<{
   NEXT_PUBLIC_BACKEND_DOMAIN: string;
   NEXT_PUBLIC_REPLICACHE_KEY: string;
   USER_AVATAR_BUCKET: string;
+  SERVICE_KEY: string;
 }>;
 
 declare module "@repo/env" {

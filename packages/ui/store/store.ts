@@ -37,6 +37,7 @@ export interface AppState {
       environment: Environment,
       userId: string,
     ) => Replicache<typeof workspaceMutators> | void;
+    removeWorkspace: (workspaceId: string) => void;
   };
 }
 
@@ -82,6 +83,21 @@ export const useAppState = create<AppState>()(
               );
 
             return workspace;
+          },
+          // Softly delete workspace from the store
+          removeWorkspace: async (workspaceId: string) => {
+            const workspaces = get().workspaces;
+
+            if (workspaces[workspaceId]) {
+              // workaround as close throws an error
+              //@ts-ignore
+              workspaces[workspaceId]!.puller = undefined;
+              //@ts-ignore
+              workspaces[workspaceId]!.pusher = undefined;
+              // workspaces[workspaceId]!.close().catch((e) => console.log("amr"));
+            }
+            const { workspaceId: _, ...rest } = workspaces;
+            set({ ...rest });
           },
           connectSocket: (userId: string) => {
             if (get().socket) return;

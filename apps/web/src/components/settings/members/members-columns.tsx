@@ -9,14 +9,25 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
+import { buttonVariants } from "@repo/ui/components/ui/button";
 import { Checkbox } from "@repo/ui/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/ui/select";
+import { useMemberInfo } from "@repo/ui/hooks/use-member-info";
+import { cn } from "@repo/ui/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Crown, MoreHorizontal } from "lucide-react";
 import { DeepReadonly } from "replicache";
 
 interface MembersColumnsProps {
   removeMember: (memberId: string) => void;
-  inviters?: (Pick<Member, "id" | "data"> | undefined)[];
+  inviters?: (Pick<Member, "id"> | undefined)[];
 }
 export function membersColumns({
   removeMember,
@@ -54,69 +65,99 @@ export function membersColumns({
 
     {
       id: "member",
-      accessorFn: (row) => row.data.email,
+      // accessorFn: (row) => row.email,
       header: () => <Header>Member</Header>,
 
       cell: ({ row }) => {
         const member = row.original;
+        const { memberInfo, isMemberPending } = useMemberInfo(member.id);
+
+        if (isMemberPending) return null;
 
         return (
           <div className="flex gap-4">
             <Avatar className="h-8 w-8 rounded-md">
-              {/* <AvatarImage
-                src={member.data.avatar}
-                alt={member.data.displayName}
+              <AvatarImage
+                src={memberInfo?.avatar}
+                alt={memberInfo?.displayName}
                 className="rounded-md"
-              /> */}
+              />
               <AvatarFallback className="rounded-md">
-                {member.data.displayName[0]}
+                {/* {memberInfo?.displayName[0]} */}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <div className="flex gap-1">
-                <p>{member.data.displayName}</p>
+                <p>{memberInfo?.displayName}</p>
               </div>
               <span className="text-xs text-muted-foreground">
-                {member.data.email}
+                {memberInfo?.email}
               </span>
             </div>
           </div>
         );
       },
     },
+
+    // {
+    //   id: "joinMethod",
+    //   header: () => <p className="pl-1">Join Method</p>,
+    //   cell: ({ row }) => {
+    //     const member = row.original;
+
+    //     const inviter = inviters?.find(
+    //       (i) => i?.id === member.joinInfo.created_by,
+    //     );
+
+    //     const token = member.joinInfo.token;
+
+    //     return (
+    //       <div className="flex flex-col">
+    //         <div className="truncate">
+    //           {token ? (
+    //             <TooltipWrapper content={`Created by ${inviter?.email}`}>
+    //               <pre className="truncate rounded-md bg-surface p-1 text-center text-xs">
+    //                 {token}
+    //               </pre>
+    //             </TooltipWrapper>
+    //           ) : (
+    //             <div className="flex items-center gap-2 pl-1">
+    //               <span>Workspace Owner</span>
+    //               <Crown className="h-4 w-4 fill-yellow-500 stroke-yellow-500" />
+    //             </div>
+    //           )}
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
-      id: "joinMethod",
-      header: () => <p className="pl-1">Join Method</p>,
+      id: "role",
+      header: () => <Header className="pl-3">Role</Header>,
       cell: ({ row }) => {
-        const member = row.original;
-
-        const inviter = inviters?.find(
-          (i) => i?.id === member.joinInfo.created_by,
-        );
-
-        const token = member.joinInfo.token;
-
         return (
-          <div className="flex flex-col">
-            <div className="truncate">
-              {token ? (
-                <TooltipWrapper content={`Created by ${inviter?.data.email}`}>
-                  <pre className="truncate rounded-md bg-surface p-1 text-center text-xs">
-                    {token}
-                  </pre>
-                </TooltipWrapper>
-              ) : (
-                <div className="flex items-center gap-2 pl-1">
-                  <span>Workspace Owner</span>
-                  <Crown className="h-4 w-4 fill-yellow-500 stroke-yellow-500" />
-                </div>
-              )}
-            </div>
+          <div className="flex w-28">
+            <Select disabled={row.original.role === "owner"}>
+              <SelectTrigger
+                className={cn(
+                  buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                  }),
+                  "w-fit justify-end gap-1 border-none text-right capitalize",
+                )}
+              >
+                <SelectValue placeholder={row.original.role} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="member">Member</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         );
       },
     },
-
     {
       id: "actions",
       cell: ({ row, table }) => {
@@ -128,11 +169,12 @@ export function membersColumns({
             table={table}
             menuItems={[
               {
-                label: "Delete",
+                label: "Remove from workspace",
                 action: () => {
                   removeMember(member.id);
                 },
                 destructive: true,
+                disabled: member.role === "owner",
               },
             ]}
           />

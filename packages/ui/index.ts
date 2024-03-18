@@ -18,6 +18,7 @@ export * from "./components/ui/dialog";
 export * from "./components/ui/tabs";
 export * from "./components/ui/skeleton";
 export * from "./components/ui/switch";
+export * from "./components/ui/select";
 export * from "./components/ui/table";
 export * from "./components/ui/badge";
 export * from "./components/ui/checkbox";
@@ -36,5 +37,6 @@ export * from "./hooks/use-is-desktop";
 export * from "./hooks/use-current-workspace-id";
 export * from "./hooks/use-current-user";
 export * from "./hooks/use-current-workspace";
+export * from "./hooks/use-member-info";
 
 export * from "./store/store";
