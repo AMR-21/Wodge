@@ -71,6 +71,7 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
         },
       });
 
+    form.setValue("id", nanoid(WORKSPACE_GROUP_ID_LENGTH));
     setColored(false);
     setDefaultColor(data.color);
   }
