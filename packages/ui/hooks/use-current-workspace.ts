@@ -38,7 +38,8 @@ export function useCurrentWorkspace() {
   useEffect(() => {
     if (isPending) return;
     if (!user || !workspaceId || !userWorkspace)
-      return router.replace("/workspaces");
+      // return router.replace("/workspaces");
+      return;
 
     const workspaceStore = getWorkspace(
       workspaceId,

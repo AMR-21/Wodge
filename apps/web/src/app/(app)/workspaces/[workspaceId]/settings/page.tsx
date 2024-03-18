@@ -1,8 +1,8 @@
 "use client";
 
 import { MembersSettings } from "@/components/settings/members/members-settings";
-import { RoleSettings } from "@/components/settings/roles/group-settings";
-import { RolesSidebar } from "@/components/settings/roles/roles-sidebar";
+import { GroupSettings } from "@/components/settings/groups/group-settings";
+import { GroupsSidebar } from "@/components/settings/groups/groups-sidebar";
 import {
   Settings,
   SettingsContent,
@@ -31,7 +31,7 @@ function WorkspaceSettingsPage() {
             <SettingsSidebarItem value="general" />
             <SettingsSidebarItem value="members" />
             <SettingsSidebarAccordionItem value="groups">
-              <RolesSidebar />
+              <GroupsSidebar />
             </SettingsSidebarAccordionItem>
             {/* <SettingsSidebarItem value="roles" /> */}
             <SettingsSidebarAccordionItem value="teams">
@@ -50,7 +50,7 @@ function WorkspaceSettingsPage() {
         </SettingsContent>
 
         <SettingsContent id="groups">
-          <RoleSettings />
+          <GroupSettings />
         </SettingsContent>
         <SettingsContent id="members">
           <MembersSettings />

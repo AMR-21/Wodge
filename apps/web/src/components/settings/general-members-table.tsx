@@ -9,7 +9,7 @@ import { DataTable } from "@repo/ui/components/data-table/data-table";
 interface MembersTableProps<TData> {
   table: Table<TData>;
   members: readonly DrObj<Member>[];
-  addMember?: (member: DrObj<Member>) => void;
+  addMember?: (memberId: string) => void;
 }
 
 export function GeneralMembersTable<TData>({

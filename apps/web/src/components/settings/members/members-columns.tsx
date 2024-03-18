@@ -76,7 +76,7 @@ export function membersColumns({
 
         const member = members?.find((m) => m.id === row.id);
 
-        return member?.email || "";
+        return `${member?.displayName} ${member?.email} ${member?.username}`;
       },
       header: () => <Header>Member</Header>,
 

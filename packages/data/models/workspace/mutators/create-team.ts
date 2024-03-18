@@ -44,6 +44,7 @@ export function createTeamMutation({
   const newTeam: Team = {
     ...newTeamBase,
     members: [],
+    moderators: [],
     folders: [
       {
         name: "root",

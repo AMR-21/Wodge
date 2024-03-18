@@ -1,4 +1,7 @@
 import { env } from "@repo/env";
+import { makeWorkspaceMembersKey } from "./keys";
+import { queryClient } from "./query-client";
+import { PullResponseV1, PullerResult } from "replicache";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
@@ -20,6 +23,16 @@ export function replicacheWrapper<Request, Result>(
 
       const response = await res.json();
 
+      if (
+        mode === "pull" &&
+        domain === "workspace" &&
+        //@ts-ignore
+        response?.patch?.map((p) => p.key)?.includes(makeWorkspaceMembersKey())
+      ) {
+        queryClient.invalidateQueries({
+          queryKey: [id, "members"],
+        });
+      }
       return {
         httpRequestInfo: {
           httpStatusCode: res.status,

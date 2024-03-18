@@ -41,5 +41,5 @@ export function createGroupMutation({
     draft.groups.push(newGroup);
   });
 
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }

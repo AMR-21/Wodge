@@ -19,17 +19,17 @@ export type GroupUpdate =
       update: { members: Group["members"] };
     };
 
-interface GroupUpdateArgs extends WorkspaceGroupMutation {
+export interface GroupUpdateRunnerArgs extends WorkspaceGroupMutation {
   groupUpdate: GroupUpdate;
   curMembers: string[];
 }
 
-export function GroupUpdateRunner({
+export function groupUpdateRunner({
   groupUpdate,
   structure,
   groupId,
   curMembers,
-}: GroupUpdateArgs) {
+}: GroupUpdateRunnerArgs) {
   if (!groupUpdate.action) throw new Error("Invalid update action");
 
   const { action, update } = groupUpdate;

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { createTestRole, createTestStructure } from "../utils";
 import { UserId } from "../tests";
-import { WORKSPACE_ROLE_ID_LENGTH } from "../..";
+import { WORKSPACE_GROUP_ID_LENGTH } from "../..";
 
 import { nanoid } from "nanoid";
 import { createRoleMutation } from "../../models/workspace/mutators/create-group";
@@ -46,7 +46,7 @@ describe("Workspace teams' unit mutations", () => {
     ).toThrowError(/^Unauthorized role creation$/);
 
     // Test: Create a team that already exists
-    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const roleId = nanoid(WORKSPACE_GROUP_ID_LENGTH);
     const role5 = createTestRole({ id: roleId });
 
     const newStructure = createRoleMutation({
@@ -79,7 +79,7 @@ describe("Workspace teams' unit mutations", () => {
   });
 
   test("update a role", () => {
-    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const roleId = nanoid(WORKSPACE_GROUP_ID_LENGTH);
     const role = createTestRole({ id: roleId });
     const structure = createRoleMutation({
       role,
@@ -111,7 +111,7 @@ describe("Workspace teams' unit mutations", () => {
   });
 
   test("update role members", () => {
-    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const roleId = nanoid(WORKSPACE_GROUP_ID_LENGTH);
     const role = createTestRole({ id: roleId });
     const structure = createRoleMutation({
       role,
@@ -188,7 +188,7 @@ describe("Workspace teams' unit mutations", () => {
   });
 
   test("delete a role", () => {
-    const roleId = nanoid(WORKSPACE_ROLE_ID_LENGTH);
+    const roleId = nanoid(WORKSPACE_GROUP_ID_LENGTH);
     const role = createTestRole({ id: roleId });
     const structure = createRoleMutation({
       role,

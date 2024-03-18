@@ -318,15 +318,18 @@ function SettingsContent({
 function SettingsContentHeader({
   label,
   description,
+  footer,
 }: {
   label: string;
   description?: string;
+  footer?: string;
 }) {
   return (
     <div className="pb-6">
       <div className="space-y-1.5">
         <h2 className="text-xl">{label}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
+        {footer && <p className="text-xs text-muted-foreground">{footer}</p>}
       </div>
     </div>
   );

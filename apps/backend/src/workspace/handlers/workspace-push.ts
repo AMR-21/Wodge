@@ -21,6 +21,8 @@ import { createTeam } from "../mutators/create-team";
 import { updateTeam } from "../mutators/update-team";
 import { removeMember } from "../mutators/remove-member";
 import { changeMemberRole } from "../mutators/change-member-role";
+import { createGroup } from "../mutators/create-group";
+import { updateGroup } from "../mutators/update-group";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -57,8 +59,14 @@ function runner(party: WorkspaceParty, req: Party.Request) {
       case "createTeam":
         return await createTeam(party, params);
 
+      case "createGroup":
+        return await createGroup(party, params);
+
       case "updateTeam":
         return await updateTeam(party, params);
+
+      case "updateGroup":
+        return await updateGroup(party, params);
 
       case "DeleteWorkspace":
         return deleteWorkspace(party, params);

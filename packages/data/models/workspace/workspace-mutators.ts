@@ -8,6 +8,7 @@ import {
   Workspace,
   defaultWorkspaceStructure,
   Member,
+  Group,
 } from "../../schemas/workspace.schema";
 import {
   makeWorkspaceKey,
@@ -25,10 +26,17 @@ import { queryClient } from "../../lib/query-client";
 import { PublicUserType } from "../../schemas/user.schema";
 import { removeMemberMutation } from "./mutators/remove-member";
 import { changeMemberRoleMutation } from "./mutators/change-member-role";
+import { createGroupMutation } from "./mutators/create-group";
+import { GroupUpdate, groupUpdateRunner } from "./mutators/group-update-runner";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
   teamId: string;
+}
+
+export interface GroupUpdateArgs {
+  groupUpdate: GroupUpdate;
+  groupId: string;
 }
 
 interface RoleUpdateArgs {
@@ -169,6 +177,54 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
+  async createGroup(
+    tx: WriteTransaction,
+    data: Omit<Group, "members" | "createdBy">
+  ) {
+    // 1. Create the group
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
+    const structure = await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    );
+
+    if (!structure) throw new Error("Bad data");
+
+    const newStructure = createGroupMutation({
+      group: data,
+      structure,
+      currentUserId: user.id,
+    });
+
+    // 2. Persist the mutation
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async updateGroup(tx: WriteTransaction, update: GroupUpdateArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    ))!;
+
+    const members = await tx.get<WorkspaceMembers>(makeWorkspaceMembersKey());
+
+    if (!members) throw new Error("Bad data");
+    if (!structure) throw new Error("Bad data");
+
+    const { groupId, groupUpdate } = update;
+    const curMembers = members.members.map((m) => m.id);
+
+    const newStructure = groupUpdateRunner({
+      structure,
+      groupUpdate,
+      groupId,
+      curMembers,
+    });
+
+    // 3. Persist the mutation
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
   // async deleteTeam(tx: WriteTransaction, teamId: string) {
   //   //Fixme - no need to validate the team id
   //   // 1.Validate the team

@@ -4,56 +4,42 @@ import {
   SettingsSidebarAccordionPlaceHolder,
 } from "../settings";
 import { SidebarItem } from "../../workspace/sidebar-item";
-import { nanoid } from "nanoid";
-import { WORKSPACE_ROLE_ID_LENGTH } from "@repo/data";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { cn } from "@repo/ui/lib/utils";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
-export function RolesSidebar() {
+export function GroupsSidebar() {
   const isDesktop = useIsDesktop();
   const { activeItemId, dispatch } = useContext(SettingsContext);
 
-  const { user } = useCurrentUser();
   const { structure } = useCurrentWorkspace();
 
-  const roles = [
-    {
-      id: "nanoid(WORKSPACE_ROLE_ID_LENGTH)",
-      name: "Admin",
-      permissions: [],
-      members: [],
-      createdBy: user?.id || "",
-      linkedTeams: [],
-      color: "#123131",
-    },
-  ];
+  const groups = structure.groups;
 
-  if (roles.length === 0)
+  if (groups.length === 0)
     return (
       <SettingsSidebarAccordionPlaceHolder>
-        No roles
+        No groups
       </SettingsSidebarAccordionPlaceHolder>
     );
 
   return (
     <div className="flex flex-col gap-1">
-      {roles.map((role) => (
+      {groups.map((group) => (
         <SidebarItem
-          key={role.id}
-          label={role.name}
+          key={group.id}
+          label={group.name}
           noIcon
           className={cn(
             "justify-start py-1.5  pr-1.5 capitalize",
-            activeItemId === role.id && "bg-accent text-accent-foreground",
+            activeItemId === group.id && "bg-accent text-accent-foreground",
           )}
           onClick={() => {
             dispatch({
               type: "openAccordionItem",
               payload: {
                 value: "groups",
-                id: role.id,
+                id: group.id,
                 isSidebarOpen: isDesktop,
               },
             });

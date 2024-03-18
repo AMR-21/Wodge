@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   BRAND_COLOR,
   ID_LENGTH,
-  WORKSPACE_ROLE_ID_LENGTH,
+  WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
 import { PublicUserSchema } from "./user.schema";
@@ -101,11 +101,11 @@ export const WorkspaceSchema = z.object({
 });
 
 export const ChannelSchema = z.object({
-  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
   avatar: z.string(),
-  viewRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
-  editRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  viewRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
+  editRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
   type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });
 
@@ -115,12 +115,12 @@ export const TagSchema = z.object({
 });
 
 export const FolderSchema = z.object({
-  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
   channels: z.array(ChannelSchema),
   // As a preset of underline channels
-  viewRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
-  editRoles: z.array(z.string().length(WORKSPACE_ROLE_ID_LENGTH)),
+  viewRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
+  editRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
 });
 
 export const MemberSchema = z.object({
@@ -135,7 +135,7 @@ export const MemberSchema = z.object({
 });
 
 export const GroupSchema = z.object({
-  id: z.string().length(WORKSPACE_ROLE_ID_LENGTH),
+  id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
   members: z.array(z.string().length(ID_LENGTH)),
   color: z.string().default(BRAND_COLOR),

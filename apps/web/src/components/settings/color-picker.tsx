@@ -42,20 +42,10 @@ export function ColorPicker({
   const [color, setColor] = useState(defaultColor || BRAND_COLOR);
   const [selected, setSelected] = useState<number>(0);
 
-  React.useEffect(() => {
-    const idx = presetColors.findIndex((c) => c === defaultColor);
-    setSelected(idx ? idx + 1 : 0);
-  }, []);
-
-  React.useEffect(() => {
-    if (handler) {
-      handler(color);
-    }
-  }, [color]);
-
   function onSetColor(color: string) {
     setSelected(0);
     setColor(color);
+    handler?.(color);
   }
 
   return (
@@ -122,7 +112,6 @@ export const Swatch = React.forwardRef<HTMLButtonElement, SwatchProps>(
         className="h-full w-full shrink-0 "
         style={{ backgroundColor: swatchColor }}
       />
-      {selected === sid && <Check className="absolute" />}
     </Button>
   ),
 );

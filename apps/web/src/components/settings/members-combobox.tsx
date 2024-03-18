@@ -1,4 +1,3 @@
-import { Member } from "@repo/data";
 import { DeepReadonlyObject } from "replicache";
 import * as React from "react";
 import {
@@ -20,10 +19,12 @@ import {
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
+import { useMember } from "@repo/ui/hooks/use-member";
+import { type Member as MemberType } from "@repo/data";
 
 interface MembersComboboxProps {
-  members: readonly DeepReadonlyObject<Member>[];
-  onClick?: (member: DeepReadonlyObject<Member>) => void;
+  members: readonly DeepReadonlyObject<MemberType>[];
+  onClick?: (memberId: string) => void;
 }
 export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
   const [open, setOpen] = React.useState(false);
@@ -38,31 +39,52 @@ export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
           <CommandEmpty>No member found.</CommandEmpty>
           <CommandGroup>
             {members.map((member) => (
-              <CommandItem
+              <Member
                 key={member.id}
-                value={member.email + member.displayName}
-                onSelect={() => {
-                  onClick?.(member);
-                  setOpen(false);
-                }}
-                className="flex items-center gap-3"
-              >
-                <Avatar className="h-8 w-8 rounded-md">
-                  <AvatarImage src={member.avatar} />
-                  <AvatarFallback>{member?.displayName?.[0]}</AvatarFallback>
-                </Avatar>
-
-                <div className="flex flex-col">
-                  <span>{member.displayName}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {member.email}
-                  </span>
-                </div>
-              </CommandItem>
+                memberId={member.id}
+                setOpen={setOpen}
+                onClick={onClick}
+              />
             ))}
           </CommandGroup>
         </Command>
       </PopoverContent>
     </Popover>
+  );
+}
+
+function Member({
+  memberId,
+  setOpen,
+  onClick,
+}: {
+  memberId: string;
+  onClick?: (memberId: string) => void;
+  setOpen: (open: boolean) => void;
+}) {
+  const { member } = useMember(memberId);
+
+  if (!member) return null;
+
+  return (
+    <CommandItem
+      key={member?.id}
+      value={member.email + member.displayName}
+      onSelect={() => {
+        onClick?.(memberId);
+        setOpen(false);
+      }}
+      className="flex items-center gap-3"
+    >
+      <Avatar className="h-8 w-8 rounded-md">
+        <AvatarImage src={member?.avatar} />
+        <AvatarFallback>{member?.displayName?.[0]}</AvatarFallback>
+      </Avatar>
+
+      <div className="flex flex-col">
+        <span>{member?.displayName}</span>
+        <span className="text-xs text-muted-foreground">{member?.email}</span>
+      </div>
+    </CommandItem>
   );
 }
