@@ -34,7 +34,7 @@ export function GroupSettings() {
         color: BRAND_COLOR,
       },
     ] satisfies DrObj<Group>[];
-  }, [structure.teams, user]);
+  }, [structure, user]);
 
   const group = React.useMemo(
     () => groups.find((g) => g.id === activeItemId),
@@ -57,7 +57,7 @@ export function GroupSettings() {
     });
   }
 
-  if (!group) return null;
+  if (!group) return <p>Placeholder</p>;
 
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">

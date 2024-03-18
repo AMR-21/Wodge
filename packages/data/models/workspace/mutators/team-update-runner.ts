@@ -1,3 +1,4 @@
+import { string } from "zod";
 import { DrObj, Team, WorkspaceStructure } from "../../..";
 import {
   addTeamFoldersMutation,
@@ -6,6 +7,7 @@ import {
 import { updateTeamInfoMutation } from "./team-info";
 import { addTeamMembersMutation, removeTeamMembers } from "./team-members";
 import { WorkspaceTeamMutation } from "./types";
+import { changeTeamMemberRoleMutation } from "./change-team-member-role";
 
 export type UpdatableTeamFields = Omit<Team, "id" | "createdBy">;
 
@@ -28,6 +30,10 @@ export type TeamUpdate =
   | {
       action: "removeFolders";
       update: { folders: string[] };
+    }
+  | {
+      action: "changeTeamMemberRole";
+      update: { memberId: string; role: "teamMember" | "moderator" };
     };
 
 export interface TeamUpdateRunnerArgs extends WorkspaceTeamMutation {
@@ -59,6 +65,13 @@ export function teamUpdateRunner({
 
     case "removeMembers":
       return removeTeamMembers({ update, teamId, structure });
+
+    case "changeTeamMemberRole":
+      return changeTeamMemberRoleMutation({
+        update,
+        teamId,
+        structure,
+      });
 
     case "addFolders":
       return addTeamFoldersMutation({ update, teamId, structure });

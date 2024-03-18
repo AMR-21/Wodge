@@ -16,13 +16,13 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
     return members.members.filter((member) =>
       group.members.includes(member.id),
     );
-  }, [members, structure.groups]);
+  }, [members, structure]);
 
   const nonGroupMembers = useMemo(() => {
     return members.members.filter(
       (member) => !group.members.includes(member.id),
     );
-  }, [members, structure.groups]);
+  }, [members, structure]);
 
   const workspaceId = useCurrentWorkspaceId();
 

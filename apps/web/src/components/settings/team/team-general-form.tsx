@@ -29,13 +29,12 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
 
   const form = useForm<DrObj<Team>>({
     resolver: zodResolver(
-      TeamSchema.pick({ name: true, avatar: true, id: true, createdBy: true }),
+      TeamSchema.pick({ name: true, avatar: true, id: true }),
     ),
     defaultValues: {
       id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team.id,
-      name: isAddition ? "" : team.name,
+      name: isAddition ? "" : team?.name,
       avatar: isAddition ? "" : team?.avatar,
-      createdBy: isAddition ? user?.id : team.createdBy,
     },
   });
 
@@ -44,19 +43,17 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
       return form.reset({
         ...team,
         id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-        createdBy: user?.id,
       });
 
     form.reset(team);
   }, [team]);
 
-  async function onSubmit(
-    data: Pick<Team, "id" | "name" | "createdBy" | "avatar">,
-  ) {
+  async function onSubmit(data: Pick<Team, "id" | "name" | "avatar">) {
+    console.log("data", data);
     if (isAddition) {
       await workspaceRep?.mutate.createTeam(data);
 
-      dispatch({
+      return dispatch({
         type: "openAccordionItem",
         payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
       });
@@ -114,17 +111,6 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="createdBy"
-            render={({ field }) => (
-              <FormItem className="hidden">
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
           <Button
             size="sm"
             type="submit"

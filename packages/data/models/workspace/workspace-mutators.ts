@@ -115,7 +115,7 @@ export const workspaceMutators = {
 
   async createTeam(
     tx: WriteTransaction,
-    data: Pick<Team, "id" | "name" | "createdBy" | "avatar">
+    data: Pick<Team, "id" | "name" | "avatar">
   ) {
     // 1. Create the team
     // 1. Create the team

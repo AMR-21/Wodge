@@ -24,6 +24,7 @@ import { changeMemberRole } from "../mutators/change-member-role";
 import { createGroup } from "../mutators/create-group";
 import { updateGroup } from "../mutators/update-group";
 import { deleteGroup } from "../mutators/delete-group";
+import { deleteTeam } from "../mutators/delete-team";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -71,6 +72,9 @@ function runner(party: WorkspaceParty, req: Party.Request) {
 
       case "deleteGroup":
         return await deleteGroup(party, params);
+
+      case "deleteTeam":
+        return await deleteTeam(party, params);
 
       case "DeleteWorkspace":
         return deleteWorkspace(party, params);

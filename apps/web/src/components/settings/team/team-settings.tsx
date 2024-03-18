@@ -13,12 +13,13 @@ import { generalMembersColumns } from "../general-members-columns";
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { teamMembersColumns } from "./team-members-columns";
 
 export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
   const isAddition = activeItemId.startsWith("add-");
 
-  const { structure } = useCurrentWorkspace();
+  const { structure, members, workspaceRep } = useCurrentWorkspace();
 
   const { user } = useCurrentUser();
 
@@ -36,40 +37,86 @@ export function TeamSettings() {
         avatar: "",
       },
     ] satisfies DrObj<Team>[];
-  }, [structure.teams, user]);
+  }, [structure, members]);
 
   const team = useMemo(
     () => teams.find((t) => t.id === activeItemId),
     [activeItemId, teams],
   );
 
-  const { members } = useCurrentWorkspace();
+  const teamMembers = useMemo(() => {
+    return members.members.filter((member) =>
+      team?.members.includes(member.id),
+    );
+  }, [members, structure, team]);
 
-  const teamMembers = members.members.filter((m) =>
-    team?.members.includes(m.id),
-  );
-
-  const nonTeamMembers = members.members.filter(
-    (m) => !team?.members.includes(m.id),
-  );
+  const nonTeamMembers = useMemo(() => {
+    return members.members.filter(
+      (member) => !team?.members.includes(member.id),
+    );
+  }, [members, structure, team]);
 
   const { table } = useTable({
     data: teamMembers as Mutable<DrObj<Member>[]>,
-    columns: generalMembersColumns({
+    columns: teamMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
+      moderatorsIds: team?.moderators || [],
+      changeTeamMemberRole,
     }),
   });
 
-  if (!team) return null;
-
-  function addMember(memberId: string) {
-    console.log("add member", memberId);
+  async function addMember(memberId: string) {
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "addMembers",
+        update: {
+          members: [memberId],
+        },
+      },
+    });
   }
 
-  function removeMember(memberId: string) {
-    console.log("remove member", memberId);
+  async function removeMember(memberId: string) {
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "removeMembers",
+        update: {
+          members: [memberId],
+        },
+      },
+    });
   }
+
+  async function changeTeamMemberRole(
+    memberId: string,
+    role: "teamMember" | "moderator",
+  ) {
+    console.log("changeTeamMemberRole", memberId, role);
+
+    if (!team) return;
+    await workspaceRep?.mutate.updateTeam({
+      teamId: team.id,
+      teamUpdate: {
+        action: "changeTeamMemberRole",
+        update: {
+          memberId,
+          role,
+        },
+      },
+    });
+  }
+
+  async function deleteTeam() {
+    if (!team) return;
+    await workspaceRep?.mutate.deleteTeam(team.id);
+  }
+
+  if (!team) return <p>Placeholder</p>;
 
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
@@ -97,7 +144,7 @@ export function TeamSettings() {
           </SettingsContentSection>
 
           <SettingsContentSection header="Danger Zone">
-            <Button size="sm" variant="destructive">
+            <Button size="sm" variant="destructive" onClick={deleteTeam}>
               Delete Team
             </Button>
           </SettingsContentSection>
