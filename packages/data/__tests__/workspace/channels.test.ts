@@ -6,9 +6,10 @@ import {
   createTestTeam,
 } from "../utils";
 import { createChannelMutation } from "../../models/workspace/mutators/create-channel";
+import { updateChannelInfoMutation } from "../../models/workspace/mutators/channel-info";
+import { deleteChannelMutation } from "../../models/workspace/mutators/delete-channel";
 import { nanoid } from "nanoid";
 import { WORKSPACE_TEAM_ID_LENGTH } from "../..";
-import { updateChannelInfoMutation } from "../../models/workspace/mutators/channel-info";
 
 describe("Workspace channels' unit mutations", () => {
   test("Create a channel", async () => {
@@ -91,7 +92,7 @@ describe("Workspace channels' unit mutations", () => {
     ).toThrowError(/^Channel already exists$/);
   });
 
-  test("update a team", async () => {
+  test("Update a channel", async () => {
     const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const folderId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     const channelId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
@@ -123,5 +124,109 @@ describe("Workspace channels' unit mutations", () => {
         .find((t) => t.id === team.id)
         ?.folders.find((f) => f.id === folderId)?.channels
     ).toEqual([{ ...channel, name: "New Name" }]);
+
+    // Test invalid data
+    expect(() =>
+      updateChannelInfoMutation({
+        structure,
+        update: { name: "" },
+        channelId: channel.id,
+        folderId,
+        teamId,
+      })
+    ).toThrowError(/^Invalid channel update data$/);
+
+    // Test team not found
+    expect(() =>
+      updateChannelInfoMutation({
+        structure,
+        update: { name: "NewName" },
+        channelId: channel.id,
+        folderId,
+        teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      })
+    ).toThrowError(/^Team not found$/);
+
+    // Test folder not found
+    expect(() =>
+      updateChannelInfoMutation({
+        structure,
+        update: { name: "NewName" },
+        channelId: channel.id,
+        folderId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        teamId,
+      })
+    ).toThrowError(/^Folder not found$/);
+
+    // Test channel not found
+    expect(() =>
+      updateChannelInfoMutation({
+        structure,
+        update: { name: "NewName" },
+        channelId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        folderId,
+        teamId,
+      })
+    ).toThrowError(/^Channel not found$/);
+  });
+
+  test("Delete a channel", async () => {
+    const folderId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
+    const channel = createTestChannel({ name: "Test" });
+    const team = createTestTeam({
+      folders: [
+        {
+          name: "folder1",
+          id: folderId,
+          channels: [channel],
+          editRoles: [],
+          viewRoles: [],
+        },
+      ],
+    });
+    const structure = createTestStructure({ teams: [team] });
+
+    const s1 = deleteChannelMutation({
+      structure,
+      teamId: team.id,
+      folderId,
+      channelId: channel.id,
+    });
+
+    // Test delete channel
+    expect(
+      s1.teams
+        .find((t) => t.id === team.id)
+        ?.folders.find((f) => f.id === folderId)?.channels
+    ).not.toContain(channel);
+
+    // Test team not found
+    expect(() =>
+      deleteChannelMutation({
+        structure,
+        teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        folderId,
+        channelId: channel.id,
+      })
+    ).toThrowError(/^Team not found$/);
+
+    // Test folder not found
+    expect(() =>
+      deleteChannelMutation({
+        structure,
+        teamId: team.id,
+        folderId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        channelId: channel.id,
+      })
+    ).toThrowError(/^Folder not found$/);
+
+    expect(() =>
+      deleteChannelMutation({
+        structure,
+        teamId: team.id,
+        folderId: folderId,
+        channelId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      })
+    ).toThrowError(/^Channel not found$/);
   });
 });
