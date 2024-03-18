@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import {
   BRAND_COLOR,
   Channel,
-  Role,
+  Group,
   TEAM_MEMBERS_ROLE,
   Team,
   WORKSPACE_TEAM_ID_LENGTH,
@@ -26,13 +26,14 @@ export function createTestTeam(data?: Partial<Team>) {
     members: [],
     name: "Test Team",
     tags: [],
+    moderators: [],
     ...data,
   };
   return newTeam;
 }
 
-export function createTestRole(data?: Partial<Role>) {
-  const newTeam: Role = {
+export function createTestRole(data?: Partial<Group>) {
+  const newTeam: Group = {
     createdBy: UserId,
     id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
     members: [],
@@ -59,7 +60,7 @@ export function createTestChannel(data?: Partial<Channel>) {
 export function createTestStructure(data?: Partial<WorkspaceStructure>) {
   const structure: WorkspaceStructure = {
     teams: [],
-    roles: [],
+    groups: [],
     tags: [],
     ...data,
   };

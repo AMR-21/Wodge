@@ -3,7 +3,7 @@ import { createTestStructure, createTestTeam } from "../utils";
 import { createTeamMutation } from "../../models/workspace/mutators/create-team";
 import { describe, expect, test } from "vitest";
 import { nanoid } from "nanoid";
-import { WORKSPACE_TEAM_ID_LENGTH } from "../..";
+import { TEAM_MEMBERS_ROLE, WORKSPACE_TEAM_ID_LENGTH } from "../..";
 import { updateTeamInfoMutation } from "../../models/workspace/mutators/team-info";
 import {
   addTeamMembersMutation,
@@ -24,8 +24,11 @@ describe("Workspace teams' unit mutations", () => {
     const team1 = createTestTeam();
 
     expect(
-      createTeamMutation({ team: team1, structure, currentUserId: UserId })
-        .teams
+      createTeamMutation({
+        team: team1,
+        structure,
+        currentUserId: UserId,
+      }).teams
     ).toContainEqual(team1);
 
     // TEST: Create a team with invalid data
@@ -314,7 +317,18 @@ describe("Workspace teams' unit mutations", () => {
     ).toEqual({
       ...s2,
       teams: [
-        { ...team, folders: [{ id: "root", name: "root", channels: [] }] },
+        {
+          ...team,
+          folders: [
+            {
+              id: "root",
+              name: "root",
+              channels: [],
+              editRoles: [TEAM_MEMBERS_ROLE],
+              viewRoles: [TEAM_MEMBERS_ROLE],
+            },
+          ],
+        },
       ],
     });
   });
