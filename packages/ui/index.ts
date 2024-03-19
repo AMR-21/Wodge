@@ -24,6 +24,7 @@ export * from "./components/ui/badge";
 export * from "./components/ui/checkbox";
 export * from "./components/ui/popover";
 export * from "./components/ui/command";
+export * from "./components/ui/radio-group";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";

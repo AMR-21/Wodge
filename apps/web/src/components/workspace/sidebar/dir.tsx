@@ -4,9 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@repo/ui/components/ui/accordion";
-import { SidebarItem } from "./sidebar-item";
+import { SidebarItem } from "../sidebar-item";
 import { ChevronRight, Component, MoreHorizontal } from "lucide-react";
-import { SidebarItemBtn } from "./sidebar-item-btn";
+import { SidebarItemBtn } from "../sidebar-item-btn";
 
 export function Dir({
   id,

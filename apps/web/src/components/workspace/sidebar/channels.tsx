@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import { SidebarItem } from "./sidebar-item";
+import { SidebarItem } from "../sidebar-item";
 import {
   ChevronRight,
   Component,
   GripVertical,
   MoreHorizontal,
 } from "lucide-react";
-import { SidebarItemBtn } from "./sidebar-item-btn";
-import { Team, Dir, type Channel as ChannelType } from "@repo/data";
+import { SidebarItemBtn } from "../sidebar-item-btn";
+import { DrObj, type Channel as ChannelType } from "@repo/data";
 import {
   SortableContext,
   useSortable,
@@ -16,12 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@repo/ui/components/ui/accordion";
+
 import { cn } from "@repo/ui/lib/utils";
 
 export function Channels({
@@ -29,7 +24,7 @@ export function Channels({
   folderId,
   teamId,
 }: {
-  channels: ChannelType[];
+  channels: readonly DrObj<ChannelType>[];
   folderId: string;
   teamId: string;
 }) {
@@ -37,7 +32,6 @@ export function Channels({
     () => channels?.map((c) => c.id) || [],
     [channels],
   );
-  // console.log({ teamsId, teams });
 
   return (
     <div>
@@ -46,12 +40,13 @@ export function Channels({
         strategy={verticalListSortingStrategy}
       >
         <ul>
-          {channels?.map((channel) => (
+          {channels?.map((channel, i) => (
             <SortableChannel
               key={channel.id}
               channel={channel}
               folderId={folderId}
               teamId={teamId}
+              idx={i}
             />
           ))}
         </ul>
@@ -65,10 +60,12 @@ function SortableChannel({
   channel,
   folderId,
   teamId,
+  idx,
 }: {
-  channel: ChannelType;
+  channel: DrObj<ChannelType>;
   folderId: string;
   teamId: string;
+  idx: number;
 }) {
   const {
     attributes,
@@ -78,14 +75,24 @@ function SortableChannel({
     transition,
     isDragging,
     activeIndex,
+    index,
+    overIndex,
+    active,
   } = useSortable({
     id: channel.id,
     data: {
       type: "channel",
       folderId,
       teamId,
+      idx,
     },
   });
+
+  const isSomethingOver = index === overIndex;
+  const isChannelOver = active?.data?.current?.type === "channel";
+
+  const isAbove = activeIndex > overIndex;
+  const isBelow = activeIndex < overIndex;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -93,7 +100,15 @@ function SortableChannel({
   };
 
   return (
-    <div style={style} {...listeners} {...attributes}>
+    <div
+      {...listeners}
+      {...attributes}
+      className={cn(
+        "border-b-2 border-t-2 border-b-transparent border-t-transparent",
+        isSomethingOver && isChannelOver && isAbove && "border-t-blue-400",
+        isSomethingOver && isChannelOver && isBelow && "border-b-blue-400",
+      )}
+    >
       <Channel
         channel={channel}
         activeIndex={activeIndex}
@@ -111,7 +126,7 @@ interface DraggableProps {
 
 export const Channel = React.forwardRef<
   HTMLLIElement,
-  { channel: ChannelType } & DraggableProps &
+  { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
 >(({ channel, activeIndex, isDragging, ...props }, ref) => {
   return (

@@ -10,10 +10,10 @@ import {
   Space,
   User2,
 } from "lucide-react";
-import { SidebarItem } from "./sidebar-item";
+import { SidebarItem } from "../sidebar-item";
 import { cn } from "@repo/ui/lib/utils";
 import { Teamspaces } from "./teamspaces";
-import { UserCard } from "./user-card";
+import { UserCard } from "../user-card";
 import { usePathname } from "next/navigation";
 import { useAppState } from "@repo/ui/store/store";
 
@@ -67,8 +67,7 @@ export function Sidebar() {
           ))}
         </ul>
         <ul className="">
-          {/* <Teamspaces />
-          <Teamspaces /> */}
+          <Teamspaces />
         </ul>
       </div>
 

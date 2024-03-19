@@ -101,11 +101,15 @@ export const WorkspaceSchema = z.object({
 });
 
 export const ChannelSchema = z.object({
-  id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
+  id: z.string().length(ID_LENGTH),
   name: z.string().max(70).min(1),
-  avatar: z.string(),
-  viewRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
-  editRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
+  avatar: z.string().optional(),
+  viewRoles: z.array(
+    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+  ),
+  editRoles: z.array(
+    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+  ),
   type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });
 

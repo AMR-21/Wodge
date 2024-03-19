@@ -1,5 +1,5 @@
 import { AppHeader } from "@/components/workspace/app-header";
-import { Sidebar } from "@/components/workspace/sidebar";
+import { Sidebar } from "@/components/workspace/sidebar/sidebar";
 
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   return (

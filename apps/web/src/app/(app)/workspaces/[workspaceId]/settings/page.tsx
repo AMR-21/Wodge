@@ -33,7 +33,6 @@ function WorkspaceSettingsPage() {
             <SettingsSidebarAccordionItem value="groups">
               <GroupsSidebar />
             </SettingsSidebarAccordionItem>
-            {/* <SettingsSidebarItem value="roles" /> */}
             <SettingsSidebarAccordionItem value="teams">
               <TeamsSidebar />
             </SettingsSidebarAccordionItem>
@@ -56,10 +55,8 @@ function WorkspaceSettingsPage() {
           <MembersSettings />
         </SettingsContent>
         <SettingsContent id="upgrade">
-          <p>updgrade</p>
+          <p>upgrade</p>
         </SettingsContent>
-
-        {/* <SettingsClose /> */}
       </Settings>
     </div>
   );
