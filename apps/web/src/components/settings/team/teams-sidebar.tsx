@@ -33,7 +33,7 @@ export function TeamsSidebar() {
           label={team.name}
           noIcon
           className={cn(
-            "justify-start py-1.5  pr-1.5 capitalize",
+            "justify-start py-1.5 pr-1.5",
             activeItemId === team.id && "bg-accent text-accent-foreground",
           )}
           onClick={() => {

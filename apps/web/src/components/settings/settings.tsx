@@ -113,7 +113,7 @@ function Settings({
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: "groups",
+      active: defaultActive,
       isSidebarOpen: isDesktop,
       activeItemId: "",
       accordionActive: "",

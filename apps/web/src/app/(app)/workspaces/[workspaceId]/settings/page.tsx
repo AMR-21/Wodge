@@ -21,7 +21,7 @@ import { Building2 } from "lucide-react";
 function WorkspaceSettingsPage() {
   return (
     <div className="flex h-full w-full">
-      <Settings defaultActive="groups">
+      <Settings defaultActive="general">
         <SettingsSidebar>
           <SettingsSidebarHeader>
             <Building2 className="h-4 w-4" />

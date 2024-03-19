@@ -9,7 +9,7 @@ import { TeamGeneralForm } from "./team-general-form";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
-import { generalMembersColumns } from "../general-members-columns";
+
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";

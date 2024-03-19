@@ -9,7 +9,6 @@ import {
   SettingsContentHeader,
   SettingsContentSection,
 } from "../settings";
-import { Gate } from "../../gate";
 import {
   Form,
   FormControl,
@@ -26,24 +25,20 @@ import {
 import { Input } from "@repo/ui/components/ui/input";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { WorkspaceDangerZone } from "./workspace-danger-zone";
+import { WorkspaceGeneralForm } from "./workspace-general-form";
 
 export function WorkspaceSettings() {
-  const { workspace } = useCurrentWorkspace();
+  const { workspace, workspaceRep } = useCurrentWorkspace();
   const form = useForm<Workspace>({
-    resolver: zodResolver(WorkspaceSchema.pick({ name: true })),
+    resolver: zodResolver(
+      WorkspaceSchema.pick({ name: true, id: true, avatar: true }),
+    ),
     defaultValues: {
       name: "",
+      avatar: "",
+      id: workspace?.id,
     },
   });
-
-  useEffect(() => {
-    if (workspace) form.reset(workspace);
-  }, [workspace]);
-
-  async function onSubmit(data: Pick<Workspace, "name">) {
-    // await workspace?.changeName(data.name);
-    console.log("update workspace", data);
-  }
 
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
@@ -68,29 +63,7 @@ export function WorkspaceSettings() {
       </SettingsContentSection>
 
       <SettingsContentSection header="General">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel>Workspace Name</FormLabel>
-
-                  <FormControl>
-                    <Input {...field} className="w-3/4" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <SettingsContentAction>Update</SettingsContentAction>
-          </form>
-        </Form>
+        <WorkspaceGeneralForm />
       </SettingsContentSection>
 
       {workspace?.environment === "local" && (

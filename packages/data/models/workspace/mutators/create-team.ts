@@ -26,8 +26,7 @@ export function createTeamMutation({
     avatar: true,
   }).safeParse(team);
 
-  if (!validatedFields.success)
-    return console.log(validatedFields.error.flatten());
+  if (!validatedFields.success) throw new Error("Invalid team data");
 
   const { data: newTeamBase } = validatedFields;
 
