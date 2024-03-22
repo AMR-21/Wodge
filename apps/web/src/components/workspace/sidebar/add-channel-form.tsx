@@ -12,8 +12,6 @@ import { Input } from "@repo/ui/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
-import { consoleLogSink } from "replicache";
-import { z } from "zod";
 
 export function AddChannelForm() {
   const form = useForm<Channel>({

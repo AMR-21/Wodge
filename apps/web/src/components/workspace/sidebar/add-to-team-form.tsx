@@ -15,8 +15,15 @@ import {
 } from "@repo/ui/components/ui/tabs";
 import { useState } from "react";
 import { AddChannelForm } from "./add-channel-form";
+import { DrObj, Folder } from "@repo/data";
 
-export function AddToTeamForm() {
+export function AddToTeamForm({
+  teamId,
+  folders,
+}: {
+  teamId: string;
+  folders: DrObj<Folder>[];
+}) {
   const [value, setValue] = useState("channel");
 
   return (

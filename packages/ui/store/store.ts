@@ -94,7 +94,7 @@ export const useAppState = create<AppState>()(
               workspaces[workspaceId]!.puller = undefined;
               //@ts-ignore
               workspaces[workspaceId]!.pusher = undefined;
-              // workspaces[workspaceId]!.close().catch((e) => console.log("amr"));
+              // await workspaces[workspaceId]!.close();
             }
             const { workspaceId: _, ...rest } = workspaces;
             set({ ...rest });

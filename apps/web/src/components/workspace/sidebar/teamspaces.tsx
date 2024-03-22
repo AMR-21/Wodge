@@ -173,7 +173,7 @@ export const Teamspace = React.forwardRef<
             Icon={MoreHorizontal}
             className="-my-1 hover:bg-transparent"
           />
-          <AddToTeamForm />
+          <AddToTeamForm teamId={team.id} folders={team.folders} />
         </div>
       </SidebarItem>
     </li>

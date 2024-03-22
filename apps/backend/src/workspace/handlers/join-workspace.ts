@@ -30,13 +30,8 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
     return badRequest();
   }
 
-  // 2. get the user data
-  const userData = <PublicUserType>JSON.parse(req.headers.get("x-user-data")!);
-
-  // const { id, ...publicData } = userData;
-
   // 3. check if the user is already a member
-  const isMember = isMemberInWorkspace(userData.id, party);
+  const isMember = isMemberInWorkspace(userId, party);
 
   if (isMember) return badRequest();
 
@@ -100,7 +95,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   party.invites.set(token, invite);
 
   // 8. Update presence
-  party.presenceMap.set(userData.id, true);
+  party.presenceMap.set(userId, true);
 
   // 9. persist updates
   await party.room.storage.put({
