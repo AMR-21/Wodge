@@ -1,44 +1,43 @@
-import { Team, TeamSchema } from "../../..";
+import { Folder, FolderSchema, Team, TeamSchema } from "../../..";
 import { WorkspaceTeamMutation } from "./types";
 import { produce } from "immer";
 
 interface UpdateTeamDirArgs extends WorkspaceTeamMutation {
-  update: { folders: Team["folders"] };
+  update: { folder: Folder };
 }
 
-export function addTeamFoldersMutation({
+export function addTeamFolderMutation({
   structure,
   update,
   teamId,
 }: UpdateTeamDirArgs) {
   // 1. Validate the update request
-  const validatedFields = TeamSchema.pick({
-    folders: true,
-  })
-    .strict()
-    .safeParse(update);
+  const validatedFields = FolderSchema.safeParse({
+    ...update.folder,
+    channels: [],
+    editRoles: ["team-members"],
+    viewRoles: ["team-members"],
+  });
 
-  if (!validatedFields.success) throw new Error("Invalid team update data");
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten());
+    // throw new Error("Invalid team update data");
+    return structure;
+  }
 
-  const {
-    data: { folders },
-  } = validatedFields;
+  const { data: folder } = validatedFields;
 
   // 2. Check if team already exists
   const teamIdx = structure.teams.findIndex((t) => t.id === teamId);
 
   if (teamIdx === -1) throw new Error("Team does not exist");
 
-  if (
-    structure.teams[teamIdx]!.folders.some((folder) =>
-      folders.some((f) => f.id === folder.id)
-    )
-  )
+  if (structure.teams[teamIdx]!.folders.some((f) => f.id === folder.id))
     throw new Error("Folder already exists in team");
 
   // 3. Update the dirs
   const newStructure = produce(structure, (draft) => {
-    draft.teams[teamIdx]!.folders.push(...folders);
+    draft.teams[teamIdx]!.folders.push(folder);
   });
 
   return newStructure;

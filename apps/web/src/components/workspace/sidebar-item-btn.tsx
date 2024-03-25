@@ -34,7 +34,7 @@ export const SidebarItemBtn = React.forwardRef<
         variant="ghost"
         size="fit"
         className={cn(
-          "group/sidebtn z-10",
+          "group/sidebtn z-20",
           !isVisible() && "invisible",
           className,
         )}

@@ -66,9 +66,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": -69.89126965573155,
-			"y": 1319.3924646181977,
-			"lastActivityTimestamp": 1710589589442,
+			"x": -1382.4429880757486,
+			"y": -749.4814023256057,
+			"lastActivityTimestamp": 1711292704529,
 			"meta": {}
 		},
 		{
@@ -108,7 +108,7 @@
 				"tldraw:color": "black",
 				"tldraw:fill": "none",
 				"tldraw:dash": "draw",
-				"tldraw:horizontalAlign": "middle",
+				"tldraw:horizontalAlign": "start",
 				"tldraw:arrowheadStart": "none",
 				"tldraw:arrowheadEnd": "arrow"
 			},
@@ -125,8 +125,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 866.296875,
-				"h": 774.4598999023438
+				"w": 1770.464599609375,
+				"h": 765.93896484375
 			},
 			"insets": [
 				false,
@@ -144,7 +144,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1.2000000476837158,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": true,
+			"isHoveringCanvas": false,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,
@@ -418,9 +418,9 @@
 			"typeName": "page"
 		},
 		{
-			"x": 724.1072814687597,
-			"y": -550.3123823767527,
-			"z": 0.7322989454644531,
+			"x": 1382.822185903863,
+			"y": 915.5510935719292,
+			"z": 0.7802428655104128,
 			"meta": {},
 			"id": "camera:page:Dt1ynBSFe7ScuyUZorY59",
 			"typeName": "camera"
@@ -16045,7 +16045,6 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:Qy3-sLqBKobZvF3F4rwpd",
 			"type": "text",
 			"props": {
 				"color": "black",
@@ -16059,6 +16058,30 @@
 			},
 			"parentId": "page:Dt1ynBSFe7ScuyUZorY59",
 			"index": "aQ",
+			"id": "shape:Qy3-sLqBKobZvF3F4rwpd",
+			"typeName": "shape"
+		},
+		{
+			"x": -962.5216105044309,
+			"y": -482.54407685721344,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:cgb0F_yeN7eCoGZOCq7Iu",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "s",
+				"w": 766.6875,
+				"text": "Protection of id length on the static\n1. send requests to the DO to init the workspace\n2. Add a record in the database with the space general info (name - id - eroslug)\n3. mark the do as initialized - by the current methodology\n4. next mutations are in the rep cache except for general info",
+				"font": "draw",
+				"align": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:Dt1ynBSFe7ScuyUZorY59",
+			"index": "aR",
 			"typeName": "shape"
 		},
 		{

@@ -1,7 +1,7 @@
 import { string } from "zod";
-import { DrObj, Team, WorkspaceStructure } from "../../..";
+import { DrObj, Folder, Team, WorkspaceStructure } from "../../..";
 import {
-  addTeamFoldersMutation,
+  addTeamFolderMutation,
   deleteTeamFoldersMutation,
 } from "./team-folders";
 import { updateTeamInfoMutation } from "./team-info";
@@ -24,8 +24,8 @@ export type TeamUpdate =
       update: { members: Team["members"] };
     }
   | {
-      action: "addFolders";
-      update: { folders: Team["folders"] };
+      action: "addFolder";
+      update: { folder: Folder };
     }
   | {
       action: "removeFolders";
@@ -73,8 +73,8 @@ export function teamUpdateRunner({
         structure,
       });
 
-    case "addFolders":
-      return addTeamFoldersMutation({ update, teamId, structure });
+    case "addFolder":
+      return addTeamFolderMutation({ update, teamId, structure });
 
     case "removeFolders":
       return deleteTeamFoldersMutation({ update, teamId, structure });

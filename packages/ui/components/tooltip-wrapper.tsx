@@ -14,7 +14,10 @@ interface TooltipWrapperProps {
   className?: string;
 }
 
-export const tol = React.forwardRef<HTMLDivElement, TooltipWrapperProps>(
+export const TooltipWrapper = React.forwardRef<
+  HTMLDivElement,
+  TooltipWrapperProps
+>(
   (
     {
       children,
@@ -29,48 +32,20 @@ export const tol = React.forwardRef<HTMLDivElement, TooltipWrapperProps>(
     return (
       <TooltipProvider {...props} delayDuration={100}>
         <Tooltip>
-          <TooltipTrigger asChild>
-            <div ref={ref}>{children}</div>
-          </TooltipTrigger>
+          <TooltipTrigger asChild>{children}</TooltipTrigger>
 
-          <TooltipContent
-            side={side}
-            sideOffset={sideOffset}
-            className={className}
-          >
-            {content}
-          </TooltipContent>
+          {content && (
+            <TooltipContent
+              side={side}
+              sideOffset={sideOffset}
+              className={className}
+              hideWhenDetached
+            >
+              {content}
+            </TooltipContent>
+          )}
         </Tooltip>
       </TooltipProvider>
     );
   },
 );
-
-export function TooltipWrapper({
-  children,
-  content = "",
-  side = "bottom",
-  sideOffset = 4,
-  className,
-  ...props
-}: TooltipWrapperProps) {
-  return (
-    <TooltipProvider {...props} delayDuration={100}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div>{children}</div>
-        </TooltipTrigger>
-
-        {content && (
-          <TooltipContent
-            side={side}
-            sideOffset={sideOffset}
-            className={className}
-          >
-            {content}
-          </TooltipContent>
-        )}
-      </Tooltip>
-    </TooltipProvider>
-  );
-}

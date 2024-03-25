@@ -10,180 +10,48 @@ body,
 
 @layer base {
   :root {
-    /* ******************************* */
-    /* Colors */
-    --black: 0 0 0;
-    --white: 255 255 255;
-
-    --slate-50: 248 250 252;
-    --slate-100: 241 245 249;
-    --slate-200: 226 232 240;
-    --slate-300: 203 213 225;
-    --slate-400: 148 163 184;
-    --slate-500: 100 116 139;
-    --slate-600: 71 85 105;
-    --slate-700: 51 65 85;
-    --slate-800: 30 41 59;
-    --slate-900: 15 23 42;
-    --slate-950: 2 6 23;
-
-    --blue-50: 239 246 255;
-    --blue-100: 219 234 254;
-    --blue-200: 191 219 254;
-    --blue-300: 147 197 253;
-    --blue-400: 96 165 250;
-    --blue-500: 59 130 246;
-    --blue-600: 37 99 235;
-    --blue-700: 29 78 216;
-    --blue-800: 30 64 175;
-    --blue-900: 30 58 138;
-    --blue-950: 23 37 84;
-
-    --thunderbird-50: 255 241 241;
-    --thunderbird-100: 255 225 225;
-    --thunderbird-200: 255 199 199;
-    --thunderbird-300: 255 161 161;
-    --thunderbird-400: 255 106 106;
-    --thunderbird-500: 248 59 59;
-    --thunderbird-600: 229 29 29;
-    --thunderbird-700: 212 22 22;
-    --thunderbird-800: 159 21 21;
-    --thunderbird-900: 132 24 24;
-    --thunderbird-950: 72 7 7;
-
-    --ochre-50: 255 251 235;
-    --ochre-100: 254 243 199;
-    --ochre-200: 253 230 138;
-    --ochre-300: 253 211 76;
-    --ochre-400: 252 191 35;
-    --ochre-500: 246 158 10;
-    --ochre-600: 209 114 5;
-    --ochre-700: 181 83 8;
-    --ochre-800: 146 64 14;
-    --ochre-900: 120 53 15;
-    --ochre-950: 69 26 3;
-
-    --watercourse-50: 236 253 245;
-    --watercourse-100: 210 249 229;
-    --watercourse-200: 169 241 207;
-    --watercourse-300: 113 228 181;
-    --watercourse-400: 56 207 150;
-    --watercourse-500: 21 180 125;
-    --watercourse-600: 9 146 102;
-    --watercourse-700: 7 115 83;
-    --watercourse-800: 8 93 68;
-    --watercourse-900: 8 76 57;
-    --watercourse-950: 3 43 33;
-
-    /* ******************************* */
-
-    --background: var(--slate-50);
-    --foreground: var(--slate-700);
-
-    --muted: var(--slate-200);
-    --muted-foreground: var(--slate-500);
-
-    --surface: var(--white);
-    --surface-foreground: var(--slate-700);
-
-    /* Secondary used in KBD, button ghost base version */
-    --secondary: var(--slate-50);
-    --secondary-foreground: var(--slate-600);
-
-    --accent: var(--slate-100);
-    --accent-foreground: var(--slate-700);
-
-    --primary: var(--blue-600);
-    --primary-foreground: var(--blue-50);
-
-    --neutral: var(--slate-800);
-    --neutral-foreground: var(--slate-200);
-
-    --destructive: var(--thunderbird-600);
-    --destructive-foreground: var(--white);
-
-    --warning: var(--ochre-600);
-    --warning-foreground: var(--ochre-50);
-
-    --success: var(--watercourse-600);
-    --success-foreground: var(--watercourse-50);
-
-    --primary-muted: var(--blue-200);
-    --primary-muted-foreground: var(--blue-600);
-
-    --neutral-muted: var(--slate-200);
-    --neutral-muted-foreground: var(--slate-700);
-
-    --destructive-muted: var(--thunderbird-200);
-    --destructive-muted-foreground: var(--thunderbird-700);
-
-    --warning-muted: var(--ochre-200);
-    --warning-muted-foreground: var(--ochre-700);
-
-    --success-muted: var(--watercourse-200);
-    --success-muted-foreground: var(--watercourse-700);
-
-    --border: var(--slate-200);
-    --input: var(--slate-200);
-    --ring: var(--blue-600);
-
-    --primary-base: var(--blue-500);
-    --destructive-base: var(--thunderbird-500);
-    --warning-base: var(--ochre-500);
-    --success-base: var(--watercourse-500);
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: var(--slate-950);
-    --foreground: var(--slate-200);
-
-    --muted: var(--slate-800);
-    --muted-foreground: var(--slate-400);
-
-    --surface: var(--slate-900);
-    --surface-foreground: var(--slate-200);
-
-    /* Secondary used in KBD, button ghost base version */
-    --secondary: var(--slate-900);
-    --secondary-foreground: var(--slate-300);
-
-    --accent: var(--slate-800) / 0.5;
-    --accent-foreground: var(--slate-200);
-
-    --primary: var(--blue-700);
-    --primary-foreground: var(--blue-50);
-
-    --neutral: var(--slate-200);
-    --neutral-foreground: var(--slate-700);
-
-    --destructive: var(--thunderbird-700);
-    --destructive-foreground: var(--thunderbird-50);
-
-    --warning: var(--ochre-700);
-    --warning-foreground: var(--ochre-50);
-
-    --success: var(--watercourse-700);
-    --success-foreground: var(--watercourse-50);
-
-    --primary-muted: var(--blue-950);
-    --primary-muted-foreground: var(--blue-200);
-
-    --neutral-muted: var(--slate-800);
-    --neutral-muted-foreground: var(--slate-200);
-
-    --destructive-muted: var(--thunderbird-950);
-    --destructive-muted-foreground: var(--thunderbird-200);
-
-    --warning-muted: var(--ochre-950);
-    --warning-muted-foreground: var(--ochre-200);
-
-    --success-muted: var(--watercourse-950);
-    --success-muted-foreground: var(--watercourse-200);
-
-    --border: var(--slate-800);
-    --input: var(--slate-800);
-    --ring: var(--blue-700);
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 }
 
@@ -202,7 +70,7 @@ body,
   }
 
   .blur-effect {
-    @apply backdrop-blur-[10px] backdrop-saturate-200;
+    @apply backdrop-blur-[5px] backdrop-saturate-[180%];
   }
 }
 .shadow-border {

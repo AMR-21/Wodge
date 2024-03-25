@@ -16,7 +16,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../packages/ui/components/data-table/settings-data-table.tsx"
+    "../../packages/ui/components/data-table/settings-data-table.tsx",
+    "src/components/workspace/sidebar/add-to-team.tsx"
   ],
   "exclude": ["node_modules"]
 }

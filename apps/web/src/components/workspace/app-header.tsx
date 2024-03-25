@@ -5,21 +5,23 @@ import { PanelLeft } from "lucide-react";
 import { useSubscribe } from "replicache-react";
 import { useAppState } from "@repo/ui/store/store";
 import { cn } from "@repo/ui/lib/utils";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function AppHeader() {
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
   const toggleSidebar = useAppState((state) => state.actions.toggleSidebar);
-  useSubscribe;
+
+  const { workspace } = useCurrentWorkspace();
 
   return (
     <div
-      className={
-        "flex h-12 min-h-12 items-center border-b border-border/50 transition-all "
-      }
+      className={"flex items-center border-b border-border/50  transition-all "}
     >
-      <WorkspaceSwitcher />
+      <div className="flex h-full w-64 min-w-64 items-center truncate border-r border-border/50 px-1.5 py-2.5">
+        <WorkspaceSwitcher />
+      </div>
 
-      <div className="flex basis-full items-center px-1.5">
+      <div className="flex basis-full items-center px-1.5 py-2.5">
         {!isSidebarOpen && (
           <SidebarItemBtn
             Icon={PanelLeft}

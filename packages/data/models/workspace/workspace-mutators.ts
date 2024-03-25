@@ -9,6 +9,10 @@ import {
   defaultWorkspaceStructure,
   Member,
   Group,
+  Channel,
+  Page,
+  Chat,
+  Thread,
 } from "../../schemas/workspace.schema";
 import {
   makeWorkspaceKey,
@@ -29,10 +33,10 @@ import { changeMemberRoleMutation } from "./mutators/change-member-role";
 import { createGroupMutation } from "./mutators/create-group";
 import { GroupUpdate, groupUpdateRunner } from "./mutators/group-update-runner";
 import { deleteGroupMutation } from "./mutators/delete-group";
-import {
-  WorkspaceUpdate,
-  updateWorkspaceInfoMutation,
-} from "./mutators/workspace-info";
+import { updateWorkspaceInfoMutation } from "./mutators/workspace-info";
+import { createPageMutation } from "./mutators/create-page";
+import { createChatMutation } from "./mutators/create-chat";
+import { createThreadMutation } from "./mutators/create-thread";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -49,6 +53,19 @@ export interface WorkspaceUpdateArgs {
     name: Workspace["name"];
     avatar?: Workspace["avatar"];
   };
+}
+
+export interface NewPageArgs extends Page {
+  teamId: string;
+  folderId: string;
+}
+
+export interface NewChatArgs extends Chat {
+  teamId: string;
+}
+
+export interface NewThreadArgs extends Thread {
+  teamId: string;
 }
 
 interface RoleUpdateArgs {
@@ -266,6 +283,72 @@ export const workspaceMutators = {
     const newStructure = deleteGroupMutation({
       structure,
       groupId,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  // async createChannel(tx: WriteTransaction, data: NewChannelArgs) {
+  //   const structure = (await tx.get<WorkspaceStructure>(
+  //     makeWorkspaceStructureKey()
+  //   )) as WorkspaceStructure;
+
+  //   const { folderId, teamId, ...channel } = data;
+
+  //   const newStructure = createChannelMutation({
+  //     channel,
+  //     teamId,
+  //     folderId,
+  //     structure,
+  //   });
+
+  //   await tx.set(makeWorkspaceStructureKey(), newStructure);
+  // },
+
+  async createPage(tx: WriteTransaction, data: NewPageArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { folderId, teamId, ...page } = data;
+
+    const newStructure = createPageMutation({
+      page,
+      teamId,
+      folderId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async createChat(tx: WriteTransaction, data: NewChatArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { teamId, ...chat } = data;
+
+    const newStructure = createChatMutation({
+      chat,
+      teamId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async createThread(tx: WriteTransaction, data: NewThreadArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { teamId, ...thread } = data;
+
+    const newStructure = createThreadMutation({
+      thread,
+      teamId,
+      structure,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

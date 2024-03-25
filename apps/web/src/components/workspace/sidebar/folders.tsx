@@ -4,6 +4,7 @@ import { SidebarItem } from "../sidebar-item";
 import {
   ChevronRight,
   Component,
+  FolderIcon,
   GripVertical,
   MoreHorizontal,
 } from "lucide-react";
@@ -23,9 +24,10 @@ import {
   AccordionTrigger,
 } from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
-import { Channels } from "./channels";
+import { Pages } from "./pages";
 import { useAtom, useAtomValue } from "jotai";
-import { openFoldersAtom } from "@/app/(app)/workspaces/[workspaceId]/(workspace)/atoms";
+import { openFoldersAtom } from "@/app/(workspaces)/[workspaceId]/(workspace)/atoms";
+import { Input } from "@repo/ui/components/ui/input";
 
 export function Folders({
   folders,
@@ -42,7 +44,7 @@ export function Folders({
     <div className="h-full">
       <Accordion
         type="multiple"
-        value={openFolders}
+        value={[`root-${teamId}`, ...openFolders]}
         onValueChange={setOpenFolders}
       >
         <SortableContext
@@ -96,10 +98,7 @@ function SortableDirectory({
     },
   });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const isRoot = folder.id.startsWith("root");
 
   const isOpen = useAtomValue(openFoldersAtom).includes(folder.id);
   const isSomethingOver = index === overIndex;
@@ -109,10 +108,6 @@ function SortableDirectory({
     active?.data?.current?.folderId !== folder.id;
 
   const isFolderOver = active?.data?.current?.type === "folder";
-  // const isChanFoldOver =
-  //   isSomethingOver &&
-  //   (active?.data?.current?.type === "channel" ||
-  //     active?.data?.current?.type === "folder");
 
   const isAbove = activeIndex > overIndex;
   const isBelow = activeIndex < overIndex;
@@ -120,29 +115,35 @@ function SortableDirectory({
   return (
     <AccordionItem
       value={folder.id}
-      className={cn(
-        "border-b-2 border-t-2 border-b-transparent border-t-transparent",
-        isSomethingOver && isFolderOver && isAbove && "border-t-blue-400",
-        isSomethingOver && isFolderOver && isBelow && "border-b-blue-400",
-      )}
+      className={
+        cn()
+        // "border-b-2 border-t-2 border-b-transparent border-t-transparent",
+        // isSomethingOver && isFolderOver && isAbove && "border-t-blue-400",
+        // isSomethingOver && isFolderOver && isBelow && "border-b-blue-400",
+        // !isRoot && "pl-3",
+      }
     >
       <AccordionTrigger {...listeners} {...attributes} asChild>
-        <div
-          className={cn(
-            "border-b-2 border-b-transparent",
-            isSomethingOver && isOpen && isChannelOver && "border-b-blue-400",
-          )}
-        >
-          <Folder
-            folder={folder}
-            isChannelOver={isChannelOver}
-            isDragging={isDragging}
-            ref={setNodeRef}
-          />
-        </div>
+        {!isRoot && (
+          <div
+            className={cn(
+              // "border-b-2 border-b-transparent",
+              isSomethingOver && isOpen && isChannelOver && "border-b-blue-400",
+            )}
+          >
+            <Folder
+              folder={folder}
+              isChannelOver={isChannelOver}
+              isDragging={isDragging}
+              ref={setNodeRef}
+            />
+          </div>
+        )}
       </AccordionTrigger>
-      <AccordionContent className="pl-3 transition-all">
-        <Channels
+      <AccordionContent
+        className={cn("pb-0.5 transition-all", !isRoot && "pl-3")}
+      >
+        <Pages
           teamId={teamId}
           channels={folder.channels}
           folderId={folder.id}
@@ -172,11 +173,11 @@ export const Folder = React.forwardRef<
       /> */}
       <SidebarItem
         aria-disabled={isDragging}
-        label={folder.name}
         isActive={isChannelOver}
-        Icon={Component}
+        Icon={FolderIcon}
+        collapsible
       >
-        <ChevronRight className=" ml-1.5 h-3.5 w-3.5 min-w-3.5 max-w-3.5 transition-transform group-data-[state=open]:rotate-90" />
+        <span className="truncate">{folder.name}</span>
         <SidebarItemBtn Icon={MoreHorizontal} className="-my-1 ml-auto" />
       </SidebarItem>
     </li>

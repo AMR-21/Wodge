@@ -88,5 +88,6 @@ export function useCurrentWorkspace() {
     isStructurePending,
     members,
     isMembersPending,
+    workspaceId,
   };
 }

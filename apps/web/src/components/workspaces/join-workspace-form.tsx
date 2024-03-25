@@ -41,7 +41,7 @@ export function JoinWorkspaceForm() {
         return;
       }
       const { workspaceId } = (await res.json()) as { workspaceId: string };
-      // router.push(`/workspaces/${workspaceId}`);
+      router.push(`/${workspaceId}`);
     });
   }
 

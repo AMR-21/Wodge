@@ -5,8 +5,8 @@ export * from "./components/ui/input";
 export * from "./components/ui/form";
 export * from "./components/ui/label";
 export * from "./components/ui/card";
+export * from "./components/ui/collapsible";
 export * from "./components/ui/separator";
-export * from "./components/ui/carousel";
 export * from "./components/ui/avatar";
 export * from "./components/ui/loader";
 export * from "./components/ui/toast";
@@ -25,6 +25,7 @@ export * from "./components/ui/checkbox";
 export * from "./components/ui/popover";
 export * from "./components/ui/command";
 export * from "./components/ui/radio-group";
+export * from "./components/ui/scroll-area";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";

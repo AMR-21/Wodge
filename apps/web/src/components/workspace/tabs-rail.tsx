@@ -1,0 +1,92 @@
+"use client";
+
+import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
+import { Button } from "@repo/ui/components/ui/button";
+import {
+  FileStack,
+  FileText,
+  Home,
+  LucideIcon,
+  MessageCircle,
+  Newspaper,
+  Settings,
+} from "lucide-react";
+import { WorkspaceSwitcher } from "./workspace-switcher";
+import Link from "next/link";
+import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
+import { usePathname } from "next/navigation";
+import { cn } from "@repo/ui/lib/utils";
+
+interface Tab {
+  Icon: LucideIcon;
+  label: string;
+  href: string;
+}
+
+const tabs: Tab[] = [
+  {
+    Icon: Home,
+    label: "home",
+    href: "/",
+  },
+  {
+    Icon: FileStack,
+    label: "pages",
+    href: "/page",
+  },
+  {
+    Icon: MessageCircle,
+    label: "Chats & meetings",
+    href: "/chat",
+  },
+  {
+    Icon: Newspaper,
+    label: "threads",
+    href: "/thread",
+  },
+  {
+    Icon: Settings,
+    label: "settings",
+    href: "/settings",
+  },
+];
+
+export function TabsRail() {
+  return (
+    <aside className="flex w-12 max-w-12 flex-col items-center gap-2.5 border-r border-r-border/50 px-1.5 py-2.5">
+      {/* <div className="flex h-12 min-h-12 items-center ">
+        <WorkspaceSwitcher />
+      </div> */}
+      {tabs.map((tab) => (
+        <TabRailItem key={tab.label} tab={tab} />
+      ))}
+    </aside>
+  );
+}
+
+export function TabRailItem({ tab }: { tab: Tab }) {
+  const workspaceId = useCurrentWorkspaceId();
+
+  const pathname = usePathname().split("/").at(2);
+
+  const isActive = tab.href === (pathname ? "/" + pathname : "/");
+
+  return (
+    <TooltipWrapper content={tab.label} side="right" className="capitalize">
+      <Link href={`/${workspaceId}${tab.href}`}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("group", isActive && "bg-accent")}
+        >
+          <tab.Icon
+            className={cn(
+              "h-5 w-5 opacity-50 transition-all group-hover:opacity-100",
+              isActive && "opacity-100",
+            )}
+          />
+        </Button>
+      </Link>
+    </TooltipWrapper>
+  );
+}

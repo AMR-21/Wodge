@@ -26,6 +26,10 @@ import { updateGroup } from "../mutators/update-group";
 import { deleteGroup } from "../mutators/delete-group";
 import { deleteTeam } from "../mutators/delete-team";
 import { updateWorkspace } from "../mutators/update-workspace";
+import { createChannel } from "../mutators/create-channel";
+import { createPage } from "../mutators/create-page";
+import { createChat } from "../mutators/create-chat";
+import { createThread } from "../mutators/create-thread";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -76,8 +80,15 @@ function runner(party: WorkspaceParty, req: Party.Request) {
       case "deleteTeam":
         return await deleteTeam(party, params);
 
-      // case "DeleteWorkspace":
-      //   return deleteWorkspace(party, params);
+      case "createPage":
+        return await createPage(party, params);
+
+      case "createChat":
+        return await createChat(party, params);
+
+      case "createThread":
+        return await createThread(party, params);
+
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }

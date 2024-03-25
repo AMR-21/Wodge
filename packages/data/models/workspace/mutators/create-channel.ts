@@ -41,5 +41,5 @@ export function createChannelMutation({
       fold?.channels.push(newChannel); // Add channel
     }
   });
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }

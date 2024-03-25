@@ -3,7 +3,7 @@ import { BeatLoader } from "react-spinners";
 export function Loader({ color }: { color?: string }) {
   return (
     <BeatLoader
-      color={color || "rgb(var(--foreground))"}
+      color={color || "hsl(var(--primary))"}
       size={8}
       loading={true}
     />

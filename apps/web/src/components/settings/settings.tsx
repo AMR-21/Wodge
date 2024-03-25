@@ -10,7 +10,7 @@ import React, {
   useState,
 } from "react";
 import { ChevronRight, LucideIcon, PanelLeft, Plus, X } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
 import { produce } from "immer";
@@ -110,10 +110,11 @@ function Settings({
   children: React.ReactNode;
 }) {
   const isDesktop = useIsDesktop();
+  const activeItem = useSearchParams().get("active");
 
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
-      active: defaultActive,
+      active: activeItem || defaultActive,
       isSidebarOpen: isDesktop,
       activeItemId: "",
       accordionActive: "",
@@ -381,7 +382,7 @@ function SettingsClose() {
        p-0 text-muted-foreground/70 transition-all hover:text-foreground"
       size="fit"
       variant="link"
-      onClick={() => router.push("/workspaces/" + workspaceId)}
+      onClick={() => router.push("/" + workspaceId)}
     >
       <X className="h-6 w-6" />
     </Button>

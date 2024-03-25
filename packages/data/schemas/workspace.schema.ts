@@ -5,86 +5,6 @@ import {
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
-import { PublicUserSchema } from "./user.schema";
-import { view } from "drizzle-orm/sqlite-core";
-
-/**
- * Workspace {
- *  id
- *  owner
- *  name
- *  avatar
- *  createdAt
- *  settings
- * }
- *
-
- *
- * structure {
- *  publicChannels:[
- *    chan :{
- *      name
- *      avatar
- *      roles
- *      type
- *   }
- *  ],
- *  tags
- *  teams:[
- *   teamId:{
- *    name
- *    avatar
- *    moderators
- *    tags
- *    dirs:[
- *      none: {
- *        channels:[
- *        
- *        ]  
- *      },
- *      dirName :{
- *       channels:[
- * 
- *       ]
- *      }
- *    ] 
- *    
- *  ],
- *  roles: [
- *    name
- *    color
- *    rules {read write admin manage_resources }
- *    color
- * ]
- * }
- *
- *
- * members:{
- *  owner
- *  members: [{
- *    id
- *    teams
- *    roles
- *    joinInfo: {
- *      token
- *      created_by
- *      joined_at
- *    } 
- *    data:{
- *      displayName
- *      avatar
- *      username
- *    }
- *  }]
- * }
- *
- * invites:[{
- *  url
- *  expires
- *  limit
- *  createdBy
- * }]
- */
 
 export const WorkspaceSchema = z.object({
   id: z.string().length(ID_LENGTH),
@@ -97,6 +17,7 @@ export const WorkspaceSchema = z.object({
     .min(1, "Workspace name is required"),
   avatar: z.string(),
   createdAt: z.string().datetime(),
+  // To be removed - all on cloud
   environment: z.enum(["local", "cloud"]),
 });
 
@@ -110,8 +31,13 @@ export const ChannelSchema = z.object({
   editRoles: z.array(
     z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
   ),
-  type: z.enum(["text", "voice", "page", "threads", "stage"]),
 });
+
+export const PageSchema = ChannelSchema.extend({});
+
+export const ChatSchema = ChannelSchema.extend({});
+
+export const ThreadSchema = ChannelSchema.extend({});
 
 export const TagSchema = z.object({
   name: z.string().max(70),
@@ -121,10 +47,14 @@ export const TagSchema = z.object({
 export const FolderSchema = z.object({
   id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
-  channels: z.array(ChannelSchema),
+  channels: z.array(PageSchema),
   // As a preset of underline channels
-  viewRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
-  editRoles: z.array(z.string().length(WORKSPACE_GROUP_ID_LENGTH)),
+  viewRoles: z.array(
+    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+  ),
+  editRoles: z.array(
+    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+  ),
 });
 
 export const MemberSchema = z.object({
@@ -152,9 +82,12 @@ export const TeamSchema = z.object({
   avatar: z.optional(z.string()),
   members: z.array(z.string().length(ID_LENGTH)),
   moderators: z.array(z.string().length(ID_LENGTH)),
-  folders: z.array(FolderSchema),
-  tags: z.array(TagSchema),
   createdBy: z.string().length(ID_LENGTH),
+
+  folders: z.array(FolderSchema),
+  chats: z.array(ChatSchema),
+  threads: z.array(ThreadSchema),
+  tags: z.array(TagSchema),
 });
 
 export const WorkspaceStructureSchema = z.object({
@@ -218,6 +151,9 @@ export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
 export type Tag = z.infer<typeof TagSchema>;
 export type Folder = z.infer<typeof FolderSchema>;
+export type Page = z.infer<typeof PageSchema>;
+export type Chat = z.infer<typeof ChatSchema>;
+export type Thread = z.infer<typeof ThreadSchema>;
 
 export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;

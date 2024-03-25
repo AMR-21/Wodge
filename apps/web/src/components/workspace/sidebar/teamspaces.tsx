@@ -30,11 +30,18 @@ import {
   isDraggingTeamAtom,
   openTeamsAtom,
   tempOpenTeamsAtom,
-} from "@/app/(app)/workspaces/[workspaceId]/(workspace)/atoms";
+} from "@/app/(workspaces)/[workspaceId]/(workspace)/atoms";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { AddToTeamForm } from "./add-to-team-form";
+import { AddToTeam } from "./add-to-team";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@repo/ui/components/ui/collapsible";
+import { Separator } from "@repo/ui/components/ui/separator";
 
-export function Teamspaces() {
+export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
   const { structure } = useCurrentWorkspace();
 
   const teamsId = useMemo(
@@ -45,21 +52,29 @@ export function Teamspaces() {
 
   return (
     <div className="h-full min-h-full shrink-0">
-      <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}>
-        <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
-          <ul>
-            {structure.teams?.map((team, i) => (
-              <SortableTeamspace key={team.id} team={team} idx={i} />
-            ))}
-          </ul>
-        </SortableContext>
-      </Accordion>
+      {/* <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}> */}
+      <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
+        <ul className="flex flex-col gap-3">
+          {structure.teams?.map((team, i) => (
+            <SortableTeamspace key={team.id} team={team} idx={i} isPages />
+          ))}
+        </ul>
+      </SortableContext>
+      {/* </Accordion> */}
     </div>
   );
 }
 
 // Teamspace
-function SortableTeamspace({ team, idx }: { team: DrObj<Team>; idx: number }) {
+function SortableTeamspace({
+  team,
+  idx,
+  isPages,
+}: {
+  team: DrObj<Team>;
+  idx: number;
+  isPages: boolean;
+}) {
   const {
     attributes,
     listeners,
@@ -68,13 +83,9 @@ function SortableTeamspace({ team, idx }: { team: DrObj<Team>; idx: number }) {
     transition,
     isDragging,
     activeIndex,
-    over,
     overIndex,
-    isOver,
     active,
     index,
-    isSorting,
-    data,
   } = useSortable({
     id: team.id,
     data: {
@@ -82,8 +93,6 @@ function SortableTeamspace({ team, idx }: { team: DrObj<Team>; idx: number }) {
       idx,
     },
   });
-
-  const isDraggingTeam = useAtomValue(isDraggingTeamAtom);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -109,20 +118,11 @@ function SortableTeamspace({ team, idx }: { team: DrObj<Team>; idx: number }) {
   const isBelow = activeIndex < overIndex;
 
   return (
-    <AccordionItem
-      value={team.id}
-      className={cn(
-        "border-b-2 border-t-2 border-b-transparent border-t-transparent",
-        isSomethingOver && isTeamOver && isAbove && "border-t-blue-400",
-        isSomethingOver && isTeamOver && isBelow && "border-b-blue-400",
-      )}
-      {...listeners}
-      {...attributes}
-    >
-      <AccordionTrigger asChild>
+    <Collapsible>
+      <CollapsibleTrigger asChild>
         <div
           className={cn(
-            "border-b-2 border-b-transparent",
+            // "border-b-2 border-b-blue-200 -py-2",
             isSomethingOver && isOpen && isChanFoldOver && "border-b-blue-400",
           )}
         >
@@ -133,14 +133,48 @@ function SortableTeamspace({ team, idx }: { team: DrObj<Team>; idx: number }) {
             ref={setNodeRef}
           />
         </div>
-      </AccordionTrigger>
-      <AccordionContent
-        className={cn("p-0 pl-3 transition-all", isDraggingTeam && "hidden")}
-      >
-        <Folders teamId={team.id} folders={team.folders} />
-      </AccordionContent>
-    </AccordionItem>
+      </CollapsibleTrigger>
+
+      <CollapsibleContent className="py-1 pl-[0.6875rem]">
+        <div className="border-l border-border p-0 pl-[0.625rem]">
+          {/* <Separator orientation="vertical" className="bg-yellow-300" /> */}
+          {isPages ? <Folders teamId={team.id} folders={team.folders} /> : null}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
+
+  // return (
+  //   <AccordionItem
+  //     value={team.id}
+  //     className={cn(
+  //       // " -py-2 border-b-2 border-t-2 border-b-blue-200 border-t-blue-200",
+  //       isSomethingOver && isTeamOver && isAbove && "border-t-blue-400",
+  //       isSomethingOver && isTeamOver && isBelow && "border-b-blue-400",
+  //     )}
+  //     {...listeners}
+  //     {...attributes}
+  //   >
+  //     <AccordionTrigger asChild>
+  //       <div
+  //         className={cn(
+  //           // "border-b-2 border-b-blue-200 -py-2",
+  //           isSomethingOver && isOpen && isChanFoldOver && "border-b-blue-400",
+  //         )}
+  //       >
+  //         <Teamspace
+  //           team={team}
+  //           isChanFoldOver={isChanFoldOver}
+  //           isDragging={isDragging}
+  //           ref={setNodeRef}
+  //         />
+  //       </div>
+  //     </AccordionTrigger>
+  //     <AccordionContent className={cn("p-0 transition-all")}>
+  //       <Folders teamId={team.id} folders={team.folders} />
+  //     </AccordionContent>
+  //   </AccordionItem>
+  // );
 }
 
 interface DraggableProps {
@@ -153,27 +187,32 @@ export const Teamspace = React.forwardRef<
   { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
 >(({ team, isChanFoldOver, isDragging, ...props }, ref) => {
   return (
-    <li
-      ref={ref}
-      className="group flex grow items-center border-2 border-transparent"
-      {...props}
-    >
+    <li ref={ref} className="group flex grow" {...props}>
       <SidebarItem
         aria-disabled={isDragging}
         isActive={isChanFoldOver}
-        label={team.name}
-        Icon={Component}
+        noIcon
+        collapsible
       >
-        <ChevronRight className=" ml-1.5 h-3.5 w-3.5 min-w-3.5 max-w-3.5 transition-transform group-data-[state=open]:rotate-90" />
+        <Avatar className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
+          {/* <AvatarImage src={workspace?.avatar} /> */}
+          <AvatarFallback className="select-none rounded-md text-xs uppercase">
+            {team.name[0]}
+          </AvatarFallback>
+        </Avatar>
+
+        <span className="select-none truncate">{team.name}</span>
         <div
-          className="invisible ml-auto flex transition-all group-hover:visible"
+          className={cn(
+            "visible ml-auto flex transition-all group-hover:visible",
+          )}
           onClick={(e) => e.stopPropagation()}
         >
           <SidebarItemBtn
             Icon={MoreHorizontal}
             className="-my-1 hover:bg-transparent"
           />
-          <AddToTeamForm teamId={team.id} folders={team.folders} />
+          <AddToTeam teamId={team.id} />
         </div>
       </SidebarItem>
     </li>
