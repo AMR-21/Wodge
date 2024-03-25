@@ -1,6 +1,6 @@
 import { Invite, Invites } from "@repo/data";
 import { env } from "@repo/env";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useQuery } from "@tanstack/react-query";
 
 function getInviteLink(invites?: Invites): Invite | undefined {
@@ -15,7 +15,7 @@ function getInviteLink(invites?: Invites): Invite | undefined {
 }
 
 export function useInvites() {
-  const workspaceId = useCurrentWorkspaceId();
+  const { workspaceId } = useCurrentWorkspace();
 
   const { data: invites, isPending } = useQuery<Invites>({
     queryKey: ["invites", workspaceId],

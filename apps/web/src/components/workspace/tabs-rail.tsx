@@ -13,9 +13,9 @@ import {
 } from "lucide-react";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import Link from "next/link";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { usePathname } from "next/navigation";
 import { cn } from "@repo/ui/lib/utils";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 interface Tab {
   Icon: LucideIcon;
@@ -65,7 +65,7 @@ export function TabsRail() {
 }
 
 export function TabRailItem({ tab }: { tab: Tab }) {
-  const workspaceId = useCurrentWorkspaceId();
+  const { workspaceSlug } = useCurrentWorkspace();
 
   const pathname = usePathname().split("/").at(2);
 
@@ -73,7 +73,7 @@ export function TabRailItem({ tab }: { tab: Tab }) {
 
   return (
     <TooltipWrapper content={tab.label} side="right" className="capitalize">
-      <Link href={`/${workspaceId}${tab.href}`}>
+      <Link href={`/${workspaceSlug}${tab.href}`}>
         <Button
           variant="ghost"
           size="icon"

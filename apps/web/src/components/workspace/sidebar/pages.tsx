@@ -19,7 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
 import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function Pages({
   channels,
@@ -131,7 +131,7 @@ export const Page = React.forwardRef<
   { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
 >(({ channel, activeIndex, isDragging, ...props }, ref) => {
-  const workspaceId = useCurrentWorkspaceId();
+  const { workspaceId } = useCurrentWorkspace();
   return (
     <li ref={ref} className="group flex grow items-center" {...props}>
       <SidebarItem

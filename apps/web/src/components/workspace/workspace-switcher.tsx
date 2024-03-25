@@ -26,13 +26,12 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import { UserWorkspacesStore, Workspace } from "@repo/data";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 
 export function WorkspaceSwitcher() {
-  const { workspace, workspaceId } = useCurrentWorkspace();
+  const { workspace, workspaceSlug } = useCurrentWorkspace();
   const { userWorkspaces } = useUserWorkspaces();
 
   return (
@@ -76,7 +75,7 @@ export function WorkspaceSwitcher() {
               All workspaces
             </Button>
           </Link>
-          <Link href={`/${workspaceId}/settings`}>
+          <Link href={`/${workspaceSlug}/settings`}>
             <Button
               variant="ghost"
               size="fit"
@@ -86,7 +85,7 @@ export function WorkspaceSwitcher() {
               Workspace settings
             </Button>
           </Link>
-          <Link href={`/${workspaceId}/settings?active=members`}>
+          <Link href={`/${workspaceSlug}/settings?active=members`}>
             <Button
               variant="ghost"
               size="fit"
@@ -114,32 +113,33 @@ export function WorkspaceSwitcher() {
 }
 
 function SwitcherItem({ workspace }: { workspace: Workspace }) {
-  const curWsId = useCurrentWorkspaceId();
+  const { workspaceSlug } = useCurrentWorkspace();
   const router = useRouter();
   return (
-    <div
-      tabIndex={0}
-      className={cn(
-        buttonVariants({
-          variant: "ghost",
-          size: "fit",
-        }),
-        "w-full cursor-pointer justify-start gap-2.5",
-      )}
-      onClick={() => router.push(`/${workspace.id}`)}
-    >
-      <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-        {/* <AvatarImage src={workspace?.avatar} /> */}
-        <AvatarFallback className=" rounded-md  uppercase">
-          {workspace.name[0]}
-        </AvatarFallback>
-      </Avatar>
+    <Link href={`/${workspace.slug}`}>
+      <div
+        tabIndex={0}
+        className={cn(
+          buttonVariants({
+            variant: "ghost",
+            size: "fit",
+          }),
+          "w-full cursor-pointer justify-start gap-2.5",
+        )}
+      >
+        <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
+          {/* <AvatarImage src={workspace?.avatar} /> */}
+          <AvatarFallback className=" rounded-md  uppercase">
+            {workspace.name[0]}
+          </AvatarFallback>
+        </Avatar>
 
-      <p className="truncate">{workspace.name}</p>
+        <p className="truncate">{workspace.name}</p>
 
-      {curWsId === workspace.name && (
-        <Check className="ml-auto h-4 w-4 shrink-0" />
-      )}
-    </div>
+        {workspaceSlug === workspace.slug && (
+          <Check className="ml-auto h-4 w-4 shrink-0" />
+        )}
+      </div>
+    </Link>
   );
 }

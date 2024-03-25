@@ -10,7 +10,7 @@ import { Skeleton } from "@repo/ui/components/ui/skeleton";
 
 export function WorkspaceItem({ workspace }: { workspace: Workspace }) {
   return (
-    <Link href={"/" + workspace.id} className="w-full">
+    <Link href={"/" + workspace.slug} className="w-full">
       <div className="dark:hover:bg-surface group flex w-full shrink-0 items-center gap-2 overflow-hidden py-3 pl-4 transition-all hover:bg-background">
         <Avatar className="h-8 w-8 rounded-md border border-primary/30">
           {/* <AvatarImage src={workspace.workspaceAvatar} /> */}

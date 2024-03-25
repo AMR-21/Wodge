@@ -3,7 +3,6 @@ import { env } from "@repo/env";
 import { useState } from "react";
 import { Check, Copy, Repeat } from "lucide-react";
 import { NewInviteForm } from "./new-invite-form";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { Invite } from "@repo/data";
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import {
@@ -12,6 +11,7 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/ui/popover";
 import { toast } from "@repo/ui/components/ui/toast";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 function makeLink(token: string, wid: string) {
   return `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/join?token=${token}`;
@@ -24,12 +24,14 @@ export function InviteLink({
   inviteLink: Invite | undefined;
   isPending: boolean;
 }) {
-  const workspaceId = useCurrentWorkspaceId();
+  const { workspaceId } = useCurrentWorkspace();
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  if (!workspaceId) return null;
+
   return (
-    <pre className="flex items-center justify-between overflow-hidden rounded-md bg-surface p-3">
+    <pre className="bg-surface flex items-center justify-between overflow-hidden rounded-md p-3">
       <code className="w-full truncate text-xs">
         {isPending ? (
           <Skeleton className="h-4 w-11/12 max-w-lg" />

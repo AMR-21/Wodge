@@ -18,7 +18,7 @@ import { ColumnDef } from "@tanstack/react-table";
 interface MembersColumnsProps {
   removeMember: (memberId: string) => void;
   creatorId?: string;
-  workspaceId: string;
+  workspaceId?: string;
 }
 
 export const groupMembersColumns = ({

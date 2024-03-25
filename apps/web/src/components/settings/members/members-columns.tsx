@@ -27,7 +27,7 @@ import { DeepReadonly } from "replicache";
 interface MembersColumnsProps {
   removeMember: (memberId: string) => void;
   changeMemberRole: (memberId: string, role: Member["role"]) => void;
-  workspaceId: string;
+  workspaceId?: string;
   inviters?: (Pick<Member, "id"> | undefined)[];
 }
 export function membersColumns({

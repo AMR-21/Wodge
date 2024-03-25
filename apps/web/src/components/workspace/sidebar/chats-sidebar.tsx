@@ -2,12 +2,9 @@ import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { cn } from "@repo/ui/lib/utils";
 import { SidebarItem } from "../sidebar-item";
 import { Teamspaces } from "./teamspaces";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { Search, Settings } from "lucide-react";
 
 export function ChatsSidebar() {
-  const workspaceId = useCurrentWorkspaceId();
-
   return (
     <aside
       className={cn(

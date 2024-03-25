@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCurrentWorkspaceId } from "./use-current-workspace-id";
 import { env } from "@repo/env";
 import { PublicUserType } from "@repo/data";
+import { useCurrentWorkspace } from "./use-current-workspace";
 
 export function useMembersInfo() {
-  const workspaceId = useCurrentWorkspaceId();
+  const {workspaceId} = useCurrentWorkspace();
 
   const { data, isPending } = useQuery({
     queryKey: [workspaceId, "members"],

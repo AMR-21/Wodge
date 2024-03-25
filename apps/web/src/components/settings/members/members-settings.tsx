@@ -9,12 +9,10 @@ import { DrObj, Member } from "@repo/data";
 import { SettingsSearchInput } from "../settings-search-input";
 import { DataTable } from "@repo/ui/components/data-table/data-table";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 
 export function MembersSettings() {
   const { invites, inviteLink, isPending } = useInvites();
-  const { members, workspaceRep } = useCurrentWorkspace();
-  const workspaceId = useCurrentWorkspaceId();
+  const { members, workspaceRep, workspaceId } = useCurrentWorkspace();
 
   const { table } = useTable({
     data: (members?.members as Mutable<DrObj<Member>[]>) || [],

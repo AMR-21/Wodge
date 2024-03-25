@@ -26,7 +26,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { Pages } from "./pages";
 import { useAtom, useAtomValue } from "jotai";
-import { openFoldersAtom } from "@/app/(workspaces)/[workspaceId]/(workspace)/atoms";
+import { openFoldersAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { Input } from "@repo/ui/components/ui/input";
 
 export function Folders({

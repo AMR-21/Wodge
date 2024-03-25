@@ -1,41 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
 import { useActions } from "../store/store-hooks";
 import { useCurrentUser } from "./use-current-user";
-import { useCurrentWorkspaceId } from "./use-current-workspace-id";
 import { ReadTransaction, Replicache } from "replicache";
 import { useUserWorkspaces } from "./use-user-workspaces";
 import { useSubscribe } from "./use-subscribe";
 import {
-  Workspace,
   WorkspaceMembers,
   WorkspaceStructure,
   defaultWorkspaceMembers,
   defaultWorkspaceStructure,
-  makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export function useCurrentWorkspace() {
   const [workspaceRep, setWorkspaceRep] = useState<Replicache<
     typeof workspaceMutators
   > | null>(null);
+  const router = useRouter();
 
-  const workspaceId = useCurrentWorkspaceId();
+  const { workspaceSlug } = useParams() as { workspaceSlug: string };
   const { user, isUserPending } = useCurrentUser();
   const { getWorkspace } = useActions();
   const { userWorkspaces, isUserWorkspacesPending } = useUserWorkspaces();
-  const router = useRouter();
 
-  const userWorkspace = userWorkspaces?.find((w) => w.id === workspaceId);
+  const workspace = useMemo(
+    () => userWorkspaces?.find((w) => w.slug === workspaceSlug),
+    [userWorkspaces],
+  );
+
+  const workspaceId = workspace?.id;
 
   const isPending = isUserPending || isUserWorkspacesPending;
 
   useEffect(() => {
     if (isPending) return;
-    if (!user || !workspaceId || !userWorkspace)
+    if (!user || !workspaceSlug || !workspace || !workspaceId)
       // return router.replace("/workspaces");
       return;
 
@@ -44,7 +46,7 @@ export function useCurrentWorkspace() {
     if (!workspaceStore) return;
 
     setWorkspaceRep(workspaceStore);
-  }, [user, workspaceId, userWorkspace, isPending]);
+  }, [user, workspaceSlug, workspace, isPending]);
 
   const { snapshot: structure, isPending: isStructurePending } = useSubscribe(
     workspaceRep,
@@ -66,11 +68,6 @@ export function useCurrentWorkspace() {
     },
   );
 
-  const workspace = useMemo(
-    () => userWorkspaces?.find((w) => w.id === workspaceId),
-    [userWorkspaces],
-  );
-
   return {
     workspaceRep,
     structure,
@@ -79,5 +76,6 @@ export function useCurrentWorkspace() {
     members,
     isMembersPending,
     workspaceId,
+    workspaceSlug,
   };
 }

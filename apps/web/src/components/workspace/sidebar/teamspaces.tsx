@@ -30,7 +30,7 @@ import {
   isDraggingTeamAtom,
   openTeamsAtom,
   tempOpenTeamsAtom,
-} from "@/app/(workspaces)/[workspaceId]/(workspace)/atoms";
+} from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { AddToTeam } from "./add-to-team";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";

@@ -2,15 +2,14 @@ import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
 import { Mutable } from "@/lib/utils";
 import { DrObj, Group, Member } from "@repo/data";
-import { generalMembersColumns } from "../general-members-columns";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useMembersInfo } from "@repo/ui/hooks/use-members-info";
 import { useMemo } from "react";
 import { groupMembersColumns } from "./group-members-columns";
-import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 
 export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
-  const { members, structure, workspaceRep } = useCurrentWorkspace();
+  const { members, structure, workspaceRep, workspaceId } =
+    useCurrentWorkspace();
 
   const groupMembers = useMemo(() => {
     return members.members.filter((member) =>
@@ -23,8 +22,6 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
       (member) => !group.members.includes(member.id),
     );
   }, [members, structure]);
-
-  const workspaceId = useCurrentWorkspaceId();
 
   const { table } = useTable({
     data: groupMembers as Mutable<DrObj<Member>[]>,
