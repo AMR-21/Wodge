@@ -15,6 +15,7 @@ import { DeepReadonlyObject } from "replicache";
 export * from "./schemas/auth.schema";
 export * from "./schemas/user.schema";
 export * from "./schemas/workspace.schema";
+export * from "./schemas/team.schema";
 export * from "./schemas/config";
 
 /**

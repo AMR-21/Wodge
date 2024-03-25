@@ -9,7 +9,14 @@ export const publicRoutes: string[] = [];
  * These routes will redirect logged in users to /settings
  * Onboarding route is treated as a protected route
  */
-export const authRoutes: string[] = ["/login", "/login/error", "/api/member"];
+export const authRoutes: string[] = [
+  "/login",
+  "/login/error",
+  "/api/member",
+  "/api/create-workspace",
+  "/api/workspace-access",
+  "/api/user-workspaces",
+];
 
 /**
  * The prefix for API authentication routes

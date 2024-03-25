@@ -7,13 +7,9 @@ import {
   PusherResult,
   Replicache,
 } from "replicache";
-import { Workspace, replicacheWrapper } from "@repo/data";
+import { replicacheWrapper } from "@repo/data";
 
-export function createWorkspaceRep(
-  userId: string,
-  workspaceId: string,
-  environment: Workspace["environment"],
-) {
+export function createWorkspaceRep(userId: string, workspaceId: string) {
   return new Replicache<typeof workspaceMutators>({
     name: `${userId}-${workspaceId}`,
     licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
@@ -21,19 +17,15 @@ export function createWorkspaceRep(
     pullInterval: null,
     pushURL: undefined,
     pullURL: undefined,
-    ...(environment === "cloud"
-      ? {
-          puller: replicacheWrapper<PullRequest, PullerResult>(
-            "pull",
-            "workspace",
-            workspaceId,
-          ),
-          pusher: replicacheWrapper<PushRequest, PusherResult>(
-            "push",
-            "workspace",
-            workspaceId,
-          ),
-        }
-      : {}),
+    puller: replicacheWrapper<PullRequest, PullerResult>(
+      "pull",
+      "workspace",
+      workspaceId,
+    ),
+    pusher: replicacheWrapper<PushRequest, PusherResult>(
+      "push",
+      "workspace",
+      workspaceId,
+    ),
   });
 }

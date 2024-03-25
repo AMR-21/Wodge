@@ -5,56 +5,83 @@ import {
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
+import { TeamSchema } from "./team.schema";
+import {
+  integer,
+  primaryKey,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
+import { users } from "./auth.schema";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { nanoid } from "nanoid";
+import { relations } from "drizzle-orm";
 
-export const WorkspaceSchema = z.object({
-  id: z.string().length(ID_LENGTH),
-  owner: z.string().length(ID_LENGTH),
-  name: z
+export const workspaces = sqliteTable("workspaces", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => nanoid(ID_LENGTH)),
+  owner: text("owner")
+    .notNull()
+    .references(() => users.id),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  avatar: text("avatar"),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+export const memberships = sqliteTable(
+  "memberships",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+  },
+  (table) => ({
+    pk: primaryKey({
+      columns: [table.userId, table.workspaceId],
+    }),
+  })
+);
+
+export const workspaceMemberships = relations(workspaces, ({ many }) => ({
+  memberships: many(memberships),
+}));
+
+export const userMemberships = relations(users, ({ many }) => ({
+  memberships: many(memberships),
+}));
+
+export const userToWorkspaces = relations(memberships, ({ one }) => ({
+  user: one(users, {
+    fields: [memberships.userId],
+    references: [users.id],
+  }),
+  workspace: one(workspaces, {
+    fields: [memberships.workspaceId],
+    references: [workspaces.id],
+  }),
+}));
+
+export const WorkspaceSchema = createInsertSchema(workspaces, {
+  name: z.string().min(1).max(70),
+  slug: z
     .string({
-      required_error: "Workspace name is required",
+      required_error: "Slug is required",
     })
-    .max(70, "Workspace name is too long")
-    .min(1, "Workspace name is required"),
-  avatar: z.string(),
-  createdAt: z.string().datetime(),
-  // To be removed - all on cloud
-  environment: z.enum(["local", "cloud"]),
-});
-
-export const ChannelSchema = z.object({
-  id: z.string().length(ID_LENGTH),
-  name: z.string().max(70).min(1),
-  avatar: z.string().optional(),
-  viewRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-  editRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-});
-
-export const PageSchema = ChannelSchema.extend({});
-
-export const ChatSchema = ChannelSchema.extend({});
-
-export const ThreadSchema = ChannelSchema.extend({});
-
-export const TagSchema = z.object({
-  name: z.string().max(70),
-  color: z.string().default(BRAND_COLOR).optional(),
-});
-
-export const FolderSchema = z.object({
-  id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
-  name: z.string().max(70).min(1),
-  channels: z.array(PageSchema),
-  // As a preset of underline channels
-  viewRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-  editRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
+    .trim()
+    .max(24, "Slug must be between 3 and 24 characters.")
+    .min(3, "Slug must be between 3 and 24 characters.")
+    .regex(
+      /^[a-zA-Z0-9_-]+$/,
+      "Only letters, numbers, dashes, and underscores."
+    ),
 });
 
 export const MemberSchema = z.object({
@@ -62,8 +89,8 @@ export const MemberSchema = z.object({
   role: z.enum(["owner", "admin", "member"]),
   joinInfo: z.object({
     token: z.string(),
-    created_by: z.string().length(ID_LENGTH),
-    joined_at: z.string().datetime(),
+    createdBy: z.string().length(ID_LENGTH),
+    joinedAt: z.string().datetime(),
     method: z.enum(["link", "email", "owner"]),
   }),
 });
@@ -76,28 +103,13 @@ export const GroupSchema = z.object({
   createdBy: z.string().length(ID_LENGTH),
 });
 
-export const TeamSchema = z.object({
-  id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
-  name: z.string().max(70).min(1),
-  avatar: z.optional(z.string()),
-  members: z.array(z.string().length(ID_LENGTH)),
-  moderators: z.array(z.string().length(ID_LENGTH)),
-  createdBy: z.string().length(ID_LENGTH),
-
-  folders: z.array(FolderSchema),
-  chats: z.array(ChatSchema),
-  threads: z.array(ThreadSchema),
-  tags: z.array(TagSchema),
-});
-
 export const WorkspaceStructureSchema = z.object({
   teams: z.array(TeamSchema),
   groups: z.array(GroupSchema),
-  tags: z.array(TagSchema),
 });
 
 export const WorkspaceMembersSchema = z.object({
-  owner: z.string().length(ID_LENGTH),
+  createdBy: z.string().length(ID_LENGTH),
   members: z.array(MemberSchema),
 });
 
@@ -122,11 +134,8 @@ export const NewInviteSchema = z.object({
 // );
 
 export const NewWorkspaceSchema = WorkspaceSchema.pick({
-  id: true,
   name: true,
-  avatar: true,
-}).extend({
-  onCloud: z.boolean(),
+  slug: true,
 });
 
 export const JoinWorkspaceSchema = z.object({
@@ -145,32 +154,24 @@ export const PresenceRequestSchema = z.object({
 });
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
-export type Group = z.infer<typeof GroupSchema>;
-export type Channel = z.infer<typeof ChannelSchema>;
-export type Team = z.infer<typeof TeamSchema>;
 export type Member = z.infer<typeof MemberSchema>;
-export type Tag = z.infer<typeof TagSchema>;
-export type Folder = z.infer<typeof FolderSchema>;
-export type Page = z.infer<typeof PageSchema>;
-export type Chat = z.infer<typeof ChatSchema>;
-export type Thread = z.infer<typeof ThreadSchema>;
+export type Group = z.infer<typeof GroupSchema>;
 
 export type WorkspaceStructure = z.infer<typeof WorkspaceStructureSchema>;
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
+
 export type Invite = z.infer<typeof NewInviteSchema> & {
   createdBy: string;
   token: string;
 };
-
 export type Invites = Map<string, Invite>;
-
 export type NewInvite = z.infer<typeof NewInviteSchema>;
 
 export function defaultWorkspaceMembers(): WorkspaceMembers {
   return {
-    owner: "",
+    createdBy: "",
     members: [],
   };
 }
@@ -179,6 +180,5 @@ export function defaultWorkspaceStructure(): WorkspaceStructure {
   return {
     teams: [],
     groups: [],
-    tags: [],
   };
 }

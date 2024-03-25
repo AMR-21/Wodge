@@ -1,7 +1,17 @@
 import type * as Party from "partykit/server";
-import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
+import {
+  getRoute,
+  notFound,
+  notImplemented,
+  ok,
+  unauthorized,
+} from "../lib/http-utils";
 
-import { checkMembershipEdge, getSession } from "../lib/auth";
+import {
+  authWorkspaceAccess,
+  checkMembershipEdge,
+  getSession,
+} from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -25,6 +35,7 @@ import {
   WORKSPACE_PRESENCE_KEY,
   Invites,
   defaultWorkspaceStructure,
+  ID_LENGTH,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -32,7 +43,7 @@ export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
 {
   workspaceMembers: ServerWorkspaceMembers;
-  workspaceMetadata: ServerWorkspaceData;
+  // workspaceMetadata: ServerWorkspaceData;
   workspaceStructure: ServerWorkspaceStructure;
   invites: Invites;
   versions: Versions;
@@ -45,12 +56,12 @@ export default class WorkspaceParty
 
   async onStart() {
     const membersKey = makeWorkspaceMembersKey();
-    const metadataKey = makeWorkspaceKey();
+    // const metadataKey = makeWorkspaceKey();
     const structureKey = makeWorkspaceStructureKey();
 
     const map = await this.room.storage.get([
       membersKey,
-      metadataKey,
+      // metadataKey,
       structureKey,
       WORKSPACE_INVITES_KEY,
       REPLICACHE_VERSIONS_KEY,
@@ -63,11 +74,11 @@ export default class WorkspaceParty
       deleted: false,
     };
 
-    this.workspaceMetadata = <ServerWorkspaceData>map.get(metadataKey) || {
-      data: {},
-      lastModifiedVersion: 0,
-      deleted: false,
-    };
+    // this.workspaceMetadata = <ServerWorkspaceData>map.get(metadataKey) || {
+    //   data: {},
+    //   lastModifiedVersion: 0,
+    //   deleted: false,
+    // };
 
     this.workspaceStructure = <ServerWorkspaceStructure>(
       map.get(structureKey)
@@ -109,28 +120,27 @@ export default class WorkspaceParty
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
+    if (lobby.id.length !== ID_LENGTH) return notFound();
+
     // CORS preflight response
     if (req.method === "OPTIONS") {
       return ok();
     }
 
     try {
+      // maybe removed when bindings are supported
       const session = await getSession(req, lobby);
+      if (!session) return unauthorized();
 
       const route = getRoute(req);
       // Check if the request is to create or join the workspace then put user data in the headers
-      if (route === "/create") {
+      if (route === "/create" || route === "/join") {
         return req;
       }
 
-      // skip membership check for join request
-      if (route === "/join") return req;
-
       // Check if the user is authorized to access the workspace
       // i.e. is member of the workspace
-      const isMember = await checkMembershipEdge(session.userId, lobby);
-
-      if (!isMember) throw new Error("Unauthorized");
+      if (!authWorkspaceAccess(req, lobby)) return unauthorized();
 
       // Request is authorized - forward it
       return req;

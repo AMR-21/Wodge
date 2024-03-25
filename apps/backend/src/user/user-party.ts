@@ -17,6 +17,7 @@ import {
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import { ServerWorkspacesStore, UserPartyInterface, Versions } from "../types";
+import { handleGet } from "./endpoints/user-get";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -130,6 +131,8 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     switch (req.method) {
       case "POST":
         return await handlePost(req, this);
+      case "GET":
+        return await handleGet(req, this);
       case "OPTIONS":
         return ok();
       default:

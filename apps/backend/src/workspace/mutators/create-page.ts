@@ -1,8 +1,8 @@
 import WorkspaceParty from "../workspace-party";
 import { RunnerParams } from "../../lib/replicache";
 import { Channel, makeWorkspaceStructureKey } from "@repo/data";
-import { NewPageArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { createPageMutation } from "@repo/data/models/workspace/mutators/create-page";
+import { NewPageArgs } from "@repo/data/models/workspace/workspace-mutators";
 
 export async function createPage(party: WorkspaceParty, params: RunnerParams) {
   const { folderId, teamId, ...page } = params.mutation.args as NewPageArgs;

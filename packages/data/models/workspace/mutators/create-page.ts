@@ -1,10 +1,6 @@
 import { produce } from "immer";
-import { DrObj } from "../../..";
-import {
-  Page,
-  PageSchema,
-  WorkspaceStructure,
-} from "../../../schemas/workspace.schema";
+import { DrObj, Page, PageSchema } from "../../..";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
   page: Page;

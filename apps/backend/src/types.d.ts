@@ -48,7 +48,7 @@ export type ServerWorkspaceStructure = {
 
 export type PresenceMap = Map<string, boolean>;
 export interface WorkspacePartyInterface extends Party {
-  workspaceMetadata: ServerWorkspaceData;
+  // workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
   invites: Invites;

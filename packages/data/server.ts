@@ -5,6 +5,7 @@ import "server-only";
  */
 
 export * from "./models/auth/auth";
+export * from "./models/workspace/workspace-model";
 
 /**
  * End of server modules

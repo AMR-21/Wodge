@@ -1,10 +1,6 @@
 import { produce } from "immer";
-import { DrObj } from "../../..";
-import {
-  Chat,
-  ChatSchema,
-  WorkspaceStructure,
-} from "../../../schemas/workspace.schema";
+import { Chat, ChatSchema, DrObj } from "../../..";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
   chat: Chat;

@@ -1,21 +1,12 @@
 import { WriteTransaction } from "replicache";
 import {
-  Team,
-  TeamSchema,
   WorkspaceMembers,
-  WorkspaceSchema,
   WorkspaceStructure,
   Workspace,
-  defaultWorkspaceStructure,
   Member,
   Group,
-  Channel,
-  Page,
-  Chat,
-  Thread,
 } from "../../schemas/workspace.schema";
 import {
-  makeWorkspaceKey,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "../../lib/keys";
@@ -33,10 +24,10 @@ import { changeMemberRoleMutation } from "./mutators/change-member-role";
 import { createGroupMutation } from "./mutators/create-group";
 import { GroupUpdate, groupUpdateRunner } from "./mutators/group-update-runner";
 import { deleteGroupMutation } from "./mutators/delete-group";
-import { updateWorkspaceInfoMutation } from "./mutators/workspace-info";
 import { createPageMutation } from "./mutators/create-page";
 import { createChatMutation } from "./mutators/create-chat";
 import { createThreadMutation } from "./mutators/create-thread";
+import { Chat, Page, Team, Thread } from "../../schemas/team.schema";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -74,42 +65,61 @@ interface RoleUpdateArgs {
 }
 
 export const workspaceMutators = {
-  async initWorkspace(tx: WriteTransaction, data: Workspace) {
-    // 1. Create the workspace
-    const validatedFields = WorkspaceSchema.safeParse(data);
+  // async initWorkspace(
+  //   tx: WriteTransaction,
+  //   data: Workspace & { defaultTeamId: string }
+  // ) {
+  //   // 1. Create the workspace
 
-    if (!validatedFields.success) {
-      console.log(validatedFields.error.flatten());
-      throw new Error("Invalid workspace data");
-    }
+  //   const { defaultTeamId, ...workspaceData } = data;
 
-    const { data: workspace } = validatedFields;
+  //   if (defaultTeamId.length !== WORKSPACE_TEAM_ID_LENGTH)
+  //     throw new Error("Invalid team id");
 
-    const userData = queryClient.getQueryData<PublicUserType>(["user"]);
+  //   const validatedFields = WorkspaceSchema.safeParse(workspaceData);
 
-    if (!userData) throw new Error("User not found");
+  //   if (!validatedFields.success) {
+  //     console.log(validatedFields.error.flatten());
+  //     throw new Error("Invalid workspace data");
+  //   }
 
-    // 2. Run the mutation
-    await tx.set(makeWorkspaceKey(), workspace);
-    await tx.set(makeWorkspaceStructureKey(), {
-      ...defaultWorkspaceStructure(),
-    });
+  //   const { data: workspace } = validatedFields;
 
-    await tx.set(makeWorkspaceMembersKey(), {
-      members: [
-        {
-          id: userData.id,
-          role: "owner",
-          joinInfo: {
-            joined_at: new Date().toISOString(),
-            token: "",
-            created_by: "",
-            method: "owner",
-          },
-        } as Member,
-      ],
-    });
-  },
+  //   const userData = queryClient.getQueryData<PublicUserType>(["user"]);
+
+  //   if (!userData) throw new Error("User not found");
+
+  //   // 2. Run the mutation
+  //   await tx.set(makeWorkspaceKey(), workspace);
+  //   await tx.set(
+  //     makeWorkspaceStructureKey(),
+  //     createTeamMutation({
+  //       team: {
+  //         id: defaultTeamId,
+  //         name: "General",
+  //         avatar: "",
+  //         slug: "general",
+  //       },
+  //       currentUserId: userData.id,
+  //       structure: defaultWorkspaceStructure(),
+  //     })
+  //   );
+
+  //   await tx.set(makeWorkspaceMembersKey(), {
+  //     members: [
+  //       {
+  //         id: userData.id,
+  //         role: "owner",
+  //         joinInfo: {
+  //           joined_at: new Date().toISOString(),
+  //           token: "",
+  //           created_by: "",
+  //           method: "owner",
+  //         },
+  //       } as Member,
+  //     ],
+  //   });
+  // },
 
   async removeMember(tx: WriteTransaction, memberId: string) {
     const workspaceMembers = await tx.get<WorkspaceMembers>(
@@ -126,23 +136,23 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceMembersKey(), updateMembers);
   },
 
-  async updateWorkspace(
-    tx: WriteTransaction,
-    workspaceUpdate: WorkspaceUpdateArgs
-  ) {
-    const workspace = await tx.get<Workspace>(makeWorkspaceKey());
+  // async updateWorkspace(
+  //   tx: WriteTransaction,
+  //   workspaceUpdate: WorkspaceUpdateArgs
+  // ) {
+  //   const workspace = await tx.get<Workspace>(makeWorkspaceKey());
 
-    const { update } = workspaceUpdate;
+  //   const { update } = workspaceUpdate;
 
-    if (!workspace) throw new Error("Bad data");
+  //   if (!workspace) throw new Error("Bad data");
 
-    const newWorkspace = updateWorkspaceInfoMutation({
-      workspace,
-      update,
-    });
+  //   const newWorkspace = updateWorkspaceInfoMutation({
+  //     workspace,
+  //     update,
+  //   });
 
-    await tx.set(makeWorkspaceKey(), newWorkspace);
-  },
+  //   await tx.set(makeWorkspaceKey(), newWorkspace);
+  // },
 
   async changeMemberRole(tx: WriteTransaction, roleUpdate: RoleUpdateArgs) {
     const workspaceMembers = await tx.get<WorkspaceMembers>(
@@ -161,7 +171,7 @@ export const workspaceMutators = {
 
   async createTeam(
     tx: WriteTransaction,
-    data: Pick<Team, "id" | "name" | "avatar">
+    data: Pick<Team, "id" | "name" | "avatar" | "slug">
   ) {
     // 1. Create the team
     // 1. Create the team

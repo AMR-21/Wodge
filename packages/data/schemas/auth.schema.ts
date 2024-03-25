@@ -6,6 +6,8 @@ import {
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
+import { relations } from "drizzle-orm";
+import { workspaces } from "./workspace.schema";
 
 export const users = sqliteTable("users", {
   id: text("id")
@@ -24,6 +26,10 @@ export const users = sqliteTable("users", {
     .$default(() => new Date())
     .notNull(),
 });
+
+// export const usersRelations = relations(users, ({ many }) => ({
+//   members: many(workspaces),
+// }));
 
 export const accounts = sqliteTable(
   "accounts",

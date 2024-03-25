@@ -1,10 +1,6 @@
 import { produce } from "immer";
-import { DrObj } from "../../..";
-import {
-  Thread,
-  ThreadSchema,
-  WorkspaceStructure,
-} from "../../../schemas/workspace.schema";
+import { DrObj, Thread, ThreadSchema } from "../../..";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
   thread: Thread;

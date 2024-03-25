@@ -9,7 +9,7 @@ import {
 
 interface CreateTeamArgs {
   // Any to account for the backend mutation runner - relay on zod to validate the data
-  team: Pick<Team, "id" | "name" | "avatar">;
+  team: Pick<Team, "id" | "name" | "avatar" | "slug">;
   currentUserId: string;
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
@@ -24,6 +24,7 @@ export function createTeamMutation({
     id: true,
     name: true,
     avatar: true,
+    slug: true,
   }).safeParse(team);
 
   if (!validatedFields.success) throw new Error("Invalid team data");
@@ -55,6 +56,9 @@ export function createTeamMutation({
       },
     ],
     tags: [],
+    chats: [],
+    threads: [],
+    default: false,
   };
 
   // 5. Create the team

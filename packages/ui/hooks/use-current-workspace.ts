@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useActions } from "../store/store-hooks";
 import { useCurrentUser } from "./use-current-user";
 import { useCurrentWorkspaceId } from "./use-current-workspace-id";
@@ -29,9 +29,7 @@ export function useCurrentWorkspace() {
   const { userWorkspaces, isUserWorkspacesPending } = useUserWorkspaces();
   const router = useRouter();
 
-  const userWorkspace = userWorkspaces?.find(
-    (w) => w.workspaceId === workspaceId,
-  );
+  const userWorkspace = userWorkspaces?.find((w) => w.id === workspaceId);
 
   const isPending = isUserPending || isUserWorkspacesPending;
 
@@ -41,11 +39,7 @@ export function useCurrentWorkspace() {
       // return router.replace("/workspaces");
       return;
 
-    const workspaceStore = getWorkspace(
-      workspaceId,
-      userWorkspace.environment,
-      user.id,
-    );
+    const workspaceStore = getWorkspace(workspaceId, user.id);
 
     if (!workspaceStore) return;
 
@@ -72,19 +66,15 @@ export function useCurrentWorkspace() {
     },
   );
 
-  const { snapshot: workspace, isPending: isWorkspacePending } = useSubscribe(
-    workspaceRep,
-    (tx: ReadTransaction) => tx.get<Workspace>(makeWorkspaceKey()),
-    {
-      dependencies: [workspaceRep],
-    },
+  const workspace = useMemo(
+    () => userWorkspaces?.find((w) => w.id === workspaceId),
+    [userWorkspaces],
   );
 
   return {
     workspaceRep,
-    workspace,
-    isWorkspacePending,
     structure,
+    workspace,
     isStructurePending,
     members,
     isMembersPending,

@@ -11,8 +11,6 @@ import { createSocket } from "./create-socket";
 import { userMutators } from "@repo/data/models/user/user-mutators";
 import { Workspace } from "@repo/data";
 
-type Environment = Workspace["environment"];
-
 export interface AppState {
   isSidebarOpen: boolean;
   openTeams: string[];
@@ -28,13 +26,11 @@ export interface AppState {
     toggleSidebar: () => void;
     addWorkspace: (
       workspace: string,
-      environment: Environment,
       userId: string,
     ) => Replicache<typeof workspaceMutators>;
     connectSocket: (userId: string) => void;
     getWorkspace: (
       workspaceId: string,
-      environment: Environment,
       userId: string,
     ) => Replicache<typeof workspaceMutators> | void;
     removeWorkspace: (workspaceId: string) => void;
@@ -55,12 +51,12 @@ export const useAppState = create<AppState>()(
           setOpenTeams: (teams: string[]) => set({ openTeams: teams }),
           setOpenDirs: (dirs: string[]) => set(() => ({ openDirs: dirs })),
           toggleSidebar: () => set({ isSidebarOpen: !get().isSidebarOpen }),
-          addWorkspace: (workspaceId, environment, userId) => {
+          addWorkspace: (workspaceId, userId) => {
             // Closing the current workspace so to account for the case of switching from local to cloud
             if (get().workspaces?.[workspaceId] !== undefined)
               get().workspaces?.[workspaceId]?.close();
 
-            const rep = createWorkspaceRep(userId, workspaceId, environment);
+            const rep = createWorkspaceRep(userId, workspaceId);
 
             set({
               workspaces: {
@@ -71,16 +67,12 @@ export const useAppState = create<AppState>()(
 
             return rep;
           },
-          getWorkspace: (workspaceId, environment, userId) => {
+          getWorkspace: (workspaceId, userId) => {
             if (!workspaceId) return;
             const workspace = get().workspaces[workspaceId];
 
             if (!workspace)
-              return get().actions.addWorkspace(
-                workspaceId,
-                environment,
-                userId,
-              );
+              return get().actions.addWorkspace(workspaceId, userId);
 
             return workspace;
           },

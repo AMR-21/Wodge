@@ -4,22 +4,36 @@ import { ReadTransaction } from "replicache";
 import { useSubscribe } from "./use-subscribe";
 import { useCurrentUser } from "./use-current-user";
 import { useUserStore } from "../store/store-hooks";
-import { UserWorkspacesStore, makeWorkspacesStoreKey } from "@repo/data";
+import {
+  UserWorkspacesStore,
+  Workspace,
+  makeWorkspacesStoreKey,
+} from "@repo/data";
+import { useQuery } from "@tanstack/react-query";
+import { env } from "@repo/env";
 
 export function useUserWorkspaces() {
   // Make sure user store is created
-  useCurrentUser();
+  const { user } = useCurrentUser();
 
-  const userStore = useUserStore();
+  const { data, isPending } = useQuery({
+    queryKey: ["user-workspaces"],
+    queryFn: async () => {
+      // if (!user?.id) return;
+      const res = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user?.id}/workspaces`,
+        {
+          credentials: "include",
+        },
+      );
 
-  const { snapshot: userWorkspaces, isPending } = useSubscribe(
-    userStore,
-    (tx: ReadTransaction) =>
-      tx.get<UserWorkspacesStore[]>(makeWorkspacesStoreKey()),
-    {
-      dependencies: [userStore],
+      if (!res.ok) throw new Error("Failed to fetch members data");
+
+      const data = (await res.json()) as Workspace[];
+      return data;
     },
-  );
+    enabled: !!user?.id,
+  });
 
-  return { userWorkspaces, isUserWorkspacesPending: isPending };
+  return { userWorkspaces: data, isUserWorkspacesPending: isPending };
 }

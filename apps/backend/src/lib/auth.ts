@@ -66,6 +66,34 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
  *  Check if the user is authorized to access the workspace
  */
 
+export const authWorkspaceAccess = async (
+  req: Party.Request,
+  lobby: Party.Lobby
+) => {
+  // TODO: replace this by the binding within partykit when supported
+  // 1. read user session and membership from db in 1 batch
+  const cookie = req.headers.get("cookie");
+
+  const workspaceId = lobby.id;
+  if (!cookie) return false;
+
+  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/workspace-access`, {
+    headers: {
+      Accept: "application/json",
+      authorization: lobby.env.SERVICE_KEY as string,
+      cookie,
+      workspaceId,
+    },
+  });
+
+  // console.log(workspaceId);
+  // 2. check if user is authentic
+  // 3. check if user is member of workspace
+  if (!res.ok) return false;
+
+  return true;
+};
+
 /**
  * Edge network version
  */
@@ -101,7 +129,7 @@ export const checkMembershipEdge = async (
  */
 export const checkMembership = (userId: string, party: WorkspaceParty) => {
   return (
-    party.workspaceMembers.data.owner === userId ||
+    party.workspaceMembers.data.createdBy === userId ||
     party.workspaceMembers.data.members.some((m) => m.id === userId)
   );
 };

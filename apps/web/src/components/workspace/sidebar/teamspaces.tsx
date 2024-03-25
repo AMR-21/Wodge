@@ -50,6 +50,14 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
   );
   const [openTeams, setOpenTeams] = useAtom(openTeamsAtom);
 
+  if (structure.teams.length === 0)
+    return (
+      <SidebarItem noIcon className="justify-center">
+        <Plus className="mr-1.5 h-3.5 w-3.5" />
+        <span>Add a team</span>
+      </SidebarItem>
+    );
+
   return (
     <div className="h-full min-h-full shrink-0">
       {/* <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}> */}

@@ -2,9 +2,9 @@ import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
 
 export function WorkspacesList() {
-  const { userWorkspaces, isPending } = useUserWorkspaces();
+  const { userWorkspaces, isUserWorkspacesPending } = useUserWorkspaces();
 
-  if (isPending)
+  if (isUserWorkspacesPending)
     return (
       <div className="w-full">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -13,7 +13,10 @@ export function WorkspacesList() {
       </div>
     );
 
-  if (!isPending && (userWorkspaces?.length === 0 || !userWorkspaces))
+  if (
+    !isUserWorkspacesPending &&
+    (userWorkspaces?.length === 0 || !userWorkspaces)
+  )
     return (
       <p className="p-5 text-center text-muted-foreground">
         Join or create workspace to start using Wodge
@@ -24,7 +27,7 @@ export function WorkspacesList() {
     <div className="flex w-full flex-col divide-y-[1px] divide-border/50">
       {userWorkspaces &&
         Object.values(userWorkspaces)?.map((workspace) => (
-          <WorkspaceItem key={workspace.workspaceId} workspace={workspace} />
+          <WorkspaceItem key={workspace.id} workspace={workspace} />
         ))}
     </div>
   );

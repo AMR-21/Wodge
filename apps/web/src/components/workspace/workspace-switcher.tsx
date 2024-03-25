@@ -25,7 +25,7 @@ import {
   Settings,
   UserRoundCog,
 } from "lucide-react";
-import { UserWorkspacesStore } from "@repo/data";
+import { UserWorkspacesStore, Workspace } from "@repo/data";
 import { useCurrentWorkspaceId } from "@repo/ui/hooks/use-current-workspace-id";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -61,7 +61,7 @@ export function WorkspaceSwitcher() {
       <PopoverContent align="start" alignOffset={0} className="max-w-60 p-0">
         <div className="flex flex-col gap-0.5 p-2">
           {userWorkspaces?.map((ws) => (
-            <SwitcherItem key={ws.workspaceId} workspace={ws} />
+            <SwitcherItem key={ws.id} workspace={ws} />
           ))}
         </div>
         <Separator />
@@ -113,7 +113,7 @@ export function WorkspaceSwitcher() {
   );
 }
 
-function SwitcherItem({ workspace }: { workspace: UserWorkspacesStore }) {
+function SwitcherItem({ workspace }: { workspace: Workspace }) {
   const curWsId = useCurrentWorkspaceId();
   const router = useRouter();
   return (
@@ -126,18 +126,18 @@ function SwitcherItem({ workspace }: { workspace: UserWorkspacesStore }) {
         }),
         "w-full cursor-pointer justify-start gap-2.5",
       )}
-      onClick={() => router.push(`/${workspace.workspaceId}`)}
+      onClick={() => router.push(`/${workspace.id}`)}
     >
       <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
         {/* <AvatarImage src={workspace?.avatar} /> */}
         <AvatarFallback className=" rounded-md  uppercase">
-          {workspace.workspaceName[0]}
+          {workspace.name[0]}
         </AvatarFallback>
       </Avatar>
 
-      <p className="truncate">{workspace.workspaceName}</p>
+      <p className="truncate">{workspace.name}</p>
 
-      {curWsId === workspace.workspaceId && (
+      {curWsId === workspace.name && (
         <Check className="ml-auto h-4 w-4 shrink-0" />
       )}
     </div>

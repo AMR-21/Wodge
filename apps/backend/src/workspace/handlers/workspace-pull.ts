@@ -21,21 +21,13 @@ function patcher(party: WorkspaceParty) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    const { workspaceMembers, workspaceMetadata, workspaceStructure } = party;
+    const { workspaceMembers, workspaceStructure } = party;
 
     if (party.workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
         key: makeWorkspaceMembersKey(),
         value: workspaceMembers.data,
-      });
-    }
-
-    if (party.workspaceMetadata.lastModifiedVersion > fromVersion) {
-      patch.push({
-        op: "put",
-        key: makeWorkspaceKey(),
-        value: workspaceMetadata.data,
       });
     }
 
