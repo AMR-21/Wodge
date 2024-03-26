@@ -7,7 +7,7 @@ import {
   Settings,
   SettingsContent,
   SettingsSidebar,
-  SettingsSidebarAccordionItem,
+  SettingsSidebarCollapsibleItem,
   SettingsSidebarHeader,
   SettingsSidebarItem,
   SettingsSidebarList,
@@ -30,12 +30,12 @@ function WorkspaceSettingsPage() {
           <SettingsSidebarList>
             <SettingsSidebarItem value="general" />
             <SettingsSidebarItem value="members" />
-            <SettingsSidebarAccordionItem value="groups">
+            <SettingsSidebarCollapsibleItem value="groups">
               <GroupsSidebar />
-            </SettingsSidebarAccordionItem>
-            <SettingsSidebarAccordionItem value="teams">
+            </SettingsSidebarCollapsibleItem>
+            <SettingsSidebarCollapsibleItem value="teams">
               <TeamsSidebar />
-            </SettingsSidebarAccordionItem>
+            </SettingsSidebarCollapsibleItem>
             <SettingsSidebarItem value="upgrade" />
           </SettingsSidebarList>
         </SettingsSidebar>

@@ -9,6 +9,7 @@ import { is } from "drizzle-orm";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { cn } from "@repo/ui/lib/utils";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 
 export function TeamsSidebar() {
   const isDesktop = useIsDesktop();
@@ -28,25 +29,30 @@ export function TeamsSidebar() {
   return (
     <div className="flex flex-col gap-1">
       {teams.map((team) => (
-        <SidebarItem
-          key={team.id}
-          label={team.name}
-          noIcon
-          className={cn(
-            "justify-start py-1.5 pr-1.5",
-            activeItemId === team.id && "bg-accent text-accent-foreground",
-          )}
-          onClick={() => {
-            dispatch({
-              type: "openAccordionItem",
-              payload: {
-                value: "teams",
-                id: team.id,
-                isSidebarOpen: isDesktop,
-              },
-            });
-          }}
-        />
+        <li key={team.id} className="group flex grow">
+          <SidebarItem
+            noIcon
+            onClick={() => {
+              dispatch({
+                type: "openAccordionItem",
+                payload: {
+                  value: "teams",
+                  id: team.id,
+                  isSidebarOpen: isDesktop,
+                },
+              });
+            }}
+          >
+            <Avatar className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
+              {/* <AvatarImage src={workspace?.avatar} /> */}
+              <AvatarFallback className="select-none rounded-md text-xs uppercase">
+                {team.name[0]}
+              </AvatarFallback>
+            </Avatar>
+
+            <span className="select-none truncate">{team.name}</span>
+          </SidebarItem>
+        </li>
       ))}
     </div>
   );

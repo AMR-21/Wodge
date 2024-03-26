@@ -3,6 +3,7 @@ import { env } from "@repo/env";
 import PartySocket from "partysocket";
 import { useAppState } from "./store";
 import { toast } from "sonner";
+import { queryClient } from "@repo/data/lib/query-client";
 
 export function createSocket(userId: string) {
   const socket = new PartySocket({
@@ -26,7 +27,7 @@ export function createSocket(userId: string) {
           let rep;
 
           if (!workspace) {
-            rep = addWorkspace(data.id, "cloud", userId);
+            rep = addWorkspace(data.id, userId);
           }
 
           return rep ? rep.pull() : workspace?.pull();
@@ -34,12 +35,21 @@ export function createSocket(userId: string) {
         case "channel":
           return;
 
+        case "workspaceInfo":
+          console.log("workinfo");
+          return queryClient.invalidateQueries({
+            queryKey: ["user-workspaces"],
+          });
+
         case "deleteWorkspace":
           if (!data.id) return;
           removeWorkspace(data.id);
           if (window.location.href.includes(data.id))
-            toast.info("You have been removed from the current workspace");
+            toast.warning("You have been removed from the current workspace");
           return userStore?.pull();
+
+        case "welcome":
+          return console.log("welcome");
         default:
           userStore?.pull();
       }

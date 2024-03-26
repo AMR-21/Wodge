@@ -6,7 +6,15 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { SidebarItemBtn } from "../sidebar-item-btn";
-import { FileCog, FileCog2, FilePlus, FilePlus2, Plus } from "lucide-react";
+import {
+  FileCog,
+  FileCog2,
+  FilePlus,
+  FilePlus2,
+  FolderCog,
+  FolderPlus,
+  Plus,
+} from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -25,12 +33,17 @@ import { AddFolderForm } from "./add-folder-form";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 
 export function AddToTeam({ teamId }: { teamId: string }) {
+  const [activeTab, setActiveTab] = useState("page");
+
   async function createBlankPage() {}
 
   return (
@@ -44,21 +57,54 @@ export function AddToTeam({ teamId }: { teamId: string }) {
           />
         </DropdownMenuTrigger>
         {/* </TooltipWrapper> */}
-        <DropdownMenuContent sideOffset={2}>
-          <DropdownMenuItem className="gap-2 text-sm" onClick={createBlankPage}>
-            <FilePlus className="h-4 w-4" />
-            Blank page
-          </DropdownMenuItem>
-
-          <DialogTrigger>
-            <DropdownMenuItem className="gap-2 text-sm">
-              <FileCog className="h-4 w-4" />
-              Custom page
+        <DropdownMenuContent className="w-48" sideOffset={2}>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="gap-2 text-sm"
+              onClick={createBlankPage}
+            >
+              <FilePlus className="h-4 w-4" />
+              Blank page
             </DropdownMenuItem>
-          </DialogTrigger>
+
+            <DialogTrigger asChild>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setActiveTab("page")}
+              >
+                <FileCog className="h-4 w-4" />
+                Custom page
+              </DropdownMenuItem>
+            </DialogTrigger>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="gap-2 text-sm"
+              onClick={createBlankPage}
+            >
+              <FolderPlus className="h-4 w-4" />
+              Folder
+            </DropdownMenuItem>
+
+            <DialogTrigger asChild>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setActiveTab("folder")}
+              >
+                <FolderCog className="h-4 w-4" />
+                Custom folder
+              </DropdownMenuItem>
+            </DialogTrigger>
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AddPageForm teamId={teamId} />
+
+      {activeTab === "page" ? (
+        <AddPageForm teamId={teamId} />
+      ) : (
+        <AddFolderForm teamId={teamId} />
+      )}
     </Dialog>
   );
 }

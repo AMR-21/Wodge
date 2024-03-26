@@ -103,6 +103,7 @@ export async function createWorkspace(
   });
   // 3. update global version
   party.versions.set("globalVersion", globalVersion + 1);
+  party.versions.set("workspaceInfo", globalVersion + 1);
 
   // 3. persist updates
   await party.room.storage.put({

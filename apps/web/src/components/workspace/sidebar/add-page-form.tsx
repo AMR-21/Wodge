@@ -1,3 +1,4 @@
+import { MultiSelect } from "@/components/multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Channel,
@@ -80,6 +81,8 @@ export function AddPageForm({
               </FormItem>
             )}
           />
+
+          <MultiSelect data={["a", "b", "c"]} />
 
           <Button type="submit" className="w-full">
             Create page

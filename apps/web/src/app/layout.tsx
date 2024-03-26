@@ -39,7 +39,7 @@ export default async function RootLayout({
             {children}
           </ThemeProvider>
         </Providers>
-        <Toaster />
+        <Toaster richColors />
       </body>
     </html>
   );

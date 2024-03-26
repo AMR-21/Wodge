@@ -16,6 +16,7 @@ export const authRoutes: string[] = [
   "/api/create-workspace",
   "/api/workspace-access",
   "/api/user-workspaces",
+  "/api/update-workspace",
 ];
 
 /**

@@ -28,7 +28,6 @@ export function GroupsSidebar() {
       {groups.map((group) => (
         <SidebarItem
           key={group.id}
-          label={group.name}
           noIcon
           className={cn(
             "justify-start py-1.5  pr-1.5 capitalize",
@@ -44,7 +43,15 @@ export function GroupsSidebar() {
               },
             });
           }}
-        />
+        >
+          <div
+            className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs"
+            style={{
+              backgroundColor: group.color,
+            }}
+          />
+          <span className="select-none truncate">{group.name}</span>
+        </SidebarItem>
       ))}
     </div>
   );

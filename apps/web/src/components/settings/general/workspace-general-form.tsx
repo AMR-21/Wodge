@@ -12,54 +12,93 @@ import { useForm } from "react-hook-form";
 import { Workspace, WorkspaceSchema } from "@repo/data";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
+import { toast } from "@repo/ui/components/ui/toast";
+import { Info } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { env } from "@repo/env";
+import { useSubmitToast } from "@/components/use-submit-toast";
 
+// TODO USE rquery to mutate inside the DO
 export function WorkspaceGeneralForm() {
-  const { workspace, workspaceRep } = useCurrentWorkspace();
+  const { workspace, workspaceRep, workspaceId } = useCurrentWorkspace();
 
   const form = useForm<Workspace>({
-    resolver: zodResolver(WorkspaceSchema.pick({ name: true, avatar: true })),
+    resolver: zodResolver(WorkspaceSchema.pick({ name: true, slug: true })),
     defaultValues: {
       name: "",
-      avatar: "",
+      slug: "",
     },
   });
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (workspace) form.reset(workspace);
   }, [workspace]);
 
-  async function onSubmit(data: Pick<Workspace, "name" | "avatar">) {
-    await workspaceRep?.mutate.updateWorkspace({ update: data });
+  const { mutate } = useMutation({
+    mutationFn: async (data: Pick<Workspace, "name" | "slug">) => {
+      await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/update`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(data),
+        },
+      );
+    },
+    onSuccess: () => {
+      toast.dismiss(toastId);
+      form.reset(data);
+    },
+  });
+
+  const { toastId } = useSubmitToast<Workspace>(form, formRef);
+
+  async function onSubmit(data: Pick<Workspace, "name" | "slug">) {
+    // await workspaceRep?.mutate.updateWorkspace({ update: data });
+    // console.log(data);
+    mutate(data);
   }
 
   return (
     <div className="space-y-2">
-      <p className="text-sm">Workspace Name</p>
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full gap-2"
+          ref={formRef}
+          className="flex w-full flex-col gap-2"
         >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="space-y-2">
+                <FormLabel>Workspace Name</FormLabel>
                 <FormControl>
-                  <Input {...field} className="basis-2/5" />
+                  <Input {...field} className="w-2/5" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button size="sm" type="submit" disabled={!form.formState.isDirty}>
-            Update
-          </Button>
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel>Workspace URL</FormLabel>
+                <FormControl>
+                  <Input {...field} className="w-2/5" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </form>
       </Form>
     </div>

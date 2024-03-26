@@ -36,6 +36,7 @@ import {
   Invites,
   defaultWorkspaceStructure,
   ID_LENGTH,
+  PokeMessage,
 } from "@repo/data";
 import { handleGet } from "./endpoints/workspace-get";
 
@@ -90,7 +91,10 @@ export default class WorkspaceParty
 
     this.versions =
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
-      new Map([["globalVersion", 0]]);
+      new Map([
+        ["globalVersion", 0],
+        ["workspaceInfo", 0],
+      ]);
 
     // remove
     this.invites = <Invites>map.get(WORKSPACE_INVITES_KEY) || new Map();
@@ -149,8 +153,25 @@ export default class WorkspaceParty
     }
   }
 
-  async poke(type = "workspace", id = this.room.id) {
+  async poke(
+    { type, id, userId }: WorkspacePokeProps = {
+      type: "workspace",
+    }
+  ) {
     const userParty = this.room.context.parties.user!;
+
+    if (userId) {
+      return await userParty.get(userId).fetch("/poke", {
+        method: "POST",
+        headers: {
+          authorization: this.room.env.SERVICE_KEY as string,
+        },
+        body: JSON.stringify({
+          type,
+          id: id || this.room.id,
+        }),
+      });
+    }
 
     await Promise.all(
       Object.keys(Object.fromEntries(this.presenceMap)).map((userId) => {
@@ -168,5 +189,10 @@ export default class WorkspaceParty
     );
   }
 }
-
 WorkspaceParty satisfies Party.Worker;
+
+interface WorkspacePokeProps {
+  type: PokeMessage["type"];
+  id?: string;
+  userId?: string;
+}

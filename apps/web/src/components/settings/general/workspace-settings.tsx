@@ -41,7 +41,7 @@ export function WorkspaceSettings() {
   });
 
   return (
-    <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
+    <div className="relative w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
         label="Workspace"
         description="Manage your workspace settings"
@@ -50,7 +50,7 @@ export function WorkspaceSettings() {
       <SettingsContentSection header="Avatar">
         <div className="space-y-3">
           <Avatar className="h-16 w-16 rounded-md">
-            <AvatarImage src={workspace?.avatar} />
+            {/* <AvatarImage src={workspace?.avatar} /> */}
             <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
               {workspace?.name[0]}
             </AvatarFallback>
@@ -65,22 +65,6 @@ export function WorkspaceSettings() {
       <SettingsContentSection header="General">
         <WorkspaceGeneralForm />
       </SettingsContentSection>
-
-      {workspace?.environment === "local" && (
-        <>
-          <SettingsContentSection header="Enable Cloud Access">
-            <div className="space-y-4">
-              <SettingsContentDescription>
-                By default a workspace is created locally, enabling cloud access
-                will allow you to save your workspace to the cloud, access it
-                from anywhere, and invite collaborators.
-              </SettingsContentDescription>
-
-              <SettingsContentAction>Enable cloud access</SettingsContentAction>
-            </div>
-          </SettingsContentSection>
-        </>
-      )}
 
       <SettingsContentSection header="Danger Zone">
         <WorkspaceDangerZone />

@@ -10,7 +10,12 @@ import React, {
   useState,
 } from "react";
 import { ChevronRight, LucideIcon, PanelLeft, Plus, X } from "lucide-react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
 import { produce } from "immer";
@@ -23,6 +28,13 @@ import {
 } from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
 import { Button, ButtonProps } from "@repo/ui/components/ui/button";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@repo/ui/components/ui/collapsible";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 
 interface Settings {
   active: string;
@@ -110,8 +122,11 @@ function Settings({
   children: React.ReactNode;
 }) {
   const isDesktop = useIsDesktop();
+  const url = useRouter();
+
   const activeItem = useSearchParams().get("active");
 
+  // console.log(window.location.hash);
   const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
     useReducer(reducer, {
       active: activeItem || defaultActive,
@@ -161,7 +176,9 @@ function SettingsSidebar({ children }: { children: React.ReactNode }) {
             className={(!isSidebarOpen && "invisible") || ""}
           />
         </div>
-        <div className="flex-1 overflow-y-scroll">{children}</div>
+        <ScrollArea>
+          <div>{children}</div>
+        </ScrollArea>
       </div>
     </>
   );
@@ -169,11 +186,7 @@ function SettingsSidebar({ children }: { children: React.ReactNode }) {
 
 function SettingsSidebarList({ children }: { children: React.ReactNode }) {
   const { active } = useContext(SettingsContext);
-  return (
-    <Accordion type="single" collapsible>
-      <ul className="flex flex-col gap-1 py-3">{children}</ul>
-    </Accordion>
-  );
+  return <ul className="flex flex-col gap-1 py-3">{children}</ul>;
 }
 
 function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
@@ -189,11 +202,10 @@ function SettingsSidebarItem({ value }: { value: string }) {
   const isDesktop = useIsDesktop();
 
   return (
-    <AccordionItem value={value}>
-      <AccordionTrigger asChild>
+    <Collapsible>
+      <CollapsibleTrigger asChild>
         <SidebarItem
           noIcon
-          label={value}
           className={cn(
             "justify-start py-1.5 pl-7 pr-1.5 capitalize",
             active === value && "bg-accent text-accent-foreground",
@@ -204,13 +216,15 @@ function SettingsSidebarItem({ value }: { value: string }) {
               payload: { value, isSidebarOpen: isDesktop },
             });
           }}
-        />
-      </AccordionTrigger>
-    </AccordionItem>
+        >
+          <span className="truncate">{value}</span>
+        </SidebarItem>
+      </CollapsibleTrigger>
+    </Collapsible>
   );
 }
 
-function SettingsSidebarAccordionItem({
+function SettingsSidebarCollapsibleItem({
   value,
   children,
   actionIcon,
@@ -220,13 +234,12 @@ function SettingsSidebarAccordionItem({
   const isDesktop = useIsDesktop();
 
   return (
-    <AccordionItem value={value}>
-      <AccordionTrigger asChild>
+    <Collapsible>
+      <CollapsibleTrigger asChild>
         <SidebarItem
           noIcon
-          label={value}
           className={cn(
-            "justify-start gap-1 py-1.5 pl-7 pr-1.5 capitalize",
+            "justify-start py-1.5 pl-2.5 pr-1.5 capitalize",
             accordionActive === value &&
               activeItemId &&
               "bg-accent text-accent-foreground",
@@ -236,15 +249,9 @@ function SettingsSidebarAccordionItem({
               return dispatch({ type: "closeAccordion" });
             dispatch({ type: "activateAccordion", payload: value });
           }}
+          collapsible
         >
-          <ChevronRight
-            className={cn(
-              "h-4 w-4 rotate-0 transition-all",
-              accordionActive === value && "rotate-90",
-              // active === value && "rotate-90",
-            )}
-          />
-
+          <span className="truncate">{value}</span>
           <SidebarItemBtn
             Icon={actionIcon || Plus}
             onClick={(e) => {
@@ -260,9 +267,13 @@ function SettingsSidebarAccordionItem({
             )}
           />
         </SidebarItem>
-      </AccordionTrigger>
-      <AccordionContent className="py-1.5 pl-7">{children}</AccordionContent>
-    </AccordionItem>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="py-1 pl-[1.0625rem]">
+        <div className="border-l border-border p-0 pl-[0.625rem]">
+          {children}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
@@ -288,7 +299,7 @@ function SettingsContent({
   if (active !== id) return null;
 
   return (
-    <div className="flex w-full basis-full justify-center overflow-y-scroll bg-page px-4 py-10">
+    <div className="bg-page flex w-full basis-full justify-center overflow-y-scroll px-4 py-10">
       <div
         className={cn(
           "flex w-full max-w-2xl shrink-0 grow flex-col items-center",
@@ -373,7 +384,7 @@ function SettingsContentAction(props: ButtonProps) {
 }
 
 function SettingsClose() {
-  const { workspaceId }: { workspaceId: string } = useParams();
+  const { workspaceSlug } = useCurrentWorkspace();
   const router = useRouter();
 
   return (
@@ -382,7 +393,7 @@ function SettingsClose() {
        p-0 text-muted-foreground/70 transition-all hover:text-foreground"
       size="fit"
       variant="link"
-      onClick={() => router.push("/" + workspaceId)}
+      onClick={() => router.push("/" + workspaceSlug)}
     >
       <X className="h-6 w-6" />
     </Button>
@@ -403,5 +414,5 @@ export {
   SettingsContentSection,
   SettingsContentDescription,
   SettingsContentAction,
-  SettingsSidebarAccordionItem,
+  SettingsSidebarCollapsibleItem,
 };

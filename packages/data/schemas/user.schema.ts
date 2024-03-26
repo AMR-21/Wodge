@@ -69,7 +69,8 @@ export type PokeMessage = {
     | "channel"
     | "presence"
     | "welcome"
-    | "deleteWorkspace";
+    | "deleteWorkspace"
+    | "workspaceInfo";
   id?: string;
 };
 

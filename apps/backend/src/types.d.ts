@@ -20,7 +20,7 @@ interface ReplicacheFields {
   deleted: boolean;
 }
 
-export type Versions = Map<string, number | boolean>;
+export type Versions = Map<string, number>;
 
 /**
  * User
@@ -29,9 +29,7 @@ export type ServerWorkspacesStore = {
   data: UserWorkspacesStore[];
 } & ReplicacheFields;
 
-export interface UserPartyInterface extends Party {
-  workspacesStore: ServerWorkspacesStore;
-}
+export interface UserPartyInterface extends Party {}
 
 /**
  * Workspace

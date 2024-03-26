@@ -14,6 +14,7 @@ import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
   USER_IS_CONNECTED_KEY,
+  Workspace,
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import { ServerWorkspacesStore, UserPartyInterface, Versions } from "../types";
@@ -24,7 +25,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     hibernate: true,
   };
 
-  workspacesStore: ServerWorkspacesStore;
   versions: Versions;
 
   constructor(readonly room: Party.Room) {}
@@ -39,13 +39,13 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
       new Map<string, number | boolean>([["globalVersion", 0]]);
 
-    this.workspacesStore = <ServerWorkspacesStore>(
-      map.get(makeWorkspacesStoreKey())
-    ) || {
-      data: [],
-      lastModifiedVersion: 0,
-      deleted: false,
-    };
+    // this.workspacesStore = <ServerWorkspacesStore>(
+    //   map.get(makeWorkspacesStoreKey())
+    // ) || {
+    //   data: [],
+    //   lastModifiedVersion: 0,
+    //   deleted: false,
+    // };
   }
 
   // When user is connected to the party
@@ -64,12 +64,28 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   async onClose() {
     const connections = [...this.room.getConnections()].length;
 
-    if (connections === 0)
-      await this.handlePresence(
-        this.workspacesStore.data
-          .filter((ws) => ws.environment === "cloud")
-          .map((ws) => ws.workspaceId, false)
+    if (connections === 0) {
+      // Todo better way to fetch user workspaces
+      const res = await fetch(
+        `${this.room.env.AUTH_DOMAIN}/api/user-workspaces`,
+        {
+          headers: {
+            // Accept: "application/json",
+            authorization: this.room.env.SERVICE_KEY as string,
+            "x-user-id": this.room.id,
+          },
+        }
       );
+
+      const workspaces = (await res.json()) as Workspace[];
+
+      if (!workspaces || workspaces.length === 0) return;
+
+      await this.handlePresence(
+        workspaces.map((ws) => ws.id),
+        false
+      );
+    }
   }
 
   async ensurePresence() {
@@ -80,12 +96,23 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       return;
     }
 
-    // Register the user in its workspaces
-    const workspaceIds = this.workspacesStore.data
-      .filter((ws) => ws.environment === "cloud")
-      .map((ws) => ws.workspaceId);
+    // Todo better way to fetch user workspaces
+    const res = await fetch(
+      `${this.room.env.AUTH_DOMAIN}/api/user-workspaces`,
+      {
+        headers: {
+          // Accept: "application/json",
+          authorization: this.room.env.SERVICE_KEY as string,
+          "x-user-id": this.room.id,
+        },
+      }
+    );
 
-    await this.handlePresence(workspaceIds);
+    const workspaces = (await res.json()) as Workspace[];
+
+    if (!workspaces || workspaces.length === 0) return;
+
+    await this.handlePresence(workspaces.map((ws) => ws.id));
   }
 
   async handlePresence(wid: string | string[], connecting = true) {
@@ -179,6 +206,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   }
 
   poke(data?: PokeMessage) {
+    console.log(data);
     this.room.broadcast(JSON.stringify({ sub: "poke", ...data }));
   }
 }

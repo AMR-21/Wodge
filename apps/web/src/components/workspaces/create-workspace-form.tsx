@@ -33,6 +33,7 @@ export function CreateWorkspaceForm() {
   });
 
   const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: NewWorkspace & { id: string }) => {
       const { id, ...workspace } = data;

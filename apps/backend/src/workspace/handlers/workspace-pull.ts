@@ -7,21 +7,29 @@ import {
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
+import { poke } from "../../user/handlers/poke";
 
 export async function workspacePull(req: Party.Request, party: WorkspaceParty) {
+  const userId = req.headers.get("x-user-id")!;
   return await repPull({
     req,
     storage: party.room.storage,
     versions: party.versions,
-    patcher: patcher(party),
+    patcher: patcher(party, userId),
   });
 }
 
-function patcher(party: WorkspaceParty) {
+function patcher(party: WorkspaceParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
     const { workspaceMembers, workspaceStructure } = party;
+
+    if (party.versions.get("workspaceInfo")! > fromVersion)
+      await party.poke({
+        type: "workspaceInfo",
+        userId,
+      });
 
     if (party.workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({

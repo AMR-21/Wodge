@@ -153,7 +153,9 @@ export const PresenceRequestSchema = z.object({
   connect: z.boolean(),
 });
 
-export type Workspace = z.infer<typeof WorkspaceSchema>;
+export type Workspace = z.infer<typeof WorkspaceSchema> & {
+  id: string;
+};
 export type Member = z.infer<typeof MemberSchema>;
 export type Group = z.infer<typeof GroupSchema>;
 

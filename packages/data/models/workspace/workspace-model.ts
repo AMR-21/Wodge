@@ -43,3 +43,13 @@ export async function getWorkspacesByUserId(userId: string) {
     .where(eq(memberships.userId, userId))
     .innerJoin(workspaces, eq(workspaces.id, memberships.workspaceId));
 }
+
+export async function updateWorkspaceById(
+  workspaceId: string,
+  data: Pick<Workspace, "name" | "slug">
+) {
+  return await db
+    .update(workspaces)
+    .set(data)
+    .where(eq(workspaces.id, workspaceId));
+}
