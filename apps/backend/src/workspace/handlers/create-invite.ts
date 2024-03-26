@@ -59,8 +59,16 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
       "/join?token=" +
       newInvite.token;
 
+    await party.poke({
+      type: "invite",
+    });
+
     return json({ inviteLink, invites: Object.fromEntries(party.invites) });
   }
+
+  await party.poke({
+    type: "invite",
+  });
 
   return json({
     invites: Object.fromEntries(party.invites),

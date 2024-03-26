@@ -28,6 +28,8 @@ export function useInvites() {
       );
       return res.json();
     },
+    enabled: !!workspaceId,
+    staleTime: 0,
   });
 
   const inviteLink = getInviteLink(invites);

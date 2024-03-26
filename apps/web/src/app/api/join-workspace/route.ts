@@ -12,8 +12,6 @@ export async function POST(req: Request) {
 
   const userId = req.headers.get("userId");
 
-  console.log("workspaceId", workspaceId);
-
   if (!userId || !workspaceId) {
     return new Response(null, { status: 401 });
   }

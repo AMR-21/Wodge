@@ -9,6 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 import { Button } from "@repo/ui/components/ui/button";
@@ -45,10 +46,15 @@ export function NewInviteForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Limit</FormLabel>
-              <Input type="number" {...field} />
+              <Input
+                {...field}
+                type="number"
+                onChange={(e) => field.onChange(+e.target.value)}
+              />
               <FormDescription>
                 Limit is number of allowed people to use this invite link
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

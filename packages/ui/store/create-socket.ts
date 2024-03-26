@@ -47,6 +47,10 @@ export function createSocket(userId: string) {
             toast.warning("You have been removed from the current workspace");
           return userStore?.pull();
 
+        case "invite":
+          return queryClient.invalidateQueries({
+            queryKey: ["invites", data.id],
+          });
         default:
           userStore?.pull();
       }

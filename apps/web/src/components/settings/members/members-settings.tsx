@@ -36,7 +36,7 @@ export function MembersSettings() {
       />
 
       <SettingsContentSection header="Invite Link">
-        <InviteLink inviteLink={inviteLink} isPending={isPending} />
+        <InviteLink />
       </SettingsContentSection>
 
       <SettingsContentSection header="Manage Members">
