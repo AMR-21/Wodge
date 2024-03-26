@@ -37,7 +37,7 @@ export function CreateWorkspaceForm() {
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: NewWorkspace & { id: string }) => {
       const { id, ...workspace } = data;
-      await fetch(
+      const res = await fetch(
         `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${data.id}/create`,
         {
           method: "POST",
@@ -45,16 +45,19 @@ export function CreateWorkspaceForm() {
           body: JSON.stringify(workspace),
         },
       );
-      return data.id;
+
+      if (!res.ok) throw new Error("Failed to create workspace");
+
+      return data.slug;
     },
-    onSuccess: (id) => {
+    onSuccess: (slug) => {
       queryClient.invalidateQueries({
         queryKey: ["user-workspaces"],
       });
-      router.push("/" + id);
+      router.push("/" + slug);
     },
-    onError: (error) => {
-      toast.error("Failed to create workspace");
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 

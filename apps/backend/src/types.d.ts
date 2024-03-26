@@ -30,7 +30,7 @@ export type ServerWorkspacesStore = {
 } & ReplicacheFields;
 
 export interface UserPartyInterface extends Party {
-  workspacesStore: string[];
+  workspacesStore: Set<string>;
 }
 
 /**

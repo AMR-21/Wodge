@@ -18,7 +18,7 @@ export async function addWorkspace(req: Party.Request, party: UserParty) {
   const workspaceId = req.headers.get("workspaceId");
   if (!workspaceId) return badRequest();
 
-  party.workspacesStore.push(workspaceId);
+  party.workspacesStore.add(workspaceId);
 
   // Persist data
   await party.room.storage.put({

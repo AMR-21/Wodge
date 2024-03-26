@@ -13,11 +13,9 @@ import { getSession } from "../lib/auth";
 import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
-  USER_IS_CONNECTED_KEY,
-  Workspace,
   makeWorkspacesStoreKey,
 } from "@repo/data";
-import { ServerWorkspacesStore, UserPartyInterface, Versions } from "../types";
+import { UserPartyInterface, Versions } from "../types";
 import { handleGet } from "./endpoints/user-get";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
@@ -25,7 +23,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     hibernate: true,
   };
 
-  workspacesStore: string[];
+  workspacesStore: Set<string>;
   versions: Versions;
 
   constructor(readonly room: Party.Room) {}
@@ -40,7 +38,8 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
       new Map<string, number | boolean>([["globalVersion", 0]]);
 
-    this.workspacesStore = <string[]>map.get(makeWorkspacesStoreKey()) || [];
+    this.workspacesStore =
+      <Set<string>>map.get(makeWorkspacesStoreKey()) || new Set<string>();
   }
 
   // When user is connected to the party
@@ -60,7 +59,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     const connections = [...this.room.getConnections()].length;
 
     if (connections === 0) {
-      await this.handlePresence(this.workspacesStore, false);
+      await this.handlePresence([...this.workspacesStore], false);
     }
   }
 
@@ -72,7 +71,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       return;
     }
 
-    await this.handlePresence(this.workspacesStore);
+    await this.handlePresence([...this.workspacesStore]);
   }
 
   async handlePresence(wid: string | string[], connecting = true) {

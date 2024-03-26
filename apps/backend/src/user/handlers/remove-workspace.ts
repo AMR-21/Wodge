@@ -6,7 +6,6 @@ import {
   UserWorkspacesStore,
   makeWorkspacesStoreKey,
 } from "@repo/data";
-import { produce } from "immer";
 
 export async function removeWorkspace(req: Party.Request, party: UserParty) {
   const serviceKey = req.headers.get("authorization");
@@ -19,22 +18,11 @@ export async function removeWorkspace(req: Party.Request, party: UserParty) {
 
   if (!workspaceId) return badRequest();
 
-  // Update store and versions
-  const nextVersion = (party.versions.get("globalVersion") as number) + 1;
-
-  party.versions.set("globalVersion", nextVersion);
-
-  party.workspacesStore = produce(party.workspacesStore, (draft) => {
-    draft.data = party.workspacesStore.data.filter(
-      (w) => w.workspaceId !== workspaceId
-    );
-    draft.lastModifiedVersion = nextVersion;
-  });
+  party.workspacesStore.delete(workspaceId);
 
   // Persist data
   await party.room.storage.put({
     [makeWorkspacesStoreKey()]: party.workspacesStore,
-    [REPLICACHE_VERSIONS_KEY]: party.versions,
   });
 
   // Poke update data

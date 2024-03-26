@@ -12,7 +12,6 @@ export async function POST(req: Request) {
 
   const res = await createWorkspace({ ...workspace, createdAt: new Date() });
 
-  console.log(res);
   if (res.error) return new Response(res.error, { status: 400 });
 
   return Response.json(res.workspace, { status: 201 });
