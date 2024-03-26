@@ -57,9 +57,6 @@ export const PublicUserSchema = UserSchema.pick({
  */
 export type UserWorkspacesStore = {
   workspaceId: string;
-  environment: "local" | "cloud";
-  workspaceName: string;
-  workspaceAvatar: string;
 };
 
 export type PokeMessage = {

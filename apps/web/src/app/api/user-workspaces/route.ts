@@ -12,7 +12,7 @@ export async function GET(req: Request) {
 
   if (!userId) return new Response(null, { status: 401 });
 
-  const res = await getWorkspacesByUserId("XnqN4jwyc6UOaD7AUcvGh");
+  const res = await getWorkspacesByUserId(userId);
 
   const workspaces = res.map((r) => r.workspaces);
 

@@ -8,6 +8,7 @@ import {
   NewWorkspaceSchema,
   REPLICACHE_VERSIONS_KEY,
   Workspace,
+  WORKSPACE_PRESENCE_KEY,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "@repo/data";
 import { produce } from "immer";
@@ -66,6 +67,21 @@ export async function createWorkspace(
   // Todo enhance and check dup slug error
   if (!res.ok) return badRequest();
 
+  // 5. Add workspace to user data
+  const userParty = party.room.context.parties.user!;
+
+  const userInstance = userParty.get(userId);
+
+  await userInstance.fetch("/add-workspace", {
+    method: "POST",
+    headers: {
+      authorization: party.room.env.SERVICE_KEY as string,
+      workspaceId: party.room.id,
+    },
+  });
+
+  // 6. add the workspace in the do
+
   const globalVersion = (party.versions.get("globalVersion") as number) || 0;
 
   party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
@@ -101,15 +117,20 @@ export async function createWorkspace(
     });
     draft.lastModifiedVersion = globalVersion + 1;
   });
-  // 3. update global version
+
+  // 7. update global versions
   party.versions.set("globalVersion", globalVersion + 1);
   party.versions.set("workspaceInfo", globalVersion + 1);
 
-  // 3. persist updates
+  // 8. add user to presence map
+  party.presenceMap.set(userId, true);
+
+  // 9. persist updates
   await party.room.storage.put({
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [makeWorkspaceStructureKey()]: party.workspaceStructure,
+    [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
   });
 
   return ok();

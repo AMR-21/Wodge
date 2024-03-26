@@ -7,7 +7,6 @@ import {
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
-import { poke } from "../../user/handlers/poke";
 
 export async function workspacePull(req: Party.Request, party: WorkspaceParty) {
   const userId = req.headers.get("x-user-id")!;
@@ -25,12 +24,12 @@ function patcher(party: WorkspaceParty, userId: string) {
 
     const { workspaceMembers, workspaceStructure } = party;
 
-    if (party.versions.get("workspaceInfo")! > fromVersion)
+    if (party.versions.get("workspaceInfo")! > fromVersion) {
       await party.poke({
         type: "workspaceInfo",
         userId,
       });
-
+    }
     if (party.workspaceMembers.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",

@@ -1,7 +1,6 @@
 import type * as Party from "partykit/server";
 
 import WorkspaceParty from "../workspace/workspace-party";
-import { Role, grant } from "@repo/data";
 
 export function getMember(userId: string, party: WorkspaceParty) {
   return party.workspaceMembers.data.members.find(
@@ -10,7 +9,7 @@ export function getMember(userId: string, party: WorkspaceParty) {
 }
 
 export function isUserOwner(userId: string, party: WorkspaceParty) {
-  return party.workspaceMembers.data.owner === userId;
+  return party.workspaceMembers.data.createdBy === userId;
 }
 
 export function isMemberInWorkspace(userId: string, party: WorkspaceParty) {
@@ -19,11 +18,11 @@ export function isMemberInWorkspace(userId: string, party: WorkspaceParty) {
   );
 }
 
-export function getRoles(rolesIds: string[], party: WorkspaceParty) {
-  return rolesIds.map((roleId) =>
-    party.workspaceStructure.data.roles.find((role) => role.id === roleId)
-  );
-}
+// export function getRoles(rolesIds: string[], party: WorkspaceParty) {
+//   return rolesIds.map((roleId) =>
+//     party.workspaceStructure.data.roles.find((role) => role.id === roleId)
+//   );
+// }
 
 export function isAllowed(req: Party.Request, party: WorkspaceParty) {
   const userId = req.headers.get("x-user-id");

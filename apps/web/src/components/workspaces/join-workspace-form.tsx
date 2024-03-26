@@ -3,7 +3,7 @@ import { JoinWorkspaceSchema } from "@repo/data";
 
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -17,6 +17,7 @@ import { Input } from "@repo/ui/components/ui/input";
 import { DialogClose } from "@repo/ui/components/ui/dialog";
 import { Button } from "@repo/ui/components/ui/button";
 import { toast } from "@repo/ui/components/ui/toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function JoinWorkspaceForm() {
   const form = useForm<z.infer<typeof JoinWorkspaceSchema>>({
@@ -26,23 +27,32 @@ export function JoinWorkspaceForm() {
     },
   });
 
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  // const user = useCurrentUser();
+  const queryClient = useQueryClient();
 
-  async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
-    startTransition(async () => {
-      const res = await fetch(data.url, {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (url: string) => {
+      const res = await fetch(url, {
         method: "POST",
         credentials: "include",
       });
-      if (!res.ok) {
-        toast.error("Failed to join workspace");
-        return;
-      }
-      const { workspaceId } = (await res.json()) as { workspaceId: string };
-      router.push(`/${workspaceId}`);
-    });
+
+      if (!res.ok) throw new Error("Failed to join workspace");
+
+      const data = (await res.json()) as { workspaceId: string };
+      return data?.workspaceId;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-workspaces"],
+      });
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
+    mutate(data.url);
   }
 
   return (

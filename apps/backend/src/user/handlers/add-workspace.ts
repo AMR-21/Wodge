@@ -15,28 +15,18 @@ export async function addWorkspace(req: Party.Request, party: UserParty) {
     return badRequest();
   }
 
-  const workspace = <UserWorkspacesStore>await req.json();
+  const workspaceId = req.headers.get("workspaceId");
+  if (!workspaceId) return badRequest();
 
-  if (!workspace.workspaceId) return badRequest();
-
-  // Update store and versions
-  const nextVersion = (party.versions.get("globalVersion") as number) + 1;
-
-  party.versions.set("globalVersion", nextVersion);
-
-  party.workspacesStore = produce(party.workspacesStore, (draft) => {
-    draft.data.push(workspace);
-    draft.lastModifiedVersion = nextVersion;
-  });
+  party.workspacesStore.push(workspaceId);
 
   // Persist data
   await party.room.storage.put({
     [makeWorkspacesStoreKey()]: party.workspacesStore,
-    [REPLICACHE_VERSIONS_KEY]: party.versions,
   });
 
-  // Poke update data
-  party.poke({ type: "user" });
+  // Account for joining cases
+  // party.poke({ type: "workspaceInfo" });
 
   return ok();
 }

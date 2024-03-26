@@ -53,3 +53,7 @@ export async function updateWorkspaceById(
     .set(data)
     .where(eq(workspaces.id, workspaceId));
 }
+
+export async function addWorkspaceMember(userId: string, workspaceId: string) {
+  return await db.insert(memberships).values({ userId, workspaceId });
+}

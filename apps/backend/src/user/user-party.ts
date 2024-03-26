@@ -25,6 +25,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     hibernate: true,
   };
 
+  workspacesStore: string[];
   versions: Versions;
 
   constructor(readonly room: Party.Room) {}
@@ -39,13 +40,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
       new Map<string, number | boolean>([["globalVersion", 0]]);
 
-    // this.workspacesStore = <ServerWorkspacesStore>(
-    //   map.get(makeWorkspacesStoreKey())
-    // ) || {
-    //   data: [],
-    //   lastModifiedVersion: 0,
-    //   deleted: false,
-    // };
+    this.workspacesStore = <string[]>map.get(makeWorkspacesStoreKey()) || [];
   }
 
   // When user is connected to the party
@@ -65,26 +60,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     const connections = [...this.room.getConnections()].length;
 
     if (connections === 0) {
-      // Todo better way to fetch user workspaces
-      const res = await fetch(
-        `${this.room.env.AUTH_DOMAIN}/api/user-workspaces`,
-        {
-          headers: {
-            // Accept: "application/json",
-            authorization: this.room.env.SERVICE_KEY as string,
-            "x-user-id": this.room.id,
-          },
-        }
-      );
-
-      const workspaces = (await res.json()) as Workspace[];
-
-      if (!workspaces || workspaces.length === 0) return;
-
-      await this.handlePresence(
-        workspaces.map((ws) => ws.id),
-        false
-      );
+      await this.handlePresence(this.workspacesStore, false);
     }
   }
 
@@ -96,23 +72,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       return;
     }
 
-    // Todo better way to fetch user workspaces
-    const res = await fetch(
-      `${this.room.env.AUTH_DOMAIN}/api/user-workspaces`,
-      {
-        headers: {
-          // Accept: "application/json",
-          authorization: this.room.env.SERVICE_KEY as string,
-          "x-user-id": this.room.id,
-        },
-      }
-    );
-
-    const workspaces = (await res.json()) as Workspace[];
-
-    if (!workspaces || workspaces.length === 0) return;
-
-    await this.handlePresence(workspaces.map((ws) => ws.id));
+    await this.handlePresence(this.workspacesStore);
   }
 
   async handlePresence(wid: string | string[], connecting = true) {
@@ -206,7 +166,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   }
 
   poke(data?: PokeMessage) {
-    console.log(data);
     this.room.broadcast(JSON.stringify({ sub: "poke", ...data }));
   }
 }

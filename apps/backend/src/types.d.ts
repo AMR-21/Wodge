@@ -29,7 +29,9 @@ export type ServerWorkspacesStore = {
   data: UserWorkspacesStore[];
 } & ReplicacheFields;
 
-export interface UserPartyInterface extends Party {}
+export interface UserPartyInterface extends Party {
+  workspacesStore: string[];
+}
 
 /**
  * Workspace

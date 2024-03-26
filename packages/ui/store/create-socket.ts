@@ -36,7 +36,6 @@ export function createSocket(userId: string) {
           return;
 
         case "workspaceInfo":
-          console.log("workinfo");
           return queryClient.invalidateQueries({
             queryKey: ["user-workspaces"],
           });
@@ -48,8 +47,6 @@ export function createSocket(userId: string) {
             toast.warning("You have been removed from the current workspace");
           return userStore?.pull();
 
-        case "welcome":
-          return console.log("welcome");
         default:
           userStore?.pull();
       }

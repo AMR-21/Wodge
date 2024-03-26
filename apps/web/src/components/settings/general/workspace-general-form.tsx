@@ -20,6 +20,7 @@ import { Info } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { useSubmitToast } from "@/components/use-submit-toast";
+import { useRouter } from "next/navigation";
 
 // TODO USE rquery to mutate inside the DO
 export function WorkspaceGeneralForm() {
@@ -35,6 +36,8 @@ export function WorkspaceGeneralForm() {
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (workspace) form.reset(workspace);
   }, [workspace]);
@@ -49,18 +52,21 @@ export function WorkspaceGeneralForm() {
           body: JSON.stringify(data),
         },
       );
+
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.dismiss(toastId);
       form.reset(data);
+      if (data.slug !== workspace?.slug) {
+        router.push(`/${data.slug}/settings`);
+      }
     },
   });
 
   const { toastId } = useSubmitToast<Workspace>(form, formRef);
 
   async function onSubmit(data: Pick<Workspace, "name" | "slug">) {
-    // await workspaceRep?.mutate.updateWorkspace({ update: data });
-    // console.log(data);
     mutate(data);
   }
 

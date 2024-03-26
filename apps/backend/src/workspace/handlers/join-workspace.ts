@@ -3,9 +3,7 @@ import { badRequest, json, ok, unauthorized } from "../../lib/http-utils";
 import WorkspaceParty from "../workspace-party";
 import {
   Member,
-  PublicUserType,
   REPLICACHE_VERSIONS_KEY,
-  UserWorkspacesStore,
   WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
   makeWorkspaceMembersKey,
@@ -40,40 +38,50 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
     // if (!invite.emails!.includes(userData.email)) return badRequest();
   }
 
-  // 5. Add workspace to user data
+  // 5. Add user to the workspace in the db
+  // Todo use bindings
+
+  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/join-workspace`, {
+    method: "POST",
+    headers: {
+      // Accept: "application/json",
+      authorization: party.room.env.SERVICE_KEY as string,
+      workspaceId: party.room.id,
+      userId: userId,
+    },
+  });
+
+  // Todo enhance and check dup slug error
+  if (!res.ok) return badRequest();
+
+  // 6. Add workspace to user data
+
   const userParty = party.room.context.parties.user!;
 
   const userInstance = userParty.get(userId);
 
-  const res = await userInstance.fetch("/add-workspace", {
+  await userInstance.fetch("/add-workspace", {
     method: "POST",
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,
-    },
-    body: JSON.stringify({
       workspaceId: party.room.id,
-      workspaceName: party.workspaceMetadata.data.name,
-      workspaceAvatar: party.workspaceMetadata.data.avatar,
-      environment: "cloud",
-    } satisfies UserWorkspacesStore),
+    },
   });
 
-  if (res.status !== 200) return badRequest();
-
-  // 6. add the user to the workspace
+  // 7. add the user to the workspace
   // TODO add role invitation
   const newMember: Member = {
     id: userId,
     role: "member",
     joinInfo: {
-      joined_at: new Date().toISOString(),
+      joinedAt: new Date().toISOString(),
       token,
-      created_by: invite.createdBy,
+      createdBy: invite.createdBy,
       method: invite.method,
     },
   };
 
-  // 7. Update Replicache versions
+  // 8. Update Replicache versions
   const nextVersion = (party.versions.get("globalVersion") as number) + 1;
 
   party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
@@ -85,7 +93,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   party.versions.set("globalVersion", nextVersion);
 
-  // 8. update the invite
+  // 9. update the invite
   // if(invite.limit !== -1)
   if (invite.method === "link") invite.limit -= 1;
 
@@ -94,10 +102,10 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   party.invites.set(token, invite);
 
-  // 8. Update presence
+  // 10. Update presence
   party.presenceMap.set(userId, true);
 
-  // 9. persist updates
+  // 11. persist updates
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [WORKSPACE_INVITES_KEY]: party.invites,
@@ -107,6 +115,8 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   // Inform current members of the new user
   await party.poke();
+
+  // Todo read slug and return it
 
   return json({
     workspaceId: party.room.id,
