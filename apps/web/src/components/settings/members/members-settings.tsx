@@ -19,6 +19,8 @@ export function MembersSettings() {
     columns: membersColumns({ changeMemberRole, removeMember, workspaceId }),
   });
 
+  const nMembers = table.getFilteredRowModel().rows.length;
+
   async function removeMember(memberId: string) {
     await workspaceRep?.mutate.removeMember(memberId);
   }
@@ -27,7 +29,6 @@ export function MembersSettings() {
     await workspaceRep?.mutate.changeMemberRole({ memberId, role });
   }
 
-  // Todo render email invites
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
@@ -41,16 +42,19 @@ export function MembersSettings() {
 
       <SettingsContentSection header="Manage Members">
         <div className="space-y-4">
-          <div className="flex justify-between">
-            <SettingsSearchInput
-              table={table}
-              searchColumn="member"
-              placeHolder="Search members by email"
-            />
+          <SettingsSearchInput
+            table={table}
+            searchColumn="member"
+            placeHolder="Search by email, username, or name"
+          />
 
-            {/* <MembersCombobox members={members?.members || []} /> */}
-          </div>
-          <DataTable table={table} />
+          {nMembers > 0 && (
+            <p className="text-xs">
+              {nMembers > 1 ? `${nMembers} members` : `1 member`}
+            </p>
+          )}
+
+          <DataTable table={table} placeholder="No members found" />
         </div>
       </SettingsContentSection>
     </div>

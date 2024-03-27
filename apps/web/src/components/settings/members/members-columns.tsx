@@ -21,7 +21,7 @@ import {
 import { useMember } from "@repo/ui/hooks/use-member";
 import { cn } from "@repo/ui/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DeepReadonly } from "replicache";
 
 interface MembersColumnsProps {
@@ -37,34 +37,34 @@ export function membersColumns({
   inviters,
 }: MembersColumnsProps): ColumnDef<DeepReadonly<Member>>[] {
   return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <div className="flex items-center">
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        </div>
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <div className="flex items-center">
+    //       <Checkbox
+    //         checked={
+    //           table.getIsAllPageRowsSelected() ||
+    //           (table.getIsSomePageRowsSelected() && "indeterminate")
+    //         }
+    //         onCheckedChange={(value) =>
+    //           table.toggleAllPageRowsSelected(!!value)
+    //         }
+    //         aria-label="Select all"
+    //       />
+    //     </div>
+    //   ),
+    //   cell: ({ row }) => (
+    //     <div className="flex items-center">
+    //       <Checkbox
+    //         checked={row.getIsSelected()}
+    //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //         aria-label="Select row"
+    //       />
+    //     </div>
+    //   ),
+    //   enableSorting: false,
+    //   enableHiding: false,
+    // },
 
     {
       id: "member",
@@ -86,27 +86,35 @@ export function membersColumns({
         if (isMembersPending) return null;
 
         return (
-          <div className="flex gap-4">
-            <Avatar className="h-8 w-8 rounded-md">
-              <AvatarImage
-                src={member?.avatar}
-                alt={member?.displayName}
-                className="rounded-md"
-              />
-              <AvatarFallback className="rounded-md">
-                {/* {member?.displayName[0]} */}
-              </AvatarFallback>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={member?.avatar} alt={member?.displayName} />
+              <AvatarFallback>{member?.displayName.at(0)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <div className="flex gap-1">
+              <div className="flex gap-1 text-[0.8125rem]">
                 <p>{member?.displayName}</p>
               </div>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-[0.8125rem] text-muted-foreground">
                 {member?.email}
               </span>
             </div>
           </div>
         );
+      },
+    },
+
+    {
+      id: "username",
+
+      header: () => <Header>Username</Header>,
+
+      cell: ({ row }) => {
+        const { member, isMembersPending } = useMember(row.original.id);
+
+        if (isMembersPending) return null;
+
+        return <p className="text-sm">@{member?.username}</p>;
       },
     },
 
@@ -146,13 +154,11 @@ export function membersColumns({
       id: "role",
       header: () => <Header className="pl-3">Role</Header>,
       cell: ({ row }) => {
-        const [value, setValue] = useState<string>(row.original.role);
-
         return (
           <div className="flex w-28">
             <Select
               disabled={row.original.role === "owner"}
-              defaultValue={value}
+              defaultValue={row.original.role}
               onValueChange={(v) =>
                 changeMemberRole(row.original.id, v as Member["role"])
               }

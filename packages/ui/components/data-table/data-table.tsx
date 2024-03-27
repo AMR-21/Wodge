@@ -36,17 +36,23 @@ interface DataTableProps<TData> {
   withPagination?: boolean;
   label?: string;
   withForm?: boolean;
+  placeholder?: string;
 }
 
-function DataTable<TData>({ table, label, withForm }: DataTableProps<TData>) {
+function DataTable<TData>({
+  table,
+  label,
+  withForm,
+  placeholder,
+}: DataTableProps<TData>) {
   if (!table.options?.meta) return null;
   // const [isEditing, setIsEditing] = React.useState(false);
   const { isEditing, setIsEditing, setEdited } = table.options.meta;
 
   return (
-    <div className="rounded-md border">
+    <div className="">
       <Table>
-        <TableHeader>
+        {/* <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -61,9 +67,9 @@ function DataTable<TData>({ table, label, withForm }: DataTableProps<TData>) {
               ))}
             </TableRow>
           ))}
-        </TableHeader>
+        </TableHeader> */}
         <TableBody>
-          {table.getCenterRows()?.length > 0 &&
+          {table.getCenterRows()?.length > 0 ? (
             table.getCenterRows().map((row) => (
               <TableRow
                 className="group/row"
@@ -76,7 +82,12 @@ function DataTable<TData>({ table, label, withForm }: DataTableProps<TData>) {
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
+            ))
+          ) : (
+            <TableRow>
+              <TableCell className="h-12 text-center">{placeholder}</TableCell>
+            </TableRow>
+          )}
           {table.getBottomRows()?.length > 0 &&
             table.getBottomRows().map((row) => (
               <TableRow
@@ -120,7 +131,7 @@ function DataTable<TData>({ table, label, withForm }: DataTableProps<TData>) {
         </TableBody>
       </Table>
 
-      <DataTablePagination table={table} withForm={withForm} />
+      {/* <DataTablePagination table={table} withForm={withForm} /> */}
     </div>
   );
 }

@@ -74,9 +74,11 @@ export function DataTableActions<TData>({
                 return (
                   <DropdownMenuItem
                     key={idx}
-                    destructive={!!item?.destructive}
                     onClick={item?.action}
                     disabled={item?.disabled}
+                    className={cn(
+                      item?.destructive && "!text-red-500 hover:!text-red-500",
+                    )}
                   >
                     {item?.label}
                   </DropdownMenuItem>
@@ -90,7 +92,7 @@ export function DataTableActions<TData>({
           Icon={Check}
           onClick={() => table.options.meta?.submitRow(row.index)}
           className={cn(
-            "invisible  text-success-base transition-all",
+            "text-success-base  invisible transition-all",
             isEdited && "visible -translate-x-7  ",
           )}
           success

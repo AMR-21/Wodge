@@ -29,12 +29,15 @@ export function InviteLink() {
   if (!workspaceId) return null;
 
   return (
-    <pre className="flex w-fit items-center justify-between gap-6 overflow-hidden rounded-md bg-accent p-3">
+    <pre className="flex w-full items-center justify-between gap-6 overflow-hidden rounded-md bg-accent p-3">
       <code className=" truncate text-sm">
         {isPending ? (
           <Skeleton className="h-4 w-11/12 max-w-lg" />
         ) : inviteLink?.token ? (
-          <p>{`${inviteLink.token}`}</p>
+          <div className="flex">
+            <p className="truncate">{`${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace`}</p>
+            <p>{`${inviteLink.token}/join`}</p>
+          </div>
         ) : (
           <p>No invite link</p>
         )}
