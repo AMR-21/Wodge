@@ -50,19 +50,11 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
   );
   const [openTeams, setOpenTeams] = useAtom(openTeamsAtom);
 
-  if (structure.teams.length === 0)
-    return (
-      <SidebarItem noIcon className="justify-center">
-        <Plus className="mr-1.5 h-3.5 w-3.5" />
-        <span>Add a team</span>
-      </SidebarItem>
-    );
-
   return (
     <div className="h-full min-h-full shrink-0">
       {/* <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}> */}
       <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-2">
           {structure.teams?.map((team, i) => (
             <SortableTeamspace key={team.id} team={team} idx={i} isPages />
           ))}

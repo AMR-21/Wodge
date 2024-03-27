@@ -1,6 +1,7 @@
 import { produce } from "immer";
-import { DrObj, Page, PageSchema } from "../../..";
+import { DrObj, Page, PageSchema, TEAM_MEMBERS_ROLE } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
+import { group } from "console";
 
 interface CreateTeamArgs {
   page: Page;
@@ -33,6 +34,20 @@ export function createPageMutation({
     if (fold.channels.find((ch) => ch.id === newPage.id)) {
       throw new Error("Page already exists");
     } else {
+      // check that every group id on the new page exists the workspace structure
+      newPage.editRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
+      newPage.viewRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
+
       fold?.channels.push(newPage); // Add page
     }
   });

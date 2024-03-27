@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { Chat, ChatSchema, DrObj } from "../../..";
+import { Chat, ChatSchema, DrObj, TEAM_MEMBERS_ROLE } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
@@ -29,6 +29,22 @@ export function createChatMutation({
     if (team.chats.find((ch) => ch.id === newChat.id)) {
       throw new Error("Chat already exists");
     } else {
+      // check that every group id on the new page exists the workspace structure
+      newChat.editRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
+      newChat.viewRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
+
       team.chats.push(newChat); // Add chat
     }
   });

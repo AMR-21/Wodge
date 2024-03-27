@@ -7,6 +7,7 @@ import {
   makeWorkspaceStructureKey,
   NewWorkspaceSchema,
   REPLICACHE_VERSIONS_KEY,
+  TEAM_MEMBERS_ROLE,
   Workspace,
   WORKSPACE_PRESENCE_KEY,
   WORKSPACE_TEAM_ID_LENGTH,
@@ -101,8 +102,9 @@ export async function createWorkspace(
 
   party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
     draft.data = defaultWorkspaceStructure();
+    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
     draft.data.teams.push({
-      id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+      id: teamId,
       name: "General",
       avatar: "",
       slug: "general",
@@ -110,7 +112,15 @@ export async function createWorkspace(
       members: [userId],
       createdBy: userId,
       default: true,
-      folders: [],
+      folders: [
+        {
+          name: "root",
+          channels: [],
+          id: "root-" + teamId,
+          editRoles: [TEAM_MEMBERS_ROLE],
+          viewRoles: [TEAM_MEMBERS_ROLE],
+        },
+      ],
       moderators: [],
       threads: [],
       tags: [],

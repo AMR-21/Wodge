@@ -33,8 +33,8 @@ export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
       <PopoverTrigger asChild>
         <Button size="sm">Add a member</Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <Command className="bg-transparent">
+      <PopoverContent className="bg-transparent p-0">
+        <Command>
           <CommandInput placeholder="Search a member" />
           <CommandEmpty>No members found</CommandEmpty>
           <CommandGroup>

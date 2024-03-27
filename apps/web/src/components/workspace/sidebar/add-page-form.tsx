@@ -1,4 +1,4 @@
-import { MultiSelect } from "@/components/multi-select";
+import { GroupMultiSelect } from "@/components/group-multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Channel,
@@ -19,6 +19,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 import { PopoverClose } from "@repo/ui/components/ui/popover";
@@ -41,9 +42,17 @@ export function AddPageForm({
   folderId?: string;
   teamId: string;
 }) {
-  const { workspaceRep } = useCurrentWorkspace();
+  const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Page>({
-    resolver: zodResolver(PageSchema),
+    resolver: zodResolver(
+      PageSchema.pick({
+        name: true,
+        editRoles: true,
+        viewRoles: true,
+        id: true,
+        avatar: true,
+      }),
+    ),
     defaultValues: {
       name: "",
       avatar: "",
@@ -54,16 +63,16 @@ export function AddPageForm({
   });
 
   async function onSubmit(data: Page) {
-    // await workspaceRep?.mutate.createPage({
-    //   folderId,
-    //   teamId,
-    //   ...data,
-    // });
+    await workspaceRep?.mutate.createPage({
+      folderId: folderId || "root-" + teamId,
+      teamId,
+      ...data,
+    });
     form.reset();
   }
 
   return (
-    <DialogContent>
+    <DialogContent className="max-w-80">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -74,7 +83,7 @@ export function AddPageForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Channel name</FormLabel>
+                <FormLabel>Page name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -82,7 +91,43 @@ export function AddPageForm({
             )}
           />
 
-          <MultiSelect data={["a", "b", "c"]} />
+          <FormField
+            control={form.control}
+            name="viewRoles"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>View groups</FormLabel>
+                  <FormControl>
+                    <GroupMultiSelect
+                      onChange={field.onChange}
+                      baseGroups={structure.groups}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+          <FormField
+            control={form.control}
+            name="editRoles"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Edit groups</FormLabel>
+                  <FormControl>
+                    <GroupMultiSelect
+                      onChange={field.onChange}
+                      baseGroups={structure.groups}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
 
           <Button type="submit" className="w-full">
             Create page

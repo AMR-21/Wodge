@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { DrObj, Thread, ThreadSchema } from "../../..";
+import { DrObj, TEAM_MEMBERS_ROLE, Thread, ThreadSchema } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
@@ -29,6 +29,21 @@ export function createThreadMutation({
     if (team.threads.find((ch) => ch.id === newThread.id)) {
       throw new Error("Thread already exists");
     } else {
+      // check that every group id on the new page exists the workspace structure
+      newThread.editRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
+      newThread.viewRoles.forEach((groupId) => {
+        if (groupId === TEAM_MEMBERS_ROLE) return;
+
+        if (!draft.groups.find((g) => g.id === groupId)) {
+          throw new Error("Group not found");
+        }
+      });
       team.threads.push(newThread); // Add thread
     }
   });

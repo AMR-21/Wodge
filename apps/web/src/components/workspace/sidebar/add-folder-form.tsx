@@ -1,4 +1,4 @@
-import { MultiSelect } from "@/components/multi-select";
+import { GroupMultiSelect } from "@/components/group-multi-select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Folder,
