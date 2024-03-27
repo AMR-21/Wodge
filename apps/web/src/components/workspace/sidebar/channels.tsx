@@ -1,15 +1,9 @@
 import * as React from "react";
 
 import { SidebarItem } from "../sidebar-item";
-import {
-  ChevronRight,
-  Component,
-  FileText,
-  GripVertical,
-  MoreHorizontal,
-} from "lucide-react";
+import { FileText, MoreHorizontal } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
-import { DrObj, type Channel as ChannelType } from "@repo/data";
+import { ChannelsTypes, DrObj, type Channel as ChannelType } from "@repo/data";
 import {
   SortableContext,
   useSortable,
@@ -21,15 +15,22 @@ import { useMemo } from "react";
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
-export function Pages({
-  channels,
-  folderId,
-  teamId,
-}: {
+interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
-  folderId: string;
+  folderId?: string;
   teamId: string;
-}) {
+  type: ChannelsTypes;
+}
+
+interface ChannelProps {
+  channel: DrObj<ChannelType>;
+  folderId?: string;
+  teamId: string;
+  type: ChannelsTypes;
+  idx: number;
+}
+
+export function Channels({ channels, folderId, teamId, type }: ChannelsProps) {
   const channelsIds = useMemo(
     () => channels?.map((c) => c.id) || [],
     [channels],
@@ -43,11 +44,12 @@ export function Pages({
       >
         <ul className="flex flex-col gap-1">
           {channels?.map((channel, i) => (
-            <SortablePage
+            <SortableChannel
               key={channel.id}
               channel={channel}
               folderId={folderId}
               teamId={teamId}
+              type={type}
               idx={i}
             />
           ))}
@@ -58,17 +60,13 @@ export function Pages({
 }
 
 // Teamspace
-function SortablePage({
+function SortableChannel({
   channel,
   folderId,
   teamId,
+  type,
   idx,
-}: {
-  channel: DrObj<ChannelType>;
-  folderId: string;
-  teamId: string;
-  idx: number;
-}) {
+}: ChannelProps) {
   const {
     attributes,
     listeners,
@@ -83,7 +81,7 @@ function SortablePage({
   } = useSortable({
     id: channel.id,
     data: {
-      type: "page",
+      type,
       folderId,
       teamId,
       idx,
@@ -91,7 +89,7 @@ function SortablePage({
   });
 
   const isSomethingOver = index === overIndex;
-  const isChannelOver = active?.data?.current?.type === "page";
+  const isChannelOver = active?.data?.current?.type === type;
 
   const isAbove = activeIndex > overIndex;
   const isBelow = activeIndex < overIndex;
@@ -111,7 +109,7 @@ function SortablePage({
         isSomethingOver && isChannelOver && isBelow && "border-b-blue-400",
       )}
     >
-      <Page
+      <Channel
         channel={channel}
         activeIndex={activeIndex}
         isDragging={isDragging}
@@ -126,7 +124,7 @@ interface DraggableProps {
   isDragging: boolean;
 }
 
-export const Page = React.forwardRef<
+export const Channel = React.forwardRef<
   HTMLLIElement,
   { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
@@ -150,4 +148,4 @@ export const Page = React.forwardRef<
   );
 });
 
-Page.displayName = "Page";
+Channel.displayName = "Channel";

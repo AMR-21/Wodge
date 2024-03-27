@@ -9,7 +9,7 @@ import {
   Plus,
 } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
-import { DrObj, Team } from "@repo/data";
+import { ChannelsTypes, DrObj, Team } from "@repo/data";
 import {
   SortableContext,
   useSortable,
@@ -41,8 +41,19 @@ import {
 } from "@repo/ui/components/ui/collapsible";
 import { Separator } from "@repo/ui/components/ui/separator";
 import { TeamMore } from "./team-more";
+import { Channels } from "./channels";
 
-export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
+interface TeamspacesProps {
+  isPages?: boolean;
+  type: ChannelsTypes;
+}
+
+interface TeamspaceProps extends TeamspacesProps {
+  team: DrObj<Team>;
+  idx: number;
+}
+
+export function Teamspaces({ isPages = false, type }: TeamspacesProps) {
   const { structure } = useCurrentWorkspace();
 
   const teamsId = useMemo(
@@ -56,7 +67,13 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
       <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
         <ul className="flex flex-col gap-2">
           {structure.teams?.map((team, i) => (
-            <SortableTeamspace key={team.id} team={team} idx={i} isPages />
+            <SortableTeamspace
+              key={team.id}
+              team={team}
+              idx={i}
+              type={type}
+              isPages={isPages}
+            />
           ))}
         </ul>
       </SortableContext>
@@ -68,12 +85,9 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
 function SortableTeamspace({
   team,
   idx,
-  isPages,
-}: {
-  team: DrObj<Team>;
-  idx: number;
-  isPages: boolean;
-}) {
+  isPages = false,
+  type,
+}: TeamspaceProps) {
   const {
     attributes,
     listeners,
@@ -137,7 +151,23 @@ function SortableTeamspace({
       <CollapsibleContent className="py-1 pl-[0.6875rem]">
         <div className="border-l border-border p-0 pl-[0.625rem]">
           {/* <Separator orientation="vertical" className="bg-yellow-300" /> */}
-          {isPages ? <Folders teamId={team.id} folders={team.folders} /> : null}
+
+          {isPages && <Folders teamId={team.id} folders={team.folders} />}
+          {!isPages && (
+            <>
+              {type === "rooms" && (
+                <Channels type="rooms" teamId={team.id} channels={team.rooms} />
+              )}
+
+              {type === "threads" && (
+                <Channels
+                  type="threads"
+                  teamId={team.id}
+                  channels={team.threads}
+                />
+              )}
+            </>
+          )}
         </div>
       </CollapsibleContent>
     </Collapsible>

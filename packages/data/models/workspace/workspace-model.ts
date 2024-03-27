@@ -8,7 +8,6 @@ import {
 } from "../../schemas/workspace.schema";
 import { db } from "../../server";
 import { eq } from "drizzle-orm";
-import { users } from "../../schemas/auth.schema";
 
 /**
  * DB operations on a workspace

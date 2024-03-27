@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { Chat, ChatSchema, DrObj, TEAM_MEMBERS_ROLE } from "../../..";
+import { Chat, RoomSchema, DrObj, TEAM_MEMBERS_ROLE } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 interface CreateTeamArgs {
@@ -14,7 +14,7 @@ export function createChatMutation({
   structure,
 }: CreateTeamArgs) {
   // Validate the data
-  const validateFields = ChatSchema.safeParse(chat);
+  const validateFields = RoomSchema.safeParse(chat);
 
   if (!validateFields.success) throw new Error("Invalid chat data");
 

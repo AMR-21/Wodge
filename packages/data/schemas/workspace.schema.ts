@@ -84,14 +84,33 @@ export const WorkspaceSchema = createInsertSchema(workspaces, {
     ),
 });
 
+export const InviteSchema = z.object({
+  limit: z.number().int().positive().default(Infinity),
+  method: z.enum(["link", "email", "owner"]),
+  // emails: z.array(z.string().email()).optional(),
+});
+// .refine(
+//   (data) => {
+//     if (
+//       data.method === "email" &&
+//       (!data.emails || data.emails.length === 0)
+//     ) {
+//       return false;
+//     }
+//     return true;
+//   },
+//   {
+//     message: "Emails are required",
+//   }
+// );
+
 export const MemberSchema = z.object({
   id: z.string().length(ID_LENGTH),
   role: z.enum(["owner", "admin", "member"]),
-  joinInfo: z.object({
+  joinInfo: InviteSchema.pick({ method: true }).extend({
     token: z.string(),
     createdBy: z.string().length(ID_LENGTH),
     joinedAt: z.string().datetime(),
-    method: z.enum(["link", "email", "owner"]),
   }),
 });
 
@@ -112,26 +131,6 @@ export const WorkspaceMembersSchema = z.object({
   createdBy: z.string().length(ID_LENGTH),
   members: z.array(MemberSchema),
 });
-
-export const NewInviteSchema = z.object({
-  limit: z.number().int().positive().default(Infinity),
-  method: z.enum(["link", "email", "owner"]),
-  // emails: z.array(z.string().email()).optional(),
-});
-// .refine(
-//   (data) => {
-//     if (
-//       data.method === "email" &&
-//       (!data.emails || data.emails.length === 0)
-//     ) {
-//       return false;
-//     }
-//     return true;
-//   },
-//   {
-//     message: "Emails are required",
-//   }
-// );
 
 export const NewWorkspaceSchema = WorkspaceSchema.pick({
   name: true,
@@ -164,23 +163,9 @@ export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 
-export type Invite = z.infer<typeof NewInviteSchema> & {
+export type Invite = z.infer<typeof InviteSchema> & {
   createdBy: string;
   token: string;
 };
 export type Invites = Map<string, Invite>;
-export type NewInvite = z.infer<typeof NewInviteSchema>;
-
-export function defaultWorkspaceMembers(): WorkspaceMembers {
-  return {
-    createdBy: "",
-    members: [],
-  };
-}
-
-export function defaultWorkspaceStructure(): WorkspaceStructure {
-  return {
-    teams: [],
-    groups: [],
-  };
-}
+export type NewInvite = z.infer<typeof InviteSchema>;

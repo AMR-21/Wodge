@@ -14,7 +14,7 @@ export function ChatsSidebar() {
       )}
     >
       <ScrollArea className="grow px-1.5 py-2">
-        <Teamspaces />
+        <Teamspaces type="rooms" />
       </ScrollArea>
     </aside>
   );

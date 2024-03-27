@@ -6,6 +6,7 @@ import {
   REPLICACHE_VERSIONS_KEY,
   WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
+  addWorkspaceMember,
   makeWorkspaceMembersKey,
 } from "@repo/data";
 import { isMemberInWorkspace } from "../../lib/utils";
@@ -70,16 +71,7 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
 
   // 7. add the user to the workspace
   // TODO add role invitation
-  const newMember: Member = {
-    id: userId,
-    role: "member",
-    joinInfo: {
-      joinedAt: new Date().toISOString(),
-      token,
-      createdBy: invite.createdBy,
-      method: invite.method,
-    },
-  };
+  const newMember: Member = addWorkspaceMember(userId, "member", invite);
 
   // 8. Update Replicache versions
   const nextVersion = (party.versions.get("globalVersion") as number) + 1;

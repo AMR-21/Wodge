@@ -2,6 +2,7 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { badRequest, error, ok, unauthorized } from "../../lib/http-utils";
 import {
+  createDefaultTeam,
   defaultWorkspaceStructure,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
@@ -102,29 +103,7 @@ export async function createWorkspace(
 
   party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
     draft.data = defaultWorkspaceStructure();
-    const teamId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
-    draft.data.teams.push({
-      id: teamId,
-      name: "General",
-      avatar: "",
-      slug: "general",
-      chats: [],
-      members: [userId],
-      createdBy: userId,
-      default: true,
-      folders: [
-        {
-          name: "root",
-          channels: [],
-          id: "root-" + teamId,
-          editRoles: [TEAM_MEMBERS_ROLE],
-          viewRoles: [TEAM_MEMBERS_ROLE],
-        },
-      ],
-      moderators: [],
-      threads: [],
-      tags: [],
-    });
+    draft.data.teams.push(createDefaultTeam(userId));
     draft.lastModifiedVersion = globalVersion + 1;
   });
 

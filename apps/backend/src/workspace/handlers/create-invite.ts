@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
-import { Invite, NewInviteSchema, WORKSPACE_INVITES_KEY } from "@repo/data";
+import { Invite, InviteSchema, WORKSPACE_INVITES_KEY } from "@repo/data";
 import { nanoid } from "nanoid";
 import { badRequest, json, unauthorized } from "../../lib/http-utils";
 import { isAllowed } from "../../lib/utils";
@@ -12,7 +12,7 @@ export async function createInvite(req: Party.Request, party: WorkspaceParty) {
 
   const body = await req.json();
 
-  const validatedFields = NewInviteSchema.safeParse(body);
+  const validatedFields = InviteSchema.safeParse(body);
 
   if (!validatedFields.success) return badRequest();
 

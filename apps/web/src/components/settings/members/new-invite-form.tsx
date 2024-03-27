@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewInvite, NewInviteSchema } from "@repo/data";
+import { NewInvite, InviteSchema } from "@repo/data";
 
 import { useForm } from "react-hook-form";
 import { useCreateInvite } from "./use-create-invite";
@@ -21,7 +21,7 @@ export function NewInviteForm({
   setIsOpen: (open: boolean) => void;
 }) {
   const form = useForm({
-    resolver: zodResolver(NewInviteSchema),
+    resolver: zodResolver(InviteSchema),
     defaultValues: {
       limit: 10,
       method: "link" as "link" | "email",

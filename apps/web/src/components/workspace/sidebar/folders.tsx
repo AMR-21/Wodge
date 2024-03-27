@@ -33,6 +33,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
+import { Channels } from "./channels";
 
 export function Folders({
   folders,
@@ -135,10 +136,11 @@ function SortableDirectory({
         )}
       </CollapsibleTrigger>
       <CollapsibleContent className={cn("transition-all", !isRoot && "pl-3")}>
-        <Pages
+        <Channels
           teamId={teamId}
           channels={folder.channels}
           folderId={folder.id}
+          type="pages"
         />
       </CollapsibleContent>
     </Collapsible>

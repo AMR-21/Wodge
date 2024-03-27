@@ -2,27 +2,12 @@ import { z } from "zod";
 import {
   BRAND_COLOR,
   ID_LENGTH,
+  TEAM_MEMBERS_ROLE,
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
-
-export const ChannelSchema = z.object({
-  id: z.string().length(ID_LENGTH),
-  name: z.string().max(70).min(1),
-  avatar: z.string().optional(),
-  viewRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-  editRoles: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-});
-
-export const PageSchema = ChannelSchema.extend({});
-
-export const ChatSchema = ChannelSchema.extend({});
-
-export const ThreadSchema = ChannelSchema.extend({});
+import { PageSchema, RoomSchema, ThreadSchema } from "./channel.schema";
+import { nanoid } from "nanoid";
 
 export const TagSchema = z.object({
   name: z.string().max(70),
@@ -51,17 +36,13 @@ export const TeamSchema = z.object({
   createdBy: z.string().length(ID_LENGTH),
 
   folders: z.array(FolderSchema),
-  chats: z.array(ChatSchema),
+  rooms: z.array(RoomSchema),
   threads: z.array(ThreadSchema),
   tags: z.array(TagSchema),
   slug: z.string().max(32).min(1),
   default: z.boolean().default(false),
 });
 
-export type Channel = z.infer<typeof ChannelSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Tag = z.infer<typeof TagSchema>;
 export type Folder = z.infer<typeof FolderSchema>;
-export type Page = z.infer<typeof PageSchema>;
-export type Chat = z.infer<typeof ChatSchema>;
-export type Thread = z.infer<typeof ThreadSchema>;

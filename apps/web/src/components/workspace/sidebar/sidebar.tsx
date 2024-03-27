@@ -4,6 +4,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { useParams, usePathname } from "next/navigation";
 import { useAppState } from "@repo/ui/store/store";
 import { PagesSidebar } from "./pages-sidebar";
+import { ChatsSidebar } from "./chats-sidebar";
 
 export function Sidebar() {
   const isSidebarOpen = useAppState((state) => state.isSidebarOpen);
@@ -14,6 +15,9 @@ export function Sidebar() {
   switch (pathName) {
     case "page":
       jsx = <PagesSidebar />;
+      break;
+    case "chat":
+      jsx = <ChatsSidebar />;
       break;
     default:
       return null;
