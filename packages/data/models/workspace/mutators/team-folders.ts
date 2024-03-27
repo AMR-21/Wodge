@@ -1,4 +1,10 @@
-import { Folder, FolderSchema, Team, TeamSchema } from "../../..";
+import {
+  Folder,
+  FolderSchema,
+  Team,
+  TEAM_MEMBERS_ROLE,
+  TeamSchema,
+} from "../../..";
 import { WorkspaceTeamMutation } from "./types";
 import { produce } from "immer";
 
@@ -15,15 +21,9 @@ export function addTeamFolderMutation({
   const validatedFields = FolderSchema.safeParse({
     ...update.folder,
     channels: [],
-    editRoles: ["team-members"],
-    viewRoles: ["team-members"],
   });
 
-  if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten());
-    // throw new Error("Invalid team update data");
-    return structure;
-  }
+  if (!validatedFields.success) throw new Error("Invalid team update data");
 
   const { data: folder } = validatedFields;
 
@@ -34,6 +34,19 @@ export function addTeamFolderMutation({
 
   if (structure.teams[teamIdx]!.folders.some((f) => f.id === folder.id))
     throw new Error("Folder already exists in team");
+
+  folder.editRoles.forEach((groupId) => {
+    if (groupId === TEAM_MEMBERS_ROLE) return;
+    if (!structure.groups.find((g) => g.id === groupId)) {
+      throw new Error("Group not found");
+    }
+  });
+  folder.viewRoles.forEach((groupId) => {
+    if (groupId === TEAM_MEMBERS_ROLE) return;
+    if (!structure.groups.find((g) => g.id === groupId)) {
+      throw new Error("Group not found");
+    }
+  });
 
   // 3. Update the dirs
   const newStructure = produce(structure, (draft) => {

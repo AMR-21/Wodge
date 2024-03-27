@@ -28,6 +28,11 @@ import { Pages } from "./pages";
 import { useAtom, useAtomValue } from "jotai";
 import { openFoldersAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { Input } from "@repo/ui/components/ui/input";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@repo/ui/components/ui/collapsible";
 
 export function Folders({
   folders,
@@ -42,27 +47,16 @@ export function Folders({
 
   return (
     <div className="h-full">
-      <Accordion
-        type="multiple"
-        value={[`root-${teamId}`, ...openFolders]}
-        onValueChange={setOpenFolders}
+      <SortableContext
+        items={foldersIds}
+        strategy={verticalListSortingStrategy}
       >
-        <SortableContext
-          items={foldersIds}
-          strategy={verticalListSortingStrategy}
-        >
-          <ul className="">
-            {folders?.map((f, i) => (
-              <SortableDirectory
-                key={f.id}
-                folder={f}
-                teamId={teamId}
-                idx={i}
-              />
-            ))}
-          </ul>
-        </SortableContext>
-      </Accordion>
+        <ul className="flex flex-col gap-1">
+          {folders?.map((f, i) => (
+            <SortableDirectory key={f.id} folder={f} teamId={teamId} idx={i} />
+          ))}
+        </ul>
+      </SortableContext>
     </div>
   );
 }
@@ -113,8 +107,8 @@ function SortableDirectory({
   const isBelow = activeIndex < overIndex;
 
   return (
-    <AccordionItem
-      value={folder.id}
+    <Collapsible
+      defaultOpen={isRoot}
       className={
         cn()
         // "border-b-2 border-t-2 border-b-transparent border-t-transparent",
@@ -123,7 +117,7 @@ function SortableDirectory({
         // !isRoot && "pl-3",
       }
     >
-      <AccordionTrigger {...listeners} {...attributes} asChild>
+      <CollapsibleTrigger asChild>
         {!isRoot && (
           <div
             className={cn(
@@ -139,17 +133,15 @@ function SortableDirectory({
             />
           </div>
         )}
-      </AccordionTrigger>
-      <AccordionContent
-        className={cn("pb-0.5 transition-all", !isRoot && "pl-3")}
-      >
+      </CollapsibleTrigger>
+      <CollapsibleContent className={cn("transition-all", !isRoot && "pl-3")}>
         <Pages
           teamId={teamId}
           channels={folder.channels}
           folderId={folder.id}
         />
-      </AccordionContent>
-    </AccordionItem>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
@@ -177,7 +169,7 @@ export const Folder = React.forwardRef<
         Icon={FolderIcon}
         collapsible
       >
-        <span className="truncate">{folder.name}</span>
+        <span className="select-none truncate">{folder.name}</span>
         <SidebarItemBtn Icon={MoreHorizontal} className="-my-1 ml-auto" />
       </SidebarItem>
     </li>

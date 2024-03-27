@@ -42,12 +42,13 @@ import {
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 
 export function AddToTeam({ teamId }: { teamId: string }) {
-  const [activeTab, setActiveTab] = useState("page");
+  const [activeTab, setActiveTab] = useState("folder");
+  const [open, setOpen] = useState(false);
 
   async function createBlankPage() {}
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         {/* <TooltipWrapper content="Add a page" side="right"> */}
         <DropdownMenuTrigger asChild>

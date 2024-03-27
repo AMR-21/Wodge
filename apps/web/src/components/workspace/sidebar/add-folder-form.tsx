@@ -7,7 +7,7 @@ import {
   WORKSPACE_GROUP_ID_LENGTH,
 } from "@repo/data";
 import { Button } from "@repo/ui/components/ui/button";
-import { DialogContent } from "@repo/ui/components/ui/dialog";
+import { DialogClose, DialogContent } from "@repo/ui/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -19,17 +19,22 @@ import { Input } from "@repo/ui/components/ui/input";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 import { nanoid } from "nanoid";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export function AddFolderForm({ teamId }: { teamId: string }) {
-  const { workspaceRep } = useCurrentWorkspace();
+  const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Folder>({
-    resolver: zodResolver(FolderSchema.pick({ name: true, id: true })),
+    resolver: zodResolver(FolderSchema.omit({ channels: true })),
     defaultValues: {
       name: "",
+      viewRoles: ["team-members"],
+      editRoles: ["team-members"],
       id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
     },
   });
+
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   async function onSubmit(data: Folder) {
     await workspaceRep?.mutate.updateTeam({
@@ -41,6 +46,8 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
     });
 
     form.reset();
+    form.setValue("id", nanoid(WORKSPACE_GROUP_ID_LENGTH));
+    closeRef.current?.click();
   }
 
   return (
@@ -63,9 +70,53 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="viewRoles"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>View groups</FormLabel>
+                  <FormControl>
+                    <GroupMultiSelect
+                      onChange={field.onChange}
+                      baseGroups={structure.groups}
+                    />
+                  </FormControl>
+                </FormItem>
+              );
+            }}
+          />
+
+          <FormField
+            control={form.control}
+            name="editRoles"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Edit groups</FormLabel>
+                  <FormControl>
+                    <GroupMultiSelect
+                      onChange={field.onChange}
+                      baseGroups={structure.groups}
+                    />
+                  </FormControl>
+                </FormItem>
+              );
+            }}
+          />
+
           <Button type="submit" className="w-full">
             Create folder
           </Button>
+
+          <DialogClose asChild>
+            <button
+              ref={closeRef}
+              className="hidden"
+              aria-label="close dialog"
+            />
+          </DialogClose>
         </form>
       </Form>
     </DialogContent>

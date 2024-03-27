@@ -41,7 +41,7 @@ export function Pages({
         items={channelsIds}
         strategy={verticalListSortingStrategy}
       >
-        <ul>
+        <ul className="flex flex-col gap-1">
           {channels?.map((channel, i) => (
             <SortablePage
               key={channel.id}

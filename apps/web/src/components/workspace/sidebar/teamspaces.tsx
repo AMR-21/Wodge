@@ -40,6 +40,7 @@ import {
   CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
 import { Separator } from "@repo/ui/components/ui/separator";
+import { TeamMore } from "./team-more";
 
 export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
   const { structure } = useCurrentWorkspace();
@@ -52,7 +53,6 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
 
   return (
     <div className="h-full min-h-full shrink-0">
-      {/* <Accordion type="multiple" value={openTeams} onValueChange={setOpenTeams}> */}
       <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
         <ul className="flex flex-col gap-2">
           {structure.teams?.map((team, i) => (
@@ -60,7 +60,6 @@ export function Teamspaces({ isPages = false }: { isPages?: boolean }) {
           ))}
         </ul>
       </SortableContext>
-      {/* </Accordion> */}
     </div>
   );
 }
@@ -143,38 +142,6 @@ function SortableTeamspace({
       </CollapsibleContent>
     </Collapsible>
   );
-
-  // return (
-  //   <AccordionItem
-  //     value={team.id}
-  //     className={cn(
-  //       // " -py-2 border-b-2 border-t-2 border-b-blue-200 border-t-blue-200",
-  //       isSomethingOver && isTeamOver && isAbove && "border-t-blue-400",
-  //       isSomethingOver && isTeamOver && isBelow && "border-b-blue-400",
-  //     )}
-  //     {...listeners}
-  //     {...attributes}
-  //   >
-  //     <AccordionTrigger asChild>
-  //       <div
-  //         className={cn(
-  //           // "border-b-2 border-b-blue-200 -py-2",
-  //           isSomethingOver && isOpen && isChanFoldOver && "border-b-blue-400",
-  //         )}
-  //       >
-  //         <Teamspace
-  //           team={team}
-  //           isChanFoldOver={isChanFoldOver}
-  //           isDragging={isDragging}
-  //           ref={setNodeRef}
-  //         />
-  //       </div>
-  //     </AccordionTrigger>
-  //     <AccordionContent className={cn("p-0 transition-all")}>
-  //       <Folders teamId={team.id} folders={team.folders} />
-  //     </AccordionContent>
-  //   </AccordionItem>
-  // );
 }
 
 interface DraggableProps {
@@ -208,11 +175,7 @@ export const Teamspace = React.forwardRef<
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          <SidebarItemBtn
-            Icon={MoreHorizontal}
-            className="-my-1 hover:bg-transparent"
-          />
-          <AddToTeam teamId={team.id} />
+          <TeamMore teamId={team.id} />
         </div>
       </SidebarItem>
     </li>

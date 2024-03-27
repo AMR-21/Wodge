@@ -10,6 +10,7 @@ import {
 import { Button, buttonVariants } from "@repo/ui/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
@@ -33,6 +34,7 @@ import {
 } from "@repo/ui/components/ui/select";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export function AddPageForm({
@@ -44,15 +46,7 @@ export function AddPageForm({
 }) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Page>({
-    resolver: zodResolver(
-      PageSchema.pick({
-        name: true,
-        editRoles: true,
-        viewRoles: true,
-        id: true,
-        avatar: true,
-      }),
-    ),
+    resolver: zodResolver(PageSchema),
     defaultValues: {
       name: "",
       avatar: "",
@@ -62,6 +56,8 @@ export function AddPageForm({
     },
   });
 
+  const closeRef = useRef<HTMLButtonElement>(null);
+
   async function onSubmit(data: Page) {
     await workspaceRep?.mutate.createPage({
       folderId: folderId || "root-" + teamId,
@@ -69,6 +65,8 @@ export function AddPageForm({
       ...data,
     });
     form.reset();
+    form.setValue("id", nanoid(ID_LENGTH));
+    closeRef.current?.click();
   }
 
   return (
@@ -85,7 +83,7 @@ export function AddPageForm({
               <FormItem>
                 <FormLabel>Page name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} placeholder="new page" />
                 </FormControl>
               </FormItem>
             )}
@@ -104,7 +102,6 @@ export function AddPageForm({
                       baseGroups={structure.groups}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -123,7 +120,6 @@ export function AddPageForm({
                       baseGroups={structure.groups}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               );
             }}
@@ -132,6 +128,14 @@ export function AddPageForm({
           <Button type="submit" className="w-full">
             Create page
           </Button>
+
+          <DialogClose asChild>
+            <button
+              ref={closeRef}
+              className="hidden"
+              aria-label="close dialog"
+            />
+          </DialogClose>
         </form>
       </Form>
     </DialogContent>

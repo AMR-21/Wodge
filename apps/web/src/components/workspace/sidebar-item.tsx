@@ -45,7 +45,7 @@ const SidebarItem = forwardRef<HTMLDivElement, SidebarItemProps>(
         role="button"
         className={cn(
           buttonVariants({
-            variant: "secondary",
+            variant: "ghost",
             size: "fit",
           }),
 
