@@ -5,6 +5,7 @@ import { Table } from "@tanstack/react-table";
 import { MembersCombobox } from "./members-combobox";
 import { Input } from "@repo/ui/components/ui/input";
 import { DataTable } from "@repo/ui/components/data-table/data-table";
+import { SettingsSearchInput } from "./settings-search-input";
 
 interface MembersTableProps<TData> {
   table: Table<TData>;
@@ -17,21 +18,25 @@ export function GeneralMembersTable<TData>({
   members,
   addMember,
 }: MembersTableProps<TData>) {
+  const nMembers = table.getFilteredRowModel().rows.length;
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between">
-        <Input
-          placeholder="Search members by emails "
-          className="max-w-56"
-          value={(table.getColumn("member")?.getFilterValue() as string) ?? ""}
-          onChange={(e) => {
-            table.getColumn("member")?.setFilterValue(e.target.value);
-          }}
+        <SettingsSearchInput
+          table={table}
+          searchColumn="member"
+          placeHolder="Search by email, username, or name"
         />
         {addMember && <MembersCombobox members={members} onClick={addMember} />}
       </div>
 
-      <DataTable table={table} />
+      {nMembers > 0 && (
+        <p className="text-xs">
+          {nMembers > 1 ? `${nMembers} members` : `1 member`}
+        </p>
+      )}
+      <DataTable table={table} placeholder="No members found" />
     </div>
   );
 }

@@ -33,10 +33,10 @@ export function MembersCombobox({ members, onClick }: MembersComboboxProps) {
       <PopoverTrigger asChild>
         <Button size="sm">Add a member</Button>
       </PopoverTrigger>
-      <PopoverContent className=" p-0">
-        <Command>
+      <PopoverContent className="p-0">
+        <Command className="bg-transparent">
           <CommandInput placeholder="Search a member" />
-          <CommandEmpty>No member found.</CommandEmpty>
+          <CommandEmpty>No members found</CommandEmpty>
           <CommandGroup>
             {members.map((member) => (
               <Member
@@ -69,21 +69,25 @@ function Member({
   return (
     <CommandItem
       key={member?.id}
-      value={member.email + member.displayName}
+      value={member.email + member.displayName + member.username}
       onSelect={() => {
         onClick?.(memberId);
         setOpen(false);
       }}
-      className="flex items-center gap-3"
+      className="flex cursor-pointer items-center gap-3"
     >
-      <Avatar className="h-8 w-8 rounded-md">
+      <Avatar className="h-8 w-8">
         <AvatarImage src={member?.avatar} />
         <AvatarFallback>{member?.displayName?.[0]}</AvatarFallback>
       </Avatar>
 
       <div className="flex flex-col">
-        <span>{member?.displayName}</span>
-        <span className="text-xs text-muted-foreground">{member?.email}</span>
+        <span className="text-[0.8125rem]">
+          {member?.displayName} - @{member?.username}
+        </span>
+        <span className="text-[0.8125rem] text-muted-foreground">
+          {member?.email}
+        </span>
       </div>
     </CommandItem>
   );

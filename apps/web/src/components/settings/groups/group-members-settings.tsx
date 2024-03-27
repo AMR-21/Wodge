@@ -17,6 +17,8 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
     );
   }, [members, structure]);
 
+  // console.log(group.id, group.members, groupMembers);
+
   const nonGroupMembers = useMemo(() => {
     return members.members.filter(
       (member) => !group.members.includes(member.id),
@@ -24,7 +26,7 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
   }, [members, structure]);
 
   const { table } = useTable({
-    data: groupMembers as Mutable<DrObj<Member>[]>,
+    data: group.members as string[],
     columns: groupMembersColumns({
       creatorId: group?.createdBy,
       removeMember,

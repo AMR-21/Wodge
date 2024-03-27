@@ -25,14 +25,14 @@ export const groupMembersColumns = ({
   creatorId,
   removeMember,
   workspaceId,
-}: MembersColumnsProps): ColumnDef<DrObj<Member>>[] => [
-  {
-    id: "select",
-    header: ({ table }) => <DataTableHeaderSelect table={table} />,
-    cell: ({ row }) => <DataTableRowSelect row={row} />,
-    enableSorting: false,
-    enableHiding: false,
-  },
+}: MembersColumnsProps): ColumnDef<string>[] => [
+  // {
+  //   id: "select",
+  //   header: ({ table }) => <DataTableHeaderSelect table={table} />,
+  //   cell: ({ row }) => <DataTableRowSelect row={row} />,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
 
   {
     accessorFn: (row) => {
@@ -41,33 +41,31 @@ export const groupMembersColumns = ({
         "members",
       ]);
 
-      const member = members?.find((m) => m.id === row.id);
+      const member = members?.find((m) => m.id === row);
 
       return `${member?.displayName} ${member?.email} ${member?.username}`;
     },
     id: "member",
     header: () => <Header>Member</Header>,
     cell: ({ row }) => {
-      const memberId = row.original.id;
+      const memberId = row.original;
       const { member, isMembersPending } = useMember(memberId);
 
       if (isMembersPending) return null;
 
       return (
         <div className="flex items-center gap-4">
-          <Avatar className="h-8 w-8 rounded-md ">
-            <AvatarImage
-              src={member?.avatar}
-              alt={member?.displayName}
-              className="rounded-md"
-            />
-            <AvatarFallback className="rounded-md capitalize">
-              {member?.displayName?.[0] || ""}
-            </AvatarFallback>
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={member?.avatar} alt={member?.displayName} />
+            <AvatarFallback>{member?.displayName.at(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p>{member?.displayName}</p>
-            <p className="text-xs text-muted-foreground">{member?.email}</p>
+            <div className="flex gap-1 text-[0.8125rem]">
+              <p>{member?.displayName}</p>
+            </div>
+            <span className="text-[0.8125rem] text-muted-foreground">
+              {member?.email}
+            </span>
           </div>
         </div>
       );
@@ -75,19 +73,22 @@ export const groupMembersColumns = ({
   },
 
   {
-    id: "creator",
-    header: () => <Header>Creator</Header>,
+    id: "username",
+
+    header: () => <Header>Username</Header>,
+
     cell: ({ row }) => {
-      if (row.original.id === creatorId) {
-        return <p>Creator</p>;
-      }
-      return null;
+      const { member, isMembersPending } = useMember(row.original);
+
+      if (isMembersPending) return null;
+
+      return <p className="text-sm">@{member?.username}</p>;
     },
   },
   {
     id: "actions",
     cell: ({ row, table }) => {
-      const memberId = row.original.id;
+      const memberId = row.original;
 
       return (
         <DataTableActions
