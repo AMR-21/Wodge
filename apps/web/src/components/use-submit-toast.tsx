@@ -7,11 +7,12 @@ import { FieldValues, UseFormReturn } from "react-hook-form";
 export function useSubmitToast<T extends FieldValues>(
   form: UseFormReturn<T>,
   formRef: React.RefObject<HTMLFormElement> | null,
+  customDirty = false,
 ) {
   const [toastId, setToastId] = useState<string | number>("");
 
   useEffect(() => {
-    if (form.formState.isDirty) {
+    if (form.formState.isDirty || customDirty) {
       const toastId = toast(
         <div className="flex w-full items-center">
           <Info className="mr-2 h-5 w-5" />
@@ -47,7 +48,7 @@ export function useSubmitToast<T extends FieldValues>(
       if (toastId) toast.dismiss(toastId);
       setToastId("");
     }
-  }, [form.formState.isDirty]);
+  }, [form.formState.isDirty, customDirty]);
 
   return { toastId };
 }

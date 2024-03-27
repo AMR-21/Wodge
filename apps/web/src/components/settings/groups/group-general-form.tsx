@@ -10,7 +10,7 @@ import {
 
 import { useForm } from "react-hook-form";
 import { SettingsContext } from "../settings";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { ColorPicker } from "../color-picker";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
@@ -24,6 +24,8 @@ import { Input } from "@repo/ui/components/ui/input";
 import { Button } from "@repo/ui/components/ui/button";
 import { cn, hexToRgb } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useSubmitToast } from "@/components/use-submit-toast";
+import { toast } from "@repo/ui/components/ui/toast";
 
 export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
   const { dispatch } = useContext(SettingsContext);
@@ -41,6 +43,10 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
     },
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const { toastId } = useSubmitToast(form, formRef, colored);
+
   useEffect(() => {
     if (isAddition)
       return form.reset({ ...group, id: nanoid(WORKSPACE_GROUP_ID_LENGTH) });
@@ -52,7 +58,8 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
   async function onSubmit(data: Omit<Group, "members" | "createdBy">) {
     if (isAddition) {
       await workspaceRep?.mutate.createGroup(data);
-      return dispatch({
+
+      dispatch({
         type: "openAccordionItem",
         payload: { value: "groups", id: data.id, isSidebarOpen: isDesktop },
       });
@@ -70,6 +77,8 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
         },
       });
 
+    toast.dismiss(toastId);
+
     setColored(false);
   }
 
@@ -79,6 +88,7 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
 
       <Form {...form}>
         <form
+          ref={formRef}
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full items-end gap-2"
         >
@@ -133,18 +143,6 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
               </FormItem>
             )}
           />
-
-          <Button
-            size="sm"
-            type="submit"
-            className={cn(
-              "invisible mt-1 opacity-0 transition-all",
-              form.formState.isDirty && "visible opacity-100",
-              (colored || isAddition) && "visible opacity-100",
-            )}
-          >
-            {isAddition ? "Create group" : "Update"}
-          </Button>
         </form>
       </Form>
     </div>
