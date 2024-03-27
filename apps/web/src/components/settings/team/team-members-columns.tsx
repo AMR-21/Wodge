@@ -1,4 +1,5 @@
-import { DrObj, Member } from "@repo/data";
+import { DrObj, Member, PublicUserType } from "@repo/data";
+import { queryClient } from "@repo/data/lib/query-client";
 import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
 import {
   DataTableHeaderSelect,
@@ -32,6 +33,7 @@ interface MembersColumnsProps {
   ) => void;
   creatorId?: string;
   moderatorsIds: readonly string[];
+  workspaceId?: string;
 }
 
 export const teamMembersColumns = ({
@@ -39,40 +41,48 @@ export const teamMembersColumns = ({
   removeMember,
   changeTeamMemberRole,
   moderatorsIds,
-}: MembersColumnsProps): ColumnDef<DrObj<Member>>[] => [
-  {
-    id: "select",
-    header: ({ table }) => <DataTableHeaderSelect table={table} />,
-    cell: ({ row }) => <DataTableRowSelect row={row} />,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  workspaceId,
+}: MembersColumnsProps): ColumnDef<string>[] => [
+  // {
+  //   id: "select",
+  //   header: ({ table }) => <DataTableHeaderSelect table={table} />,
+  //   cell: ({ row }) => <DataTableRowSelect row={row} />,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
 
   {
-    // accessorFn: (member) => member.data.email,
+    accessorFn: (row) => {
+      const members = queryClient.getQueryData<PublicUserType[]>([
+        workspaceId,
+        "members",
+      ]);
+
+      const member = members?.find((m) => m.id === row);
+
+      return `${member?.displayName} ${member?.email} ${member?.username}`;
+    },
     id: "member",
     header: () => <Header>Member</Header>,
     cell: ({ row }) => {
-      const memberId = row.original.id;
+      const memberId = row.original;
       const { member, isMembersPending } = useMember(memberId);
 
       if (isMembersPending) return null;
 
       return (
         <div className="flex items-center gap-4">
-          <Avatar className="h-8 w-8 rounded-md ">
-            <AvatarImage
-              src={member?.avatar}
-              alt={member?.displayName}
-              className="rounded-md"
-            />
-            <AvatarFallback className="rounded-md capitalize">
-              {member?.displayName?.[0] || ""}
-            </AvatarFallback>
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={member?.avatar} alt={member?.displayName} />
+            <AvatarFallback>{member?.displayName.at(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p>{member?.displayName}</p>
-            <p className="text-xs text-muted-foreground">{member?.email}</p>
+            <div className="flex gap-1 text-[0.8125rem]">
+              <p>{member?.displayName}</p>
+            </div>
+            <span className="text-[0.8125rem] text-muted-foreground">
+              {member?.email}
+            </span>
           </div>
         </div>
       );
@@ -80,20 +90,23 @@ export const teamMembersColumns = ({
   },
 
   {
-    id: "creator",
-    header: () => <Header>Creator</Header>,
+    id: "username",
+
+    header: () => <Header>Username</Header>,
+
     cell: ({ row }) => {
-      if (row.original.id === creatorId) {
-        return <p>Creator</p>;
-      }
-      return null;
+      const { member, isMembersPending } = useMember(row.original);
+
+      if (isMembersPending) return null;
+
+      return <p className="text-sm">@{member?.username}</p>;
     },
   },
   {
     id: "role",
     header: () => <Header className="pl-3">Role</Header>,
     cell: ({ row }) => {
-      const isModerator = moderatorsIds?.includes(row.original.id);
+      const isModerator = moderatorsIds?.includes(row.original);
       const [value, setValue] = useState<string>(
         isModerator ? "moderator" : "teamMember",
       );
@@ -104,7 +117,7 @@ export const teamMembersColumns = ({
             defaultValue={value}
             onValueChange={(v) =>
               changeTeamMemberRole(
-                row.original.id,
+                row.original,
                 v as "teamMember" | "moderator",
               )
             }
@@ -132,7 +145,7 @@ export const teamMembersColumns = ({
   {
     id: "actions",
     cell: ({ row, table }) => {
-      const memberId = row.original.id;
+      const memberId = row.original;
 
       return (
         <DataTableActions

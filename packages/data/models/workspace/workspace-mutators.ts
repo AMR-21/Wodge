@@ -174,7 +174,6 @@ export const workspaceMutators = {
     data: Pick<Team, "id" | "name" | "avatar" | "slug">
   ) {
     // 1. Create the team
-    // 1. Create the team
     const user = queryClient.getQueryData<PublicUserType>(["user"]);
 
     if (!user) throw new Error("User not found");

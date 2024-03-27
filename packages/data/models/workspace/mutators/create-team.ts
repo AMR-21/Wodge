@@ -19,7 +19,7 @@ export function createTeamMutation({
   structure,
   currentUserId,
 }: CreateTeamArgs) {
-  //1. Validate the data
+  // 1. Validate the data
   const validatedFields = TeamSchema.pick({
     id: true,
     name: true,
@@ -31,16 +31,14 @@ export function createTeamMutation({
 
   const { data: newTeamBase } = validatedFields;
 
-  // 2. validate owner
-  // if (newTeamBase.createdBy !== currentUserId)
-  //   throw new Error("Unauthorized team creation");
-
-  // 3. Validate if the team is already existing - i.e. duplicate id
-  const teamExists = structure.teams.some((t) => t.id === newTeamBase.id);
+  // 2. Validate if the team is already existing - i.e. duplicate id/slug
+  const teamExists = structure.teams.some(
+    (t) => t.id === newTeamBase.id || t.slug === newTeamBase.slug
+  );
 
   if (teamExists) throw new Error("Team already exists");
 
-  // 4. Sanitize the input team with no members and tags
+  // 3. Sanitize the input team with no members and tags
   const newTeam: Team = {
     ...newTeamBase,
     createdBy: currentUserId,
@@ -61,7 +59,7 @@ export function createTeamMutation({
     default: false,
   };
 
-  // 5. Create the team
+  // 4. Create the team
   const newStructure = produce(structure, (draft) => {
     draft.teams.push(newTeam);
   });

@@ -17,6 +17,7 @@ export type TeamUpdate =
       update: {
         name: Team["name"];
         avatar: Team["avatar"];
+        slug: Team["slug"];
       };
     }
   | {

@@ -19,7 +19,8 @@ export function TeamSettings() {
   const { activeItemId } = useContext(SettingsContext);
   const isAddition = activeItemId.startsWith("add-");
 
-  const { structure, members, workspaceRep } = useCurrentWorkspace();
+  const { structure, members, workspaceRep, workspaceId } =
+    useCurrentWorkspace();
 
   const { user } = useCurrentUser();
 
@@ -34,6 +35,10 @@ export function TeamSettings() {
         folders: [],
         moderators: [],
         tags: [],
+        chats: [],
+        default: false,
+        slug: "",
+        threads: [],
         avatar: "",
       },
     ] satisfies DrObj<Team>[];
@@ -44,12 +49,6 @@ export function TeamSettings() {
     [activeItemId, teams],
   );
 
-  const teamMembers = useMemo(() => {
-    return members.members.filter((member) =>
-      team?.members.includes(member.id),
-    );
-  }, [members, structure, team]);
-
   const nonTeamMembers = useMemo(() => {
     return members.members.filter(
       (member) => !team?.members.includes(member.id),
@@ -57,12 +56,13 @@ export function TeamSettings() {
   }, [members, structure, team]);
 
   const { table } = useTable({
-    data: teamMembers as Mutable<DrObj<Member>[]>,
+    data: team?.members as string[],
     columns: teamMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
       moderatorsIds: team?.moderators || [],
       changeTeamMemberRole,
+      workspaceId,
     }),
   });
 
@@ -96,8 +96,6 @@ export function TeamSettings() {
     memberId: string,
     role: "teamMember" | "moderator",
   ) {
-    console.log("changeTeamMemberRole", memberId, role);
-
     if (!team) return;
     await workspaceRep?.mutate.updateTeam({
       teamId: team.id,

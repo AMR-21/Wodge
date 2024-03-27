@@ -76,7 +76,7 @@ export function WorkspaceGeneralForm() {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           ref={formRef}
-          className="flex w-full flex-col gap-2"
+          className="flex w-full flex-col gap-4"
         >
           <FormField
             control={form.control}
