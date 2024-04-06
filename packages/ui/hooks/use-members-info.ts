@@ -4,7 +4,7 @@ import { PublicUserType } from "@repo/data";
 import { useCurrentWorkspace } from "./use-current-workspace";
 
 export function useMembersInfo() {
-  const {workspaceId} = useCurrentWorkspace();
+  const { workspaceId } = useCurrentWorkspace();
 
   const { data, isPending } = useQuery({
     queryKey: [workspaceId, "members"],

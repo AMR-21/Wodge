@@ -1,6 +1,7 @@
+"use client";
+
 import { SettingsContentHeader, SettingsContentSection } from "../settings";
 
-import { useInvites } from "./use-invites";
 import { InviteLink } from "./invite-sections";
 import { useTable } from "../use-table";
 import { membersColumns } from "./members-columns";
@@ -11,7 +12,6 @@ import { DataTable } from "@repo/ui/components/data-table/data-table";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function MembersSettings() {
-  const { invites, inviteLink, isPending } = useInvites();
   const { members, workspaceRep, workspaceId } = useCurrentWorkspace();
 
   const { table } = useTable({

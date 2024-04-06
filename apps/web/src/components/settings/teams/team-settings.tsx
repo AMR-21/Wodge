@@ -1,53 +1,25 @@
-import { useContext, useMemo } from "react";
-import {
-  SettingsContentHeader,
-  SettingsContentSection,
-  SettingsContext,
-} from "../settings";
-import { DrObj, Member, Team } from "@repo/data";
+"use client";
+
+import { useMemo } from "react";
+import { SettingsContentHeader, SettingsContentSection } from "../settings";
+import { DrObj, Team } from "@repo/data";
 import { TeamGeneralForm } from "./team-general-form";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
-import { Mutable } from "@/lib/utils";
 
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { teamMembersColumns } from "./team-members-columns";
 
-export function TeamSettings() {
-  const { activeItemId } = useContext(SettingsContext);
-  const isAddition = activeItemId.startsWith("add-");
-
+export function TeamSettings({
+  team,
+  isAddition = false,
+}: {
+  team?: DrObj<Team>;
+  isAddition?: boolean;
+}) {
   const { structure, members, workspaceRep, workspaceId } =
     useCurrentWorkspace();
-
-  const { user } = useCurrentUser();
-
-  const teams = useMemo(() => {
-    return [
-      ...structure.teams,
-      {
-        id: "add-teams",
-        name: "",
-        members: [],
-        createdBy: user?.id || "",
-        folders: [],
-        moderators: [],
-        tags: [],
-        chats: [],
-        default: false,
-        slug: "",
-        threads: [],
-        avatar: "",
-      },
-    ] satisfies DrObj<Team>[];
-  }, [structure, members]);
-
-  const team = useMemo(
-    () => teams.find((t) => t.id === activeItemId),
-    [activeItemId, teams],
-  );
 
   const nonTeamMembers = useMemo(() => {
     return members.members.filter(
@@ -55,8 +27,10 @@ export function TeamSettings() {
     );
   }, [members, structure, team]);
 
+  const teamMembers = useMemo(() => team?.members || [], [team]) as string[];
+
   const { table } = useTable({
-    data: team?.members as string[],
+    data: teamMembers,
     columns: teamMembersColumns({
       creatorId: team?.createdBy,
       removeMember,
@@ -114,12 +88,10 @@ export function TeamSettings() {
     await workspaceRep?.mutate.deleteTeam(team.id);
   }
 
-  if (!team) return <p>Placeholder</p>;
-
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
-        label={`${isAddition ? "Add a new team" : team.name + " settings"}`}
+        label={`${isAddition ? "Add a new team" : team?.name + " settings"}`}
         description={`${isAddition ? "Create a new team" : "Manage team settings"}`}
       />
 

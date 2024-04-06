@@ -30,14 +30,14 @@ export function createChatMutation({
       throw new Error("Chat already exists");
     } else {
       // check that every group id on the new page exists the workspace structure
-      newChat.editRoles.forEach((groupId) => {
+      newChat.editGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
 
         if (!draft.groups.find((g) => g.id === groupId)) {
           throw new Error("Group not found");
         }
       });
-      newChat.viewRoles.forEach((groupId) => {
+      newChat.viewGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
 
         if (!draft.groups.find((g) => g.id === groupId)) {

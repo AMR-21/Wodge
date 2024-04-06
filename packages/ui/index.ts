@@ -26,6 +26,7 @@ export * from "./components/ui/popover";
 export * from "./components/ui/command";
 export * from "./components/ui/radio-group";
 export * from "./components/ui/scroll-area";
+export * from "./components/ui/sheet";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";
@@ -37,6 +38,7 @@ export * from "./hooks/use-current-user";
 export * from "./hooks/use-user-workspaces";
 export * from "./hooks/use-is-desktop";
 export * from "./hooks/use-current-user";
+export * from "./hooks/use-workspace-subscription";
 export * from "./hooks/use-current-workspace";
 export * from "./hooks/use-members-info";
 export * from "./hooks/use-member";

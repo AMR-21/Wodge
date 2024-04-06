@@ -35,13 +35,13 @@ export function addTeamFolderMutation({
   if (structure.teams[teamIdx]!.folders.some((f) => f.id === folder.id))
     throw new Error("Folder already exists in team");
 
-  folder.editRoles.forEach((groupId) => {
+  folder.editGroups.forEach((groupId) => {
     if (groupId === TEAM_MEMBERS_ROLE) return;
     if (!structure.groups.find((g) => g.id === groupId)) {
       throw new Error("Group not found");
     }
   });
-  folder.viewRoles.forEach((groupId) => {
+  folder.viewGroups.forEach((groupId) => {
     if (groupId === TEAM_MEMBERS_ROLE) return;
     if (!structure.groups.find((g) => g.id === groupId)) {
       throw new Error("Group not found");

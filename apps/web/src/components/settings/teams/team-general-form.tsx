@@ -2,11 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 
 import { useForm } from "react-hook-form";
-import { SettingsContext } from "../settings";
-import { use, useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { nanoid } from "nanoid";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import {
   Form,
@@ -16,19 +13,18 @@ import {
   FormLabel,
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+
 import { useSubmitToast } from "@/components/use-submit-toast";
 import { toast } from "@repo/ui/components/ui/toast";
+import { useRouter } from "next/navigation";
+import { Button } from "@repo/ui/components/ui/button";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
-export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
-  const { dispatch } = useContext(SettingsContext);
-  const { workspaceRep } = useCurrentWorkspace();
-  const isAddition = team.id.startsWith("add-");
+export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
+  const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
+  const isAddition = !team;
+  const router = useRouter();
 
-  const isDesktop = useIsDesktop();
-  const { user } = useCurrentUser();
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<DrObj<Team>>({
@@ -36,19 +32,18 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
       TeamSchema.pick({ name: true, slug: true, id: true, avatar: true }),
     ),
     defaultValues: {
-      id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team.id,
+      id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team?.id,
       name: isAddition ? "" : team?.name,
       avatar: isAddition ? "" : team?.avatar,
       slug: isAddition ? "" : team?.slug,
     },
   });
 
-  const { toastId } = useSubmitToast(form, formRef);
+  // const { toastId } = useSubmitToast(form, formRef);
 
   useEffect(() => {
     if (isAddition)
       return form.reset({
-        ...team,
         id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
       });
 
@@ -56,13 +51,11 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
   }, [team]);
 
   async function onSubmit(data: Pick<Team, "id" | "name" | "avatar" | "slug">) {
+    let flag = false;
+
     if (isAddition) {
       await workspaceRep?.mutate.createTeam(data);
-
-      dispatch({
-        type: "openAccordionItem",
-        payload: { value: "teams", id: data.id, isSidebarOpen: isDesktop },
-      });
+      flag = true;
     }
 
     if (!isAddition) {
@@ -77,9 +70,12 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
           },
         },
       });
+
+      if (team.slug !== data.slug) flag = true;
     }
-    toast.dismiss(toastId);
+
     form.reset();
+    flag && router.push(`/${workspaceSlug}/settings/teams/${data.slug}`);
   }
 
   return (
@@ -128,6 +124,10 @@ export function TeamGeneralForm({ team }: { team: DrObj<Team> }) {
               )}
             />
           </div>
+
+          <Button className="w-32" disabled={!form.formState.isDirty} size="sm">
+            {isAddition ? "Create team" : "Update team"}
+          </Button>
         </form>
       </Form>
     </div>

@@ -19,10 +19,10 @@ export const FolderSchema = z.object({
   name: z.string().max(70).min(1),
   channels: z.array(PageSchema),
   // As a preset of underline channels
-  viewRoles: z.array(
+  viewGroups: z.array(
     z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
   ),
-  editRoles: z.array(
+  editGroups: z.array(
     z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
   ),
 });

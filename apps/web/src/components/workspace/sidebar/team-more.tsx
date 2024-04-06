@@ -35,8 +35,8 @@ export function TeamMore({ teamId }: { teamId: string }) {
       teamId,
       name: "New page",
       id: nanoid(ID_LENGTH),
-      editRoles: ["team-members"],
-      viewRoles: ["team-members"],
+      editGroups: ["team-members"],
+      viewGroups: ["team-members"],
       avatar: "",
     });
   }
@@ -49,8 +49,8 @@ export function TeamMore({ teamId }: { teamId: string }) {
         update: {
           folder: {
             name: "New folder",
-            viewRoles: ["team-members"],
-            editRoles: ["team-members"],
+            viewGroups: ["team-members"],
+            editGroups: ["team-members"],
             id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
             channels: [],
           },

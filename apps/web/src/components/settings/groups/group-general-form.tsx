@@ -9,8 +9,7 @@ import {
 } from "@repo/data";
 
 import { useForm } from "react-hook-form";
-import { SettingsContext } from "../settings";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { ColorPicker } from "../color-picker";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
@@ -21,14 +20,12 @@ import {
   FormItem,
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn, hexToRgb } from "@repo/ui/lib/utils";
+import { hexToRgb } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useSubmitToast } from "@/components/use-submit-toast";
 import { toast } from "@repo/ui/components/ui/toast";
 
 export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
-  const { dispatch } = useContext(SettingsContext);
   const { workspaceRep } = useCurrentWorkspace();
   const isAddition = group.id.startsWith("add-");
   const [colored, setColored] = useState(false);
@@ -59,10 +56,10 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
     if (isAddition) {
       await workspaceRep?.mutate.createGroup(data);
 
-      dispatch({
-        type: "openAccordionItem",
-        payload: { value: "groups", id: data.id, isSidebarOpen: isDesktop },
-      });
+      // dispatch({
+      //   type: "openAccordionItem",
+      //   payload: { value: "groups", id: data.id, isSidebarOpen: isDesktop },
+      // });
     }
 
     if (!isAddition)

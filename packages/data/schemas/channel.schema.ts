@@ -7,10 +7,10 @@ export const ChannelSchema = z.object({
   id: z.string().length(ID_LENGTH),
   name: z.string().max(70).min(1),
   avatar: z.string().optional(),
-  viewRoles: z.array(
+  viewGroups: z.array(
     z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
   ),
-  editRoles: z.array(
+  editGroups: z.array(
     z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
   ),
 });

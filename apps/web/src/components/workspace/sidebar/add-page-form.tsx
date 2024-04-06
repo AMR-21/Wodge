@@ -50,8 +50,8 @@ export function AddPageForm({
     defaultValues: {
       name: "",
       avatar: "",
-      editRoles: ["team-members"],
-      viewRoles: ["team-members"],
+      editGroups: ["team-members"],
+      viewGroups: ["team-members"],
       id: nanoid(ID_LENGTH),
     },
   });
@@ -91,7 +91,7 @@ export function AddPageForm({
 
           <FormField
             control={form.control}
-            name="viewRoles"
+            name="viewGroups"
             render={({ field }) => {
               return (
                 <FormItem>
@@ -109,7 +109,7 @@ export function AddPageForm({
 
           <FormField
             control={form.control}
-            name="editRoles"
+            name="editGroups"
             render={({ field }) => {
               return (
                 <FormItem>

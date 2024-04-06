@@ -28,8 +28,8 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
     resolver: zodResolver(FolderSchema.omit({ channels: true })),
     defaultValues: {
       name: "",
-      viewRoles: ["team-members"],
-      editRoles: ["team-members"],
+      viewGroups: ["team-members"],
+      editGroups: ["team-members"],
       id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
     },
   });
@@ -72,7 +72,7 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
 
           <FormField
             control={form.control}
-            name="viewRoles"
+            name="viewGroups"
             render={({ field }) => {
               return (
                 <FormItem>
@@ -90,7 +90,7 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
 
           <FormField
             control={form.control}
-            name="editRoles"
+            name="editGroups"
             render={({ field }) => {
               return (
                 <FormItem>

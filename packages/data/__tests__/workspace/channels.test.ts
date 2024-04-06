@@ -21,8 +21,8 @@ describe("Workspace channels' unit mutations", () => {
           name: "TEST",
           id: folderId,
           channels: [],
-          editRoles: [],
-          viewRoles: [],
+          editGroups: [],
+          viewGroups: [],
         },
       ],
     });
@@ -104,8 +104,8 @@ describe("Workspace channels' unit mutations", () => {
           id: folderId,
           name: "fold test",
           channels: [channel],
-          editRoles: [],
-          viewRoles: [],
+          editGroups: [],
+          viewGroups: [],
         },
       ],
     });
@@ -179,8 +179,8 @@ describe("Workspace channels' unit mutations", () => {
           name: "folder1",
           id: folderId,
           channels: [channel],
-          editRoles: [],
-          viewRoles: [],
+          editGroups: [],
+          viewGroups: [],
         },
       ],
     });

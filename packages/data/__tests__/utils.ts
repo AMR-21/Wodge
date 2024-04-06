@@ -18,8 +18,8 @@ export function createTestTeam(data?: Partial<Team>) {
         name: "root",
         channels: [],
         id: "root",
-        editRoles: [TEAM_MEMBERS_ROLE],
-        viewRoles: [TEAM_MEMBERS_ROLE],
+        editGroups: [TEAM_MEMBERS_ROLE],
+        viewGroups: [TEAM_MEMBERS_ROLE],
       },
     ],
     id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
@@ -50,8 +50,8 @@ export function createTestChannel(data?: Partial<Channel>) {
     name: "Test Channel",
     type: "text",
     avatar: "",
-    editRoles: [],
-    viewRoles: [],
+    editGroups: [],
+    viewGroups: [],
     ...data,
   };
   return channel;

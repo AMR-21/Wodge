@@ -750,6 +750,12 @@ importers:
       immer:
         specifier: ^10.0.3
         version: 10.0.4
+      jotai:
+        specifier: ^2.7.0
+        version: 2.7.0(@types/react@18.2.65)(react@18.2.0)
+      jotai-location:
+        specifier: ^0.5.4
+        version: 0.5.4(jotai@2.7.0)
       lucide-react:
         specifier: ^0.330.0
         version: 0.330.0(react@18.2.0)
@@ -784,7 +790,7 @@ importers:
         specifier: ^0.13.8
         version: 0.13.8(react-dom@18.2.0)(react@18.2.0)
       replicache:
-        specifier: ^14.1.0
+        specifier: ^14.2.2
         version: 14.2.2
       replicache-react:
         specifier: ^5.0.1
@@ -10754,6 +10760,14 @@ packages:
 
   /jose@5.2.3:
     resolution: {integrity: sha512-KUXdbctm1uHVL8BYhnyHkgp3zDX5KW8ZhAKVFEfUbU2P8Alpzjb+48hHvjOdQIyPshoblhzsuqOwEEAbtHVirA==}
+
+  /jotai-location@0.5.4(jotai@2.7.0):
+    resolution: {integrity: sha512-IqpyYLAF6HgoDoJVlX66IGvgrugCA1LJybT01NqenpdwypPtUB6u0cnJZMbN6axU+Yl2FTI6l+4x9IWh4WGFRA==}
+    peerDependencies:
+      jotai: '>=1.11.0'
+    dependencies:
+      jotai: 2.7.0(@types/react@18.2.65)(react@18.2.0)
+    dev: false
 
   /jotai@2.7.0(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-4qsyFKu4MprI39rj2uoItyhu24NoCHzkOV7z70PQr65SpzV6CSyhQvVIfbNlNqOIOspNMdf5OK+kTXLvqe63Jw==}

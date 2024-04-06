@@ -9,6 +9,7 @@ import {
   LucideIcon,
   MessageCircle,
   Newspaper,
+  Notebook,
   Settings,
 } from "lucide-react";
 import { WorkspaceSwitcher } from "./workspace-switcher";
@@ -30,7 +31,7 @@ const tabs: Tab[] = [
     href: "/",
   },
   {
-    Icon: FileStack,
+    Icon: Notebook,
     label: "pages",
     href: "/page",
   },

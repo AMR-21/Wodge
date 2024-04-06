@@ -12,6 +12,10 @@ export function useSubmitToast<T extends FieldValues>(
   const [toastId, setToastId] = useState<string | number>("");
 
   useEffect(() => {
+    if (toastId) {
+      toast.dismiss(toastId);
+      setToastId("");
+    }
     if (form.formState.isDirty || customDirty) {
       const toastId = toast(
         <div className="flex w-full items-center">
@@ -44,9 +48,6 @@ export function useSubmitToast<T extends FieldValues>(
         },
       );
       setToastId(toastId);
-    } else {
-      if (toastId) toast.dismiss(toastId);
-      setToastId("");
     }
   }, [form.formState.isDirty, customDirty]);
 

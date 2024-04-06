@@ -35,13 +35,13 @@ export function createPageMutation({
       throw new Error("Page already exists");
     } else {
       // check that every group id on the new page exists the workspace structure
-      newPage.editRoles.forEach((groupId) => {
+      newPage.editGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
         if (!draft.groups.find((g) => g.id === groupId)) {
           throw new Error("Group not found");
         }
       });
-      newPage.viewRoles.forEach((groupId) => {
+      newPage.viewGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
         if (!draft.groups.find((g) => g.id === groupId)) {
           throw new Error("Group not found");

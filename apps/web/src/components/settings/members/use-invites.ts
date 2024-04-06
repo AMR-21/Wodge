@@ -1,3 +1,5 @@
+"use client";
+
 import { Invite, Invites } from "@repo/data";
 import { env } from "@repo/env";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";

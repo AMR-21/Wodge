@@ -30,14 +30,14 @@ export function createThreadMutation({
       throw new Error("Thread already exists");
     } else {
       // check that every group id on the new page exists the workspace structure
-      newThread.editRoles.forEach((groupId) => {
+      newThread.editGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
 
         if (!draft.groups.find((g) => g.id === groupId)) {
           throw new Error("Group not found");
         }
       });
-      newThread.viewRoles.forEach((groupId) => {
+      newThread.viewGroups.forEach((groupId) => {
         if (groupId === TEAM_MEMBERS_ROLE) return;
 
         if (!draft.groups.find((g) => g.id === groupId)) {

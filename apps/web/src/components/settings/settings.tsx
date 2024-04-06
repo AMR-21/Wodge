@@ -1,31 +1,12 @@
 "use client";
 
 import { SidebarItem } from "../workspace/sidebar-item";
-import React, {
-  Children,
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
-import { ChevronRight, LucideIcon, PanelLeft, Plus, X } from "lucide-react";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+
+import { LucideIcon, PanelLeft, Plus, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
-import { produce } from "immer";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
 import { Button, ButtonProps } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
@@ -34,158 +15,16 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { useState } from "react";
+import { SheetClose, SheetTrigger } from "@repo/ui/components/ui/sheet";
 
-interface Settings {
-  active: string;
-  isSidebarOpen: boolean;
-  activeItemId: string;
-  accordionActive: string;
-  dispatch: React.Dispatch<any>;
-}
-
-interface SettingsState {
-  active: string;
-  isSidebarOpen: boolean;
-  activeItemId: string;
-  accordionActive: string;
-}
-
-interface SettingsAccordionItemProps {
-  value: string;
+interface SettingsCollapsibleItemProps {
+  label: string;
   children?: React.ReactNode;
   actionIcon?: LucideIcon | IconType;
 }
 
-const SettingsContext = createContext<Settings>({
-  active: "",
-  isSidebarOpen: true,
-  activeItemId: "",
-  accordionActive: "",
-  dispatch: () => {},
-});
-
-function reducer(state: SettingsState, action: any) {
-  switch (action.type) {
-    case "setSidebar":
-      return produce(state, (draft) => {
-        draft.isSidebarOpen = action.payload;
-      });
-    case "toggleSidebar":
-      return produce(state, (draft) => {
-        draft.isSidebarOpen = !draft.isSidebarOpen;
-      });
-    case "openNormalItem":
-      return produce(state, (draft) => {
-        draft.active = action.payload.value;
-        draft.activeItemId = "";
-        draft.accordionActive = "";
-        draft.isSidebarOpen = action.payload.isSidebarOpen;
-      });
-    case "activateAccordion":
-      return produce(state, (draft) => {
-        draft.accordionActive = action.payload;
-      });
-    case "openAccordionItem":
-      return produce(state, (draft) => {
-        draft.activeItemId = action.payload.id;
-        draft.active = action.payload.value;
-        draft.accordionActive = action.payload.value;
-        draft.isSidebarOpen = action.payload.isSidebarOpen;
-      });
-
-    case "openAdd":
-      return produce(state, (draft) => {
-        draft.activeItemId = "add-" + action.payload.value;
-        draft.active = action.payload.value;
-
-        draft.isSidebarOpen = action.payload.isSidebarOpen;
-      });
-
-    case "closeAccordion":
-      return produce(state, (draft) => {
-        // draft.activeItemId = "";
-        // draft.active = "";
-        draft.accordionActive = "";
-      });
-
-    default:
-      return state;
-  }
-}
-
-function Settings({
-  children,
-  defaultActive = "",
-}: {
-  defaultActive?: string;
-  children: React.ReactNode;
-}) {
-  const isDesktop = useIsDesktop();
-  const url = useRouter();
-
-  const activeItem = useSearchParams().get("active");
-
-  // console.log(window.location.hash);
-  const [{ accordionActive, active, activeItemId, isSidebarOpen }, dispatch] =
-    useReducer(reducer, {
-      active: activeItem || defaultActive,
-      isSidebarOpen: isDesktop,
-      activeItemId: "",
-      accordionActive: "",
-    });
-
-  useEffect(() => {
-    dispatch({ type: "setSidebar", payload: isDesktop });
-  }, [isDesktop]);
-
-  return (
-    <SettingsContext.Provider
-      value={{
-        active,
-        isSidebarOpen,
-        activeItemId,
-        accordionActive,
-        dispatch,
-      }}
-    >
-      {children}
-    </SettingsContext.Provider>
-  );
-}
-
-function SettingsSidebar({ children }: { children: React.ReactNode }) {
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { isSidebarOpen, dispatch } = useContext(SettingsContext);
-
-  return (
-    <>
-      <div
-        className={cn(
-          "flex h-dvh min-h-0  shrink-0 grow flex-col border-r border-border/50  py-10 transition-all ",
-          isSidebarOpen && "w-56 max-w-56 px-6",
-
-          !isSidebarOpen && "invisible w-0 max-w-0 border-0 px-0",
-        )}
-      >
-        <div className="flex justify-between pb-6 text-muted-foreground">
-          <h2 className={(!isSidebarOpen && "invisible") || ""}>Settings</h2>
-          <SidebarItemBtn
-            Icon={PanelLeft}
-            onClick={() => dispatch({ type: "toggleSidebar" })}
-            className={(!isSidebarOpen && "invisible") || ""}
-          />
-        </div>
-        <ScrollArea>
-          <div>{children}</div>
-        </ScrollArea>
-      </div>
-    </>
-  );
-}
-
 function SettingsSidebarList({ children }: { children: React.ReactNode }) {
-  const { active } = useContext(SettingsContext);
   return <ul className="flex flex-col gap-1 py-3">{children}</ul>;
 }
 
@@ -197,74 +36,66 @@ function SettingsSidebarHeader({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SettingsSidebarItem({ value }: { value: string }) {
-  const { active, activeItemId, dispatch } = useContext(SettingsContext);
+function SettingsSidebarItem({
+  label,
+  href,
+  isDefault,
+}: {
+  label: string;
+  href?: string;
+  isDefault?: boolean;
+}) {
+  const { workspaceSlug } = useCurrentWorkspace();
+  const curPage = usePathname().split("/").at(3);
+  const isActive = curPage === label || (isDefault && !curPage);
   const isDesktop = useIsDesktop();
 
-  return (
-    <Collapsible>
-      <CollapsibleTrigger asChild>
-        <SidebarItem
-          noIcon
-          className={cn(
-            "justify-start py-1.5 pl-7 pr-1.5 capitalize",
-            active === value && "bg-accent text-accent-foreground",
-          )}
-          onClick={() => {
-            dispatch({
-              type: "openNormalItem",
-              payload: { value, isSidebarOpen: isDesktop },
-            });
-          }}
-        >
-          <span className="truncate">{value}</span>
-        </SidebarItem>
-      </CollapsibleTrigger>
-    </Collapsible>
+  const jsx = (
+    <SidebarItem
+      noIcon
+      className={cn("justify-start py-1.5 pl-7 pr-1.5 capitalize")}
+      href={`/${workspaceSlug}/settings${href ? href : `/${label}`}`}
+      isActive={isActive}
+    >
+      <span className="truncate">{label}</span>
+    </SidebarItem>
   );
+
+  if (isDesktop) return jsx;
+
+  return <SheetClose asChild>{jsx}</SheetClose>;
 }
 
 function SettingsSidebarCollapsibleItem({
-  value,
+  label,
   children,
   actionIcon,
-}: SettingsAccordionItemProps) {
-  const { activeItemId, accordionActive, dispatch, active } =
-    useContext(SettingsContext);
-  const isDesktop = useIsDesktop();
+}: SettingsCollapsibleItemProps) {
+  const { workspaceSlug } = useCurrentWorkspace();
+  const curPage = usePathname().split("/").at(3);
+  const [open, setOpen] = useState(curPage === label);
+  const isActive = curPage === label;
 
   return (
-    <Collapsible>
+    <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <SidebarItem
           noIcon
-          className={cn(
-            "justify-start py-1.5 pl-2.5 pr-1.5 capitalize",
-            accordionActive === value &&
-              activeItemId &&
-              "bg-accent text-accent-foreground",
-          )}
-          onClick={() => {
-            if (accordionActive === value)
-              return dispatch({ type: "closeAccordion" });
-            dispatch({ type: "activateAccordion", payload: value });
-          }}
+          className={cn("group justify-start py-1.5 pl-2.5 pr-1.5 capitalize")}
+          isActive={curPage === label}
           collapsible
         >
-          <span className="truncate">{value}</span>
+          <span className="truncate">{label}</span>
           <SidebarItemBtn
             Icon={actionIcon || Plus}
             onClick={(e) => {
               e.stopPropagation();
-              dispatch({
-                type: "openAdd",
-                payload: { value, isSidebarOpen: isDesktop },
-              });
             }}
             className={cn(
-              "invisible -my-1 ml-auto transition-all",
-              accordionActive === value && "visible",
+              "invisible -my-1 ml-auto transition-all group-hover:visible",
+              isActive && "visible",
             )}
+            href={`/${workspaceSlug}/settings/${label}/new`}
           />
         </SidebarItem>
       </CollapsibleTrigger>
@@ -277,7 +108,7 @@ function SettingsSidebarCollapsibleItem({
   );
 }
 
-function SettingsSidebarAccordionPlaceHolder({
+function SettingsCollapsiblePlaceHolder({
   children,
 }: {
   children: React.ReactNode;
@@ -286,20 +117,14 @@ function SettingsSidebarAccordionPlaceHolder({
 }
 
 function SettingsContent({
-  id,
   children,
   className,
 }: {
-  id: string;
   children: React.ReactNode;
   className?: string;
 }) {
-  const { isSidebarOpen, dispatch, active } = useContext(SettingsContext);
-
-  if (active !== id) return null;
-
   return (
-    <div className="bg-page flex w-full basis-full justify-center overflow-y-scroll px-4 py-10">
+    <div className="bg-page flex w-full basis-full justify-center overflow-y-scroll px-8 py-10 md:px-6">
       <div
         className={cn(
           "flex w-full max-w-2xl shrink-0 grow flex-col items-center",
@@ -308,14 +133,14 @@ function SettingsContent({
       >
         <div className="h-[2.75rem] w-full shrink-0 ">
           <div className="flex w-full items-start justify-between">
-            <SidebarItemBtn
-              Icon={PanelLeft}
-              className={cn(
-                "-ml-1 w-fit opacity-100  transition-all duration-300",
-                isSidebarOpen && "invisible opacity-0",
-              )}
-              onClick={() => dispatch({ type: "toggleSidebar" })}
-            />
+            <SheetTrigger asChild>
+              <SidebarItemBtn
+                Icon={PanelLeft}
+                className={cn(
+                  "visible -ml-1 w-fit opacity-100 transition-all  duration-300 md:invisible",
+                )}
+              />
+            </SheetTrigger>
 
             <SettingsClose />
           </div>
@@ -401,12 +226,9 @@ function SettingsClose() {
 }
 
 export {
-  SettingsContext,
-  Settings,
-  SettingsSidebar,
   SettingsSidebarList,
   SettingsSidebarHeader,
-  SettingsSidebarAccordionPlaceHolder,
+  SettingsCollapsiblePlaceHolder,
   SettingsSidebarItem,
   SettingsContent,
   SettingsClose,
