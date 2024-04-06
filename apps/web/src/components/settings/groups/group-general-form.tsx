@@ -24,12 +24,15 @@ import { hexToRgb } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useSubmitToast } from "@/components/use-submit-toast";
 import { toast } from "@repo/ui/components/ui/toast";
+import { useRouter } from "next/navigation";
+import { Button } from "@repo/ui/components/ui/button";
 
-export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
-  const { workspaceRep } = useCurrentWorkspace();
-  const isAddition = group.id.startsWith("add-");
+export function GroupGeneralForm({ group }: { group?: DrObj<Group> }) {
+  const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
+  const isAddition = !group;
+
   const [colored, setColored] = useState(false);
-  const isDesktop = useIsDesktop();
+  const router = useRouter();
 
   const form = useForm<DrObj<Group>>({
     resolver: zodResolver(GroupSchema.omit({ members: true, createdBy: true })),
@@ -42,24 +45,22 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { toastId } = useSubmitToast(form, formRef, colored);
+  // const { toastId } = useSubmitToast(form, formRef, colored);
 
   useEffect(() => {
     if (isAddition)
-      return form.reset({ ...group, id: nanoid(WORKSPACE_GROUP_ID_LENGTH) });
+      return form.reset({ id: nanoid(WORKSPACE_GROUP_ID_LENGTH) });
 
     form.reset(group);
     setColored(false);
   }, [group, isAddition]);
 
   async function onSubmit(data: Omit<Group, "members" | "createdBy">) {
+    let flag = false;
     if (isAddition) {
       await workspaceRep?.mutate.createGroup(data);
 
-      // dispatch({
-      //   type: "openAccordionItem",
-      //   payload: { value: "groups", id: data.id, isSidebarOpen: isDesktop },
-      // });
+      flag = true;
     }
 
     if (!isAddition)
@@ -74,72 +75,83 @@ export function GroupGeneralForm({ group }: { group: DrObj<Group> }) {
         },
       });
 
-    toast.dismiss(toastId);
-
     setColored(false);
+
+    if (flag) router.push(`/${workspaceSlug}/settings/groups/${data.id}`);
   }
 
   return (
     <div className="space-y-2">
-      <p className="text-sm">Color & Name</p>
-
       <Form {...form}>
         <form
           ref={formRef}
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full items-end gap-2"
+          className="flex w-full flex-col gap-4"
         >
-          <FormField
-            control={form.control}
-            name="color"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} type="hidden" />
-                </FormControl>
-                <ColorPicker
-                  key={group?.id}
-                  handler={(c) => {
-                    form.setValue("color", c);
-                    if (c === group?.color) return;
-                    setColored(true);
-                  }}
-                  defaultColor={group.color}
-                />
-              </FormItem>
-            )}
-          />
+          <div className="space-y-2">
+            <p className="text-sm">Color & Name</p>
 
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Group Name"
-                    style={{
-                      backgroundColor: `rgba(${hexToRgb(form.watch("color"))},0.25)`,
-                      borderColor: form.watch("color"),
-                    }}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+            <div className="flex w-64 items-end gap-2">
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} type="hidden" />
+                    </FormControl>
+                    <ColorPicker
+                      key={group?.id}
+                      handler={(c) => {
+                        form.setValue("color", c);
+                        if (c === group?.color) return;
+                        setColored(true);
+                      }}
+                      defaultColor={group?.color || BRAND_COLOR}
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Group Name"
+                        style={{
+                          backgroundColor: `rgba(${hexToRgb(form.watch("color"))},0.25)`,
+                          borderColor: form.watch("color"),
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
 
           <FormField
             control={form.control}
             name="id"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="hidden">
                 <FormControl>
-                  <Input {...field} type="hidden" />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
+
+          <Button
+            className="w-fit"
+            disabled={!form.formState.isDirty && !colored}
+            size="sm"
+          >
+            {isAddition ? "Create group" : "Update group"}
+          </Button>
         </form>
       </Form>
     </div>

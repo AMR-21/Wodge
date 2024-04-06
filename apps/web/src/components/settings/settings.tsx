@@ -76,6 +76,19 @@ function SettingsSidebarCollapsibleItem({
   const [open, setOpen] = useState(curPage === label);
   const isActive = curPage === label;
 
+  const isDesktop = useIsDesktop();
+
+  const actionBtn = (
+    <SidebarItemBtn
+      Icon={actionIcon || Plus}
+      className={cn(
+        "invisible -my-1 ml-auto transition-all group-hover:visible",
+        isActive && "visible",
+      )}
+      href={`/${workspaceSlug}/settings/${label}/new`}
+    />
+  );
+
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
@@ -86,17 +99,8 @@ function SettingsSidebarCollapsibleItem({
           collapsible
         >
           <span className="truncate">{label}</span>
-          <SidebarItemBtn
-            Icon={actionIcon || Plus}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className={cn(
-              "invisible -my-1 ml-auto transition-all group-hover:visible",
-              isActive && "visible",
-            )}
-            href={`/${workspaceSlug}/settings/${label}/new`}
-          />
+
+          {isDesktop ? actionBtn : <SheetClose asChild>{actionBtn}</SheetClose>}
         </SidebarItem>
       </CollapsibleTrigger>
       <CollapsibleContent className="py-1 pl-[1.0625rem]">

@@ -79,44 +79,27 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
   }
 
   return (
-    <div className="space-y-2">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          ref={formRef}
-          className="flex w-full flex-col gap-4"
-        >
-          <div className="space-y-2">
-            <p className="text-sm">Icon & Name</p>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        ref={formRef}
+        className="flex w-full flex-col gap-4"
+      >
+        <div className="space-y-2">
+          <p className="text-sm">Icon & Name</p>
 
-            <div className="flex w-64 items-end gap-2">
-              <Avatar className="h-8 w-8 rounded-md">
-                {/* <AvatarImage src={form.watch("avatar")} /> */}
-                <AvatarFallback className="rounded-md capitalize">
-                  {form.watch("name")?.[0] || ""}
-                </AvatarFallback>
-              </Avatar>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormControl>
-                      <Input {...field} className="" placeholder="Team Name" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="w-64">
+          <div className="flex w-64 items-end gap-2">
+            <Avatar className="h-8 w-8 rounded-md">
+              {/* <AvatarImage src={form.watch("avatar")} /> */}
+              <AvatarFallback className="rounded-md capitalize">
+                {form.watch("name")?.[0] || ""}
+              </AvatarFallback>
+            </Avatar>
             <FormField
               control={form.control}
-              name="slug"
+              name="name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team slug</FormLabel>
+                <FormItem className="">
                   <FormControl>
                     <Input {...field} className="" placeholder="Team Name" />
                   </FormControl>
@@ -124,12 +107,25 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
               )}
             />
           </div>
+        </div>
 
-          <Button className="w-32" disabled={!form.formState.isDirty} size="sm">
-            {isAddition ? "Create team" : "Update team"}
-          </Button>
-        </form>
-      </Form>
-    </div>
+        <FormField
+          control={form.control}
+          name="slug"
+          render={({ field }) => (
+            <FormItem className="w-64">
+              <FormLabel>Team slug</FormLabel>
+              <FormControl>
+                <Input {...field} className="" placeholder="Team Name" />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button className="w-fit" disabled={!form.formState.isDirty} size="sm">
+          {isAddition ? "Create team" : "Update team"}
+        </Button>
+      </form>
+    </Form>
   );
 }

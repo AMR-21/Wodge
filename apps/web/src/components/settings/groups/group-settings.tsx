@@ -16,7 +16,7 @@ export function GroupSettings({
   group,
   isAddition,
 }: {
-  group: DrObj<Group>;
+  group?: DrObj<Group>;
   isAddition: boolean;
 }) {
   const { workspaceRep } = useCurrentWorkspace();
@@ -29,14 +29,12 @@ export function GroupSettings({
     toast.success("Group deleted");
   }
 
-  if (!group) return <p>Placeholder</p>;
-
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
-        label={`${isAddition ? "Add a new group" : group.name + " settings"}`}
+        label={`${isAddition ? "Add a new group" : group?.name + " settings"}`}
         description={`${isAddition ? "Create a new group" : "Manage group settings"}`}
-        footer={`Created by ${member?.email}`}
+        {...(!isAddition && { footer: `Created by ${member?.email}` })}
       />
 
       <SettingsContentSection header="general">

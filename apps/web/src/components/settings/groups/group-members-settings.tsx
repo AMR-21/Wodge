@@ -7,26 +7,18 @@ import { useMembersInfo } from "@repo/ui/hooks/use-members-info";
 import { useMemo } from "react";
 import { groupMembersColumns } from "./group-members-columns";
 
-export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
+export function GroupMembersSettings({ group }: { group?: DrObj<Group> }) {
   const { members, structure, workspaceRep, workspaceId } =
     useCurrentWorkspace();
 
-  const groupMembers = useMemo(() => {
-    return members.members.filter((member) =>
-      group.members.includes(member.id),
-    );
-  }, [members, structure]);
-
-  // console.log(group.id, group.members, groupMembers);
-
   const nonGroupMembers = useMemo(() => {
     return members.members.filter(
-      (member) => !group.members.includes(member.id),
+      (member) => !group?.members.includes(member.id),
     );
   }, [members, structure]);
 
   const { table } = useTable({
-    data: group.members as string[],
+    data: (group?.members || []) as string[],
     columns: groupMembersColumns({
       creatorId: group?.createdBy,
       removeMember,
@@ -35,6 +27,7 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
   });
 
   async function removeMember(memberId: string) {
+    if (!group) return;
     await workspaceRep?.mutate.updateGroup({
       groupId: group.id,
       groupUpdate: {
@@ -47,6 +40,8 @@ export function GroupMembersSettings({ group }: { group: DrObj<Group> }) {
   }
 
   async function addMember(memberId: string) {
+    if (!group) return;
+
     await workspaceRep?.mutate.updateGroup({
       groupId: group.id,
       groupUpdate: {
