@@ -140,7 +140,7 @@ function SortableDirectory({
           teamId={teamId}
           channels={folder.channels}
           folderId={folder.id}
-          type="pages"
+          type="page"
         />
       </CollapsibleContent>
     </Collapsible>

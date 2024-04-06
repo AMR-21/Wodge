@@ -113,6 +113,7 @@ function SortableChannel({
         channel={channel}
         activeIndex={activeIndex}
         isDragging={isDragging}
+        type={type}
         ref={setNodeRef}
       />
     </div>
@@ -122,20 +123,22 @@ function SortableChannel({
 interface DraggableProps {
   activeIndex?: number;
   isDragging: boolean;
+  type: ChannelsTypes;
 }
 
 export const Channel = React.forwardRef<
   HTMLLIElement,
   { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
->(({ channel, activeIndex, isDragging, ...props }, ref) => {
-  const { workspaceId } = useCurrentWorkspace();
+>(({ channel, activeIndex, isDragging, type, ...props }, ref) => {
+  const { workspaceSlug } = useCurrentWorkspace();
+
   return (
     <li ref={ref} className="group flex grow items-center" {...props}>
       <SidebarItem
         aria-disabled={isDragging}
         Icon={FileText}
-        href={`/${workspaceId}/${channel.id}`}
+        href={`/${workspaceSlug}/${type}/${channel.id}`}
       >
         <span className="select-none truncate">{channel.name}</span>
         <SidebarItemBtn

@@ -44,3 +44,4 @@ export * from "./hooks/use-members-info";
 export * from "./hooks/use-member";
 
 export * from "./store/store";
+export * from "./store/atoms";

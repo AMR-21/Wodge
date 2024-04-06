@@ -3,6 +3,7 @@
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 import { Button } from "@repo/ui/components/ui/button";
 import {
+  Component,
   FileStack,
   FileText,
   Home,
@@ -21,10 +22,14 @@ import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 interface Tab {
   Icon: LucideIcon;
   label: string;
-  href: string;
+  href?: string;
 }
 
 const tabs: Tab[] = [
+  {
+    Icon: Component,
+    label: "components",
+  },
   {
     Icon: Home,
     label: "home",
@@ -54,7 +59,7 @@ const tabs: Tab[] = [
 
 export function TabsRail() {
   return (
-    <aside className="flex w-12 max-w-12 flex-col items-center gap-2.5 border-r border-r-border/50 px-1.5 py-2.5">
+    <aside className="bg-dim flex w-12 max-w-12 flex-col items-center gap-2.5 border-r border-r-border/50 px-1.5 py-2.5">
       {/* <div className="flex h-12 min-h-12 items-center ">
         <WorkspaceSwitcher />
       </div> */}
@@ -72,22 +77,28 @@ export function TabRailItem({ tab }: { tab: Tab }) {
 
   const isActive = tab.href === (pathname ? "/" + pathname : "/");
 
+  const jsx = (
+    <Button
+      variant="secondary"
+      size="icon"
+      className={cn("group", isActive && "bg-accent")}
+    >
+      <tab.Icon
+        className={cn(
+          "h-5 w-5 opacity-50 transition-all group-hover:opacity-100",
+          isActive && "opacity-100",
+        )}
+      />
+    </Button>
+  );
+
   return (
     <TooltipWrapper content={tab.label} side="right" className="capitalize">
-      <Link href={`/${workspaceSlug}${tab.href}`}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn("group", isActive && "bg-accent")}
-        >
-          <tab.Icon
-            className={cn(
-              "h-5 w-5 opacity-50 transition-all group-hover:opacity-100",
-              isActive && "opacity-100",
-            )}
-          />
-        </Button>
-      </Link>
+      {tab?.href ? (
+        <Link href={`/${workspaceSlug}${tab.href}`}>{jsx}</Link>
+      ) : (
+        jsx
+      )}
     </TooltipWrapper>
   );
 }

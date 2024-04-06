@@ -1,19 +1,28 @@
+"use client";
+
 import { AppHeader } from "@/components/workspace/app-header";
-import { Sidebar } from "@/components/workspace/sidebar/sidebar";
-import { TabsRail } from "@/components/workspace/tabs-rail";
-import { Button } from "@repo/ui/components/ui/button";
-import { Home } from "lucide-react";
+import { SidebarWrapper } from "@/components/workspace/sidebar/sidebar-wrapper";
+import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
+import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
+import { useSetAtom } from "jotai";
+import { set } from "lodash";
+import { useEffect } from "react";
 
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
+  const isDesktop = useIsDesktop();
+  const setSidebarOpen = useSetAtom(isSidebarOpenAtom);
+
+  useEffect(() => {
+    setSidebarOpen(isDesktop);
+  }, [isDesktop]);
+
   return (
-    <div className="flex">
-      <div className="flex h-dvh w-full flex-col bg-background">
+    <div className="flex h-dvh max-h-dvh overflow-hidden">
+      <SidebarWrapper />
+
+      <div className="flex w-full flex-col py-2.5">
         <AppHeader />
-        <div className="max-h-dv h flex h-dvh min-h-0 overflow-y-hidden">
-          <TabsRail />
-          <Sidebar />
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   );

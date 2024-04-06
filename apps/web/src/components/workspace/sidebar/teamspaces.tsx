@@ -1,13 +1,7 @@
 import * as React from "react";
 
 import { SidebarItem } from "../sidebar-item";
-import {
-  ChevronRight,
-  Component,
-  GripVertical,
-  MoreHorizontal,
-  Plus,
-} from "lucide-react";
+
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import { ChannelsTypes, DrObj, Team } from "@repo/data";
 import {
@@ -17,20 +11,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
 import { Folders } from "./folders";
 import { useAtom, useAtomValue } from "jotai";
-import {
-  isDraggingTeamAtom,
-  openTeamsAtom,
-  tempOpenTeamsAtom,
-} from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
+import { openTeamsAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { AddToTeam } from "./add-to-team";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
@@ -39,7 +23,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
-import { Separator } from "@repo/ui/components/ui/separator";
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
 
@@ -148,20 +131,20 @@ function SortableTeamspace({
         </div>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="py-1 pl-[0.6875rem]">
-        <div className="border-l border-border p-0 pl-[0.625rem]">
+      <CollapsibleContent className="py-1 pl-[0.9375rem]">
+        <div className="border-l border-border p-0 pl-1.5">
           {/* <Separator orientation="vertical" className="bg-yellow-300" /> */}
 
           {isPages && <Folders teamId={team.id} folders={team.folders} />}
           {!isPages && (
             <>
-              {type === "rooms" && (
-                <Channels type="rooms" teamId={team.id} channels={team.rooms} />
+              {type === "room" && (
+                <Channels type="room" teamId={team.id} channels={team.rooms} />
               )}
 
-              {type === "threads" && (
+              {type === "thread" && (
                 <Channels
-                  type="threads"
+                  type="thread"
                   teamId={team.id}
                   channels={team.threads}
                 />
@@ -191,7 +174,7 @@ export const Teamspace = React.forwardRef<
         noIcon
         collapsible
       >
-        <Avatar className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
+        <Avatar className=" mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
           {/* <AvatarImage src={workspace?.avatar} /> */}
           <AvatarFallback className="select-none rounded-md text-xs uppercase">
             {team.name[0]}
