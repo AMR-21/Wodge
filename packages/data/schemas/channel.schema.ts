@@ -18,7 +18,7 @@ export const ChannelSchema = z.object({
 export const PageSchema = ChannelSchema.extend({});
 
 export const RoomSchema = ChannelSchema.extend({
-  type: z.enum(["chat", "stage"]),
+  // type: z.enum(["chat", "stage"]),
 });
 
 export const ThreadSchema = ChannelSchema.extend({});

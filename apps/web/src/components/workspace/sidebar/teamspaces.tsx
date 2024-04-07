@@ -16,7 +16,6 @@ import { Folders } from "./folders";
 import { useAtom, useAtomValue } from "jotai";
 import { openTeamsAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { AddToTeam } from "./add-to-team";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import {
   Collapsible,
@@ -25,6 +24,8 @@ import {
 } from "@repo/ui/components/ui/collapsible";
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
+import { TeamRoomsMore } from "./team-rooms-more";
+import { TeamThreadsMore } from "./team-threads-more";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -124,6 +125,7 @@ function SortableTeamspace({
         >
           <Teamspace
             team={team}
+            type={type}
             isChanFoldOver={isChanFoldOver}
             isDragging={isDragging}
             ref={setNodeRef}
@@ -160,12 +162,13 @@ function SortableTeamspace({
 interface DraggableProps {
   isChanFoldOver?: boolean;
   isDragging: boolean;
+  type: ChannelsTypes;
 }
 
 export const Teamspace = React.forwardRef<
   HTMLLIElement,
   { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
->(({ team, isChanFoldOver, isDragging, ...props }, ref) => {
+>(({ team, isChanFoldOver, type, isDragging, ...props }, ref) => {
   return (
     <li ref={ref} className="group flex grow" {...props}>
       <SidebarItem
@@ -182,13 +185,16 @@ export const Teamspace = React.forwardRef<
         </Avatar>
 
         <span className="select-none truncate">{team.name}</span>
+
         <div
-          className={cn(
-            "visible ml-auto flex transition-all group-hover:visible",
-          )}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="ml-auto"
         >
-          <TeamMore teamId={team.id} />
+          {type === "page" && <TeamMore teamId={team.id} />}
+          {type === "room" && <TeamRoomsMore teamId={team.id} />}
+          {type === "thread" && <TeamThreadsMore teamId={team.id} />}
         </div>
       </SidebarItem>
     </li>

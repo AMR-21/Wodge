@@ -28,7 +28,7 @@ import { deleteTeam } from "../mutators/delete-team";
 import { updateWorkspace } from "../mutators/update-workspace";
 import { createChannel } from "../mutators/create-channel";
 import { createPage } from "../mutators/create-page";
-import { createChat } from "../mutators/create-chat";
+import { createRoom } from "../mutators/create-room";
 import { createThread } from "../mutators/create-thread";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
@@ -83,8 +83,8 @@ function runner(party: WorkspaceParty, req: Party.Request) {
       case "createPage":
         return await createPage(party, params);
 
-      case "createChat":
-        return await createChat(party, params);
+      case "createRoom":
+        return await createRoom(party, params);
 
       case "createThread":
         return await createThread(party, params);

@@ -3,11 +3,16 @@
 import * as React from "react";
 import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
-import { Button, ButtonProps } from "@repo/ui/components/ui/button";
+import {
+  Button,
+  ButtonProps,
+  buttonVariants,
+} from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
 import Link from "next/link";
 
-interface SidebarItemBtnProps extends ButtonProps {
+interface SidebarItemBtnProps
+  extends React.ButtonHTMLAttributes<HTMLDivElement> {
   Icon?: LucideIcon | IconType;
   iconClassName?: string;
   isVisible?: () => boolean;
@@ -16,7 +21,7 @@ interface SidebarItemBtnProps extends ButtonProps {
 }
 
 export const SidebarItemBtn = React.forwardRef<
-  HTMLButtonElement,
+  HTMLDivElement,
   SidebarItemBtnProps
 >(
   (
@@ -51,24 +56,24 @@ export const SidebarItemBtn = React.forwardRef<
     if (href) jsx = <Link href={href}>{jsx}</Link>;
 
     return (
-      <Button
+      <div
+        tabIndex={0}
         ref={ref}
-        variant="ghost"
-        size="fit"
+        role="button"
         className={cn(
-          "group/sidebtn z-20",
+          buttonVariants({ variant: "ghost", size: "fit" }),
+          "group/sidebtn z-20 aria-expanded:text-accent-foreground",
           !isVisible() && "invisible",
           className,
         )}
         onClick={(e) => {
-          e.stopPropagation();
           onClick?.(e);
         }}
         {...props}
         {...(href && { asChild: true })}
       >
         {jsx}
-      </Button>
+      </div>
     );
   },
 );

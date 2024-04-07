@@ -25,9 +25,10 @@ import { createGroupMutation } from "./mutators/create-group";
 import { GroupUpdate, groupUpdateRunner } from "./mutators/group-update-runner";
 import { deleteGroupMutation } from "./mutators/delete-group";
 import { createPageMutation } from "./mutators/create-page";
-import { createChatMutation } from "./mutators/create-chat";
+import { createRoomMutation } from "./mutators/create-room";
 import { createThreadMutation } from "./mutators/create-thread";
-import { Chat, Page, Team, Thread } from "../../schemas/team.schema";
+import { Room, Page, Thread } from "../../schemas/channel.schema";
+import { Team } from "../../schemas/team.schema";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -51,7 +52,7 @@ export interface NewPageArgs extends Page {
   folderId: string;
 }
 
-export interface NewChatArgs extends Chat {
+export interface NewRoomArgs extends Room {
   teamId: string;
 }
 
@@ -331,15 +332,15 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  async createChat(tx: WriteTransaction, data: NewChatArgs) {
+  async createRoom(tx: WriteTransaction, data: NewRoomArgs) {
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
     )) as WorkspaceStructure;
 
-    const { teamId, ...chat } = data;
+    const { teamId, ...room } = data;
 
-    const newStructure = createChatMutation({
-      chat,
+    const newStructure = createRoomMutation({
+      room,
       teamId,
       structure,
     });

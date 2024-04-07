@@ -25,15 +25,21 @@ import { nanoid } from "nanoid";
 import { ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 
-export function TeamMore({ teamId }: { teamId: string }) {
+interface TeamMoreProps {
+  teamId: string;
+  folderId?: string;
+}
+
+export function TeamMore({ teamId, folderId }: TeamMoreProps) {
   const [activeTab, setActiveTab] = useState("folder");
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
 
   async function createBlankPage() {
     await workspaceRep?.mutate.createPage({
-      folderId: "root-" + teamId,
+      folderId: folderId || "root-" + teamId,
       teamId,
       name: "New page",
+
       id: nanoid(ID_LENGTH),
       editGroups: ["team-members"],
       viewGroups: ["team-members"],
@@ -65,7 +71,7 @@ export function TeamMore({ teamId }: { teamId: string }) {
         <DropdownMenuTrigger asChild>
           <SidebarItemBtn
             Icon={MoreHorizontal}
-            className="z-10 -my-1 hover:bg-transparent"
+            className="invisible z-10 -my-1 ml-auto flex transition-all hover:bg-transparent group-hover:visible aria-expanded:visible"
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48" sideOffset={2}>
@@ -89,35 +95,53 @@ export function TeamMore({ teamId }: { teamId: string }) {
               </DropdownMenuItem>
             </DialogTrigger>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>Folders</DropdownMenuLabel>
-            <DropdownMenuItem className="gap-2 text-sm" onClick={createFolder}>
-              <FolderPlus className="h-4 w-4" />
-              New folder
-            </DropdownMenuItem>
+          {/* TODO USE IT FOR NESTED FOLDERS */}
+          {!folderId && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Folders</DropdownMenuLabel>
+                <DropdownMenuItem
+                  className="gap-2 text-sm"
+                  onClick={createFolder}
+                >
+                  <FolderPlus className="h-4 w-4" />
+                  New folder
+                </DropdownMenuItem>
 
-            <DialogTrigger asChild>
-              <DropdownMenuItem
-                className="gap-2 text-sm"
-                onClick={() => setActiveTab("folder")}
-              >
-                <FolderCog className="h-4 w-4" />
-                Custom folder
-              </DropdownMenuItem>
-            </DialogTrigger>
-          </DropdownMenuGroup>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem
+                    className="gap-2 text-sm"
+                    onClick={() => setActiveTab("folder")}
+                  >
+                    <FolderCog className="h-4 w-4" />
+                    Custom folder
+                  </DropdownMenuItem>
+                </DialogTrigger>
+              </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
 
-          <DropdownMenuGroup>
-            <Link href={`/${workspaceSlug}/settings?active=teams`}>
+              <DropdownMenuGroup>
+                <Link href={`/${workspaceSlug}/settings/${teamId}`}>
+                  <DropdownMenuItem className="gap-2 text-sm">
+                    <Settings className="h-4 w-4" />
+                    Team settings
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </>
+          )}
+
+          {folderId && (
+            <>
+              <DropdownMenuSeparator />
               <DropdownMenuItem className="gap-2 text-sm">
                 <Settings className="h-4 w-4" />
-                Team settings
+                Folder settings
               </DropdownMenuItem>
-            </Link>
-          </DropdownMenuGroup>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 

@@ -1,7 +1,13 @@
 import * as React from "react";
 
 import { SidebarItem } from "../sidebar-item";
-import { FileText, MoreHorizontal } from "lucide-react";
+import {
+  FileText,
+  Hash,
+  LucideIcon,
+  MessageCircle,
+  MoreHorizontal,
+} from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import { ChannelsTypes, DrObj, type Channel as ChannelType } from "@repo/data";
 import {
@@ -14,6 +20,7 @@ import { useMemo } from "react";
 
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useParams } from "next/navigation";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -133,19 +140,41 @@ export const Channel = React.forwardRef<
 >(({ channel, activeIndex, isDragging, type, ...props }, ref) => {
   const { workspaceSlug } = useCurrentWorkspace();
 
+  const { channelId } = useParams() as { channelId: string };
+
+  // const icon =
+  let icon: LucideIcon | undefined;
+
+  switch (type) {
+    case "page":
+      icon = FileText;
+      break;
+    case "room":
+      icon = MessageCircle;
+      break;
+    case "thread":
+      icon = Hash;
+      break;
+
+    default:
+      icon = undefined;
+  }
+
   return (
     <li ref={ref} className="group flex grow items-center" {...props}>
       <SidebarItem
         aria-disabled={isDragging}
-        Icon={FileText}
+        Icon={icon}
+        isActive={channel.id === channelId}
         href={`/${workspaceSlug}/${type}/${channel.id}`}
       >
         <span className="select-none truncate">{channel.name}</span>
-        <SidebarItemBtn
-          Icon={MoreHorizontal}
-          className="-my-1 ml-auto"
-          onClick={() => {}}
-        />
+        <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+          <SidebarItemBtn
+            Icon={MoreHorizontal}
+            className="invisible -my-1 ml-auto flex transition-all group-hover:visible"
+          />
+        </div>
       </SidebarItem>
     </li>
   );

@@ -58,13 +58,13 @@ export function Sidebar() {
   const { workspaceSlug } = useCurrentWorkspace();
 
   return (
-    <aside
-      className={cn(
-        "bg-dim h-full max-h-full min-h-0 shrink-0 grow  px-2.5 py-1.5 transition-all",
-        !isSidebarOpen && "px-0",
-      )}
-    >
-      <ScrollArea>
+    <ScrollArea>
+      <aside
+        className={cn(
+          "h-full max-h-full min-h-0 shrink-0 grow bg-dim  px-2.5 py-1.5 transition-all",
+          !isSidebarOpen && "px-0",
+        )}
+      >
         <div className="flex flex-col gap-4">
           <ul className="flex flex-col gap-1">
             {tabs.map((tab) => {
@@ -93,7 +93,7 @@ export function Sidebar() {
             <Teamspaces type="page" isPages />
           )}
         </div>
-      </ScrollArea>
-    </aside>
+      </aside>
+    </ScrollArea>
   );
 }

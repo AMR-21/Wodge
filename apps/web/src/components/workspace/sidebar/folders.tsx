@@ -1,13 +1,7 @@
 import * as React from "react";
 
 import { SidebarItem } from "../sidebar-item";
-import {
-  ChevronRight,
-  Component,
-  FolderIcon,
-  GripVertical,
-  MoreHorizontal,
-} from "lucide-react";
+import { FolderIcon, MoreHorizontal } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import { DrObj, type Folder as FolderType } from "@repo/data";
 import {
@@ -15,25 +9,17 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@repo/ui/components/ui/accordion";
 import { cn } from "@repo/ui/lib/utils";
-import { Pages } from "./pages";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { openFoldersAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
-import { Input } from "@repo/ui/components/ui/input";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@repo/ui/components/ui/collapsible";
 import { Channels } from "./channels";
+import { TeamMore } from "./team-more";
 
 export function Folders({
   folders,
@@ -43,8 +29,6 @@ export function Folders({
   teamId: string;
 }) {
   const foldersIds = useMemo(() => folders?.map((d) => d.id) || [], [folders]);
-
-  const [openFolders, setOpenFolders] = useAtom(openFoldersAtom);
 
   return (
     <div className="h-full">
@@ -128,6 +112,7 @@ function SortableDirectory({
           >
             <Folder
               folder={folder}
+              teamId={teamId}
               isChannelOver={isChannelOver}
               isDragging={isDragging}
               ref={setNodeRef}
@@ -135,13 +120,19 @@ function SortableDirectory({
           </div>
         )}
       </CollapsibleTrigger>
-      <CollapsibleContent className={cn("transition-all", !isRoot && "pl-3")}>
-        <Channels
-          teamId={teamId}
-          channels={folder.channels}
-          folderId={folder.id}
-          type="page"
-        />
+      <CollapsibleContent
+        className={cn("transition-all", !isRoot && "py-1  pl-[0.9375rem]")}
+      >
+        <div
+          className={cn(!isRoot && "border-l border-border p-0 pl-[0.3025rem]")}
+        >
+          <Channels
+            teamId={teamId}
+            channels={folder.channels}
+            folderId={folder.id}
+            type="page"
+          />
+        </div>
       </CollapsibleContent>
     </Collapsible>
   );
@@ -150,13 +141,14 @@ function SortableDirectory({
 interface DraggableProps {
   isChannelOver?: boolean;
   isDragging: boolean;
+  teamId: string;
 }
 
 export const Folder = React.forwardRef<
   HTMLLIElement,
   { folder: DrObj<FolderType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
->(({ folder, isChannelOver, isDragging, ...props }, ref) => {
+>(({ folder, teamId, isChannelOver, isDragging, ...props }, ref) => {
   return (
     <li ref={ref} className="group flex grow items-center" {...props}>
       {/* <GripVertical
@@ -172,7 +164,8 @@ export const Folder = React.forwardRef<
         collapsible
       >
         <span className="select-none truncate">{folder.name}</span>
-        <SidebarItemBtn Icon={MoreHorizontal} className="-my-1 ml-auto" />
+
+        <TeamMore folderId={folder.id} teamId={teamId} />
       </SidebarItem>
     </li>
   );
