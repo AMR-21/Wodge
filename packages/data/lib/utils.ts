@@ -2,10 +2,11 @@ import { env } from "@repo/env";
 import { makeWorkspaceMembersKey } from "./keys";
 import { queryClient } from "./query-client";
 import { PullResponseV1, PullerResult } from "replicache";
+import { ChannelsTypes } from "../schemas/channel.schema";
 
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
-  domain: "user" | "workspace",
+  domain: "user" | "workspace" | ChannelsTypes,
   id: string,
   headers?: Record<string, string>
 ) {

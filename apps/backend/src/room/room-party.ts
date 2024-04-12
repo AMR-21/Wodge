@@ -1,13 +1,7 @@
 import type * as Party from "partykit/server";
 
-import {
-  badRequest,
-  notImplemented,
-  ok,
-  unauthorized,
-} from "../lib/http-utils";
+import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
-import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
 
 export default class UserParty implements Party.Server {
   options: Party.ServerOptions = {
@@ -38,7 +32,7 @@ export default class UserParty implements Party.Server {
 
     try {
       const session = await getSession(req, lobby);
-      return authorizeChannel(req, lobby, session.userId);
+      return authorizeChannel(req, lobby, session.userId, "room");
     } catch (e) {
       return unauthorized();
     }

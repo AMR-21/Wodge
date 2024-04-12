@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
-import { json } from "../../lib/http-utils";
+import { json, unauthorized } from "../../lib/http-utils";
 import { canEdit, canView, ChannelsTypes, isAdmin, isOwner } from "@repo/data";
 
 export interface AuthChannelResponse {
@@ -14,13 +14,15 @@ export interface AuthChannelResponse {
 
 export function authChannel(req: Party.Request, party: WorkspaceParty) {
   const serviceKey = req.headers.get("authorization");
+
   // from rep wrapper
   const workspaceId = req.headers.get("x-workspace-id");
-  const teamId = req.headers.get("x-team-id");
+  const teamId = req.headers.get("x-team-id") as string | undefined;
+  const folderId = req.headers.get("x-folder-id") as string | undefined;
 
   // from channel party
-  const userId = req.headers.get("x-user-id");
-  const channelId = req.headers.get("x-channel-id");
+  const userId = req.headers.get("x-user-id") as string;
+  const channelId = req.headers.get("x-channel-id") as string;
   const channelType = req.headers.get("x-channel-type") as ChannelsTypes;
 
   // Verify service key
@@ -29,18 +31,7 @@ export function authChannel(req: Party.Request, party: WorkspaceParty) {
       success: false,
     } satisfies AuthChannelResponse);
 
-  if (workspaceId !== party.room.id)
-    return json({ success: false } satisfies AuthChannelResponse);
-
-  if (!userId)
-    return json({
-      success: false,
-    } satisfies AuthChannelResponse);
-
-  if (!channelId || !teamId)
-    return json({
-      success: false,
-    } satisfies AuthChannelResponse);
+  if (workspaceId !== party.room.id) return unauthorized();
 
   if (party.workspaceMembers.data.createdBy === userId)
     return json({
@@ -71,6 +62,8 @@ export function authChannel(req: Party.Request, party: WorkspaceParty) {
       channelId,
       structure: party.workspaceStructure.data,
       channelType,
+      folderId,
+      teamId,
     })
   ) {
     return json({
@@ -87,6 +80,8 @@ export function authChannel(req: Party.Request, party: WorkspaceParty) {
       channelId,
       structure: party.workspaceStructure.data,
       channelType,
+      folderId,
+      teamId,
     })
   ) {
     return json({

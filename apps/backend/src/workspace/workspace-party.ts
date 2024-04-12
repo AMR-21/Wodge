@@ -131,6 +131,8 @@ export default class WorkspaceParty
       return ok();
     }
 
+    if (getRoute(req) === "/auth-channel") return req;
+
     try {
       // maybe removed when bindings are supported
       const session = await getSession(req, lobby);

@@ -5,6 +5,7 @@ import type * as Party from "partykit/server";
 import { badRequest, error, ok, unauthorized } from "./http-utils";
 import WorkspaceParty from "../workspace/workspace-party";
 import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
+import { ChannelsTypes } from "@repo/data";
 
 /**
  * Referenced from user client model
@@ -138,22 +139,34 @@ export const checkMembership = (userId: string, party: WorkspaceParty) => {
 export const authorizeChannel = async (
   req: Party.Request,
   lobby: Party.Lobby,
-  userId: string
+  userId: string,
+  type: ChannelsTypes
 ) => {
   const workspaceId = req.headers.get("x-workspace-id");
+  const teamId = req.headers.get("x-team-id");
+  const folderId = req.headers.get("x-folder-id");
 
-  if (!workspaceId) return badRequest();
+  if (!workspaceId || !teamId) return badRequest();
 
-  const workspaceParty = lobby.parties.workspaces?.get(workspaceId);
+  const workspaceParty = lobby.parties.workspace?.get(workspaceId);
 
   if (!workspaceParty) return badRequest();
 
+  if (!userId) return unauthorized();
+
+  if (!teamId) return unauthorized();
+
+  if (type === "page" && !folderId) return badRequest();
+
   const res = await workspaceParty.fetch("/auth-channel", {
     headers: {
-      ...req.headers,
+      "x-workspace-id": workspaceId,
+      "x-team-id": teamId,
       "x-user-id": userId,
       "x-channel-id": lobby.id,
-      "x-channel-type": "room",
+      "x-channel-type": type,
+      authorization: lobby.env.SERVICE_KEY as string,
+      ...(type === "page" && { "x-folder-id": folderId }),
     },
   });
 
