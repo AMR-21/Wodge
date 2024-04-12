@@ -39,7 +39,7 @@ export type TeamUpdate =
 
 export interface TeamUpdateRunnerArgs extends WorkspaceTeamMutation {
   teamUpdate: TeamUpdate;
-  curMembers: string[];
+  curMembers?: string[];
 }
 
 export function teamUpdateRunner({
@@ -57,6 +57,8 @@ export function teamUpdateRunner({
       return updateTeamInfoMutation({ update, teamId, structure });
 
     case "addMembers":
+      if (!curMembers)
+        throw new Error("Current members are required for adding members");
       return addTeamMembersMutation({
         update,
         teamId,

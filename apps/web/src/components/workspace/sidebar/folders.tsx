@@ -165,7 +165,14 @@ export const Folder = React.forwardRef<
       >
         <span className="select-none truncate">{folder.name}</span>
 
-        <TeamMore folderId={folder.id} teamId={teamId} />
+        <div
+          className="ml-auto"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <TeamMore folderId={folder.id} teamId={teamId} />
+        </div>
       </SidebarItem>
     </li>
   );

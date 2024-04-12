@@ -42,7 +42,7 @@ export function createTeamMutation({
   const newTeam: Team = {
     ...newTeamBase,
     createdBy: currentUserId,
-    members: [],
+    members: [currentUserId],
     moderators: [],
     folders: [
       {
@@ -54,7 +54,7 @@ export function createTeamMutation({
       },
     ],
     tags: [],
-    chats: [],
+    rooms: [],
     threads: [],
     default: false,
   };

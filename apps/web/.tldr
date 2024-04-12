@@ -66,9 +66,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": -1382.4429880757486,
-			"y": -749.4814023256057,
-			"lastActivityTimestamp": 1711292704529,
+			"x": 2.4126534718386665,
+			"y": -378.8293439421321,
+			"lastActivityTimestamp": 1712866363683,
 			"meta": {}
 		},
 		{
@@ -112,7 +112,12 @@
 				"tldraw:arrowheadStart": "none",
 				"tldraw:arrowheadEnd": "arrow"
 			},
-			"brush": null,
+			"brush": {
+				"x": -210.52818803900584,
+				"y": -399.47815281591096,
+				"w": 212.9408415108445,
+				"h": 20.648808873778876
+			},
 			"scribbles": [],
 			"cursor": {
 				"type": "default",
@@ -125,12 +130,12 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1770.464599609375,
-				"h": 765.93896484375
+				"w": 1603,
+				"h": 620
 			},
 			"insets": [
 				false,
-				true,
+				false,
 				true,
 				false
 			],
@@ -144,7 +149,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1.2000000476837158,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": false,
+			"isHoveringCanvas": true,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,
@@ -418,9 +423,9 @@
 			"typeName": "page"
 		},
 		{
-			"x": 1382.822185903863,
-			"y": 915.5510935719292,
-			"z": 0.7802428655104128,
+			"x": 737.0728143203667,
+			"y": 765.9945103254856,
+			"z": 0.7748630973246015,
 			"meta": {},
 			"id": "camera:page:Dt1ynBSFe7ScuyUZorY59",
 			"typeName": "camera"
@@ -429,7 +434,7 @@
 			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [],
-			"hoveredShapeId": null,
+			"hoveredShapeId": "shape:cgb0F_yeN7eCoGZOCq7Iu",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -15606,7 +15611,7 @@
 		},
 		{
 			"x": -240,
-			"y": 580,
+			"y": 579.1995198409079,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -15664,7 +15669,7 @@
 					"type": "binding",
 					"boundShapeId": "shape:CNsoPdFtz7THmthchRTAn",
 					"normalizedAnchor": {
-						"x": 0.5,
+						"x": 0.28305290014401263,
 						"y": 0.5
 					},
 					"isPrecise": true,
@@ -16068,7 +16073,6 @@
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:cgb0F_yeN7eCoGZOCq7Iu",
 			"type": "text",
 			"props": {
 				"color": "black",
@@ -16082,6 +16086,7 @@
 			},
 			"parentId": "page:Dt1ynBSFe7ScuyUZorY59",
 			"index": "aR",
+			"id": "shape:cgb0F_yeN7eCoGZOCq7Iu",
 			"typeName": "shape"
 		},
 		{
