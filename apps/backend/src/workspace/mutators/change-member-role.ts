@@ -2,18 +2,21 @@ import { changeMemberRoleMutation } from "@repo/data/models/workspace/mutators/c
 import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { WorkspaceMembers, makeWorkspaceMembersKey } from "@repo/data";
+import { produce } from "immer";
 
 export async function changeMemberRole(
   party: WorkspaceParty,
   params: RunnerParams
 ) {
-  party.workspaceMembers.data = changeMemberRoleMutation({
-    members: party.workspaceMembers.data,
-    memberId: params.mutation.args.memberId,
-    role: params.mutation.args.role,
-  }) as WorkspaceMembers;
+  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
+    draft.data = changeMemberRoleMutation({
+      members: draft.data,
+      memberId: params.mutation.args.memberId,
+      role: params.mutation.args.role,
+    }) as WorkspaceMembers;
 
-  party.workspaceMembers.lastModifiedVersion = params.nextVersion;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceMembersKey(),

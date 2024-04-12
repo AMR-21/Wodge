@@ -33,7 +33,7 @@ export function OnboardingSteps() {
             disabled={isPending}
           >
             {isPending ? (
-              <Loader color="rgb(var(--primary-foreground))" />
+              <Loader color="hsl(var(--primary-foreground))" />
             ) : (
               "Continue"
             )}

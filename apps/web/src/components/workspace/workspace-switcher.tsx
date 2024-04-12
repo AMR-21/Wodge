@@ -21,10 +21,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
+import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
 
 export function WorkspaceSwitcher() {
   const { workspace, workspaceSlug } = useCurrentWorkspace();
   const { userWorkspaces } = useUserWorkspaces();
+
+  const isPrivileged = useIsOwnerOrAdmin();
 
   return (
     <DropdownMenu>
@@ -51,13 +54,18 @@ export function WorkspaceSwitcher() {
           <Link href="/">
             <DropdownMenuItem>All Workspaces</DropdownMenuItem>
           </Link>
-          <Link href={`/${workspaceSlug}/settings`}>
-            <DropdownMenuItem>Workspace settings</DropdownMenuItem>
-          </Link>
 
-          <Link href={`/${workspaceSlug}/settings/members`}>
-            <DropdownMenuItem>Invite & manage members</DropdownMenuItem>
-          </Link>
+          {isPrivileged && (
+            <>
+              <Link href={`/${workspaceSlug}/settings`}>
+                <DropdownMenuItem>Workspace settings</DropdownMenuItem>
+              </Link>
+
+              <Link href={`/${workspaceSlug}/settings/members`}>
+                <DropdownMenuItem>Invite & manage members</DropdownMenuItem>
+              </Link>
+            </>
+          )}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />

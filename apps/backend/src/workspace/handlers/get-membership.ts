@@ -17,7 +17,7 @@ export function getMembership(req: Party.Request, party: WorkspaceParty) {
       success: false,
     });
 
-  if (party.workspaceMembers.data.owner === userId)
+  if (party.workspaceMembers.data.createdBy === userId)
     return json({
       success: true,
     });

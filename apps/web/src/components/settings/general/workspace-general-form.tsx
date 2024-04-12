@@ -42,7 +42,7 @@ export function WorkspaceGeneralForm() {
     if (workspace) form.reset(workspace);
   }, [workspace]);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: Pick<Workspace, "name" | "slug">) => {
       await fetch(
         `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/update`,
@@ -56,7 +56,7 @@ export function WorkspaceGeneralForm() {
       return data;
     },
     onSuccess: (data) => {
-      toast.dismiss(toastId);
+      // toast.dismiss(toastId);
       form.reset(data);
       if (data.slug !== workspace?.slug) {
         router.push(`/${data.slug}/settings`);
@@ -64,7 +64,7 @@ export function WorkspaceGeneralForm() {
     },
   });
 
-  const { toastId } = useSubmitToast<Workspace>(form, formRef);
+  // const { toastId } = useSubmitToast<Workspace>(form, formRef);
 
   async function onSubmit(data: Pick<Workspace, "name" | "slug">) {
     mutate(data);
@@ -105,6 +105,14 @@ export function WorkspaceGeneralForm() {
               </FormItem>
             )}
           />
+
+          <Button
+            className="w-fit"
+            disabled={!form.formState.isDirty || isPending}
+            size="sm"
+          >
+            Update workspace
+          </Button>
         </form>
       </Form>
     </div>

@@ -6,7 +6,8 @@ import { PullResponseV1, PullerResult } from "replicache";
 export function replicacheWrapper<Request, Result>(
   mode: "push" | "pull",
   domain: "user" | "workspace",
-  id: string
+  id: string,
+  headers?: Record<string, string>
 ) {
   return async (requestBody: Request, requestID: string) => {
     try {
@@ -16,6 +17,7 @@ export function replicacheWrapper<Request, Result>(
           method: "POST",
           credentials: "include",
           body: JSON.stringify(requestBody),
+          headers,
         }
       );
 

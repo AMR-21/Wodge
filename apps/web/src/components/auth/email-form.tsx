@@ -65,7 +65,7 @@ export function EmailForm() {
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending ? (
-            <Loader color="rgb(var(--primary-foreground))" />
+            <Loader color="hsl(var(--primary-foreground))" />
           ) : (
             "Continue with email"
           )}

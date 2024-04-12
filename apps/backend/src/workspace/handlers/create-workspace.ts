@@ -74,13 +74,15 @@ export async function createWorkspace(
 
   const userInstance = userParty.get(userId);
 
-  await userInstance.fetch("/add-workspace", {
+  const res2 = await userInstance.fetch("/add-workspace", {
     method: "POST",
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,
       workspaceId: party.room.id,
     },
   });
+
+  if (!res2.ok) return badRequest();
 
   // 6. add the workspace in the do
 

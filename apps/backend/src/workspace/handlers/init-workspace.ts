@@ -15,7 +15,7 @@ export async function initWorkspace(
   { mutation, nextVersion, userId }: RunnerParams
 ) {
   // 1. validate that initiator of the request is the owner of the workspace
-  if (party.workspaceMembers.data.owner !== userId) {
+  if (party.workspaceMembers.data.createdBy !== userId) {
     return;
   }
 

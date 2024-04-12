@@ -17,6 +17,7 @@ import { useAtomValue } from "jotai";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
 import { Teamspaces } from "./teamspaces";
 import { ChannelsTypes } from "@repo/data";
+import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
 
 interface Tab {
   Icon: LucideIcon;
@@ -57,6 +58,8 @@ export function Sidebar() {
   const activeChan = usePathname().split("/").at(2) as ChannelsTypes;
   const { workspaceSlug } = useCurrentWorkspace();
 
+  const isPrivileged = useIsOwnerOrAdmin();
+
   return (
     <ScrollArea>
       <aside
@@ -69,6 +72,10 @@ export function Sidebar() {
           <ul className="flex flex-col gap-1">
             {tabs.map((tab) => {
               const baseUrl = `/${workspaceSlug}`;
+
+              if (tab.label === "settings" && !isPrivileged) {
+                return null;
+              }
 
               return (
                 <SidebarItem

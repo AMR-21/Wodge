@@ -42,6 +42,7 @@ export * from "./hooks/use-workspace-subscription";
 export * from "./hooks/use-current-workspace";
 export * from "./hooks/use-members-info";
 export * from "./hooks/use-member";
+export * from "./hooks/use-is-owner-or-admin";
 
 export * from "./store/store";
 export * from "./store/atoms";

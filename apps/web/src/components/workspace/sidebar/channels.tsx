@@ -3,7 +3,7 @@ import * as React from "react";
 import { SidebarItem } from "../sidebar-item";
 import {
   FileText,
-  Hash,
+  GanttChart,
   LucideIcon,
   MessageCircle,
   MoreHorizontal,
@@ -153,7 +153,7 @@ export const Channel = React.forwardRef<
       icon = MessageCircle;
       break;
     case "thread":
-      icon = Hash;
+      icon = GanttChart;
       break;
 
     default:

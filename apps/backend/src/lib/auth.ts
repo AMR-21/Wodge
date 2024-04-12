@@ -2,8 +2,9 @@
  * Credits to partykit nextjs chat template
  */
 import type * as Party from "partykit/server";
-import { error, ok, unauthorized } from "./http-utils";
+import { badRequest, error, ok, unauthorized } from "./http-utils";
 import WorkspaceParty from "../workspace/workspace-party";
+import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
 
 /**
  * Referenced from user client model
@@ -132,4 +133,37 @@ export const checkMembership = (userId: string, party: WorkspaceParty) => {
     party.workspaceMembers.data.createdBy === userId ||
     party.workspaceMembers.data.members.some((m) => m.id === userId)
   );
+};
+
+export const authorizeChannel = async (
+  req: Party.Request,
+  lobby: Party.Lobby,
+  userId: string
+) => {
+  const workspaceId = req.headers.get("x-workspace-id");
+
+  if (!workspaceId) return badRequest();
+
+  const workspaceParty = lobby.parties.workspaces?.get(workspaceId);
+
+  if (!workspaceParty) return badRequest();
+
+  const res = await workspaceParty.fetch("/auth-channel", {
+    headers: {
+      ...req.headers,
+      "x-user-id": userId,
+      "x-channel-id": lobby.id,
+      "x-channel-type": "room",
+    },
+  });
+
+  if (res.status !== 200) return unauthorized();
+
+  const body = (await res.json()) as AuthChannelResponse;
+
+  if (!body.success) return unauthorized();
+
+  req.headers.set("channel-auth", JSON.stringify(body));
+
+  return req;
 };
