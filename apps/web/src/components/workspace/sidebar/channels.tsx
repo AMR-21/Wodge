@@ -122,6 +122,7 @@ function SortableChannel({
         isDragging={isDragging}
         type={type}
         ref={setNodeRef}
+        teamId={teamId}
       />
     </div>
   );
@@ -131,13 +132,14 @@ interface DraggableProps {
   activeIndex?: number;
   isDragging: boolean;
   type: ChannelsTypes;
+  teamId: string;
 }
 
 export const Channel = React.forwardRef<
   HTMLLIElement,
   { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
->(({ channel, activeIndex, isDragging, type, ...props }, ref) => {
+>(({ channel, activeIndex, teamId, isDragging, type, ...props }, ref) => {
   const { workspaceSlug } = useCurrentWorkspace();
 
   const { channelId } = useParams() as { channelId: string };
@@ -166,7 +168,7 @@ export const Channel = React.forwardRef<
         aria-disabled={isDragging}
         Icon={icon}
         isActive={channel.id === channelId}
-        href={`/${workspaceSlug}/${type}/${channel.id}`}
+        href={`/${workspaceSlug}/${teamId}/${type}/${channel.id}`}
       >
         <span className="select-none truncate">{channel.name}</span>
         <div className="ml-auto" onClick={(e) => e.stopPropagation()}>

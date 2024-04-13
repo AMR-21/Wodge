@@ -7,7 +7,7 @@ import { LinkMenu } from '../../components/menus'
 
 import { useBlockEditor } from '../../hooks/useBlockEditor'
 
-import '../../styles/index.css'
+// import '../../styles/index.css'
 
 import ImageBlockMenu from '../../extensions/ImageBlock/components/ImageBlockMenu'
 import { ColumnsMenu } from '../../extensions/MultiColumn/menus'
