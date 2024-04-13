@@ -27,6 +27,7 @@ export * from "./components/ui/command";
 export * from "./components/ui/radio-group";
 export * from "./components/ui/scroll-area";
 export * from "./components/ui/sheet";
+export * from "./components/ui/breadcrumb";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";
@@ -42,6 +43,7 @@ export * from "./hooks/use-workspace-subscription";
 export * from "./hooks/use-current-workspace";
 export * from "./hooks/use-members-info";
 export * from "./hooks/use-member";
+export * from "./hooks/use-channel-path";
 export * from "./hooks/use-is-owner-or-admin";
 
 export * from "./store/store";

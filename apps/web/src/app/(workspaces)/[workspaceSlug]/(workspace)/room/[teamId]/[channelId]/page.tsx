@@ -1,3 +1,5 @@
+"use client";
+
 function ChannelPage() {
   return <div>channel</div>;
 }

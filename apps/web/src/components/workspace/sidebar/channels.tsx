@@ -123,6 +123,7 @@ function SortableChannel({
         type={type}
         ref={setNodeRef}
         teamId={teamId}
+        folderId={folderId}
       />
     </div>
   );
@@ -133,53 +134,59 @@ interface DraggableProps {
   isDragging: boolean;
   type: ChannelsTypes;
   teamId: string;
+  folderId?: string;
 }
 
 export const Channel = React.forwardRef<
   HTMLLIElement,
   { channel: DrObj<ChannelType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
->(({ channel, activeIndex, teamId, isDragging, type, ...props }, ref) => {
-  const { workspaceSlug } = useCurrentWorkspace();
+>(
+  (
+    { channel, activeIndex, folderId, teamId, isDragging, type, ...props },
+    ref,
+  ) => {
+    const { workspaceSlug } = useCurrentWorkspace();
 
-  const { channelId } = useParams() as { channelId: string };
+    const { channelId } = useParams() as { channelId: string };
 
-  // const icon =
-  let icon: LucideIcon | undefined;
+    // const icon =
+    let icon: LucideIcon | undefined;
 
-  switch (type) {
-    case "page":
-      icon = FileText;
-      break;
-    case "room":
-      icon = MessageCircle;
-      break;
-    case "thread":
-      icon = GanttChart;
-      break;
+    switch (type) {
+      case "page":
+        icon = FileText;
+        break;
+      case "room":
+        icon = MessageCircle;
+        break;
+      case "thread":
+        icon = GanttChart;
+        break;
 
-    default:
-      icon = undefined;
-  }
+      default:
+        icon = undefined;
+    }
 
-  return (
-    <li ref={ref} className="group flex grow items-center" {...props}>
-      <SidebarItem
-        aria-disabled={isDragging}
-        Icon={icon}
-        isActive={channel.id === channelId}
-        href={`/${workspaceSlug}/${teamId}/${type}/${channel.id}`}
-      >
-        <span className="select-none truncate">{channel.name}</span>
-        <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
-          <SidebarItemBtn
-            Icon={MoreHorizontal}
-            className="invisible -my-1 ml-auto flex transition-all group-hover:visible"
-          />
-        </div>
-      </SidebarItem>
-    </li>
-  );
-});
+    return (
+      <li ref={ref} className="group flex grow items-center" {...props}>
+        <SidebarItem
+          aria-disabled={isDragging}
+          Icon={icon}
+          isActive={channel.id === channelId}
+          href={`/${workspaceSlug}/${type}/${teamId}${type === "page" ? "/" + folderId : ""}/${channel.id}`}
+        >
+          <span className="select-none truncate">{channel.name}</span>
+          <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+            <SidebarItemBtn
+              Icon={MoreHorizontal}
+              className="invisible -my-1 ml-auto flex transition-all group-hover:visible"
+            />
+          </div>
+        </SidebarItem>
+      </li>
+    );
+  },
+);
 
 Channel.displayName = "Channel";
