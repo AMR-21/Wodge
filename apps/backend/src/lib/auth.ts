@@ -160,6 +160,7 @@ export const authorizeChannel = async (
 
   const res = await workspaceParty.fetch("/auth-channel", {
     headers: {
+      //@ts-ignore
       "x-workspace-id": workspaceId,
       "x-team-id": teamId,
       "x-user-id": userId,
