@@ -3,19 +3,20 @@ import { useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { v4 as uuid } from 'uuid'
 
-import { Button } from '@/components/ui/Button'
-import { Loader } from '@/components/ui/Loader'
-import { Panel, PanelHeadline } from '@/components/ui/Panel'
-import { Textarea } from '@/components/ui/Textarea'
-import { Icon } from '@/components/ui/Icon'
+import { Button } from '../../../components/ui/Button'
+import { Loader } from '../../../components/ui/Loader'
+import { Panel, PanelHeadline } from '../../../components/ui/Panel'
+import { Textarea } from '../../../components/ui/Textarea'
+import { Icon } from '../../../components/ui/Icon'
 
-import { AiTone, AiToneOption } from '@/components/BlockEditor/types'
-import { tones } from '@/lib/constants'
+import { AiTone, AiToneOption } from '../../../components/BlockEditor/types'
+import { tones } from '../../../lib/constants'
 
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
-import { Toolbar } from '@/components/ui/Toolbar'
-import { Surface } from '@/components/ui/Surface'
-import { DropdownButton } from '@/components/ui/Dropdown'
+import { Toolbar } from '../../../components/ui/Toolbar'
+import { Surface } from '../../../components/ui/Surface'
+import { DropdownButton } from '../../../components/ui/Dropdown'
+import { Check, ChevronDown, Mic, Repeat, Sparkles, Trash, Undo2 } from 'lucide-react'
 
 export interface DataProps {
   text: string
@@ -152,9 +153,9 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
               <Dropdown.Root>
                 <Dropdown.Trigger asChild>
                   <Button variant="tertiary">
-                    <Icon name="Mic" />
+                    <Icon Icon={Mic} />
                     {currentTone?.label || 'Change tone'}
-                    <Icon name="ChevronDown" />
+                    <Icon Icon={ChevronDown} />
                   </Button>
                 </Dropdown.Trigger>
                 <Dropdown.Portal>
@@ -164,7 +165,7 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
                         <>
                           <Dropdown.Item asChild>
                             <DropdownButton isActive={data.tone === undefined} onClick={onUndoClick}>
-                              <Icon name="Undo2" />
+                              <Icon Icon={Undo2} />
                               Reset
                             </DropdownButton>
                           </Dropdown.Item>
@@ -190,18 +191,18 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
                   className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
                   onClick={discard}
                 >
-                  <Icon name="Trash" />
+                  <Icon Icon={Trash} />
                   Discard
                 </Button>
               )}
               {previewText && (
                 <Button variant="ghost" onClick={insert} disabled={!previewText}>
-                  <Icon name="Check" />
+                  <Icon Icon={Check} />
                   Insert
                 </Button>
               )}
               <Button variant="primary" onClick={generateText} style={{ whiteSpace: 'nowrap' }}>
-                {previewText ? <Icon name="Repeat" /> : <Icon name="Sparkles" />}
+                {previewText ? <Icon Icon={Repeat} /> : <Icon Icon={Sparkles} />}
                 {previewText ? 'Regenerate' : 'Generate text'}
               </Button>
             </div>

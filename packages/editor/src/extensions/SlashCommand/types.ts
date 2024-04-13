@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/core'
 
-import { icons } from 'lucide-react'
+import { icons, LucideIcon } from 'lucide-react'
 
 export interface Group {
   name: string
@@ -13,7 +13,7 @@ export interface Command {
   label: string
   description: string
   aliases?: string[]
-  iconName: keyof typeof icons
+  icon: LucideIcon
   action: (editor: Editor) => void
   shouldBeHidden?: (editor: Editor) => boolean
 }

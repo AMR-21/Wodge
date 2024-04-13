@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Command, MenuListProps } from './types'
 import { CommandButton } from './CommandButton'
-import { Surface } from '@/components/ui/Surface'
-import { DropdownButton } from '@/components/ui/Dropdown'
-import { Icon } from '@/components/ui/Icon'
+import { Surface } from '../../components/ui/Surface'
+import { DropdownButton } from '../../components/ui/Dropdown'
+import { Icon } from '../../components/ui/Icon'
 
 export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   const scrollContainer = useRef<HTMLDivElement>(null)
@@ -21,8 +21,8 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
 
   const selectItem = useCallback(
     (groupIndex: number, commandIndex: number) => {
-      const command = props.items[groupIndex].commands[commandIndex]
-      props.command(command)
+      const command = props?.items[groupIndex]?.commands[commandIndex]
+      if (command) props?.command(command)
     },
     [props],
   )
@@ -34,12 +34,12 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
           return false
         }
 
-        const commands = props.items[selectedGroupIndex].commands
+        const commands = props.items[selectedGroupIndex]?.commands
 
         let newCommandIndex = selectedCommandIndex + 1
         let newGroupIndex = selectedGroupIndex
 
-        if (commands.length - 1 < newCommandIndex) {
+        if (commands && commands.length - 1 < newCommandIndex) {
           newCommandIndex = 0
           newGroupIndex = selectedGroupIndex + 1
         }
@@ -64,12 +64,13 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
 
         if (newCommandIndex < 0) {
           newGroupIndex = selectedGroupIndex - 1
-          newCommandIndex = props.items[newGroupIndex]?.commands.length - 1 || 0
+
+          newCommandIndex = props.items[newGroupIndex]?.commands?.length - 1 || 0
         }
 
         if (newGroupIndex < 0) {
           newGroupIndex = props.items.length - 1
-          newCommandIndex = props.items[newGroupIndex].commands.length - 1
+          newCommandIndex = props.items[newGroupIndex].commands?.length - 1
         }
 
         setSelectedCommandIndex(newCommandIndex)
@@ -131,7 +132,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
                 isActive={selectedGroupIndex === groupIndex && selectedCommandIndex === commandIndex}
                 onClick={createCommandClickHandler(groupIndex, commandIndex)}
               >
-                <Icon name={command.iconName} className="mr-1" />
+                <Icon Icon={command.icon} className="mr-1" />
                 {command.label}
               </DropdownButton>
             ))}

@@ -8,8 +8,8 @@ import {
   ImageUpload,
   Link,
   CodeBlock,
-} from '@/extensions'
-import { TableOfContentsNode } from '@/extensions/TableOfContentsNode'
+} from '../../extensions'
+import { TableOfContentsNode } from '../../extensions/TableOfContentsNode'
 
 export const isTableGripSelected = (node: HTMLElement) => {
   let container = node

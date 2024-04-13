@@ -95,7 +95,6 @@ function SortableChannel({
     },
   });
 
-  console.log({ channel: channel.id });
   const isSomethingOver = index === overIndex;
   const isChannelOver = active?.data?.current?.type === type;
 

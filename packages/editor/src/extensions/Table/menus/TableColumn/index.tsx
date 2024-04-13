@@ -1,11 +1,12 @@
 import { BubbleMenu as BaseBubbleMenu } from '@tiptap/react'
 import React, { useCallback } from 'react'
-import * as PopoverMenu from '@/components/ui/PopoverMenu'
+import * as PopoverMenu from '../../../../components/ui/PopoverMenu'
 
-import { Toolbar } from '@/components/ui/Toolbar'
+import { Toolbar } from '../../../../components/ui/Toolbar'
 import { isColumnGripSelected } from './utils'
-import { Icon } from '@/components/ui/Icon'
-import { MenuProps, ShouldShowProps } from '@/components/menus/types'
+import { Icon } from '../../../../components/ui/Icon'
+import { MenuProps, ShouldShowProps } from '../../../../components/menus/types'
+import { ArrowLeftToLine, ArrowRightToLine } from 'lucide-react'
 
 export const TableColumnMenu = React.memo(({ editor, appendTo }: MenuProps): JSX.Element => {
   const shouldShow = useCallback(
@@ -49,13 +50,13 @@ export const TableColumnMenu = React.memo(({ editor, appendTo }: MenuProps): JSX
     >
       <Toolbar.Wrapper isVertical>
         <PopoverMenu.Item
-          iconComponent={<Icon name="ArrowLeftToLine" />}
+          iconComponent={<Icon Icon={ArrowLeftToLine} />}
           close={false}
           label="Add column before"
           onClick={onAddColumnBefore}
         />
         <PopoverMenu.Item
-          iconComponent={<Icon name="ArrowRightToLine" />}
+          iconComponent={<Icon Icon={ArrowRightToLine} />}
           close={false}
           label="Add column after"
           onClick={onAddColumnAfter}

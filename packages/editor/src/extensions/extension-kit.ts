@@ -2,7 +2,7 @@
 
 import { HocuspocusProvider } from '@hocuspocus/provider'
 
-import { API } from '@/lib/api'
+import { API } from '../lib/api'
 
 import {
   // AiWriter,
@@ -50,9 +50,10 @@ import { ImageUpload } from './ImageUpload'
 import { TableOfContentsNode } from './TableOfContentsNode'
 import { lowlight } from 'lowlight'
 import { WebrtcProvider } from 'y-webrtc'
+import YPartyKitProvider from 'y-partykit/provider'
 
 interface ExtensionKitProps {
-  provider?: WebrtcProvider | null
+  provider: YPartyKitProvider
   userId?: string
   userName?: string
   userColor?: string

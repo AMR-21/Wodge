@@ -3,11 +3,12 @@ import { useCallback } from 'react'
 import { sticky } from 'tippy.js'
 import { v4 as uuid } from 'uuid'
 
-import { MenuProps } from '@/components/menus/types'
-import { getRenderContainer } from '@/lib/utils/getRenderContainer'
-import { Toolbar } from '@/components/ui/Toolbar'
+import { MenuProps } from '../../../components/menus/types'
+import { getRenderContainer } from '../../../lib/utils'
+import { Toolbar } from '../../../components/ui/Toolbar'
 import { ColumnLayout } from '../Columns'
-import { Icon } from '@/components/ui/Icon'
+import { Icon } from '../../../components/ui/Icon'
+import { Columns, PanelLeft, PanelRight } from 'lucide-react'
 
 export const ColumnsMenu = ({ editor, appendTo }: MenuProps) => {
   const getReferenceClientRect = useCallback(() => {
@@ -57,21 +58,21 @@ export const ColumnsMenu = ({ editor, appendTo }: MenuProps) => {
           active={editor.isActive('columns', { layout: ColumnLayout.SidebarLeft })}
           onClick={onColumnLeft}
         >
-          <Icon name="PanelLeft" />
+          <Icon Icon={PanelLeft} />
         </Toolbar.Button>
         <Toolbar.Button
           tooltip="Two columns"
           active={editor.isActive('columns', { layout: ColumnLayout.TwoColumn })}
           onClick={onColumnTwo}
         >
-          <Icon name="Columns" />
+          <Icon Icon={Columns} />
         </Toolbar.Button>
         <Toolbar.Button
           tooltip="Sidebar right"
           active={editor.isActive('columns', { layout: ColumnLayout.SidebarRight })}
           onClick={onColumnRight}
         >
-          <Icon name="PanelRight" />
+          <Icon Icon={PanelRight} />
         </Toolbar.Button>
       </Toolbar.Wrapper>
     </BaseBubbleMenu>

@@ -1,10 +1,10 @@
-import { Icon } from '@/components/ui/Icon'
-import { icons } from 'lucide-react'
+import { Icon } from '../../../../components/ui/Icon'
+import { ChevronDown, icons, LucideIcon, Pilcrow } from 'lucide-react'
 import { useMemo } from 'react'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
-import { Toolbar } from '@/components/ui/Toolbar'
-import { Surface } from '@/components/ui/Surface'
-import { DropdownButton, DropdownCategoryTitle } from '@/components/ui/Dropdown'
+import { Toolbar } from '../../../../components/ui/Toolbar'
+import { Surface } from '../../../../components/ui/Surface'
+import { DropdownButton, DropdownCategoryTitle } from '../../../../components/ui/Dropdown'
 
 export type ContentTypePickerOption = {
   label: string
@@ -13,7 +13,7 @@ export type ContentTypePickerOption = {
   disabled: () => boolean
   isActive: () => boolean
   onClick: () => void
-  icon: keyof typeof icons
+  icon: LucideIcon
 }
 
 export type ContentTypePickerCategory = {
@@ -40,8 +40,8 @@ export const ContentTypePicker = ({ options }: ContentTypePickerProps) => {
     <Dropdown.Root>
       <Dropdown.Trigger asChild>
         <Toolbar.Button active={activeItem?.id !== 'paragraph' && !!activeItem?.type}>
-          <Icon name={(activeItem?.type === 'option' && activeItem.icon) || 'Pilcrow'} />
-          <Icon name="ChevronDown" className="w-2 h-2" />
+          <Icon Icon={(activeItem?.type === 'option' && activeItem.icon) || Pilcrow} />
+          <Icon Icon={ChevronDown} className="w-2 h-2" />
         </Toolbar.Button>
       </Dropdown.Trigger>
       <Dropdown.Content asChild>
@@ -50,7 +50,7 @@ export const ContentTypePicker = ({ options }: ContentTypePickerProps) => {
             if (isOption(option)) {
               return (
                 <DropdownButton key={option.id} onClick={option.onClick} isActive={option.isActive()}>
-                  <Icon name={option.icon} className="w-4 h-4 mr-1" />
+                  <Icon Icon={option.icon} className="w-4 h-4 mr-1" />
                   {option.label}
                 </DropdownButton>
               )

@@ -1,8 +1,9 @@
-import { DropdownButton, DropdownCategoryTitle } from '@/components/ui/Dropdown'
-import { Icon } from '@/components/ui/Icon'
-import { Surface } from '@/components/ui/Surface'
-import { Toolbar } from '@/components/ui/Toolbar'
+import { DropdownButton, DropdownCategoryTitle } from '../../../../components/ui/Dropdown'
+import { Icon } from '../../../../components/ui/Icon'
+import { Surface } from '../../../../components/ui/Surface'
+import { Toolbar } from '../../../../components/ui/Toolbar'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
+import { ChevronDown } from 'lucide-react'
 import { useCallback } from 'react'
 
 const FONT_SIZES = [
@@ -29,7 +30,7 @@ export const FontSizePicker = ({ onChange, value }: FontSizePickerProps) => {
       <Dropdown.Trigger asChild>
         <Toolbar.Button active={!!currentValue?.value}>
           {currentSizeLabel}
-          <Icon name="ChevronDown" className="w-2 h-2" />
+          <Icon Icon={ChevronDown} className="w-2 h-2" />
         </Toolbar.Button>
       </Dropdown.Trigger>
       <Dropdown.Content asChild>

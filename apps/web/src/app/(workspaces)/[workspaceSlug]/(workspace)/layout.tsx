@@ -5,7 +5,6 @@ import { SidebarWrapper } from "@/components/workspace/sidebar/sidebar-wrapper";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
 import { useSetAtom } from "jotai";
-import { set } from "lodash";
 import { useEffect } from "react";
 
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
@@ -20,9 +19,9 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh max-h-dvh overflow-hidden">
       <SidebarWrapper />
 
-      <div className="flex w-full flex-col py-2.5">
+      <div className="flex w-full flex-col px-3 py-2.5">
         <AppHeader />
-        {children}
+        <div className="h-full">{children}</div>
       </div>
     </div>
   );

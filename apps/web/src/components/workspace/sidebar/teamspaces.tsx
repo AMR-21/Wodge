@@ -38,15 +38,13 @@ interface TeamspaceProps extends TeamspacesProps {
 }
 
 export function Teamspaces({ isPages = false, type }: TeamspacesProps) {
-  const { structure, workspaceId } = useCurrentWorkspace();
+  const { structure } = useCurrentWorkspace();
 
   const teamsId = useMemo(
     () => structure.teams?.map((t) => t.id) || [],
     [structure.teams],
   );
   const [openTeams, setOpenTeams] = useAtom(openTeamsAtom);
-
-  console.log({ workspaceId });
 
   return (
     <div className="h-full min-h-full shrink-0">
@@ -92,8 +90,6 @@ function SortableTeamspace({
       idx,
     },
   });
-
-  console.log({ team: team.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),

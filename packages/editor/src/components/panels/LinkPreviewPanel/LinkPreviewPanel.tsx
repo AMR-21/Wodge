@@ -1,7 +1,8 @@
-import { Icon } from '@/components/ui/Icon'
-import { Surface } from '@/components/ui/Surface'
-import { Toolbar } from '@/components/ui/Toolbar'
-import Tooltip from '@/components/ui/Tooltip'
+import { Icon } from '../../../components/ui/Icon'
+import { Surface } from '../../../components/ui/Surface'
+import { Toolbar } from '../../../components/ui/Toolbar'
+import Tooltip from '../../../components/ui/Tooltip'
+import { Pen, Trash2 } from 'lucide-react'
 
 export type LinkPreviewPanelProps = {
   url: string
@@ -18,12 +19,12 @@ export const LinkPreviewPanel = ({ onClear, onEdit, url }: LinkPreviewPanelProps
       <Toolbar.Divider />
       <Tooltip title="Edit link">
         <Toolbar.Button onClick={onEdit}>
-          <Icon name="Pen" />
+          <Icon Icon={Pen} />
         </Toolbar.Button>
       </Tooltip>
       <Tooltip title="Remove link">
         <Toolbar.Button onClick={onClear}>
-          <Icon name="Trash2" />
+          <Icon Icon={Trash2} />
         </Toolbar.Button>
       </Tooltip>
     </Surface>

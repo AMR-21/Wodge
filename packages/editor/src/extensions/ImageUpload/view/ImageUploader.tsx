@@ -1,9 +1,10 @@
-import { Spinner } from '@/components/ui/Spinner'
+import { Spinner } from '../../../components/ui/Spinner'
 import { useDropZone, useFileUpload, useUploader } from './hooks'
-import { Button } from '@/components/ui/Button'
-import { Icon } from '@/components/ui/Icon'
-import { cn } from '@/lib/utils'
+import { Button } from '../../../components/ui/Button'
+import { Icon } from '../../../components/ui/Icon'
+import { cn } from '@repo/ui/lib/utils'
 import { ChangeEvent, useCallback } from 'react'
+import { Image, Upload } from 'lucide-react'
 
 export const ImageUploader = ({ onUpload }: { onUpload: (url: string) => void }) => {
   const { loading, uploadFile } = useUploader({ onUpload })
@@ -36,14 +37,14 @@ export const ImageUploader = ({ onUpload }: { onUpload: (url: string) => void })
       onDragLeave={onDragLeave}
       contentEditable={false}
     >
-      <Icon name="Image" className="w-12 h-12 mb-4 text-black dark:text-white opacity-20" />
+      <Icon Icon={Image} className="w-12 h-12 mb-4 text-black dark:text-white opacity-20" />
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="text-sm font-medium text-center text-neutral-400 dark:text-neutral-500">
           {draggedInside ? 'Drop image here' : 'Drag and drop or'}
         </div>
         <div>
           <Button disabled={draggedInside} onClick={handleUploadClick} variant="primary" buttonSize="small">
-            <Icon name="Upload" />
+            <Icon Icon={Upload} />
             Upload an image
           </Button>
         </div>

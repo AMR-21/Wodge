@@ -1,3 +1,19 @@
+import {
+  Book,
+  Columns,
+  Heading1,
+  Heading2,
+  Heading3,
+  Image,
+  List,
+  ListOrdered,
+  ListTodo,
+  Minus,
+  Quote,
+  Sparkles,
+  SquareCode,
+  Table,
+} from 'lucide-react'
 import { Group } from './types'
 
 export const GROUPS: Group[] = [
@@ -8,7 +24,7 @@ export const GROUPS: Group[] = [
       {
         name: 'aiWriter',
         label: 'AI Writer',
-        iconName: 'Sparkles',
+        icon: Sparkles,
         description: 'Let AI finish your thoughts',
         shouldBeHidden: editor => editor.isActive('columns'),
         action: editor => editor.chain().focus().setAiWriter().run(),
@@ -16,7 +32,7 @@ export const GROUPS: Group[] = [
       {
         name: 'aiImage',
         label: 'AI Image',
-        iconName: 'Sparkles',
+        icon: Sparkles,
         description: 'Generate an image from text',
         shouldBeHidden: editor => editor.isActive('columns'),
         action: editor => editor.chain().focus().setAiImage().run(),
@@ -30,7 +46,7 @@ export const GROUPS: Group[] = [
       {
         name: 'heading1',
         label: 'Heading 1',
-        iconName: 'Heading1',
+        icon: Heading1,
         description: 'High priority section title',
         aliases: ['h1'],
         action: editor => {
@@ -40,7 +56,7 @@ export const GROUPS: Group[] = [
       {
         name: 'heading2',
         label: 'Heading 2',
-        iconName: 'Heading2',
+        icon: Heading2,
         description: 'Medium priority section title',
         aliases: ['h2'],
         action: editor => {
@@ -50,7 +66,7 @@ export const GROUPS: Group[] = [
       {
         name: 'heading3',
         label: 'Heading 3',
-        iconName: 'Heading3',
+        icon: Heading3,
         description: 'Low priority section title',
         aliases: ['h3'],
         action: editor => {
@@ -60,7 +76,7 @@ export const GROUPS: Group[] = [
       {
         name: 'bulletList',
         label: 'Bullet List',
-        iconName: 'List',
+        icon: List,
         description: 'Unordered list of items',
         aliases: ['ul'],
         action: editor => {
@@ -70,7 +86,7 @@ export const GROUPS: Group[] = [
       {
         name: 'numberedList',
         label: 'Numbered List',
-        iconName: 'ListOrdered',
+        icon: ListOrdered,
         description: 'Ordered list of items',
         aliases: ['ol'],
         action: editor => {
@@ -80,7 +96,7 @@ export const GROUPS: Group[] = [
       {
         name: 'taskList',
         label: 'Task List',
-        iconName: 'ListTodo',
+        icon: ListTodo,
         description: 'Task list with todo items',
         aliases: ['todo'],
         action: editor => {
@@ -90,7 +106,7 @@ export const GROUPS: Group[] = [
       {
         name: 'blockquote',
         label: 'Blockquote',
-        iconName: 'Quote',
+        icon: Quote,
         description: 'Element for quoting',
         action: editor => {
           editor.chain().focus().setBlockquote().run()
@@ -99,7 +115,7 @@ export const GROUPS: Group[] = [
       {
         name: 'codeBlock',
         label: 'Code Block',
-        iconName: 'SquareCode',
+        icon: SquareCode,
         description: 'Code block with syntax highlighting',
         shouldBeHidden: editor => editor.isActive('columns'),
         action: editor => {
@@ -115,7 +131,7 @@ export const GROUPS: Group[] = [
       {
         name: 'table',
         label: 'Table',
-        iconName: 'Table',
+        icon: Table,
         description: 'Insert a table',
         shouldBeHidden: editor => editor.isActive('columns'),
         action: editor => {
@@ -125,7 +141,7 @@ export const GROUPS: Group[] = [
       {
         name: 'image',
         label: 'Image',
-        iconName: 'Image',
+        icon: Image,
         description: 'Insert an image',
         aliases: ['img'],
         action: editor => {
@@ -135,7 +151,7 @@ export const GROUPS: Group[] = [
       {
         name: 'columns',
         label: 'Columns',
-        iconName: 'Columns',
+        icon: Columns,
         description: 'Add two column content',
         aliases: ['cols'],
         shouldBeHidden: editor => editor.isActive('columns'),
@@ -151,7 +167,7 @@ export const GROUPS: Group[] = [
       {
         name: 'horizontalRule',
         label: 'Horizontal Rule',
-        iconName: 'Minus',
+        icon: Minus,
         description: 'Insert a horizontal divider',
         aliases: ['hr'],
         action: editor => {
@@ -161,7 +177,7 @@ export const GROUPS: Group[] = [
       {
         name: 'toc',
         label: 'Table of Contents',
-        iconName: 'Book',
+        icon: Book,
         aliases: ['outline'],
         description: 'Insert a table of contents',
         shouldBeHidden: editor => editor.isActive('columns'),

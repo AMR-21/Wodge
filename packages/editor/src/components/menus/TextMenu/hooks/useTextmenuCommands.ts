@@ -32,6 +32,7 @@ export const useTextmenuCommands = (editor: Editor) => {
   // const onTldr = useCallback(() => editor.chain().focus().aiTldr().run(), [editor])
   // const onTone = useCallback((tone: string) => editor.chain().focus().aiAdjustTone(tone).run(), [editor])
   // const onTranslate = useCallback((language: Language) => editor.chain().focus().aiTranslate(language).run(), [editor])
+
   const onLink = useCallback(
     (url: string, inNewTab?: boolean) =>
       editor

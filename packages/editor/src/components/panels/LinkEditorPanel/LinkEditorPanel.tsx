@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/Button'
-import { Icon } from '@/components/ui/Icon'
-import { Surface } from '@/components/ui/Surface'
-import { Toggle } from '@/components/ui/Toggle'
+import { Button } from '../../../components/ui/Button'
+import { Icon } from '../../../components/ui/Icon'
+import { Surface } from '../../../components/ui/Surface'
+import { Toggle } from '../../../components/ui/Toggle'
+import { Link } from 'lucide-react'
 import { useState, useCallback, useMemo } from 'react'
 
 export type LinkEditorPanelProps = {
@@ -48,7 +49,7 @@ export const LinkEditorPanel = ({ onSetLink, initialOpenInNewTab, initialUrl }: 
     <Surface className="p-2">
       <form onSubmit={state.handleSubmit} className="flex items-center gap-2">
         <label className="flex items-center gap-2 p-2 rounded-lg bg-neutral-100 dark:bg-neutral-900 cursor-text">
-          <Icon name="Link" className="flex-none text-black dark:text-white" />
+          <Icon Icon={Link} className="flex-none text-black dark:text-white" />
           <input
             type="url"
             className="flex-1 bg-transparent outline-none min-w-[12rem] text-black text-sm dark:text-white"

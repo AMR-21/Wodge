@@ -6,14 +6,15 @@ import { ImageOptions } from '@tiptap-pro/extension-ai'
 
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 
-import { Button } from '@/components/ui/Button'
-import { Loader } from '@/components/ui/Loader'
-import { Panel, PanelHeadline } from '@/components/ui/Panel'
-import { Textarea } from '@/components/ui/Textarea'
-import { Icon } from '@/components/ui/Icon'
-import { Surface } from '@/components/ui/Surface'
-import { DropdownButton } from '@/components/ui/Dropdown'
-import { Toolbar } from '@/components/ui/Toolbar'
+import { Button } from '../../../components/ui/Button'
+import { Loader } from '../../../components/ui/Loader'
+import { Panel, PanelHeadline } from '../../../components/ui/Panel'
+import { Textarea } from '../../../components/ui/Textarea'
+import { Icon } from '../../../components/ui/Icon'
+import { Surface } from '../../../components/ui/Surface'
+import { DropdownButton } from '../../../components/ui/Dropdown'
+import { Toolbar } from '../../../components/ui/Toolbar'
+import { Check, ChevronDown, Image, Repeat, Sparkles, Trash, Undo2 } from 'lucide-react'
 
 const imageStyles = [
   { name: 'photorealistic', label: 'Photorealistic', value: 'photorealistic' },
@@ -153,9 +154,9 @@ export const AiImageView = ({ editor, node, getPos, deleteNode }: NodeViewWrappe
               <Dropdown.Root>
                 <Dropdown.Trigger asChild>
                   <Button variant="tertiary">
-                    <Icon name="Image" />
+                    <Icon Icon={Image} />
                     {currentImageStyle?.label || 'Image style'}
-                    <Icon name="ChevronDown" />
+                    <Icon Icon={ChevronDown} />
                   </Button>
                 </Dropdown.Trigger>
                 <Dropdown.Portal>
@@ -164,7 +165,7 @@ export const AiImageView = ({ editor, node, getPos, deleteNode }: NodeViewWrappe
                       {!!data.imageStyle && (
                         <>
                           <DropdownButton isActive={data.imageStyle === undefined} onClick={onUndoClick}>
-                            <Icon name="Undo2" />
+                            <Icon Icon={Undo2} />
                             Reset
                           </DropdownButton>
                           <Toolbar.Divider horizontal />
@@ -191,18 +192,18 @@ export const AiImageView = ({ editor, node, getPos, deleteNode }: NodeViewWrappe
                   className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
                   onClick={discard}
                 >
-                  <Icon name="Trash" />
+                  <Icon Icon={Trash} />
                   Discard
                 </Button>
               )}
               {previewImage && (
                 <Button variant="ghost" onClick={insert}>
-                  <Icon name="Check" />
+                  <Icon Icon={Check} />
                   Insert
                 </Button>
               )}
               <Button variant="primary" onClick={generateImage}>
-                {previewImage ? <Icon name="Repeat" /> : <Icon name="Sparkles" />}
+                {previewImage ? <Icon Icon={Repeat} /> : <Icon Icon={Sparkles} />}
                 {previewImage ? 'Regenerate' : 'Generate image'}
               </Button>
             </div>

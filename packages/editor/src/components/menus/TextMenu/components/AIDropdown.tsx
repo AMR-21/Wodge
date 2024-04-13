@@ -1,21 +1,35 @@
-import { DropdownButton } from '@/components/ui/Dropdown'
-import { Icon } from '@/components/ui/Icon'
-import { Surface } from '@/components/ui/Surface'
-import { Toolbar } from '@/components/ui/Toolbar'
-import { languages, tones } from '@/lib/constants'
+import { DropdownButton } from '../../../../components/ui/Dropdown'
+import { Icon } from '../../../../components/ui/Icon'
+import { Surface } from '../../../../components/ui/Surface'
+import { Toolbar } from '../../../../components/ui/Toolbar'
+import { languages, tones } from '../../../../lib/constants'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
+import {
+  ArrowLeftToLine,
+  ArrowRightToLine,
+  ChevronDown,
+  ChevronRight,
+  CircleSlash,
+  Eraser,
+  Languages,
+  Mic,
+  MoreHorizontal,
+  PenLine,
+  SmilePlus,
+  Sparkles,
+} from 'lucide-react'
 import { useCallback } from 'react'
 
 export type AIDropdownProps = {
-  onSimplify: () => void
-  onFixSpelling: () => void
-  onMakeShorter: () => void
-  onMakeLonger: () => void
-  onEmojify: () => void
-  onTldr: () => void
-  onTranslate: (language: string) => void
-  onTone: (tone: string) => void
-  onCompleteSentence: () => void
+  onSimplify?: () => void
+  onFixSpelling?: () => void
+  onMakeShorter?: () => void
+  onMakeLonger?: () => void
+  onEmojify?: () => void
+  onTldr?: () => void
+  onTranslate?: (language: string) => void
+  onTone?: (tone: string) => void
+  onCompleteSentence?: () => void
 }
 
 export const AIDropdown = ({
@@ -29,8 +43,8 @@ export const AIDropdown = ({
   onTone,
   onTranslate,
 }: AIDropdownProps) => {
-  const handleTone = useCallback((tone: string) => () => onTone(tone), [onTone])
-  const handleTranslate = useCallback((language: string) => () => onTranslate(language), [onTranslate])
+  const handleTone = useCallback((tone: string) => () => onTone?.(tone), [onTone])
+  const handleTranslate = useCallback((language: string) => () => onTranslate?.(language), [onTranslate])
 
   return (
     <Dropdown.Root>
@@ -39,43 +53,43 @@ export const AIDropdown = ({
           className="text-purple-500 hover:text-purple-600 active:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300 dark:active:text-purple-400"
           activeClassname="text-purple-600 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-200"
         >
-          <Icon name="Sparkles" className="mr-1" />
+          <Icon Icon={Sparkles} className="mr-1" />
           AI Tools
-          <Icon name="ChevronDown" className="w-2 h-2 ml-1" />
+          <Icon Icon={ChevronDown} className="w-2 h-2 ml-1" />
         </Toolbar.Button>
       </Dropdown.Trigger>
       <Dropdown.Content asChild>
         <Surface className="p-2 min-w-[10rem]">
           <Dropdown.Item onClick={onSimplify}>
             <DropdownButton>
-              <Icon name="CircleSlash" />
+              <Icon Icon={CircleSlash} />
               Simplify
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={onFixSpelling}>
             <DropdownButton>
-              <Icon name="Eraser" />
+              <Icon Icon={Eraser} />
               Fix spelling & grammar
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={onMakeShorter}>
             <DropdownButton>
-              <Icon name="ArrowLeftToLine" />
+              <Icon Icon={ArrowLeftToLine} />
               Make shorter
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={onMakeLonger}>
             <DropdownButton>
-              <Icon name="ArrowRightToLine" />
+              <Icon Icon={ArrowRightToLine} />
               Make longer
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Sub>
             <Dropdown.SubTrigger>
               <DropdownButton>
-                <Icon name="Mic" />
+                <Icon Icon={Mic} />
                 Change tone
-                <Icon name="ChevronRight" className="w-4 h-4 ml-auto" />
+                <Icon Icon={ChevronRight} className="w-4 h-4 ml-auto" />
               </DropdownButton>
             </Dropdown.SubTrigger>
             <Dropdown.SubContent>
@@ -90,22 +104,22 @@ export const AIDropdown = ({
           </Dropdown.Sub>
           <Dropdown.Item onClick={onTldr}>
             <DropdownButton>
-              <Icon name="MoreHorizontal" />
+              <Icon Icon={MoreHorizontal} />
               Tl;dr:
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Item onClick={onEmojify}>
             <DropdownButton>
-              <Icon name="SmilePlus" />
+              <Icon Icon={SmilePlus} />
               Emojify
             </DropdownButton>
           </Dropdown.Item>
           <Dropdown.Sub>
             <Dropdown.SubTrigger>
               <DropdownButton>
-                <Icon name="Languages" />
+                <Icon Icon={Languages} />
                 Translate
-                <Icon name="ChevronRight" className="w-4 h-4 ml-auto" />
+                <Icon Icon={ChevronRight} className="w-4 h-4 ml-auto" />
               </DropdownButton>
             </Dropdown.SubTrigger>
             <Dropdown.SubContent>
@@ -120,7 +134,7 @@ export const AIDropdown = ({
           </Dropdown.Sub>
           <Dropdown.Item onClick={onCompleteSentence}>
             <DropdownButton>
-              <Icon name="PenLine" />
+              <Icon Icon={PenLine} />
               Complete sentence
             </DropdownButton>
           </Dropdown.Item>

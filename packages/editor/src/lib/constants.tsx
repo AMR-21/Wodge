@@ -1,20 +1,20 @@
 import { AiToneOption, LanguageOption } from '../components/BlockEditor/types'
 
-// export const languages: LanguageOption[] = [
-//   { name: 'arabic', label: 'Arabic', value: 'ar' as LanguageOption['value'] },
-//   { name: 'chinese', label: 'Chinese', value: 'zh' as LanguageOption['value'] },
-//   { name: 'english', label: 'English', value: 'en' as LanguageOption['value'] },
-//   { name: 'french', label: 'French', value: 'fr' as LanguageOption['value'] },
-//   { name: 'german', label: 'German', value: 'de' as LanguageOption['value'] },
-//   { name: 'greek', label: 'Greek', value: 'gr' as LanguageOption['value'] },
-//   { name: 'italian', label: 'Italian', value: 'it' as LanguageOption['value'] },
-//   { name: 'japanese', label: 'Japanese', value: 'jp' as LanguageOption['value'] },
-//   { name: 'korean', label: 'Korean', value: 'ko' as LanguageOption['value'] },
-//   { name: 'russian', label: 'Russian', value: 'ru' as LanguageOption['value'] },
-//   { name: 'spanish', label: 'Spanish', value: 'es' as LanguageOption['value'] },
-//   { name: 'swedish', label: 'Swedish', value: 'sv' as LanguageOption['value'] },
-//   { name: 'ukrainian', label: 'Ukrainian', value: 'ua' as LanguageOption['value'] },
-// ]
+export const languages: (LanguageOption & { value: string })[] = [
+  { name: 'arabic', label: 'Arabic', value: 'ar' },
+  { name: 'chinese', label: 'Chinese', value: 'zh' },
+  { name: 'english', label: 'English', value: 'en' },
+  { name: 'french', label: 'French', value: 'fr' },
+  { name: 'german', label: 'German', value: 'de' },
+  { name: 'greek', label: 'Greek', value: 'gr' },
+  { name: 'italian', label: 'Italian', value: 'it' },
+  { name: 'japanese', label: 'Japanese', value: 'jp' },
+  { name: 'korean', label: 'Korean', value: 'ko' },
+  { name: 'russian', label: 'Russian', value: 'ru' },
+  { name: 'spanish', label: 'Spanish', value: 'es' },
+  { name: 'swedish', label: 'Swedish', value: 'sv' },
+  { name: 'ukrainian', label: 'Ukrainian', value: 'ua' },
+]
 
 export const tones: AiToneOption[] = [
   { name: 'academic', label: 'Academic', value: 'academic' },

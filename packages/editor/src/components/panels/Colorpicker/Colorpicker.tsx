@@ -3,7 +3,8 @@ import { HexColorPicker } from 'react-colorful'
 import { ColorButton } from './ColorButton'
 import { Toolbar } from '../../ui/Toolbar'
 import { Icon } from '../../ui/Icon'
-import { themeColors } from '@/lib/constants'
+import { themeColors } from '../../../lib/constants'
+import { Undo } from 'lucide-react'
 
 export type ColorPickerProps = {
   color?: string
@@ -55,7 +56,7 @@ export const ColorPicker = ({ color, onChange, onClear }: ColorPickerProps) => {
           />
         ))}
         <Toolbar.Button tooltip="Reset color to default" onClick={onClear}>
-          <Icon name="Undo" />
+          <Icon Icon={Undo} />
         </Toolbar.Button>
       </div>
     </div>

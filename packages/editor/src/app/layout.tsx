@@ -1,4 +1,4 @@
-import './globals.css'
+// import './globals.css'
 import type { Metadata } from 'next'
 
 import 'cal-sans'
@@ -10,6 +10,13 @@ import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
+import { Inter } from 'next/font/google'
+import '@repo/ui/styles'
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://demos.tiptap.dev'),
@@ -32,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html className="h-full font-sans" lang="en">
+    <html className={'h-full font-sans ' + inter.variable} lang="en">
       <body className="flex flex-col h-full">
         <main className="h-full">{children}</main>
       </body>

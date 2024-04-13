@@ -1,18 +1,35 @@
-import { Icon } from '@/components/ui/Icon'
-import { Toolbar } from '@/components/ui/Toolbar'
+import { Icon } from '../../ui/Icon'
+import { Toolbar } from '../../ui/Toolbar'
 import { useTextmenuCommands } from './hooks/useTextmenuCommands'
 import { useTextmenuStates } from './hooks/useTextmenuStates'
 import { BubbleMenu, Editor } from '@tiptap/react'
 import { memo } from 'react'
 import * as Popover from '@radix-ui/react-popover'
-import { Surface } from '@/components/ui/Surface'
-import { ColorPicker } from '@/components/panels'
+import { Surface } from '../../ui/Surface'
+import { ColorPicker } from '../../panels'
 import { FontFamilyPicker } from './components/FontFamilyPicker'
 import { FontSizePicker } from './components/FontSizePicker'
 import { useTextmenuContentTypes } from './hooks/useTextmenuContentTypes'
 import { ContentTypePicker } from './components/ContentTypePicker'
 import { AIDropdown } from './components/AIDropdown'
 import { EditLinkPopover } from './components/EditLinkPopover'
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Code,
+  Code2,
+  Highlighter,
+  Italic,
+  MoreVertical,
+  Palette,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Underline,
+} from 'lucide-react'
 
 // We memorize the button so each button is not rerendered
 // on every editor state change
@@ -40,24 +57,24 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
       updateDelay={100}
     >
       <Toolbar.Wrapper>
-        {/* <AIDropdown
-          onCompleteSentence={commands.onCompleteSentence}
-          onEmojify={commands.onEmojify}
-          onFixSpelling={commands.onFixSpelling}
-          onMakeLonger={commands.onMakeLonger}
-          onMakeShorter={commands.onMakeShorter}
-          onSimplify={commands.onSimplify}
-          onTldr={commands.onTldr}
-          onTone={commands.onTone}
-          onTranslate={commands.onTranslate}
-        /> */}
+        <AIDropdown
+        // onCompleteSentence={commands.onCompleteSentence}
+        // onEmojify={commands.onEmojify}
+        // onFixSpelling={commands.onFixSpelling}
+        // onMakeLonger={commands.onMakeLonger}
+        // onMakeShorter={commands.onMakeShorter}
+        // onSimplify={commands.onSimplify}
+        // onTldr={commands.onTldr}
+        // onTone={commands.onTone}
+        // onTranslate={commands.onTranslate}
+        />
         <Toolbar.Divider />
         <MemoContentTypePicker options={blockOptions} />
         <MemoFontFamilyPicker onChange={commands.onSetFont} value={states.currentFont || ''} />
         <MemoFontSizePicker onChange={commands.onSetFontSize} value={states.currentSize || ''} />
         <Toolbar.Divider />
         <MemoButton tooltip="Bold" tooltipShortcut={['Mod', 'B']} onClick={commands.onBold} active={states.isBold}>
-          <Icon name="Bold" />
+          <Icon Icon={Bold} />
         </MemoButton>
         <MemoButton
           tooltip="Italic"
@@ -65,7 +82,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           onClick={commands.onItalic}
           active={states.isItalic}
         >
-          <Icon name="Italic" />
+          <Icon Icon={Italic} />
         </MemoButton>
         <MemoButton
           tooltip="Underline"
@@ -73,7 +90,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           onClick={commands.onUnderline}
           active={states.isUnderline}
         >
-          <Icon name="Underline" />
+          <Icon Icon={Underline} />
         </MemoButton>
         <MemoButton
           tooltip="Strikehrough"
@@ -81,19 +98,19 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           onClick={commands.onStrike}
           active={states.isStrike}
         >
-          <Icon name="Strikethrough" />
+          <Icon Icon={Strikethrough} />
         </MemoButton>
         <MemoButton tooltip="Code" tooltipShortcut={['Mod', 'E']} onClick={commands.onCode} active={states.isCode}>
-          <Icon name="Code" />
+          <Icon Icon={Code} />
         </MemoButton>
         <MemoButton tooltip="Code block" onClick={commands.onCodeBlock}>
-          <Icon name="Code2" />
+          <Icon Icon={Code2} />
         </MemoButton>
         <EditLinkPopover onSetLink={commands.onLink} />
         <Popover.Root>
           <Popover.Trigger asChild>
             <MemoButton active={!!states.currentHighlight} tooltip="Highlight text">
-              <Icon name="Highlighter" />
+              <Icon Icon={Highlighter} />
             </MemoButton>
           </Popover.Trigger>
           <Popover.Content side="top" sideOffset={8} asChild>
@@ -109,7 +126,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <Popover.Root>
           <Popover.Trigger asChild>
             <MemoButton active={!!states.currentColor} tooltip="Text color">
-              <Icon name="Palette" />
+              <Icon Icon={Palette} />
             </MemoButton>
           </Popover.Trigger>
           <Popover.Content side="top" sideOffset={8} asChild>
@@ -125,7 +142,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <Popover.Root>
           <Popover.Trigger asChild>
             <MemoButton tooltip="More options">
-              <Icon name="MoreVertical" />
+              <Icon Icon={MoreVertical} />
             </MemoButton>
           </Popover.Trigger>
           <Popover.Content side="top" asChild>
@@ -136,7 +153,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onSubscript}
                 active={states.isSubscript}
               >
-                <Icon name="Subscript" />
+                <Icon Icon={Subscript} />
               </MemoButton>
               <MemoButton
                 tooltip="Superscript"
@@ -144,7 +161,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onSuperscript}
                 active={states.isSuperscript}
               >
-                <Icon name="Superscript" />
+                <Icon Icon={Superscript} />
               </MemoButton>
               <Toolbar.Divider />
               <MemoButton
@@ -153,7 +170,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onAlignLeft}
                 active={states.isAlignLeft}
               >
-                <Icon name="AlignLeft" />
+                <Icon Icon={AlignLeft} />
               </MemoButton>
               <MemoButton
                 tooltip="Align center"
@@ -161,7 +178,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onAlignCenter}
                 active={states.isAlignCenter}
               >
-                <Icon name="AlignCenter" />
+                <Icon Icon={AlignCenter} />
               </MemoButton>
               <MemoButton
                 tooltip="Align right"
@@ -169,7 +186,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onAlignRight}
                 active={states.isAlignRight}
               >
-                <Icon name="AlignRight" />
+                <Icon Icon={AlignRight} />
               </MemoButton>
               <MemoButton
                 tooltip="Justify"
@@ -177,7 +194,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 onClick={commands.onAlignJustify}
                 active={states.isAlignJustify}
               >
-                <Icon name="AlignJustify" />
+                <Icon Icon={AlignJustify} />
               </MemoButton>
             </Toolbar.Wrapper>
           </Popover.Content>

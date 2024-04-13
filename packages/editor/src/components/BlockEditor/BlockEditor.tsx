@@ -1,79 +1,43 @@
 'use client'
 
-import { EditorContent, PureEditorContent } from '@tiptap/react'
-import React, { useMemo, useRef } from 'react'
+import { EditorContent } from '@tiptap/react'
+import React, { useRef } from 'react'
 
-import { LinkMenu } from '@/components/menus'
+import { LinkMenu } from '../../components/menus'
 
-import { useBlockEditor } from '@/hooks/useBlockEditor'
+import { useBlockEditor } from '../../hooks/useBlockEditor'
 
-import '@/styles/index.css'
+import '../../styles/index.css'
 
-import { Sidebar } from '@/components/Sidebar'
-import { Loader } from '@/components/ui/Loader'
-import { EditorContext } from '@/context/EditorContext'
-import ImageBlockMenu from '@/extensions/ImageBlock/components/ImageBlockMenu'
-import { ColumnsMenu } from '@/extensions/MultiColumn/menus'
-import { TableColumnMenu, TableRowMenu } from '@/extensions/Table/menus'
-// import { useAIState } from '@/hooks/useAIState'
-import { createPortal } from 'react-dom'
+import ImageBlockMenu from '../../extensions/ImageBlock/components/ImageBlockMenu'
+import { ColumnsMenu } from '../../extensions/MultiColumn/menus'
+import { TableColumnMenu, TableRowMenu } from '../../extensions/Table/menus'
 import { TiptapProps } from './types'
-import { EditorHeader } from './components/EditorHeader'
 import { TextMenu } from '../menus/TextMenu'
 import { ContentItemMenu } from '../menus/ContentItemMenu'
+import { EditorInfo } from './components/EditorInfo'
+import { EditorCounts } from './components/EditorCounts'
+import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
 
-export const BlockEditor = ({
-  // aiToken,
-  ydoc,
-  provider,
-}: TiptapProps) => {
-  // const aiState = useAIState()
+export const BlockEditor = ({ ydoc, provider }: TiptapProps) => {
   const menuContainerRef = useRef(null)
-  // const editorRef = useRef<PureEditorContent | null>(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
+  const { user } = useCurrentUser()
 
-  const {
-    editor,
-    users,
-    characterCount,
-    // collabState,
-    leftSidebar,
-  } = useBlockEditor({
-    // aiToken,
+  const { editor, users, characterCount } = useBlockEditor({
     ydoc,
     provider,
   })
 
-  const displayedUsers = users.slice(0, 3)
+  const displayedUsers = users.slice(0, 5)
 
-  // const providerValue = useMemo(() => {
-  //   return {
-  //     isAiLoading: aiState.isAiLoading,
-  //     aiError: aiState.aiError,
-  //     setIsAiLoading: aiState.setIsAiLoading,
-  //     setAiError: aiState.setAiError,
-  //   }
-  // }, [aiState])
-
-  if (!editor) {
+  if (!editor || !user) {
     return null
   }
 
-  // const aiLoaderPortal = createPortal(<Loader label="AI is now doing its job." />, document.body)
-
   return (
-    // <EditorContext.Provider value={providerValue}>
-    <div className="flex h-full" ref={menuContainerRef}>
-      <Sidebar isOpen={leftSidebar.isOpen} onClose={leftSidebar.close} editor={editor} />
-      <div className="relative flex flex-col flex-1 h-full overflow-hidden">
-        <EditorHeader
-          characters={characterCount.characters()}
-          // collabState={collabState}
-          users={displayedUsers}
-          words={characterCount.words()}
-          isSidebarOpen={leftSidebar.isOpen}
-          toggleSidebar={leftSidebar.toggle}
-        />
+    <div className="flex flex-col h-full" ref={menuContainerRef}>
+      <div className="relative flex flex-col flex-1 h-full overflow-hidden ">
         <EditorContent editor={editor} ref={editorRef} className="flex-1 overflow-y-auto" />
         <ContentItemMenu editor={editor} />
         <LinkMenu editor={editor} appendTo={menuContainerRef} />
@@ -83,9 +47,11 @@ export const BlockEditor = ({
         <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
         <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
       </div>
+      <div className="flex justify-between p-3">
+        <EditorInfo users={displayedUsers} />
+        <EditorCounts characters={characterCount.characters()} words={characterCount.words()} />
+      </div>
     </div>
-    // {aiState.isAiLoading && aiLoaderPortal}
-    // </EditorContext.Provider>
   )
 }
 

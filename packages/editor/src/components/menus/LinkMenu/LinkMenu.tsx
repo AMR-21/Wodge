@@ -2,8 +2,8 @@ import { BubbleMenu as BaseBubbleMenu } from '@tiptap/react'
 import React, { useCallback, useState } from 'react'
 
 import { MenuProps } from '../types'
-import { LinkPreviewPanel } from '@/components/panels/LinkPreviewPanel'
-import { LinkEditorPanel } from '@/components/panels'
+import { LinkPreviewPanel } from '../../panels/LinkPreviewPanel'
+import { LinkEditorPanel } from '../../panels'
 
 export const LinkMenu = ({ editor, appendTo }: MenuProps): JSX.Element => {
   const [showEdit, setShowEdit] = useState(false)

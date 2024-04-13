@@ -1,42 +1,20 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-import { Editor, useEditor } from '@tiptap/react'
-// import Ai from '@tiptap-pro/extension-ai'
+import { useEditor } from '@tiptap/react'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-import { TiptapCollabProvider, WebSocketStatus } from '@hocuspocus/provider'
 import * as Y from 'yjs'
 
-import { ExtensionKit } from '@/extensions/extension-kit'
-import { EditorContext } from '../context/EditorContext'
+import { ExtensionKit } from '../extensions/extension-kit'
 import { userColors, userNames } from '../lib/constants'
 import { randomElement } from '../lib/utils'
 import { EditorUser } from '../components/BlockEditor/types'
-import { useSidebar } from './useSidebar'
-import { initialContent } from '@/lib/data/initialContent'
-import { WebrtcProvider } from 'y-webrtc'
+import YPartyKitProvider from 'y-partykit/provider'
+import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
 
-// const TIPTAP_AI_APP_ID = process.env.NEXT_PUBLIC_TIPTAP_AI_APP_ID
-// const TIPTAP_AI_BASE_URL = process.env.NEXT_PUBLIC_TIPTAP_AI_BASE_URL || 'https://api.tiptap.dev/v1/ai'
-
-declare global {
-  interface Window {
-    editor: Editor | null
-  }
-}
-
-export const useBlockEditor = ({
-  // aiToken,
-  ydoc,
-  provider,
-}: {
-  // aiToken: string
-  ydoc: Y.Doc
-  provider?: WebrtcProvider | null | undefined
-}) => {
-  const leftSidebar = useSidebar()
-  // const [collabState, setCollabState] = useState<WebSocketStatus>(WebSocketStatus.Connecting)
-  // const { setIsAiLoading, setAiError } = useContext(EditorContext)
+// TODO AI
+export const useBlockEditor = ({ ydoc, provider }: { ydoc: Y.Doc; provider: YPartyKitProvider }) => {
+  const { user } = useCurrentUser()
 
   const editor = useEditor(
     {
@@ -58,8 +36,9 @@ export const useBlockEditor = ({
         CollaborationCursor.configure({
           provider,
           user: {
-            name: randomElement(userNames),
+            name: user?.displayName,
             color: randomElement(userColors),
+            avatar: user?.avatar,
           },
         }),
         // Ai.configure({
@@ -112,7 +91,8 @@ export const useBlockEditor = ({
 
   // useEffect(() => {
   //   provider?.on('status', (event: { status: WebSocketStatus }) => {
-  //     setCollabState(event.status)
+  //     console.log({ event })
+  //     // setCollabState(event.status)
   //   })
   // }, [provider])
 
@@ -122,7 +102,5 @@ export const useBlockEditor = ({
     editor,
     users,
     characterCount,
-    // collabState,
-    leftSidebar,
   }
 }

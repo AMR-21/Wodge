@@ -2,18 +2,20 @@ import { TiptapCollabProvider } from '@hocuspocus/provider'
 import { WebrtcProvider } from 'y-webrtc'
 // import { Language } from '@tiptap-pro/extension-ai'
 import * as Y from 'yjs'
+import YPartyKitProvider from 'y-partykit/provider'
 
 export interface TiptapProps {
   // aiToken: string
   // hasCollab: boolean
   ydoc: Y.Doc
-  provider?: WebrtcProvider | null | undefined
+  provider: YPartyKitProvider
 }
 
 export type EditorUser = {
   clientId: string
   name: string
   color: string
+  avatar?: string
   initials?: string
 }
 

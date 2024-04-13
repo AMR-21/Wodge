@@ -1,14 +1,14 @@
-import { Icon } from '@/components/ui/Icon'
-import { Toolbar } from '@/components/ui/Toolbar'
+import { Icon } from '../../ui/Icon'
+import { Toolbar } from '../../ui/Toolbar'
 import DragHandle from '@tiptap-pro/extension-drag-handle-react'
 import { Editor } from '@tiptap/react'
 
-import * as Popover from '@radix-ui/react-popover'
-import { Surface } from '@/components/ui/Surface'
-import { DropdownButton } from '@/components/ui/Dropdown'
+import { DropdownButton } from '../../ui/Dropdown'
 import useContentItemActions from './hooks/useContentItemActions'
 import { useData } from './hooks/useData'
 import { useEffect, useState } from 'react'
+import { Clipboard, Copy, GripVertical, Plus, RemoveFormatting, Trash2 } from 'lucide-react'
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@repo/ui/components/ui/popover'
 
 export type ContentItemMenuProps = {
   editor: Editor
@@ -39,47 +39,46 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
     >
       <div className="flex items-center gap-0.5">
         <Toolbar.Button onClick={actions.handleAdd}>
-          <Icon name="Plus" />
+          <Icon Icon={Plus} />
         </Toolbar.Button>
-        <Popover.Root open={menuOpen} onOpenChange={setMenuOpen}>
-          <Popover.Trigger asChild>
+
+        <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+          <PopoverTrigger asChild>
             <Toolbar.Button>
-              <Icon name="GripVertical" />
+              <Icon Icon={GripVertical} />
             </Toolbar.Button>
-          </Popover.Trigger>
-          <Popover.Content side="bottom" align="start" sideOffset={8}>
-            <Surface className="p-2 flex flex-col min-w-[16rem]">
-              <Popover.Close>
-                <DropdownButton onClick={actions.resetTextFormatting}>
-                  <Icon name="RemoveFormatting" />
-                  Clear formatting
-                </DropdownButton>
-              </Popover.Close>
-              <Popover.Close>
-                <DropdownButton onClick={actions.copyNodeToClipboard}>
-                  <Icon name="Clipboard" />
-                  Copy to clipboard
-                </DropdownButton>
-              </Popover.Close>
-              <Popover.Close>
-                <DropdownButton onClick={actions.duplicateNode}>
-                  <Icon name="Copy" />
-                  Duplicate
-                </DropdownButton>
-              </Popover.Close>
-              <Toolbar.Divider horizontal />
-              <Popover.Close>
-                <DropdownButton
-                  onClick={actions.deleteNode}
-                  className="text-red-500 bg-red-500 dark:text-red-500 hover:bg-red-500 dark:hover:text-red-500 dark:hover:bg-red-500 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-20"
-                >
-                  <Icon name="Trash2" />
-                  Delete
-                </DropdownButton>
-              </Popover.Close>
-            </Surface>
-          </Popover.Content>
-        </Popover.Root>
+          </PopoverTrigger>
+          <PopoverContent side="bottom" align="start" sideOffset={8} className="p-2 flex flex-col min-w-[16rem] ">
+            <PopoverClose>
+              <DropdownButton onClick={actions.resetTextFormatting}>
+                <Icon Icon={RemoveFormatting} />
+                Clear formatting
+              </DropdownButton>
+            </PopoverClose>
+            <PopoverClose>
+              <DropdownButton onClick={actions.copyNodeToClipboard}>
+                <Icon Icon={Clipboard} />
+                Copy to clipboard
+              </DropdownButton>
+            </PopoverClose>
+            <PopoverClose>
+              <DropdownButton onClick={actions.duplicateNode}>
+                <Icon Icon={Copy} />
+                Duplicate
+              </DropdownButton>
+            </PopoverClose>
+            <Toolbar.Divider horizontal />
+            <PopoverClose>
+              <DropdownButton
+                onClick={actions.deleteNode}
+                className="text-red-500 bg-red-500 dark:text-red-500 hover:bg-red-500 dark:hover:text-red-500 dark:hover:bg-red-500 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-20"
+              >
+                <Icon Icon={Trash2} />
+                Delete
+              </DropdownButton>
+            </PopoverClose>
+          </PopoverContent>
+        </Popover>
       </div>
     </DragHandle>
   )
