@@ -72,7 +72,7 @@ export const useBlockEditor = ({
           autocomplete: 'off',
           autocorrect: 'off',
           autocapitalize: 'off',
-          class: 'min-h-full',
+          class: 'min-h-full pr-8 pl-20 py-16 z-0 lg:pl-8 lg:pr-8 ',
         },
       },
     },

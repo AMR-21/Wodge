@@ -50,11 +50,12 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
 
   return (
     <BubbleMenu
-      tippyOptions={{ popperOptions: { placement: 'top-start' } }}
+      tippyOptions={{ popperOptions: { placement: 'auto-start' } }}
       editor={editor}
       pluginKey="textMenu"
       shouldShow={states.shouldShow}
       updateDelay={100}
+      className="z-50"
     >
       <Toolbar.Wrapper>
         <AIDropdown
