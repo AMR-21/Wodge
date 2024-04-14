@@ -17,6 +17,8 @@ export * from "./schemas/user.schema";
 export * from "./schemas/workspace.schema";
 export * from "./schemas/team.schema";
 export * from "./schemas/channel.schema";
+export * from "./schemas/thread.schema";
+export * from "./schemas/room.schema";
 export * from "./schemas/config";
 
 /**

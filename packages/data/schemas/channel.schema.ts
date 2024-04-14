@@ -5,6 +5,7 @@ export type ChannelsTypes = "page" | "room" | "thread";
 
 export const ChannelSchema = z.object({
   id: z.string().length(ID_LENGTH),
+  // act as title
   name: z.string().max(70).min(1),
   avatar: z.string().optional(),
   viewGroups: z.array(
@@ -17,13 +18,5 @@ export const ChannelSchema = z.object({
 
 export const PageSchema = ChannelSchema.extend({});
 
-export const RoomSchema = ChannelSchema.extend({
-  // type: z.enum(["chat", "stage"]),
-});
-
-export const ThreadSchema = ChannelSchema.extend({});
-
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Page = z.infer<typeof PageSchema>;
-export type Room = z.infer<typeof RoomSchema>;
-export type Thread = z.infer<typeof ThreadSchema>;

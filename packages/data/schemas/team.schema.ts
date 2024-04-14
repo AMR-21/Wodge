@@ -6,8 +6,10 @@ import {
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
-import { PageSchema, RoomSchema, ThreadSchema } from "./channel.schema";
+import { PageSchema } from "./channel.schema";
 import { nanoid } from "nanoid";
+import { ThreadSchema } from "./thread.schema";
+import { RoomSchema } from "./room.schema";
 
 export const TagSchema = z.object({
   name: z.string().max(70),

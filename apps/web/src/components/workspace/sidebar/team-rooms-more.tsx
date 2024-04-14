@@ -75,7 +75,7 @@ export function TeamRoomsMore({ teamId }: TeamMoreProps) {
 
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link href={`/${workspaceSlug}/settings/${teamId}`}>
+            <Link href={`/${workspaceSlug}/settings/teams/${teamId}`}>
               <DropdownMenuItem className="gap-2 text-sm">
                 <Settings className="h-4 w-4" />
                 Team settings

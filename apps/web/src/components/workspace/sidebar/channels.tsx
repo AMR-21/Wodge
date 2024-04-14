@@ -21,6 +21,11 @@ import { useMemo } from "react";
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useParams } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -178,10 +183,15 @@ export const Channel = React.forwardRef<
         >
           <span className="select-none truncate">{channel.name}</span>
           <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
-            <SidebarItemBtn
-              Icon={MoreHorizontal}
-              className="invisible -my-1 ml-auto flex transition-all group-hover:visible"
-            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarItemBtn
+                  Icon={MoreHorizontal}
+                  className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>dasd</DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </SidebarItem>
       </li>

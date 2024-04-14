@@ -26,6 +26,7 @@ import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
 import { TeamRoomsMore } from "./team-rooms-more";
 import { TeamThreadsMore } from "./team-threads-more";
+import { useParams } from "next/navigation";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -169,11 +170,13 @@ export const Teamspace = React.forwardRef<
   HTMLLIElement,
   { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
 >(({ team, isChanFoldOver, type, isDragging, ...props }, ref) => {
+  const { teamId } = useParams<{ teamId?: string }>();
+
   return (
     <li ref={ref} className="group flex grow" {...props}>
       <SidebarItem
         aria-disabled={isDragging}
-        isActive={isChanFoldOver}
+        isActive={isChanFoldOver || team.id === teamId}
         noIcon
         collapsible
       >

@@ -109,7 +109,7 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
           </div>
         </div>
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="slug"
           render={({ field }) => (
@@ -120,7 +120,7 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
               </FormControl>
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button className="w-fit" disabled={!form.formState.isDirty} size="sm">
           {isAddition ? "Create team" : "Update team"}

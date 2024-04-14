@@ -29,8 +29,8 @@ export function TeamsSidebar() {
           <SidebarItem
             noIcon
             onClick={() => {}}
-            href={`${baseUrl}/${team.slug}`}
-            isActive={pathname.split("/").at(-1) === team.slug}
+            href={`${baseUrl}/${team.id}`}
+            isActive={pathname.split("/").at(-1) === team.id}
           >
             <Avatar className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
               {/* <AvatarImage src={workspace?.avatar} /> */}

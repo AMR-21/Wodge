@@ -2,11 +2,15 @@ import type * as Party from "partykit/server";
 
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
+import { ServerThreadMessages, ThreadPartyInterface, Versions } from "../types";
 
-export default class UserParty implements Party.Server {
+export default class ThreadParty implements Party.Server, ThreadPartyInterface {
   options: Party.ServerOptions = {
     hibernate: true,
   };
+
+  threadMessages: ServerThreadMessages;
+  versions: Versions;
 
   constructor(readonly room: Party.Room) {}
 
@@ -31,10 +35,11 @@ export default class UserParty implements Party.Server {
 
     try {
       const session = await getSession(req, lobby);
-      return authorizeChannel(req, lobby, session.userId);
+      return authorizeChannel(req, lobby, session.userId, "thread");
     } catch (e) {
       return unauthorized();
     }
   }
 }
-UserParty satisfies Party.Worker;
+
+ThreadParty satisfies Party.Worker;
