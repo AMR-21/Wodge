@@ -7,6 +7,7 @@ import {
   Workspace,
   Comment,
   ThreadMessage,
+  Message,
 } from "@repo/data";
 import WorkspaceParty from "./workspace/workspace-party";
 
@@ -59,6 +60,14 @@ export interface WorkspacePartyInterface extends Party {
 
 export interface ServerThreadMessages extends ReplicacheFields {
   data: ThreadMessage[];
+}
+
+export interface ServerRoomMessages extends ReplicacheFields {
+  data: Message[];
+}
+
+export interface RoomPartyInterface extends Party {
+  roomMessages: ServerRoomMessages;
 }
 
 export interface ThreadPartyInterface extends Party {

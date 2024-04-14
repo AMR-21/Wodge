@@ -2,11 +2,15 @@ import type * as Party from "partykit/server";
 
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
+import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 
-export default class UserParty implements Party.Server {
+export default class RoomParty implements Party.Server, RoomPartyInterface {
   options: Party.ServerOptions = {
     hibernate: true,
   };
+
+  roomMessages: ServerRoomMessages;
+  versions: Versions;
 
   constructor(readonly room: Party.Room) {}
 
@@ -38,4 +42,4 @@ export default class UserParty implements Party.Server {
     }
   }
 }
-UserParty satisfies Party.Worker;
+RoomParty satisfies Party.Worker;

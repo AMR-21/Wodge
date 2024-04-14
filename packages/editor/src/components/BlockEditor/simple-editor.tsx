@@ -46,23 +46,23 @@ export const SimpleEditor = () => {
   }
 
   return (
-    // <ScrollArea className="max-h-16">
-    <div className="flex flex-col" ref={menuContainerRef}>
-      <div className="relative flex flex-col flex-1 h-fit ">
-        <EditorContent
-          editor={editor}
-          ref={editorRef}
-          className="px-6 py-2 z-0 bg-secondary/20 overflow-y-auto rounded-md text-sm"
-        />
-        <LinkMenu editor={editor} appendTo={menuContainerRef} />
-        <TextMenu editor={editor} />
-        <ColumnsMenu editor={editor} appendTo={menuContainerRef} />
-        <TableRowMenu editor={editor} appendTo={menuContainerRef} />
-        <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
-        <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
+    <ScrollArea className="max-h-16">
+      <div className="flex flex-col" ref={menuContainerRef}>
+        <div className="relative flex flex-col flex-1 h-fit ">
+          <EditorContent
+            editor={editor}
+            ref={editorRef}
+            className="px-6 py-2 z-0 bg-secondary/20 overflow-y-auto rounded-md text-sm"
+          />
+          <LinkMenu editor={editor} appendTo={menuContainerRef} />
+          <TextMenu editor={editor} />
+          <ColumnsMenu editor={editor} appendTo={menuContainerRef} />
+          <TableRowMenu editor={editor} appendTo={menuContainerRef} />
+          <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
+          <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
+        </div>
       </div>
-    </div>
-    // </ScrollArea>
+    </ScrollArea>
   )
 }
 
