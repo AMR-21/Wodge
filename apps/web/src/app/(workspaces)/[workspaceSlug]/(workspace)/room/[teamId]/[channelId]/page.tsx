@@ -3,6 +3,7 @@
 import { MessageList } from "@/components/room/message-list";
 import { RoomHeader } from "@/components/room/room-header";
 import { Textarea } from "@repo/editor/src/components/ui/Textarea";
+import { Input } from "@repo/ui/components/ui/input";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 
 function ChannelPage() {
@@ -14,8 +15,8 @@ function ChannelPage() {
           <MessageList />
         </ScrollArea>
       </div>
-      <div className="shrink-0">
-        <Textarea />
+      <div className="">
+        <Input />
       </div>
     </div>
   );
