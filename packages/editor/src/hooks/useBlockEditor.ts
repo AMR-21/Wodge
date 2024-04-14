@@ -11,11 +11,18 @@ import { randomElement } from '../lib/utils'
 import { EditorUser } from '../components/BlockEditor/types'
 import YPartyKitProvider from 'y-partykit/provider'
 import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
+import { PublicUserType } from '../../../data'
 
 // TODO AI
-export const useBlockEditor = ({ ydoc, provider }: { ydoc: Y.Doc; provider: YPartyKitProvider }) => {
-  const { user } = useCurrentUser()
-
+export const useBlockEditor = ({
+  ydoc,
+  provider,
+  user,
+}: {
+  ydoc: Y.Doc
+  provider: YPartyKitProvider
+  user: PublicUserType
+}) => {
   const editor = useEditor(
     {
       autofocus: true,
@@ -36,7 +43,7 @@ export const useBlockEditor = ({ ydoc, provider }: { ydoc: Y.Doc; provider: YPar
         CollaborationCursor.configure({
           provider,
           user: {
-            name: user?.displayName,
+            name: user?.username,
             color: randomElement(userColors),
             avatar: user?.avatar,
           },

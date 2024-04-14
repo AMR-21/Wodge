@@ -18,20 +18,27 @@ import { ContentItemMenu } from '../menus/ContentItemMenu'
 import { EditorInfo } from './components/EditorInfo'
 import { EditorCounts } from './components/EditorCounts'
 import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
+import { PublicUserType } from '../../../../data'
 
-export const BlockEditor = ({ ydoc, provider }: TiptapProps) => {
+export const BlockEditor = ({
+  ydoc,
+  provider,
+  user,
+}: TiptapProps & {
+  user: PublicUserType
+}) => {
   const menuContainerRef = useRef(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
-  const { user } = useCurrentUser()
 
   const { editor, users, characterCount } = useBlockEditor({
     ydoc,
     provider,
+    user,
   })
 
   const displayedUsers = users.slice(0, 5)
 
-  if (!editor || !user) {
+  if (!editor) {
     return null
   }
 

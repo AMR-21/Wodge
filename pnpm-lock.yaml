@@ -132,6 +132,9 @@ importers:
       cors:
         specifier: ^2.8.5
         version: 2.8.5
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
       drizzle-orm:
         specifier: ^0.29.5
         version: 0.29.5(@cloudflare/workers-types@4.20240312.0)(@types/react@18.2.65)(better-sqlite3@9.4.3)(react@18.2.0)
@@ -8112,6 +8115,10 @@ packages:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.0.0
     dev: true
+
+  /date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+    dev: false
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}

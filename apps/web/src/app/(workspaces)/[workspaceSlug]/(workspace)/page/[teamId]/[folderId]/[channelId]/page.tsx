@@ -1,6 +1,7 @@
 "use client";
 
 import { BlockEditor } from "@repo/editor";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
@@ -13,7 +14,11 @@ const provider = new YPartyKitProvider(
   yDoc,
 );
 function ChannelPage() {
-  return <BlockEditor ydoc={yDoc} provider={provider} />;
+  const { user } = useCurrentUser();
+
+  if (!user) return null;
+
+  return <BlockEditor ydoc={yDoc} provider={provider} user={user} />;
 }
 
 export default ChannelPage;
