@@ -3,9 +3,9 @@
 import { EditorContent } from '@tiptap/react'
 import React, { useRef } from 'react'
 
-import { LinkMenu } from '../../components/menus'
+import { LinkMenu } from '../menus'
 
-import { useBlockEditor } from '../../hooks/useBlockEditor'
+import { useBlockEditor } from '../../hooks/use-block-editor'
 
 // import '../../styles/index.css'
 

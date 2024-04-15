@@ -2,7 +2,7 @@
   @apply caret-black dark:caret-white outline-0;
 
   & > * {
-    @apply max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl;
+    @apply mx-auto max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl;
   }
 
   .selection {
