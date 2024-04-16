@@ -22,7 +22,7 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
 
       <div className="flex w-full flex-col px-3 py-2.5">
         <AppHeader />
-        <div className="container flex h-full max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl">
+        <div className="container flex h-full max-w-lg sm:max-w-xl lg:max-w-2xl  xl:max-w-4xl ">
           {children}
         </div>
       </div>

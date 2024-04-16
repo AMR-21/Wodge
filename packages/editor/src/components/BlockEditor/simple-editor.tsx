@@ -14,7 +14,7 @@ export const SimpleEditor = ({ editor }: { editor: Editor | null }) => {
   return (
     <div className="flex flex-col w-full h-full max-h-16" ref={menuContainerRef}>
       <div className="relative flex justify-center flex-col h-full">
-        <EditorContent editor={editor} ref={editorRef} className="z-0 overflow-y-auto text-sm bg-white/10 h-fit" />
+        <EditorContent editor={editor} ref={editorRef} className="z-0 overflow-y-auto text-sm h-fit" />
       </div>
     </div>
   )

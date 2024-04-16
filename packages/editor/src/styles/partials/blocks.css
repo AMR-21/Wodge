@@ -1,4 +1,4 @@
-.ProseMirror {
+.BlockEditor {
   /* Image Block */
   figure[data-type='imageBlock'] {
     @apply m-0;

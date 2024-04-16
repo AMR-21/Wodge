@@ -1,4 +1,4 @@
-.ProseMirror {
+.BlockEditor {
   p {
     @apply leading-relaxed my-3 first:mt-0 last:mb-0;
   }

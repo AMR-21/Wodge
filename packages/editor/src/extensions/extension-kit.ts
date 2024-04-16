@@ -152,7 +152,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   Placeholder.configure({
     includeChildren: true,
     showOnlyCurrent: false,
-    placeholder: () => '',
+    placeholder: 'Write something, or / for commands',
   }),
   SlashCommand,
   Focus,

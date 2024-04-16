@@ -1,7 +1,7 @@
 "use client";
 
 import { ThreadMessage as ThreadMessageType } from "@repo/data";
-import { SimpleEditor } from "@repo/editor";
+import { SimpleEditor, useSimpleEditor } from "@repo/editor";
 import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
 
 const messages: ThreadMessageType[] = [
@@ -20,12 +20,14 @@ const messages: ThreadMessageType[] = [
 function ChannelPage() {
   const path = useChannelPath();
 
+  const editor = useSimpleEditor();
+
   if (!path) return null;
 
   const { team, thread } = path;
 
   return (
-    <div className="flex h-full max-h-dvh flex-col gap-4 overflow-y-scroll bg-yellow-300 p-1.5">
+    <div className="flex h-full max-h-dvh w-full flex-col gap-4 p-1.5">
       <header className="">
         <h2 className="text-2xl font-semibold">{thread} posts</h2>
       </header>
@@ -38,7 +40,7 @@ function ChannelPage() {
       </div>
 
       <div className="mt-auto ">
-        <SimpleEditor />
+        <SimpleEditor editor={editor} />
       </div>
     </div>
   );

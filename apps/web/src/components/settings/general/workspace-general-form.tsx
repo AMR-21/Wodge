@@ -17,7 +17,7 @@ import { Button } from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
 import { toast } from "@repo/ui/components/ui/toast";
 import { Info } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { useSubmitToast } from "@/components/use-submit-toast";
 import { useRouter } from "next/navigation";
@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 // TODO USE rquery to mutate inside the DO
 export function WorkspaceGeneralForm() {
   const { workspace, workspaceRep, workspaceId } = useCurrentWorkspace();
+  const queryClient = useQueryClient();
 
   const form = useForm<Workspace>({
     resolver: zodResolver(WorkspaceSchema.pick({ name: true, slug: true })),
@@ -57,10 +58,11 @@ export function WorkspaceGeneralForm() {
     },
     onSuccess: (data) => {
       // toast.dismiss(toastId);
-      form.reset(data);
-      if (data.slug !== workspace?.slug) {
-        router.push(`/${data.slug}/settings`);
-      }
+      // if (data.slug !== workspace?.slug) {
+      queryClient.invalidateQueries({
+        queryKey: ["user-workspaces"],
+      });
+      // }
     },
   });
 
@@ -68,6 +70,8 @@ export function WorkspaceGeneralForm() {
 
   async function onSubmit(data: Pick<Workspace, "name" | "slug">) {
     mutate(data);
+    router.push(`/${data.slug}/settings`);
+    form.reset(data);
   }
 
   return (
