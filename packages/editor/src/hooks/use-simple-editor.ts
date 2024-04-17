@@ -1,5 +1,10 @@
+import Code from '@tiptap/extension-code'
+import Document from '@tiptap/extension-document'
 import Highlight from '@tiptap/extension-highlight'
+import Link from '@tiptap/extension-link'
+import Paragraph from '@tiptap/extension-paragraph'
 import Placeholder from '@tiptap/extension-placeholder'
+import Text from '@tiptap/extension-text'
 import Typography from '@tiptap/extension-typography'
 import { Extension, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -24,8 +29,14 @@ export function useSimpleEditor() {
   const editor = useEditor({
     autofocus: true,
     extensions: [
-      // header
-      StarterKit,
+      StarterKit.configure({
+        code: {
+          HTMLAttributes: {
+            class: 'bg-secondary',
+          },
+        },
+        codeBlock: false,
+      }),
       Highlight,
       Placeholder.configure({
         placeholder: 'Type a message',
@@ -33,6 +44,11 @@ export function useSimpleEditor() {
       Typography,
       Markdown,
       MessageNewLine,
+      Link.configure({
+        HTMLAttributes: {
+          class: 'text-sky-500 cursor-pointer',
+        },
+      }),
     ],
     editorProps: {
       attributes: {

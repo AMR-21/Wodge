@@ -97,19 +97,19 @@
   }
 
   h1 {
-    @apply text-3xl;
+    @apply text-base;
   }
 
   h2 {
-    @apply text-2xl;
+    @apply text-base;
   }
 
   h3 {
-    @apply text-xl;
+    @apply text-base;
   }
 
   h4 {
-    @apply text-lg;
+    @apply text-base;
   }
 
   h5 {
@@ -117,7 +117,7 @@
   }
 
   h6 {
-    @apply text-sm;
+    @apply text-base;
   }
 
   h1,

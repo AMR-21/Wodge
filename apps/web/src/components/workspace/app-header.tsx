@@ -31,7 +31,7 @@ export function AppHeader() {
   return (
     <div
       className={
-        "z-[9999999999] flex h-12 items-center bg-background transition-all"
+        "z-[9999999999] flex h-12 w-full items-center bg-background px-2.5 py-2 transition-all"
       }
     >
       <div className="flex basis-full items-center px-1.5 py-2.5">
