@@ -15,7 +15,6 @@ import {
   DeleteObjectCommand,
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
-import { serveStatic } from "hono/cloudflare-workers";
 
 const app = new Hono({ strict: false });
 app.use(prettyJSON());
@@ -28,11 +27,11 @@ const api_object = app.basePath("/object");
 let s3Client: S3Client;
 
 const expiresIn = 900;
-app.all("*", async (c, next) => {
+app.use("*", async (c, next) => {
   const { ENDPOINT } = env<{ ENDPOINT: string }>(c);
   const { ACCESS_KEY } = env<{ ACCESS_KEY: string }>(c);
   const { SECRET_KEY } = env<{ SECRET_KEY: string }>(c);
-  s3Client = new S3Client({
+  s3Client ??= new S3Client({
     region: "us-east-1",
     endpoint: ENDPOINT,
     credentials: {
@@ -43,25 +42,22 @@ app.all("*", async (c, next) => {
   await next();
 });
 
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+  console.error(`${err}`);
+  if (c.res.status === 404) {
+    return c.html("Not-Found", 404);
+  } else return c.html("Internal Server Error", 500);
+});
+
 app.post("/auth", async (c, next) => {
   let authorized = true;
   if (!authorized) {
     throw new HTTPException(401, { message: "Not-Authorized" });
   }
   await next();
-});
-
-app.get(
-  "public/static/*",
-  serveStatic({
-    root: "./",
-    manifest: "",
-  })
-);
-
-app.get("/", async (c) => {
-  const res = await app.request("public/index.html");
-  console.log(res.body);
 });
 
 // CREATE A BUCKET IN THE ACCOUNT USED FOR CREATING A NEW TEAM IN THE APP
@@ -283,5 +279,7 @@ api_object.post("/copy/:source/:dest/:key", async (c) => {
     }
   }
 });
-
+app.all("*", async (c, next) => {
+  return c.newResponse(null, { status: 501 });
+});
 export default app;
