@@ -54,3 +54,7 @@ export function replicacheWrapper<Request, Result>(
     }
   };
 }
+
+export function getBucketAddress(wid: string) {
+  return btoa(wid).toLowerCase();
+}
