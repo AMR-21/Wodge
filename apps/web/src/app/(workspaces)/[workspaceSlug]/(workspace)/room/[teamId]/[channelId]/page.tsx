@@ -15,7 +15,7 @@ function ChannelPage() {
 
   function onSubmit() {
     if (editor) {
-      console.log(editor.getText());
+      console.log(editor.storage?.markdown?.getMarkdown?.());
       editor.commands.clearContent();
     }
   }
@@ -23,7 +23,7 @@ function ChannelPage() {
   return (
     <div className="h-full w-full p-1.5">
       <div className="flex h-full flex-col justify-end">
-        <ScrollArea className="mb-2">
+        <ScrollArea className="mb-1">
           <RoomHeader />
           <MessageList />
         </ScrollArea>
@@ -33,9 +33,22 @@ function ChannelPage() {
           <div
             className="flex h-full w-full items-center overflow-hidden"
             onKeyDown={(e) => {
+              // e.preventDefault();
               if (e.code === "Enter" && !e.shiftKey) {
                 onSubmit();
               }
+
+              // if (e.code === "Enter" && e.shiftKey) {
+              //   // e.preventDefault();
+              //   // editor.commands.insertText("\n");
+              //   // editor?.commands.setContent({
+              //   //   type: "paragraph",
+              //   // });
+              //   editor?.commands.insertContent({
+              //     type: "paragraph",
+              //   });
+              //   // e.stopPropagation();
+              // }
             }}
           >
             <SimpleEditor editor={editor} />
