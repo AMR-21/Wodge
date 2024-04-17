@@ -15,7 +15,9 @@ import {
   DeleteObjectCommand,
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
-
+import { serveStatic } from "hono/cloudflare-workers";
+//@ts-ignore
+import manifest from "__STATIC_CONTENT_MANIFEST";
 const app = new Hono({ strict: false });
 app.use(prettyJSON());
 const api_bucket = app.basePath("/bucket");
@@ -41,6 +43,10 @@ app.use("*", async (c, next) => {
   });
   await next();
 });
+
+app.use("/static/*", serveStatic({ root: "./", manifest }));
+app.use("/favicon.ico", serveStatic({ path: "./favicon.ico", manifest }));
+app.get("/", serveStatic({ manifest, path: "/drag.html" }));
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
@@ -103,12 +109,13 @@ api_bucket.post("/delete/:bucket-name", async (c) => {
 });
 
 api_object.post("/put/:bucket/:key", async (c) => {
+  console.log(c.req);
   const bucket = c.req.param("bucket");
 
   const key = atob(c.req.param("key"));
 
   const [_, file] = key.split("/");
-  const file_extension = path.extname(file);
+  const file_extension = path.extname(file) || ".jpg";
 
   var body: string | ArrayBuffer;
   var content_type;
