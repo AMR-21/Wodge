@@ -85,7 +85,7 @@ api_bucket.get("/list", async (c) => {
 });
 
 // USED TO DELETE A WHOLE TEAM BE CAREFUL WHEN USING
-
+// TODO
 api_bucket.post("/delete/:bucket-name", async (c) => {
   try {
     const bucketName = c.req.param("bucket-name");
@@ -104,9 +104,12 @@ api_bucket.post("/delete/:bucket-name", async (c) => {
 
 api_object.post("/put/:bucket/:key", async (c) => {
   const bucket = c.req.param("bucket");
-  let key = c.req.param("key");
-  key = key.replace(/\+47%\+/g, "/");
-  const file_extension = path.extname(key);
+
+  const key = atob(c.req.param("key"));
+
+  const [_, file] = key.split("/");
+  const file_extension = path.extname(file);
+
   var body: string | ArrayBuffer;
   var content_type;
   try {
@@ -142,10 +145,7 @@ api_object.post("/put/:bucket/:key", async (c) => {
 // Delete a file from a bucket
 api_object.post("/delete/:bucket/:key", async (c) => {
   const bucket = c.req.param("bucket");
-  let key = c.req
-    .param("key")
-    .replace(/\+47%\+/g, "/")
-    .replace(/\+46%\+/g, ".");
+  let key = atob(c.req.param("key"));
   const checkfile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),
@@ -176,10 +176,7 @@ api_object.post("/delete/:bucket/:key", async (c) => {
 // Download a file from a bucket
 api_object.get("/download/:bucket/:key", async (c) => {
   const bucket = c.req.param("bucket");
-  let key = c.req
-    .param("key")
-    .replace(/\+47%\+/g, "/")
-    .replace(/\+46%\+/g, ".");
+  let key = atob(c.req.param("key"));
   const checkfile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),
@@ -203,10 +200,7 @@ api_object.get("/download/:bucket/:key", async (c) => {
 // check file in bucket
 api_object.get("/check/:bucket/:key", async (c) => {
   const bucket = c.req.param("bucket");
-  let key = c.req
-    .param("key")
-    .replace(/\+47%\+/g, "/")
-    .replace(/\+46%\+/g, ".");
+  let key = atob(c.req.param("key"));
   const checkfile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),
