@@ -53,7 +53,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import YPartyKitProvider from 'y-partykit/provider'
 
 interface ExtensionKitProps {
-  provider: YPartyKitProvider
+  provider?: YPartyKitProvider
   userId?: string
   userName?: string
   userColor?: string

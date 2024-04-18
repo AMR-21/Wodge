@@ -1,3 +1,4 @@
+import ExtensionKit from '@/extensions/extension-kit'
 import Code from '@tiptap/extension-code'
 import Document from '@tiptap/extension-document'
 import Highlight from '@tiptap/extension-highlight'
@@ -25,30 +26,16 @@ const MessageNewLine = Extension.create({
   },
 })
 
-export function useSimpleEditor() {
+export function useThreadEditor() {
   const editor = useEditor({
     autofocus: true,
     extensions: [
-      StarterKit.configure({
-        code: {
-          HTMLAttributes: {
-            class: 'bg-secondary',
-          },
-        },
-        codeBlock: false,
-      }),
+      ...ExtensionKit({}),
       Highlight,
       Placeholder.configure({
         placeholder: 'Type a message',
       }),
-      Typography,
       Markdown,
-      MessageNewLine,
-      Link.configure({
-        HTMLAttributes: {
-          class: 'text-sky-500 cursor-pointer',
-        },
-      }),
     ],
     editorProps: {
       attributes: {
