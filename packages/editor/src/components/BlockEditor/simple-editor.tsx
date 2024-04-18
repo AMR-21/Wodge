@@ -1,9 +1,10 @@
 'use client'
 
+import { cn } from '../../lib/utils'
 import { Editor, EditorContent } from '@tiptap/react'
 import React, { useRef } from 'react'
 
-export const SimpleEditor = ({ editor }: { editor: Editor | null }) => {
+export const SimpleEditor = ({ editor, isThread = false }: { editor: Editor | null; isThread?: boolean }) => {
   const menuContainerRef = useRef(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
@@ -12,7 +13,7 @@ export const SimpleEditor = ({ editor }: { editor: Editor | null }) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-full max-h-16" ref={menuContainerRef}>
+    <div className={cn('flex flex-col w-full h-full', !isThread && 'max-h-16')} ref={menuContainerRef}>
       <div className="relative flex justify-center flex-col h-full">
         <EditorContent editor={editor} ref={editorRef} className="z-0 overflow-y-auto text-sm h-fit" />
       </div>

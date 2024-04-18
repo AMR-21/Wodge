@@ -1,4 +1,4 @@
-import ExtensionKit from '@/extensions/extension-kit'
+import ExtensionKit from '../extensions/extension-kit'
 import Code from '@tiptap/extension-code'
 import Document from '@tiptap/extension-document'
 import Highlight from '@tiptap/extension-highlight'
@@ -26,8 +26,9 @@ const MessageNewLine = Extension.create({
   },
 })
 
-export function useThreadEditor() {
+export function useThreadEditor(content?: string) {
   const editor = useEditor({
+    content,
     autofocus: true,
     extensions: [
       ...ExtensionKit({}),
@@ -42,7 +43,7 @@ export function useThreadEditor() {
         autocomplete: 'off',
         autocorrect: 'off',
         autocapitalize: 'off',
-        class: 'outline-0 max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl MessageEditor',
+        class: 'outline-0 max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl BlockEditor',
       },
     },
   })

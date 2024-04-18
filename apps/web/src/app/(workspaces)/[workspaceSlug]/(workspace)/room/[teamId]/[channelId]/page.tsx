@@ -12,22 +12,21 @@ import { useAtom } from "jotai";
 import { Plus, Send, Smile } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-
-import Uppy from "@uppy/core";
-import { Dashboard } from "@uppy/react";
-import XHR from "@uppy/xhr-upload";
-
 import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
+// Import React FilePond
+import { FilePond, registerPlugin } from "react-filepond";
+
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+import { UploadButton } from "@/components/room/upload-button";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 function ChannelPage() {
   const editor = useMessageEditor();
   const { user } = useCurrentUser();
-  const [uppy] = useState(() =>
-    new Uppy().use(XHR, {
-      endpoint: "http://localhost:8787/object/put/testasd/YW1yL3Jlc3VtZS5wZGY=",
-    }),
-  );
+  const { workspaceId } = useCurrentWorkspace();
+
   const [msgs, setMsgs] = useAtom(msgsAtom);
 
   function onSubmit() {
@@ -42,6 +41,7 @@ function ChannelPage() {
           content: content,
           date: new Date().toISOString(),
           id: nanoid(),
+          type: "text",
         },
       ]);
 
@@ -49,16 +49,21 @@ function ChannelPage() {
     }
   }
 
+  if (!workspaceId) return null;
+
   return (
-    <div className="flex h-full w-full flex-col pb-4 pt-2">
-      <Dashboard uppy={uppy} id="dahsboard" />
+    <div className="flex h-full w-full flex-col  pb-4 pt-2">
+      {/* <Dashboard uppy={uppy} id="dahsboard" /> */}
+
       <div className="flex-1" />
-      <ScrollArea className="mb-1 pr-2">
+      <ScrollArea className="mb-1 flex min-w-0 flex-col pr-2">
+        {/* <div className=" overflow-y-auto"> */}
         <RoomHeader />
         <MessageList />
+        {/* </div> */}
       </ScrollArea>
-      <div className="flex items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">
-        <SidebarItemBtn Icon={Plus} className="mr-2" />
+      <div className="flex shrink-0 items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">
+        <UploadButton bucketId={workspaceId} />
 
         <div
           className="flex h-full w-full items-center overflow-hidden"

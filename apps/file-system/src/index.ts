@@ -18,6 +18,11 @@ import {
 import { serveStatic } from "hono/cloudflare-workers";
 //@ts-ignore
 import manifest from "__STATIC_CONTENT_MANIFEST";
+import { cors } from "hono/cors";
+import { nanoid } from "nanoid";
+
+import { fileTypeFromBuffer } from "file-type";
+
 const app = new Hono({ strict: false });
 app.use(prettyJSON());
 const api_bucket = app.basePath("/bucket");
@@ -29,6 +34,13 @@ const api_object = app.basePath("/object");
 let s3Client: S3Client;
 
 const expiresIn = 900;
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+
 app.use("*", async (c, next) => {
   const { ENDPOINT } = env<{ ENDPOINT: string }>(c);
   const { ACCESS_KEY } = env<{ ACCESS_KEY: string }>(c);
@@ -113,42 +125,52 @@ api_bucket.post("/delete/:bucket-name", async (c) => {
   }
 });
 
-api_object.post("/put/:bucket/:key", async (c) => {
-  console.log(c.req);
+api_object.post("/put/:bucket/:teamId", async (c) => {
   const bucket = c.req.param("bucket");
 
-  const key = atob(c.req.param("key"));
+  const teamId = c.req.param("teamId");
 
-  const [_, file] = key.split("/");
-  const file_extension = path.extname(file) || ".jpg";
+  // const [folder, file] = key.split("/");
+  // const file_extension = path.extname(file) || ".jpg";
 
-  var body: string | ArrayBuffer;
+  const fileId = nanoid();
+
+  const body = await c.req.arrayBuffer();
+  const file_extension = await fileTypeFromBuffer(body);
+
+  if (!file_extension) return c.json({ message: "Invalid file type" }, 400);
+
+  let key = c.req.param("teamId") + "/" + fileId;
+
+  // var body: string | ArrayBuffer;
   var content_type;
+
   try {
-    if ([".txt", ".js", ".html", ".css", ".json"].includes(file_extension)) {
-      body = await c.req.text();
-      body = body.toString();
-      content_type = "text/plain";
+    if (["txt", "js", "html", "css", "json"].includes(file_extension?.ext)) {
+      // body = await c.req.text();
+      // body = body.toString();
+      // content_type = "text/plain";
     } else if (
-      [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".pdf"].includes(file_extension)
+      ["jpg", "jpeg", "png", "gif", "mp4", "pdf"].includes(file_extension?.ext)
     ) {
-      body = await c.req.arrayBuffer();
       content_type = "application/octet-stream";
     } else {
       return c.json({ message: "Invalid file type" }, 400);
     }
     const input = {
-      Body: body! as string,
+      Body: body as Buffer,
       Bucket: bucket!,
-      Key: key!,
+      Key: teamId + "/" + fileId,
       ContentType: content_type,
     };
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
-    const signedUrl = await getSignedUrl(s3Client, command, {
-      expiresIn,
-    });
-    return c.json({ signedUrl, response }, 200);
+    const signedUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({ Bucket: bucket, Key: key }),
+      { expiresIn: 3600 }
+    );
+    return c.json({ signedUrl, response, fileId }, 200);
   } catch (error) {
     console.log(error);
     return c.json(error, 400);
@@ -158,6 +180,7 @@ api_object.post("/put/:bucket/:key", async (c) => {
 api_object.post("/delete/:bucket/:key", async (c) => {
   const bucket = c.req.param("bucket");
   let key = atob(c.req.param("key"));
+
   const checkfile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),
@@ -186,9 +209,11 @@ api_object.post("/delete/:bucket/:key", async (c) => {
 });
 
 // Download a file from a bucket
-api_object.get("/download/:bucket/:key", async (c) => {
+api_object.get("/download/:bucket/:teamId/:objId", async (c) => {
+  // let key = atob(c.req.param("key"));
   const bucket = c.req.param("bucket");
-  let key = atob(c.req.param("key"));
+  let key = c.req.param("teamId") + "/" + c.req.param("objId");
+
   const checkfile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),

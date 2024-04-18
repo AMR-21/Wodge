@@ -1,15 +1,9 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { Message } from "./message";
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { Message as MessageType } from "@repo/data";
 
-export interface Message {
-  sender: string;
-  content: string;
-  date: string;
-  id: string;
-}
-
-export const msgsAtom = atom<Message[]>([
+export const msgsAtom = atom<MessageType[]>([
   {
     sender: "AsojFlHm9Vd9CxoFcQ5Ww",
     content: `asdasd
@@ -19,31 +13,40 @@ sadasdasd
 → zebbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbby`,
     date: "2021-10-11T14:48:00.000Z",
     id: "1",
+    type: "text",
   },
   {
     sender: "AsojFlHm9Vd9CxoFcQ5Ww",
     content: `asdsaadasd`,
     date: "2021-10-11T14:48:00.000Z",
     id: "2",
+    type: "text",
   },
   {
+    content: "",
+    date: "2024-04-18T15:34:02.130Z",
+    id: "eSiQ2yCVX0H64azuLpp-5",
     sender: "AsojFlHm9Vd9CxoFcQ5Ww",
-    content: `asdsaadasd`,
-    date: "2021-10-11T14:48:00.000Z",
-    id: "3",
+    type: "image",
   },
-  {
-    sender: "AsojFlHm9Vd9CxoFcQ5Ww",
-    content: `asdsaadasd`,
-    date: "2021-10-11T14:48:00.000Z",
-    id: "4",
-  },
-  {
-    sender: "AsojFlHm9Vd9CxoFcQ5Ww",
-    content: `asdsaadasd`,
-    date: "2021-10-11T14:48:00.000Z",
-    id: "5",
-  },
+  // {
+  //   sender: "AsojFlHm9Vd9CxoFcQ5Ww",
+  //   content: `asdsaadasd`,
+  //   date: "2021-10-11T14:48:00.000Z",
+  //   id: "3",
+  // },
+  // {
+  //   sender: "AsojFlHm9Vd9CxoFcQ5Ww",
+  //   content: `asdsaadasd`,
+  //   date: "2021-10-11T14:48:00.000Z",
+  //   id: "4",
+  // },
+  // {
+  //   sender: "AsojFlHm9Vd9CxoFcQ5Ww",
+  //   content: `http://localhost:3000/asdsaz/room/yYqfuu6BbgsCdYOx/fpSRx0aBscjjq7_8x8usG`,
+  //   date: "2021-10-11T14:48:00.000Z",
+  //   id: "5",
+  // },
   // {
   //   sender: "AsojFlHm9Vd9CxoFcQ5Ww",
   //   content: `asd
@@ -90,10 +93,7 @@ export function MessageList() {
   }, [messages]);
 
   return (
-    <div
-      className="flex flex-col gap-2 overflow-hidden pb-2 pt-4"
-      ref={listRef}
-    >
+    <div className="flex flex-col gap-2 pb-2 pt-4" ref={listRef}>
       {messages.map((m, i) => {
         if (i === messages.length - 1)
           setTimeout(() => {
