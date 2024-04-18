@@ -85,9 +85,14 @@ api_bucket.post("/create/:bucket-name", async (c) => {
 // GET LIST OF ALL BUCKETS IN THE ACCOUNT USED FOR TESTING
 
 api_bucket.get("/list", async (c) => {
-  const command = new ListBucketsCommand({});
-  const response = await s3Client.send(command);
-  return c.json(response, 200);
+  try {
+    const command = new ListBucketsCommand({});
+    const response = await s3Client.send(command);
+    return c.json(response, 200);
+  } catch (error) {
+    console.log(error);
+    return c.json(error, 400);
+  }
 });
 
 // USED TO DELETE A WHOLE TEAM BE CAREFUL WHEN USING
@@ -281,6 +286,7 @@ api_object.post("/copy/:source/:dest/:key", async (c) => {
   }
 });
 app.all("*", async (c, next) => {
+  await next();
   return c.newResponse(null, { status: 501 });
 });
 export default app;
