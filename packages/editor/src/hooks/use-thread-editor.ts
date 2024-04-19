@@ -30,14 +30,8 @@ export function useThreadEditor(content?: string) {
   const editor = useEditor({
     content,
     autofocus: true,
-    extensions: [
-      ...ExtensionKit({}),
-      Highlight,
-      Placeholder.configure({
-        placeholder: 'Type a message',
-      }),
-      Markdown,
-    ],
+
+    extensions: [...ExtensionKit({})],
     editorProps: {
       attributes: {
         autocomplete: 'off',

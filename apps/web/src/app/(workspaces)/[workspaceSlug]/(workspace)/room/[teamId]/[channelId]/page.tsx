@@ -31,7 +31,8 @@ function ChannelPage() {
 
   function onSubmit() {
     if (editor) {
-      const content = editor.storage?.markdown?.getMarkdown();
+      // console.log(DOMPurify.sanitize(editor.getHTML()));
+      const content = editor.getHTML();
       if (!content || !user) return;
 
       setMsgs((msgs) => [

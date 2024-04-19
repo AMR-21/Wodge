@@ -2,9 +2,9 @@
 
 import { cn } from '../../lib/utils'
 import { Editor, EditorContent } from '@tiptap/react'
-import React, { useRef } from 'react'
+import React, { memo, useRef } from 'react'
 
-export const SimpleEditor = ({ editor, isThread = false }: { editor: Editor | null; isThread?: boolean }) => {
+export const SimpleEditor = memo(({ editor, isThread = false }: { editor: Editor | null; isThread?: boolean }) => {
   const menuContainerRef = useRef(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
@@ -19,6 +19,6 @@ export const SimpleEditor = ({ editor, isThread = false }: { editor: Editor | nu
       </div>
     </div>
   )
-}
+})
 
 export default SimpleEditor

@@ -1,19 +1,15 @@
-import Code from '@tiptap/extension-code'
-import Document from '@tiptap/extension-document'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
-import Paragraph from '@tiptap/extension-paragraph'
 import Placeholder from '@tiptap/extension-placeholder'
-import Text from '@tiptap/extension-text'
 import Typography from '@tiptap/extension-typography'
-import { Extension, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
+import { Extension, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Markdown } from 'tiptap-markdown'
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji'
 
 const MessageNewLine = Extension.create({
   addKeyboardShortcuts() {
     return {
+      Enter: () => true,
       'Shift-Enter': () =>
         this.editor.commands.insertContent({
           type: 'paragraph',
@@ -43,20 +39,18 @@ export function useMessageEditor() {
         placeholder: 'Type a message',
       }),
       Typography,
-      Markdown.configure({
-        linkify: true,
-        transformCopiedText: true,
-        transformPastedText: true,
-      }),
-      MessageNewLine,
-      Link.configure({
+      Link.extend({ inclusive: false }).configure({
+        autolink: true,
         HTMLAttributes: {
-          class: 'text-sky-500 cursor-pointer',
+          class: 'msg-link',
         },
       }),
-      // Emoji.extend({
-      //   renderText() {},
-      // }),
+      Emoji.configure({
+        enableEmoticons: true,
+        emojis: gitHubEmojis,
+        // suggestion: emojiSuggestion,
+      }),
+      MessageNewLine,
     ],
     editorProps: {
       attributes: {

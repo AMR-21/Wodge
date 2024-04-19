@@ -44,6 +44,7 @@ import {
   Column,
   TaskItem,
   TaskList,
+  gitHubEmojis,
 } from '.'
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
 import { ImageUpload } from './ImageUpload'
@@ -76,9 +77,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   // }),
   Column,
   Selection,
-  Heading.configure({
-    levels: [1, 2, 3, 4, 5, 6],
-  }),
+  Heading,
   HorizontalRule,
   StarterKit.configure({
     document: false,
@@ -106,9 +105,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   CharacterCount.configure({ limit: 50000 }),
   TableOfContents,
   TableOfContentsNode,
-  // ImageUpload.configure({
-  //   clientId: provider?.document?.clientID,
-  // }),
+  ImageUpload,
   ImageBlock,
   FileHandler.configure({
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
@@ -133,7 +130,8 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   }),
   Emoji.configure({
     enableEmoticons: true,
-    suggestion: emojiSuggestion,
+    emojis: gitHubEmojis,
+    // suggestion: emojiSuggestion,
   }),
   TextAlign.extend({
     addKeyboardShortcuts() {

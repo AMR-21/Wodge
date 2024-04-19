@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { Button } from "@repo/ui/components/ui/button";
+import { SafeDiv } from "../safe-div";
 
 export const Message = memo(
   ({
@@ -64,29 +65,24 @@ export const Message = memo(
 
     return (
       <div className="group break-words rounded-md p-1.5 transition-all hover:bg-secondary">
-        {/* {lastSenderId !== member?.id && ( */}
-        {true && (
-          <>
-            <div className="flex items-start gap-2">
-              <Avatar className="h-7 w-7">
-                <AvatarImage src={member?.avatar} alt={member?.displayName} />
-                <AvatarFallback>{member?.displayName[0]}</AvatarFallback>
-              </Avatar>
+        <div className="flex items-start gap-2">
+          <Avatar className="h-7 w-7">
+            <AvatarImage src={member?.avatar} alt={member?.displayName} />
+            <AvatarFallback>{member?.displayName[0]}</AvatarFallback>
+          </Avatar>
 
-              <div className="flex items-center gap-2">
-                <p className="text-sm">{member?.displayName}</p>
-                <p className="pt-0.5 text-xs text-muted-foreground">
-                  {format(message.date, "yyyy/MM/dd h:mm a")}
-                </p>
-              </div>
+          <div className="flex items-center gap-2">
+            <p className="text-sm">{member?.displayName}</p>
+            <p className="pt-0.5 text-xs text-muted-foreground">
+              {format(message.date, "yyyy/MM/dd h:mm a")}
+            </p>
+          </div>
 
-              <SidebarItemBtn
-                Icon={MoreHorizontal}
-                className="invisible ml-auto transition-all group-hover:visible"
-              />
-            </div>
-          </>
-        )}
+          <SidebarItemBtn
+            Icon={MoreHorizontal}
+            className="invisible ml-auto transition-all group-hover:visible"
+          />
+        </div>
 
         {/* <p className="">{message.content}</p> */}
 
@@ -101,7 +97,7 @@ export const Message = memo(
               )}
 
               {!data && (
-                <div className="flex h-48 w-full items-center justify-center">
+                <div className="flex h-24 w-1/2 items-center justify-center">
                   <Button
                     isPending={isFetching}
                     onClick={() => setDownload(true)}
@@ -113,21 +109,28 @@ export const Message = memo(
             </>
           )}
           {message.type === "text" && (
-            <Markdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                a: ({ node, ...props }) => (
-                  <a
-                    {...props}
-                    target="_blank"
-                    className="text-sky-500  dark:text-sky-400"
-                  />
-                ),
-              }}
-              className="prose prose-neutral -mt-1  text-sm text-foreground dark:prose-invert"
-            >
-              {message.content}
-            </Markdown>
+            <>
+              {/* <div>{message.content}</div> */}
+              <SafeDiv
+                className="MessageEditor text-sm"
+                html={message.content}
+              />
+              {/* <Markdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  a: ({ node, ...props }) => (
+                    <a
+                      {...props}
+                      target="_blank"
+                      className="text-sky-500  dark:text-sky-400"
+                    />
+                  ),
+                }}
+                className="prose prose-neutral -mt-1  text-sm text-foreground dark:prose-invert"
+              >
+                {message.content}
+              </Markdown> */}
+            </>
           )}
         </div>
       </div>
