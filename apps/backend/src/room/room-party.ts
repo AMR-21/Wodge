@@ -3,6 +3,7 @@ import type * as Party from "partykit/server";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
+import { handlePost } from "./room-post";
 
 export default class RoomParty implements Party.Server, RoomPartyInterface {
   options: Party.ServerOptions = {
@@ -15,16 +16,16 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
   constructor(readonly room: Party.Room) {}
 
   async onRequest(req: Party.Request) {
-    // switch (req.method) {
-    //   case "POST":
-    //     return await handlePost(req, this);
-    //   case "GET":
-    //     return await handleGet(req, this);
-    //   case "OPTIONS":
-    //     return ok();
-    //   default:
-    //     return notImplemented();
-    // }
+    switch (req.method) {
+      case "POST":
+        return await handlePost(req, this);
+      // case "GET":
+      //   return await handleGet(req, this);
+      case "OPTIONS":
+        return ok();
+      default:
+        return notImplemented();
+    }
     return ok();
   }
 

@@ -1,5 +1,5 @@
 import type * as Party from "partykit/server";
-import { badRequest, getRoute, ok } from "../../lib/http-utils";
+import { badRequest, getRoute, ok, unauthorized } from "../../lib/http-utils";
 import WorkspaceParty from "../workspace-party";
 import { workspacePull } from "../handlers/workspace-pull";
 import { workspacePush } from "../handlers/workspace-push";
@@ -29,6 +29,24 @@ export async function handlePost(req: Party.Request, party: WorkspaceParty) {
 
     case "/update":
       return updateWorkspace(req, party);
+
+    case "/poke":
+      const serviceKey = req.headers.get("authorization");
+      const channelId = req.headers.get("channelId");
+      if (!serviceKey || !channelId) {
+        return badRequest();
+      }
+
+      if (serviceKey !== party.room.env.SERVICE_KEY) {
+        return unauthorized();
+      }
+
+      await party.poke({
+        type: "channel",
+        id: channelId,
+      });
+
+      return ok();
 
     default:
       return badRequest();
