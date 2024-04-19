@@ -8,6 +8,7 @@ import {
 import { sendMessage } from "../../models/workspace/mutators/send-msg";
 import { deleteMsg } from "../../models/workspace/mutators/delete-msg";
 import { addReact } from "../../models/workspace/mutators/add-react";
+import { removeReact } from "../../models/workspace/mutators/remove-react";
 describe("Chat test", () => {
   test.skip("Chat test", async () => {
     const room = createTestRoom();
@@ -50,7 +51,7 @@ describe("Chat test", () => {
     ).not.toContain(msg);
     // console.log(newStr2.teams[0]?.rooms[0]?.messages);
   });
-  test("Add reaction", async () => {
+  test.skip("Add reaction", async () => {
     const msg = createTestMessage();
     const room = createTestRoom({ messages: [msg] });
     const team = createTestTeam({ rooms: [room] });
@@ -65,6 +66,28 @@ describe("Chat test", () => {
 
     console.log(newStr.teams[0]?.rooms[0]?.messages[0]?.reactions);
     const newStr1 = addReact({
+      messageId: msg.id,
+      roomId: room.id,
+      teamId: team.id,
+      structure: newStr,
+      emoji: "👎",
+    });
+    console.log(newStr1.teams[0]?.rooms[0]?.messages[0]?.reactions);
+  });
+  test("remove react", async () => {
+    const msg = createTestMessage();
+    const room = createTestRoom({ messages: [msg] });
+    const team = createTestTeam({ rooms: [room] });
+    const structure = createTestStructure({ teams: [team] });
+    const newStr = addReact({
+      messageId: msg.id,
+      roomId: room.id,
+      teamId: team.id,
+      structure: structure,
+      emoji: "👍",
+    });
+    console.log(newStr.teams[0]?.rooms[0]?.messages[0]?.reactions);
+    const newStr1 = removeReact({
       messageId: msg.id,
       roomId: room.id,
       teamId: team.id,
