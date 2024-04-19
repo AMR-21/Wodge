@@ -11,6 +11,7 @@ import {
   FormLabel,
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
@@ -19,8 +20,14 @@ import { useForm } from "react-hook-form";
 
 export function AddThreadForm({ teamId }: { teamId: string }) {
   const { workspaceRep, structure } = useCurrentWorkspace();
+  const { user } = useCurrentUser();
   const form = useForm<Thread>({
-    resolver: zodResolver(ThreadSchema),
+    resolver: zodResolver(
+      ThreadSchema.omit({
+        createdBy: true,
+        isResolved: true,
+      }),
+    ),
     defaultValues: {
       name: "",
       avatar: "",
@@ -32,10 +39,13 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  async function onSubmit(data: Room) {
+  async function onSubmit(data: Thread) {
+    if (!user) return;
+
     await workspaceRep?.mutate.createThread({
       teamId,
       ...data,
+      createdBy: user.id,
     });
     form.reset();
     form.setValue("id", nanoid(ID_LENGTH));
@@ -56,7 +66,7 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
               <FormItem>
                 <FormLabel>Thread name</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="new page" />
+                  <Input {...field} placeholder="new thread" />
                 </FormControl>
               </FormItem>
             )}
@@ -99,7 +109,7 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
           />
 
           <Button type="submit" className="w-full">
-            Create room
+            Create thread
           </Button>
 
           <DialogClose asChild>

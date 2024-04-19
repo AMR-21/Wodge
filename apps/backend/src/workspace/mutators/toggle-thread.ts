@@ -1,22 +1,23 @@
-import { NewThreadArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
-import { createThreadMutation } from "@repo/data/models/workspace/mutators/create-thread";
+import { toggleThreadMutation } from "@repo/data/models/workspace/mutators/toggle-thread";
 
-export async function createThread(
+export async function toggleThread(
   party: WorkspaceParty,
   params: RunnerParams
 ) {
-  const { teamId, ...thread } = params.mutation.args as NewThreadArgs;
+  const { teamId, threadId } = params.mutation.args as {
+    teamId: string;
+    threadId: string;
+  };
 
-  if (!teamId || !thread) return;
+  if (!teamId || !threadId) return;
 
-  party.workspaceStructure.data = createThreadMutation({
-    curUserId: params.userId,
+  party.workspaceStructure.data = toggleThreadMutation({
     structure: party.workspaceStructure.data,
     teamId,
-    thread,
+    threadId,
   });
 
   party.workspaceStructure.lastModifiedVersion = params.nextVersion;

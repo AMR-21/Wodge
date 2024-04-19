@@ -51,7 +51,7 @@ export function AppHeader() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>{team}</BreadcrumbItem>
-              <BreadcrumbSeparator />
+              {(page || room || thread) && <BreadcrumbSeparator />}
               {folder && !folderId?.startsWith("root-") && (
                 <>
                   <BreadcrumbItem>{folder}</BreadcrumbItem>

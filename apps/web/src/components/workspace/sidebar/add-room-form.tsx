@@ -84,7 +84,7 @@ export function AddRoomForm({
               <FormItem>
                 <FormLabel>Room name</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="new page" />
+                  <Input {...field} placeholder="new room" />
                 </FormControl>
               </FormItem>
             )}
