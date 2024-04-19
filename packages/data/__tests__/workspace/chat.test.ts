@@ -5,10 +5,10 @@ import {
   createTestStructure,
   createTestTeam,
 } from "../utils";
-import { sendMessage } from "../../models/workspace/mutators/send-msg";
-import { deleteMsg } from "../../models/workspace/mutators/delete-msg";
-import { addReact } from "../../models/workspace/mutators/add-react";
-import { removeReact } from "../../models/workspace/mutators/remove-react";
+import { sendMessage } from "../../models/room/mutators/send-msg";
+import { deleteMsg } from "../../models/room/mutators/delete-msg";
+import { addReact } from "../../models/room/mutators/add-react";
+import { removeReact } from "../../models/room/mutators/remove-react";
 describe("Chat test", () => {
   test.skip("Chat test", async () => {
     const room = createTestRoom();

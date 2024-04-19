@@ -9,10 +9,14 @@ import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
 import { userMutators } from "@repo/data/models/user/user-mutators";
+import { roomMutators } from "@repo/data";
+import { CreateChannelArgs, createChannelRep } from "./create-channel-rep";
 
+type ChannelMutators = typeof roomMutators;
 export interface AppState {
   userStore?: Replicache<typeof userMutators>;
   workspaces: Record<string, Replicache<typeof workspaceMutators>>;
+  activeChanRep?: Replicache<typeof roomMutators>;
   socket?: PartySocket;
 
   actions: {
@@ -26,6 +30,7 @@ export interface AppState {
       userId: string,
     ) => Replicache<typeof workspaceMutators> | void;
     removeWorkspace: (workspaceId: string) => void;
+    setChannelRep: (rep: Replicache<ChannelMutators>) => void;
   };
 }
 
@@ -78,6 +83,9 @@ export const useAppState = create<AppState>()(
         if (get().socket) return;
 
         set({ socket: createSocket(userId) });
+      },
+      setChannelRep: (rep) => {
+        set({ activeChanRep: rep });
       },
     },
   })),

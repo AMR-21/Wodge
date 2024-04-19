@@ -22,10 +22,12 @@ function patcher(party: RoomParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
+    console.log(party.roomMessages.data);
+
     if (party.roomMessages.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: makeWorkspaceMembersKey(),
+        key: "messages",
         value: party.roomMessages.data,
       });
     }

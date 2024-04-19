@@ -4,6 +4,7 @@ import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 import { handlePost } from "./room-post";
+import { REPLICACHE_VERSIONS_KEY } from "@repo/data";
 
 export default class RoomParty implements Party.Server, RoomPartyInterface {
   options: Party.ServerOptions = {
@@ -14,6 +15,19 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
   versions: Versions;
 
   constructor(readonly room: Party.Room) {}
+
+  async onStart() {
+    this.roomMessages = (await this.room.storage.get("messages")) || {
+      data: [],
+      lastModifiedVersion: 0,
+      deleted: false,
+    };
+
+    this.versions = <Versions>(
+      ((await this.room.storage.get(REPLICACHE_VERSIONS_KEY)) ||
+        new Map<string, number | boolean>([["globalVersion", 0]]))
+    );
+  }
 
   async onRequest(req: Party.Request) {
     switch (req.method) {
@@ -37,6 +51,7 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
 
     try {
       const session = await getSession(req, lobby);
+      return req;
       return authorizeChannel(req, lobby, session.userId, "room");
     } catch (e) {
       return unauthorized();

@@ -4,23 +4,17 @@ import { MessageList, msgsAtom } from "@/components/room/message-list";
 import { RoomHeader } from "@/components/room/room-header";
 import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 import { SimpleEditor, useMessageEditor } from "@repo/editor";
-import { Textarea } from "@repo/editor/src/components/ui/Textarea";
-import { Input } from "@repo/ui/components/ui/input";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useAtom } from "jotai";
-import { Plus, Send, Smile } from "lucide-react";
+import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useEffect, useState } from "react";
 import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
-// Import React FilePond
-import { FilePond, registerPlugin } from "react-filepond";
 
-// Import FilePond styles
-import "filepond/dist/filepond.min.css";
 import { UploadButton } from "@/components/room/upload-button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
 
 function ChannelPage() {
   const editor = useMessageEditor();
@@ -29,22 +23,32 @@ function ChannelPage() {
 
   const [msgs, setMsgs] = useAtom(msgsAtom);
 
-  function onSubmit() {
+  const rep = useCurrentRoomRep();
+
+  async function onSubmit() {
     if (editor) {
-      // console.log(DOMPurify.sanitize(editor.getHTML()));
       const content = editor.getHTML();
       if (!content || !user) return;
 
-      setMsgs((msgs) => [
-        ...msgs,
-        {
-          sender: user.id,
-          content: content,
-          date: new Date().toISOString(),
-          id: nanoid(),
-          type: "text",
-        },
-      ]);
+      // setMsgs((msgs) => [
+      //   ...msgs,
+      //   {
+      //     sender: user.id,
+      //     content: content,
+      //     date: new Date().toISOString(),
+      //     id: nanoid(),
+      //     type: "text",
+      //     reactions: [],
+      //   },
+      // ]);
+      await rep?.mutate.sendMessage({
+        sender: user.id,
+        content: content,
+        date: new Date().toISOString(),
+        id: nanoid(),
+        type: "text",
+        reactions: [],
+      });
 
       editor.commands.clearContent();
     }
@@ -60,7 +64,7 @@ function ChannelPage() {
       <ScrollArea className="mb-1 flex min-w-0 flex-col pr-2">
         {/* <div className=" overflow-y-auto"> */}
         <RoomHeader />
-        <MessageList />
+        <MessageList rep={rep} />
         {/* </div> */}
       </ScrollArea>
       <div className="flex shrink-0 items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">

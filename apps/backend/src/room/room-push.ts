@@ -3,6 +3,7 @@ import { repPush, RunnerParams } from "../lib/replicache";
 import RoomParty from "./room-party";
 import { pokeWorkspace } from "../lib/utils";
 import { badRequest } from "../lib/http-utils";
+import { sendMessage } from "./send-message";
 
 export async function roomPush(req: Party.Request, party: RoomParty) {
   const wid = req.headers.get("x-workspace-id");
@@ -27,6 +28,9 @@ export async function roomPush(req: Party.Request, party: RoomParty) {
 function runner(party: RoomParty, req: Party.Request) {
   return async (params: RunnerParams) => {
     switch (params.mutation.name) {
+      case "sendMessage":
+        return await sendMessage(party, params);
+
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }

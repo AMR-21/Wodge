@@ -6,7 +6,7 @@ import {
 import { useMember } from "@repo/ui/hooks/use-member";
 import { format } from "date-fns";
 import { lastSenderIdAtom } from "./message-list";
-import { Message as MessageType } from "@repo/data";
+import { DrObj, Message as MessageType } from "@repo/data";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { MoreHorizontal } from "lucide-react";
 import Markdown from "react-markdown";
@@ -25,7 +25,7 @@ export const Message = memo(
     message,
     lastSenderId,
   }: {
-    message: MessageType;
+    message: MessageType | DrObj<MessageType>;
     lastSenderId?: string;
   }) => {
     const { member, isMembersPending } = useMember(message.sender);
