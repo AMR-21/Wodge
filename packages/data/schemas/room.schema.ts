@@ -20,7 +20,7 @@ export const MessageSchema = z.object({
 
 export const RoomSchema = ChannelSchema.extend({
   // type: z.enum(["chat", "stage"]),
-  messages: z.array(MessageSchema),
+  // messages: z.array(MessageSchema),
 });
 
 export type Room = z.infer<typeof RoomSchema>;
