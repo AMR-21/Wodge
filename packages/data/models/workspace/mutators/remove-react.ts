@@ -12,27 +12,26 @@ interface remReactArgs {
   messageId: string;
   // senderId: string;
   emoji: React["emoji"];
-  teamId: string;
-  roomId: string;
+  // teamId: string;
+  // roomId: string;
+  arr: Message[];
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
 export function removeReact({
   messageId,
   emoji,
-  teamId,
-  roomId,
+  // teamId,
+  // roomId,
+  arr,
   structure,
 }: remReactArgs) {
   const newStructure = produce(structure, (draft) => {
-    const team = draft.teams.find((t) => t.id === teamId);
-    if (!team) throw new Error("Team not found");
-    const room = team.rooms.find((r) => r.id === roomId);
-    if (!room) throw new Error("Room not found");
-    const message = room.messages.find((m) => m.id === messageId);
+    const message = arr.find((m) => m.id === messageId);
     if (!message) throw new Error("message not found");
-    // const reaaact = message.reactions.find((r) => r.emoji === emoji);
-    message.reactions = message.reactions.filter((r) => r.emoji !== emoji);
+    const react = message.reactions.find((r) => r.emoji === emoji);
+    if (!react) throw new Error("react not found");
+    message.reactions = message.reactions.filter((r) => r.emoji === emoji);
   });
   return newStructure;
 }

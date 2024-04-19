@@ -5,18 +5,15 @@ interface deleteMsgArgs {
   // message: Message;
   // senderId: string;
   msgId: string;
-  teamId: string;
-  roomId: string;
+  // teamId: string;
+  // roomId: string;
+  arr: Message[];
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
-export function deleteMsg({ msgId, teamId, roomId, structure }: deleteMsgArgs) {
+export function deleteMsg({ msgId,arr, structure }: deleteMsgArgs) {
   const newStructure = produce(structure, (draft) => {
-    const team = draft.teams.find((t) => t.id === teamId);
-    if (!team) throw new Error("Team not found");
-    const room = team.rooms.find((r) => r.id === roomId);
-    if (!room) throw new Error("Room not found");
-    room.messages = room.messages.filter((m) => m.id !== msgId);
+    arr = arr.filter(m => m.id !== msgId)
   });
   return newStructure;
 }
