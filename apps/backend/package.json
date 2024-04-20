@@ -12,7 +12,9 @@
     "nanoid": "^5.0.5",
     "object-sizeof": "^2.6.4",
     "partysocket": "^0.0.25",
+    "query-string": "^9.0.0",
     "replicache": "^14.1.0",
+    "y-partykit": "^0.0.28",
     "zod": "^3.22.4"
   },
   "devDependencies": {

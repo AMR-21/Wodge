@@ -140,11 +140,12 @@ export const authorizeChannel = async (
   req: Party.Request,
   lobby: Party.Lobby,
   userId: string,
-  type: ChannelsTypes
+  type: ChannelsTypes,
+  obj?: { folderId: string; teamId: string; workspaceId: string }
 ) => {
-  const workspaceId = req.headers.get("x-workspace-id");
-  const teamId = req.headers.get("x-team-id");
-  const folderId = req.headers.get("x-folder-id");
+  const workspaceId = obj?.workspaceId ?? req.headers.get("x-workspace-id");
+  const teamId = obj?.teamId ?? req.headers.get("x-team-id");
+  const folderId = obj?.folderId ?? req.headers.get("x-folder-id");
 
   if (!workspaceId || !teamId) return badRequest();
 

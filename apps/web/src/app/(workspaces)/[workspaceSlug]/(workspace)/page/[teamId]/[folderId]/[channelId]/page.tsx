@@ -5,20 +5,34 @@ import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
+import useYProvider from "y-partykit/react";
+import { useParams } from "next/navigation";
+import { env } from "@repo/env";
+import { Page } from "@/components/Page";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
-const yDoc = new Y.Doc();
-
-const provider = new YPartyKitProvider(
-  "localhost:1999",
-  "my-document-name",
-  yDoc,
-);
 function ChannelPage() {
   const { user } = useCurrentUser();
 
-  if (!user) return null;
+  const { channelId, folderId, teamId } = useParams<{
+    channelId: string;
+    folderId: string;
+    teamId: string;
+  }>();
 
-  return <BlockEditor ydoc={yDoc} provider={provider} user={user} />;
+  const { workspaceId } = useCurrentWorkspace();
+
+  if (!user || !workspaceId) return null;
+
+  return (
+    <Page
+      channelId={channelId}
+      folderId={folderId}
+      user={user}
+      teamId={teamId}
+      workspaceId={workspaceId}
+    />
+  );
 }
 
 export default ChannelPage;

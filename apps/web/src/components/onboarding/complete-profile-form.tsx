@@ -20,11 +20,13 @@ import { Input } from "@repo/ui/components/ui/input";
 import { PublicUserType, UpdateUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/user-actions";
 import { toast } from "@repo/ui/components/ui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
   const { nextStep } = useStepper();
   const [localUrl, setLocalUrl] = useState<string>("");
+  const queryClient = useQueryClient();
   const avatarFileRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
@@ -65,6 +67,9 @@ export function CompleteProfileForm() {
           toast.error(res.error);
         }
         if (res?.success) {
+          queryClient.invalidateQueries({
+            queryKey: ["user"],
+          });
           nextStep();
         }
       });

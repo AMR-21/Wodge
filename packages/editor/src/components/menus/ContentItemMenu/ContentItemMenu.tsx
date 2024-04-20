@@ -49,26 +49,26 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
             </Toolbar.Button>
           </PopoverTrigger>
           <PopoverContent side="bottom" align="start" sideOffset={8} className="p-2 flex flex-col min-w-[16rem] ">
-            <PopoverClose>
+            <PopoverClose asChild>
               <DropdownButton onClick={actions.resetTextFormatting}>
                 <Icon Icon={RemoveFormatting} />
                 Clear formatting
               </DropdownButton>
             </PopoverClose>
-            <PopoverClose>
+            <PopoverClose asChild>
               <DropdownButton onClick={actions.copyNodeToClipboard}>
                 <Icon Icon={Clipboard} />
                 Copy to clipboard
               </DropdownButton>
             </PopoverClose>
-            <PopoverClose>
+            <PopoverClose asChild>
               <DropdownButton onClick={actions.duplicateNode}>
                 <Icon Icon={Copy} />
                 Duplicate
               </DropdownButton>
             </PopoverClose>
             <Toolbar.Divider horizontal />
-            <PopoverClose>
+            <PopoverClose asChild>
               <DropdownButton
                 onClick={actions.deleteNode}
                 className="text-red-500 bg-red-500 dark:text-red-500 hover:bg-red-500 dark:hover:text-red-500 dark:hover:bg-red-500 bg-opacity-10 hover:bg-opacity-20 dark:hover:bg-opacity-20"
