@@ -10,7 +10,7 @@ import {
   removeTeamMembers,
 } from "../../models/workspace/mutators/team-members";
 import {
-  addTeamFoldersMutation,
+  addTeamFolderszMutation,
   deleteTeamFoldersMutation,
 } from "../../models/workspace/mutators/team-folders";
 import exp from "constants";
