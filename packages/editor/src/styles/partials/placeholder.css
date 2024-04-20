@@ -7,17 +7,17 @@
   &.ProseMirror-focused {
     /* Slashmenu Placeholder */
     > p.has-focus.is-empty::before {
-      content: 'Type  /  to browse options';
+      content: attr(data-placeholder);
     }
 
     > [data-type='columns'] > [data-type='column'] > p.is-empty.has-focus::before {
-      content: 'Type  /  to browse options';
+      content: attr(data-placeholder);
     }
   }
 
   /* Default Placeholder */
   & > .is-editor-empty::before {
-    content: 'Click here to start writing …';
+    content: attr(data-placeholder);
   }
 
   /* Blockquote Placeholder */

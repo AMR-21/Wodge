@@ -21,6 +21,7 @@ export function useMembersInfo() {
       const data = (await res.json()) as PublicUserType[];
       return data;
     },
+    enabled: !!workspaceId,
   });
 
   return { membersInfo: data || [], isMembersPending: isPending };

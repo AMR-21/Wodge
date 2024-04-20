@@ -1,22 +1,7 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
-import { badRequest, unauthorized } from "../../lib/http-utils";
-import {
-  PublicUserType,
-  Team,
-  // WorkspaceTeamMutation,
-  WorkspaceSchema,
-  defaultWorkspaceStructure,
-  makeWorkspaceStructureKey,
-  // updateTeamMutator,
-} from "@repo/data";
-import { makeWorkspaceKey } from "@repo/data";
-import { isAllowed } from "../../lib/utils";
 import { initWorkspace } from "./init-workspace";
-import { deleteWorkspace } from "../mutators/delete-workspace";
-import { produce } from "immer";
-import { createTeamMutation } from "@repo/data/models/workspace/mutators/create-team";
 import { createTeam } from "../mutators/create-team";
 import { updateTeam } from "../mutators/update-team";
 import { removeMember } from "../mutators/remove-member";
@@ -26,10 +11,10 @@ import { updateGroup } from "../mutators/update-group";
 import { deleteGroup } from "../mutators/delete-group";
 import { deleteTeam } from "../mutators/delete-team";
 import { updateWorkspace } from "../mutators/update-workspace";
-import { createChannel } from "../mutators/create-channel";
 import { createPage } from "../mutators/create-page";
 import { createRoom } from "../mutators/create-room";
 import { createThread } from "../mutators/create-thread";
+import { toggleThread } from "../mutators/toggle-thread";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -88,6 +73,9 @@ function runner(party: WorkspaceParty, req: Party.Request) {
 
       case "createThread":
         return await createThread(party, params);
+
+      case "toggleThread":
+        return await toggleThread(party, params);
 
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);

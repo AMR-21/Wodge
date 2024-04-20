@@ -1,33 +1,38 @@
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
 import { env } from "@repo/env";
 import {
+  MutatorDefs,
   PullRequest,
   PullerResult,
   PushRequest,
   PusherResult,
   Replicache,
+  ReplicacheOptions,
 } from "replicache";
-import { ChannelsTypes, replicacheWrapper } from "@repo/data";
+import { ChannelsTypes, replicacheWrapper, roomMutators } from "@repo/data";
 
-export function createChannelRep({
-  channelId,
-  userId,
-  workspaceId,
-  teamId,
-  folderId,
-  channelType,
-}: {
+export interface CreateChannelArgs {
   userId: string;
   workspaceId: string;
   channelId: string;
   teamId: string;
   folderId?: string;
   channelType: ChannelsTypes;
-}) {
-  return new Replicache<typeof workspaceMutators>({
+}
+
+export function createChannelRep<T extends MutatorDefs>({
+  channelId,
+  userId,
+  workspaceId,
+  teamId,
+  folderId,
+  channelType,
+  mutators,
+}: CreateChannelArgs & { mutators: T }) {
+  return new Replicache<T>({
     name: `${userId}-${channelId}`,
     licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-    mutators: workspaceMutators,
+    mutators,
     pullInterval: null,
     pushURL: undefined,
     pullURL: undefined,

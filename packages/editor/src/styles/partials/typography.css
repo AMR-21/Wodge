@@ -1,10 +1,10 @@
-.ProseMirror {
+.BlockEditor {
   p {
-    @apply leading-relaxed my-3 first:mt-0 last:mb-0;
+    @apply leading-relaxed my-1 first:mt-0 last:mb-0;
   }
 
   & > p {
-    @apply my-6 first:mt-0 last:mb-0;
+    @apply my-2.5 first:mt-0 last:mb-0;
   }
 
   h1 {
@@ -43,17 +43,102 @@
   h1,
   h2,
   h3 {
-    @apply mt-12;
+    @apply mt-3;
   }
 
   h4,
   h5,
   h6 {
-    @apply mt-8;
+    @apply mt-2;
   }
 
   a.link {
     @apply text-blue-500 font-extrabold dark:text-blue-400;
+  }
+
+  mark {
+    @apply bg-red-500 rounded-sm decoration-clone text-inherit py-1 px-0 dark:bg-red-400;
+  }
+
+  & img {
+    @apply h-auto w-full max-w-full;
+  }
+
+  [data-type='horizontalRule'] {
+    @apply my-4 py-2 transition-all duration-100 ease-in-out cursor-pointer;
+
+    &.ProseMirror-selectednode {
+      @apply bg-black/5 dark:bg-white/10;
+
+      hr {
+        @apply border-t-black/30 dark:border-t-white/30;
+      }
+    }
+
+    &:hover:not(&.ProseMirror-selectednode) {
+      @apply bg-black/5;
+      @apply dark:bg-white/10;
+    }
+
+    hr {
+      @apply border-0 border-t border-black/20 bg-black/80;
+      @apply dark:border-white/20 dark:bg-white/80;
+    }
+  }
+}
+
+.MessageEditor .msg-link {
+  @apply text-sky-500 cursor-pointer dark:text-sky-400;
+
+  strong {
+    @apply font-normal;
+  }
+}
+
+.MessageEditor {
+  p {
+    @apply leading-relaxed first:mt-0 last:mb-0;
+  }
+
+  & > p {
+    @apply first:mt-0 last:mb-0;
+  }
+
+  h1 {
+    @apply text-base;
+  }
+
+  h2 {
+    @apply text-base;
+  }
+
+  h3 {
+    @apply text-base;
+  }
+
+  h4 {
+    @apply text-base;
+  }
+
+  h5 {
+    @apply text-base;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold first:mt-0 last:mb-0;
+  }
+
+  a.link {
+    @apply text-sky-500 font-normal dark:text-sky-400;
   }
 
   mark {

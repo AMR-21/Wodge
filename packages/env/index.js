@@ -20,6 +20,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_BACKEND_DOMAIN: z.string(),
     NEXT_PUBLIC_REPLICACHE_KEY: z.string(),
+    NEXT_PUBLIC_FS_DOMAIN: z.string(),
   },
 
   runtimeEnv: {
@@ -34,6 +35,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL_FROM: process.env.RESEND_EMAIL_FROM,
+    NEXT_PUBLIC_FS_DOMAIN: process.env.NEXT_PUBLIC_FS_DOMAIN,
+    FS_DOMAIN: process.env.FS_DOMAIN,
     USER_AVATAR_BUCKET: process.env.USER_AVATAR_BUCKET,
     SERVICE_KEY: process.env.SERVICE_KEY,
   },

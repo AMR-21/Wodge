@@ -49,6 +49,8 @@ export function useChannelPath() {
     return {
       team: team.name,
       thread: thread?.name,
+      createdBy: thread?.createdBy,
+      isResolved: thread?.isResolved,
     };
   }
 }
