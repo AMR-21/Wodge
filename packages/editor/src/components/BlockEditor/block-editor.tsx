@@ -29,8 +29,6 @@ export const BlockEditor = ({
   const menuContainerRef = useRef(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
-  console.log({ user })
-
   const { editor, users, characterCount } = useBlockEditor({
     ydoc,
     provider,

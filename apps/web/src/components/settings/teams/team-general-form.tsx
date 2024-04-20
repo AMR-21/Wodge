@@ -29,13 +29,12 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
 
   const form = useForm<DrObj<Team>>({
     resolver: zodResolver(
-      TeamSchema.pick({ name: true, slug: true, id: true, avatar: true }),
+      TeamSchema.pick({ name: true, id: true, avatar: true }),
     ),
     defaultValues: {
       id: isAddition ? nanoid(WORKSPACE_TEAM_ID_LENGTH) : team?.id,
       name: isAddition ? "" : team?.name,
       avatar: isAddition ? "" : team?.avatar,
-      slug: isAddition ? "" : team?.slug,
     },
   });
 
@@ -50,7 +49,7 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
     form.reset(team);
   }, [team]);
 
-  async function onSubmit(data: Pick<Team, "id" | "name" | "avatar" | "slug">) {
+  async function onSubmit(data: Pick<Team, "id" | "name" | "avatar">) {
     let flag = false;
 
     if (isAddition) {
@@ -66,16 +65,13 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
           update: {
             name: data.name,
             avatar: data.avatar,
-            slug: data.slug,
           },
         },
       });
-
-      if (team.slug !== data.slug) flag = true;
     }
 
     form.reset();
-    flag && router.push(`/${workspaceSlug}/settings/teams/${data.slug}`);
+    flag && router.push(`/${workspaceSlug}/settings/teams/${data.id}`);
   }
 
   return (

@@ -101,7 +101,7 @@ export const workspaceMutators = {
 
   async createTeam(
     tx: WriteTransaction,
-    data: Pick<Team, "id" | "name" | "avatar" | "slug">
+    data: Pick<Team, "id" | "name" | "avatar">
   ) {
     // 1. Create the team
     const user = queryClient.getQueryData<PublicUserType>(["user"]);

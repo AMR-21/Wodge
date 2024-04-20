@@ -41,7 +41,6 @@ export const TeamSchema = z.object({
   rooms: z.array(RoomSchema),
   threads: z.array(ThreadSchema),
   tags: z.array(TagSchema),
-  slug: z.string().max(32).min(1),
   default: z.boolean().default(false),
 });
 

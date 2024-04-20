@@ -9,7 +9,7 @@ import {
 
 interface CreateTeamArgs {
   // Any to account for the backend mutation runner - relay on zod to validate the data
-  team: Pick<Team, "id" | "name" | "avatar" | "slug">;
+  team: Pick<Team, "id" | "name" | "avatar">;
   currentUserId: string;
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
@@ -32,9 +32,7 @@ export function createTeamMutation({
   const { data: newTeamBase } = validatedFields;
 
   // 2. Validate if the team is already existing - i.e. duplicate id/slug
-  const teamExists = structure.teams.some(
-    (t) => t.id === newTeamBase.id || t.slug === newTeamBase.slug
-  );
+  const teamExists = structure.teams.some((t) => t.id === newTeamBase.id);
 
   if (teamExists) throw new Error("Team already exists");
 
