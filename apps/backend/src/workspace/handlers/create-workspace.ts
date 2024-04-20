@@ -1,9 +1,10 @@
-import type * as Party from "partykit/server";
+import * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { badRequest, error, ok, unauthorized } from "../../lib/http-utils";
 import {
   createDefaultTeam,
   defaultWorkspaceStructure,
+  getBucketAddress,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
   NewWorkspaceSchema,
@@ -85,7 +86,6 @@ export async function createWorkspace(
   if (!res2.ok) return badRequest();
 
   // 6. add the workspace in the do
-
   const globalVersion = (party.versions.get("globalVersion") as number) || 0;
 
   party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
@@ -123,6 +123,15 @@ export async function createWorkspace(
     [makeWorkspaceStructureKey()]: party.workspaceStructure,
     [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
   });
+
+  // 10. create workspace bucket
+
+  const resBucket = await fetch(
+    `${party.room.env.FS_DOMAIN}/bucket/create/${getBucketAddress(party.room.id)}`,
+    {
+      method: "POST",
+    }
+  );
 
   return ok();
 }

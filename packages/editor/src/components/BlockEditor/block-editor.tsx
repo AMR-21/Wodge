@@ -3,11 +3,9 @@
 import { EditorContent } from '@tiptap/react'
 import React, { useRef } from 'react'
 
-import { LinkMenu } from '../../components/menus'
+import { LinkMenu } from '../menus'
 
-import { useBlockEditor } from '../../hooks/useBlockEditor'
-
-// import '../../styles/index.css'
+import { useBlockEditor } from '../../hooks/use-block-editor'
 
 import ImageBlockMenu from '../../extensions/ImageBlock/components/ImageBlockMenu'
 import { ColumnsMenu } from '../../extensions/MultiColumn/menus'
@@ -43,8 +41,8 @@ export const BlockEditor = ({
   }
 
   return (
-    <div className="flex flex-col h-full" ref={menuContainerRef}>
-      <div className="relative flex flex-col flex-1 h-full overflow-hidden ">
+    <div className="flex flex-col h-full w-full" ref={menuContainerRef}>
+      <div className="relative flex flex-col flex-1 h-full  ">
         <EditorContent editor={editor} ref={editorRef} className="flex-1 overflow-y-auto" />
         <ContentItemMenu editor={editor} />
         <LinkMenu editor={editor} appendTo={menuContainerRef} />

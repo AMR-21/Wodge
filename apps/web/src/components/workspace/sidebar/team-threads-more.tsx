@@ -25,23 +25,30 @@ import { nanoid } from "nanoid";
 import { ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 import { AddRoomForm } from "./add-room-form";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { AddThreadForm } from "./add-thread-form";
 
 interface TeamMoreProps {
   teamId: string;
+  children?: React.ReactNode;
 }
 
-export function TeamThreadsMore({ teamId }: TeamMoreProps) {
+export function TeamThreadsMore({ teamId, children }: TeamMoreProps) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
 
+  const { user } = useCurrentUser();
+
   async function createBlankThread() {
+    if (!user) return;
     await workspaceRep?.mutate.createThread({
       teamId,
       name: "New thread",
-
+      createdBy: user.id,
       id: nanoid(ID_LENGTH),
       editGroups: ["team-members"],
       viewGroups: ["team-members"],
       avatar: "",
+      isResolved: false,
     });
   }
 
@@ -49,10 +56,12 @@ export function TeamThreadsMore({ teamId }: TeamMoreProps) {
     <Dialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarItemBtn
-            Icon={MoreHorizontal}
-            className="invisible z-10 -my-1 ml-auto flex transition-all hover:bg-transparent group-hover:visible aria-expanded:visible"
-          />
+          {children || (
+            <SidebarItemBtn
+              Icon={MoreHorizontal}
+              className="invisible z-10 -my-1 ml-auto flex transition-all hover:bg-transparent group-hover:visible aria-expanded:visible"
+            />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48" sideOffset={2}>
           <DropdownMenuGroup>
@@ -73,19 +82,23 @@ export function TeamThreadsMore({ teamId }: TeamMoreProps) {
             </DialogTrigger>
           </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <Link href={`/${workspaceSlug}/settings/teams/${teamId}`}>
-              <DropdownMenuItem className="gap-2 text-sm">
-                <Settings className="h-4 w-4" />
-                Team settings
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuGroup>
+          {!children && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <Link href={`/${workspaceSlug}/settings/teams/${teamId}`}>
+                  <DropdownMenuItem className="gap-2 text-sm">
+                    <Settings className="h-4 w-4" />
+                    Team settings
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AddRoomForm teamId={teamId} />
+      <AddThreadForm teamId={teamId} />
     </Dialog>
   );
 }

@@ -1,6 +1,8 @@
 import type * as Party from "partykit/server";
 
 import WorkspaceParty from "../workspace/workspace-party";
+import RoomParty from "../room/room-party";
+import ThreadParty from "../thread/thread-party";
 
 export function getMember(userId: string, party: WorkspaceParty) {
   return party.workspaceMembers.data.members.find(
@@ -41,4 +43,21 @@ export function isAllowed(req: Party.Request, party: WorkspaceParty) {
   if (!isOwner) return false;
 
   return true;
+}
+
+export async function pokeWorkspace(
+  wid: string,
+  party: RoomParty | ThreadParty
+) {
+  const workspaceParty = party.room.context.parties.workspace?.get(wid);
+
+  if (workspaceParty) {
+    await workspaceParty.fetch("/poke", {
+      method: "POST",
+      headers: {
+        authorization: party.room.env.SERVICE_KEY as string,
+        channelId: party.room.id,
+      },
+    });
+  }
 }

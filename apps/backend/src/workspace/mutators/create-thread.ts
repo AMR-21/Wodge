@@ -13,6 +13,7 @@ export async function createThread(
   if (!teamId || !thread) return;
 
   party.workspaceStructure.data = createThreadMutation({
+    curUserId: params.userId,
     structure: party.workspaceStructure.data,
     teamId,
     thread,

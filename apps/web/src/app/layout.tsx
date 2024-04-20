@@ -29,7 +29,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className="font-sans">
+      <body className="overflow-hidden font-sans">
         <Providers>
           <ThemeProvider
             attribute="class"

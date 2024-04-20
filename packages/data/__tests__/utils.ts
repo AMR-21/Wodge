@@ -4,6 +4,8 @@ import {
   Channel,
   Group,
   ID_LENGTH,
+  Room,
+  Message,
   TEAM_MEMBERS_ROLE,
   Team,
   Thread,
@@ -83,6 +85,31 @@ export function createTestChannel(data?: Partial<Channel>) {
     ...data,
   };
   return channel;
+}
+export function createTestRoom(data?: Partial<Room>) {
+  const room: Room = {
+    id: nanoid(ID_LENGTH),
+    name: "Test Channel",
+    avatar: "",
+    editGroups: ["team-members"],
+    viewGroups: ["team-members"],
+    messages: [],
+    ...data,
+  };
+  return room;
+}
+
+export function createTestMessage(data?: Partial<Message>) {
+  const message: Message = {
+    id: nanoid(ID_LENGTH),
+    type: "text",
+    content: "Hello",
+    date: new Date().toISOString(),
+    sender: UserId,
+    reactions: [],
+    ...data,
+  };
+  return message;
 }
 
 export function createTestStructure(data?: Partial<WorkspaceStructure>) {

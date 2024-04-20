@@ -145,13 +145,13 @@ function SortableTeamspace({
                 <Channels type="room" teamId={team.id} channels={team.rooms} />
               )}
 
-              {type === "thread" && (
+              {/* {type === "thread" && (
                 <Channels
                   type="thread"
                   teamId={team.id}
                   channels={team.threads}
                 />
-              )}
+              )} */}
             </>
           )}
         </div>
@@ -171,6 +171,7 @@ export const Teamspace = React.forwardRef<
   { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
 >(({ team, isChanFoldOver, type, isDragging, ...props }, ref) => {
   const { teamId } = useParams<{ teamId?: string }>();
+  const { workspaceSlug } = useCurrentWorkspace();
 
   return (
     <li ref={ref} className="group flex grow" {...props}>
@@ -178,7 +179,10 @@ export const Teamspace = React.forwardRef<
         aria-disabled={isDragging}
         isActive={isChanFoldOver || team.id === teamId}
         noIcon
-        collapsible
+        collapsible={type !== "thread"}
+        {...(type === "thread" && {
+          href: `/${workspaceSlug}/thread/${team.id}`,
+        })}
       >
         <Avatar className=" mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
           {/* <AvatarImage src={workspace?.avatar} /> */}

@@ -29,7 +29,11 @@ export function AppHeader() {
   const openSidebar = setSidebar.bind(null, true);
 
   return (
-    <div className={"flex h-12 items-center transition-all"}>
+    <div
+      className={
+        "z-[9999999999] flex h-12 w-full items-center bg-background px-2.5 py-2 transition-all"
+      }
+    >
       <div className="flex basis-full items-center px-1.5 py-2.5">
         {!isSidebarOpen && (
           <SidebarItemBtn
@@ -47,7 +51,7 @@ export function AppHeader() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>{team}</BreadcrumbItem>
-              <BreadcrumbSeparator />
+              {(page || room || thread) && <BreadcrumbSeparator />}
               {folder && !folderId?.startsWith("root-") && (
                 <>
                   <BreadcrumbItem>{folder}</BreadcrumbItem>

@@ -27,8 +27,11 @@ import { deleteGroupMutation } from "./mutators/delete-group";
 import { createPageMutation } from "./mutators/create-page";
 import { createRoomMutation } from "./mutators/create-room";
 import { createThreadMutation } from "./mutators/create-thread";
-import { Room, Page, Thread } from "../../schemas/channel.schema";
+import { Page } from "../../schemas/channel.schema";
 import { Team } from "../../schemas/team.schema";
+import { Room } from "../../schemas/room.schema";
+import { Thread } from "../../schemas/thread.schema";
+import { toggleThreadMutation } from "./mutators/toggle-thread";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -66,62 +69,6 @@ interface RoleUpdateArgs {
 }
 
 export const workspaceMutators = {
-  // async initWorkspace(
-  //   tx: WriteTransaction,
-  //   data: Workspace & { defaultTeamId: string }
-  // ) {
-  //   // 1. Create the workspace
-
-  //   const { defaultTeamId, ...workspaceData } = data;
-
-  //   if (defaultTeamId.length !== WORKSPACE_TEAM_ID_LENGTH)
-  //     throw new Error("Invalid team id");
-
-  //   const validatedFields = WorkspaceSchema.safeParse(workspaceData);
-
-  //   if (!validatedFields.success) {
-  //     console.log(validatedFields.error.flatten());
-  //     throw new Error("Invalid workspace data");
-  //   }
-
-  //   const { data: workspace } = validatedFields;
-
-  //   const userData = queryClient.getQueryData<PublicUserType>(["user"]);
-
-  //   if (!userData) throw new Error("User not found");
-
-  //   // 2. Run the mutation
-  //   await tx.set(makeWorkspaceKey(), workspace);
-  //   await tx.set(
-  //     makeWorkspaceStructureKey(),
-  //     createTeamMutation({
-  //       team: {
-  //         id: defaultTeamId,
-  //         name: "General",
-  //         avatar: "",
-  //         slug: "general",
-  //       },
-  //       currentUserId: userData.id,
-  //       structure: defaultWorkspaceStructure(),
-  //     })
-  //   );
-
-  //   await tx.set(makeWorkspaceMembersKey(), {
-  //     members: [
-  //       {
-  //         id: userData.id,
-  //         role: "owner",
-  //         joinInfo: {
-  //           joined_at: new Date().toISOString(),
-  //           token: "",
-  //           created_by: "",
-  //           method: "owner",
-  //         },
-  //       } as Member,
-  //     ],
-  //   });
-  // },
-
   async removeMember(tx: WriteTransaction, memberId: string) {
     const workspaceMembers = await tx.get<WorkspaceMembers>(
       makeWorkspaceMembersKey()
@@ -136,24 +83,6 @@ export const workspaceMutators = {
 
     await tx.set(makeWorkspaceMembersKey(), updateMembers);
   },
-
-  // async updateWorkspace(
-  //   tx: WriteTransaction,
-  //   workspaceUpdate: WorkspaceUpdateArgs
-  // ) {
-  //   const workspace = await tx.get<Workspace>(makeWorkspaceKey());
-
-  //   const { update } = workspaceUpdate;
-
-  //   if (!workspace) throw new Error("Bad data");
-
-  //   const newWorkspace = updateWorkspaceInfoMutation({
-  //     workspace,
-  //     update,
-  //   });
-
-  //   await tx.set(makeWorkspaceKey(), newWorkspace);
-  // },
 
   async changeMemberRole(tx: WriteTransaction, roleUpdate: RoleUpdateArgs) {
     const workspaceMembers = await tx.get<WorkspaceMembers>(
@@ -298,23 +227,6 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
-  // async createChannel(tx: WriteTransaction, data: NewChannelArgs) {
-  //   const structure = (await tx.get<WorkspaceStructure>(
-  //     makeWorkspaceStructureKey()
-  //   )) as WorkspaceStructure;
-
-  //   const { folderId, teamId, ...channel } = data;
-
-  //   const newStructure = createChannelMutation({
-  //     channel,
-  //     teamId,
-  //     folderId,
-  //     structure,
-  //   });
-
-  //   await tx.set(makeWorkspaceStructureKey(), newStructure);
-  // },
-
   async createPage(tx: WriteTransaction, data: NewPageArgs) {
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
@@ -355,10 +267,34 @@ export const workspaceMutators = {
 
     const { teamId, ...thread } = data;
 
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
     const newStructure = createThreadMutation({
       thread,
+      curUserId: user.id,
       teamId,
       structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async toggleThread(
+    tx: WriteTransaction,
+    data: {
+      teamId: string;
+      threadId: string;
+    }
+  ) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const newStructure = toggleThreadMutation({
+      structure,
+      ...data,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

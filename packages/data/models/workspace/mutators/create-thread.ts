@@ -2,23 +2,28 @@ import { produce } from "immer";
 import { DrObj, TEAM_MEMBERS_ROLE, Thread, ThreadSchema } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
-interface CreateTeamArgs {
+interface CreateThreadArgs {
   thread: Thread;
   teamId: string;
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
+  curUserId: string;
 }
 
 export function createThreadMutation({
   thread,
   teamId,
   structure,
-}: CreateTeamArgs) {
+  curUserId,
+}: CreateThreadArgs) {
   // Validate the data
   const validateFields = ThreadSchema.safeParse(thread);
 
   if (!validateFields.success) throw new Error("Invalid thread data");
 
   const { data: newThread } = validateFields;
+
+  if (newThread.createdBy !== curUserId)
+    throw new Error("User not authorized to create thread");
 
   const newStructure = produce(structure, (draft) => {
     const team = draft.teams.find((t) => t.id === teamId);
