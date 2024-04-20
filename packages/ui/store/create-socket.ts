@@ -34,7 +34,6 @@ export function createSocket(userId: string) {
 
         case "channel":
           const repCh = useAppState.getState().activeChanRep;
-          console.log("ch");
           if (repCh && data.id && repCh.name.includes(data.id)) repCh.pull();
           return;
 

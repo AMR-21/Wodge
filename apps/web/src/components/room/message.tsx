@@ -55,8 +55,7 @@ export const Message = memo(
 
         return downloadurl;
       },
-      enabled:
-        download && !!(workspaceId && teamId && message.type === "image"),
+      enabled: !!(workspaceId && teamId && message.type === "image"),
       persister: undefined,
       staleTime: 3600,
     });

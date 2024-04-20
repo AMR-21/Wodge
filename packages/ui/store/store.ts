@@ -9,14 +9,14 @@ import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
 import { userMutators } from "@repo/data/models/user/user-mutators";
-import { roomMutators } from "@repo/data";
+import { roomMutators, threadMutators } from "@repo/data";
 import { CreateChannelArgs, createChannelRep } from "./create-channel-rep";
 
-type ChannelMutators = typeof roomMutators;
+type ChannelMutators = typeof roomMutators | typeof threadMutators;
 export interface AppState {
   userStore?: Replicache<typeof userMutators>;
   workspaces: Record<string, Replicache<typeof workspaceMutators>>;
-  activeChanRep?: Replicache<typeof roomMutators>;
+  activeChanRep?: Replicache<ChannelMutators>;
   socket?: PartySocket;
 
   actions: {

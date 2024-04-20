@@ -59,4 +59,6 @@ export type DrObj<T> = DeepReadonlyObject<T>;
 
 export * from "./models/workspace/workspace-shared-model";
 export * from "./models/room/room-mutators";
+export * from "./models/thread/thread-mutators";
 export * from "./models/room/create-room-rep";
+export * from "./models/thread/create-thread-rep";

@@ -10,8 +10,6 @@ export const roomMutators = {
 
     const user = queryClient.getQueryData<PublicUserType>(["user"]);
 
-    console.log({ data });
-
     if (!user) throw new Error("User not found");
 
     const newMessages = sendMessageMutation({

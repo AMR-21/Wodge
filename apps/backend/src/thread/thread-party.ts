@@ -3,6 +3,8 @@ import type * as Party from "partykit/server";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getSession } from "../lib/auth";
 import { ServerThreadMessages, ThreadPartyInterface, Versions } from "../types";
+import { REPLICACHE_VERSIONS_KEY } from "@repo/data";
+import { handlePost } from "./thread-post";
 
 export default class ThreadParty implements Party.Server, ThreadPartyInterface {
   options: Party.ServerOptions = {
@@ -14,18 +16,30 @@ export default class ThreadParty implements Party.Server, ThreadPartyInterface {
 
   constructor(readonly room: Party.Room) {}
 
+  async onStart() {
+    this.threadMessages = (await this.room.storage.get("messages")) || {
+      data: [],
+      lastModifiedVersion: 0,
+      deleted: false,
+    };
+
+    this.versions = <Versions>(
+      ((await this.room.storage.get(REPLICACHE_VERSIONS_KEY)) ||
+        new Map<string, number | boolean>([["globalVersion", 0]]))
+    );
+  }
+
   async onRequest(req: Party.Request) {
-    // switch (req.method) {
-    //   case "POST":
-    //     return await handlePost(req, this);
-    //   case "GET":
-    //     return await handleGet(req, this);
-    //   case "OPTIONS":
-    //     return ok();
-    //   default:
-    //     return notImplemented();
-    // }
-    return ok();
+    switch (req.method) {
+      case "POST":
+        return await handlePost(req, this);
+      // case "GET":
+      // return await handleGet(req, this);
+      case "OPTIONS":
+        return ok();
+      default:
+        return notImplemented();
+    }
   }
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
     // CORS preflight response

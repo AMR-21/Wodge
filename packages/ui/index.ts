@@ -46,6 +46,7 @@ export * from "./hooks/use-member";
 export * from "./hooks/use-channel-path";
 export * from "./hooks/use-is-owner-or-admin";
 export * from "./hooks/use-room-rep";
+export * from "./hooks/use-thread-rep";
 
 export * from "./store/store";
 export * from "./store/atoms";
