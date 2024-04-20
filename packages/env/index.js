@@ -15,17 +15,22 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     RESEND_EMAIL_FROM: z.string(),
     SERVICE_KEY: z.string(),
+    LIVEKIT_API_KEY: z.string(),
+    LIVEKIT_API_SECRET: z.string(),
   },
 
   client: {
     NEXT_PUBLIC_BACKEND_DOMAIN: z.string(),
     NEXT_PUBLIC_REPLICACHE_KEY: z.string(),
     NEXT_PUBLIC_FS_DOMAIN: z.string(),
+    NEXT_PUBLIC_LIVEKIT_URL: z.string(),
   },
 
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-
+    LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
+    LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET,
+    NEXT_PUBLIC_LIVEKIT_URL: process.env.NEXT_PUBLIC_LIVEKIT_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     NEXT_PUBLIC_BACKEND_DOMAIN: process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
     NEXT_PUBLIC_REPLICACHE_KEY: process.env.NEXT_PUBLIC_REPLICACHE_KEY,

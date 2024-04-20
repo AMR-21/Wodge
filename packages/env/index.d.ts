@@ -13,6 +13,9 @@ type Env = Readonly<{
   SERVICE_KEY: string;
   FS_DOMAIN: string;
   NEXT_PUBLIC_FS_DOMAIN: string;
+  LIVEKIT_API_KEY: string;
+  LIVEKIT_API_SECRET: string;
+  NEXT_PUBLIC_LIVEKIT_URL: string;
 }>;
 
 declare module "@repo/env" {

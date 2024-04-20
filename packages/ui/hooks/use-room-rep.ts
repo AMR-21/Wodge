@@ -39,7 +39,6 @@ export function useCurrentRoomRep() {
         userId: user.id,
       });
 
-      console.log("setting", repTemp, channelId);
       setRep(repTemp);
       setChannelRep(repTemp);
     }

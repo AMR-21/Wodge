@@ -30,10 +30,11 @@ export const ContentItemMenu = ({ editor }: ContentItemMenuProps) => {
   return (
     <DragHandle
       pluginKey="ContentItemMenu"
+      className="pr-2"
       editor={editor}
       onNodeChange={data.handleNodeChange}
       tippyOptions={{
-        offset: [-2, 16],
+        offset: [-2, 0],
         zIndex: 99,
       }}
     >

@@ -17,12 +17,12 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   }, [isDesktop]);
 
   return (
-    <div className="flex h-dvh w-full overflow-hidden">
+    <div className="flex h-dvh w-full ">
       <SidebarWrapper />
 
       <div className="flex h-full w-full flex-col py-2.5">
         <AppHeader />
-        <div className="lg:max-w-32xl container flex max-w-xl flex-1  overflow-hidden sm:max-w-2xl xl:max-w-5xl">
+        <div className="lg:max-w-32xl container flex max-w-xl flex-1  overflow-y-hidden sm:max-w-2xl xl:max-w-5xl">
           {children}
         </div>
       </div>
