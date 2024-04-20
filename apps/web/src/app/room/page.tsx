@@ -13,7 +13,7 @@ import {
 import { Track } from "livekit-client";
 import { useEffect, useState } from "react";
 
-export default function Page() {
+export default function RoomPage() {
   // TODO: get user input for room and name
   const room = "quickstart-room";
   const name = "quickstart-user";

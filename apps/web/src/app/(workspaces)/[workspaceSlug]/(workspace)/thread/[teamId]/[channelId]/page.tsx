@@ -28,29 +28,7 @@ import { nanoid } from "nanoid";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
-const threadMessages = atom<ThreadMessageType[]>([
-  {
-    id: "asd",
-    author: "TjhBT7b4wJnsVgM_RMX2r",
-    content: "my first message",
-    date: "2021-09-01T12:00:00",
-    type: "message",
-  },
-  {
-    id: "asd2",
-    author: "TjhBT7b4wJnsVgM_RMX2r",
-    content: "my second message",
-    date: "2021-09-01T12:00:00",
-    type: "message",
-  },
-  {
-    id: "asd32",
-    author: "TjhBT7b4wJnsVgM_RMX2r",
-    content: "",
-    date: "2021-09-01T12:00:00",
-    type: "close",
-  },
-]);
+const threadMessages = atom<ThreadMessageType[]>([]);
 
 function ChannelPage() {
   const path = useChannelPath();

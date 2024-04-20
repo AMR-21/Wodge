@@ -1,6 +1,6 @@
 "use client";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { PanelLeft } from "lucide-react";
+import { PanelLeft, PhoneCall } from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
 import { useAtom } from "jotai";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
@@ -63,6 +63,14 @@ export function AppHeader() {
               {thread && <BreadcrumbItem>{thread}</BreadcrumbItem>}
             </BreadcrumbList>
           </Breadcrumb>
+        )}
+
+        {room && (
+          <SidebarItemBtn
+            iconClassName="w-5 h-5"
+            Icon={PhoneCall}
+            className="ml-auto mr-6"
+          />
         )}
       </div>
     </div>
