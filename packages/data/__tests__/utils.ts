@@ -6,11 +6,34 @@ import {
   ID_LENGTH,
   TEAM_MEMBERS_ROLE,
   Team,
+  Thread,
   WORKSPACE_TEAM_ID_LENGTH,
   WorkspaceMembers,
   WorkspaceStructure,
+  ThreadMessage,
 } from "..";
 import { UserId } from "./tests";
+
+export function createTestThread (data?: Partial<Thread>) {
+  const newThread: Thread = {
+    id: nanoid(ID_LENGTH),
+    name: "Test Thread",
+    editGroups: [TEAM_MEMBERS_ROLE],
+    viewGroups: [TEAM_MEMBERS_ROLE],
+    ...data
+  }
+  return newThread
+  
+}
+export function createThreadMessage (data?: Partial<ThreadMessage>) {
+  const newThreadMessage: ThreadMessage = {
+    id: nanoid(ID_LENGTH),
+    author: UserId,
+    content: "Test Message",
+    ...data
+  }
+  return newThreadMessage
+}
 
 export function createTestTeam(data?: Partial<Team>) {
   const newTeam: Team = {
