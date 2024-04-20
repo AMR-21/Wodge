@@ -3,6 +3,7 @@
 import { cn } from "@repo/ui/lib/utils";
 import { usePathname } from "next/navigation";
 import {
+  Database,
   Home,
   LucideIcon,
   MessageCircle,
@@ -45,6 +46,11 @@ const tabs: Tab[] = [
     Icon: Newspaper,
     label: "threads",
     href: "/thread",
+  },
+  {
+    Icon: Database,
+    label: "resources",
+    href: "/resources",
   },
   {
     Icon: Settings,

@@ -5,7 +5,8 @@ import { toggleThreadMutation } from "@repo/data/models/workspace/mutators/toggl
 
 export async function toggleThread(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  isAdmin: boolean
 ) {
   const { teamId, threadId } = params.mutation.args as {
     teamId: string;
@@ -18,6 +19,8 @@ export async function toggleThread(
     structure: party.workspaceStructure.data,
     teamId,
     threadId,
+    curUserId: params.userId,
+    isAdmin,
   });
 
   party.workspaceStructure.lastModifiedVersion = params.nextVersion;

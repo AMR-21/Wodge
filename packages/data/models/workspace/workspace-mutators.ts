@@ -292,8 +292,20 @@ export const workspaceMutators = {
       makeWorkspaceStructureKey()
     )) as WorkspaceStructure;
 
+    const members = await tx.get<WorkspaceMembers>(makeWorkspaceMembersKey());
+
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
+    const isAdmin =
+      members?.createdBy === user.id ||
+      members?.members.find((m) => m.id === user.id)?.role === "admin";
+
     const newStructure = toggleThreadMutation({
       structure,
+      curUserId: user.id,
+      isAdmin,
       ...data,
     });
 
