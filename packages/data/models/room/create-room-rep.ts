@@ -39,7 +39,7 @@ export function createRoomRep({
     pusher: replicacheWrapper<PushRequest, PusherResult>(
       "push",
       "room",
-      workspaceId,
+      channelId,
       {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,

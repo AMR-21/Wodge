@@ -29,7 +29,7 @@ export function useCurrentUser() {
     },
   });
 
-  if (!isPending && !data) throw Error("Error loading user");
+  // if (!isPending && !data) throw Error("Error loading user");
 
   useEffect(() => {
     if (!isPending && data) {

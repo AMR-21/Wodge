@@ -132,9 +132,9 @@ function ChannelPage() {
           <div className="absolute left-5 top-1/2 h-[90%] w-[2px] -translate-y-1/2 bg-border/70" />
 
           <div className="z-50 flex items-center gap-3 pl-[0.5625rem] text-sm">
-            <CircleDot className="h-6 w-6 shrink-0 rounded-full bg-green-600 p-1 text-green-50" />
+            <CircleDot className="h-6 w-6 shrink-0 rounded-full border-2 border-background bg-green-600 p-0.5 text-green-50" />
             <div className="flex gap-1">
-              <p>@{member?.username}</p>
+              <p>@{member?.username || "workspace_member"}</p>
               <p className="text-muted-foreground">created the thread</p>
             </div>
           </div>
@@ -163,9 +163,9 @@ function ThreadMessage({ msg }: { msg: ThreadMessageType }) {
   if (msg.type === "open")
     return (
       <div className="z-50 flex items-center gap-3 pl-[0.5625rem] text-sm">
-        <CircleDot className="h-6 w-6 shrink-0 rounded-full bg-green-600 p-1 text-green-50" />
+        <CircleDot className="h-6 w-6 shrink-0 rounded-full border-2 border-background bg-green-600 p-0.5 text-green-50" />
         <div className="flex gap-1">
-          <p>@{member?.username}</p>
+          <p>@{member?.username || "workspace_member"}</p>
           <p className="text-muted-foreground">reopened the thread</p>
           <p className="pt-0.5 text-xs text-muted-foreground">
             {format(msg.date, "yyyy/MM/dd h:mm a")}
@@ -177,9 +177,9 @@ function ThreadMessage({ msg }: { msg: ThreadMessageType }) {
   if (msg.type === "close")
     return (
       <div className="z-50 flex items-center gap-3 pl-[0.5625rem] text-sm">
-        <CheckCircle2 className="h-6 w-6 shrink-0 rounded-full bg-purple-600 p-1 text-purple-50" />
+        <CheckCircle2 className="h-6 w-6 shrink-0 rounded-full border-2 border-background bg-purple-600 p-0.5 text-purple-50" />
         <div className="flex gap-1">
-          <p>@{member?.username}</p>
+          <p>@{member?.username || "workspace_member"}</p>
           <p className="text-muted-foreground">closed the thread</p>
           <p className="pt-0.5 text-xs text-muted-foreground">
             {format(msg.date, "yyyy/MM/dd h:mm a")}
@@ -192,12 +192,15 @@ function ThreadMessage({ msg }: { msg: ThreadMessageType }) {
     <div className="z-10 w-full rounded-md border border-border/50 bg-dim px-2 py-4">
       <div className="flex items-start gap-2">
         <Avatar className="h-7 w-7">
-          <AvatarImage src={member?.avatar} alt={member?.displayName} />
-          <AvatarFallback>{member?.displayName[0]}</AvatarFallback>
+          <AvatarImage
+            src={member?.avatar}
+            alt={member?.displayName || "Workspace Member"}
+          />
+          <AvatarFallback>{member?.displayName[0] || "W"}</AvatarFallback>
         </Avatar>
 
         <div className="flex items-center gap-2">
-          <p className="text-sm">{member?.displayName}</p>
+          <p className="text-sm">{member?.displayName || "Workspace Member"}</p>
           <p className="pt-0.5 text-xs text-muted-foreground">
             {format(msg.date, "yyyy/MM/dd h:mm a")}
           </p>

@@ -8,7 +8,7 @@ import {
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { Plus } from "lucide-react";
 import Uppy from "@uppy/core";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/react";
 import { useParams } from "next/navigation";
@@ -18,8 +18,17 @@ import { useSetAtom } from "jotai";
 import { msgsAtom } from "./message-list";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
+import { nanoid } from "nanoid";
+import { roomMutators } from "@repo/data";
+import { Replicache } from "replicache";
 
-export function UploadButton({ bucketId }: { bucketId: string }) {
+export function UploadButton({
+  bucketId,
+  rep,
+}: {
+  bucketId: string;
+  rep?: Replicache<typeof roomMutators>;
+}) {
   const [open, setOpen] = useState(false);
 
   const { teamId } = useParams<{ teamId: string }>();
@@ -27,55 +36,58 @@ export function UploadButton({ bucketId }: { bucketId: string }) {
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
 
-  const uppyRef = useRef(
-    new Uppy({
-      allowMultipleUploadBatches: false,
-      restrictions: {
-        allowedFileTypes: ["image/*"],
-        maxNumberOfFiles: 1,
-      },
-    })
-      .use(XHRUpload, {
-        limit: 1,
-
-        formData: false,
-        method: "POST",
-        endpoint: `http://localhost:8787/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
+  const uppyRef = useMemo(
+    () =>
+      new Uppy({
+        allowMultipleUploadBatches: false,
+        restrictions: {
+          allowedFileTypes: ["image/*"],
+          maxNumberOfFiles: 1,
+        },
       })
-      .on("complete", (e) => {
-        const fileId = e.successful[0]?.response?.body?.fileId as
-          | string
-          | undefined;
+        .use(XHRUpload, {
+          limit: 1,
 
-        if (fileId && user) {
-          setOpen(false);
+          formData: false,
+          method: "POST",
+          endpoint: `http://localhost:8787/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
+        })
+        .on("complete", (e) => {
+          const fileId = e.successful[0]?.response?.body?.fileId as
+            | string
+            | undefined;
 
-          // Todo create Message
+          if (fileId && user) {
+            setOpen(false);
 
-          setMessages((msgs) => [
-            ...msgs,
-            {
-              content: ``,
-              date: new Date().toISOString(),
-              id: fileId,
-              sender: user.id,
-              type: "image",
-            },
-          ]);
+            completeUpload(
+              fileId,
+              e.successful[0]?.response?.body?.signedUrl as string,
+            );
 
-          queryClient.setQueryData(
-            ["image", fileId],
-            e.successful[0]?.response?.body?.signedUrl,
-          );
-
-          cancel();
-        }
-      }),
+            cancel();
+          }
+        }),
+    [rep],
   );
 
   function cancel() {
-    uppyRef.current.cancelAll();
+    uppyRef.cancelAll();
     setOpen(false);
+  }
+
+  async function completeUpload(fileId: string, signedUrl: string) {
+    if (!user) return;
+    await rep?.mutate.sendMessage({
+      sender: user.id,
+      content: "aa",
+      date: new Date().toISOString(),
+      id: fileId,
+      type: "image",
+      reactions: [],
+    });
+
+    queryClient.setQueryData(["image", fileId], signedUrl);
   }
 
   return (
@@ -85,7 +97,7 @@ export function UploadButton({ bucketId }: { bucketId: string }) {
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">
         <Dashboard
-          uppy={uppyRef.current}
+          uppy={uppyRef}
           id="dahsboard"
           height={240}
           width={240}

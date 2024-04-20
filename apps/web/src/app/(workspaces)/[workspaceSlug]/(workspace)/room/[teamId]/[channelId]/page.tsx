@@ -68,7 +68,7 @@ function ChannelPage() {
         {/* </div> */}
       </ScrollArea>
       <div className="flex shrink-0 items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">
-        <UploadButton bucketId={workspaceId} />
+        <UploadButton bucketId={workspaceId} rep={rep} />
 
         <div
           className="flex h-full w-full items-center overflow-hidden"

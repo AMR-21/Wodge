@@ -126,12 +126,16 @@ export async function createWorkspace(
 
   // 10. create workspace bucket
 
-  const resBucket = await fetch(
-    `${party.room.env.FS_DOMAIN}/bucket/create/${getBucketAddress(party.room.id)}`,
-    {
-      method: "POST",
-    }
-  );
+  try {
+    const resBucket = await fetch(
+      `${party.room.env.FS_DOMAIN}/bucket/create/${getBucketAddress(party.room.id)}`,
+      {
+        method: "POST",
+      }
+    );
+  } catch (e) {
+    console.error(e);
+  }
 
   return ok();
 }
