@@ -26,6 +26,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
+import { useCanView } from "@repo/ui/hooks/use-can-view";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -110,6 +111,15 @@ function SortableChannel({
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  const canView = useCanView({
+    type,
+    forceTeamId: teamId,
+    forceChannelId: channel.id,
+    forceFolderId: folderId,
+  });
+
+  if (!canView) return null;
 
   return (
     <div
@@ -199,4 +209,4 @@ export const Channel = React.forwardRef<
   },
 );
 
-Channel.displayName = "Channel";
+// Channel.displayName = "Channel";

@@ -178,4 +178,4 @@ export const Folder = React.forwardRef<
   );
 });
 
-Folder.displayName = "Folder";
+// Folder.displayName = "Folder";

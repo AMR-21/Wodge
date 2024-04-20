@@ -20,6 +20,7 @@ import { useMemo } from "react";
 
 import { cn } from "@repo/ui/lib/utils";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCanView } from "@repo/ui/hooks/use-can-view";
 
 export function Pages({
   channels,
@@ -101,6 +102,16 @@ function SortablePage({
     transition,
   };
 
+  const canView = useCanView({
+    type: "page",
+    forceTeamId: teamId,
+    forceChannelId: channel.id,
+    forceFolderId: folderId,
+  });
+
+  console.log("canView", canView, channel.name);
+  if (!canView) return null;
+
   return (
     <div
       {...listeners}
@@ -150,4 +161,4 @@ export const Page = React.forwardRef<
   );
 });
 
-Page.displayName = "Page";
+// Page.displayName = "Page";

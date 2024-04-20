@@ -27,6 +27,7 @@ import { Channels } from "./channels";
 import { TeamRoomsMore } from "./team-rooms-more";
 import { TeamThreadsMore } from "./team-threads-more";
 import { useParams } from "next/navigation";
+import { useIsTeamMember } from "@repo/ui/hooks/use-is-team-member";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -114,6 +115,10 @@ function SortableTeamspace({
 
   const isAbove = activeIndex > overIndex;
   const isBelow = activeIndex < overIndex;
+
+  const isTeamMemberOrModerator = useIsTeamMember(team.id);
+
+  if (!isTeamMemberOrModerator) return null;
 
   return (
     <Collapsible>
@@ -208,4 +213,4 @@ export const Teamspace = React.forwardRef<
   );
 });
 
-Teamspace.displayName = "Teamspace";
+// Teamspace.displayName = "Teamspace";
