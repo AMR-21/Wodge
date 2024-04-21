@@ -53,7 +53,6 @@ export const createDefaultTeam = (createdBy: string): Team => {
   return {
     id: teamId,
     name: "General",
-    slug: "general",
     avatar: "",
     moderators: [],
     members: [createdBy],

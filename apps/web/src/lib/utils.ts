@@ -1,5 +1,6 @@
 import { env } from "@repo/env";
-import { auth } from "./auth";
+import { createClient } from "./supabase/server";
+import { getUserById } from "@repo/data/server";
 
 export type VerificationMail = {
   identifier?: string;
@@ -38,7 +39,11 @@ export async function sendMagicLink({
 }
 
 export async function currentUser() {
-  const session = await auth();
+  // const session = await auth();
 
-  return session?.user;
+  const client = createClient();
+
+  const userId = (await client.auth.getUser()).data.user?.id;
+
+  return await getUserById(userId);
 }

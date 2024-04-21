@@ -29,7 +29,7 @@ function WorkspacesPage() {
 
       <div className="w-full max-w-xs ">
         <p className="mb-2 text-xs text-muted-foreground">Your Workspaces</p>
-        <div className="min-h-0 rounded-md border border-border/50 bg-page">
+        <div className="bg-page min-h-0 rounded-md border border-border/50">
           <div className="flex max-h-72 grow flex-col items-center overflow-y-scroll ">
             <WorkspacesList />
           </div>

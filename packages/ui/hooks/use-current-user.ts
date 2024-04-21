@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { createUserRep } from "../store/create-user-rep";
-import { PublicUserType } from "@repo/data";
+import { PublicUserType, users } from "@repo/data";
 import { useAppState } from "../store/store";
 
 type Session = {
@@ -18,14 +18,14 @@ export function useCurrentUser() {
   const { data, isPending } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await fetch("/api/auth/session");
+      const response = await fetch("/auth/user");
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
-      const data = (await response.json()) as Session;
-      return data.user;
+      const data = (await response.json()) as typeof users.$inferSelect;
+      return data;
     },
   });
 

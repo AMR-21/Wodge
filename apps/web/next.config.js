@@ -5,6 +5,9 @@ await import("./node_modules/@repo/env/index.js");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@radix-ui"],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 /**

@@ -14,10 +14,10 @@ import { toast } from "@repo/ui/components/ui/toast";
 
 export function GroupSettings({
   group,
-  isAddition,
+  isAddition = false,
 }: {
   group?: DrObj<Group>;
-  isAddition: boolean;
+  isAddition?: boolean;
 }) {
   const { workspaceRep } = useCurrentWorkspace();
 

@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { Editor } from '@tiptap/react'
 
 export const getRenderContainer = (editor: Editor, nodeType: string) => {

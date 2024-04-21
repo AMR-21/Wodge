@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { SidebarItemBtn } from "../sidebar-item-btn";
+import { SidebarItemBtn } from "./sidebar-item-btn";
 import { Check, MoreHorizontal, Users2, X } from "lucide-react";
 import { Row, RowData, Table } from "@tanstack/react-table";
 import { Children } from "react";

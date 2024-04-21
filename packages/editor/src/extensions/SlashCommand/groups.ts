@@ -26,7 +26,9 @@ export const GROUPS: Group[] = [
         label: 'AI Writer',
         icon: Sparkles,
         description: 'Let AI finish your thoughts',
+
         shouldBeHidden: editor => editor.isActive('columns'),
+        //@ts-ignore
         action: editor => editor.chain().focus().setAiWriter().run(),
       },
       {
@@ -35,6 +37,8 @@ export const GROUPS: Group[] = [
         icon: Sparkles,
         description: 'Generate an image from text',
         shouldBeHidden: editor => editor.isActive('columns'),
+        //@ts-ignore
+
         action: editor => editor.chain().focus().setAiImage().run(),
       },
     ],

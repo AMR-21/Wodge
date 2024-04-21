@@ -1,5 +1,4 @@
-import { Workspace } from "@repo/data";
-import { createWorkspace, getWorkspacesByUserId } from "@repo/data/server";
+import { getWorkspacesByUserId } from "@repo/data/server";
 import { env } from "@repo/env";
 
 export async function GET(req: Request) {

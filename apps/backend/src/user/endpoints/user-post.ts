@@ -9,7 +9,6 @@ import {
 import {
   REPLICACHE_VERSIONS_KEY,
   UserSchema,
-  UserType,
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import UserParty from "../user-party";

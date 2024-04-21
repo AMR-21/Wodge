@@ -9,21 +9,23 @@
 import "server-only";
 
 import { eq, inArray } from "drizzle-orm";
-import { db } from "../../lib/db";
+
 import { users } from "../../schemas/auth.schema";
 import { UserType } from "../..";
+import { createDb } from "../../server";
 
 /**
  * Get user by userId
  */
-export async function getUserById(id: string) {
+export async function getUserById(id?: string) {
   try {
+    const db = createDb();
+
     const user = await db.query.users.findFirst({
-      columns: { emailVerified: false },
-      where: eq(users.id, id),
+      where: eq(users.id, id || ""),
     });
 
-    return user as UserType;
+    return user;
   } catch (e) {
     return null;
   }
@@ -31,8 +33,10 @@ export async function getUserById(id: string) {
 
 export async function getUserByUsername(username: string) {
   try {
+    const db = createDb();
+
     const user = await db.query.users.findFirst({
-      columns: { id: false, emailVerified: false, updatedAt: false },
+      columns: { id: false },
       where: eq(users.username, username),
     });
 
@@ -48,6 +52,8 @@ export async function getUserByUsername(username: string) {
  */
 export async function updateUserById(userId: string, data: Partial<UserType>) {
   try {
+    const db = createDb();
+
     const user = await db
       .update(users)
       .set(data)
@@ -69,9 +75,10 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
 
 export async function getUserInfoById(userIds: string[]) {
   try {
+    const db = createDb();
+
     const user = await db.query.users.findMany({
       columns: {
-        emailVerified: false,
         updatedAt: false,
         createdAt: false,
       },

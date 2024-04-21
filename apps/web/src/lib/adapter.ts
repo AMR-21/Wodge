@@ -3,12 +3,7 @@ import { eq, and } from "drizzle-orm";
 
 import type { Adapter } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-} from "@repo/data";
+import { accounts, sessions, users, verificationTokens } from "@repo/data";
 import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 type NonNullableProps<T> = {
@@ -22,11 +17,12 @@ function stripUndefined<T>(obj: T): Pick<T, NonNullableProps<T>> {
 }
 
 export function DbAdapter(
-  client: InstanceType<typeof BaseSQLiteDatabase>,
+  client: () => InstanceType<typeof BaseSQLiteDatabase>,
 ): Adapter {
+  const db = client();
   return {
     async createUser(data) {
-      return await client
+      return await db
         .insert(users)
         .values({
           ...data,
@@ -38,7 +34,7 @@ export function DbAdapter(
         .get();
     },
     async getUser(data) {
-      const result = await client
+      const result = await db
         .select()
         .from(users)
         .where(eq(users.id, data))
@@ -46,7 +42,7 @@ export function DbAdapter(
       return result ?? null;
     },
     async getUserByEmail(data) {
-      const result = await client
+      const result = await db
         .select()
         .from(users)
         .where(eq(users.email, data))
@@ -54,10 +50,10 @@ export function DbAdapter(
       return result ?? null;
     },
     createSession(data) {
-      return client.insert(sessions).values(data).returning().get();
+      return db.insert(sessions).values(data).returning().get();
     },
     async getSessionAndUser(data) {
-      const result = await client
+      const result = await db
         .select({ session: sessions, user: users })
         .from(sessions)
         .where(eq(sessions.sessionToken, data))
@@ -70,7 +66,7 @@ export function DbAdapter(
         throw new Error("No user id.");
       }
 
-      const result = await client
+      const result = await db
         .update(users)
         .set(data)
         .where(eq(users.id, data.id))
@@ -79,7 +75,7 @@ export function DbAdapter(
       return result ?? null;
     },
     async updateSession(data) {
-      const result = await client
+      const result = await db
         .update(sessions)
         .set(data)
         .where(eq(sessions.sessionToken, data.sessionToken))
@@ -89,11 +85,11 @@ export function DbAdapter(
     },
     async linkAccount(rawAccount) {
       return stripUndefined(
-        await client.insert(accounts).values(rawAccount).returning().get(),
+        await db.insert(accounts).values(rawAccount).returning().get(),
       );
     },
     async getUserByAccount(account) {
-      const results = await client
+      const results = await db
         .select()
         .from(accounts)
         .leftJoin(users, eq(users.id, accounts.userId))
@@ -111,7 +107,7 @@ export function DbAdapter(
       return Promise.resolve(results).then((results) => results.users);
     },
     async deleteSession(sessionToken) {
-      const result = await client
+      const result = await db
         .delete(sessions)
         .where(eq(sessions.sessionToken, sessionToken))
         .returning()
@@ -119,7 +115,7 @@ export function DbAdapter(
       return result ?? null;
     },
     async createVerificationToken(token) {
-      const result = await client
+      const result = await db
         .insert(verificationTokens)
         .values(token)
         .returning()
@@ -128,7 +124,7 @@ export function DbAdapter(
     },
     async useVerificationToken(token) {
       try {
-        const result = await client
+        const result = await db
           .delete(verificationTokens)
           .where(
             and(
@@ -144,7 +140,7 @@ export function DbAdapter(
       }
     },
     async deleteUser(id) {
-      const result = await client
+      const result = await db
         .delete(users)
         .where(eq(users.id, id))
         .returning()
@@ -152,7 +148,7 @@ export function DbAdapter(
       return result ?? null;
     },
     async unlinkAccount(account) {
-      await client
+      await db
         .delete(accounts)
         .where(
           and(

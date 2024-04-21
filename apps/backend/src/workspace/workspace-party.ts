@@ -10,7 +10,7 @@ import {
 import {
   authWorkspaceAccess,
   checkMembershipEdge,
-  getSession,
+  getCurrentUser,
 } from "../lib/auth";
 
 import {
@@ -135,8 +135,8 @@ export default class WorkspaceParty
 
     try {
       // maybe removed when bindings are supported
-      const session = await getSession(req, lobby);
-      if (!session) return unauthorized();
+      const user = await getCurrentUser(req, lobby);
+      if (!user) return unauthorized();
 
       const route = getRoute(req);
       // Check if the request is to create or join the workspace then put user data in the headers

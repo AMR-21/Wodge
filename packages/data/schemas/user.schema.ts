@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { ID_LENGTH } from "./config";
 
 /**
  * General user schema
  * This identical to the one in the auth schema but with more evolved validation
  */
 export const UserSchema = z.object({
-  id: z.string().length(ID_LENGTH),
+  id: z.string(),
   username: z
     .string({
       required_error: "Username is required",
@@ -28,7 +27,6 @@ export const UserSchema = z.object({
   email: z.string().email(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  emailVerified: z.date(),
 });
 
 /**
@@ -72,5 +70,5 @@ export type PokeMessage = {
   id?: string;
 };
 
-export type UserType = z.infer<typeof UserSchema>;
+// export type UserType = z.infer<typeof UserSchema>;
 export type PublicUserType = z.infer<typeof PublicUserSchema>;

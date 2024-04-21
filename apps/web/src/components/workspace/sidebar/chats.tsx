@@ -150,4 +150,4 @@ export const Page = React.forwardRef<
   );
 });
 
-Page.displayName = "Page";
+// Page.displayName = "Page";

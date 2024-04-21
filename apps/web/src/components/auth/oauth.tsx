@@ -5,11 +5,18 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { signIn } from "next-auth/react";
 import { Button } from "@repo/ui/components/ui/button";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { login } from "@/actions/login";
+import { createClient } from "@/lib/supabase/client";
 
 export function OAuth() {
-  function onClick(provider: "google" | "github") {
-    signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT + "?login",
+  const supabase = createClient();
+
+  async function onClick(provider: "google" | "github") {
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: "http://localhost:3000/auth/callback",
+      },
     });
   }
 

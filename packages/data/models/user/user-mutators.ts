@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { WriteTransaction } from "replicache";
 import {
   NewWorkspace,

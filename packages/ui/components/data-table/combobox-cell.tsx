@@ -13,7 +13,7 @@ import {
 } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
-import { SidebarItemBtn } from "../sidebar-item-btn";
+import { SidebarItemBtn } from "./sidebar-item-btn";
 import { TooltipWrapper } from "../tooltip-wrapper";
 import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 

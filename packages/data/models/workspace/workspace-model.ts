@@ -6,14 +6,17 @@ import {
   Workspace,
   workspaces,
 } from "../../schemas/workspace.schema";
-import { db } from "../../server";
+// import { db } from "../../server";
 import { eq } from "drizzle-orm";
+import { createDb } from "../../server";
 
 /**
  * DB operations on a workspace
  */
 export async function createWorkspace(data: Workspace) {
   try {
+    const db = createDb();
+
     const [workspace] = await db.batch([
       db.insert(workspaces).values(data).returning(),
       db
@@ -36,6 +39,8 @@ export async function createWorkspace(data: Workspace) {
 }
 
 export async function getWorkspacesByUserId(userId: string) {
+  const db = createDb();
+
   return await db
     .select()
     .from(memberships)
@@ -47,6 +52,7 @@ export async function updateWorkspaceById(
   workspaceId: string,
   data: Pick<Workspace, "name" | "slug">
 ) {
+  const db = createDb();
   return await db
     .update(workspaces)
     .set(data)
@@ -54,5 +60,6 @@ export async function updateWorkspaceById(
 }
 
 export async function addWorkspaceMember(userId: string, workspaceId: string) {
+  const db = createDb();
   return await db.insert(memberships).values({ userId, workspaceId });
 }

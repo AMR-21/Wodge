@@ -9,7 +9,7 @@ import type * as Party from "partykit/server";
 
 import { handlePost } from "./endpoints/user-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { getSession } from "../lib/auth";
+import { getCurrentUser } from "../lib/auth";
 import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
@@ -133,10 +133,10 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     }
 
     try {
-      const session = await getSession(req, lobby);
+      const user = await getCurrentUser(req, lobby);
 
       // Authorize the user by checking that session.userId matches the target user id (party id)
-      if (session.userId !== lobby.id) throw new Error("Unauthorized");
+      if (user.id !== lobby.id) throw new Error("Unauthorized");
 
       // Request is authorized - forward it
       return req;
@@ -152,10 +152,10 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     }
 
     try {
-      const session = await getSession(req, lobby);
+      const user = await getCurrentUser(req, lobby);
 
       // Authorize the user by checking that session.userId matches the target user id (party id)
-      if (session.userId !== lobby.id) throw new Error("Unauthorized");
+      if (user.id !== lobby.id) throw new Error("Unauthorized");
 
       // Request is authorized - forward it
       return req;

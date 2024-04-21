@@ -1,15 +1,15 @@
 import { z } from "zod";
-import { ID_LENGTH } from "./config";
+
 import { ChannelSchema } from "./channel.schema";
 
 export const ThreadSchema = ChannelSchema.extend({
-  createdBy: z.string().length(ID_LENGTH),
+  createdBy: z.string(),
   isResolved: z.boolean().default(false),
 });
 
 export const ThreadMessageSchema = z.object({
   id: z.string(),
-  author: z.string().length(ID_LENGTH),
+  author: z.string(),
   content: z.string().min(1).max(4096),
   date: z.string().datetime(),
   type: z.enum(["message", "open", "close"]),

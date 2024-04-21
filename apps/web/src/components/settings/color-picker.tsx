@@ -116,4 +116,4 @@ export const Swatch = React.forwardRef<HTMLButtonElement, SwatchProps>(
   ),
 );
 
-Swatch.displayName = "Swatch";
+// Swatch.displayName = "Swatch";

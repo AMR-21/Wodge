@@ -87,7 +87,7 @@ export function UserAvatar({
                 <div
                   role="button"
                   className={cn(
-                    buttonVariants({ size: "fit", variant: "neutral" }),
+                    buttonVariants({ size: "fit", variant: "secondary" }),
                     "invisible absolute -right-1 top-0 rounded-full border border-border transition-all group-hover:visible",
                   )}
                   onClick={(e) => {

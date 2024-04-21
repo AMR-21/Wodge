@@ -1,10 +1,13 @@
 import { auth } from "@/lib/auth";
 import { memberships } from "@repo/data";
-import { db } from "@repo/data/server";
+import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
 import { and, eq } from "drizzle-orm";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
+  const db = createDb();
   const serviceKey = req.headers.get("authorization");
 
   if (env.SERVICE_KEY !== serviceKey)

@@ -15,7 +15,7 @@ export * from "./models/workspace/workspace-model";
  * Drizzle db instance
  */
 
-export * from "./lib/db";
+export * from "./lib/create-db";
 
 /**
  * End of drizzle db instance

@@ -1,13 +1,10 @@
 import { z } from "zod";
 import {
   BRAND_COLOR,
-  ID_LENGTH,
-  TEAM_MEMBERS_ROLE,
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
 import { PageSchema } from "./channel.schema";
-import { nanoid } from "nanoid";
 import { ThreadSchema } from "./thread.schema";
 import { RoomSchema } from "./room.schema";
 
@@ -33,9 +30,9 @@ export const TeamSchema = z.object({
   id: z.string().length(WORKSPACE_TEAM_ID_LENGTH),
   name: z.string().max(70).min(1),
   avatar: z.optional(z.string()),
-  members: z.array(z.string().length(ID_LENGTH)),
-  moderators: z.array(z.string().length(ID_LENGTH)),
-  createdBy: z.string().length(ID_LENGTH),
+  members: z.array(z.string()),
+  moderators: z.array(z.string()),
+  createdBy: z.string(),
 
   folders: z.array(FolderSchema),
   rooms: z.array(RoomSchema),

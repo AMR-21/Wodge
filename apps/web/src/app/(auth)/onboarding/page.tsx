@@ -4,18 +4,16 @@ import { currentUser } from "@/lib/utils";
 import { getUserById } from "@repo/data/server";
 import { redirect } from "next/navigation";
 
+export const runtime = "edge";
+
 async function OnboardingPage() {
   const user = await currentUser();
 
   if (!user) return redirect("/login");
 
-  const userData = await getUserById(user.id);
-
-  if (!userData) return redirect("/login");
-
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <OnboardingProvider user={userData}>
+      <OnboardingProvider user={user}>
         <OnboardingSteps />
         {/* <EmailFor */}
       </OnboardingProvider>

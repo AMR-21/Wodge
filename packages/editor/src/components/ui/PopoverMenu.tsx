@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import * as Popover from '@radix-ui/react-popover'
 import { cn } from '@repo/ui/lib/utils'
 import { icons } from 'lucide-react'

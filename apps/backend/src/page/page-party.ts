@@ -9,13 +9,12 @@ import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { authorizeChannel, getSession } from "../lib/auth";
+import { authorizeChannel, getCurrentUser } from "../lib/auth";
 import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
   makeWorkspacesStoreKey,
 } from "@repo/data";
-import { UserPartyInterface, Versions } from "../types";
 import queryString from "query-string";
 export default class PageParty implements Party.Server {
   // options: Party.ServerOptions = {
@@ -55,12 +54,12 @@ export default class PageParty implements Party.Server {
     }
 
     try {
-      const session = await getSession(req, lobby);
+      const user = await getCurrentUser(req, lobby);
 
       return authorizeChannel(
         req,
         lobby,
-        session.userId,
+        user.id,
         "page",
         queryString.parse(req.url) as {
           folderId: string;
@@ -80,9 +79,9 @@ export default class PageParty implements Party.Server {
     }
 
     try {
-      const session = await getSession(req, lobby);
+      const user = await getCurrentUser(req, lobby);
 
-      return authorizeChannel(req, lobby, session.userId, "page");
+      return authorizeChannel(req, lobby, user.id, "page");
     } catch (e) {
       return unauthorized();
     }

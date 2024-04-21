@@ -1,7 +1,7 @@
 import type * as Party from "partykit/server";
 
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { authorizeChannel, getSession } from "../lib/auth";
+import { authorizeChannel, getCurrentUser } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 import { handlePost } from "./room-post";
 import { REPLICACHE_VERSIONS_KEY } from "@repo/data";
@@ -50,9 +50,8 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
     }
 
     try {
-      const session = await getSession(req, lobby);
-      return req;
-      return authorizeChannel(req, lobby, session.userId, "room");
+      const user = await getCurrentUser(req, lobby);
+      return authorizeChannel(req, lobby, user.id, "room");
     } catch (e) {
       return unauthorized();
     }

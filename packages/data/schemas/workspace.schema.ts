@@ -105,11 +105,11 @@ export const InviteSchema = z.object({
 // );
 
 export const MemberSchema = z.object({
-  id: z.string().length(ID_LENGTH),
+  id: z.string(),
   role: z.enum(["owner", "admin", "member"]),
   joinInfo: InviteSchema.pick({ method: true }).extend({
     token: z.string(),
-    createdBy: z.string().length(ID_LENGTH),
+    createdBy: z.string(),
     joinedAt: z.string().datetime(),
   }),
 });
@@ -117,9 +117,9 @@ export const MemberSchema = z.object({
 export const GroupSchema = z.object({
   id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
-  members: z.array(z.string().length(ID_LENGTH)),
+  members: z.array(z.string()),
   color: z.string().default(BRAND_COLOR),
-  createdBy: z.string().length(ID_LENGTH),
+  createdBy: z.string(),
 });
 
 export const WorkspaceStructureSchema = z.object({
@@ -128,7 +128,7 @@ export const WorkspaceStructureSchema = z.object({
 });
 
 export const WorkspaceMembersSchema = z.object({
-  createdBy: z.string().length(ID_LENGTH),
+  createdBy: z.string(),
   members: z.array(MemberSchema),
 });
 
@@ -148,7 +148,7 @@ export const JoinWorkspaceSchema = z.object({
 });
 
 export const PresenceRequestSchema = z.object({
-  userId: z.string().length(ID_LENGTH),
+  userId: z.string(),
   connect: z.boolean(),
 });
 

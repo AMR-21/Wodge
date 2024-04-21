@@ -4,7 +4,7 @@ import { useCurrentWorkspace } from "./use-current-workspace";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export function useIsTeamModerator() {
+export function useIsTeamModerator(forceTeamId?: string) {
   const { structure } = useCurrentWorkspace();
 
   const { teamId } = useParams<{
@@ -19,7 +19,7 @@ export function useIsTeamModerator() {
       isTeamModerator({
         structure,
         userId: user?.id,
-        teamId,
+        teamId: forceTeamId || teamId,
       }),
     );
   }, [structure, teamId, user?.id]);

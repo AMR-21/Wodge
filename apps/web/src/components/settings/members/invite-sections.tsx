@@ -1,4 +1,3 @@
-import { SidebarItemBtn } from "@repo/ui/components/sidebar-item-btn";
 import { env } from "@repo/env";
 import { useState } from "react";
 import { Check, Copy, Repeat } from "lucide-react";
@@ -14,6 +13,7 @@ import { toast } from "@repo/ui/components/ui/toast";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useInvites } from "./use-invites";
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
+import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 
 function makeLink(token: string, wid: string) {
   return `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/join?token=${token}`;

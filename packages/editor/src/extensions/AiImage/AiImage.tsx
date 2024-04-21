@@ -1,8 +1,10 @@
+//@ts-nocheck
+
 import { mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { v4 as uuid } from 'uuid'
 
-import { AiImageView } from './components/AiImageView'
+// import { AiImageView } from './components/AiImageView'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {

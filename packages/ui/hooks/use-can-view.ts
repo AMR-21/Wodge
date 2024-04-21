@@ -3,6 +3,8 @@ import { useCurrentWorkspace } from "./use-current-workspace";
 import { useParams } from "next/navigation";
 import { useCurrentUser } from "./use-current-user";
 import { useEffect, useState } from "react";
+import { useIsOwnerOrAdmin } from "./use-is-owner-or-admin";
+import { useIsTeamModerator } from "./use-is-team-moderator";
 
 export function useCanView({
   type,
@@ -26,17 +28,23 @@ export function useCanView({
   const { user } = useCurrentUser();
 
   const [grant, setGrant] = useState(false);
+
+  const isAdminOrOwner = useIsOwnerOrAdmin();
+  const isTeamMod = useIsTeamModerator(forceTeamId);
+
   useEffect(() => {
     setGrant(
-      canEdit({
-        members,
-        structure,
-        teamId: forceTeamId || teamId,
-        channelId: forceChannelId || channelId,
-        channelType: type,
-        userId: user?.id,
-        ...(type === "page" && { folderId: forceFolderId || folderId }),
-      }) ||
+      isAdminOrOwner ||
+        isTeamMod ||
+        canEdit({
+          members,
+          structure,
+          teamId: forceTeamId || teamId,
+          channelId: forceChannelId || channelId,
+          channelType: type,
+          userId: user?.id,
+          ...(type === "page" && { folderId: forceFolderId || folderId }),
+        }) ||
         canView({
           members,
           structure,

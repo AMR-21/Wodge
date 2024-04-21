@@ -5,7 +5,7 @@ import type * as Party from "partykit/server";
 import { badRequest, error, ok, unauthorized } from "./http-utils";
 import WorkspaceParty from "../workspace/workspace-party";
 import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
-import { ChannelsTypes } from "@repo/data";
+import { ChannelsTypes, UserType } from "@repo/data";
 
 /**
  * Referenced from user client model
@@ -35,7 +35,10 @@ export const isSessionValid = (
  * Get the current session by the cookie in the request and from the
  * next-auth endpoint
  */
-export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
+export const getCurrentUser = async (
+  req: Party.Request,
+  lobby: Party.Lobby
+) => {
   // Extract auth cookies from the request
   // Should be on the same domain in order to work
   const cookie = req.headers.get("cookie");
@@ -43,7 +46,7 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
   if (!cookie) throw new Error("No cookie found");
 
   // Fetch the session from the auth endpoint validated by the CSRF token
-  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/auth/session`, {
+  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/auth/user`, {
     headers: {
       Accept: "application/json",
       Cookie: cookie,
@@ -52,16 +55,16 @@ export const getSession = async (req: Party.Request, lobby: Party.Lobby) => {
 
   if (!res.ok) throw new Error("Unauthorized");
 
-  const session = (await res.json()) as Session;
+  const user = (await res.json()) as UserType;
 
   // Validate the session
-  if (!session || !isSessionValid(session)) throw new Error("Invalid Session");
+  if (!user) throw new Error("Invalid Session");
 
   // Set user id in a header for some use cases
-  req.headers.set("x-user-id", session.userId);
+  req.headers.set("x-user-id", user.id);
   // req.headers.set("x-user-data", JSON.stringify(session.user));
 
-  return session;
+  return user;
 };
 
 /**
@@ -123,6 +126,7 @@ export const checkMembershipEdge = async (
 
   const data = await res.json();
 
+  //@ts-ignore
   return !!data?.success;
 };
 

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { ID_LENGTH } from "./config";
 import { ChannelSchema } from "./channel.schema";
 
 export const ReactionSchema = z.object({
@@ -10,7 +9,7 @@ export const ReactionSchema = z.object({
 
 export const MessageSchema = z.object({
   id: z.string(),
-  sender: z.string().length(ID_LENGTH),
+  sender: z.string(),
   content: z.string().min(1).max(1024),
   date: z.string().datetime(),
   // reactions: z.array()
