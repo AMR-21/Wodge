@@ -19,6 +19,7 @@ export const authRoutes: string[] = [
   "/api/update-workspace",
   "/api/join-workspace",
   "/auth/user",
+  "/auth/callback",
 ];
 
 /**

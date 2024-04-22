@@ -1,6 +1,6 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
 
-await import("./node_modules/@repo/env/index.js");
+// await import("./node_modules/@repo/env/index.js");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

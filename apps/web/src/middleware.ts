@@ -1,25 +1,19 @@
 import { type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
-import { createClient } from "./lib/supabase/server";
 import { createDb, getUserById } from "@repo/data/server";
 import { users } from "@repo/data";
-import {
-  apiAuthPrefix,
-  authRoutes,
-  DEFAULT_LOGIN_REDIRECT,
-  publicRoutes,
-} from "./routes";
+import { authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes } from "./routes";
 
 export async function middleware(request: NextRequest) {
   const { response, user } = await updateSession(request);
 
-  if (!user.data.user) return response;
-  const { id, email, user_metadata, app_metadata } = user.data.user;
+  let curUser = await getUserById(user.data.user?.id);
 
-  let curUser = await getUserById(id);
-
-  if (id && !curUser) {
+  // handle saving user data on our side
+  if (user.data.user && !curUser) {
     const db = createDb();
+
+    const { id, email, user_metadata } = user.data.user;
 
     curUser = await db
       .insert(users)
@@ -35,31 +29,30 @@ export async function middleware(request: NextRequest) {
 
   const { nextUrl } = request;
 
-  const isLoggedIn = !!id;
+  const isLoggedIn = !!curUser;
   const hasUsername = !!curUser?.username;
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
 
   // order matters here
   // api auth routes for auth.js
-  if (isApiAuthRoute) {
-    return;
-  }
+  // if (isApiAuthRoute) {
+  //   return;
+  // }
 
   // auth routes ex. login, onboarding
   if (isAuthRoute) {
     if (nextUrl.pathname === "/auth/user") {
-      return;
+      return response;
     }
 
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
-    return;
+    return response;
   }
 
   // User is not authentic and trying to access a protected route
@@ -81,16 +74,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
 
 // import {
