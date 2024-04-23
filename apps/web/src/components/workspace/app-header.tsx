@@ -126,7 +126,7 @@ export function AppHeader() {
                     variant="link"
                   >
                     Jump to call @
-                    <span className="max-w-28  truncate">{lk_room?.name}</span>{" "}
+                    <span className="max-w-28  truncate">{lk_room?.name}</span>
                   </Button>
                 </Link>
               </div>
