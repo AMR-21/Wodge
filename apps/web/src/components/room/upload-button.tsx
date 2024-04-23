@@ -21,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
 import { roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
+import { env } from "@repo/env";
 
 export function UploadButton({
   bucketId,
@@ -41,16 +42,23 @@ export function UploadButton({
       new Uppy({
         allowMultipleUploadBatches: false,
         restrictions: {
-          allowedFileTypes: ["image/*"],
+          allowedFileTypes: [
+            "image/*",
+            "text/*",
+            "audio/*",
+            "video/*",
+            "application/*",
+            ".ppsx",
+          ],
           maxNumberOfFiles: 1,
         },
       })
         .use(XHRUpload, {
           limit: 1,
 
-          formData: false,
+          // formData: false,
           method: "POST",
-          endpoint: `http://localhost:8787/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
+          endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
         })
         .on("complete", (e) => {
           const fileId = e.successful[0]?.response?.body?.fileId as

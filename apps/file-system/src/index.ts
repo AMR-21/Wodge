@@ -118,17 +118,26 @@ api_bucket.post("/delete/:bucket-name", async (c) => {
 
     const command = new DeleteBucketCommand(input);
     const response = await s3Client.send(command);
-    return c.json(response, 200);
+    // return c.json(response, 204);
+    return c.newResponse(null, { status: 204 });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    // if(error.)
+    // console.log(error?.name);
+    if (error instanceof ReferenceError)
+      return c.newResponse(null, { status: 204 });
     return c.json(error, 400);
   }
 });
 
-api_object.post("/put/:bucket/:teamId", async (c) => {
+api_object.post("/put/:bucket/:teamId/:path?", async (c) => {
   const bucket = c.req.param("bucket");
 
   const teamId = c.req.param("teamId");
+
+  let path;
+
+  if (c.req.param("path")) path = atob(c.req.param("path")!);
 
   // const [folder, file] = key.split("/");
   // const file_extension = path.extname(file) || ".jpg";
@@ -136,38 +145,46 @@ api_object.post("/put/:bucket/:teamId", async (c) => {
   const fileId = nanoid();
 
   const body = await c.req.arrayBuffer();
-  const file_extension = await fileTypeFromBuffer(body);
 
-  if (!file_extension) return c.json({ message: "Invalid file type" }, 400);
+  // const f = body.get("file") as File;
+  // const file_extension = await fileTypeFromBuffer(body);
+  // const file_extension = { ext: "tsx" };
 
-  let key = c.req.param("teamId") + "/" + fileId;
+  // if (!file_extension) return c.json({ message: "Invalid file type" }, 400);
+
+  const Key = teamId + "/" + (path || fileId);
 
   // var body: string | ArrayBuffer;
-  var content_type;
+  // var content_type;
+
+  // return c.json({ message: "Invalid file type" }, 400);
 
   try {
-    if (["txt", "js", "html", "css", "json"].includes(file_extension?.ext)) {
-      // body = await c.req.text();
-      // body = body.toString();
-      // content_type = "text/plain";
-    } else if (
-      ["jpg", "jpeg", "png", "gif", "mp4", "pdf"].includes(file_extension?.ext)
-    ) {
-      content_type = "application/octet-stream";
-    } else {
-      return c.json({ message: "Invalid file type" }, 400);
-    }
+    // if (
+    //   ["txt", "js", "html", "css", "json", "ts"].includes(file_extension?.ext)
+    // ) {
+    //   // body = await c.req.text();
+    //   // body = body.toString();
+    //   // content_type = "text/plain";
+    //   content_type = "application/octet-stream";
+    // } else if (
+    //   ["jpg", "jpeg", "png", "gif", "mp4", "pdf"].includes(file_extension?.ext)
+    // ) {
+    //   content_type = "application/octet-stream";
+    // } else {
+    //   return c.json({ message: "Invalid file type" }, 400);
+    // }
     const input = {
       Body: body as Buffer,
       Bucket: bucket!,
-      Key: teamId + "/" + fileId,
-      ContentType: content_type,
+      Key,
+      ContentType: "application/octet-stream",
     };
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
     const signedUrl = await getSignedUrl(
       s3Client,
-      new GetObjectCommand({ Bucket: bucket, Key: key }),
+      new GetObjectCommand({ Bucket: bucket, Key }),
       { expiresIn: 3600 }
     );
     return c.json({ signedUrl, response, fileId }, 200);
