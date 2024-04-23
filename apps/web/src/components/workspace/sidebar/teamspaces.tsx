@@ -184,9 +184,12 @@ export const Teamspace = React.forwardRef<
         aria-disabled={isDragging}
         isActive={isChanFoldOver || team.id === teamId}
         noIcon
-        collapsible={type !== "thread"}
+        collapsible={type !== "thread" && type !== "resources"}
         {...(type === "thread" && {
           href: `/${workspaceSlug}/thread/${team.id}`,
+        })}
+        {...(type === "resources" && {
+          href: `/${workspaceSlug}/resources/${team.id}`,
         })}
       >
         <Avatar className=" mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">

@@ -31,7 +31,7 @@ export interface AppState {
   room?: { room: Room; name: string; id: string };
   micStatus?: boolean;
   camStatus?: boolean;
-  deafenStatus?: boolean;
+  screenStatus?: boolean;
 
   actions: {
     addWorkspace: (
@@ -49,6 +49,7 @@ export interface AppState {
     disconnectFromCurrentRoom: () => Promise<void>;
     toggleMic: () => void;
     toggleCam: () => void;
+    toggleScreen: () => void;
   };
 }
 
@@ -134,6 +135,7 @@ export const useAppState = create<AppState>()(
         // console.log(room.canPlaybackAudio);
         room.localParticipant.setMicrophoneEnabled(!!get().micStatus);
         room.localParticipant.setCameraEnabled(!!get().camStatus);
+        room.localParticipant.setScreenShareEnabled(!!get().screenStatus);
 
         set({
           room: {
@@ -165,6 +167,12 @@ export const useAppState = create<AppState>()(
         const room = get().room;
         if (room) room.room.localParticipant.setCameraEnabled(!get().camStatus);
         set({ camStatus: !get().camStatus });
+      },
+      toggleScreen: () => {
+        const room = get().room;
+        if (room)
+          room.room.localParticipant.setScreenShareEnabled(!get().screenStatus);
+        set({ screenStatus: !get().screenStatus });
       },
     },
   })),

@@ -1,6 +1,13 @@
 "use client";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { Camera, Headset, Mic, PanelLeft, PhoneCall } from "lucide-react";
+import {
+  Camera,
+  Headset,
+  Mic,
+  MonitorUp,
+  PanelLeft,
+  PhoneCall,
+} from "lucide-react";
 import { cn } from "@repo/ui/lib/utils";
 import { useAtom } from "jotai";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
@@ -38,13 +45,19 @@ export function AppHeader() {
 
   const lk_room = useAppState((s) => s.room);
 
-  const { connectToRoom, disconnectFromCurrentRoom, toggleCam, toggleMic } =
-    useAppState((s) => s.actions);
+  const {
+    connectToRoom,
+    disconnectFromCurrentRoom,
+    toggleCam,
+    toggleMic,
+    toggleScreen,
+  } = useAppState((s) => s.actions);
 
   const [isConnecting, setIsConnecting] = useState(false);
 
   const micStatus = useAppState((s) => s.micStatus);
   const camStatus = useAppState((s) => s.camStatus);
+  const screenStatus = useAppState((s) => s.screenStatus);
 
   const openSidebar = setSidebar.bind(null, true);
 
@@ -177,6 +190,18 @@ export function AppHeader() {
                   }}
                 >
                   <Camera className="size-4 group-data-[state=off]:text-red-500 " />
+                </Toggle>
+
+                <Toggle
+                  variant="outline"
+                  size="sm"
+                  className="group"
+                  pressed={screenStatus}
+                  onPressedChange={() => {
+                    toggleScreen();
+                  }}
+                >
+                  <MonitorUp className="size-4 group-data-[state=off]:text-red-500 " />
                 </Toggle>
               </div>
             </div>

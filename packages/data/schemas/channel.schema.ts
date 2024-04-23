@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "./config";
 
-export type ChannelsTypes = "page" | "room" | "thread";
+export type ChannelsTypes = "page" | "room" | "thread" | "resources";
 
 export const ChannelSchema = z.object({
   id: z.string().length(ID_LENGTH),

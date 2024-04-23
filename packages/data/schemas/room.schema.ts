@@ -14,7 +14,9 @@ export const MessageSchema = z.object({
   date: z.string().datetime(),
   // reactions: z.array()
   reactions: z.array(ReactionSchema).default([]),
-  type: z.enum(["text", "mention", "image", "voice"]).default("text"),
+  type: z
+    .enum(["text", "mention", "image", "voice", "video", "file"])
+    .default("text"),
 });
 
 export const RoomSchema = ChannelSchema.extend({
