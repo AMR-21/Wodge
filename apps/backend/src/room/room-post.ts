@@ -7,6 +7,8 @@ import { badRequest, getRoute } from "../lib/http-utils";
 export async function handlePost(req: Party.Request, party: RoomParty) {
   const route = getRoute(req);
 
+  console.log(JSON.parse(req.headers.get("channel-auth")!));
+
   switch (route) {
     case "/replicache-push":
       return roomPush(req, party);

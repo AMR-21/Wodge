@@ -11,13 +11,27 @@ import { createSocket } from "./create-socket";
 import { userMutators } from "@repo/data/models/user/user-mutators";
 import { roomMutators, threadMutators } from "@repo/data";
 import { CreateChannelArgs, createChannelRep } from "./create-channel-rep";
+import { Room } from "livekit-client";
+import { env } from "@repo/env";
 
 type ChannelMutators = typeof roomMutators | typeof threadMutators;
+
+interface ConnectionParams {
+  workspaceId?: string;
+  channelId?: string;
+  teamId?: string;
+  channelName?: string;
+}
+
 export interface AppState {
   userStore?: Replicache<typeof userMutators>;
   workspaces: Record<string, Replicache<typeof workspaceMutators>>;
   activeChanRep?: Replicache<ChannelMutators>;
   socket?: PartySocket;
+  room?: { room: Room; name: string; id: string };
+  micStatus?: boolean;
+  camStatus?: boolean;
+  deafenStatus?: boolean;
 
   actions: {
     addWorkspace: (
@@ -31,6 +45,10 @@ export interface AppState {
     ) => Replicache<typeof workspaceMutators> | void;
     removeWorkspace: (workspaceId: string) => void;
     setChannelRep: (rep: Replicache<ChannelMutators>) => void;
+    connectToRoom: (params: ConnectionParams) => Promise<Room | undefined>;
+    disconnectFromCurrentRoom: () => Promise<void>;
+    toggleMic: () => void;
+    toggleCam: () => void;
   };
 }
 
@@ -38,6 +56,7 @@ export const useAppState = create<AppState>()(
   devtools((set, get) => ({
     userStore: undefined,
     workspaces: {},
+    micStatus: true,
 
     actions: {
       addWorkspace: (workspaceId, userId) => {
@@ -86,6 +105,66 @@ export const useAppState = create<AppState>()(
       },
       setChannelRep: (rep) => {
         set({ activeChanRep: rep });
+      },
+
+      connectToRoom: async ({
+        workspaceId,
+        channelId,
+        teamId,
+        channelName,
+      }) => {
+        if (!workspaceId || !channelId || !teamId || !channelName) return;
+        const room = new Room();
+
+        const resp = await fetch(
+          `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/room/${channelId}/call-token`,
+          {
+            headers: {
+              "x-workspace-id": workspaceId,
+              "x-team-id": teamId,
+            },
+            credentials: "include",
+          },
+        );
+        const data = await resp.json<{
+          token: string;
+        }>();
+        await room.connect(env.NEXT_PUBLIC_LIVEKIT_URL, data.token);
+        // room.startAudio();
+        // console.log(room.canPlaybackAudio);
+        room.localParticipant.setMicrophoneEnabled(!!get().micStatus);
+        room.localParticipant.setCameraEnabled(!!get().camStatus);
+
+        set({
+          room: {
+            room,
+            name: channelName,
+            id: channelId,
+          },
+        });
+
+        return room;
+      },
+      disconnectFromCurrentRoom: async () => {
+        const room = get().room;
+        if (!room) {
+          set({ room: undefined });
+          return;
+        }
+
+        await room.room.disconnect();
+        set({ room: undefined });
+      },
+      toggleMic: () => {
+        const room = get().room;
+        if (room)
+          room.room.localParticipant.setMicrophoneEnabled(!get().micStatus);
+        set({ micStatus: !get().micStatus });
+      },
+      toggleCam: () => {
+        const room = get().room;
+        if (room) room.room.localParticipant.setCameraEnabled(!get().camStatus);
+        set({ camStatus: !get().camStatus });
       },
     },
   })),

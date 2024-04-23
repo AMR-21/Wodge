@@ -62,7 +62,8 @@ export const getCurrentUser = async (
 
   // Set user id in a header for some use cases
   req.headers.set("x-user-id", user.id);
-  // req.headers.set("x-user-data", JSON.stringify(session.user));
+
+  req.headers.set("x-user-data", JSON.stringify(user));
 
   return user;
 };

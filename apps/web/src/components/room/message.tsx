@@ -5,14 +5,10 @@ import {
 } from "@repo/ui/components/ui/avatar";
 import { useMember } from "@repo/ui/hooks/use-member";
 import { format } from "date-fns";
-import { lastSenderIdAtom } from "./message-list";
 import { DrObj, Message as MessageType } from "@repo/data";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
 import { MoreHorizontal } from "lucide-react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
-import { useAtomValue } from "jotai";
+import React, { memo, useRef, useState } from "react";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

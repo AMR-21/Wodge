@@ -4,5 +4,6 @@
       "mode": "auto"
     }
   ],
-  "cSpell.words": ["downloadurl", "LIVEKIT", "uppy"]
+  "cSpell.words": ["downloadurl", "LIVEKIT", "uppy"],
+  "cSpell.ignoreWords": ["dompurify", "prosemirror"]
 }

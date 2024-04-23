@@ -56,6 +56,7 @@ export function canEdit({
     channelType?: ChannelsTypes;
   }) {
   const team = structure.teams.find((t) => t.id === teamId);
+
   const channel =
     channelType === "page"
       ? team?.folders

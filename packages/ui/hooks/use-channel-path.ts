@@ -41,6 +41,7 @@ export function useChannelPath() {
     return {
       team: team.name,
       room: room?.name,
+      roomId: room?.id,
     };
   }
 

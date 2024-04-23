@@ -28,6 +28,7 @@ export * from "./components/ui/radio-group";
 export * from "./components/ui/scroll-area";
 export * from "./components/ui/sheet";
 export * from "./components/ui/breadcrumb";
+export * from "./components/ui/toggle";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";

@@ -105,3 +105,10 @@ body,
 .color-picker .react-colorful__alpha {
   @apply h-2 rounded-md;
 }
+.lk-toast-connection-state {
+  @apply !hidden;
+}
+
+.lk-chat-toggle {
+  @apply !hidden;
+}

@@ -5,6 +5,7 @@ import { authorizeChannel, getCurrentUser } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 import { handlePost } from "./room-post";
 import { REPLICACHE_VERSIONS_KEY } from "@repo/data";
+import { handleGet } from "./room-get";
 
 export default class RoomParty implements Party.Server, RoomPartyInterface {
   options: Party.ServerOptions = {
@@ -33,8 +34,8 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
     switch (req.method) {
       case "POST":
         return await handlePost(req, this);
-      // case "GET":
-      //   return await handleGet(req, this);
+      case "GET":
+        return await handleGet(req, this);
       case "OPTIONS":
         return ok();
       default:

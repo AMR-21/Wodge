@@ -9,6 +9,7 @@
   "dependencies": {
     "aws-sdk": "^2.1599.0",
     "immer": "^10.0.3",
+    "livekit-server-sdk": "^2.1.2",
     "nanoid": "^5.0.5",
     "object-sizeof": "^2.6.4",
     "partysocket": "^0.0.25",
