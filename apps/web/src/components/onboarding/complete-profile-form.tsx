@@ -36,13 +36,12 @@ export function CompleteProfileForm() {
         body: JSON.stringify(data),
       });
 
-      console.log(res);
       if (!res.ok) {
-        throw new Error("Failed to update user");
+        toast.error("Username already exists.");
+        return false;
       }
-    },
-    onError: (error) => {
-      toast.error(error.message);
+
+      return true;
     },
   });
 
@@ -79,7 +78,7 @@ export function CompleteProfileForm() {
 
   async function onSubmit(data: z.infer<typeof UpdateUserSchema>) {
     startTransition(async () => {
-      console.log(typeof updateProfile);
+      // console.log(typeof updateProfile);
       // updateProfile(data).then(async (res) => {
       //   if (res?.error) {
       //     toast.error(res.error);
@@ -92,13 +91,15 @@ export function CompleteProfileForm() {
       //   }
       // });
 
-      await mutateAsync(data);
+      const ok = await mutateAsync(data);
 
-      queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
+      if (ok) {
+        queryClient.invalidateQueries({
+          queryKey: ["user"],
+        });
 
-      nextStep();
+        nextStep();
+      }
     });
   }
 
