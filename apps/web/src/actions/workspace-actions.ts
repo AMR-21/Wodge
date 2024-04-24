@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { currentUser } from "@/lib/utils";
 import {
   NewWorkspace,
   NewWorkspaceSchema,
@@ -8,7 +8,7 @@ import {
   workspaces,
   WorkspaceSchema,
 } from "@repo/data";
-import { db } from "@repo/data/server";
+import { createDb } from "@repo/data/server";
 import { eq } from "drizzle-orm";
 import "server-only";
 
@@ -18,9 +18,9 @@ export async function updateWorkspace(
   data: Pick<Workspace, "name" | "slug">,
 ) {
   // 1. Authenticate user
-  const session = await auth();
+  const user = await currentUser();
 
-  if (!session) {
+  if (!user) {
     return { error: "Unauthorized" };
   }
 
@@ -37,6 +37,8 @@ export async function updateWorkspace(
   }
 
   const { data: updatedData } = validatedFields;
+
+  const db = createDb();
 
   // 3. update workspace
   await db

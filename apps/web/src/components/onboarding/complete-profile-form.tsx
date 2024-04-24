@@ -20,7 +20,7 @@ import { Input } from "@repo/ui/components/ui/input";
 import { PublicUserType, UpdateUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/user-actions";
 import { toast } from "@repo/ui/components/ui/toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
@@ -28,6 +28,23 @@ export function CompleteProfileForm() {
   const [localUrl, setLocalUrl] = useState<string>("");
   const queryClient = useQueryClient();
   const avatarFileRef = useRef<HTMLInputElement>(null);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (data: z.infer<typeof UpdateUserSchema>) => {
+      const res = await fetch("/api/update-user", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      console.log(res);
+      if (!res.ok) {
+        throw new Error("Failed to update user");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
     resolver: zodResolver(UpdateUserSchema),
@@ -61,18 +78,27 @@ export function CompleteProfileForm() {
   }
 
   async function onSubmit(data: z.infer<typeof UpdateUserSchema>) {
-    startTransition(() => {
-      updateProfile(data).then(async (res) => {
-        if (res?.error) {
-          toast.error(res.error);
-        }
-        if (res?.success) {
-          queryClient.invalidateQueries({
-            queryKey: ["user"],
-          });
-          nextStep();
-        }
+    startTransition(async () => {
+      console.log(typeof updateProfile);
+      // updateProfile(data).then(async (res) => {
+      //   if (res?.error) {
+      //     toast.error(res.error);
+      //   }
+      //   if (res?.success) {
+      //     queryClient.invalidateQueries({
+      //       queryKey: ["user"],
+      //     });
+      //     nextStep();
+      //   }
+      // });
+
+      await mutateAsync(data);
+
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
       });
+
+      nextStep();
     });
   }
 

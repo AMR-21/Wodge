@@ -33,8 +33,8 @@ export function useCurrentUser() {
 
   useEffect(() => {
     if (!isPending && data) {
-      if (!useAppState.getState().userStore) createUserRep(data.id);
-      if (!useAppState.getState().socket) connectSocket(data.id);
+      if (!useAppState.getState().userStore) createUserRep(data?.id);
+      if (!useAppState.getState().socket) connectSocket(data?.id);
     }
   }, [data, isPending]);
 

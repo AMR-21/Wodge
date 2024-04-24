@@ -21,7 +21,6 @@ export function OnboardingProvider({
 }) {
   const [isPending, startTransition] = useTransition();
 
-  useCurrentUser();
   return (
     <Context.Provider
       value={{

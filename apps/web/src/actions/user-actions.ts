@@ -10,10 +10,11 @@ import { UpdateUserSchema } from "@repo/data";
 
 export async function updateProfile(rawData: z.infer<typeof UpdateUserSchema>) {
   // 1. Authenticate access
+
   const user = await currentUser();
 
   if (!user) {
-    return redirect("/login");
+    return { error: "Unauthorized" };
   }
 
   // 2. Validate data
