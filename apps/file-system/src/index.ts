@@ -23,6 +23,17 @@ import { nanoid } from "nanoid";
 
 import { fileTypeFromBuffer } from "file-type";
 
+async function notify(dom?: string, wid?: string, tid?: string, sKey?: string) {
+  if (!dom || !wid || !tid || !sKey) return;
+  const res = await fetch(`${dom}/parties/workspace/${wid}/notify-file`, {
+    method: "POST",
+    headers: {
+      "x-team-id": tid,
+      authorization: sKey,
+    },
+  });
+}
+
 const app = new Hono({ strict: false });
 app.use(prettyJSON());
 const api_bucket = app.basePath("/bucket");
@@ -187,6 +198,16 @@ api_object.post("/put/:bucket/:teamId/:path?", async (c) => {
       new GetObjectCommand({ Bucket: bucket, Key }),
       { expiresIn: 3600 }
     );
+
+    const workspaceId = c.req.header("x-workspace-id");
+
+    await notify(
+      c.env?.BACKEND_DOMAIN as string,
+      workspaceId,
+      teamId,
+      c.env?.SERVICE_KEY as string
+    );
+
     return c.json({ signedUrl, response, fileId }, 200);
   } catch (error) {
     console.log(error);
@@ -226,10 +247,12 @@ api_object.post("/delete/:bucket/:key", async (c) => {
 });
 
 // Download a file from a bucket
-api_object.get("/download/:bucket/:teamId/:objId", async (c) => {
+api_object.get("/download/:bucket/:teamId/:path", async (c) => {
   // let key = atob(c.req.param("key"));
   const bucket = c.req.param("bucket");
-  let key = c.req.param("teamId") + "/" + c.req.param("objId");
+
+  const path = atob(c.req.param("path"));
+  let key = c.req.param("teamId") + "/" + path;
 
   const checkfile = await getSignedUrl(
     s3Client,
@@ -273,15 +296,14 @@ api_object.get("/check/:bucket/:key", async (c) => {
 //list all files in a bucket in a path in recusive mode
 api_object.get("/list/:bucket/:path?", async (c) => {
   const bucket = c.req.param("bucket");
-  let path = c.req.param("path") as string;
-  if (path === undefined) {
-    path = "";
-  }
-  path = path.replace(/\+47%\+/g, "/").replace(/\+46%\+/g, ".");
+  let path = "";
+  if (c.req.param("path")) path = atob(c.req.param("path")!);
+
   const input = {
-    Bucket: bucket!,
-    Prefix: path!,
+    Bucket: bucket,
+    Prefix: path,
   };
+
   const command = new ListObjectsV2Command(input);
   const response = await s3Client.send(command);
   const keys = response.Contents?.map((content) => content.Key);
@@ -327,6 +349,9 @@ api_object.post("/copy/:source/:dest/:key", async (c) => {
     }
   }
 });
+
+// app.post("/lk-webhook", async (c) => {});
+
 app.all("*", async (c, next) => {
   await next();
   return c.newResponse(null, { status: 501 });

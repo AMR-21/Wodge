@@ -66,7 +66,8 @@ export type PokeMessage = {
     | "welcome"
     | "deleteWorkspace"
     | "workspaceInfo"
-    | "invite";
+    | "invite"
+    | "team-files";
   id?: string;
 };
 

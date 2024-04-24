@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { Button } from "@repo/ui/components/ui/button";
 import { useSetAtom } from "jotai";
-import { msgsAtom } from "./message-list";
+import { msgsAtom } from "../room/message-list";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
@@ -59,9 +59,6 @@ export function UploadButton({
           // formData: false,
           method: "POST",
           endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
-          headers: {
-            "x-workspace-id": bucketId,
-          },
         })
         .on("complete", (e) => {
           const fileId = e.successful[0]?.response?.body?.fileId as

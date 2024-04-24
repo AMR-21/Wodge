@@ -132,6 +132,7 @@ export default class WorkspaceParty
     }
 
     if (getRoute(req) === "/auth-channel") return req;
+    if (getRoute(req) === "/notify-file") return req;
 
     try {
       // maybe removed when bindings are supported

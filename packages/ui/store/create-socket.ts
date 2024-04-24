@@ -53,6 +53,11 @@ export function createSocket(userId: string) {
           return queryClient.invalidateQueries({
             queryKey: ["invites", data.id],
           });
+
+        case "team-files":
+          return queryClient.invalidateQueries({
+            queryKey: ["resources", data.id],
+          });
         default:
           userStore?.pull();
       }
