@@ -40,7 +40,7 @@ export const Message = memo(
       queryKey: ["image", message.id],
       queryFn: async () => {
         const res = await fetch(
-          `${env.NEXT_PUBLIC_FS_DOMAIN}/object/download/${btoa(workspaceId!).toLowerCase()}/${teamId}/${message.id}`,
+          `${env.NEXT_PUBLIC_FS_DOMAIN}/object/download/${btoa(workspaceId!).toLowerCase()}/${"messages+" + teamId}/${message.id}`,
         );
 
         const { downloadurl } = await res.json<{

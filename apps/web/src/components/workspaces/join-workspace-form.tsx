@@ -27,6 +27,8 @@ export function JoinWorkspaceForm() {
     },
   });
 
+  const router = useRouter();
+
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -45,6 +47,8 @@ export function JoinWorkspaceForm() {
       queryClient.invalidateQueries({
         queryKey: ["user-workspaces"],
       });
+
+      // router.push(`//${data}`);
     },
     onError: (e) => {
       toast.error(e.message);

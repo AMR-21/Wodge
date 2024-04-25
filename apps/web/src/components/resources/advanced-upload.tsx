@@ -12,18 +12,15 @@ import { useMemo, useRef, useState } from "react";
 import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/react";
 import { useParams } from "next/navigation";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { Button } from "@repo/ui/components/ui/button";
-import { useSetAtom } from "jotai";
-import { msgsAtom } from "../room/message-list";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
-import { nanoid } from "nanoid";
 import { roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
 import { env } from "@repo/env";
+import { Input } from "@repo/ui/components/ui/input";
+import { Label } from "@repo/ui/components/ui/label";
 
-export function UploadButton({
+export function AdvancedUploadButton({
   bucketId,
   rep,
 }: {
@@ -31,9 +28,12 @@ export function UploadButton({
   rep?: Replicache<typeof roomMutators>;
 }) {
   const [open, setOpen] = useState(false);
+  const [resetFlag, setResetFlag] = useState(false);
+  const [folder, setFolder] = useState<string>("");
 
-  const { teamId } = useParams<{ teamId: string }>();
-  const setMessages = useSetAtom(msgsAtom);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { teamId, path } = useParams<{ teamId: string; path?: string[] }>();
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
 
@@ -53,65 +53,81 @@ export function UploadButton({
           maxNumberOfFiles: 1,
         },
       })
-        .use(XHRUpload, {
-          limit: 1,
-
-          // formData: false,
-          method: "POST",
-          endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${teamId}`,
+        .on("upload", (e) => {
+          completeUpload(e.fileIDs);
         })
-        .on("complete", (e) => {
-          const fileId = e.successful[0]?.response?.body?.fileId as
-            | string
-            | undefined;
-
-          if (fileId && user) {
-            setOpen(false);
-
-            completeUpload(
-              fileId,
-              e.successful[0]?.response?.body?.signedUrl as string,
-            );
-
-            cancel();
-          }
+        .on("upload-success", (e) => {
+          setResetFlag((prev) => !prev);
+          setFolder("");
+          setOpen(false);
         }),
-    [rep],
+    [resetFlag],
   );
 
-  function cancel() {
-    uppyRef.cancelAll();
-    setOpen(false);
-  }
-
-  async function completeUpload(fileId: string, signedUrl: string) {
+  async function completeUpload(fileIds: string[]) {
     if (!user) return;
-    await rep?.mutate.sendMessage({
-      sender: user.id,
-      content: "aa",
-      date: new Date().toISOString(),
-      id: fileId,
-      type: "image",
-      reactions: [],
+
+    const file = uppyRef
+      .getFiles()
+      .filter((f) => fileIds.includes(f.id))
+      .at(0);
+
+    if (!file) return;
+
+    const folder = inputRef.current?.value;
+    const filePath = folder
+      ? folder + "/" + file.name
+      : path
+        ? path.join("/") + "/" + file.name
+        : file.name;
+
+    const base64 = btoa(filePath);
+
+    uppyRef.use(XHRUpload, {
+      limit: 1,
+      method: "POST",
+      endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${teamId}/${base64}`,
+      headers: {
+        "x-workspace-id": bucketId,
+      },
     });
 
-    queryClient.setQueryData(["image", fileId], signedUrl);
+    queryClient.invalidateQueries({
+      queryKey: ["resources", teamId],
+    });
   }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <SidebarItemBtn Icon={Plus} className="mr-2" />
+        <SidebarItemBtn Icon={Plus} className="" />
       </PopoverTrigger>
-      <PopoverContent className="w-fit p-0">
+      <PopoverContent className="w-fit max-w-72 ">
         <Dashboard
           uppy={uppyRef}
-          id="dahsboard"
-          height={240}
+          id="dashboard"
+          height={"auto"}
           width={240}
           className="flex justify-center"
-          theme="auto"
         />
+
+        <div className="space-y-1">
+          <Label htmlFor="file-path">File path</Label>
+          <Input
+            ref={inputRef}
+            id="file-path"
+            value={folder}
+            onChange={(e) => setFolder(e.target.value)}
+          />
+          <p className="break-words pt-2 text-xs text-muted-foreground">
+            Optionally you can provide a path for the file otherwise we will use
+            the current active path.
+          </p>
+          <p className="break-words text-xs text-muted-foreground">
+            For example "newFolder" will create a new folder called newFolder
+            and the upload the file inside it.
+          </p>
+        </div>
       </PopoverContent>
     </Popover>
   );

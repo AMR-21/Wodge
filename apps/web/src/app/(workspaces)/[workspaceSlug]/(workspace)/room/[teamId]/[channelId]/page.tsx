@@ -10,7 +10,6 @@ import { useAtom } from "jotai";
 import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
 import "@uppy/core/dist/style.min.css";
-import "@uppy/dashboard/dist/style.min.css";
 
 import { UploadButton } from "@/components/room/upload-button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";

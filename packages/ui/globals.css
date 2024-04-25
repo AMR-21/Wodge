@@ -112,3 +112,72 @@ body,
 .lk-chat-toggle {
   @apply !hidden;
 }
+
+.uppy-Dashboard-inner {
+  @apply border-none bg-transparent text-foreground;
+}
+
+[data-uppy-drag-drop-supported="true"] .uppy-Dashboard-AddFiles {
+  @apply border-none;
+}
+
+.uppy-Dashboard-AddFiles-title {
+  @apply text-foreground;
+}
+
+.uppy-Dashboard-browse {
+  @apply border-b-[1px] border-b-transparent text-sky-500;
+
+  &:hover {
+    @apply border-b-sky-500;
+  }
+}
+
+.uppy-DashboardContent-bar {
+  @apply border-none bg-transparent text-foreground;
+}
+
+.uppy-DashboardContent-back,
+.uppy-StatusBar-actionBtn {
+  @apply text-sky-500 hover:text-sky-600 dark:hover:text-sky-400;
+}
+
+.uppy-Dashboard-Item {
+  @apply border-none;
+}
+
+/* .uppy-StatusBar-actions {
+  @apply border-none bg-transparent;
+} */
+.uppy-StatusBar.is-waiting .uppy-StatusBar-actionBtn--upload {
+  @apply rounded-md bg-primary text-primary-foreground;
+}
+
+.uppy-StatusBar:not([aria-hidden="true"]).is-waiting {
+  @apply border-none;
+}
+
+.uppy-StatusBar.is-waiting .uppy-StatusBar-actions {
+  @apply border-none bg-transparent;
+}
+.uppy-StatusBar:not([aria-hidden="true"]).is-waiting {
+  @apply border-none bg-transparent;
+}
+
+.uppy-DashboardContent-back:focus,
+.uppy-DashboardContent-save:focus,
+.uppy-StatusBar-actionBtn:focus {
+  @apply bg-secondary;
+}
+
+.uppy-StatusBar {
+  @apply bg-transparent text-foreground;
+}
+
+.uppy-StatusBar-statusPrimary {
+  @apply text-foreground;
+}
+
+.uppy-StatusBar-statusIndicator {
+  @apply fill-foreground;
+}

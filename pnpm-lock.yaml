@@ -214,6 +214,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.2.4
         version: 2.3.0(@tiptap/pm@2.3.0)
+      '@uppy/audio':
+        specifier: ^1.1.8
+        version: 1.1.8(@uppy/core@3.10.1)
       '@uppy/core':
         specifier: ^3.10.1
         version: 3.10.1
@@ -226,6 +229,9 @@ importers:
       '@uppy/file-input':
         specifier: ^3.1.1
         version: 3.1.1(@uppy/core@3.10.1)
+      '@uppy/google-drive':
+        specifier: ^3.5.0
+        version: 3.5.0(@uppy/core@3.10.1)
       '@uppy/progress-bar':
         specifier: ^3.1.1
         version: 3.1.1(@uppy/core@3.10.1)
@@ -8749,6 +8755,16 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
+  /@uppy/audio@1.1.8(@uppy/core@3.10.1):
+    resolution: {integrity: sha512-NQC3j7157I4L3jmBXYpJEr7OELN+QCR6SCmx2lW5tMXTBArWpl2i0W8T8H977SQ/u/I8mQD3Aw2H85NvwDZTnQ==}
+    peerDependencies:
+      '@uppy/core': ^3.10.0
+    dependencies:
+      '@uppy/core': 3.10.1
+      '@uppy/utils': 5.8.0
+      preact: 10.11.3
+    dev: false
+
   /@uppy/companion-client@3.8.0(@uppy/core@3.10.1):
     resolution: {integrity: sha512-CnIUAlmwz3qvT0LC9EMTiXH6hv9veGsYEZfXYsVb7b+hg21pOktkQrYB71Gf+rH9XdpZPcPBRrTx9ihZZnvAdg==}
     peerDependencies:
@@ -8809,6 +8825,18 @@ packages:
       '@uppy/core': ^3.10.0
     dependencies:
       '@uppy/core': 3.10.1
+      '@uppy/utils': 5.8.0
+      preact: 10.11.3
+    dev: false
+
+  /@uppy/google-drive@3.5.0(@uppy/core@3.10.1):
+    resolution: {integrity: sha512-AkJ5AhqJ7rPyuKT1h7T/ThEfFCbRfCm/gpPg8j7EnHeQypRKrFZXWe5wZM5mb7ARtOLAdonNzCgyffpl90jwjg==}
+    peerDependencies:
+      '@uppy/core': ^3.10.0
+    dependencies:
+      '@uppy/companion-client': 3.8.0(@uppy/core@3.10.1)
+      '@uppy/core': 3.10.1
+      '@uppy/provider-views': 3.11.0(@uppy/core@3.10.1)
       '@uppy/utils': 5.8.0
       preact: 10.11.3
     dev: false

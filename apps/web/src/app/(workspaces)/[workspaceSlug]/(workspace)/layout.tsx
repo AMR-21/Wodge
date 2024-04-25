@@ -8,6 +8,8 @@ import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 
+
+
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const isDesktop = useIsDesktop();
   const setSidebarOpen = useSetAtom(isSidebarOpenAtom);

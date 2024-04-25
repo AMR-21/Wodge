@@ -102,7 +102,11 @@ export default function RoomPage() {
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
         data-lk-theme="default"
         className="flex w-full flex-col"
+        options={{
+          disconnectOnPageLeave: false,
+        }}
         onDisconnected={async () => {
+          console.log("Disconnected from room");
           await disconnectFromCurrentRoom();
         }}
       >

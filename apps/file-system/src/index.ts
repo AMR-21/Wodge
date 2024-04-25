@@ -155,41 +155,18 @@ api_object.post("/put/:bucket/:teamId/:path?", async (c) => {
 
   const fileId = nanoid();
 
-  const body = await c.req.arrayBuffer();
+  const body = await c.req.parseBody();
 
-  // const f = body.get("file") as File;
-  // const file_extension = await fileTypeFromBuffer(body);
-  // const file_extension = { ext: "tsx" };
-
-  // if (!file_extension) return c.json({ message: "Invalid file type" }, 400);
+  const file = body["file"] as File;
 
   const Key = teamId + "/" + (path || fileId);
 
-  // var body: string | ArrayBuffer;
-  // var content_type;
-
-  // return c.json({ message: "Invalid file type" }, 400);
-
   try {
-    // if (
-    //   ["txt", "js", "html", "css", "json", "ts"].includes(file_extension?.ext)
-    // ) {
-    //   // body = await c.req.text();
-    //   // body = body.toString();
-    //   // content_type = "text/plain";
-    //   content_type = "application/octet-stream";
-    // } else if (
-    //   ["jpg", "jpeg", "png", "gif", "mp4", "pdf"].includes(file_extension?.ext)
-    // ) {
-    //   content_type = "application/octet-stream";
-    // } else {
-    //   return c.json({ message: "Invalid file type" }, 400);
-    // }
     const input = {
-      Body: body as Buffer,
+      Body: file,
       Bucket: bucket!,
       Key,
-      ContentType: "application/octet-stream",
+      ContentType: file.type,
     };
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
@@ -215,9 +192,10 @@ api_object.post("/put/:bucket/:teamId/:path?", async (c) => {
   }
 });
 // Delete a file from a bucket
-api_object.post("/delete/:bucket/:key", async (c) => {
+api_object.post("/delete/:bucket/:teamId/:key", async (c) => {
   const bucket = c.req.param("bucket");
-  let key = atob(c.req.param("key"));
+  const teamId = c.req.param("teamId");
+  let key = teamId + "/" + atob(c.req.param("key"));
 
   const checkfile = await getSignedUrl(
     s3Client,

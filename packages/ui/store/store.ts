@@ -115,7 +115,9 @@ export const useAppState = create<AppState>()(
         channelName,
       }) => {
         if (!workspaceId || !channelId || !teamId || !channelName) return;
-        const room = new Room();
+        const room = new Room({
+          disconnectOnPageLeave: false,
+        });
 
         const resp = await fetch(
           `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/room/${channelId}/call-token`,
@@ -136,7 +138,6 @@ export const useAppState = create<AppState>()(
         room.localParticipant.setMicrophoneEnabled(!!get().micStatus);
         room.localParticipant.setCameraEnabled(!!get().camStatus);
         room.localParticipant.setScreenShareEnabled(!!get().screenStatus);
-
         set({
           room: {
             room,
