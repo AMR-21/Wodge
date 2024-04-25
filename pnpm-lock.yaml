@@ -241,6 +241,9 @@ importers:
       '@uppy/status-bar':
         specifier: ^3.3.1
         version: 3.3.1(@uppy/core@3.10.1)
+      '@uppy/webcam':
+        specifier: ^3.4.0
+        version: 3.4.0(@uppy/core@3.10.1)
       '@uppy/xhr-upload':
         specifier: ^3.6.4
         version: 3.6.4(@uppy/core@3.10.1)
@@ -8940,6 +8943,17 @@ packages:
       preact: 10.11.3
     dev: false
 
+  /@uppy/webcam@3.4.0(@uppy/core@3.10.1):
+    resolution: {integrity: sha512-Es2XolcOPtCyRS5nBFovgclA/4O3OwPHO6lq2EgK46CTjnQ514Y2eAf/0SxBmQ+0eKhg3EYSZzioK7Yg9jPrKQ==}
+    peerDependencies:
+      '@uppy/core': ^3.10.0
+    dependencies:
+      '@uppy/core': 3.10.1
+      '@uppy/utils': 5.8.0
+      is-mobile: 3.1.1
+      preact: 10.11.3
+    dev: false
+
   /@uppy/xhr-upload@3.6.4(@uppy/core@3.10.1):
     resolution: {integrity: sha512-9CI0W5Q2pq7rRLF5Jp9/Va2Dp3LDBjTXIiC8t6QufSodcn6lqvGCk0zRG0nbkDLptuqNkrHMTpyGg9qXI8DDPw==}
     peerDependencies:
@@ -13060,6 +13074,10 @@ packages:
 
   /is-map@2.0.2:
     resolution: {integrity: sha512-cOZFQQozTha1f4MxLFzlgKYPTyj26picdZTx82hbc/Xf4K/tZOOXSCkMvU4pKioRXGDLJRn0GM7Upe7kR721yg==}
+
+  /is-mobile@3.1.1:
+    resolution: {integrity: sha512-RRoXXR2HNFxNkUnxtaBdGBXtFlUMFa06S0NUKf/LCF+MuGLu13gi9iBCkoEmc6+rpXuwi5Mso5V8Zf7mNynMBQ==}
+    dev: false
 
   /is-negative-zero@2.0.2:
     resolution: {integrity: sha512-dqJvarLawXsFbNDeJW7zAz8ItJ9cd28YufuuFzh0G8pNHjJMnY08Dv7sYX2uF5UpQOwieAeOExEYAWWfu7ZZUA==}

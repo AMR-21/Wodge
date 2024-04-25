@@ -57,9 +57,9 @@ export function AdvancedUploadButton({
           completeUpload(e.fileIDs);
         })
         .on("upload-success", (e) => {
-          setResetFlag((prev) => !prev);
+          // setResetFlag((prev) => !prev);
           setFolder("");
-          setOpen(false);
+          // setOpen(false);
         }),
     [resetFlag],
   );

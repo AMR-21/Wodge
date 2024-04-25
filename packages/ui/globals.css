@@ -150,7 +150,7 @@ body,
   @apply border-none bg-transparent;
 } */
 .uppy-StatusBar.is-waiting .uppy-StatusBar-actionBtn--upload {
-  @apply rounded-md bg-primary text-primary-foreground;
+  @apply rounded-md bg-primary text-primary-foreground hover:bg-primary/90;
 }
 
 .uppy-StatusBar:not([aria-hidden="true"]).is-waiting {
@@ -170,6 +170,16 @@ body,
   @apply bg-secondary;
 }
 
+.uppy-StatusBar-actionBtn,
+.uppy-StatusBar-actionBtn--retry {
+  @apply text-red-500 hover:text-red-50;
+}
+
+.uppy-StatusBar-actionBtn,
+.uppy-StatusBar-actionBtn--success {
+  @apply text-sky-500 hover:text-red-50;
+}
+
 .uppy-StatusBar {
   @apply bg-transparent text-foreground;
 }
@@ -179,5 +189,17 @@ body,
 }
 
 .uppy-StatusBar-statusIndicator {
-  @apply fill-foreground;
+  @apply fill-green-500;
+}
+
+.uppy-StatusBar.is-complete .uppy-StatusBar-progress {
+  @apply bg-green-500;
+}
+
+.uppy-StatusBar.is-error .uppy-StatusBar-statusIndicator {
+  @apply fill-red-500;
+}
+
+.uppy-StatusBar.is-error .uppy-StatusBar-progress {
+  @apply bg-red-500;
 }

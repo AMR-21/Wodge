@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@uppy/dashboard/dist/style.min.css";
+import "@uppy/audio/dist/style.min.css";
+import "@uppy/webcam/dist/style.min.css";
 import "@repo/editor/src/styles/index.css";
 import "@repo/ui/styles";
 import { ThemeProvider } from "@/components/theme-provider";

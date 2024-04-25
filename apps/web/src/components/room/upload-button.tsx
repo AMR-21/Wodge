@@ -20,6 +20,8 @@ import { roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
 import { env } from "@repo/env";
 
+import Audio from "@uppy/audio";
+
 export function UploadButton({
   bucketId,
   rep,
@@ -50,6 +52,7 @@ export function UploadButton({
           maxNumberOfFiles: 1,
         },
       })
+        .use(Audio)
         .use(XHRUpload, {
           limit: 1,
 
