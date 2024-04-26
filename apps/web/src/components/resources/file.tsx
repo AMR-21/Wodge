@@ -28,7 +28,7 @@ export function File({
           variant: "ghost",
           size: "sm",
         }),
-        "group items-center justify-start gap-2 rounded-none py-4 text-base",
+        "group items-center justify-start gap-2 rounded-none py-4 ",
       )}
     >
       <FileIcon className="h-4 w-4" />
