@@ -52,6 +52,10 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
+    if (nextUrl.pathname === "/api/ai") {
+      return response;
+    }
+
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }

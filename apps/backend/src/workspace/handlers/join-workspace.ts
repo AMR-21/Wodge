@@ -6,6 +6,7 @@ import {
   REPLICACHE_VERSIONS_KEY,
   WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
+  WORKSPACE_STRUCTURE_KEY,
   addWorkspaceMember,
   makeWorkspaceMembersKey,
 } from "@repo/data";
@@ -97,12 +98,22 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // 10. Update presence
   party.presenceMap.set(userId, true);
 
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    const def = draft.data.teams.find((t) => t.default);
+
+    if (def) {
+      def.members.push(userId);
+      draft.lastModifiedVersion = nextVersion;
+    }
+  });
+
   // 11. persist updates
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [WORKSPACE_INVITES_KEY]: party.invites,
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
+    [WORKSPACE_STRUCTURE_KEY]: party.workspaceStructure,
   });
 
   // Inform current members of the new user

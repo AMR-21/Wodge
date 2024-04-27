@@ -27,11 +27,13 @@ import { deleteGroupMutation } from "./mutators/delete-group";
 import { createPageMutation } from "./mutators/create-page";
 import { createRoomMutation } from "./mutators/create-room";
 import { createThreadMutation } from "./mutators/create-thread";
-import { Page } from "../../schemas/channel.schema";
+import { ChannelsTypes, Page } from "../../schemas/channel.schema";
 import { Team } from "../../schemas/team.schema";
 import { Room } from "../../schemas/room.schema";
 import { Thread } from "../../schemas/thread.schema";
 import { toggleThreadMutation } from "./mutators/toggle-thread";
+import { deleteChannelMutation } from "./mutators/delete-channel";
+import { updatePageMutation } from "./mutators/update-page";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -244,6 +246,22 @@ export const workspaceMutators = {
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
 
+  async updatePage(tx: WriteTransaction, data: NewPageArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { folderId, teamId, ...page } = data;
+
+    const newStructure = updatePageMutation({
+      page,
+      teamId,
+      folderId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
   async createRoom(tx: WriteTransaction, data: NewRoomArgs) {
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
@@ -311,4 +329,27 @@ export const workspaceMutators = {
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
+
+  async deleteChannel(tx: WriteTransaction, data: DeleteChannelArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const newStructure = deleteChannelMutation({
+      channelId: data.channelId,
+      folderId: data?.folderId,
+      structure,
+      teamId: data.teamId,
+      type: data.type,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+};
+
+export type DeleteChannelArgs = {
+  channelId: string;
+  folderId?: string;
+  teamId: string;
+  type: ChannelsTypes;
 };

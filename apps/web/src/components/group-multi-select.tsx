@@ -20,6 +20,7 @@ import { useEffect, useMemo, useState } from "react";
 interface GroupMultiSelectProps {
   baseGroups: readonly DrObj<Group>[];
   onChange: (...event: any[]) => void;
+  preset?: string[];
 }
 
 const teamMember: Group = {
@@ -33,8 +34,9 @@ const teamMember: Group = {
 export function GroupMultiSelect({
   baseGroups,
   onChange,
+  preset,
 }: GroupMultiSelectProps) {
-  const [value, setValue] = useState<string[]>([teamMember.id]);
+  const [value, setValue] = useState<string[]>(preset || [teamMember.id]);
 
   const groups = useMemo(() => [teamMember, ...baseGroups], [baseGroups]);
   useEffect(() => {

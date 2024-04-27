@@ -13,6 +13,6 @@ interface WorkspaceGroupMutation {
 interface WorkspaceChannelMutation {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
   channelId: string;
-  folderId: string;
+  folderId?: string;
   teamId: string;
 }

@@ -72,7 +72,7 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="viewGroups"
             render={({ field }) => {
@@ -106,7 +106,7 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
                 </FormItem>
               );
             }}
-          />
+          /> */}
 
           <Button type="submit" className="w-full">
             Create thread

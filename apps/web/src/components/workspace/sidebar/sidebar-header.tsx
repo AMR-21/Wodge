@@ -20,10 +20,10 @@ export function SidebarHeader() {
     >
       <WorkspaceSwitcher />
 
-      <div className="ml-auto flex items-center gap-1">
+      <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
+      <div className="ml-auto flex shrink-0 basis-1/4 items-center gap-1">
         {/* <SidebarItemBtn Icon={Search} />
         <SidebarItemBtn Icon={Plus} className="bg-secondary" /> */}
-        <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
       </div>
     </div>
   );

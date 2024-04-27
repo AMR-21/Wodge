@@ -34,31 +34,46 @@ import {
 } from "@repo/ui/components/ui/select";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export function AddPageForm({
   folderId,
   teamId,
+  page,
 }: {
   folderId?: string;
   teamId: string;
+  page?: Page;
 }) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Page>({
     resolver: zodResolver(PageSchema),
     defaultValues: {
-      name: "",
-      avatar: "",
-      editGroups: ["team-members"],
-      viewGroups: ["team-members"],
-      id: nanoid(ID_LENGTH),
+      name: page?.avatar || "",
+      avatar: page?.avatar || "",
+      editGroups: page?.editGroups || ["team-members"],
+      viewGroups: page?.viewGroups || ["team-members"],
+      id: page?.id || nanoid(ID_LENGTH),
     },
   });
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
+  useEffect(() => {
+    form?.reset(page);
+  }, [page]);
+
   async function onSubmit(data: Page) {
+    if (page) {
+      await workspaceRep?.mutate.updatePage({
+        folderId: folderId || "root-" + teamId,
+        teamId,
+        ...data,
+      });
+      return closeRef.current?.click();
+    }
+
     await workspaceRep?.mutate.createPage({
       folderId: folderId || "root-" + teamId,
       teamId,
@@ -100,6 +115,7 @@ export function AddPageForm({
                     <GroupMultiSelect
                       onChange={field.onChange}
                       baseGroups={structure.groups}
+                      preset={page?.viewGroups}
                     />
                   </FormControl>
                 </FormItem>
@@ -118,6 +134,7 @@ export function AddPageForm({
                     <GroupMultiSelect
                       onChange={field.onChange}
                       baseGroups={structure.groups}
+                      preset={page?.editGroups}
                     />
                   </FormControl>
                 </FormItem>
@@ -126,7 +143,7 @@ export function AddPageForm({
           />
 
           <Button type="submit" className="w-full">
-            Create page
+            {page ? "Update" : "Create"} page
           </Button>
 
           <DialogClose asChild>

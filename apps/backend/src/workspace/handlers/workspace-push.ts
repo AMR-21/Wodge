@@ -16,6 +16,8 @@ import { createRoom } from "../mutators/create-room";
 import { createThread } from "../mutators/create-thread";
 import { toggleThread } from "../mutators/toggle-thread";
 import { isAdmin, isOwner, isTeamMember, isTeamModerator } from "@repo/data";
+import { deleteChannel } from "../mutators/delete-channel";
+import { updatePage } from "../mutators/update-page";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -97,13 +99,17 @@ function runner(party: WorkspaceParty, req: Party.Request) {
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
         return await createPage(party, params);
 
+      case "updatePage":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await updatePage(party, params);
+
       case "createRoom":
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
 
         return await createRoom(party, params);
 
       case "createThread":
-        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        // if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
 
         return await createThread(party, params);
 
@@ -114,6 +120,9 @@ function runner(party: WorkspaceParty, req: Party.Request) {
           isOwnerOrAdmin || isTeamModeratorFlag
         );
 
+      case "deleteChannel":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await deleteChannel(party, params);
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }

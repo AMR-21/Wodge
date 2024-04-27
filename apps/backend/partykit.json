@@ -9,5 +9,6 @@
     "thread": "src/thread/thread-party.ts",
     "page": "src/page/page-party.ts"
   },
+  "ai": true,
   "compatibilityDate": "2024-02-14"
 }

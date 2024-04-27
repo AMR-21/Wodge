@@ -18,7 +18,7 @@ export function ThreadMessage({ msg }: { msg: ThreadMessageType }) {
     return <ThreadAction msg={msg} member={member} />;
 
   return (
-    <div className="z-10 w-full rounded-md border border-border/50 bg-dim px-2 py-4">
+    <div className="z-10 flex w-full flex-col items-start rounded-md border border-border/50 bg-dim  px-2 py-4">
       <div className="flex items-start gap-2">
         <Avatar className="h-7 w-7">
           <AvatarImage

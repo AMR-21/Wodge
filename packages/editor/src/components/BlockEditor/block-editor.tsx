@@ -1,7 +1,7 @@
 'use client'
 
 import { EditorContent } from '@tiptap/react'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { LinkMenu } from '../menus'
 
@@ -16,15 +16,16 @@ import { ContentItemMenu } from '../menus/ContentItemMenu'
 import { EditorInfo } from './components/EditorInfo'
 import { EditorCounts } from './components/EditorCounts'
 import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
-import { PublicUserType } from '../../../../data'
+import { PublicUserType, users } from '../../../../data'
 import { ScrollArea } from '@repo/ui/components/ui/scroll-area'
+import { useCanEdit } from '@repo/ui/hooks/use-can-edit'
 
 export const BlockEditor = ({
   ydoc,
   provider,
   user,
 }: TiptapProps & {
-  user: PublicUserType
+  user: typeof users.$inferSelect
 }) => {
   const menuContainerRef = useRef(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
@@ -34,6 +35,14 @@ export const BlockEditor = ({
     provider,
     user,
   })
+
+  const canEdit = useCanEdit({ type: 'page' })
+
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(canEdit)
+    }
+  }, [canEdit, editor])
 
   const displayedUsers = users.slice(0, 5)
 

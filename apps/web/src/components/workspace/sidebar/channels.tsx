@@ -9,7 +9,12 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
-import { ChannelsTypes, DrObj, type Channel as ChannelType } from "@repo/data";
+import {
+  ChannelsTypes,
+  DrObj,
+  Page,
+  type Channel as ChannelType,
+} from "@repo/data";
 import {
   SortableContext,
   useSortable,
@@ -24,9 +29,17 @@ import { useParams } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
 import { useCanView } from "@repo/ui/hooks/use-can-view";
+import { AddPageForm } from "./add-page-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@repo/ui/components/ui/dialog";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -161,7 +174,7 @@ export const Channel = React.forwardRef<
     { channel, activeIndex, folderId, teamId, isDragging, type, ...props },
     ref,
   ) => {
-    const { workspaceSlug } = useCurrentWorkspace();
+    const { workspaceSlug, workspaceRep } = useCurrentWorkspace();
 
     const { channelId } = useParams() as { channelId: string };
 
@@ -193,15 +206,44 @@ export const Channel = React.forwardRef<
         >
           <span className="select-none truncate">{channel.name}</span>
           <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarItemBtn
-                  Icon={MoreHorizontal}
-                  className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>dasd</DropdownMenuContent>
-            </DropdownMenu>
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarItemBtn
+                    Icon={MoreHorizontal}
+                    className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem className="text-gray-500 hover:text-gray-400">
+                      Edit channel
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500 hover:text-red-400"
+                    onClick={async () => {
+                      await workspaceRep?.mutate.deleteChannel({
+                        channelId: channel.id,
+                        type,
+                        teamId,
+                        folderId,
+                      });
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <AddPageForm
+                teamId={teamId}
+                folderId={folderId}
+                page={channel as Page}
+              />
+            </Dialog>
           </div>
         </SidebarItem>
       </li>

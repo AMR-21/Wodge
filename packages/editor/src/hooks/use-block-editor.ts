@@ -11,7 +11,9 @@ import { randomElement } from '../lib/utils'
 import { EditorUser } from '../components/BlockEditor/types'
 import YPartyKitProvider from 'y-partykit/provider'
 import { useCurrentUser } from '@repo/ui/hooks/use-current-user'
-import { PublicUserType } from '../../../data'
+import { PublicUserType, users } from '../../../data'
+
+import { useCanEdit } from '@repo/ui/hooks/use-can-edit'
 
 // TODO AI
 export const useBlockEditor = ({
@@ -21,10 +23,13 @@ export const useBlockEditor = ({
 }: {
   ydoc: Y.Doc
   provider: YPartyKitProvider
-  user: PublicUserType
+  user: typeof users.$inferSelect
 }) => {
+  const canEdit = useCanEdit({ type: 'page' })
+  // console.log({ canEdit })
   const editor = useEditor(
     {
+      // editable: canEdit,
       autofocus: true,
       extensions: [
         ...ExtensionKit({

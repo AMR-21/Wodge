@@ -22,7 +22,7 @@ import { AddFolderForm } from "./add-folder-form";
 import { useState } from "react";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
-import { ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
+import { ID_LENGTH, Page, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 
 interface TeamMoreProps {
@@ -146,7 +146,7 @@ export function TeamMore({ teamId, folderId }: TeamMoreProps) {
       </DropdownMenu>
 
       {activeTab === "page" ? (
-        <AddPageForm teamId={teamId} />
+        <AddPageForm teamId={teamId} folderId={folderId} />
       ) : (
         <AddFolderForm teamId={teamId} />
       )}

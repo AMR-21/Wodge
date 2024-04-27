@@ -16,12 +16,21 @@ import {
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import queryString from "query-string";
+
+import { Ai } from "partykit-ai";
+
 export default class PageParty implements Party.Server {
   // options: Party.ServerOptions = {
   //   hibernate: true,
   // };
+  ai: Ai;
+  constructor(readonly room: Party.Room) {
+    this.ai = new Ai(room.context.ai);
+  }
 
-  constructor(readonly room: Party.Room) {}
+  async onStart() {
+    // this.ai = new Ai(this.room.context.ai);
+  }
 
   async onConnect(conn: Party.Connection) {
     return await onConnect(conn, this.room, {
@@ -34,6 +43,15 @@ export default class PageParty implements Party.Server {
   }
 
   async onRequest(req: Party.Request) {
+    const result = await this.ai.run("@cf/meta/llama-2-7b-chat-fp16", {
+      prompt: "What is the capital of France?",
+      // stream: true,
+    });
+
+    // return new Response(result, {
+    // headers: { "content-type": "text/event-stream" },
+    // });
+    return Response.json(result);
     // switch (req.method) {
     //   case "POST":
     //     return await handlePost(req, this);
@@ -77,6 +95,8 @@ export default class PageParty implements Party.Server {
     if (req.method === "OPTIONS") {
       return ok();
     }
+
+    return req;
 
     try {
       const user = await getCurrentUser(req, lobby);

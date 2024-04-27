@@ -50,6 +50,9 @@ importers:
       object-sizeof:
         specifier: ^2.6.4
         version: 2.6.4
+      partykit-ai:
+        specifier: ^0.0.17
+        version: 0.0.17
       partysocket:
         specifier: ^0.0.25
         version: 0.0.25
@@ -542,6 +545,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.48)(react@18.2.0)
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../env
       '@repo/ui':
         specifier: workspace:*
         version: link:../ui
@@ -764,6 +770,9 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
+      y-indexeddb:
+        specifier: ^9.0.12
+        version: 9.0.12(yjs@13.6.14)
       y-partykit:
         specifier: ^0.0.28
         version: 0.0.28
@@ -3232,6 +3241,10 @@ packages:
   /@cloudflare/workers-types@4.20240208.0:
     resolution: {integrity: sha512-MVGTTjZpJu4kJONvai5SdJzWIhOJbuweVZ3goI7FNyG+JdoQH41OoB+nMhLsX626vPLZVWGPIWsiSo/WZHzgQw==}
     dev: true
+
+  /@cloudflare/workers-types@4.20240320.1:
+    resolution: {integrity: sha512-CiYtVpQURPgQqtBKkmOAnfPElVZuD7Xyf1IxKtKp2B4aB9gnooapwJhzeY8c4Ls4u17SgMS0MprOkrgYwzZ6xg==}
+    dev: false
 
   /@cloudflare/workers-types@4.20240405.0:
     resolution: {integrity: sha512-sEVOhyOgXUwfLkgHqbLZa/sfkSYrh7/zLmI6EZNibPaVPvAnAcItbNNl3SAlLyLKuwf8m4wAIAgu9meKWCvXjg==}
@@ -14470,6 +14483,12 @@ packages:
     dependencies:
       entities: 4.5.0
 
+  /partykit-ai@0.0.17:
+    resolution: {integrity: sha512-5mS5i71BmOpQ86+SKA7W543AjTryXgjQDug693vEl+NwDoO/pxi2H9t+2NUkZyt5470HV2a6b/Jsk5FelNIDVw==}
+    dependencies:
+      '@cloudflare/workers-types': 4.20240320.1
+    dev: false
+
   /partykit@0.0.89:
     resolution: {integrity: sha512-Eb89fYOtQQA+dUivszEG3dnZ7U7k2Mmkx6AfrIty2ldLfbn1LJNDxUrlyjBFez+spPD4LiCH/02I4WYXWHIm3w==}
     hasBin: true
@@ -17354,6 +17373,16 @@ packages:
   /xxhash-wasm@1.0.2:
     resolution: {integrity: sha512-ibF0Or+FivM9lNrg+HGJfVX8WJqgo+kCLDc4vx6xMeTce7Aj+DLttKbxxRR/gNLSAelRc1omAPlJ77N/Jem07A==}
     dev: true
+
+  /y-indexeddb@9.0.12(yjs@13.6.14):
+    resolution: {integrity: sha512-9oCFRSPPzBK7/w5vOkJBaVCQZKHXB/v6SIT+WYhnJxlEC61juqG0hBrAf+y3gmSMLFLwICNH9nQ53uscuse6Hg==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
+    peerDependencies:
+      yjs: ^13.0.0
+    dependencies:
+      lib0: 0.2.93
+      yjs: 13.6.14
+    dev: false
 
   /y-partykit@0.0.28:
     resolution: {integrity: sha512-CuYUE6HyQ1T4f/GTv+HDwbl9wX5LIiyJIn8ozxK/OiAQcVLPSdjcCpNE1AOFRd2YoIp1Z18bvk8KuF6mrB067w==}

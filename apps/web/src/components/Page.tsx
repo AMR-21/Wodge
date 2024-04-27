@@ -1,5 +1,6 @@
-import { PublicUserType } from "@repo/data";
-import { BlockEditor } from "@repo/editor";
+import { users } from "@repo/data";
+
+import { BlockEditor, useYDoc } from "@repo/editor";
 import { env } from "@repo/env";
 import useYProvider from "y-partykit/react";
 import * as Y from "yjs";
@@ -15,19 +16,13 @@ export function Page({
   folderId: string;
   workspaceId: string;
   teamId: string;
-  user: PublicUserType;
+  user: typeof users.$inferSelect;
 }) {
-  const provider = useYProvider({
-    room: channelId,
-    host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
-    party: "page",
-    options: {
-      params: () => ({
-        folderId,
-        teamId,
-        workspaceId,
-      }),
-    },
+  const { provider } = useYDoc({
+    channelId,
+    folderId,
+    teamId,
+    workspaceId,
   });
 
   return <BlockEditor ydoc={provider.doc} provider={provider} user={user} />;

@@ -1,25 +1,42 @@
 import { produce } from "immer";
 import { WorkspaceChannelMutation } from "./types";
+import { ChannelsTypes } from "../../../schemas/channel.schema";
+import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
 export function deleteChannelMutation({
   structure,
   teamId,
   folderId,
   channelId,
-}: WorkspaceChannelMutation) {
+  type,
+}: WorkspaceChannelMutation & { type: ChannelsTypes }) {
   const newStructure = produce(structure, (draft) => {
     // Check if the team not existing
-    const team = draft.teams.find((t) => t.id === teamId);
-    if (!team) throw new Error("Team not found");
-    // Check if the folder not existing
-    const folder = team.folders.find((f) => f.id === folderId);
-    if (!folder) throw new Error("Folder not found");
-    // Check if the channel not existing
-    const channel = folder.channels.find((c) => c.id === channelId);
-    if (!channel) throw new Error("Channel not found");
-    // Delete the channel
-    folder.channels = folder.channels.filter((c) => c.id !== channelId);
+    const teamIdx = draft.teams.findIndex((t) => t.id === teamId);
+    if (teamIdx === -1) throw new Error("Team not found");
+
+    const team = draft.teams[teamIdx]!;
+
+    if (type === "page") {
+      const folderIdx = team.folders.findIndex((f) => f.id === folderId);
+      if (folderIdx === -1) throw new Error("Folder not found");
+      draft.teams[teamIdx]!.folders[folderIdx]!.channels = team.folders[
+        folderIdx
+      ]!.channels.filter((c) => c.id !== channelId);
+    }
+
+    if (type === "room") {
+      draft.teams[teamIdx]!.rooms = team.rooms.filter(
+        (c) => c.id !== channelId
+      );
+    }
+
+    if (type === "thread") {
+      draft.teams[teamIdx]!.threads = team.threads.filter(
+        (c) => c.id !== channelId
+      );
+    }
   });
 
-  return newStructure;
+  return newStructure as WorkspaceStructure;
 }

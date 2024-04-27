@@ -66,18 +66,18 @@ export function TeamThreadsMore({ teamId, children }: TeamMoreProps) {
         <DropdownMenuContent className="w-48" sideOffset={2}>
           <DropdownMenuGroup>
             <DropdownMenuLabel>Threads</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               className="gap-2 text-sm"
               onClick={createBlankThread}
             >
               <FilePlus className="h-4 w-4" />
               New thread
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
 
             <DialogTrigger asChild>
               <DropdownMenuItem className="gap-2 text-sm">
                 <FileCog className="h-4 w-4" />
-                Custom thread
+                New thread
               </DropdownMenuItem>
             </DialogTrigger>
           </DropdownMenuGroup>
