@@ -20,3 +20,18 @@ export const PageSchema = ChannelSchema.extend({});
 
 export type Channel = z.infer<typeof ChannelSchema>;
 export type Page = z.infer<typeof PageSchema>;
+
+export type Prompt = {
+  prompt: string;
+  action?:
+    | "simplify"
+    | "fix"
+    | "shorter"
+    | "longer"
+    | "tone"
+    | "tldr"
+    | "emojify"
+    | "translate"
+    | "complete";
+  lang?: string;
+};

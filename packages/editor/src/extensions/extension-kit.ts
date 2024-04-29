@@ -52,6 +52,8 @@ import { TableOfContentsNode } from './TableOfContentsNode'
 import { lowlight } from 'lowlight'
 import { WebrtcProvider } from 'y-webrtc'
 import YPartyKitProvider from 'y-partykit/provider'
+import { AiWriter } from './AiWriter'
+import { AiImage } from './AiImage'
 
 interface ExtensionKitProps {
   provider?: YPartyKitProvider
@@ -67,10 +69,10 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   TaskItem.configure({
     nested: true,
   }),
-  // AiWriter.configure({
-  //   authorId: userId,
-  //   authorName: userName,
-  // }),
+  AiWriter.configure({
+    authorId: userId,
+    authorName: userName,
+  }),
   // AiImage.configure({
   //   authorId: userId,
   //   authorName: userName,

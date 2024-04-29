@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { v4 as uuid } from 'uuid'
 
-import { Button } from '../../../components/ui/Button'
+// import { Button } from '../../../components/ui/Button'
 import { Loader } from '../../../components/ui/Loader'
 import { Panel, PanelHeadline } from '../../../components/ui/Panel'
 import { Textarea } from '../../../components/ui/Textarea'
@@ -17,6 +17,11 @@ import { Toolbar } from '../../../components/ui/Toolbar'
 import { Surface } from '../../../components/ui/Surface'
 import { DropdownButton } from '../../../components/ui/Dropdown'
 import { Check, ChevronDown, Mic, Repeat, Sparkles, Trash, Undo2 } from 'lucide-react'
+import { Prompt } from '../../../../../data'
+import { env } from '@repo/env'
+import { useParams } from 'next/navigation'
+import { useCurrentWorkspace } from '@repo/ui/hooks/use-current-workspace'
+import { Button } from '@repo/ui/components/ui/button'
 
 export interface DataProps {
   text: string
@@ -28,7 +33,11 @@ export interface DataProps {
 }
 
 export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapperProps) => {
-  const aiOptions = editor.extensionManager.extensions.find((ext: Extension) => ext.name === 'ai').options
+  const aiOptions = editor.extensionManager.extensions.find((ext: Extension) => ext.name === 'ai')?.options
+
+  const { channelId, folderId, teamId } = useParams<{ channelId: string; teamId: string; folderId: string }>()
+
+  const { workspaceId } = useCurrentWorkspace()
 
   const [data, setData] = useState<DataProps>({
     text: '',
@@ -38,7 +47,7 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
     language: undefined,
   })
   const currentTone = tones.find(t => t.value === data.tone)
-  const [previewText, setPreviewText] = useState(undefined)
+  const [previewText, setPreviewText] = useState<string | undefined>(undefined)
   const [isFetching, setIsFetching] = useState(false)
   const textareaId = useMemo(() => uuid(), [])
 
@@ -51,33 +60,33 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
       return
     }
 
+    if (!workspaceId) {
+      return
+    }
+
     setIsFetching(true)
 
-    const payload = {
-      text: dataText,
-      textLength: textLength,
-      textUnit: textUnit,
-      useHeading: addHeading,
-      tone,
-      language,
+    const payload: Prompt = {
+      prompt: dataText,
     }
 
     try {
-      const { baseUrl, appId, token } = aiOptions
-      const response = await fetch(`${baseUrl}/text/prompt`, {
+      // const { baseUrl, appId, token } = aiOptions
+      const response = await fetch(`${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt`, {
         method: 'POST',
         headers: {
-          accept: 'application.json',
+          'x-workspace-id': workspaceId,
+          'x-team-id': teamId,
+          'x-folder-id': folderId,
           'Content-Type': 'application/json',
-          'X-App-Id': appId.trim(),
-          Authorization: `Bearer ${token.trim()}`,
         },
+        credentials: 'include',
         body: JSON.stringify(payload),
       })
 
-      const json = await response.json()
-      const text = json.response
+      const json = await response.json<{ response: string }>()
 
+      const text = json.response
       if (!text.length) {
         setIsFetching(false)
 
@@ -94,7 +103,7 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
       setIsFetching(false)
       toast.error(message)
     }
-  }, [data, aiOptions])
+  }, [data, workspaceId])
 
   const insert = useCallback(() => {
     const from = getPos()
@@ -123,9 +132,8 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
 
   return (
     <NodeViewWrapper data-drag-handle>
-      <Panel noShadow className="w-full">
-        <div className="flex flex-col p-1">
-          {isFetching && <Loader label="AI is now doing its job!" />}
+      <Panel noShadow className="w-full ">
+        <div className="flex flex-col p-1 bg-dim">
           {previewText && (
             <>
               <PanelHeadline>Preview</PanelHeadline>
@@ -150,7 +158,7 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
           />
           <div className="flex flex-row items-center justify-between gap-1">
             <div className="flex justify-between w-auto gap-1">
-              <Dropdown.Root>
+              {/* <Dropdown.Root>
                 <Dropdown.Trigger asChild>
                   <Button variant="tertiary">
                     <Icon Icon={Mic} />
@@ -160,7 +168,7 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
                 </Dropdown.Trigger>
                 <Dropdown.Portal>
                   <Dropdown.Content side="bottom" align="start" asChild>
-                    <Surface className="p-2 min-w-[12rem]">
+                    <Surface className="p-2 min-w-[12rem] ">
                       {!!data.tone && (
                         <>
                           <Dropdown.Item asChild>
@@ -182,27 +190,39 @@ export const AiWriterView = ({ editor, node, getPos, deleteNode }: NodeViewWrapp
                     </Surface>
                   </Dropdown.Content>
                 </Dropdown.Portal>
-              </Dropdown.Root>
+              </Dropdown.Root> */}
             </div>
             <div className="flex justify-between w-auto gap-1">
-              {previewText && (
+              {true && (
                 <Button
+                  size="sm"
                   variant="ghost"
                   className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
                   onClick={discard}
                 >
-                  <Icon Icon={Trash} />
+                  <Icon Icon={Trash} className="shrink-0 mr-1" />
                   Discard
                 </Button>
               )}
               {previewText && (
-                <Button variant="ghost" onClick={insert} disabled={!previewText}>
-                  <Icon Icon={Check} />
+                <Button size="sm" variant="ghost" onClick={insert} disabled={!previewText}>
+                  <Icon Icon={Check} className="shrink-0 mr-1" />
                   Insert
                 </Button>
               )}
-              <Button variant="primary" onClick={generateText} style={{ whiteSpace: 'nowrap' }}>
-                {previewText ? <Icon Icon={Repeat} /> : <Icon Icon={Sparkles} />}
+              <Button
+                size="sm"
+                variant="default"
+                onClick={generateText}
+                style={{ whiteSpace: 'nowrap' }}
+                isPending={isFetching}
+                className="w-36"
+              >
+                {previewText ? (
+                  <Icon Icon={Repeat} className="shrink-0 mr-1" />
+                ) : (
+                  <Icon Icon={Sparkles} className="shrink-0 mr-1" />
+                )}
                 {previewText ? 'Regenerate' : 'Generate text'}
               </Button>
             </div>

@@ -245,7 +245,11 @@ api_object.get("/download/:bucket/:teamId/:path", async (c) => {
   } else {
     const downloadurl = await getSignedUrl(
       s3Client,
-      new GetObjectCommand({ Bucket: bucket, Key: key }),
+      new GetObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        ResponseContentDisposition: "attachment",
+      }),
       { expiresIn: 3600 }
     );
     return c.json({ downloadurl }, 200);

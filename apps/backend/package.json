@@ -7,7 +7,9 @@
     "deploy": "partykit deploy"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.39.8",
     "aws-sdk": "^2.1599.0",
+    "cookie-parse": "^0.4.0",
     "immer": "^10.0.3",
     "livekit-server-sdk": "^2.1.2",
     "nanoid": "^5.0.5",

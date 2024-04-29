@@ -35,9 +35,15 @@ importers:
 
   apps/backend:
     dependencies:
+      '@supabase/supabase-js':
+        specifier: 2.39.8
+        version: 2.39.8
       aws-sdk:
         specifier: ^2.1599.0
         version: 2.1599.0
+      cookie-parse:
+        specifier: ^0.4.0
+        version: 0.4.0
       immer:
         specifier: ^10.0.3
         version: 10.0.4
@@ -10091,6 +10097,11 @@ packages:
 
   /convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  /cookie-parse@0.4.0:
+    resolution: {integrity: sha512-WichJHIaIzLrGkCbdup1SzJABOv/724MubsY2eaT5QkZz8ojNcZzn+gJ4Drrklm/le7lr0j/q0FaEgjooXhAog==}
+    engines: {node: '>= 0.6'}
+    dev: false
 
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}

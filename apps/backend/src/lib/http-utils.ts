@@ -16,7 +16,7 @@ export const CORS = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PATCH",
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Headers":
-    "Authorization, Content-Type, X-Replicache-RequestID, x-team-id, x-workspace-id",
+    "Authorization, Content-Type, X-Replicache-RequestID, x-team-id, x-workspace-id, x-folder-id",
 };
 
 /**

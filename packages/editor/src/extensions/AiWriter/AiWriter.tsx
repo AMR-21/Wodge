@@ -64,7 +64,7 @@ export const AiWriter = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+    return ['div', mergeAttributes(this?.options?.HTMLAttributes, HTMLAttributes)]
   },
 
   addCommands() {
@@ -75,11 +75,11 @@ export const AiWriter = Node.create({
           chain()
             .focus()
             .insertContent({
-              type: this.name,
+              type: this?.name,
               attrs: {
                 id: uuid(),
-                authorId: this.options.authorId,
-                authorName: this.options.authorName,
+                authorId: this?.options.authorId,
+                authorName: this?.options.authorName,
               },
             })
             .run(),

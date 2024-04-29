@@ -18,6 +18,7 @@ import {
 import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
+import { handlePost } from "./page-post";
 
 export default class PageParty implements Party.Server {
   // options: Party.ServerOptions = {
@@ -28,10 +29,6 @@ export default class PageParty implements Party.Server {
     this.ai = new Ai(room.context.ai);
   }
 
-  async onStart() {
-    // this.ai = new Ai(this.room.context.ai);
-  }
-
   async onConnect(conn: Party.Connection) {
     return await onConnect(conn, this.room, {
       // ...options
@@ -39,30 +36,23 @@ export default class PageParty implements Party.Server {
       persist: {
         mode: "snapshot",
       },
+      callback: {
+        async handler(yDoc) {
+          console.log("a callback @", new Date().toISOString());
+        },
+      },
     });
   }
 
   async onRequest(req: Party.Request) {
-    const result = await this.ai.run("@cf/meta/llama-2-7b-chat-fp16", {
-      prompt: "What is the capital of France?",
-      // stream: true,
-    });
-
-    // return new Response(result, {
-    // headers: { "content-type": "text/event-stream" },
-    // });
-    return Response.json(result);
-    // switch (req.method) {
-    //   case "POST":
-    //     return await handlePost(req, this);
-    //   case "GET":
-    //     return await handleGet(req, this);
-    //   case "OPTIONS":
-    //     return ok();
-    //   default:
-    //     return notImplemented();
-    // }
-    return ok();
+    switch (req.method) {
+      case "POST":
+        return await handlePost(req, this);
+      case "OPTIONS":
+        return ok();
+      default:
+        return notImplemented();
+    }
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
@@ -96,12 +86,20 @@ export default class PageParty implements Party.Server {
       return ok();
     }
 
-    return req;
-
     try {
       const user = await getCurrentUser(req, lobby);
 
-      return authorizeChannel(req, lobby, user.id, "page");
+      return authorizeChannel(
+        req,
+        lobby,
+        user.id,
+        "page",
+        queryString.parse(req.url) as {
+          folderId: string;
+          teamId: string;
+          workspaceId: string;
+        }
+      );
     } catch (e) {
       return unauthorized();
     }
