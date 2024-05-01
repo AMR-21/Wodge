@@ -16,7 +16,9 @@ export async function POST(req: Request) {
     return new Response(null, { status: 401 });
   }
 
-  await addWorkspaceMember(userId, workspaceId);
+  const res = await addWorkspaceMember(userId, workspaceId);
 
-  return new Response(null, { status: 200 });
+  if (!res) return new Response(null, { status: 400 });
+
+  return Response.json({ workspace: res });
 }

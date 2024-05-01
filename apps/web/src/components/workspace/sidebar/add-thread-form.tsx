@@ -18,7 +18,13 @@ import { nanoid } from "nanoid";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
-export function AddThreadForm({ teamId }: { teamId: string }) {
+export function AddThreadForm({
+  teamId,
+  thread,
+}: {
+  teamId: string;
+  thread?: Thread;
+}) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const { user } = useCurrentUser();
   const form = useForm<Thread>({
@@ -29,11 +35,11 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
       }),
     ),
     defaultValues: {
-      name: "",
-      avatar: "",
-      editGroups: ["team-members"],
-      viewGroups: ["team-members"],
-      id: nanoid(ID_LENGTH),
+      name: thread?.name || "",
+      avatar: thread?.avatar || "",
+      editGroups: thread?.editGroups || ["team-members"],
+      viewGroups: thread?.viewGroups || ["team-members"],
+      id: thread?.id || nanoid(ID_LENGTH),
     },
   });
 
@@ -41,6 +47,14 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
 
   async function onSubmit(data: Thread) {
     if (!user) return;
+
+    if (thread) {
+      await workspaceRep?.mutate.updateThread({
+        teamId,
+        ...data,
+      });
+      return closeRef.current?.click();
+    }
 
     await workspaceRep?.mutate.createThread({
       teamId,
@@ -109,7 +123,7 @@ export function AddThreadForm({ teamId }: { teamId: string }) {
           /> */}
 
           <Button type="submit" className="w-full">
-            Create thread
+            {thread ? "Update" : "Create"} thread
           </Button>
 
           <DialogClose asChild>

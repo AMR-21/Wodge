@@ -40,15 +40,18 @@ export function JoinWorkspaceForm() {
 
       if (!res.ok) throw new Error("Failed to join workspace");
 
-      const data = (await res.json()) as { workspaceId: string };
-      return data?.workspaceId;
+      const data = (await res.json()) as {
+        workspaceId: string;
+        workspaceSlug: string;
+      };
+      return data?.workspaceSlug;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["user-workspaces"],
       });
 
-      // router.push(`//${data}`);
+      router.push(`/${data}`);
     },
     onError: (e) => {
       toast.error(e.message);

@@ -14,9 +14,11 @@ import { GroupsSidebar } from "./groups/groups-sidebar";
 import { TeamsSidebar } from "./teams/teams-sidebar";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { Sheet, SheetContent } from "@repo/ui/components/ui/sheet";
+import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
 
 export function SettingsSidebar() {
   const isDesktop = useIsDesktop();
+  const isManger = useIsOwnerOrAdmin();
 
   const jsx = (
     <>
@@ -31,14 +33,20 @@ export function SettingsSidebar() {
           </SettingsSidebarHeader>
           <SettingsSidebarList>
             <SettingsSidebarItem label="general" href="/" isDefault />
-            <SettingsSidebarItem label="members" />
-            <SettingsSidebarCollapsibleItem label="groups">
-              <GroupsSidebar />
-            </SettingsSidebarCollapsibleItem>
-            <SettingsSidebarCollapsibleItem label="teams">
-              <TeamsSidebar />
-            </SettingsSidebarCollapsibleItem>
-            <SettingsSidebarItem label="upgrade" />
+            {isManger && (
+              <>
+                <SettingsSidebarItem label="members" />
+
+                <SettingsSidebarCollapsibleItem label="groups">
+                  <GroupsSidebar />
+                </SettingsSidebarCollapsibleItem>
+                <SettingsSidebarCollapsibleItem label="teams">
+                  <TeamsSidebar />
+                </SettingsSidebarCollapsibleItem>
+
+                <SettingsSidebarItem label="upgrade" />
+              </>
+            )}
           </SettingsSidebarList>
         </div>
       </ScrollArea>
@@ -49,7 +57,7 @@ export function SettingsSidebar() {
     return (
       <div
         className={cn(
-          "bg-dim flex h-dvh w-56 shrink-0 grow flex-col border-r border-border/50 px-6 py-10 transition-all",
+          "flex h-dvh w-56 shrink-0 grow flex-col border-r border-border/50 bg-dim px-6 py-10 transition-all",
         )}
       >
         {jsx}
@@ -57,7 +65,7 @@ export function SettingsSidebar() {
     );
 
   return (
-    <SheetContent side="left" className="bg-dim w-56 py-10">
+    <SheetContent side="left" className="w-56 bg-dim py-10">
       {jsx}
     </SheetContent>
   );

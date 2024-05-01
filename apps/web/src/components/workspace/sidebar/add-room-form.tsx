@@ -42,25 +42,35 @@ import { useForm } from "react-hook-form";
 export function AddRoomForm({
   folderId,
   teamId,
+  room,
 }: {
   folderId?: string;
   teamId: string;
+  room?: Room;
 }) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Room>({
     resolver: zodResolver(RoomSchema),
     defaultValues: {
-      name: "",
-      avatar: "",
-      editGroups: ["team-members"],
-      viewGroups: ["team-members"],
-      id: nanoid(ID_LENGTH),
+      name: room?.name || "",
+      avatar: room?.avatar || "",
+      editGroups: room?.editGroups || ["team-members"],
+      viewGroups: room?.viewGroups || ["team-members"],
+      id: room?.id || nanoid(ID_LENGTH),
     },
   });
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
   async function onSubmit(data: Room) {
+    if (room) {
+      await workspaceRep?.mutate.updateRoom({
+        teamId,
+        ...data,
+      });
+      return closeRef.current?.click();
+    }
+
     await workspaceRep?.mutate.createRoom({
       teamId,
       ...data,
@@ -101,6 +111,7 @@ export function AddRoomForm({
                     <GroupMultiSelect
                       onChange={field.onChange}
                       baseGroups={structure.groups}
+                      preset={room?.viewGroups}
                     />
                   </FormControl>
                 </FormItem>
@@ -119,6 +130,7 @@ export function AddRoomForm({
                     <GroupMultiSelect
                       onChange={field.onChange}
                       baseGroups={structure.groups}
+                      preset={room?.editGroups}
                     />
                   </FormControl>
                 </FormItem>
@@ -127,7 +139,7 @@ export function AddRoomForm({
           />
 
           <Button type="submit" className="w-full">
-            Create room
+            {room ? "Update" : "Create"} room
           </Button>
 
           <DialogClose asChild>

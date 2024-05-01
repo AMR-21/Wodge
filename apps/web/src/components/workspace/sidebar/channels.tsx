@@ -13,6 +13,7 @@ import {
   ChannelsTypes,
   DrObj,
   Page,
+  Room,
   type Channel as ChannelType,
 } from "@repo/data";
 import {
@@ -40,6 +41,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
+import { AddRoomForm } from "./add-room-form";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -238,11 +240,21 @@ export const Channel = React.forwardRef<
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <AddPageForm
-                teamId={teamId}
-                folderId={folderId}
-                page={channel as Page}
-              />
+              {type === "page" && (
+                <AddPageForm
+                  teamId={teamId}
+                  folderId={folderId}
+                  page={channel as Page}
+                />
+              )}
+
+              {type === "room" && (
+                <AddRoomForm
+                  teamId={teamId}
+                  folderId={folderId}
+                  room={channel as Room}
+                />
+              )}
             </Dialog>
           </div>
         </SidebarItem>

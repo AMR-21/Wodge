@@ -1,18 +1,26 @@
 "use client";
 
-import { SidebarItem } from "@/components/workspace/sidebar-item";
 import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
-import { TeamThreadsMore } from "@/components/workspace/sidebar/team-threads-more";
+import { AddThreadForm } from "@/components/workspace/sidebar/add-thread-form";
+import { Thread } from "@repo/data";
 import { Button } from "@repo/ui/components/ui/button";
+import { Dialog, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { CircleDot, GanttChart, MoreHorizontal, Plus } from "lucide-react";
+import { GanttChart, MoreHorizontal, Plus } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
 function ThreadsPage() {
-  const { structure, workspaceSlug } = useCurrentWorkspace();
+  const { structure, workspaceSlug, workspaceRep } = useCurrentWorkspace();
 
   const { teamId } = useParams<{ teamId: string }>();
 
@@ -23,12 +31,15 @@ function ThreadsPage() {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <TeamThreadsMore teamId={teamId}>
-        <Button variant="secondary" className="w-full gap-1">
-          <Plus className="h-4 w-4" />
-          New Thread
-        </Button>
-      </TeamThreadsMore>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="secondary" className="w-full gap-1">
+            <Plus className="h-4 w-4" />
+            New Thread
+          </Button>
+        </DialogTrigger>
+        <AddThreadForm teamId={teamId} />
+      </Dialog>
 
       <ScrollArea className="w-full">
         <div className="flex w-full flex-col gap-2">
@@ -44,7 +55,44 @@ function ThreadsPage() {
                 <div className="flex w-full items-center gap-2">
                   <GanttChart className="h-4 w-4" />
                   <p className="shrink-0">{thread.name}</p>
-                  <SidebarItemBtn className="ml-auto" Icon={MoreHorizontal} />
+                  <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+                    <Dialog>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <SidebarItemBtn
+                            className="ml-auto"
+                            Icon={MoreHorizontal}
+                          />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DialogTrigger asChild>
+                            <DropdownMenuItem className="text-gray-500 hover:text-gray-400">
+                              Edit thread
+                            </DropdownMenuItem>
+                          </DialogTrigger>
+
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-500 hover:text-red-400"
+                            onClick={async () => {
+                              await workspaceRep?.mutate.deleteChannel({
+                                channelId: thread.id,
+                                type: "thread",
+                                teamId,
+                              });
+                            }}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <AddThreadForm
+                        teamId={teamId}
+                        thread={thread as Thread}
+                      />
+                    </Dialog>
+                  </div>
                 </div>
               </Link>
             </div>

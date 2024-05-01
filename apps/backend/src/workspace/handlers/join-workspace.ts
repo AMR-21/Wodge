@@ -7,6 +7,7 @@ import {
   WORKSPACE_INVITES_KEY,
   WORKSPACE_PRESENCE_KEY,
   WORKSPACE_STRUCTURE_KEY,
+  Workspace,
   addWorkspaceMember,
   makeWorkspaceMembersKey,
 } from "@repo/data";
@@ -52,6 +53,12 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
       userId: userId,
     },
   });
+
+  let workspace: { workspace: Workspace } | undefined;
+
+  try {
+    workspace = await res.json();
+  } catch (e) {}
 
   // Todo enhance and check dup slug error
   if (!res.ok) return badRequest();
@@ -119,9 +126,8 @@ export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
   // Inform current members of the new user
   await party.poke();
 
-  // Todo read slug and return it
-
   return json({
     workspaceId: party.room.id,
+    workspaceSlug: workspace?.workspace?.slug,
   });
 }

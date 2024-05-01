@@ -22,6 +22,7 @@ export const authRoutes: string[] = [
   "/auth/user",
   "/auth/callback",
   "/api/ai",
+  "/api/remove-member",
 ];
 
 /**

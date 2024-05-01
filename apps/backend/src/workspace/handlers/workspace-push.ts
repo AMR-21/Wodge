@@ -18,6 +18,8 @@ import { toggleThread } from "../mutators/toggle-thread";
 import { isAdmin, isOwner, isTeamMember, isTeamModerator } from "@repo/data";
 import { deleteChannel } from "../mutators/delete-channel";
 import { updatePage } from "../mutators/update-page";
+import { updateRoom } from "../mutators/update-room";
+import { updateThread } from "../mutators/update-thread";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -102,6 +104,14 @@ function runner(party: WorkspaceParty, req: Party.Request) {
       case "updatePage":
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
         return await updatePage(party, params);
+
+      case "updateRoom":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await updateRoom(party, params);
+
+      case "updateThread":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await updateThread(party, params);
 
       case "createRoom":
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;

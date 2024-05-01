@@ -7,7 +7,7 @@ import {
   workspaces,
 } from "../../schemas/workspace.schema";
 // import { db } from "../../server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { createDb } from "../../server";
 
 /**
@@ -61,5 +61,20 @@ export async function updateWorkspaceById(
 
 export async function addWorkspaceMember(userId: string, workspaceId: string) {
   const db = createDb();
-  return await db.insert(memberships).values({ userId, workspaceId });
+  await db.insert(memberships).values({ userId, workspaceId });
+  return await db.query.workspaces.findFirst({
+    where: eq(workspaces.id, workspaceId),
+  });
+}
+
+export async function removeMember(userId: string, workspaceId: string) {
+  const db = createDb();
+  return await db
+    .delete(memberships)
+    .where(
+      and(
+        eq(memberships.userId, userId),
+        eq(memberships.workspaceId, workspaceId)
+      )
+    );
 }

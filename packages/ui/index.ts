@@ -50,6 +50,7 @@ export * from "./hooks/use-room-rep";
 export * from "./hooks/use-thread-rep";
 export * from "./hooks/use-is-team-member";
 export * from "./hooks/use-is-team-moderator";
+export * from "./hooks/use-is-owner";
 export * from "./hooks/use-can-edit";
 export * from "./hooks/use-can-view";
 export * from "./hooks/use-current-resources";

@@ -34,6 +34,8 @@ import { Thread } from "../../schemas/thread.schema";
 import { toggleThreadMutation } from "./mutators/toggle-thread";
 import { deleteChannelMutation } from "./mutators/delete-channel";
 import { updatePageMutation } from "./mutators/update-page";
+import { updateRoomMutation } from "./mutators/update-room";
+import { updateThreadMutation } from "./mutators/update-thread";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -257,6 +259,36 @@ export const workspaceMutators = {
       page,
       teamId,
       folderId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+  async updateRoom(tx: WriteTransaction, data: NewRoomArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { teamId, ...room } = data;
+
+    const newStructure = updateRoomMutation({
+      room,
+      teamId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+  async updateThread(tx: WriteTransaction, data: NewThreadArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { teamId, ...thread } = data;
+
+    const newStructure = updateThreadMutation({
+      thread,
+      teamId,
       structure,
     });
 
