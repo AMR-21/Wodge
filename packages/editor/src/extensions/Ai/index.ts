@@ -26,9 +26,11 @@ export const AiPrompts = Extension.create({
     return {
       prompt:
         ({ action, toneOrLang, channelId, teamId, workspaceId, folderId }) =>
-        async ({ chain, view, state }) => {
+        async ({ chain, view, state, editor }) => {
           if (!workspaceId) return chain().focus().run()
-          const prompt = state.doc.textBetween(view.state.selection.from, view.state.selection.to, ' ')
+
+          const { from, to } = view.state.selection
+          const prompt = state.doc.textBetween(from, to, ' ')
 
           const res = await fetch(`${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt`, {
             method: 'POST',
@@ -44,8 +46,13 @@ export const AiPrompts = Extension.create({
             }),
           })
 
-          console.log('res', await res.json())
-          return chain().focus().run()
+          const { response } = await res.json<{ response: string }>()
+
+          return editor
+            .chain()
+            .focus()
+            .insertContentAt({ from, to }, response || '')
+            .run()
         },
     }
   },

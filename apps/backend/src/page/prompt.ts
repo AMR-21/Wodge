@@ -18,25 +18,27 @@ export async function prompt(req: Party.Request, party: PageParty) {
   }
 
   if (action) {
+    // run a prompt based on action
+    let response = "placeholder";
     switch (action) {
       case "simplify":
-        break;
+        return json({ response });
       case "fix":
-        break;
+        return json({ response });
       case "shorter":
-        break;
+        return json({ response });
       case "longer":
-        break;
+        return json({ response });
       case "tone":
-        break;
+        return json({ response });
       case "tldr":
-        break;
+        return json({ response });
       case "emojify":
-        break;
+        return json({ response });
       case "translate":
-        break;
+        return json({ response });
       case "complete":
-        break;
+        return json({ response });
       default:
         return json({ error: "Invalid action" }, 400);
     }
