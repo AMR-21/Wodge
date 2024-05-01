@@ -1,8 +1,13 @@
 // import { Language } from '@tiptap-pro/extension-ai'
+import { useCurrentWorkspace } from '@repo/ui/hooks/use-current-workspace'
 import { Editor } from '@tiptap/react'
+import { useParams } from 'next/navigation'
 import { useCallback } from 'react'
 
 export const useTextmenuCommands = (editor: Editor) => {
+  const { workspaceId } = useCurrentWorkspace()
+  const { teamId, channelId, folderId } = useParams<{ teamId: string; channelId: string; folderId: string }>()
+
   const onBold = useCallback(() => editor.chain().focus().toggleBold().run(), [editor])
   const onItalic = useCallback(() => editor.chain().focus().toggleItalic().run(), [editor])
   const onStrike = useCallback(() => editor.chain().focus().toggleStrike().run(), [editor])
@@ -23,15 +28,143 @@ export const useTextmenuCommands = (editor: Editor) => {
   const onChangeHighlight = useCallback((color: string) => editor.chain().setHighlight({ color }).run(), [editor])
   const onClearHighlight = useCallback(() => editor.chain().focus().unsetHighlight().run(), [editor])
 
-  // const onSimplify = useCallback(() => editor.chain().focus().aiSimplify().run(), [editor])
-  // const onEmojify = useCallback(() => editor.chain().focus().aiEmojify().run(), [editor])
-  // const onCompleteSentence = useCallback(() => editor.chain().focus().aiComplete().run(), [editor])
-  // const onFixSpelling = useCallback(() => editor.chain().focus().aiFixSpellingAndGrammar().run(), [editor])
-  // const onMakeLonger = useCallback(() => editor.chain().focus().aiExtend().run(), [editor])
-  // const onMakeShorter = useCallback(() => editor.chain().focus().aiShorten().run(), [editor])
-  // const onTldr = useCallback(() => editor.chain().focus().aiTldr().run(), [editor])
-  // const onTone = useCallback((tone: string) => editor.chain().focus().aiAdjustTone(tone).run(), [editor])
-  // const onTranslate = useCallback((language: Language) => editor.chain().focus().aiTranslate(language).run(), [editor])
+  const onSimplify = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'simplify',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onEmojify = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'emojify',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onCompleteSentence = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'complete',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onFixSpelling = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'fix',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onMakeLonger = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'longer',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onMakeShorter = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'shorter',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onTldr = useCallback(
+    () =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'tldr',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+        })
+        .run(),
+    [editor],
+  )
+  const onTone = useCallback(
+    (tone: string) =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'tone',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+          toneOrLang: tone,
+        })
+        .run(),
+    [editor],
+  )
+  const onTranslate = useCallback(
+    (lang: string) =>
+      editor
+        .chain()
+        .focus()
+        .prompt({
+          action: 'translate',
+          channelId,
+          teamId,
+          workspaceId,
+          folderId,
+          toneOrLang: lang,
+        })
+        .run(),
+    [editor],
+  )
 
   const onLink = useCallback(
     (url: string, inNewTab?: boolean) =>
@@ -82,15 +215,15 @@ export const useTextmenuCommands = (editor: Editor) => {
     onClearHighlight,
     onSetFont,
     onSetFontSize,
-    // onSimplify,
-    // onEmojify,
-    // onCompleteSentence,
-    // onFixSpelling,
-    // onMakeLonger,
-    // onMakeShorter,
-    // onTldr,
-    // onTone,
-    // onTranslate,
+    onSimplify,
+    onEmojify,
+    onCompleteSentence,
+    onFixSpelling,
+    onMakeLonger,
+    onMakeShorter,
+    onTldr,
+    onTone,
+    onTranslate,
     onLink,
   }
 }

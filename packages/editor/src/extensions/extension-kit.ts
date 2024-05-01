@@ -54,6 +54,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import YPartyKitProvider from 'y-partykit/provider'
 import { AiWriter } from './AiWriter'
 import { AiImage } from './AiImage'
+import { AiPrompts } from './Ai'
 
 interface ExtensionKitProps {
   provider?: YPartyKitProvider
@@ -73,6 +74,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
     authorId: userId,
     authorName: userName,
   }),
+  AiPrompts,
   // AiImage.configure({
   //   authorId: userId,
   //   authorName: userName,

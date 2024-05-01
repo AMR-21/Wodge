@@ -33,5 +33,5 @@ export type Prompt = {
     | "emojify"
     | "translate"
     | "complete";
-  lang?: string;
+  toneOrLang?: string;
 };
