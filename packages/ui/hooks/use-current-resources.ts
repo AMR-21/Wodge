@@ -23,16 +23,18 @@ export function useCurrentResources() {
   const { data } = useQuery({
     queryFn: async () => {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_FS_DOMAIN}/object/list/${getBucketAddress(workspaceId!)}/${btoa(teamId)}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}/${btoa(teamId)}`,
+        {
+          credentials: "include",
+        },
       );
 
       const data = await res.json<string[]>();
 
       return data?.map((d) => d.slice(WORKSPACE_TEAM_ID_LENGTH + 1)) || [];
     },
-    queryKey: ["resources", teamId],
+    queryKey: ["resources", workspaceId, teamId],
     enabled: !!teamId && !!workspaceId,
-    staleTime: 0,
   });
 
   const curLevel = path?.length || 0;

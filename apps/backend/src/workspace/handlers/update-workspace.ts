@@ -35,7 +35,7 @@ export async function updateWorkspace(party: WorkspaceParty, c: Context) {
 
   if (!res.ok) return badRequest();
 
-  await party.poke({ type: "workspaceInfo" });
+  await party.poke();
 
   party.versions.set("workspaceInfo", party.versions.get("workspaceInfo")! + 1);
 

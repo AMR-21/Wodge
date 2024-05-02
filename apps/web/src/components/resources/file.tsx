@@ -40,15 +40,15 @@ export function File({
           // download file
           const path = curPath ? curPath + "/" : "";
           const res = await fetch(
-            `${env.NEXT_PUBLIC_FS_DOMAIN}/object/download/${getBucketAddress(wid)}/${teamId}/${btoa(path + name)}`,
+            `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${teamId}/${btoa(path + name)}`,
+            { credentials: "include" },
           );
 
-          const data = await res.json<{ downloadurl: string }>();
+          const data = await res.json<{ downloadUrl: string }>();
 
-          if (data.downloadurl) {
+          if (data.downloadUrl) {
             const tempLink = document.createElement("a");
-            tempLink.href = data.downloadurl;
-            console.log(data.downloadurl);
+            tempLink.href = data.downloadUrl;
             tempLink.setAttribute("download", ""); // This attribute triggers the download instead of navigation
             tempLink.style.display = "none"; // Hide the anchor element
 
@@ -70,9 +70,10 @@ export function File({
           const path = curPath ? curPath + "/" : "";
 
           const res = await fetch(
-            `${env.NEXT_PUBLIC_FS_DOMAIN}/object/delete/${getBucketAddress(wid)}/${teamId}/${btoa(path + name)}`,
+            `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/files/${teamId}/${btoa(path + name)}`,
             {
-              method: "POST",
+              method: "DELETE",
+              credentials: "include",
             },
           );
 

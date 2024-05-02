@@ -25,17 +25,16 @@ export function WorkspaceSettings() {
 
   const isManager = useIsOwnerOrAdmin();
 
-  const avatar = useAvatarUrl("ws_" + workspace?.id ?? "");
   const queryClient = useQueryClient();
-  console.log(avatar);
   const { mutate } = useMutation({
     mutationFn: async (data: FormData) => {
       if (!workspace?.id) return false;
       const res = await fetch(
-        `${env.NEXT_PUBLIC_FS_DOMAIN}/object/avatars/ws_${workspace.id}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspace.id}/avatar`,
         {
           method: "POST",
           body: data,
+          credentials: "include",
         },
       );
 
@@ -47,11 +46,6 @@ export function WorkspaceSettings() {
     },
     onSuccess: () => {
       toast.success("Avatar uploaded");
-      console.log("Avatar uploaded");
-      //call backend
-      queryClient.invalidateQueries({
-        queryKey: ["avatar", "ws_" + workspace?.id],
-      });
     },
     onError: () => {
       toast.error("Failed to upload avatar");
@@ -106,10 +100,10 @@ export function WorkspaceSettings() {
           <SettingsContentSection header="Avatar">
             <div className="space-y-3">
               <AvatarComp
-                fallback={workspace?.avatar}
+                fallback={workspace?.name}
                 onUpload={onUpload}
-                onRemove={deleteAvatar}
-                avatar={avatar}
+                // onRemove={deleteAvatar}
+                avatar={workspace?.avatar}
               />
 
               <SettingsContentDescription>

@@ -65,3 +65,11 @@ export function getBucketAddress(wid: string) {
 export function getAvatarAddress(id?: string) {
   return `${env.NEXT_PUBLIC_AVATARS_URL}/${id}`;
 }
+
+export function makeWorkspaceAvatarKey(id: string) {
+  return `wrk_${id}`;
+}
+
+export function makeUserAvatarKey(id: string) {
+  return `usr_${id}`;
+}

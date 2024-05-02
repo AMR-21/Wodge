@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
-    if (nextUrl.pathname === "/api/ai") {
+    if (nextUrl.pathname === "/api/update-avatar") {
       return response;
     }
 

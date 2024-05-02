@@ -34,6 +34,10 @@ export function createSocket(userId: string) {
             queryKey: ["invites", data.id],
           });
 
+          queryClient.invalidateQueries({
+            queryKey: ["user-workspaces"],
+          });
+
           return rep ? rep.pull() : workspace?.pull();
 
         case "channel":
@@ -44,6 +48,10 @@ export function createSocket(userId: string) {
         case "workspaceInfo":
           queryClient.invalidateQueries({
             queryKey: ["invites", data.id],
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["resources", data.id],
           });
 
           return queryClient.invalidateQueries({

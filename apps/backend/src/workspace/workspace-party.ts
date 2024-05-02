@@ -36,6 +36,10 @@ import { getMembership } from "./handlers/get-membership";
 import { getInvites } from "./handlers/get-invites";
 import { getMembersInfo } from "./handlers/get-members-info";
 import { authChannel } from "./handlers/auth-channel";
+import { uploadAvatar } from "./handlers/upload-avatar";
+import { deleteFile } from "./handlers/delete-file";
+import { listFiles } from "./handlers/list-files";
+import { downloadFile } from "./handlers/download-file";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -66,8 +70,6 @@ export default class WorkspaceParty
 
     this.app.post("/replicache-push", workspacePush.bind(null, this));
 
-    this.app.post("/upload-file/:teamId/:path?", uploadFile.bind(null, this));
-
     this.app.post("/create", createWorkspace.bind(null, this));
 
     this.app.post("/create-invite", createInvite.bind(null, this));
@@ -81,6 +83,15 @@ export default class WorkspaceParty
     this.app.post("/poke", channelPoke.bind(null, this));
 
     this.app.post("/leave", leaveWorkspace.bind(null, this));
+
+    this.app
+      .get("/files/:teamId/:path?", listFiles.bind(null, this))
+      .post(uploadFile.bind(null, this))
+      .delete(deleteFile.bind(null, this, "file"));
+
+    this.app.get("/file/:teamId/:path", downloadFile.bind(null, this));
+
+    this.app.post("/avatar", uploadAvatar.bind(null, this)).delete();
 
     this.app.delete("/", deleteWorkspace.bind(null, this));
 

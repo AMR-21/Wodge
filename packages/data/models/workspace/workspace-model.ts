@@ -50,7 +50,11 @@ export async function getWorkspacesByUserId(userId: string) {
 
 export async function updateWorkspaceById(
   workspaceId: string,
-  data: Pick<Workspace, "name" | "slug">
+  data: {
+    name?: Workspace["name"];
+    slug?: Workspace["slug"];
+    avatar?: Workspace["avatar"];
+  }
 ) {
   const db = createDb();
   return await db

@@ -1,6 +1,10 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@repo/ui/components/ui/avatar";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
@@ -50,7 +54,7 @@ export function WorkspaceSwitcher() {
           )}
         >
           <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-            {/* <AvatarImage src={workspace?.avatar} /> */}
+            {workspace?.avatar && <AvatarImage src={workspace.avatar} />}
             <AvatarFallback className=" rounded-md text-sm uppercase">
               {workspace?.name[0]}
             </AvatarFallback>
@@ -138,7 +142,8 @@ function SwitcherItem({ workspace }: { workspace: Workspace }) {
         )}
       >
         <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-          {/* <AvatarImage src={workspace?.avatar} /> */}
+          {workspace?.avatar && <AvatarImage src={workspace.avatar} />}
+
           <AvatarFallback className=" rounded-md  uppercase">
             {workspace.name[0]}
           </AvatarFallback>

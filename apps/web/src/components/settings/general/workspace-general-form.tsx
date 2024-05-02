@@ -22,7 +22,6 @@ import { env } from "@repo/env";
 import { useSubmitToast } from "@/components/use-submit-toast";
 import { useRouter } from "next/navigation";
 
-// TODO USE rquery to mutate inside the DO
 export function WorkspaceGeneralForm() {
   const { workspace, workspaceRep, workspaceId } = useCurrentWorkspace();
   const queryClient = useQueryClient();

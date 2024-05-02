@@ -50,7 +50,6 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
     owner: userId,
     createdAt: new Date(),
     id: party.room.id,
-    avatar: "workspace_avatar_path",
   };
 
   const res = await fetch(

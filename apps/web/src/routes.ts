@@ -24,6 +24,7 @@ export const authRoutes: string[] = [
   "/api/ai",
   "/api/remove-member",
   "/api/delete-workspace",
+  "/api/update-avatar",
 ];
 
 /**
