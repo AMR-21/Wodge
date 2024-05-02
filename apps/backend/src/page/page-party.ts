@@ -19,14 +19,23 @@ import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
 import { handlePost } from "./page-post";
+import { Hono } from "hono";
+import { prompt } from "./prompt";
 
 export default class PageParty implements Party.Server {
   // options: Party.ServerOptions = {
   //   hibernate: true,
   // };
   ai: Ai;
+
+  app: Hono = new Hono().basePath("/parties/page/:pageId");
+
   constructor(readonly room: Party.Room) {
     this.ai = new Ai(room.context.ai);
+  }
+
+  async onStart() {
+    this.app.post("/prompt", prompt.bind(null, this));
   }
 
   async onConnect(conn: Party.Connection) {
@@ -45,14 +54,8 @@ export default class PageParty implements Party.Server {
   }
 
   async onRequest(req: Party.Request) {
-    switch (req.method) {
-      case "POST":
-        return await handlePost(req, this);
-      case "OPTIONS":
-        return ok();
-      default:
-        return notImplemented();
-    }
+    //@ts-ignore
+    return this.app.fetch(req);
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
