@@ -78,3 +78,8 @@ export async function removeMember(userId: string, workspaceId: string) {
       )
     );
 }
+
+export async function deleteWorkspace(workspaceId: string) {
+  const db = createDb();
+  return await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
+}

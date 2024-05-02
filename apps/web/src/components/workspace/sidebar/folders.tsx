@@ -20,6 +20,7 @@ import {
 } from "@repo/ui/components/ui/collapsible";
 import { Channels } from "./channels";
 import { TeamMore } from "./team-more";
+import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 
 export function Folders({
   folders,
@@ -171,7 +172,11 @@ export const Folder = React.forwardRef<
             e.stopPropagation();
           }}
         >
-          <TeamMore folderId={folder.id} teamId={teamId} />
+          <TeamMore
+            folderId={folder.id}
+            teamId={teamId}
+            folder={folder as FolderType}
+          />
         </div>
       </SidebarItem>
     </li>

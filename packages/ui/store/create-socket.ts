@@ -13,9 +13,7 @@ export function createSocket(userId: string) {
   });
 
   const userStore = useAppState.getState().userStore;
-  const workspaces = useAppState.getState().workspaces;
-  const { addWorkspace, removeWorkspace, getWorkspace } =
-    useAppState.getState().actions;
+  const { addWorkspace, removeWorkspace } = useAppState.getState().actions;
 
   socket.addEventListener("message", (e) => {
     const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
@@ -62,8 +60,6 @@ export function createSocket(userId: string) {
         case "deleteWorkspace":
           if (!data.id) return;
           removeWorkspace(data.id);
-          if (window.location.href.includes(data.id))
-            toast.warning("You have been removed from the current workspace");
 
           return queryClient.invalidateQueries({
             queryKey: ["user-workspaces"],

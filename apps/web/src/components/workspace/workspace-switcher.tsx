@@ -35,7 +35,7 @@ export function WorkspaceSwitcher() {
         <div
           className={cn(
             buttonVariants({ variant: "ghost", size: "fit" }),
-            "group w-fit basis-3/4 cursor-pointer items-center justify-start pl-[0.345rem]",
+            "group max-w-44 cursor-pointer items-center justify-start pl-[0.345rem]",
           )}
         >
           <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
@@ -55,12 +55,11 @@ export function WorkspaceSwitcher() {
             <DropdownMenuItem>All Workspaces</DropdownMenuItem>
           </Link>
 
+          <Link href={`/${workspaceSlug}/settings`}>
+            <DropdownMenuItem>Workspace settings</DropdownMenuItem>
+          </Link>
           {isPrivileged && (
             <>
-              <Link href={`/${workspaceSlug}/settings`}>
-                <DropdownMenuItem>Workspace settings</DropdownMenuItem>
-              </Link>
-
               <Link href={`/${workspaceSlug}/settings/members`}>
                 <DropdownMenuItem>Invite & manage members</DropdownMenuItem>
               </Link>

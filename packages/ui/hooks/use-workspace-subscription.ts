@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useActions } from "../store/store-hooks";
 import { useCurrentUser } from "./use-current-user";
 import { ReadTransaction, Replicache } from "replicache";
@@ -40,18 +40,28 @@ export function useWorkspaceSubscription() {
 
   useEffect(() => {
     if (isPending) return;
-    if (!user || !workspaceSlug || !workspace || !workspaceId)
-      // return router.replace("/workspaces");
-      return;
+
+    let timerId: any;
+    if (!workspace) {
+      timerId = setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    }
+    // return;
 
     // if (workspaceRep && workspaceRep.name.includes(workspaceId)) return;
 
+    if (!user || !workspaceId) return;
+
     const workspaceStore = getWorkspace(workspaceId, user.id);
 
-    // console.log(workspaceStore);
     if (!workspaceStore) return;
 
     setWorkspaceRep(workspaceStore);
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   }, [user, workspaceSlug, workspace, isPending]);
 
   const { snapshot: structure, isPending: isStructurePending } = useSubscribe(

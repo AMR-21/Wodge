@@ -20,6 +20,8 @@ import { deleteChannel } from "../mutators/delete-channel";
 import { updatePage } from "../mutators/update-page";
 import { updateRoom } from "../mutators/update-room";
 import { updateThread } from "../mutators/update-thread";
+import { updateFolder } from "../mutators/update-folder";
+import { deleteFolder } from "../mutators/delete-folder";
 
 export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
   const res = await repPush({
@@ -113,6 +115,10 @@ function runner(party: WorkspaceParty, req: Party.Request) {
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
         return await updateThread(party, params);
 
+      case "updateFolder":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await updateFolder(party, params);
+
       case "createRoom":
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
 
@@ -133,6 +139,10 @@ function runner(party: WorkspaceParty, req: Party.Request) {
       case "deleteChannel":
         if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
         return await deleteChannel(party, params);
+
+      case "deleteFolder":
+        if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
+        return await deleteFolder(party, params);
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }

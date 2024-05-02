@@ -22,21 +22,36 @@ import { nanoid } from "nanoid";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
-export function AddFolderForm({ teamId }: { teamId: string }) {
+export function AddFolderForm({
+  teamId,
+  folder,
+}: {
+  teamId: string;
+  folder?: Folder;
+}) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Folder>({
-    resolver: zodResolver(FolderSchema.omit({ channels: true })),
+    resolver: zodResolver(FolderSchema),
     defaultValues: {
-      name: "",
-      viewGroups: ["team-members"],
-      editGroups: ["team-members"],
-      id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
+      name: folder?.name || "",
+      viewGroups: folder?.viewGroups || ["team-members"],
+      editGroups: folder?.editGroups || ["team-members"],
+      id: folder?.id || nanoid(WORKSPACE_GROUP_ID_LENGTH),
+      channels: folder?.channels || [],
     },
   });
 
   const closeRef = useRef<HTMLButtonElement>(null);
 
   async function onSubmit(data: Folder) {
+    if (folder) {
+      await workspaceRep?.mutate.updateFolder({
+        teamId,
+        ...data,
+      });
+
+      return closeRef.current?.click();
+    }
     await workspaceRep?.mutate.updateTeam({
       teamId,
       teamUpdate: {
@@ -70,7 +85,7 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="viewGroups"
             render={({ field }) => {
@@ -104,10 +119,10 @@ export function AddFolderForm({ teamId }: { teamId: string }) {
                 </FormItem>
               );
             }}
-          />
+          /> */}
 
           <Button type="submit" className="w-full">
-            Create folder
+            {folder ? "Update" : "Create"} folder
           </Button>
 
           <DialogClose asChild>

@@ -23,6 +23,7 @@ export const authRoutes: string[] = [
   "/auth/callback",
   "/api/ai",
   "/api/remove-member",
+  "/api/delete-workspace",
 ];
 
 /**

@@ -11,6 +11,7 @@ import { getMembersInfo } from "../handlers/get-members-info";
 import { updateWorkspace } from "../handlers/update-workspace";
 import { notifyFile } from "../handlers/notify-file";
 import { leaveWorkspace } from "../handlers/leave-workspace";
+import { deleteWorkspace } from "../handlers/delete-workspace";
 
 export async function handlePost(req: Party.Request, party: WorkspaceParty) {
   const route = getRoute(req);
@@ -55,7 +56,8 @@ export async function handlePost(req: Party.Request, party: WorkspaceParty) {
 
     case "/leave":
       return await leaveWorkspace(req, party);
-
+    case "/delete":
+      return await deleteWorkspace(req, party);
     default:
       return badRequest();
   }

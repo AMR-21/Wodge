@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelLeftClose } from "lucide-react";
+import { PanelLeftClose, Search } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import { WorkspaceSwitcher } from "../workspace-switcher";
 import { useAtom } from "jotai";
@@ -14,16 +14,15 @@ export function SidebarHeader() {
   return (
     <div
       className={cn(
-        "flex h-12 max-h-12 w-full shrink-0 items-center truncate bg-dim px-2 py-2.5",
-        !isSidebarOpen && "px-0",
+        "flex h-12 max-h-12 w-60 max-w-60 items-center overflow-hidden bg-dim px-2 py-2.5",
+        !isSidebarOpen && "w-0 px-0",
       )}
     >
       <WorkspaceSwitcher />
 
-      <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
-      <div className="ml-auto flex shrink-0 basis-1/4 items-center gap-1">
-        {/* <SidebarItemBtn Icon={Search} />
-        <SidebarItemBtn Icon={Plus} className="bg-secondary" /> */}
+      <div className=" ml-auto flex shrink-0  items-center gap-1">
+        <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
+        <SidebarItemBtn Icon={Search} />
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ import { createPageMutation } from "./mutators/create-page";
 import { createRoomMutation } from "./mutators/create-room";
 import { createThreadMutation } from "./mutators/create-thread";
 import { ChannelsTypes, Page } from "../../schemas/channel.schema";
-import { Team } from "../../schemas/team.schema";
+import { Folder, Team } from "../../schemas/team.schema";
 import { Room } from "../../schemas/room.schema";
 import { Thread } from "../../schemas/thread.schema";
 import { toggleThreadMutation } from "./mutators/toggle-thread";
@@ -36,6 +36,8 @@ import { deleteChannelMutation } from "./mutators/delete-channel";
 import { updatePageMutation } from "./mutators/update-page";
 import { updateRoomMutation } from "./mutators/update-room";
 import { updateThreadMutation } from "./mutators/update-thread";
+import { updateFolderMutation } from "./mutators/update-folder";
+import { deleteFolderMutation } from "./mutators/delete-folder";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -60,6 +62,9 @@ export interface NewPageArgs extends Page {
 }
 
 export interface NewRoomArgs extends Room {
+  teamId: string;
+}
+export interface NewFolderArgs extends Folder {
   teamId: string;
 }
 
@@ -294,6 +299,21 @@ export const workspaceMutators = {
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);
   },
+  async updateFolder(tx: WriteTransaction, data: NewFolderArgs) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const { teamId, ...folder } = data;
+
+    const newStructure = updateFolderMutation({
+      folder,
+      teamId,
+      structure,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
   async createRoom(tx: WriteTransaction, data: NewRoomArgs) {
     const structure = (await tx.get<WorkspaceStructure>(
       makeWorkspaceStructureKey()
@@ -373,6 +393,23 @@ export const workspaceMutators = {
       structure,
       teamId: data.teamId,
       type: data.type,
+    });
+
+    await tx.set(makeWorkspaceStructureKey(), newStructure);
+  },
+
+  async deleteFolder(
+    tx: WriteTransaction,
+    data: { teamId: string; folderId: string }
+  ) {
+    const structure = (await tx.get<WorkspaceStructure>(
+      makeWorkspaceStructureKey()
+    )) as WorkspaceStructure;
+
+    const newStructure = deleteFolderMutation({
+      folderId: data.folderId,
+      structure,
+      teamId: data.teamId,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

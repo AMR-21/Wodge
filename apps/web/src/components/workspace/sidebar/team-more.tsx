@@ -14,7 +14,10 @@ import {
   FolderCog,
   FolderPlus,
   MoreHorizontal,
+  Pen,
+  Pencil,
   Settings,
+  Trash2,
 } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import { AddPageForm } from "./add-page-form";
@@ -22,15 +25,16 @@ import { AddFolderForm } from "./add-folder-form";
 import { useState } from "react";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
-import { ID_LENGTH, Page, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
+import { Folder, ID_LENGTH, Page, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 
 interface TeamMoreProps {
   teamId: string;
   folderId?: string;
+  folder?: Folder;
 }
 
-export function TeamMore({ teamId, folderId }: TeamMoreProps) {
+export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
   const [activeTab, setActiveTab] = useState("folder");
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
 
@@ -136,19 +140,41 @@ export function TeamMore({ teamId, folderId }: TeamMoreProps) {
           {folderId && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-2 text-sm">
-                <Settings className="h-4 w-4" />
-                Folder settings
+              <DropdownMenuLabel>Folder settings</DropdownMenuLabel>
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  className="gap-2 text-sm"
+                  onClick={() => setActiveTab("folderEdit")}
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit folder
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuItem
+                className="gap-2 text-sm text-red-500 hover:text-red-400"
+                onClick={async () => {
+                  await workspaceRep?.mutate.deleteFolder({
+                    teamId,
+                    folderId,
+                  });
+                }}
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete folder
               </DropdownMenuItem>
             </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {activeTab === "page" ? (
+      {activeTab === "page" && (
         <AddPageForm teamId={teamId} folderId={folderId} />
-      ) : (
-        <AddFolderForm teamId={teamId} />
+      )}
+
+      {activeTab === "folder" && <AddFolderForm teamId={teamId} />}
+
+      {activeTab === "folderEdit" && (
+        <AddFolderForm teamId={teamId} folder={folder} />
       )}
     </Dialog>
   );

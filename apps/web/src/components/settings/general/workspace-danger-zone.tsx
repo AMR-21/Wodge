@@ -33,6 +33,26 @@ export function WorkspaceDangerZone() {
     },
   });
 
+  const { mutate: deleteWorkspace, isPending: isDeleting } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/delete`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
+
+      if (!res.ok) throw new Error("Failed to delete workspace");
+    },
+    onSuccess: () => {
+      router.push("/");
+    },
+    onError: () => {
+      toast.error("Failed to delete workspace");
+    },
+  });
+
   return (
     <div className="flex gap-4 ">
       {!isOwner && (
@@ -47,7 +67,12 @@ export function WorkspaceDangerZone() {
       )}
 
       {isOwner && (
-        <SettingsContentAction variant="destructive" className="w-32">
+        <SettingsContentAction
+          variant="destructive"
+          className="w-32"
+          onClick={() => deleteWorkspace()}
+          isPending={isDeleting}
+        >
           Delete Workspace
         </SettingsContentAction>
       )}

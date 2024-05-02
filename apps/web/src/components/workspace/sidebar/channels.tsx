@@ -7,6 +7,8 @@ import {
   LucideIcon,
   MessageCircle,
   MoreHorizontal,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { SidebarItemBtn } from "../sidebar-item-btn";
 import {
@@ -216,16 +218,17 @@ export const Channel = React.forwardRef<
                     className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
                   />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent className="w-48">
                   <DialogTrigger asChild>
-                    <DropdownMenuItem className="text-gray-500 hover:text-gray-400">
-                      Edit channel
+                    <DropdownMenuItem className="gap-2 text-sm">
+                      <Pencil className="h-4 w-4 " />
+                      Edit {type}
                     </DropdownMenuItem>
                   </DialogTrigger>
 
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className="text-red-500 hover:text-red-400"
+                    className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
                     onClick={async () => {
                       await workspaceRep?.mutate.deleteChannel({
                         channelId: channel.id,
@@ -235,7 +238,8 @@ export const Channel = React.forwardRef<
                       });
                     }}
                   >
-                    Delete
+                    <Trash2 className="h-4 w-4" />
+                    Delete {type}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

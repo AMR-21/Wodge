@@ -68,7 +68,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isPending ? (
-          <Loader color="hsl(var(--primary-foreground))" />
+          <Loader
+            color={
+              variant === "destructive"
+                ? "white"
+                : "hsl(var(--primary-foreground))"
+            }
+          />
         ) : (
           children
         )}
