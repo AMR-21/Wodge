@@ -14,7 +14,7 @@ export function SidebarHeader() {
   return (
     <div
       className={cn(
-        "flex h-12 max-h-12 w-60 max-w-60 items-center overflow-hidden bg-dim px-2 py-2.5",
+        "flex h-12 max-h-12 w-60 max-w-60 items-center overflow-hidden border-r border-border/50 bg-dim px-2 py-2.5",
         !isSidebarOpen && "w-0 px-0",
       )}
     >
