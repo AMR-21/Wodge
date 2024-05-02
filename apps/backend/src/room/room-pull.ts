@@ -3,11 +3,12 @@ import { PatcherParams, repPull } from "../lib/replicache";
 import { PatchOperation } from "replicache";
 
 import RoomParty from "./room-party";
+import { Context } from "hono";
 
-export async function roomPull(req: Party.Request, party: RoomParty) {
-  const userId = req.headers.get("x-user-id")!;
+export async function roomPull(party: RoomParty, c: Context) {
+  const userId = c.req.header("x-user-id")!;
   return await repPull({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
     patcher: patcher(party, userId),

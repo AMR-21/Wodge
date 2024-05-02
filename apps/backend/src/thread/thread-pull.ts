@@ -2,11 +2,12 @@ import type * as Party from "partykit/server";
 import { PatcherParams, repPull } from "../lib/replicache";
 import { PatchOperation } from "replicache";
 import ThreadParty from "./thread-party";
+import { Context } from "hono";
 
-export async function threadPull(req: Party.Request, party: ThreadParty) {
-  const userId = req.headers.get("x-user-id")!;
+export async function threadPull(party: ThreadParty, c: Context) {
+  const userId = c.req.header("x-user-id")!;
   return await repPull({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
     patcher: patcher(party, userId),
