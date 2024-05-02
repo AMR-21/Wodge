@@ -1,25 +1,17 @@
-import { removeMemberMutation } from "@repo/data/models/workspace/mutators/remove-member";
-import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import {
-  REPLICACHE_VERSIONS_KEY,
-  WORKSPACE_INVITES_KEY,
-  WORKSPACE_PRESENCE_KEY,
-  WorkspaceMembers,
   defaultWorkspaceMembers,
   defaultWorkspaceStructure,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
+  REPLICACHE_VERSIONS_KEY,
+  WORKSPACE_INVITES_KEY,
+  WORKSPACE_PRESENCE_KEY,
 } from "@repo/data";
-import { produce } from "immer";
 
-import * as Party from "partykit/server";
 import { ok } from "../../lib/http-utils";
 
-export async function deleteWorkspace(
-  req: Party.Request,
-  party: WorkspaceParty
-) {
+export async function deleteWorkspace(party: WorkspaceParty) {
   // Update the user party
   const userParty = party.room.context.parties.user!;
 

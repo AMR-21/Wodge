@@ -7,7 +7,7 @@
 
 import type * as Party from "partykit/server";
 
-import { handlePost } from "./endpoints/user-post";
+// import { handlePost } from "./endpoints/user-post";
 import { notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getCurrentUser } from "../lib/auth";
 import {
@@ -16,7 +16,15 @@ import {
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import { UserPartyInterface, Versions } from "../types";
-import { handleGet } from "./endpoints/user-get";
+// import { handleGet } from "./endpoints/user-get";
+import { Hono } from "hono";
+import { userPull } from "./handlers/user-pull";
+import { startFn } from "./start-fn";
+import { userPush } from "./handlers/user-push";
+import { addWorkspace } from "./handlers/add-workspace";
+import { removeWorkspace } from "./handlers/remove-workspace";
+import { poke } from "./handlers/poke";
+import { getUserWorkspaces } from "./handlers/get-user-workspace";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -25,21 +33,23 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
   workspacesStore: Set<string>;
   versions: Versions;
+  app: Hono = new Hono().basePath("/parties/user/:userId");
 
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
-    const map = await this.room.storage.get([
-      REPLICACHE_VERSIONS_KEY,
-      makeWorkspacesStoreKey(),
-    ]);
+    this.app.post("/replicache-pull", userPull.bind(null, this));
+    this.app.post("/replicache-push", userPush.bind(null, this));
 
-    this.versions =
-      <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
-      new Map<string, number | boolean>([["globalVersion", 0]]);
+    this.app.post("/add-workspace", addWorkspace.bind(null, this));
 
-    this.workspacesStore =
-      <Set<string>>map.get(makeWorkspacesStoreKey()) || new Set<string>();
+    this.app.post("/remove-workspace", removeWorkspace.bind(null, this));
+
+    this.app.post("/poke", poke.bind(null, this));
+
+    this.app.get("/workspaces", getUserWorkspaces.bind(null, this));
+
+    await startFn(this);
   }
 
   // When user is connected to the party
@@ -114,16 +124,18 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   }
 
   async onRequest(req: Party.Request) {
-    switch (req.method) {
-      case "POST":
-        return await handlePost(req, this);
-      case "GET":
-        return await handleGet(req, this);
-      case "OPTIONS":
-        return ok();
-      default:
-        return notImplemented();
-    }
+    //@ts-ignore
+    return this.app.fetch(req);
+    // switch (req.method) {
+    //   case "POST":
+    //     return await handlePost(req, this);
+    //   case "GET":
+    //     return await handleGet(req, this);
+    //   case "OPTIONS":
+    //     return ok();
+    //   default:
+    //     return notImplemented();
+    // }
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {

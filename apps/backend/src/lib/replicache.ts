@@ -12,6 +12,7 @@ import { badRequest, error, json, ok, unauthorized } from "./http-utils";
 import { PatchOperation, PullResponse } from "replicache";
 import { z } from "zod";
 import { Versions } from "../types";
+import { HonoRequest } from "hono";
 
 export type ReplicacheSpace = {
   id: string;
@@ -64,14 +65,14 @@ export interface PatcherParams {
 }
 
 export interface PushProps {
-  req: Request;
+  req: HonoRequest;
   storage: Storage;
   versions: Versions;
   runner: (params: RunnerParams) => Promise<void>;
 }
 
 export interface PullProps {
-  req: Request;
+  req: HonoRequest;
   storage: Storage;
   versions: Versions;
   patcher: (params: PatcherParams) => Promise<PatchOperation[]>;
@@ -81,7 +82,7 @@ const authError = {};
 const clientStateNotFoundError = {};
 
 export async function repPull({ req, storage, versions, patcher }: PullProps) {
-  const userId = req.headers.get("x-user-id");
+  const userId = req.header("x-user-id");
   if (!userId) return unauthorized();
 
   const data = await req.json();
@@ -139,7 +140,7 @@ export async function repPull({ req, storage, versions, patcher }: PullProps) {
 }
 
 export async function repPush({ req, storage, versions, runner }: PushProps) {
-  const userId = req.headers.get("x-user-id");
+  const userId = req.header("x-user-id");
   const data = await req.json();
 
   if (!userId) return unauthorized();

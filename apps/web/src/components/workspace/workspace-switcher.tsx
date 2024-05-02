@@ -6,7 +6,14 @@ import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
 import { cn } from "@repo/ui/lib/utils";
 import { buttonVariants } from "@repo/ui/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Building2,
+  Check,
+  ChevronsUpDown,
+  LogOut,
+  Settings,
+  Users2,
+} from "lucide-react";
 import { Workspace } from "@repo/data";
 import Link from "next/link";
 import {
@@ -22,12 +29,16 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "@repo/ui/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 export function WorkspaceSwitcher() {
   const { workspace, workspaceSlug } = useCurrentWorkspace();
   const { userWorkspaces } = useUserWorkspaces();
 
   const isPrivileged = useIsOwnerOrAdmin();
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -52,16 +63,25 @@ export function WorkspaceSwitcher() {
       <DropdownMenuContent alignOffset={0} align="start" className="w-52">
         <DropdownMenuGroup>
           <Link href="/">
-            <DropdownMenuItem>All Workspaces</DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 text-sm">
+              <Building2 className="h-4 w-4" />
+              All Workspaces
+            </DropdownMenuItem>
           </Link>
 
           <Link href={`/${workspaceSlug}/settings`}>
-            <DropdownMenuItem>Workspace settings</DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 text-sm">
+              <Settings className="h-4 w-4" />
+              Workspace settings
+            </DropdownMenuItem>
           </Link>
           {isPrivileged && (
             <>
               <Link href={`/${workspaceSlug}/settings/members`}>
-                <DropdownMenuItem>Invite & manage members</DropdownMenuItem>
+                <DropdownMenuItem className="gap-2 text-sm">
+                  <Users2 className="h-4 w-4" />
+                  Manage members
+                </DropdownMenuItem>
               </Link>
             </>
           )}
@@ -81,7 +101,23 @@ export function WorkspaceSwitcher() {
             </DropdownMenuPortal>
           </DropdownMenuSub>
 
-          <DropdownMenuItem>Log out</DropdownMenuItem>
+          <DropdownMenuItem
+            className="gap-2 text-sm"
+            onClick={async () => {
+              const supabase = createClient();
+
+              const { error } = await supabase.auth.signOut();
+
+              if (error) {
+                toast.error("Failed to log out");
+              } else {
+                router.push("/login");
+              }
+            }}
+          >
+            <LogOut className="h-4 w-4" />
+            Log out
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

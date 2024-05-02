@@ -10,12 +10,10 @@ import { produce } from "immer";
 
 import * as Party from "partykit/server";
 import { ok } from "../../lib/http-utils";
+import { Context } from "hono";
 
-export async function leaveWorkspace(
-  req: Party.Request,
-  party: WorkspaceParty
-) {
-  const memberId = req.headers.get("x-user-id") as string;
+export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
+  const memberId = c.req.header("x-user-id") as string;
 
   const newState = removeMemberMutation({
     memberId,

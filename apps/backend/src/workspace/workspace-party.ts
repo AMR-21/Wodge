@@ -7,38 +7,35 @@ import {
   unauthorized,
 } from "../lib/http-utils";
 
-import {
-  authWorkspaceAccess,
-  checkMembershipEdge,
-  getCurrentUser,
-} from "../lib/auth";
+import { authWorkspaceAccess, getCurrentUser } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
-  ServerWorkspaceData,
   WorkspacePartyInterface,
   ServerWorkspaceStructure,
   Versions,
   PresenceMap,
 } from "../types";
 
-import { handlePost } from "./endpoints/workspace-post";
-
-import {
-  REPLICACHE_VERSIONS_KEY,
-  WORKSPACE_INVITES_KEY,
-  makeWorkspaceKey,
-  makeWorkspaceMembersKey,
-  makeWorkspaceStructureKey,
-  defaultWorkspaceMembers,
-  Invite,
-  WORKSPACE_PRESENCE_KEY,
-  Invites,
-  defaultWorkspaceStructure,
-  ID_LENGTH,
-  PokeMessage,
-} from "@repo/data";
-import { handleGet } from "./endpoints/workspace-get";
+import { Invites, ID_LENGTH, PokeMessage } from "@repo/data";
+import { Hono } from "hono";
+import { uploadFile } from "./handlers/upload-file";
+import { startFn } from "./start-fn";
+import { cors } from "hono/cors";
+import { workspacePull } from "./handlers/workspace-pull";
+import { createWorkspace } from "./handlers/create-workspace";
+import { workspacePush } from "./handlers/workspace-push";
+import { createInvite } from "./handlers/create-invite";
+import { joinWorkspace } from "./handlers/join-workspace";
+import { handlePresence } from "./handlers/presence";
+import { updateWorkspace } from "./handlers/update-workspace";
+import { channelPoke } from "./handlers/channel-poke";
+import { leaveWorkspace } from "./handlers/leave-workspace";
+import { deleteWorkspace } from "./handlers/delete-workspace";
+import { getMembership } from "./handlers/get-membership";
+import { getInvites } from "./handlers/get-invites";
+import { getMembersInfo } from "./handlers/get-members-info";
+import { authChannel } from "./handlers/auth-channel";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -53,70 +50,68 @@ export default class WorkspaceParty
   // Number count the connected user devices - may use the user-agent header instead
   presenceMap: PresenceMap;
 
+  app: Hono = new Hono().basePath("/parties/workspace/:workspaceId");
+
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
-    const membersKey = makeWorkspaceMembersKey();
-    // const metadataKey = makeWorkspaceKey();
-    const structureKey = makeWorkspaceStructureKey();
+    this.app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      })
+    );
 
-    const map = await this.room.storage.get([
-      membersKey,
-      // metadataKey,
-      structureKey,
-      WORKSPACE_INVITES_KEY,
-      REPLICACHE_VERSIONS_KEY,
-      WORKSPACE_PRESENCE_KEY,
-    ]);
+    this.app.post("/replicache-pull", workspacePull.bind(null, this));
 
-    this.workspaceMembers = <ServerWorkspaceMembers>map.get(membersKey) || {
-      data: { ...defaultWorkspaceMembers() },
-      lastModifiedVersion: 0,
-      deleted: false,
-    };
+    this.app.post("/replicache-push", workspacePush.bind(null, this));
 
-    // this.workspaceMetadata = <ServerWorkspaceData>map.get(metadataKey) || {
-    //   data: {},
-    //   lastModifiedVersion: 0,
-    //   deleted: false,
-    // };
+    this.app.post("/upload-file/:teamId/:path?", uploadFile.bind(null, this));
 
-    this.workspaceStructure = <ServerWorkspaceStructure>(
-      map.get(structureKey)
-    ) || {
-      data: { ...defaultWorkspaceStructure() },
-      lastModifiedVersion: 0,
-      deleted: false,
-    };
+    this.app.post("/create", createWorkspace.bind(null, this));
 
-    this.versions =
-      <Versions>map.get(REPLICACHE_VERSIONS_KEY) ||
-      new Map([
-        ["globalVersion", 0],
-        ["workspaceInfo", 0],
-      ]);
+    this.app.post("/create-invite", createInvite.bind(null, this));
 
-    // remove
-    this.invites = <Invites>map.get(WORKSPACE_INVITES_KEY) || new Map();
+    this.app.post("/join", joinWorkspace.bind(null, this));
 
-    this.presenceMap =
-      <PresenceMap>map.get(WORKSPACE_PRESENCE_KEY) || new Map();
+    this.app.post("/presence", handlePresence.bind(null, this));
+
+    this.app.post("/update", updateWorkspace.bind(null, this));
+
+    this.app.post("/poke", channelPoke.bind(null, this));
+
+    this.app.post("/leave", leaveWorkspace.bind(null, this));
+
+    this.app.delete("/", deleteWorkspace.bind(null, this));
+
+    this.app.get("/membership", getMembership.bind(null, this));
+
+    this.app.get("/invites", getInvites.bind(null, this));
+
+    this.app.get("/members-info", getMembersInfo.bind(null, this));
+
+    this.app.get("/auth-channel", authChannel.bind(null, this));
+
+    await startFn(this);
   }
 
   async onRequest(req: Party.Request) {
-    switch (req.method) {
-      case "POST":
-        return await handlePost(req, this);
-      case "OPTIONS":
-        return ok();
-      case "GET":
-        return await handleGet(req, this);
-      case "PATCH":
-        this.poke();
-        return ok();
-      default:
-        return notImplemented();
-    }
+    // @ts-ignore
+    return this.app.fetch(req);
+
+    // switch (req.method) {
+    //   case "POST":
+    //     return await handlePost(req, this);
+    //   case "OPTIONS":
+    //     return ok();
+    //   case "GET":
+    //     return await handleGet(req, this);
+    //   case "PATCH":
+    //     this.poke();
+    //     return ok();
+    //   default:
+    //     return notImplemented();
+    // }
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
@@ -132,7 +127,6 @@ export default class WorkspaceParty
     }
 
     if (getRoute(req) === "/auth-channel") return req;
-    if (getRoute(req) === "/notify-file") return req;
 
     try {
       // maybe removed when bindings are supported

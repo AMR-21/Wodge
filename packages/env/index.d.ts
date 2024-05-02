@@ -18,6 +18,7 @@ type Env = Readonly<{
   NEXT_PUBLIC_LIVEKIT_URL: string;
   NEXT_PUBLIC_SUPABASE_URL: string;
   NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
+  NEXT_PUBLIC_AVATARS_URL: string;
 }>;
 
 declare module "@repo/env" {

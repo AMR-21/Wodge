@@ -1,10 +1,11 @@
 import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { json } from "../../lib/http-utils";
+import { Context } from "hono";
 
-export function getMembership(req: Party.Request, party: WorkspaceParty) {
-  const serviceKey = req.headers.get("authorization");
-  const userId = req.headers.get("x-user-id");
+export function getMembership(party: WorkspaceParty, c: Context) {
+  const serviceKey = c.req.header("authorization");
+  const userId = c.req.header("x-user-id");
 
   // Verify service key
   if (serviceKey !== party.room.env.SERVICE_KEY)

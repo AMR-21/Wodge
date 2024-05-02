@@ -2,15 +2,13 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { REPLICACHE_VERSIONS_KEY, WorkspaceSchema } from "@repo/data";
 import { badRequest, ok } from "../../lib/http-utils";
+import { Context } from "hono";
 
-export async function updateWorkspace(
-  req: Party.Request,
-  party: WorkspaceParty
-) {
+export async function updateWorkspace(party: WorkspaceParty, c: Context) {
   // 1. authorize
 
   // 2. Validate data
-  const body = await req.json();
+  const body = await c.req.json();
   const validatedFields = WorkspaceSchema.pick({
     name: true,
     slug: true,

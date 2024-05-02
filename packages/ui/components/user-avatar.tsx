@@ -11,11 +11,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { buttonVariants } from "./ui/button";
 import { cn } from "../lib/utils";
-import { Cross1Icon } from "@radix-ui/react-icons";
 import { X } from "lucide-react";
 
 interface ProfileAvatarProps {
-  avatar?: string;
+  avatar?: string | null;
   fallback?: string;
   localUrl?: string;
   inputRef?: React.RefObject<HTMLInputElement>;
@@ -100,6 +99,7 @@ export function UserAvatar({
                   }}
                   onMouseLeave={() => setIsClearHovered(false)}
                 >
+                  {/* @ts-ignore */}
                   <X className="h-3.5 w-3.5" />
                 </div>
               )}

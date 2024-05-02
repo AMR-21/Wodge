@@ -3,10 +3,11 @@ import UserParty from "../user-party";
 import { RunnerParams, repPush } from "../../lib/replicache";
 import { NewWorkspaceSchema } from "@repo/data";
 import { makeWorkspacesStoreKey } from "@repo/data";
+import { Context } from "hono";
 
-export async function userPush(req: Request, party: UserParty) {
+export async function userPush(party: UserParty, c: Context) {
   const res = await repPush({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
     runner: runner(party),

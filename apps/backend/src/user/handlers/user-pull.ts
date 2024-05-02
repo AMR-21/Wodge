@@ -3,10 +3,11 @@ import UserParty from "../user-party";
 import { PatcherParams, repPull } from "../../lib/replicache";
 import { PatchOperation } from "replicache";
 import { makeWorkspacesStoreKey } from "@repo/data";
+import { Context } from "hono";
 
-export async function userPull(req: Request, party: UserParty) {
+export async function userPull(party: UserParty, c: Context) {
   return await repPull({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
     patcher: patcher(party),
@@ -19,14 +20,14 @@ function patcher(party: UserParty) {
 
     const patch: PatchOperation[] = [];
 
-    if (workspacesStore)
-      if (workspacesStore.lastModifiedVersion > fromVersion) {
-        patch.push({
-          op: "put",
-          key: makeWorkspacesStoreKey(),
-          value: workspacesStore.data,
-        });
-      }
+    // if (workspacesStore)
+    //   if (workspacesStore.lastModifiedVersion > fromVersion) {
+    //     patch.push({
+    //       op: "put",
+    //       key: makeWorkspacesStoreKey(),
+    //       value: workspacesStore.data,
+    //     });
+    //   }
 
     return patch;
   };

@@ -4,13 +4,14 @@ import { Invite, InviteSchema, WORKSPACE_INVITES_KEY } from "@repo/data";
 import { nanoid } from "nanoid";
 import { badRequest, json, unauthorized } from "../../lib/http-utils";
 import { isAllowed } from "../../lib/utils";
+import { Context } from "hono";
 
-export async function createInvite(req: Party.Request, party: WorkspaceParty) {
-  // if (!isAllowed(req, party, ["admin"])) return unauthorized();
+export async function createInvite(party: WorkspaceParty, c: Context) {
+  // if (!isAllowed(c.req, party, ["admin"])) return unauthorized();
 
-  const userId = req.headers.get("x-user-id")!;
+  const userId = c.req.header("x-user-id")!;
 
-  const body = await req.json();
+  const body = await c.req.json();
 
   const validatedFields = InviteSchema.safeParse(body);
 

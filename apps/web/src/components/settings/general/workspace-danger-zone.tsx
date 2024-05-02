@@ -36,9 +36,9 @@ export function WorkspaceDangerZone() {
   const { mutate: deleteWorkspace, isPending: isDeleting } = useMutation({
     mutationFn: async () => {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/delete`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}`,
         {
-          method: "POST",
+          method: "DELETE",
           credentials: "include",
         },
       );

@@ -13,14 +13,16 @@ import {
 } from "@repo/data";
 import { isMemberInWorkspace } from "../../lib/utils";
 import { produce } from "immer";
+import { Context } from "hono";
+import queryString from "query-string";
 
-export async function joinWorkspace(req: Party.Request, party: WorkspaceParty) {
-  const token = new URL(req.url).searchParams.get("token");
-  const userId = req.headers.get("x-user-id");
+export async function joinWorkspace(party: WorkspaceParty, c: Context) {
+  const { token } = queryString.parseUrl(c.req.url).query;
+  const userId = c.req.header("x-user-id");
 
   if (!userId) return unauthorized();
 
-  if (!token) return badRequest();
+  if (!token || typeof token !== "string") return badRequest();
 
   // 1. validate the token
   const invite = party.invites.get(token);

@@ -7,15 +7,16 @@ import {
   makeWorkspacesStoreKey,
 } from "@repo/data";
 import { produce } from "immer";
+import { Context } from "hono";
 
-export async function addWorkspace(req: Party.Request, party: UserParty) {
-  const serviceKey = req.headers.get("authorization");
+export async function addWorkspace(party: UserParty, c: Context) {
+  const serviceKey = c.req.header("authorization");
 
   if (serviceKey !== party.room.env.SERVICE_KEY) {
     return badRequest();
   }
 
-  const workspaceId = req.headers.get("workspaceId");
+  const workspaceId = c.req.header("workspaceId");
   if (!workspaceId) return badRequest();
 
   party.workspacesStore.add(workspaceId);

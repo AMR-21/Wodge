@@ -86,10 +86,8 @@ export function AdvancedUploadButton({
     uppyRef.use(XHRUpload, {
       limit: 1,
       method: "POST",
-      endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${teamId}/${base64}`,
-      headers: {
-        "x-workspace-id": bucketId,
-      },
+      endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${bucketId}/upload-file/${teamId}/${base64}`,
+      withCredentials: true,
     });
 
     queryClient.invalidateQueries({

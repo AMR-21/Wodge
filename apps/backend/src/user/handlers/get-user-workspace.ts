@@ -2,9 +2,10 @@ import type * as Party from "partykit/server";
 import UserParty from "../user-party";
 import { badRequest, json } from "../../lib/http-utils";
 import { Workspace } from "@repo/data";
+import { Context } from "hono";
 
-export async function getUserWorkspaces(req: Party.Request, party: UserParty) {
-  const userId = req.headers.get("x-user-id");
+export async function getUserWorkspaces(party: UserParty, c: Context) {
+  const userId = c.req.header("x-user-id");
 
   // Todo read the user workspaces from db binding instead
 

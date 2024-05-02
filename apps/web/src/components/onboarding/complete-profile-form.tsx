@@ -78,19 +78,6 @@ export function CompleteProfileForm() {
 
   async function onSubmit(data: z.infer<typeof UpdateUserSchema>) {
     startTransition(async () => {
-      // console.log(typeof updateProfile);
-      // updateProfile(data).then(async (res) => {
-      //   if (res?.error) {
-      //     toast.error(res.error);
-      //   }
-      //   if (res?.success) {
-      //     queryClient.invalidateQueries({
-      //       queryKey: ["user"],
-      //     });
-      //     nextStep();
-      //   }
-      // });
-
       const ok = await mutateAsync(data);
 
       if (ok) {

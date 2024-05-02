@@ -32,7 +32,6 @@ export * from "./components/ui/toggle";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";
-export * from "./components/user-card";
 export * from "./components/tooltip-wrapper";
 export * from "./components/tag";
 
@@ -54,6 +53,7 @@ export * from "./hooks/use-is-owner";
 export * from "./hooks/use-can-edit";
 export * from "./hooks/use-can-view";
 export * from "./hooks/use-current-resources";
+export * from "./hooks/use-avatar-url";
 
 export * from "./store/store";
 export * from "./store/atoms";

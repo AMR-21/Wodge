@@ -7,11 +7,13 @@ import {
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
 } from "@repo/data";
+import { Context } from "hono";
 
-export async function workspacePull(req: Party.Request, party: WorkspaceParty) {
-  const userId = req.headers.get("x-user-id")!;
+export async function workspacePull(party: WorkspaceParty, c: Context) {
+  const userId = c.req.header("x-user-id")!;
+
   return await repPull({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
     patcher: patcher(party, userId),

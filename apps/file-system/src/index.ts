@@ -21,8 +21,6 @@ import manifest from "__STATIC_CONTENT_MANIFEST";
 import { cors } from "hono/cors";
 import { nanoid } from "nanoid";
 
-import { fileTypeFromBuffer } from "file-type";
-
 async function notify(dom?: string, wid?: string, tid?: string, sKey?: string) {
   if (!dom || !wid || !tid || !sKey) return;
   const res = await fetch(`${dom}/parties/workspace/${wid}/notify-file`, {
@@ -140,6 +138,51 @@ api_bucket.post("/delete/:bucket-name", async (c) => {
     return c.json(error, 400);
   }
 });
+
+api_object
+  .post("/:bucket/:name", async (c) => {
+    try {
+      const bucket = c.req.param("bucket");
+      const name = c.req.param("name");
+
+      const body = await c.req.parseBody();
+
+      const file = body["file"] as File;
+
+      const input = {
+        Body: file,
+        Bucket: bucket,
+        Key: name,
+        ContentType: file.type,
+      };
+      const command = new PutObjectCommand(input);
+      const response = await s3Client.send(command);
+      return c.json(response, 200);
+    } catch (error) {
+      console.log(error);
+      return c.json(error, 400);
+    }
+  })
+  .delete(async (c) => {
+    try {
+      const bucket = c.req.param("bucket");
+      const name = c.req.param("name");
+
+      const input = {
+        Bucket: bucket,
+        Key: name,
+      };
+      const command = new DeleteObjectCommand(input);
+      const response = await s3Client.send(command);
+      return c.json(response, 200);
+    } catch (error) {
+      if (error instanceof ReferenceError) {
+        return c.json({ message: "File deleted successfully" }, 200);
+      } else {
+        return c.json({ message: "File not deleted" }, 400);
+      }
+    }
+  });
 
 api_object.post("/put/:bucket/:teamId/:path?", async (c) => {
   const bucket = c.req.param("bucket");

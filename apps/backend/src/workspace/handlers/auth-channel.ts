@@ -2,6 +2,7 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { json, unauthorized } from "../../lib/http-utils";
 import { canEdit, canView, ChannelsTypes, isAdmin, isOwner } from "@repo/data";
+import { Context } from "hono";
 
 export interface AuthChannelResponse {
   success: boolean;
@@ -12,18 +13,18 @@ export interface AuthChannelResponse {
   canView?: boolean;
 }
 
-export function authChannel(req: Party.Request, party: WorkspaceParty) {
-  const serviceKey = req.headers.get("authorization");
+export function authChannel(party: WorkspaceParty, c: Context) {
+  const serviceKey = c.req.header("authorization");
 
   // from rep wrapper
-  const workspaceId = req.headers.get("x-workspace-id");
-  const teamId = req.headers.get("x-team-id") as string | undefined;
-  const folderId = req.headers.get("x-folder-id") as string | undefined;
+  const workspaceId = c.req.header("x-workspace-id");
+  const teamId = c.req.header("x-team-id") as string | undefined;
+  const folderId = c.req.header("x-folder-id") as string | undefined;
 
   // from channel party
-  const userId = req.headers.get("x-user-id") as string;
-  const channelId = req.headers.get("x-channel-id") as string;
-  const channelType = req.headers.get("x-channel-type") as ChannelsTypes;
+  const userId = c.req.header("x-user-id") as string;
+  const channelId = c.req.header("x-channel-id") as string;
+  const channelType = c.req.header("x-channel-type") as ChannelsTypes;
 
   // Verify service key
   if (serviceKey !== party.room.env.SERVICE_KEY)

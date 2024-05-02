@@ -3,18 +3,16 @@ import WorkspaceParty from "../workspace-party";
 import { badRequest, ok, unauthorized } from "../../lib/http-utils";
 import { PresenceRequestSchema, WORKSPACE_PRESENCE_KEY } from "@repo/data";
 import { checkMembership } from "../../lib/auth";
+import { Context } from "hono";
 
-export async function handlePresence(
-  req: Party.Request,
-  party: WorkspaceParty
-) {
-  const serviceKey = req.headers.get("Authorization");
+export async function handlePresence(party: WorkspaceParty, c: Context) {
+  const serviceKey = c.req.header("Authorization");
 
   if (serviceKey !== party.room.env.SERVICE_KEY) {
     return unauthorized();
   }
 
-  const body = await req.json();
+  const body = await c.req.json();
 
   const validatedFields = PresenceRequestSchema.safeParse(body);
 

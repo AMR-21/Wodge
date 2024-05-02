@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog";
 import { WorkspacesList } from "@/components/workspaces/workspaces-list";
 import { Button } from "@repo/ui/components/ui/button";
-import { UserCard } from "@repo/ui/components/user-card";
+import { UserCard } from "@/components/user-card";
 
 function WorkspacesPage() {
   const router = useRouter();

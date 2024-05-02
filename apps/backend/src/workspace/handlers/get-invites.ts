@@ -1,11 +1,8 @@
-import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
-import { isAllowed } from "../../lib/utils";
-import { json, unauthorized } from "../../lib/http-utils";
+import { json } from "../../lib/http-utils";
+import { Context } from "hono";
 
-export async function getInvites(req: Party.Request, party: WorkspaceParty) {
-  // if (!isAllowed(req, party, ["admin"])) return unauthorized();
-
+export async function getInvites(party: WorkspaceParty, c: Context) {
   return json({
     ...Object.fromEntries(party.invites),
   });

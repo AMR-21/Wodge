@@ -22,13 +22,14 @@ import { updateRoom } from "../mutators/update-room";
 import { updateThread } from "../mutators/update-thread";
 import { updateFolder } from "../mutators/update-folder";
 import { deleteFolder } from "../mutators/delete-folder";
+import { Context, HonoRequest } from "hono";
 
-export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
+export async function workspacePush(party: WorkspaceParty, c: Context) {
   const res = await repPush({
-    req,
+    req: c.req,
     storage: party.room.storage,
     versions: party.versions,
-    runner: runner(party, req),
+    runner: runner(party, c.req),
   });
 
   if (res.status === 200) {
@@ -39,21 +40,21 @@ export async function workspacePush(req: Party.Request, party: WorkspaceParty) {
 }
 
 //verify room id
-function runner(party: WorkspaceParty, req: Party.Request) {
+function runner(party: WorkspaceParty, req: HonoRequest) {
   return async (params: RunnerParams) => {
     const isOwnerOrAdmin =
       isAdmin({
         members: party.workspaceMembers.data,
-        userId: req.headers.get("x-user-id")!,
+        userId: req.header("x-user-id")!,
       }) ||
       isOwner({
         members: party.workspaceMembers.data,
-        userId: req.headers.get("x-user-id")!,
+        userId: req.header("x-user-id")!,
       });
 
     const isTeamModeratorFlag = isTeamModerator({
       structure: party.workspaceStructure.data,
-      userId: req.headers.get("x-user-id")!,
+      userId: req.header("x-user-id")!,
       teamId: params.mutation.args.teamId,
     });
 

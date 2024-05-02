@@ -16,25 +16,23 @@ import {
 } from "@repo/data";
 import { produce } from "immer";
 import { nanoid } from "nanoid";
+import { Context } from "hono";
 
-export async function createWorkspace(
-  req: Party.Request,
-  party: WorkspaceParty
-) {
+export async function createWorkspace(party: WorkspaceParty, c: Context) {
   // 1. Check that the workspace has not been created i.e no owner
   if (party.workspaceMembers.data.createdBy !== "") {
     return error("Workspace already exists", 401);
   }
 
   // 2. add owner to the workspace members as owner and member
-  const userId = req.headers.get("x-user-id");
+  const userId = c.req.header("x-user-id");
 
   if (!userId) {
     return unauthorized();
   }
 
   // 3. validate workspace data
-  const body = await req.json();
+  const body = await c.req.json();
 
   const validatedFields = NewWorkspaceSchema.safeParse(body);
 

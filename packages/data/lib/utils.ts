@@ -61,3 +61,7 @@ export function replicacheWrapper<Request, Result>(
 export function getBucketAddress(wid: string) {
   return btoa(wid).toLowerCase();
 }
+
+export function getAvatarAddress(id?: string) {
+  return `${env.NEXT_PUBLIC_AVATARS_URL}/${id}`;
+}

@@ -5,9 +5,9 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.554.0",
-    "@aws-sdk/client-sts": "^3.554.0",
-    "@aws-sdk/s3-request-presigner": "^3.554.0",
+    "@aws-sdk/client-s3": "^3.567.0",
+    "@aws-sdk/client-sts": "^3.567.0",
+    "@aws-sdk/s3-request-presigner": "^3.567.0",
     "aws-sdk": "^2.1599.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
