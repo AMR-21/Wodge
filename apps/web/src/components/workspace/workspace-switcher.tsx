@@ -14,8 +14,12 @@ import {
   Building2,
   Check,
   ChevronsUpDown,
+  Computer,
   LogOut,
+  Monitor,
+  MoonStar,
   Settings,
+  Sun,
   Users2,
 } from "lucide-react";
 import { Workspace } from "@repo/data";
@@ -36,10 +40,12 @@ import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "@repo/ui/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 export function WorkspaceSwitcher() {
   const { workspace, workspaceSlug } = useCurrentWorkspace();
   const { userWorkspaces } = useUserWorkspaces();
+  const { setTheme, theme } = useTheme();
 
   const isPrivileged = useIsOwnerOrAdmin();
   const router = useRouter();
@@ -109,6 +115,44 @@ export function WorkspaceSwitcher() {
                 {userWorkspaces?.map((ws) => (
                   <SwitcherItem key={ws.id} workspace={ws} />
                 ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  className="gap-2 text-sm"
+                  onClick={() => setTheme("light")}
+                >
+                  <Sun className="h-4 w-4" />
+                  Light
+                  {theme === "light" && (
+                    <Check className="ml-auto h-4 w-4 shrink-0" />
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="gap-2 text-sm"
+                  onClick={() => setTheme("dark")}
+                >
+                  <MoonStar className="h-4 w-4" />
+                  Dark
+                  {theme === "dark" && (
+                    <Check className="ml-auto h-4 w-4 shrink-0" />
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="gap-2 text-sm"
+                  onClick={() => setTheme("system")}
+                >
+                  <Monitor className="h-4 w-4" />
+                  System
+                  {theme === "system" && (
+                    <Check className="ml-auto h-4 w-4 shrink-0" />
+                  )}
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>

@@ -8,7 +8,7 @@
 import type * as Party from "partykit/server";
 
 // import { handlePost } from "./endpoints/user-post";
-import { notImplemented, ok, unauthorized } from "../lib/http-utils";
+import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
 import { getCurrentUser } from "../lib/auth";
 import {
   PokeMessage,
@@ -25,6 +25,10 @@ import { addWorkspace } from "./handlers/add-workspace";
 import { removeWorkspace } from "./handlers/remove-workspace";
 import { poke } from "./handlers/poke";
 import { getUserWorkspaces } from "./handlers/get-user-workspace";
+import { update } from "./handlers/update";
+import { uploadAvatar } from "./handlers/upload-avatar";
+import { cors } from "hono/cors";
+import { deleteAvatar } from "./handlers/delete-avatar";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -38,6 +42,12 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
+    this.app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      })
+    );
     this.app.post("/replicache-pull", userPull.bind(null, this));
     this.app.post("/replicache-push", userPush.bind(null, this));
 
@@ -46,6 +56,11 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     this.app.post("/remove-workspace", removeWorkspace.bind(null, this));
 
     this.app.post("/poke", poke.bind(null, this));
+
+    this.app.post("/update", update.bind(null, this));
+    this.app
+      .post("/avatar", uploadAvatar.bind(null, this))
+      .delete(deleteAvatar.bind(null, this));
 
     this.app.get("/workspaces", getUserWorkspaces.bind(null, this));
 
@@ -143,6 +158,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     if (req.method === "OPTIONS") {
       return ok();
     }
+    if (getRoute(req) === "/update") return req;
 
     try {
       const user = await getCurrentUser(req, lobby);

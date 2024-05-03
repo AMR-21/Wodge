@@ -10,30 +10,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 function SettingsLayout({ children }: { children: React.ReactNode }) {
-  // const {
-  //   structure,
-  //   members,
-  //   isMembersPending,
-  //   isStructurePending,
-  //   workspaceSlug,
-  // } = useCurrentWorkspace();
-  // const { user, isUserPending } = useCurrentUser();
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (isMembersPending || isStructurePending || isUserPending) return;
-
-  //   if (!structure || !members || !user)
-  //     return router.replace(`/${workspaceSlug}`);
-
-  //   if (
-  //     !isOwner({ members, userId: user?.id }) &&
-  //     !isAdmin({ members, userId: user?.id })
-  //   ) {
-  //     return router.replace(`/${workspaceSlug}`);
-  //   }
-  // }, [structure, members, user]);
-
   return (
     <div className="flex h-full w-full">
       <Sheet>

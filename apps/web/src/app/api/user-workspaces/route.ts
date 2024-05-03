@@ -1,17 +1,15 @@
+import { createClient } from "@/lib/supabase/server";
 import { getWorkspacesByUserId } from "@repo/data/server";
-import { env } from "@repo/env";
 
 export async function GET(req: Request) {
-  const serviceKey = req.headers.get("authorization");
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (env.SERVICE_KEY !== serviceKey)
-    return new Response(null, { status: 401 });
+  if (!user?.id) return new Response(null, { status: 401 });
 
-  const userId = req.headers.get("x-user-id");
-
-  if (!userId) return new Response(null, { status: 401 });
-
-  const res = await getWorkspacesByUserId(userId);
+  const res = await getWorkspacesByUserId(user.id);
 
   const workspaces = res.map((r) => r.workspaces);
 

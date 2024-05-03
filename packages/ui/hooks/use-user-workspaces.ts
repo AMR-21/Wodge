@@ -20,14 +20,11 @@ export function useUserWorkspaces() {
     queryKey: ["user-workspaces"],
     queryFn: async () => {
       // if (!user?.id) return;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user?.id}/workspaces`,
-        {
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`/api/user-workspaces`, {
+        credentials: "include",
+      });
 
-      if (!res.ok) throw new Error("Failed to fetch members data");
+      if (!res.ok) throw new Error("Failed to fetch workspaces data");
 
       const data = (await res.json()) as Workspace[];
       return data;

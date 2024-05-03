@@ -12,26 +12,26 @@ export const publicRoutes: string[] = [];
 export const authRoutes: string[] = [
   "/login",
   "/login/error",
-  "/api/member",
-  "/api/create-workspace",
-  "/api/workspace-access",
-  "/api/user-workspaces",
-  "/api/update-workspace",
-  "/api/join-workspace",
-  "/api/update-user",
+  // "/api/member",
+  // "/api/create-workspace",
+  // "/api/workspace-access",
+  // "/api/user-workspaces",
+  // "/api/update-workspace",
+  // "/api/join-workspace",
+  // "/api/update-user",
   "/auth/user",
   "/auth/callback",
-  "/api/ai",
-  "/api/remove-member",
-  "/api/delete-workspace",
-  "/api/update-avatar",
+  // "/api/ai",
+  // "/api/remove-member",
+  // "/api/delete-workspace",
+  // "/api/update-avatar",
 ];
 
 /**
  * The prefix for API authentication routes
  * Routes that start with prefix are used for API authentication purposes
  */
-export const apiAuthPrefix = "/api/auth";
+export const apiPrefix = "/api";
 
 /**
  * Default redirect path after logging in

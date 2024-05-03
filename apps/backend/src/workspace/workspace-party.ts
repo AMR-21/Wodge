@@ -17,7 +17,13 @@ import {
   PresenceMap,
 } from "../types";
 
-import { Invites, ID_LENGTH, PokeMessage } from "@repo/data";
+import {
+  Invites,
+  ID_LENGTH,
+  PokeMessage,
+  makeWorkspaceMembersKey,
+  REPLICACHE_VERSIONS_KEY,
+} from "@repo/data";
 import { Hono } from "hono";
 import { uploadFile } from "./handlers/upload-file";
 import { startFn } from "./start-fn";
@@ -40,6 +46,7 @@ import { uploadAvatar } from "./handlers/upload-avatar";
 import { deleteFile } from "./handlers/delete-file";
 import { listFiles } from "./handlers/list-files";
 import { downloadFile } from "./handlers/download-file";
+import { memberUpdateHandler } from "./handlers/member-update";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -83,6 +90,8 @@ export default class WorkspaceParty
     this.app.post("/poke", channelPoke.bind(null, this));
 
     this.app.post("/leave", leaveWorkspace.bind(null, this));
+
+    this.app.post("/member-update", memberUpdateHandler.bind(null, this));
 
     this.app
       .get("/files/:teamId/:path?", listFiles.bind(null, this))

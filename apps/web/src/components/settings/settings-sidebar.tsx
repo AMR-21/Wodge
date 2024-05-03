@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/ui/lib/utils";
 import { SidebarItemBtn } from "../workspace/sidebar-item-btn";
-import { Building2, PanelLeft } from "lucide-react";
+import { Building2, PanelLeft, User2, UserCircle } from "lucide-react";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import {
   SettingsSidebarCollapsibleItem,
@@ -47,6 +47,14 @@ export function SettingsSidebar() {
                 <SettingsSidebarItem label="upgrade" />
               </>
             )}
+          </SettingsSidebarList>
+          <SettingsSidebarHeader>
+            <User2 className="h-4 w-4" />
+            <span>My Account</span>
+          </SettingsSidebarHeader>
+
+          <SettingsSidebarList>
+            <SettingsSidebarItem label="account" href="/account" />
           </SettingsSidebarList>
         </div>
       </ScrollArea>

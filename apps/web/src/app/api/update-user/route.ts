@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/utils";
 import { UpdateUserSchema } from "@repo/data";
 import { updateUserById } from "@repo/data/server";
+import { env } from "@repo/env";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -32,7 +33,19 @@ export async function POST(req: NextRequest) {
     updatedAt: new Date(),
   });
 
-  if (res.user) return Response.json({ success: true, user: res.user });
+  if (res.user) {
+    //inform workspaces
+    await fetch(
+      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user.id}/update`,
+      {
+        method: "POST",
+        headers: {
+          authorization: env.SERVICE_KEY,
+        },
+      },
+    );
+    return Response.json({ success: true, user: res.user });
+  }
 
   return Response.json({ error: res.error }, { status: 400 });
 }

@@ -2,7 +2,12 @@ import { type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 import { createDb, getUserById } from "@repo/data/server";
 import { users } from "@repo/data";
-import { authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes } from "./routes";
+import {
+  apiPrefix,
+  authRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+  publicRoutes,
+} from "./routes";
 
 export async function middleware(request: NextRequest) {
   const { response, user } = await updateSession(request);
@@ -35,27 +40,20 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
+  const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
 
   // order matters here
-  // api auth routes for auth.js
-  // if (isApiAuthRoute) {
-  //   return;
-  // }
-
+  if (isApiRoute) {
+    return response;
+  }
+  if (
+    nextUrl.pathname === "/auth/user" ||
+    nextUrl.pathname === "/auth/callback"
+  ) {
+    return response;
+  }
   // auth routes ex. login, onboarding
   if (isAuthRoute) {
-    if (nextUrl.pathname === "/auth/user") {
-      return response;
-    }
-
-    if (nextUrl.pathname === "/api/update-user") {
-      return response;
-    }
-
-    if (nextUrl.pathname === "/api/update-avatar") {
-      return response;
-    }
-
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { users } from "./auth.schema";
 
 /**
  * General user schema
@@ -74,3 +75,4 @@ export type PokeMessage = {
 
 // export type UserType = z.infer<typeof UserSchema>;
 export type PublicUserType = z.infer<typeof PublicUserSchema>;
+export type User = typeof users.$inferSelect;
