@@ -3,7 +3,11 @@ import WorkspaceParty from "../workspace-party";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { HeadObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getS3Client } from "../../lib/get-s3-client";
-import { getBucketAddress, makeWorkspaceAvatarKey } from "@repo/data";
+import {
+  getBucketAddress,
+  makeWorkspaceAvatarKey,
+  REPLICACHE_VERSIONS_KEY,
+} from "@repo/data";
 import { badRequest } from "../../lib/http-utils";
 
 export async function deleteFile(
@@ -11,7 +15,7 @@ export async function deleteFile(
   mode: "avatar" | "file" = "file",
   c: Context
 ) {
-  if (!c.req.param("path")) return badRequest();
+  if (mode === "file" && !c.req.param("path")) return badRequest();
 
   const bucket = mode === "file" ? getBucketAddress(party.room.id) : "avatars";
   const teamId = (mode === "file" && c.req.param("teamId")) || undefined;
@@ -38,15 +42,50 @@ export async function deleteFile(
       new DeleteObjectCommand({ Bucket: bucket, Key: key }),
       { expiresIn: 3600 }
     );
+
     let response = await fetch(deleteUrl, {
       method: "DELETE",
     });
 
     if (response.status === 204) {
-      await party.poke({
-        type: "team-files",
-        id: teamId,
-      });
+      // delete avatar in db
+      if (mode === "avatar") {
+        // Inform the DB
+        const res = await fetch(
+          `${party.room.env.AUTH_DOMAIN}/api/update-avatar`,
+          {
+            method: "DELETE",
+            headers: {
+              authorization: party.room.env.SERVICE_KEY as string,
+              workspaceId: party.room.id,
+            },
+          }
+        );
+
+        if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
+
+        party.versions.set(
+          "workspaceInfo",
+          party.versions.get("workspaceInfo")! + 1
+        );
+
+        await Promise.all([
+          party.poke(),
+          party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
+        ]);
+      } else {
+        party.versions.set(
+          "workspaceInfo",
+          party.versions.get("workspaceInfo")! + 1
+        );
+
+        await Promise.all([
+          party.poke({
+            type: "team-files",
+          }),
+          party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
+        ]);
+      }
 
       return c.json({ message: "File deleted successfully" }, 200);
     } else {

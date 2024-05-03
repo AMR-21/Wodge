@@ -26,7 +26,7 @@ export function WorkspaceSettings() {
   const isManager = useIsOwnerOrAdmin();
 
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate: upload, isPending: isUploading } = useMutation({
     mutationFn: async (data: FormData) => {
       if (!workspace?.id) return false;
       const res = await fetch(
@@ -52,14 +52,14 @@ export function WorkspaceSettings() {
     },
   });
 
-  const { mutate: deleteAvatar } = useMutation({
-    mutationFn: async (data: FormData) => {
+  const { mutate: deleteAvatar, isPending: isDeleting } = useMutation({
+    mutationFn: async () => {
       if (!workspace?.id) return false;
       const res = await fetch(
-        `${env.NEXT_PUBLIC_FS_DOMAIN}/object/avatars/ws_${workspace.id}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspace.id}/avatar`,
         {
           method: "DELETE",
-          body: data,
+          credentials: "include",
         },
       );
 
@@ -84,7 +84,7 @@ export function WorkspaceSettings() {
   function onUpload(file: File) {
     const formData = new FormData();
     formData.append("file", file);
-    mutate(formData);
+    upload(formData);
   }
 
   return (
@@ -102,8 +102,10 @@ export function WorkspaceSettings() {
               <AvatarComp
                 fallback={workspace?.name}
                 onUpload={onUpload}
-                // onRemove={deleteAvatar}
+                onRemove={deleteAvatar}
                 avatar={workspace?.avatar}
+                isUploading={isUploading}
+                isDeleting={isDeleting}
               />
 
               <SettingsContentDescription>

@@ -91,7 +91,9 @@ export default class WorkspaceParty
 
     this.app.get("/file/:teamId/:path", downloadFile.bind(null, this));
 
-    this.app.post("/avatar", uploadAvatar.bind(null, this)).delete();
+    this.app
+      .post("/avatar", uploadAvatar.bind(null, this))
+      .delete(deleteFile.bind(null, this, "avatar"));
 
     this.app.delete("/", deleteWorkspace.bind(null, this));
 

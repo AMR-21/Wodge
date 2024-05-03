@@ -53,12 +53,20 @@ export function WorkspaceSwitcher() {
             "group max-w-44 cursor-pointer items-center justify-start pl-[0.345rem]",
           )}
         >
-          <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-            {workspace?.avatar && <AvatarImage src={workspace.avatar} />}
-            <AvatarFallback className=" rounded-md text-sm uppercase">
-              {workspace?.name[0]}
-            </AvatarFallback>
-          </Avatar>
+          {workspace?.avatar ? (
+            <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
+              <AvatarImage src={workspace.avatar} />
+              <AvatarFallback className=" rounded-md text-sm uppercase">
+                {workspace?.name[0]}
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
+              <AvatarFallback className=" rounded-md text-sm uppercase">
+                {workspace?.name[0]}
+              </AvatarFallback>
+            </Avatar>
+          )}
 
           <p className="mr-1.5 truncate">{workspace?.name}</p>
           <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
@@ -141,13 +149,21 @@ function SwitcherItem({ workspace }: { workspace: Workspace }) {
           "w-full cursor-pointer justify-start gap-2.5",
         )}
       >
-        <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-          {workspace?.avatar && <AvatarImage src={workspace.avatar} />}
+        {workspace?.avatar ? (
+          <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
+            <AvatarImage src={workspace.avatar} />
 
-          <AvatarFallback className=" rounded-md  uppercase">
-            {workspace.name[0]}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarFallback className=" rounded-md  uppercase">
+              {workspace.name[0]}
+            </AvatarFallback>
+          </Avatar>
+        ) : (
+          <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
+            <AvatarFallback className=" rounded-md  uppercase">
+              {workspace.name[0]}
+            </AvatarFallback>
+          </Avatar>
+        )}
 
         <p className="truncate">{workspace.name}</p>
 

@@ -1,7 +1,7 @@
 import WorkspaceParty from "../workspace-party";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Context } from "hono";
-import { makeWorkspaceAvatarKey } from "@repo/data";
+import { makeWorkspaceAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 
 export async function uploadAvatar(party: WorkspaceParty, c: Context) {
   const s3Client = new S3Client({
@@ -40,7 +40,15 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
 
-    await party.poke();
+    party.versions.set(
+      "workspaceInfo",
+      party.versions.get("workspaceInfo")! + 1
+    );
+
+    await Promise.all([
+      party.poke(),
+      party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
+    ]);
 
     return c.json({ response }, 200);
   } catch (error) {
