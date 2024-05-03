@@ -1,3 +1,4 @@
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { WorkspaceItem } from "./workspace-item";
 import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
 
@@ -24,7 +25,7 @@ export function WorkspacesList() {
     );
 
   return (
-    <div className="flex w-full flex-col divide-y-[1px] divide-border/50">
+    <div className="flex h-full w-full flex-col divide-y-[1px] divide-border/50">
       {userWorkspaces &&
         Object.values(userWorkspaces)?.map((workspace) => (
           <WorkspaceItem key={workspace.id} workspace={workspace} />

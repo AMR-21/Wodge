@@ -37,8 +37,6 @@ export function AvatarBtn({
   const [blobUrl, setBlobUrl] = useState<string | undefined>();
   const [content, setContent] = useState<string | null>(null);
 
-  const avatarRef = useRef<HTMLImageElement>(null);
-
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
@@ -49,7 +47,7 @@ export function AvatarBtn({
 
   return (
     <TooltipWrapper
-      sideOffset={1}
+      sideOffset={3}
       content={content || (avatar ? "Replace avatar" : "Add avatar")}
     >
       <div
@@ -80,11 +78,13 @@ export function AvatarBtn({
 
         {avatar && (
           <Button
-            className="invisible absolute -right-1 -top-1 h-fit w-fit rounded-full p-0 transition-all duration-100 group-hover:visible"
-            variant="default"
+            className="invisible absolute -right-0.5 -top-0.5 h-fit w-fit rounded-full p-0.5 transition-all duration-100 group-hover:visible"
+            variant="secondary"
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               setBlobUrl(undefined);
+              inputRef.current?.value && (inputRef.current.value = "");
               onRemove?.();
             }}
             disabled={isDeleting}

@@ -2,7 +2,8 @@
 
 import { users, UserType } from "@repo/data";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { createContext, useContext, useTransition } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, useContext, useEffect, useTransition } from "react";
 
 interface ContextValues {
   user: UserType;
@@ -20,6 +21,13 @@ export function OnboardingProvider({
   user: UserType;
 }) {
   const [isPending, startTransition] = useTransition();
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  }, []);
 
   return (
     <Context.Provider

@@ -19,63 +19,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { toast } from "@repo/ui/components/ui/toast";
 import { useAvatarUrl } from "@repo/ui/hooks/use-avatar-url";
+import { useUpload } from "@repo/ui/hooks/use-upload";
+import { useDelete } from "@repo/ui/hooks/use-delete";
 
 export function WorkspaceSettings() {
   const { workspace, workspaceRep } = useCurrentWorkspace();
 
   const isManager = useIsOwnerOrAdmin();
 
-  const queryClient = useQueryClient();
-  const { mutate: upload, isPending: isUploading } = useMutation({
-    mutationFn: async (data: FormData) => {
-      if (!workspace?.id) return false;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspace.id}/avatar`,
-        {
-          method: "POST",
-          body: data,
-          credentials: "include",
-        },
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to upload avatar");
-      }
-
-      return true;
-    },
-    onSuccess: () => {
-      toast.success("Avatar uploaded");
-    },
-    onError: () => {
-      toast.error("Failed to upload avatar");
-    },
-  });
-
-  const { mutate: deleteAvatar, isPending: isDeleting } = useMutation({
-    mutationFn: async () => {
-      if (!workspace?.id) return false;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspace.id}/avatar`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to delete avatar");
-      }
-
-      return true;
-    },
-    onSuccess: () => {
-      toast.success("Avatar deleted");
-    },
-    onError: () => {
-      toast.error("Failed to upload avatar");
-    },
-  });
+  const { upload, isUploading } = useUpload("workspace", workspace?.id);
+  const { deleteAvatar, isDeleting } = useDelete("workspace", workspace?.id);
 
   function onUpload(file: File) {
     const formData = new FormData();
@@ -96,6 +49,7 @@ export function WorkspaceSettings() {
           <SettingsContentSection header="Avatar">
             <div className="space-y-3">
               <AvatarBtn
+                className="h-20 w-20 border-2 border-primary/30"
                 fallback={workspace?.name}
                 onUpload={onUpload}
                 onRemove={deleteAvatar}

@@ -21,13 +21,13 @@ import { PublicUserType, UpdateUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/user-actions";
 import { toast } from "@repo/ui/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AvatarBtn } from "../avatar-btn";
+import { useUpload } from "@repo/ui/hooks/use-upload";
+import { useDelete } from "@repo/ui/hooks/use-delete";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();
   const { nextStep } = useStepper();
-  const [localUrl, setLocalUrl] = useState<string>("");
-  const queryClient = useQueryClient();
-  const avatarFileRef = useRef<HTMLInputElement>(null);
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: z.infer<typeof UpdateUserSchema>) => {
@@ -46,34 +46,31 @@ export function CompleteProfileForm() {
   });
 
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
-    resolver: zodResolver(UpdateUserSchema),
+    resolver: zodResolver(UpdateUserSchema.omit({ avatar: true })),
     defaultValues: {
       displayName: user?.displayName ?? "",
       username: user?.username ?? "",
-      avatar: user?.avatar ?? "",
     },
   });
 
-  function removeAvatar() {
-    form.setValue("avatar", "");
-    setLocalUrl("");
-  }
+  const queryClient = useQueryClient();
 
-  // TODO
-  async function onAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // 1 Get the file and set preview URL - optionally validate file type and size
-    // Optionally set local state to file to upload to server action
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setLocalUrl(url);
+  const { upload, isUploading } = useUpload("user", user?.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  });
 
-    // 2 Created presigned url
+  const { deleteAvatar, isDeleting } = useDelete("user", user?.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  });
 
-    // 3 Upload file to R2
-
-    // 4 Set avatar to the new url
-    form.setValue("avatar", url);
+  function onUpload(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+    upload(formData);
   }
 
   async function onSubmit(data: z.infer<typeof UpdateUserSchema>) {
@@ -93,37 +90,22 @@ export function CompleteProfileForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col space-y-3">
-        <UserAvatar
-          inputRef={avatarFileRef}
-          localUrl={localUrl}
-          onRemoveAvatar={removeAvatar}
-          avatar={form.watch("avatar")}
-          fallback={form.watch("displayName")}
-        />
-
+        <div className="flex justify-center">
+          <AvatarBtn
+            avatar={user?.avatar}
+            fallback={user?.displayName}
+            className="h-20 w-20 rounded-full border-2 border-primary/30"
+            isDeleting={isDeleting}
+            isUploading={isUploading}
+            onRemove={deleteAvatar}
+            onUpload={onUpload}
+          />
+        </div>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col space-y-2"
           id="profile-form"
         >
-          <Input
-            type="file"
-            onChange={onAvatarChange}
-            ref={avatarFileRef}
-            className="hidden"
-          />
-
-          <FormField
-            control={form.control}
-            name="avatar"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} type="hidden" />
-                </FormControl>
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="displayName"

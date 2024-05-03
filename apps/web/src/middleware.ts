@@ -13,12 +13,22 @@ export async function middleware(request: NextRequest) {
   const { response, user } = await updateSession(request);
 
   let curUser = await getUserById(user.data.user?.id);
+  const { nextUrl } = request;
+
+  const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
+
+  // order matters here
+  if (isApiRoute) {
+    return response;
+  }
 
   // handle saving user data on our side
   if (user.data.user && !curUser) {
     const db = createDb();
 
     const { id, email, user_metadata } = user.data.user;
+
+    console.log({ id, email, user_metadata });
 
     curUser = await db
       .insert(users)
@@ -32,20 +42,13 @@ export async function middleware(request: NextRequest) {
       .get();
   }
 
-  const { nextUrl } = request;
-
   const isLoggedIn = !!curUser;
   const hasUsername = !!curUser?.username;
 
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
-  const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
 
-  // order matters here
-  if (isApiRoute) {
-    return response;
-  }
   if (
     nextUrl.pathname === "/auth/user" ||
     nextUrl.pathname === "/auth/callback"

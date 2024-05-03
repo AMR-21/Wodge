@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
+import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,14 +36,16 @@ export function UserCard({ className }: { className?: string }) {
             className,
           )}
         >
-          <UserAvatar
-            className="h-9 w-9"
-            avatar={user.avatar}
-            interactive={false}
+          <SafeAvatar
+            src={user.avatar}
+            className="h-10 w-10 rounded-full border-2 border-primary/30"
+            fallback={user.displayName}
           />
           <div>
-            <p className="text-sm font-medium">{user.displayName}</p>
-            <p className="text-xs text-muted-foreground">{user.username}</p>
+            <p className="truncate text-sm font-medium">{user.displayName}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              @{user.username}
+            </p>
           </div>
         </div>
       </DropdownMenuTrigger>

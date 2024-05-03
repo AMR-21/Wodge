@@ -1,6 +1,6 @@
 "use client";
 
-import { Outro, Welcome } from "./screening";
+import { Outro, Themes, Welcome } from "./screening";
 import { CompleteProfileWrapper } from "./complete-profile-wrapper";
 import { useOnboarding } from "./onboarding-context";
 import Link from "next/link";
@@ -40,6 +40,10 @@ export function OnboardingSteps() {
           </NextBtn>
         </Step>
         <Step index={3}>
+          <Themes />
+          <NextBtn className="w-4/6">Continue</NextBtn>
+        </Step>
+        <Step index={4}>
           <Outro />
           <NextBtn className="w-4/6" asChild>
             <Link href={DEFAULT_LOGIN_REDIRECT}>Get started</Link>

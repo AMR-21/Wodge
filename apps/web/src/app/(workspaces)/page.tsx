@@ -5,6 +5,7 @@ import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog
 import { WorkspacesList } from "@/components/workspaces/workspaces-list";
 import { Button } from "@repo/ui/components/ui/button";
 import { UserCard } from "@/components/user-card";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 
 function WorkspacesPage() {
   const router = useRouter();
@@ -27,13 +28,12 @@ function WorkspacesPage() {
         Back
       </Button>
 
-      <div className="w-full max-w-xs ">
+      <div className="flex w-full max-w-xs flex-col">
         <p className="mb-2 text-xs text-muted-foreground">Your Workspaces</p>
-        <div className="bg-page min-h-0 rounded-md border border-border/50">
-          <div className="flex max-h-72 grow flex-col items-center overflow-y-scroll ">
-            <WorkspacesList />
-          </div>
-        </div>
+
+        <ScrollArea className="max-h-72 rounded-md border border-border/50 bg-dim">
+          <WorkspacesList />
+        </ScrollArea>
 
         <AddWorkspaceDialog />
       </div>

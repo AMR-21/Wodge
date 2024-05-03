@@ -1,10 +1,15 @@
+import { useTheme } from "next-themes";
 import { Logo } from "../logo";
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/ui/card";
+import { Button } from "@repo/ui/components/ui/button";
+import { Monitor, MoonStar, Sun } from "lucide-react";
+import { cn } from "@repo/ui/lib/utils";
 
 function Wrapper({
   title,
@@ -14,7 +19,7 @@ function Wrapper({
   description: string;
 }) {
   return (
-    <Card className="border-none bg-transparent text-center shadow-none">
+    <Card className="-mb-6 border-none bg-transparent text-center shadow-none">
       <CardHeader className="flex flex-col items-center">
         <Logo />
         <CardTitle className="text-4xl">{title}</CardTitle>
@@ -39,5 +44,58 @@ export function Outro() {
       title="You're all set!"
       description="Maximizing your team productivity is just a click away"
     />
+  );
+}
+
+export function Themes() {
+  const { setTheme, theme } = useTheme();
+  return (
+    <Card className="-mb-6 border-none bg-transparent text-center shadow-none">
+      <CardHeader className="flex flex-col items-center">
+        <Logo />
+        <CardTitle className="text-4xl">Choose your theme</CardTitle>
+        <CardDescription className="text-base">
+          You can change the theme later
+        </CardDescription>
+
+        <CardContent>
+          <div className="-mb-5 mt-2 flex h-full items-center gap-2">
+            <Button
+              variant="outline"
+              className={cn(
+                "h-full w-20 flex-col gap-1",
+                theme === "dark" && "bg-accent",
+              )}
+              onClick={() => setTheme("dark")}
+            >
+              <MoonStar className="h-6 w-6" />
+              <span>Dark</span>
+            </Button>
+            <Button
+              variant="outline"
+              className={cn(
+                "h-full w-20 flex-col gap-1",
+                theme === "light" && "bg-accent",
+              )}
+              onClick={() => setTheme("light")}
+            >
+              <Sun className="h-6 w-6" />
+              <span>Light</span>
+            </Button>
+            <Button
+              variant="outline"
+              className={cn(
+                "h-full w-20 flex-col gap-1",
+                theme === "system" && "bg-accent",
+              )}
+              onClick={() => setTheme("system")}
+            >
+              <Monitor className="h-6 w-6" />
+              <span>System</span>
+            </Button>
+          </div>
+        </CardContent>
+      </CardHeader>
+    </Card>
   );
 }

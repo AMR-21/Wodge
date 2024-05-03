@@ -55,6 +55,8 @@ export * from "./hooks/use-can-edit";
 export * from "./hooks/use-can-view";
 export * from "./hooks/use-current-resources";
 export * from "./hooks/use-avatar-url";
+export * from "./hooks/use-delete";
+export * from "./hooks/use-upload";
 
 export * from "./store/store";
 export * from "./store/atoms";

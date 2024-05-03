@@ -21,71 +21,31 @@ import { WorkspaceGeneralForm } from "../general/workspace-general-form";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { AccountGeneralForm } from "./account-general-form";
 import { ModeToggle } from "@/components/toggle";
+import { useUpload } from "@repo/ui/hooks/use-upload";
+import { useDelete } from "@repo/ui/hooks/use-delete";
 
 export function AccountSettings() {
-  const { workspace, workspaceRep } = useCurrentWorkspace();
+  const { workspace } = useCurrentWorkspace();
 
   const { user } = useCurrentUser();
 
   const queryClient = useQueryClient();
 
-  const { mutate: upload, isPending: isUploading } = useMutation({
-    mutationFn: async (data: FormData) => {
-      if (!user?.id) return false;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user.id}/avatar`,
-        {
-          method: "POST",
-          body: data,
-          credentials: "include",
-        },
-      );
+  const { upload, isUploading } = useUpload("workspace", workspace?.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  });
 
-      if (!res.ok) {
-        throw new Error("Failed to upload avatar");
-      }
-
-      return true;
-    },
-    onSuccess: () => {
-      toast.success("Avatar uploaded");
+  const { deleteAvatar, isDeleting } = useDelete(
+    "workspace",
+    workspace?.id,
+    () => {
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
     },
-    onError: () => {
-      toast.error("Failed to upload avatar");
-    },
-  });
-
-  const { mutate: deleteAvatar, isPending: isDeleting } = useMutation({
-    mutationFn: async () => {
-      if (!user?.id) return false;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user.id}/avatar`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to delete avatar");
-      }
-
-      return true;
-    },
-    onSuccess: () => {
-      toast.success("Avatar deleted");
-      //call backend
-      queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
-    },
-    onError: () => {
-      toast.error("Failed to upload avatar");
-    },
-  });
+  );
 
   function onUpload(file: File) {
     const formData = new FormData();
@@ -108,7 +68,7 @@ export function AccountSettings() {
             avatar={user?.avatar}
             isUploading={isUploading}
             isDeleting={isDeleting}
-            className="rounded-full border-2 border-primary/30"
+            className="h-20 w-20 rounded-full border-2 border-primary/30"
           />
 
           <SettingsContentDescription>
