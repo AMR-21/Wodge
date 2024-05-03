@@ -37,7 +37,10 @@ export async function updateWorkspace(party: WorkspaceParty, c: Context) {
 
   await party.poke();
 
-  party.versions.set("workspaceInfo", party.versions.get("workspaceInfo")! + 1);
+  const nextVersion = party.versions.get("globalVersion")! + 1;
+
+  party.versions.set("workspaceInfo", nextVersion);
+  party.versions.set("globalVersion", nextVersion);
 
   await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
   return ok();

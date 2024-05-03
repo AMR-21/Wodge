@@ -14,7 +14,7 @@ import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { WorkspaceDangerZone } from "./workspace-danger-zone";
 import { WorkspaceGeneralForm } from "./workspace-general-form";
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
-import { AvatarComp } from "@/components/avatar";
+import { AvatarBtn } from "@/components/avatar-btn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { toast } from "@repo/ui/components/ui/toast";
@@ -71,10 +71,6 @@ export function WorkspaceSettings() {
     },
     onSuccess: () => {
       toast.success("Avatar deleted");
-      //call backend
-      queryClient.invalidateQueries({
-        queryKey: ["avatar", "ws_" + workspace?.id],
-      });
     },
     onError: () => {
       toast.error("Failed to upload avatar");
@@ -99,7 +95,7 @@ export function WorkspaceSettings() {
         <>
           <SettingsContentSection header="Avatar">
             <div className="space-y-3">
-              <AvatarComp
+              <AvatarBtn
                 fallback={workspace?.name}
                 onUpload={onUpload}
                 onRemove={deleteAvatar}

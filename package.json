@@ -13,7 +13,8 @@
     "lint": "turbo lint",
     "add:comp": "turbo add:comp",
     "reset:app": "rm -r ./apps/web/.wrangler && rm -r ./apps/backend/.partykit",
-    "init:app": "pnpm generate && pnpm migrate:local && mkdir -p ./apps/backend/.partykit"
+    "init:app": "pnpm generate && pnpm migrate:local && mkdir -p ./apps/backend/.partykit",
+    "pull:secrets": "infisical export > ./apps/web/.env --path=/web && infisical export > ./apps/web/.dev.vars --path=/web && infisical export > ./apps/backend/.env --path=/web"
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",

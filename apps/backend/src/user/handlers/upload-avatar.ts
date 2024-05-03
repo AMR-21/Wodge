@@ -1,17 +1,11 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { Context } from "hono";
 import { makeUserAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 import UserParty from "../user-party";
+import { getS3Client } from "../../lib/get-s3-client";
 
 export async function uploadAvatar(party: UserParty, c: Context) {
-  const s3Client = new S3Client({
-    region: "us-east-1",
-    endpoint: party.room.env.ENDPOINT as string,
-    credentials: {
-      accessKeyId: party.room.env.ACCESS_KEY as string,
-      secretAccessKey: party.room.env.SECRET_KEY as string,
-    },
-  });
+  const s3Client = getS3Client(party.room);
 
   const body = await c.req.parseBody();
 

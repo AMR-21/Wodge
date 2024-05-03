@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
-import { AvatarComp } from "@/components/avatar";
+import { AvatarBtn } from "@/components/avatar-btn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { toast } from "@repo/ui/components/ui/toast";
@@ -101,14 +101,14 @@ export function AccountSettings() {
       />
       <SettingsContentSection header="Avatar">
         <div className="space-y-3">
-          <AvatarComp
+          <AvatarBtn
             fallback={user?.displayName}
             onUpload={onUpload}
             onRemove={deleteAvatar}
             avatar={user?.avatar}
             isUploading={isUploading}
             isDeleting={isDeleting}
-            className="rounded-full"
+            className="rounded-full border-2 border-primary/30"
           />
 
           <SettingsContentDescription>

@@ -15,10 +15,12 @@ import { TeamsSidebar } from "./teams/teams-sidebar";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { Sheet, SheetContent } from "@repo/ui/components/ui/sheet";
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { useParams } from "next/navigation";
 
 export function SettingsSidebar() {
   const isDesktop = useIsDesktop();
   const isManger = useIsOwnerOrAdmin();
+  const { workspaceSlug } = useParams<{ workspaceSlug?: string }>();
 
   const jsx = (
     <>
@@ -27,34 +29,42 @@ export function SettingsSidebar() {
       </div>
       <ScrollArea>
         <div>
-          <SettingsSidebarHeader>
-            <Building2 className="h-4 w-4" />
-            <span>Workspace</span>
-          </SettingsSidebarHeader>
-          <SettingsSidebarList>
-            <SettingsSidebarItem label="general" href="/" isDefault />
-            {isManger && (
-              <>
-                <SettingsSidebarItem label="members" />
+          {workspaceSlug && (
+            <>
+              <SettingsSidebarHeader>
+                <Building2 className="h-4 w-4" />
+                <span>Workspace</span>
+              </SettingsSidebarHeader>
+              <SettingsSidebarList>
+                <SettingsSidebarItem label="general" href="/" isDefault />
+                {isManger && (
+                  <>
+                    <SettingsSidebarItem label="members" />
 
-                <SettingsSidebarCollapsibleItem label="groups">
-                  <GroupsSidebar />
-                </SettingsSidebarCollapsibleItem>
-                <SettingsSidebarCollapsibleItem label="teams">
-                  <TeamsSidebar />
-                </SettingsSidebarCollapsibleItem>
+                    <SettingsSidebarCollapsibleItem label="groups">
+                      <GroupsSidebar />
+                    </SettingsSidebarCollapsibleItem>
+                    <SettingsSidebarCollapsibleItem label="teams">
+                      <TeamsSidebar />
+                    </SettingsSidebarCollapsibleItem>
 
-                <SettingsSidebarItem label="upgrade" />
-              </>
-            )}
-          </SettingsSidebarList>
+                    <SettingsSidebarItem label="upgrade" />
+                  </>
+                )}
+              </SettingsSidebarList>
+            </>
+          )}
           <SettingsSidebarHeader>
             <User2 className="h-4 w-4" />
             <span>My Account</span>
           </SettingsSidebarHeader>
 
           <SettingsSidebarList>
-            <SettingsSidebarItem label="account" href="/account" />
+            <SettingsSidebarItem
+              label="account"
+              href={workspaceSlug ? "/account" : "/"}
+              isDefault={!!!workspaceSlug}
+            />
           </SettingsSidebarList>
         </div>
       </ScrollArea>

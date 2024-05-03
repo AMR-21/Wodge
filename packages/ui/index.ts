@@ -34,6 +34,7 @@ export * from "./components/data-table";
 export * from "./components/user-avatar";
 export * from "./components/tooltip-wrapper";
 export * from "./components/tag";
+export * from "./components/safe-avatar";
 
 export * from "./hooks/use-current-user";
 export * from "./hooks/use-user-workspaces";

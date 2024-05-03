@@ -222,7 +222,7 @@ function SettingsClose() {
        p-0 text-muted-foreground/70 transition-all hover:text-foreground"
       size="fit"
       variant="link"
-      onClick={() => router.push("/" + workspaceSlug)}
+      onClick={() => router.push("/" + (workspaceSlug || ""))}
     >
       <X className="h-6 w-6" />
     </Button>

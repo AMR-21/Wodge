@@ -7,17 +7,18 @@ import {
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
+import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 
 export function WorkspaceItem({ workspace }: { workspace: Workspace }) {
   return (
     <Link href={"/" + workspace.slug} className="w-full">
       <div className="dark:hover:bg-surface group flex w-full shrink-0 items-center gap-2 overflow-hidden py-3 pl-4 transition-all hover:bg-background">
-        <Avatar className="h-8 w-8 rounded-md border border-primary/30">
-          {/* <AvatarImage src={workspace.workspaceAvatar} /> */}
-          <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
-            {workspace.name?.[0]}
-          </AvatarFallback>
-        </Avatar>
+        <SafeAvatar
+          src={workspace?.avatar}
+          className="h-8 w-8 shrink-0 rounded-md border border-primary/30"
+          fallbackClassName="rounded-md text-lg uppercase"
+          fallback={workspace?.name}
+        />
 
         <div className="flex flex-col">
           <p className="truncate text-sm">{workspace.name}</p>

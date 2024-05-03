@@ -3,6 +3,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { nanoid } from "nanoid";
 import { Context } from "hono";
 import { getBucketAddress, REPLICACHE_VERSIONS_KEY } from "@repo/data";
+import { n } from "vitest/dist/reporters-LqC_WI4d.js";
 
 export async function uploadFile(party: WorkspaceParty, c: Context) {
   const s3Client = new S3Client({
@@ -43,17 +44,16 @@ export async function uploadFile(party: WorkspaceParty, c: Context) {
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
 
-    party.versions.set(
-      "workspaceInfo",
-      party.versions.get("workspaceInfo")! + 1
-    );
+    const nextVersion = party.versions.get("globalVersion")! + 1;
 
-    await Promise.all([
-      party.poke({
-        type: "team-files",
-      }),
-      party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
-    ]);
+    party.versions.set("workspaceInfo", nextVersion);
+    party.versions.set("globalVersion", nextVersion);
+
+    await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
+
+    await party.poke({
+      type: "team-files",
+    });
 
     return c.json({ response, fileId }, 200);
   } catch (error) {

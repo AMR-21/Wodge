@@ -56,16 +56,13 @@ export function WorkspaceGeneralForm() {
       return data;
     },
     onSuccess: (data) => {
-      // toast.dismiss(toastId);
-      // if (data.slug !== workspace?.slug) {
+      toast.success("Workspace updated");
       queryClient.invalidateQueries({
         queryKey: ["user-workspaces"],
       });
       // }
     },
   });
-
-  // const { toastId } = useSubmitToast<Workspace>(form, formRef);
 
   async function onSubmit(data: Pick<Workspace, "name" | "slug">) {
     mutate(data);

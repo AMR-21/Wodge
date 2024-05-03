@@ -17,6 +17,8 @@ import {
 import { produce } from "immer";
 import { nanoid } from "nanoid";
 import { Context } from "hono";
+import { CreateBucketCommand } from "@aws-sdk/client-s3";
+import { getS3Client } from "../../lib/get-s3-client";
 
 export async function createWorkspace(party: WorkspaceParty, c: Context) {
   // 1. Check that the workspace has not been created i.e no owner
@@ -122,17 +124,15 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
   });
 
   // 10. create workspace bucket
-
   try {
-    const resBucket = await fetch(
-      `${party.room.env.FS_DOMAIN}/bucket/create/${getBucketAddress(party.room.id)}`,
-      {
-        method: "POST",
-      }
-    );
-  } catch (e) {
-    console.error(e);
+    const s3Client = getS3Client(party.room);
+    const input = {
+      Bucket: getBucketAddress(party.room.id),
+    };
+    const command = new CreateBucketCommand(input);
+    const response = await s3Client.send(command);
+    return c.json(response, 200);
+  } catch (error) {
+    return c.json(error, 400);
   }
-
-  return ok();
 }

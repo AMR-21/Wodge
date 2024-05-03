@@ -39,8 +39,9 @@ import {
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "@repo/ui/components/ui/toast";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 
 export function WorkspaceSwitcher() {
   const { workspace, workspaceSlug } = useCurrentWorkspace();
@@ -49,6 +50,8 @@ export function WorkspaceSwitcher() {
 
   const isPrivileged = useIsOwnerOrAdmin();
   const router = useRouter();
+
+  if (!workspace) return null;
 
   return (
     <DropdownMenu>
@@ -59,20 +62,12 @@ export function WorkspaceSwitcher() {
             "group max-w-44 cursor-pointer items-center justify-start pl-[0.345rem]",
           )}
         >
-          {workspace?.avatar ? (
-            <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-              <AvatarImage src={workspace.avatar} />
-              <AvatarFallback className=" rounded-md text-sm uppercase">
-                {workspace?.name[0]}
-              </AvatarFallback>
-            </Avatar>
-          ) : (
-            <Avatar className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-              <AvatarFallback className=" rounded-md text-sm uppercase">
-                {workspace?.name[0]}
-              </AvatarFallback>
-            </Avatar>
-          )}
+          <SafeAvatar
+            src={workspace?.avatar}
+            className="mr-2 h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs"
+            fallbackClassName=" rounded-md text-sm uppercase"
+            fallback={workspace?.name}
+          />
 
           <p className="mr-1.5 truncate">{workspace?.name}</p>
           <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
@@ -181,7 +176,9 @@ export function WorkspaceSwitcher() {
 }
 
 function SwitcherItem({ workspace }: { workspace: Workspace }) {
-  const { workspaceSlug } = useCurrentWorkspace();
+  const { workspaceSlug } = useParams<{ workspaceSlug: string }>();
+
+  if (!workspaceSlug) return null;
   return (
     <Link href={`/${workspace.slug}`}>
       <DropdownMenuItem
@@ -193,21 +190,12 @@ function SwitcherItem({ workspace }: { workspace: Workspace }) {
           "w-full cursor-pointer justify-start gap-2.5",
         )}
       >
-        {workspace?.avatar ? (
-          <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-            <AvatarImage src={workspace.avatar} />
-
-            <AvatarFallback className=" rounded-md  uppercase">
-              {workspace.name[0]}
-            </AvatarFallback>
-          </Avatar>
-        ) : (
-          <Avatar className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs">
-            <AvatarFallback className=" rounded-md  uppercase">
-              {workspace.name[0]}
-            </AvatarFallback>
-          </Avatar>
-        )}
+        <SafeAvatar
+          src={workspace?.avatar}
+          className="h-6 w-6 shrink-0 rounded-md border border-primary/30 text-xs"
+          fallbackClassName="rounded-md text-sm uppercase"
+          fallback={workspace?.name}
+        />
 
         <p className="truncate">{workspace.name}</p>
 

@@ -3,18 +3,26 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
 import { toast } from "@repo/ui/components/ui/toast";
 import { UserAvatar } from "@repo/ui/components/user-avatar";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { cn } from "@repo/ui/lib/utils";
-import { LogOut, Settings2 } from "lucide-react";
+import { Check, LogOut, Monitor, MoonStar, Settings2, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function UserCard({ className }: { className?: string }) {
   const { user } = useCurrentUser();
   const router = useRouter();
+
+  const { theme, setTheme } = useTheme();
   // TODO add skeleton
   if (!user) return null;
 
@@ -39,10 +47,51 @@ export function UserCard({ className }: { className?: string }) {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36">
-        <DropdownMenuItem className="gap-2 text-sm">
-          <Settings2 className="h-4 w-4" />
-          Settings
-        </DropdownMenuItem>
+        <Link href="/settings">
+          <DropdownMenuItem className="gap-2 text-sm">
+            <Settings2 className="h-4 w-4" />
+            Settings
+          </DropdownMenuItem>
+        </Link>
+
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setTheme("light")}
+              >
+                <Sun className="h-4 w-4" />
+                Light
+                {theme === "light" && (
+                  <Check className="ml-auto h-4 w-4 shrink-0" />
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setTheme("dark")}
+              >
+                <MoonStar className="h-4 w-4" />
+                Dark
+                {theme === "dark" && (
+                  <Check className="ml-auto h-4 w-4 shrink-0" />
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setTheme("system")}
+              >
+                <Monitor className="h-4 w-4" />
+                System
+                {theme === "system" && (
+                  <Check className="ml-auto h-4 w-4 shrink-0" />
+                )}
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+
         <DropdownMenuItem
           className="gap-2 text-sm"
           onClick={async () => {

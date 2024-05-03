@@ -64,27 +64,24 @@ export async function deleteFile(
 
         if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
 
-        party.versions.set(
-          "workspaceInfo",
-          party.versions.get("workspaceInfo")! + 1
-        );
+        const nextVersion = party.versions.get("workspaceInfo")! + 1;
 
-        await Promise.all([
-          party.poke(),
-          party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
-        ]);
+        party.versions.set("workspaceInfo", nextVersion);
+        party.versions.set("globalVersion", nextVersion);
+
+        await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
+
+        await party.poke();
       } else {
-        party.versions.set(
-          "workspaceInfo",
-          party.versions.get("workspaceInfo")! + 1
-        );
+        const nextVersion = party.versions.get("workspaceInfo")! + 1;
 
-        await Promise.all([
-          party.poke({
+        party.versions.set("workspaceInfo", nextVersion);
+        party.versions.set("globalVersion", nextVersion);
+
+        await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
+          await party.poke({
             type: "team-files",
-          }),
-          party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
-        ]);
+          });
       }
 
       return c.json({ message: "File deleted successfully" }, 200);

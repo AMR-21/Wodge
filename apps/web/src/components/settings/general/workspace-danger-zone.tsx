@@ -5,13 +5,14 @@ import { env } from "@repo/env";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { toast } from "@repo/ui/components/ui/toast";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function WorkspaceDangerZone() {
   const isManager = useIsOwnerOrAdmin();
   const isOwner = useIsOwner();
   const { workspaceId } = useCurrentWorkspace();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
@@ -26,6 +27,9 @@ export function WorkspaceDangerZone() {
       if (!res.ok) throw new Error("Failed to leave workspace");
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-workspaces"],
+      });
       router.push("/");
     },
     onError: () => {

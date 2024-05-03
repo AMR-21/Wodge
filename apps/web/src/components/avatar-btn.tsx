@@ -1,4 +1,5 @@
 import { getAvatarAddress } from "@repo/data";
+import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
 import {
   Avatar,
@@ -23,7 +24,7 @@ interface AvatarCompProps {
   isDeleting?: boolean;
 }
 
-export function AvatarComp({
+export function AvatarBtn({
   fallback,
   className,
   avatar,
@@ -45,16 +46,6 @@ export function AvatarComp({
       onUpload?.(file);
     }
   }
-
-  useEffect(() => {
-    if (avatar && avatarRef.current) {
-      avatarRef.current.src = avatar + "?" + new Date().getTime();
-    }
-
-    if (!avatar) {
-      setBlobUrl(undefined);
-    }
-  }, [avatar, isUploading]);
 
   return (
     <TooltipWrapper
@@ -79,21 +70,13 @@ export function AvatarComp({
           disabled={isUploading || isDeleting}
         />
 
-        {(avatar || blobUrl) && (
-          <Avatar className={cn("h-12 w-12 rounded-md", className)}>
-            <AvatarImage ref={avatarRef} src={blobUrl || (avatar as string)} />
-            <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
-              {fallback?.[0]}
-            </AvatarFallback>
-          </Avatar>
-        )}
-        {!avatar && !blobUrl && (
-          <Avatar className={cn("h-12 w-12 rounded-md", className)}>
-            <AvatarFallback className="rounded-md text-lg uppercase transition-all  ">
-              {fallback?.[0]}
-            </AvatarFallback>
-          </Avatar>
-        )}
+        <SafeAvatar
+          src={blobUrl || avatar}
+          isBlob={!!blobUrl}
+          className={cn("h-12 w-12 rounded-md", className)}
+          fallbackClassName="rounded-md text-lg uppercase transition-all"
+          fallback={fallback}
+        />
 
         {avatar && (
           <Button
@@ -101,6 +84,7 @@ export function AvatarComp({
             variant="default"
             onClick={(e) => {
               e.stopPropagation();
+              setBlobUrl(undefined);
               onRemove?.();
             }}
             disabled={isDeleting}

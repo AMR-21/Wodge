@@ -2,16 +2,10 @@ import WorkspaceParty from "../workspace-party";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Context } from "hono";
 import { makeWorkspaceAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
+import { getS3Client } from "../../lib/get-s3-client";
 
 export async function uploadAvatar(party: WorkspaceParty, c: Context) {
-  const s3Client = new S3Client({
-    region: "us-east-1",
-    endpoint: party.room.env.ENDPOINT as string,
-    credentials: {
-      accessKeyId: party.room.env.ACCESS_KEY as string,
-      secretAccessKey: party.room.env.SECRET_KEY as string,
-    },
-  });
+  const s3Client = getS3Client(party.room);
 
   const body = await c.req.parseBody();
 
@@ -40,18 +34,17 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
 
-    party.versions.set(
-      "workspaceInfo",
-      party.versions.get("workspaceInfo")! + 1
-    );
+    const nextVersion = party.versions.get("globalVersion")! + 1;
 
-    await Promise.all([
-      party.poke(),
-      party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
-    ]);
+    party.versions.set("workspaceInfo", nextVersion);
+    party.versions.set("globalVersion", nextVersion);
+    await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
+
+    await party.poke();
 
     return c.json({ response }, 200);
   } catch (error) {
+    console.log("Error uploading avatar", error);
     return c.json(error, 400);
   }
 }
