@@ -29,6 +29,7 @@ export * from "./components/ui/scroll-area";
 export * from "./components/ui/sheet";
 export * from "./components/ui/breadcrumb";
 export * from "./components/ui/toggle";
+export * from "./components/ui/carousel";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";
@@ -57,6 +58,7 @@ export * from "./hooks/use-current-resources";
 export * from "./hooks/use-avatar-url";
 export * from "./hooks/use-delete";
 export * from "./hooks/use-upload";
+export * from "./hooks/use-recently-visited";
 
 export * from "./store/store";
 export * from "./store/atoms";

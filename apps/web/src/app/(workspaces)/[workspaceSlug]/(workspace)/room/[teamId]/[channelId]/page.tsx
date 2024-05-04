@@ -14,8 +14,11 @@ import "@uppy/core/dist/style.min.css";
 import { UploadButton } from "@/components/room/upload-button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
+import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
 
 function ChannelPage() {
+  useUpdateRecentlyVisited("room");
+
   const editor = useMessageEditor();
   const { user } = useCurrentUser();
   const { workspaceId } = useCurrentWorkspace();
@@ -29,17 +32,6 @@ function ChannelPage() {
       const content = editor.getHTML();
       if (!content || !user) return;
 
-      // setMsgs((msgs) => [
-      //   ...msgs,
-      //   {
-      //     sender: user.id,
-      //     content: content,
-      //     date: new Date().toISOString(),
-      //     id: nanoid(),
-      //     type: "text",
-      //     reactions: [],
-      //   },
-      // ]);
       await rep?.mutate.sendMessage({
         sender: user.id,
         content: content,

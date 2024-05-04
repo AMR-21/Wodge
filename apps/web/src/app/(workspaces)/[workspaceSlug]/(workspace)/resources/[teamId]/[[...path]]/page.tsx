@@ -12,6 +12,7 @@ import { File } from "@/components/resources/file";
 import { Folder } from "@/components/resources/folder";
 import { useRouter } from "next/navigation";
 import { FoldersBreadcrumbs } from "@/components/resources/folders-breadcrumbs";
+import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
 
 const paths = [
   "x.pdf",
@@ -31,6 +32,8 @@ function TeamResourcePage({
     path: string[];
   };
 }) {
+  useUpdateRecentlyVisited("resources");
+
   const activePath = useChannelPath();
 
   const { workspaceId } = useCurrentWorkspace();
