@@ -55,7 +55,7 @@ function ChannelPage() {
     if (editor && user) {
       const content = editor.getHTML();
 
-      await rep?.mutate.createThreadMessage({
+      await rep?.mutate.createMessage({
         id: nanoid(),
         author: user.id,
         content,
@@ -70,7 +70,7 @@ function ChannelPage() {
   async function toggleThread() {
     // add message to thread
     if (user)
-      await rep?.mutate.createThreadMessage({
+      await rep?.mutate.createMessage({
         id: nanoid(),
         author: user.id,
         content: "toggle",

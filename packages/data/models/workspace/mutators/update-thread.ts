@@ -37,20 +37,6 @@ export function updateThreadMutation({
     if (threadIdx === -1) {
       throw new Error("Page not found");
     } else {
-      // check that every group id on the new page exists the workspace structure
-      newThread.editGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-      newThread.viewGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-
       team.threads[threadIdx]! = newThread; // Add page
     }
   });

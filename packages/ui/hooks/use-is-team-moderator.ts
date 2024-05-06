@@ -1,11 +1,11 @@
-import { isTeamModerator } from "@repo/data";
+import { isAdmin, isOwner, isTeamModerator } from "@repo/data";
 import { useCurrentUser } from "./use-current-user";
 import { useCurrentWorkspace } from "./use-current-workspace";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function useIsTeamModerator(forceTeamId?: string) {
-  const { structure } = useCurrentWorkspace();
+  const { structure, members } = useCurrentWorkspace();
 
   const { teamId } = useParams<{
     teamId: string;
@@ -14,13 +14,19 @@ export function useIsTeamModerator(forceTeamId?: string) {
   const { user } = useCurrentUser();
 
   const [grant, setGrant] = useState(false);
+
   useEffect(() => {
     setGrant(
-      isTeamModerator({
-        structure,
+      isAdmin({
         userId: user?.id,
-        teamId: forceTeamId || teamId,
-      }),
+        members,
+      }) ||
+        isOwner({ userId: user?.id, members }) ||
+        isTeamModerator({
+          structure,
+          userId: user?.id,
+          teamId: forceTeamId || teamId,
+        }),
     );
   }, [structure, teamId, user?.id]);
 

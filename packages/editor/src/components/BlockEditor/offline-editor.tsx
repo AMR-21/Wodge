@@ -19,7 +19,7 @@ export const OfflineEditor = memo(({ editor, isThread = false }: { editor: Edito
   return (
     <div className={cn('flex flex-col w-full h-full', !isThread && 'max-h-16')} ref={menuContainerRef}>
       <div className="relative flex justify-center flex-col h-full">
-        <EditorContent editor={editor} ref={editorRef} className="z-0 overflow-y-auto text-sm h-fit" />
+        <EditorContent editor={editor} ref={editorRef} className="z-0 overflow-y-auto h-fit" />
         <LinkMenu editor={editor} appendTo={menuContainerRef} />
         <TextMenu editor={editor} />
         <ColumnsMenu editor={editor} appendTo={menuContainerRef} />

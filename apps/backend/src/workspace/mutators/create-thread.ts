@@ -6,11 +6,14 @@ import { createThreadMutation } from "@repo/data/models/workspace/mutators/creat
 
 export async function createThread(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  isPrivileged: boolean
 ) {
   const { teamId, ...thread } = params.mutation.args as NewThreadArgs;
 
   if (!teamId || !thread) return;
+
+  if (thread.type === "post" && !isPrivileged) return;
 
   party.workspaceStructure.data = createThreadMutation({
     curUserId: params.userId,

@@ -36,7 +36,7 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   async function toggleThread() {
     // add message to thread
     if (user)
-      await rep?.mutate.createThreadMessage({
+      await rep?.mutate.createMessage({
         id: nanoid(),
         author: user.id,
         content: "toggle",

@@ -2,15 +2,11 @@ import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
 import { OfflineEditor, useThreadEditor } from "@repo/editor";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { CheckCircle2, CircleDot, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useParams } from "next/navigation";
 import { threadMutators } from "@repo/data";
 import { Replicache } from "replicache";
-import { cn } from "@repo/ui/lib/utils";
 import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
-import { Button } from "@repo/ui/components/ui/button";
 
 export function CommentEditor({
   rep,
@@ -29,7 +25,7 @@ export function CommentEditor({
     const text = editor?.getHTML();
     if (!text || !user) return;
 
-    await rep?.mutate.createThreadMessage({
+    await rep?.mutate.createMessage({
       author: user.id,
       content: text,
       date: new Date().toISOString(),

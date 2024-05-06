@@ -8,8 +8,6 @@ import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 
-
-
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const isDesktop = useIsDesktop();
   const setSidebarOpen = useSetAtom(isSidebarOpenAtom);
@@ -22,10 +20,10 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh w-full ">
       <SidebarWrapper />
 
-      <div className="flex h-full w-full flex-col py-2.5">
+      <div className="flex h-full w-full flex-col px-4 py-2.5">
         <AppHeader />
         {/* <div className="lg:max-w-32xl container flex max-w-xl flex-1  overflow-y-hidden sm:max-w-2xl xl:max-w-5xl"> */}
-        <div className="flex flex-1 overflow-y-hidden  px-4">{children}</div>
+        <div className="flex flex-1 overflow-y-hidden">{children}</div>
       </div>
     </div>
   );

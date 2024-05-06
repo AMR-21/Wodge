@@ -224,5 +224,11 @@ export const authorizeChannel = async (
 
   req.headers.set("channel-auth", JSON.stringify(body));
 
+  req.headers.set("x-admin", body.isAdmin ? "true" : "false");
+  req.headers.set("x-can-edit", body.canEdit ? "true" : "false");
+  req.headers.set("x-can-view", body.canView ? "true" : "false");
+  req.headers.set("x-owner", body.isOwner ? "true" : "false");
+  req.headers.set("x-team-moderator", body.isOwner ? "true" : "false");
+
   return req;
 };

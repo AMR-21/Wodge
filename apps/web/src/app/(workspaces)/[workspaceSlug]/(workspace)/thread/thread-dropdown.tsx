@@ -11,6 +11,8 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 interface ThreadDropDownProps {
   onEdit?: () => void;
   onDelete?: () => void;
+  canEdit?: boolean;
+  canDelete?: boolean;
   label?: string;
 }
 
@@ -18,6 +20,8 @@ export function ThreadDropDown({
   onDelete,
   onEdit,
   label = "post",
+  canDelete,
+  canEdit,
 }: ThreadDropDownProps) {
   return (
     <DropdownMenu>
@@ -30,6 +34,7 @@ export function ThreadDropDown({
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem
+          disabled={!canEdit}
           className="gap-2 text-sm"
           onClick={() => {
             onEdit?.();
@@ -42,6 +47,7 @@ export function ThreadDropDown({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
+          disabled={!canDelete}
           className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
           onClick={() => {
             onDelete?.();

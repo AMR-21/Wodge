@@ -67,15 +67,15 @@ export function AppHeader() {
   return (
     <div
       className={
-        "flex h-12 w-full items-center bg-background px-2.5 py-2 transition-all"
+        "flex h-12 w-full items-center bg-background px-2 py-2 transition-all"
       }
     >
-      <div className="flex basis-full items-center px-1.5 py-2.5">
+      <div className="flex w-full items-center py-2.5">
         {!isSidebarOpen && (
           <SidebarItemBtn
             Icon={PanelLeft}
             className={cn(
-              "pointer-events-auto mr-3 transition-all duration-500",
+              "pointer-events-auto mr-0.5 transition-all duration-500",
             )}
             onClick={(e) => {
               e.stopPropagation();

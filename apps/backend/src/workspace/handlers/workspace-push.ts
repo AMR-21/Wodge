@@ -126,9 +126,11 @@ function runner(party: WorkspaceParty, req: HonoRequest) {
         return await createRoom(party, params);
 
       case "createThread":
-        // if (!isOwnerOrAdmin && !isTeamModeratorFlag) return;
-
-        return await createThread(party, params);
+        return await createThread(
+          party,
+          params,
+          isTeamModeratorFlag || isOwnerOrAdmin
+        );
 
       case "toggleThread":
         return await toggleThread(

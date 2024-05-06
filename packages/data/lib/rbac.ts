@@ -3,8 +3,8 @@ import {
   WorkspaceMembers,
   WorkspaceStructure,
 } from "../schemas/workspace.schema";
-import { ChannelsTypes } from "../schemas/channel.schema";
-import { DrObj } from "..";
+import { ChannelsTypes, Page } from "../schemas/channel.schema";
+import { DrObj, Room, Thread } from "..";
 
 interface Common {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
@@ -66,22 +66,35 @@ export function canEdit({
         ? team?.rooms.find((r) => r.id === channelId)
         : team?.threads.find((t) => t.id === channelId);
 
-  if (channel?.editGroups?.includes("team-members"))
-    return isTeamMember({ structure, userId, teamId });
+  if (channelType !== "thread") {
+    const chan = channel as Room | Page;
+    if (chan?.editGroups?.includes("team-members"))
+      return isTeamMember({ structure, userId, teamId });
 
-  const editGroups = channel?.editGroups
-    .map((g) => structure.groups.find((gr) => gr.id === g)?.members)
-    .flat();
+    const editGroups = chan?.editGroups
+      .map((g) => structure.groups.find((gr) => gr.id === g)?.members)
+      .flat();
 
-  return (
-    !!editGroups?.includes(userId) ||
-    isTeamModerator({ structure, userId, teamId })
-  );
+    return (
+      !!editGroups?.includes(userId) ||
+      isTeamModerator({ structure, userId, teamId })
+    );
+  } else {
+    const chan = channel as Thread;
+
+    if (chan.type === "post")
+      return (
+        isTeamModerator({ structure, userId, teamId }) ||
+        isAdmin({ members, userId }) ||
+        isOwner({ members, userId })
+      );
+
+    return true;
+  }
 }
 
 // canView
 export function canView({
-  members,
   structure,
   userId = "",
   teamId = "",
@@ -104,17 +117,22 @@ export function canView({
         ? team?.rooms.find((r) => r.id === channelId)
         : team?.threads.find((t) => t.id === channelId);
 
-  if (channel?.viewGroups?.includes("team-members"))
-    return isTeamMember({ structure, userId, teamId });
+  if (channelType !== "thread") {
+    const chan = channel as Room | Page;
+    if (chan?.viewGroups?.includes("team-members"))
+      return isTeamMember({ structure, userId, teamId });
 
-  const viewGroups = channel?.viewGroups
-    .map((g) => structure.groups.find((gr) => gr.id === g)?.members)
-    .flat();
+    const viewGroups = chan?.viewGroups
+      .map((g) => structure.groups.find((gr) => gr.id === g)?.members)
+      .flat();
 
-  return (
-    !!viewGroups?.includes(userId) ||
-    isTeamModerator({ structure, userId, teamId })
-  );
+    return (
+      !!viewGroups?.includes(userId) ||
+      isTeamModerator({ structure, userId, teamId })
+    );
+  } else {
+    return true;
+  }
 }
 
 export function isOwner({ members, userId }: Membership) {

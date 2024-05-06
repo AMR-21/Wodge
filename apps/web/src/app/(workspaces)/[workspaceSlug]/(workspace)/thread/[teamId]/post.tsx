@@ -1,28 +1,17 @@
 import { DrObj, Thread } from "@repo/data";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
 import { format } from "date-fns";
-import { SidebarItemBtn } from "../../../../../../components/workspace/sidebar-item-btn";
-import { MessageCircle, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { SafeDiv } from "../../../../../../components/safe-div";
 import { useMember } from "@repo/ui/hooks/use-member";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useParams } from "next/navigation";
-import { memo } from "react";
+import { memo, useState } from "react";
 import Link from "next/link";
 import { Button } from "@repo/ui/components/ui/button";
 import { ThreadDropDown } from "../thread-dropdown";
+import { EditEditor } from "./edit-editor";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
 
 export const Post = memo(
   ({
@@ -34,12 +23,17 @@ export const Post = memo(
     opened?: boolean;
     isQA?: boolean;
   }) => {
-    const { workspaceRep } = useCurrentWorkspace();
     const { teamId, workspaceSlug } = useParams<{
       teamId: string;
       workspaceSlug: string;
     }>();
+
+    const [isEditing, setIsEditing] = useState(false);
+
+    const { workspaceRep } = useCurrentWorkspace();
     const { member } = useMember(post.createdBy);
+    const { user } = useCurrentUser();
+    const isPrivileged = useIsTeamModerator();
 
     return (
       <div className="group overflow-hidden rounded-md border border-border/50 bg-dim ">
@@ -63,10 +57,42 @@ export const Post = memo(
               </p>
             </div>
 
-            <ThreadDropDown label={isQA ? "question" : "post"} />
+            <ThreadDropDown
+              label={isQA ? "question" : "post"}
+              onDelete={async () => {
+                await workspaceRep?.mutate.deleteChannel({
+                  channelId: post.id,
+                  teamId,
+                  type: "thread",
+                });
+              }}
+              onEdit={() => setIsEditing(true)}
+              canEdit={post.createdBy === user?.id}
+              canDelete={post.createdBy === user?.id || isPrivileged}
+            />
           </div>
 
-          <SafeDiv className="BlockEditor pl-9" html={post.content} />
+          {isEditing ? (
+            <div className="w-full pl-9">
+              <EditEditor
+                post={post}
+                onCancelEdit={() => {
+                  setIsEditing(false);
+                }}
+                onSuccessEdit={async (text: string) => {
+                  await workspaceRep?.mutate.updateThread({
+                    ...post,
+                    content: text,
+                    teamId,
+                  });
+
+                  setIsEditing(false);
+                }}
+              />
+            </div>
+          ) : (
+            <SafeDiv className="BlockEditor pl-9" html={post.content} />
+          )}
         </div>
 
         {!opened && (

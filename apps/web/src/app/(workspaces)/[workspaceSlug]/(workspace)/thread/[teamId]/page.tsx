@@ -71,26 +71,28 @@ function ThreadsPage() {
   return (
     <div className="flex h-full w-full flex-col gap-4">
       <Tabs defaultValue="posts" className="h-full">
-        <TabsList className="w-full">
-          <TabsTrigger value="posts" className="w-full">
-            Posts
-          </TabsTrigger>
-          <TabsTrigger value="qa" className="w-full">
-            Q&A
-          </TabsTrigger>
-        </TabsList>
+        <div className="px-2">
+          <TabsList className="w-full">
+            <TabsTrigger value="posts" className="w-full">
+              Posts
+            </TabsTrigger>
+            <TabsTrigger value="qa" className="w-full">
+              Q&A
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-        <ScrollArea className="h-full w-full py-2">
-          <TabsContent value="posts" className="">
+        <ScrollArea className="h-full w-full px-2 py-2">
+          <TabsContent value="posts" className="pb-4">
             <ThreadEditor />
-            <div className="flex flex-col gap-1 py-4">
+            <div className="flex flex-col gap-2.5 py-4">
               {posts?.map((post) => <Post key={post.id} post={post} />)}
             </div>
           </TabsContent>
 
-          <TabsContent value="qa" className="">
+          <TabsContent value="qa" className="pb-4">
             <ThreadEditor isQA />
-            <div className="flex flex-col gap-1 py-4">
+            <div className="flex flex-col gap-1.5 py-4">
               {qas?.map((post) => <Post isQA key={post.id} post={post} />)}
             </div>
           </TabsContent>

@@ -1,14 +1,10 @@
-import { sendMessageMutation } from "@repo/data/models/room/mutators/send-msg";
 import { RunnerParams } from "../lib/replicache";
-import { Message, ThreadMessage } from "@repo/data";
+import { ThreadMessage } from "@repo/data";
 import { produce } from "immer";
 import ThreadParty from "./thread-party";
 import { createThreadMessageMutation } from "@repo/data/models/thread/mutators/create-thread-message";
 
-export async function createThreadMessage(
-  party: ThreadParty,
-  params: RunnerParams
-) {
+export async function createMessage(party: ThreadParty, params: RunnerParams) {
   const d = createThreadMessageMutation({
     msg: params.mutation.args as ThreadMessage,
     msgsArray: party.threadMessages.data,

@@ -1,7 +1,14 @@
-import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { json, unauthorized } from "../../lib/http-utils";
-import { canEdit, canView, ChannelsTypes, isAdmin, isOwner } from "@repo/data";
+import {
+  canEdit,
+  canView,
+  ChannelsTypes,
+  isAdmin,
+  isOwner,
+  isTeamMember,
+  isTeamModerator,
+} from "@repo/data";
 import { Context } from "hono";
 
 export interface AuthChannelResponse {
@@ -11,6 +18,7 @@ export interface AuthChannelResponse {
   isAdmin?: boolean;
   canEdit?: boolean;
   canView?: boolean;
+  isTeamModerator?: boolean;
 }
 
 export function authChannel(party: WorkspaceParty, c: Context) {
@@ -55,6 +63,24 @@ export function authChannel(party: WorkspaceParty, c: Context) {
       canView: true,
     });
   }
+
+  if (
+    isTeamModerator({
+      structure: party.workspaceStructure.data,
+      teamId,
+      userId,
+    })
+  ) {
+    return json({
+      success: true,
+      isTeamModerator: true,
+    });
+  }
+
+  if (
+    !isTeamMember({ structure: party.workspaceStructure.data, userId, teamId })
+  )
+    return json({ success: false });
 
   if (
     canEdit({

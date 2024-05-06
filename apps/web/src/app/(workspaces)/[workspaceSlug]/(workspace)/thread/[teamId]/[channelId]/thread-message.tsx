@@ -10,9 +10,13 @@ import { SafeDiv } from "@/components/safe-div";
 export function ThreadMessage({
   msg,
   type,
+  onDelete,
+  onEdit,
 }: {
   msg: ThreadMessageType;
   type: Thread["type"];
+  onDelete?: () => void;
+  onEdit?: () => void;
 }) {
   const { member } = useMember(msg.author);
 
@@ -35,7 +39,11 @@ export function ThreadMessage({
           </p>
         </div>
 
-        <ThreadDropDown label={type === "post" ? "comment" : "answer"} />
+        <ThreadDropDown
+          label={type === "post" ? "comment" : "answer"}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       </div>
 
       <SafeDiv className="BlockEditor pl-9 text-sm" html={msg.content} />

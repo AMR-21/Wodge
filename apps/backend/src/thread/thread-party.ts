@@ -21,8 +21,9 @@ export default class ThreadParty implements Party.Server, ThreadPartyInterface {
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
-    this.app.post("/replicache-push", threadPush.bind(null, this));
     this.app.post("/replicache-pull", threadPull.bind(null, this));
+
+    this.app.post("/replicache-push", threadPush.bind(null, this));
 
     await startFn(this);
   }
