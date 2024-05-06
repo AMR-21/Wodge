@@ -1,11 +1,15 @@
 import * as Party from "partykit/server";
 import PageParty from "./page-party";
-import { json, ok } from "../lib/http-utils";
-import { Prompt } from "@repo/data";
+import { json } from "../lib/http-utils";
 import { Context } from "hono";
+import { Prompt } from "@repo/data";
+import { concat } from "lodash";
+
+// Assuming that prompt_templates.json is in the same directory as this script
+const promptTemplates = require("./prompt_templates.json");
 
 export async function prompt(party: PageParty, c: Context) {
-  const { prompt, action, toneOrLang } = await c.req.json<Prompt>();
+  let { prompt, action, toneOrLang } = await c.req.json<Prompt>();
 
   // This is a normal prompt to run, no action specified
   if (!action) {
@@ -20,28 +24,26 @@ export async function prompt(party: PageParty, c: Context) {
 
   if (action) {
     // run a prompt based on action
-    let response = "placeholder";
-    switch (action) {
-      case "simplify":
-        return json({ response });
-      case "fix":
-        return json({ response });
-      case "shorter":
-        return json({ response });
-      case "longer":
-        return json({ response });
-      case "tone":
-        return json({ response });
-      case "tldr":
-        return json({ response });
-      case "emojify":
-        return json({ response });
-      case "translate":
-        return json({ response });
-      case "complete":
-        return json({ response });
-      default:
-        return json({ error: "Invalid action" }, 400);
+    let response;
+    let prompt_header;
+    let data; // get data from context
+
+    // Find the corresponding prompt header from the prompt_templates.json file
+    const template = promptTemplates.cases.find(
+      (item: { case: string }) => item.case === action
+    );
+    if (template) {
+      prompt_header = template.prompt_header;
+      prompt = prompt_header + "" + data;
+      const { response } = await party.ai.run("@cf/meta/llama-2-7b-chat-fp16", {
+        prompt: `"${prompt}"`,
+      });
+      return json({ response });
+
+      // Run the AI model based on the action
+    } else {
+      // If the action is not found in the templates, return an error
+      return json({ error: "Invalid action" }, 400);
     }
   }
 }
