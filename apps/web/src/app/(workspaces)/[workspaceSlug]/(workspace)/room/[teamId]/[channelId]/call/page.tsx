@@ -52,7 +52,7 @@ export default function RoomPage() {
               workspaceId: workspaceId,
               channelId: channelId,
               teamId: teamId,
-              channelName: path?.room,
+              channelName: path?.room?.name,
             });
 
             setIsConnecting(false);
@@ -77,7 +77,7 @@ export default function RoomPage() {
               workspaceId: workspaceId,
               channelId: channelId,
               teamId: teamId,
-              channelName: path?.room,
+              channelName: path?.room?.name,
             });
 
             setIsConnecting(false);

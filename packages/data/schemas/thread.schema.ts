@@ -2,9 +2,17 @@ import { z } from "zod";
 
 import { ChannelSchema } from "./channel.schema";
 
-export const ThreadSchema = ChannelSchema.extend({
+export const ThreadSchema = ChannelSchema.omit({
+  name: true,
+  editGroups: true,
+  viewGroups: true,
+}).extend({
+  // post it the post/question
+  content: z.string().min(1).max(4096),
+  type: z.enum(["post", "qa"]),
   createdBy: z.string(),
-  isResolved: z.boolean().default(false),
+  isResolved: z.boolean().default(false).optional(),
+  createdAt: z.string().datetime(),
 });
 
 export const ThreadMessageSchema = z.object({

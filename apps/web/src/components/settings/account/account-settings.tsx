@@ -25,27 +25,21 @@ import { useUpload } from "@repo/ui/hooks/use-upload";
 import { useDelete } from "@repo/ui/hooks/use-delete";
 
 export function AccountSettings() {
-  const { workspace } = useCurrentWorkspace();
-
   const { user } = useCurrentUser();
 
   const queryClient = useQueryClient();
 
-  const { upload, isUploading } = useUpload("workspace", workspace?.id, () => {
+  const { upload, isUploading } = useUpload("user", user?.id, () => {
     queryClient.invalidateQueries({
       queryKey: ["user"],
     });
   });
 
-  const { deleteAvatar, isDeleting } = useDelete(
-    "workspace",
-    workspace?.id,
-    () => {
-      queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
-    },
-  );
+  const { deleteAvatar, isDeleting } = useDelete("user", user?.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  });
 
   function onUpload(file: File) {
     const formData = new FormData();
@@ -68,7 +62,7 @@ export function AccountSettings() {
             avatar={user?.avatar}
             isUploading={isUploading}
             isDeleting={isDeleting}
-            className="h-20 w-20 rounded-full border-2 border-primary/30"
+            className="h-20 w-20 rounded-full ring-2"
           />
 
           <SettingsContentDescription>

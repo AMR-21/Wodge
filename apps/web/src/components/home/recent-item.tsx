@@ -1,3 +1,4 @@
+import { DrObj, Page, Room, Thread } from "@repo/data";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { RecentlyVisitedItem } from "@repo/ui/store/atoms";
 import { format } from "date-fns";
@@ -22,17 +23,21 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
     case "page":
       Icon = NotebookText;
       folder = team?.folders.find((f) => f.id === item.folderId);
-      channel = folder?.channels.find((c) => c.id === item.channelId);
+      channel = folder?.channels.find(
+        (c) => c.id === item.channelId,
+      ) as DrObj<Page>;
       url = `${url}/${item.folderId}/${item.channelId}`;
       break;
     case "room":
       Icon = MessageCircle;
-      channel = team?.rooms.find((c) => c.id === item.channelId);
+      channel = team?.rooms.find((c) => c.id === item.channelId) as DrObj<Room>;
       url = `${url}/${item.channelId}`;
       break;
     case "thread":
       Icon = Newspaper;
-      channel = team?.threads.find((c) => c.id === item.channelId);
+      channel = team?.threads.find(
+        (c) => c.id === item.channelId,
+      ) as DrObj<Thread>;
       url = `${url}/${item.channelId}`;
       break;
     case "resources":
@@ -49,7 +54,15 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
           <Icon className="absolute bottom-0 h-5 w-5 translate-y-1/2 opacity-50 transition-all group-hover/item:opacity-100" />
         </div>
         <div className="px-3 pb-2 pt-4">
-          <p>{channel?.name}</p>
+          <p>
+            {item.type === "thread"
+              ? // @ts-ignore
+                channel?.type === "post"
+                ? "Post"
+                : "Q&A"
+              : // @ts-ignore
+                channel?.name || "Resources"}
+          </p>
           {folder && (
             <span className="truncate text-xs text-muted-foreground">
               {folder?.name} /{" "}

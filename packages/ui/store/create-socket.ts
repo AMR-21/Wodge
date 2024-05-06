@@ -18,6 +18,8 @@ export function createSocket(userId: string) {
   socket.addEventListener("message", (e) => {
     const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
 
+    // console.log("socket message", data);
+
     if (data.sub === "poke") {
       switch (data.type) {
         case "workspace":
@@ -50,9 +52,9 @@ export function createSocket(userId: string) {
             queryKey: ["invites", data.id],
           });
 
-          queryClient.invalidateQueries({
-            queryKey: ["resources", data.id],
-          });
+          // queryClient.invalidateQueries({
+          //   queryKey: ["resources", data.id],
+          // });
 
           return queryClient.invalidateQueries({
             queryKey: ["user-workspaces"],

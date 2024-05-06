@@ -1,6 +1,8 @@
 "use client";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import {
+  ArrowLeft,
+  ArrowRight,
   Camera,
   Headset,
   Mic,
@@ -17,7 +19,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@repo/ui/components/ui/breadcrumb";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
 import { useAppState } from "@repo/ui/store/store";
 import {
@@ -30,7 +32,6 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Toggle } from "@repo/ui/components/ui/toggle";
 import Link from "next/link";
 import { useState } from "react";
-import { set } from "lodash";
 
 export function AppHeader() {
   const [isSidebarOpen, setSidebar] = useAtom(isSidebarOpenAtom);
@@ -44,6 +45,8 @@ export function AppHeader() {
   const path = useChannelPath();
 
   const lk_room = useAppState((s) => s.room);
+
+  const router = useRouter();
 
   const {
     connectToRoom,
@@ -80,22 +83,31 @@ export function AppHeader() {
             }}
           />
         )}
+
+        <SidebarItemBtn
+          onClick={() => router.back()}
+          Icon={ArrowLeft}
+          className="mr-0.5"
+        />
+        <SidebarItemBtn
+          onClick={() => router.forward()}
+          Icon={ArrowRight}
+          className="mr-2"
+        />
+
         {teamId && (
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>{path?.team}</BreadcrumbItem>
-              {(path?.page || path?.room || path?.thread) && (
-                <BreadcrumbSeparator />
-              )}
-              {path?.folder && !path?.folderId?.startsWith("root-") && (
+              <BreadcrumbItem>{path?.team.name}</BreadcrumbItem>
+              {(path?.page || path?.room) && <BreadcrumbSeparator />}
+              {path?.folder && !path?.folder.id?.startsWith("root-") && (
                 <>
-                  <BreadcrumbItem>{path?.folder}</BreadcrumbItem>
+                  <BreadcrumbItem>{path?.folder.name}</BreadcrumbItem>
                   <BreadcrumbSeparator />
                 </>
               )}
-              {path?.page && <BreadcrumbItem>{path?.page}</BreadcrumbItem>}
-              {path?.room && <BreadcrumbItem>{path?.room}</BreadcrumbItem>}
-              {path?.thread && <BreadcrumbItem>{path?.thread}</BreadcrumbItem>}
+              {path?.page && <BreadcrumbItem>{path?.page.name}</BreadcrumbItem>}
+              {path?.room && <BreadcrumbItem>{path?.room.name}</BreadcrumbItem>}
             </BreadcrumbList>
           </Breadcrumb>
         )}
@@ -104,7 +116,7 @@ export function AppHeader() {
           <SidebarItemBtn
             iconClassName={cn("h-5 w-5")}
             Icon={Headset}
-            href={`/${workspaceSlug}/room/${teamId}/${path?.roomId}/call`}
+            href={`/${workspaceSlug}/room/${teamId}/${path?.room.id}/call`}
             className="ml-auto mr-2"
           />
         )}
@@ -114,7 +126,6 @@ export function AppHeader() {
               iconClassName={cn("h-5 w-5", lk_room && "text-green-500")}
               Icon={PhoneCall}
               className={cn(
-                "mr-6",
                 !path?.room && "ml-auto",
                 lk_room && "animate-pulse duration-1000 hover:animate-none",
               )}
@@ -154,14 +165,14 @@ export function AppHeader() {
                     ? await disconnectFromCurrentRoom()
                     : await connectToRoom({
                         workspaceId: workspaceId,
-                        channelId: path?.roomId,
+                        channelId: path?.room?.id,
                         teamId: teamId,
-                        channelName: path?.room,
+                        channelName: path?.room?.name,
                       });
 
                   setIsConnecting(false);
                 }}
-                disabled={!lk_room && !path?.roomId}
+                disabled={!lk_room && !path?.room?.id}
                 className="w-full"
                 isPending={isConnecting}
               >

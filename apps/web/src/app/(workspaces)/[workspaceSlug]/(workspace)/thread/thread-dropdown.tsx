@@ -1,0 +1,56 @@
+import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+
+interface ThreadDropDownProps {
+  onEdit?: () => void;
+  onDelete?: () => void;
+  label?: string;
+}
+
+export function ThreadDropDown({
+  onDelete,
+  onEdit,
+  label = "post",
+}: ThreadDropDownProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <SidebarItemBtn
+          Icon={MoreHorizontal}
+          className="invisible ml-auto transition-all group-hover:visible aria-expanded:visible"
+        />
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          className="gap-2 text-sm"
+          onClick={() => {
+            onEdit?.();
+          }}
+        >
+          <Pencil className="h-4 w-4 " />
+          Edit {label}
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
+          onClick={() => {
+            onDelete?.();
+          }}
+        >
+          <Trash2 className="h-4 w-4" />
+          Delete {label}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

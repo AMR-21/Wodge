@@ -28,6 +28,7 @@ import { TeamRoomsMore } from "./team-rooms-more";
 import { TeamThreadsMore } from "./team-threads-more";
 import { useParams } from "next/navigation";
 import { useIsTeamMember } from "@repo/ui/hooks/use-is-team-member";
+import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -192,12 +193,12 @@ export const Teamspace = React.forwardRef<
           href: `/${workspaceSlug}/resources/${team.id}`,
         })}
       >
-        <Avatar className=" mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs">
-          {/* <AvatarImage src={workspace?.avatar} /> */}
-          <AvatarFallback className="select-none rounded-md text-xs uppercase">
-            {team.name[0]}
-          </AvatarFallback>
-        </Avatar>
+        <SafeAvatar
+          className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs"
+          fallbackClassName="select-none rounded-md text-xs uppercase"
+          fallback={team.name}
+          src={team.avatar}
+        />
 
         <span className="select-none truncate">{team.name}</span>
 

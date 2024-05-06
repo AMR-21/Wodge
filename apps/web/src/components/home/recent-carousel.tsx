@@ -7,9 +7,12 @@ import {
 } from "@repo/ui/components/ui/carousel";
 import { RecentItem } from "./recent-item";
 import { useRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+import { ChannelsTypes } from "@repo/data";
 
-export function RecentCarousel() {
+export function RecentCarousel({ filter }: { filter?: ChannelsTypes }) {
   const recent = useRecentlyVisited();
+
+  const filtered = filter ? recent?.filter((r) => r.type === filter) : recent;
 
   return (
     <div className="group flex w-full flex-col items-center gap-2 rounded-md border border-border bg-dim px-2 py-2">
@@ -17,7 +20,7 @@ export function RecentCarousel() {
         Recently visited
       </p>
 
-      {!recent?.length && (
+      {!filtered?.length && (
         <p className="text-sm text-muted-foreground">No recent items</p>
       )}
 
@@ -28,7 +31,7 @@ export function RecentCarousel() {
         className="w-full"
       >
         <CarouselContent className="-ml-2">
-          {recent?.map((r, index) => (
+          {filtered?.map((r, index) => (
             <CarouselItem key={index} className="w-36 max-w-36 pl-2">
               <RecentItem item={r} />
             </CarouselItem>

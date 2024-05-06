@@ -1,37 +1,21 @@
 import ExtensionKit from '../extensions/extension-kit'
-import Code from '@tiptap/extension-code'
-import Document from '@tiptap/extension-document'
-import Highlight from '@tiptap/extension-highlight'
-import Link from '@tiptap/extension-link'
-import Paragraph from '@tiptap/extension-paragraph'
-import Placeholder from '@tiptap/extension-placeholder'
-import Text from '@tiptap/extension-text'
-import Typography from '@tiptap/extension-typography'
-import { Extension, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { Markdown } from 'tiptap-markdown'
 
-const MessageNewLine = Extension.create({
-  addKeyboardShortcuts() {
-    return {
-      'Shift-Enter': () =>
-        this.editor.commands.insertContent({
-          type: 'paragraph',
-        }),
-      'Mod-Enter': () =>
-        this.editor.commands.insertContent({
-          type: 'paragraph',
-        }),
-    }
-  },
-})
+import { Editor, Extension, useEditor } from '@tiptap/react'
 
-export function useThreadEditor(content?: string) {
+interface UseEditorProps {
+  content?: string
+  placeholder?: string
+}
+export function useThreadEditor({ content, placeholder }: UseEditorProps = {}) {
   const editor = useEditor({
     content,
     autofocus: true,
 
-    extensions: [...ExtensionKit({})],
+    extensions: [
+      ...ExtensionKit({
+        placeholder: placeholder || "What's happening?",
+      }),
+    ],
     editorProps: {
       attributes: {
         autocomplete: 'off',

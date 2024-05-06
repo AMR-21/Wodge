@@ -49,13 +49,14 @@ export function WorkspaceSettings() {
           <SettingsContentSection header="Avatar">
             <div className="space-y-3">
               <AvatarBtn
-                className="h-20 w-20 border-2 border-primary/30"
+                className="h-16 w-16 ring-2"
                 fallback={workspace?.name}
                 onUpload={onUpload}
                 onRemove={deleteAvatar}
                 avatar={workspace?.avatar}
                 isUploading={isUploading}
                 isDeleting={isDeleting}
+                isSquare
               />
 
               <SettingsContentDescription>

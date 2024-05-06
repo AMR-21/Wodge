@@ -3,6 +3,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Context } from "hono";
 import { makeWorkspaceAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 import { getS3Client } from "../../lib/get-s3-client";
+import { nanoid } from "nanoid";
 
 export async function uploadAvatar(party: WorkspaceParty, c: Context) {
   const s3Client = getS3Client(party.room);
@@ -11,13 +12,13 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
 
   const file = body["file"] as File;
 
-  const key = makeWorkspaceAvatarKey(party.room.id);
+  const key = btoa(nanoid(12));
 
   try {
     const input = {
       Body: file,
       Bucket: "avatars",
-      Key: key,
+      Key: makeWorkspaceAvatarKey(key),
       ContentType: file.type,
     };
     // Inform the DB
@@ -26,6 +27,7 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,
         workspaceId: party.room.id,
+        key,
       },
     });
 

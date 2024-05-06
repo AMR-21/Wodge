@@ -61,9 +61,10 @@ interface ExtensionKitProps {
   userId?: string
   userName?: string
   userColor?: string
+  placeholder?: string
 }
 
-export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionKitProps) => [
+export const ExtensionKit = ({ provider, userId, userName = 'Maxi', placeholder }: ExtensionKitProps) => [
   Document,
   Columns,
   TaskList,
@@ -74,11 +75,11 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
     authorId: userId,
     authorName: userName,
   }),
-  AiPrompts,
   // AiImage.configure({
   //   authorId: userId,
   //   authorName: userName,
   // }),
+  AiPrompts,
   Column,
   Selection,
   Heading,
@@ -107,8 +108,6 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   Highlight.configure({ multicolor: true }),
   Underline,
   CharacterCount.configure({ limit: 50000 }),
-  TableOfContents,
-  TableOfContentsNode,
   ImageUpload,
   ImageBlock,
   FileHandler.configure({
@@ -154,7 +153,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
   Placeholder.configure({
     includeChildren: true,
     showOnlyCurrent: false,
-    placeholder: 'Write something, or / for commands',
+    placeholder: placeholder || 'Write something, or / for commands',
   }),
   SlashCommand,
   Focus,

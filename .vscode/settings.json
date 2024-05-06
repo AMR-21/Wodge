@@ -4,6 +4,13 @@
       "mode": "auto"
     }
   ],
-  "cSpell.words": ["downloadurl", "LIVEKIT", "uppy", "uqkkqllielmukapbadjn"],
+  "cSpell.words": [
+    "downloadurl",
+    "Dropcursor",
+    "LIVEKIT",
+    "lowlight",
+    "uppy",
+    "uqkkqllielmukapbadjn"
+  ],
   "cSpell.ignoreWords": ["dompurify", "prosemirror"]
 }

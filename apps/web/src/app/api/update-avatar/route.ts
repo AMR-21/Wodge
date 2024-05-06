@@ -9,13 +9,14 @@ export async function POST(req: Request) {
     return new Response(null, { status: 401 });
 
   const workspaceId = req.headers.get("workspaceId");
+  const key = req.headers.get("key");
 
-  if (!workspaceId) {
+  if (!workspaceId || !key) {
     return new Response(null, { status: 400 });
   }
 
   await updateWorkspaceById(workspaceId, {
-    avatar: getAvatarAddress(makeWorkspaceAvatarKey(workspaceId)),
+    avatar: getAvatarAddress(makeWorkspaceAvatarKey(key)),
   });
 
   return new Response(null, { status: 200 });

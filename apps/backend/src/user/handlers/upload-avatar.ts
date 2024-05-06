@@ -3,6 +3,7 @@ import { Context } from "hono";
 import { makeUserAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 import UserParty from "../user-party";
 import { getS3Client } from "../../lib/get-s3-client";
+import { nanoid } from "nanoid";
 
 export async function uploadAvatar(party: UserParty, c: Context) {
   const s3Client = getS3Client(party.room);
@@ -11,13 +12,13 @@ export async function uploadAvatar(party: UserParty, c: Context) {
 
   const file = body["file"] as File;
 
-  const key = makeUserAvatarKey(party.room.id);
+  const key = btoa(nanoid(12));
 
   try {
     const input = {
       Body: file,
       Bucket: "avatars",
-      Key: key,
+      Key: makeUserAvatarKey(key),
       ContentType: file.type,
     };
     // Inform the DB
@@ -28,6 +29,7 @@ export async function uploadAvatar(party: UserParty, c: Context) {
         headers: {
           authorization: party.room.env.SERVICE_KEY as string,
           userId: party.room.id,
+          key,
         },
       }
     );

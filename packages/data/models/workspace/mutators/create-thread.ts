@@ -35,21 +35,8 @@ export function createThreadMutation({
       throw new Error("Thread already exists");
     } else {
       // check that every group id on the new page exists the workspace structure
-      newThread.editGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
 
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-      newThread.viewGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
-
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-      team.threads.push(newThread); // Add thread
+      team.threads.unshift(newThread); // Add thread
     }
   });
   return newStructure as WorkspaceStructure;

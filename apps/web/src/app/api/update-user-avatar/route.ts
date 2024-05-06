@@ -13,13 +13,14 @@ export async function POST(req: Request) {
     return new Response(null, { status: 401 });
 
   const userId = req.headers.get("userId");
+  const key = req.headers.get("key");
 
-  if (!userId) {
+  if (!userId || !key) {
     return new Response(null, { status: 400 });
   }
 
   await updateUserById(userId, {
-    avatar: getAvatarAddress(makeUserAvatarKey(userId)),
+    avatar: getAvatarAddress(makeUserAvatarKey(key)),
   });
 
   return new Response(null, { status: 200 });

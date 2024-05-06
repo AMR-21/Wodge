@@ -50,7 +50,7 @@ function TeamResourcePage({
 
   return (
     <div className="flex w-full flex-col py-4">
-      <h2 className="text-xl">{activePath?.team} Resources</h2>
+      <h2 className="text-xl">{activePath?.team.name} Resources</h2>
       <div className="flex h-8 items-center px-3 py-1.5">
         <FoldersBreadcrumbs />
         <div className="ml-4">

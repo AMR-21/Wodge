@@ -1,18 +1,8 @@
 import { useParams } from "next/navigation";
-import { useChannelPath } from "./use-channel-path";
 import { useQuery } from "@tanstack/react-query";
 import { env } from "@repo/env";
 import { useCurrentWorkspace } from "./use-current-workspace";
-import { getBucketAddress, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
-
-const paths = [
-  "x.pdf",
-  "y.pdf",
-  "amr/t.pdf",
-  "ali/tsd.pdf",
-  "amr/yasser/s.pdf",
-  "amr/yasser/ali/s.pdf",
-];
+import { WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 
 export function useCurrentResources() {
   const { path, teamId } = useParams<{ path: string[]; teamId: string }>();

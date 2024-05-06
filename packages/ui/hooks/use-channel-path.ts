@@ -29,33 +29,29 @@ export function useChannelPath() {
     const folder = team.folders.find((f) => f.id === folderId);
     const page = folder?.channels.find((p) => p.id === channelId);
     return {
-      team: team.name,
-      folder: folder?.name,
-      folderId: folder?.id,
-      page: page?.name,
+      team,
+      folder,
+      page,
     };
   }
 
   if (isRoom) {
     const room = team.rooms.find((r) => r.id === channelId);
     return {
-      team: team.name,
-      room: room?.name,
-      roomId: room?.id,
+      team,
+      room,
     };
   }
 
   if (isThread) {
     const thread = team.threads.find((t) => t.id === channelId);
     return {
-      team: team.name,
-      thread: thread?.name,
-      createdBy: thread?.createdBy,
-      isResolved: thread?.isResolved,
+      team,
+      thread,
     };
   }
 
   return {
-    team: team.name,
+    team,
   };
 }

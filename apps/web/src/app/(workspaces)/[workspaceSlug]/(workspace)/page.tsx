@@ -20,8 +20,8 @@ function HomePage() {
   }
 
   return (
-    <div className="container w-full space-y-8">
-      <h2 className="text-center text-2xl">
+    <div className="container w-full space-y-4">
+      <h2 className="text-center text-2xl font-semibold">
         {greeting}, {user?.displayName}
       </h2>
 

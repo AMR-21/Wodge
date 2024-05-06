@@ -22,6 +22,7 @@ interface AvatarCompProps {
   onRemove?: () => void;
   isUploading?: boolean;
   isDeleting?: boolean;
+  isSquare?: boolean;
 }
 
 export function AvatarBtn({
@@ -32,6 +33,7 @@ export function AvatarBtn({
   onUpload,
   isUploading,
   isDeleting,
+  isSquare = false,
 }: AvatarCompProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [blobUrl, setBlobUrl] = useState<string | undefined>();
@@ -71,14 +73,21 @@ export function AvatarBtn({
         <SafeAvatar
           src={blobUrl || avatar}
           isBlob={!!blobUrl}
-          className={cn("h-12 w-12 rounded-md", className)}
-          fallbackClassName="rounded-md text-lg uppercase transition-all"
+          className={cn("h-12 w-12", isSquare && "rounded-md", className)}
+          fallbackClassName={cn(
+            "text-lg uppercase transition-all",
+            isSquare && "rounded-md",
+          )}
           fallback={fallback}
         />
 
         {avatar && (
           <Button
-            className="invisible absolute -right-0.5 -top-0.5 h-fit w-fit rounded-full p-0.5 transition-all duration-100 group-hover:visible"
+            className={cn(
+              "invisible absolute aspect-square rounded-full p-0.5 transition-all duration-100 group-hover:visible",
+              isSquare ? "-right-1.5 -top-1.5" : "-right-0.5 -top-0.5",
+            )}
+            size="fit"
             variant="secondary"
             onClick={(e) => {
               e.stopPropagation();

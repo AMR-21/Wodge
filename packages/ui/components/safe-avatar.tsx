@@ -21,27 +21,23 @@ export const SafeAvatar = memo(
   }: SafeAvatarProps) => {
     const avatarRef = useRef<HTMLImageElement>(null);
 
-    const updateFlag = useAtomValue(updateAtom);
-
-    const url = useMemo(() => {
-      if (src && !isBlob) {
-        return src + "?" + new Date().getTime();
-      }
-      return src;
-    }, [src, updateFlag, isBlob]);
-
     return (
       <>
-        {url && (
-          <Avatar className={cn("h-12 w-12 rounded-md", className)}>
-            <AvatarImage ref={avatarRef} src={url} />
+        {src && (
+          <Avatar
+            className={cn(
+              "h-12 w-12 rounded-full ring-[1.5px] ring-primary/30",
+              className,
+            )}
+          >
+            <AvatarImage ref={avatarRef} src={src} />
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}
             </AvatarFallback>
           </Avatar>
         )}
-        {!url && (
-          <Avatar className={cn("h-12 w-12 rounded-md", className)}>
+        {!src && (
+          <Avatar className={cn("h-12 w-12", className)}>
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}
             </AvatarFallback>

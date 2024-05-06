@@ -6,11 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { atom, useSetAtom } from "jotai";
 import { updateAtom } from "..";
 
-
 export function useUserWorkspaces() {
   // Make sure user store is created
   const { user } = useCurrentUser();
-  const setUpdateAtom = useSetAtom(updateAtom);
+  // const setUpdateAtom = useSetAtom(updateAtom);
 
   const { data, isPending } = useQuery({
     queryKey: ["user-workspaces"],
@@ -21,7 +20,7 @@ export function useUserWorkspaces() {
 
       const data = (await res.json()) as Workspace[];
 
-      setUpdateAtom((v) => !v);
+      // setUpdateAtom((v) => !v);
       return data;
     },
 
