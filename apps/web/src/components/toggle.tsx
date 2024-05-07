@@ -18,11 +18,18 @@ export function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          suppressHydrationWarning
+        >
           <Sun className="h-4 w-4 dark:hidden" />
           <MoonStar className="hidden h-4 w-4 dark:block" />
           <span className="sr-only">Toggle theme</span>
-          <span className="capitalize">{theme}</span>
+          <span suppressHydrationWarning className="capitalize">
+            {theme}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
