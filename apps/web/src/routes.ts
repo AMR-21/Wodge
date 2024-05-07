@@ -12,19 +12,9 @@ export const publicRoutes: string[] = [];
 export const authRoutes: string[] = [
   "/login",
   "/login/error",
-  // "/api/member",
-  // "/api/create-workspace",
-  // "/api/workspace-access",
-  // "/api/user-workspaces",
-  // "/api/update-workspace",
-  // "/api/join-workspace",
-  // "/api/update-user",
+
   "/auth/user",
   "/auth/callback",
-  // "/api/ai",
-  // "/api/remove-member",
-  // "/api/delete-workspace",
-  // "/api/update-avatar",
 ];
 
 /**

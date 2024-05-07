@@ -46,11 +46,7 @@ export function StepperContainer({
   children?: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div className={cn("flex items-center overflow-hidden", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("flex items-center", className)}>{children}</div>;
 }
 
 export function useStepper() {
@@ -77,6 +73,7 @@ export function Step({ index, children, className }: StepsProps) {
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full  transition-all",
         "flex flex-col items-center gap-8",
+        currentStep === index ? "visible opacity-100" : "visible opacity-0",
         className,
       )}
       style={{

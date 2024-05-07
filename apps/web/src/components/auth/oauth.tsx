@@ -2,10 +2,7 @@
 
 import { RiGoogleFill as Google } from "react-icons/ri";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { signIn } from "next-auth/react";
 import { Button } from "@repo/ui/components/ui/button";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { login } from "@/actions/login";
 import { createClient } from "@/lib/supabase/client";
 
 export function OAuth() {

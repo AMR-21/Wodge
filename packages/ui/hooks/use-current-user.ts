@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { createUserRep } from "../store/create-user-rep";
 import { PublicUserType, users } from "@repo/data";
 import { useAppState } from "../store/store";
+import { usePathname } from "next/navigation";
 
 type Session = {
   sessionToken: string;
@@ -15,6 +16,8 @@ type Session = {
 
 export function useCurrentUser() {
   const { connectSocket } = useAppState.getState().actions;
+
+  const pathname = usePathname();
   const { data, isPending } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -27,6 +30,7 @@ export function useCurrentUser() {
       const data = (await response.json()) as typeof users.$inferSelect;
       return data;
     },
+    enabled: !pathname.startsWith("/login"),
   });
 
   // if (!isPending && !data) throw Error("Error loading user");

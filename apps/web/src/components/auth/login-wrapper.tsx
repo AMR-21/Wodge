@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { EmailForm } from "./email-form";
+import { EmailWrapper } from "./email-wrapper";
 import { OAuth } from "./oauth";
 import {
   Card,
@@ -14,18 +14,18 @@ import { Separator } from "@repo/ui/components/ui/separator";
 
 export function LoginWrapper() {
   return (
-    <Card className="flex w-fit max-w-96 flex-col justify-center border-none bg-transparent shadow-none">
+    <Card className="flex w-fit max-w-96 flex-col justify-center border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-center text-2xl">Welcome Back</CardTitle>
         <CardDescription className="text-center">
           Enter your email below to continue
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6 ">
-        <EmailForm />
+      <CardContent className="space-y-6 px-8">
+        <EmailWrapper />
 
-        <div className="relative flex justify-center">
-          <div className="absolute inset-0 flex items-center">
+        <div className="relative flex justify-center ">
+          <div className="absolute inset-0 flex items-center px-0.5">
             <Separator />
           </div>
 
@@ -34,11 +34,13 @@ export function LoginWrapper() {
           </div>
         </div>
 
-        <OAuth />
+        <div className="px-0.5">
+          <OAuth />
+        </div>
       </CardContent>
 
       <CardFooter className="mt-4 flex px-8 text-sm text-muted-foreground">
-        <p>
+        <p className="px-0.5">
           By logging in, you agree to our{" "}
           <Link
             href="/terms"
