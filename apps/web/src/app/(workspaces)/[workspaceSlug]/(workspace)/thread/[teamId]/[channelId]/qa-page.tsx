@@ -3,9 +3,7 @@ import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
 import { ThreadAction } from "./thread-actions";
 import { ThreadMessagesList } from "./thread-msgs-list";
-import { OfflineEditor, useThreadEditor } from "@repo/editor";
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
-import { CheckCircle2, CircleDot, Send } from "lucide-react";
+import { CheckCircle2, CircleDot } from "lucide-react";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useMember } from "@repo/ui/hooks/use-member";
 import { useParams } from "next/navigation";
@@ -28,9 +26,6 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   }>();
 
   const { member } = useMember(path?.thread?.createdBy);
-  const editor = useThreadEditor({
-    placeholder: "What's in your mind?",
-  });
   const { workspaceRep } = useCurrentWorkspace();
 
   async function toggleThread() {
@@ -58,7 +53,7 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
     <div className="flex h-full max-h-dvh w-full flex-col gap-4 p-1.5">
       <ScrollArea className="">
         <div className="relative  flex flex-col gap-2.5">
-          <div className="absolute left-5 top-1/2 -z-10 h-[90%] w-[2px] -translate-y-1/2 bg-border/70" />
+          <div className="absolute left-5 top-1/2 -z-10 h-[86.5%] w-[2px] -translate-y-1/2 bg-border/70" />
 
           <div className="flex items-center justify-between">
             <ThreadAction
@@ -91,9 +86,9 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
             </Button>
           </div>
 
-          <Post post={path?.thread} opened isQA />
+          <Post post={path.thread} opened isQA />
 
-          <ThreadMessagesList type="qa" rep={rep} />
+          <ThreadMessagesList thread={path.thread} rep={rep} />
         </div>
       </ScrollArea>
       <CommentEditor rep={rep} isQA />

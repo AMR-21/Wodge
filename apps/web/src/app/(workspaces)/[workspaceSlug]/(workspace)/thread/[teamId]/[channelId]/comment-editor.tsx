@@ -50,7 +50,11 @@ export function CommentEditor({
           <SafeAvatar src={user?.avatar} className="mr-3 h-6 w-6 self-start" />
           <OfflineEditor editor={editor} isThread />
           <TooltipWrapper content={isQA ? "Send answer" : "Send comment"}>
-            <SidebarItemBtn Icon={Send} className="self-start" />
+            <SidebarItemBtn
+              Icon={Send}
+              className="self-start"
+              onClick={createComment}
+            />
           </TooltipWrapper>
         </div>
       </div>

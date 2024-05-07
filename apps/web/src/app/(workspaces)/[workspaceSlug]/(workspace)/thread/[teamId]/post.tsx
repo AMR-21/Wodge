@@ -4,7 +4,7 @@ import { SafeDiv } from "../../../../../../components/safe-div";
 import { useMember } from "@repo/ui/hooks/use-member";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import Link from "next/link";
 import { Button } from "@repo/ui/components/ui/button";
@@ -12,6 +12,9 @@ import { ThreadDropDown } from "../thread-dropdown";
 import { EditEditor } from "./edit-editor";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { useEditEditor } from "./[channelId]/use-edit-editor";
+import { cn } from "@repo/ui/lib/utils";
+import { CheckCircle2, CircleDot } from "lucide-react";
 
 export const Post = memo(
   ({
@@ -28,12 +31,15 @@ export const Post = memo(
       workspaceSlug: string;
     }>();
 
-    const [isEditing, setIsEditing] = useState(false);
+    const { isEditing, setIsEditing, onCancelEdit, onEdit } = useEditEditor();
 
     const { workspaceRep } = useCurrentWorkspace();
     const { member } = useMember(post.createdBy);
     const { user } = useCurrentUser();
     const isPrivileged = useIsTeamModerator();
+    const router = useRouter();
+
+    const Icon = post.isResolved ? CheckCircle2 : CircleDot;
 
     return (
       <div className="group overflow-hidden rounded-md border border-border/50 bg-dim ">
@@ -55,6 +61,17 @@ export const Post = memo(
                   "yyyy/MM/dd h:mm a",
                 )}
               </p>
+
+              {isQA && (
+                <Icon
+                  className={cn(
+                    "h-4 w-4 shrink-0",
+                    post.isResolved
+                      ? "text-purple-600 dark:text-purple-500"
+                      : "text-green-600 dark:text-green-500",
+                  )}
+                />
+              )}
             </div>
 
             <ThreadDropDown
@@ -65,8 +82,10 @@ export const Post = memo(
                   teamId,
                   type: "thread",
                 });
+
+                if (opened) router.back();
               }}
-              onEdit={() => setIsEditing(true)}
+              onEdit={onEdit}
               canEdit={post.createdBy === user?.id}
               canDelete={post.createdBy === user?.id || isPrivileged}
             />
@@ -75,10 +94,8 @@ export const Post = memo(
           {isEditing ? (
             <div className="w-full pl-9">
               <EditEditor
-                post={post}
-                onCancelEdit={() => {
-                  setIsEditing(false);
-                }}
+                content={post}
+                onCancelEdit={onCancelEdit}
                 onSuccessEdit={async (text: string) => {
                   await workspaceRep?.mutate.updateThread({
                     ...post,

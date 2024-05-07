@@ -6,19 +6,30 @@ import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 
 import { ThreadDropDown } from "../../thread-dropdown";
 import { SafeDiv } from "@/components/safe-div";
+import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useEditEditor } from "./use-edit-editor";
+import { EditEditor } from "../edit-editor";
 
 export function ThreadMessage({
   msg,
   type,
-  onDelete,
-  onEdit,
+  isResolved,
+  onDeleteMsg,
+  onEditMsg,
 }: {
   msg: ThreadMessageType;
   type: Thread["type"];
-  onDelete?: () => void;
-  onEdit?: () => void;
+  isResolved?: boolean;
+  onDeleteMsg?: (msg: ThreadMessageType) => void;
+  onEditMsg?: (msg: ThreadMessageType, content: string) => Promise<void>;
 }) {
   const { member } = useMember(msg.author);
+  const { user } = useCurrentUser();
+
+  const isPrivileged = useIsTeamModerator();
+
+  const { isEditing, setIsEditing, onCancelEdit, onEdit } = useEditEditor();
 
   if (msg.type === "open" || msg.type === "close")
     return <ThreadAction msg={msg} member={member} />;
@@ -42,11 +53,26 @@ export function ThreadMessage({
         <ThreadDropDown
           label={type === "post" ? "comment" : "answer"}
           onEdit={onEdit}
-          onDelete={onDelete}
+          onDelete={() => onDeleteMsg?.(msg as ThreadMessageType)}
+          canDelete={!isResolved && (msg.author === user?.id || isPrivileged)}
+          canEdit={!isResolved && msg.author === user?.id}
         />
       </div>
 
-      <SafeDiv className="BlockEditor pl-9 text-sm" html={msg.content} />
+      {isEditing ? (
+        <div className="w-full pl-9">
+          <EditEditor
+            content={msg}
+            onCancelEdit={onCancelEdit}
+            onSuccessEdit={async (text: string) => {
+              await onEditMsg?.(msg, text);
+              setIsEditing(false);
+            }}
+          />
+        </div>
+      ) : (
+        <SafeDiv className="BlockEditor pl-9" html={msg.content} />
+      )}
     </div>
   );
 }

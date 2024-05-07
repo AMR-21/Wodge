@@ -1,6 +1,6 @@
 import { SafeDiv } from "@/components/safe-div";
 import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
-import { Thread } from "@repo/data";
+import { Thread, ThreadMessage } from "@repo/data";
 import { OfflineEditor, useThreadEditor } from "@repo/editor";
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
@@ -8,12 +8,12 @@ import { useEffect } from "react";
 
 export function EditEditor({
   isQA = false,
-  post,
+  content,
   onSuccessEdit,
   onCancelEdit,
 }: {
   isQA?: boolean;
-  post: Thread;
+  content: Thread | ThreadMessage;
   onSuccessEdit?: (text: string) => void;
 
   onCancelEdit?: () => void;
@@ -21,7 +21,7 @@ export function EditEditor({
   const { user } = useCurrentUser();
 
   const editor = useThreadEditor({
-    content: post.content,
+    content: content.content,
     placeholder: isQA ? "What's your question?" : "What's happening?",
   });
 
@@ -46,7 +46,7 @@ export function EditEditor({
           }
         }}
       >
-        {!editor && <SafeDiv className="BlockEditor" html={post.content} />}
+        {!editor && <SafeDiv className="BlockEditor" html={content.content} />}
         <OfflineEditor editor={editor} isThread />
       </div>
       <div className="ml-0.5 flex items-center pl-8">

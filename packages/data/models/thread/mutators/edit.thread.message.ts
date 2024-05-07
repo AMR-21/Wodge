@@ -1,15 +1,5 @@
 import { produce } from "immer";
-import {
-  DrObj,
-  TEAM_MEMBERS_ROLE,
-  Thread,
-  ThreadMessage,
-  ThreadSchema,
-  ThreadMessageSchema,
-  PublicUserType,
-} from "../../..";
-import { WorkspaceStructure } from "../../../schemas/workspace.schema";
-import { z } from "zod";
+import { DrObj, ThreadMessage, ThreadMessageSchema } from "../../..";
 export function editThreadMessageMutation({
   msg,
   msgsArray,
@@ -21,13 +11,14 @@ export function editThreadMessageMutation({
   userId: string;
   msgsArray: ThreadMessage[] | DrObj<ThreadMessage[]>;
 }) {
-  const ContentSchema = z.string().min(1).max(4096);
-
   const validateFields = ThreadMessageSchema.pick({
     content: true,
-  }).safeParse(newContent);
+  }).safeParse({ content: newContent });
 
-  if (!validateFields.success) throw new Error("Invalid msg data");
+  if (!validateFields.success) {
+    console.log(validateFields.error.flatten());
+    throw new Error("Invalid msg data");
+  }
 
   //check if you are allowed to edit the message
   if (userId !== msg.author)

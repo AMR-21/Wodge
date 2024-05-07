@@ -15,7 +15,7 @@ export function PostPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
     <div className="flex w-full flex-col gap-4">
       <ScrollArea className="">
         <Post post={path.thread} opened />
-        <ThreadMessagesList type="post" rep={rep} />
+        <ThreadMessagesList thread={path.thread} rep={rep} />
       </ScrollArea>
       <CommentEditor rep={rep} />
     </div>

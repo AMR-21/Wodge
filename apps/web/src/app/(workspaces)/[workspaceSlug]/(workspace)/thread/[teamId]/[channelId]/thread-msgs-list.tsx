@@ -3,7 +3,7 @@ import {
   ThreadMessage as ThreadMessageType,
   threadMutators,
 } from "@repo/data";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { ReadTransaction, Replicache } from "replicache";
 import { useSubscribe } from "@repo/ui/hooks/use-subscribe";
 import { ThreadMessage } from "./thread-message";
@@ -11,20 +11,32 @@ import { ThreadMessage } from "./thread-message";
 export const ThreadMessagesList = memo(
   ({
     rep,
-    type,
+    thread,
   }: {
     rep?: Replicache<typeof threadMutators>;
-    type: Thread["type"];
+    thread: Thread;
   }) => {
-    const { snapshot: messages } = useSubscribe(rep, (tx: ReadTransaction) =>
-      tx.get<ThreadMessageType[]>("messages"),
+    const { snapshot: messages, isPending } = useSubscribe(
+      rep,
+      (tx: ReadTransaction) => tx.get<ThreadMessageType[]>("messages"),
     );
+
+    async function onDeleteMsg(msg: ThreadMessageType) {
+      await rep?.mutate.deleteMessage(msg);
+    }
+
+    async function onEditMsg(msg: ThreadMessageType, newContent: string) {
+      await rep?.mutate.editMessage({
+        msg,
+        newContent,
+      });
+    }
 
     if (!messages) return null;
 
     return (
       <div className="py-4">
-        {type === "post" && (
+        {thread.type === "post" && (
           <p className="pb-2 text-sm font-medium text-muted-foreground">
             Comments
           </p>
@@ -32,7 +44,14 @@ export const ThreadMessagesList = memo(
 
         <div className="flex flex-col gap-2.5">
           {messages?.map((m) => (
-            <ThreadMessage type={type} msg={m} key={m.id} />
+            <ThreadMessage
+              type={thread.type}
+              msg={m}
+              key={m.id}
+              onDeleteMsg={onDeleteMsg}
+              onEditMsg={onEditMsg}
+              isResolved={thread.isResolved}
+            />
           ))}
         </div>
       </div>

@@ -9,13 +9,13 @@ export async function deleteMessage(
   params: RunnerParams,
   isPrivileged: boolean
 ) {
-  const { msg } = params.mutation.args as { msg: ThreadMessage };
+  const msg = params.mutation.args as ThreadMessage;
 
   const d = deleteThreadMessageMutation({
     msg,
     msgsArray: party.threadMessages.data,
     userId: params.userId,
-    isPrivileged: msg.author === params.userId || isPrivileged,
+    isPrivileged: msg?.author === params.userId || isPrivileged,
   });
 
   party.threadMessages = produce(party.threadMessages, (draft) => {

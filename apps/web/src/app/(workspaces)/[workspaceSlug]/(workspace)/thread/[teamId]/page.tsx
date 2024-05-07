@@ -30,27 +30,13 @@ import {
 } from "@repo/ui/components/ui/tabs";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { format } from "date-fns";
-import {
-  GanttChart,
-  Image,
-  MoreHorizontal,
-  Plus,
-  Send,
-  Vote,
-} from "lucide-react";
-import { nanoid } from "nanoid";
-import Link from "next/link";
+
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ThreadEditor } from "./thread-editor";
 
 function ThreadsPage() {
-  const { structure, workspaceSlug, workspaceRep } = useCurrentWorkspace();
-
-  const { user } = useCurrentUser();
-
-  // const editor = useThreadEditor();
+  const { structure } = useCurrentWorkspace();
 
   const { teamId } = useParams<{ teamId: string }>();
 
@@ -68,6 +54,9 @@ function ThreadsPage() {
     () => team?.threads.filter((thread) => thread.type === "qa"),
     [team?.threads],
   );
+
+  const [active, setActive] = useState("posts");
+
   return (
     <div className="flex h-full w-full flex-col gap-4">
       <Tabs defaultValue="posts" className="h-full">
