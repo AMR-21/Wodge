@@ -1,11 +1,15 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@repo/ui/components/ui/button";
-import { signOut } from "next-auth/react";
 
 export function LogoutBtn() {
+  const supabase = createClient();
   return (
-    <Button onClick={() => signOut()} className="w-full">
+    <Button
+      onClick={async () => await supabase.auth.signOut()}
+      className="w-full"
+    >
       Log out
     </Button>
   );
