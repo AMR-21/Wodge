@@ -70,7 +70,7 @@ export async function joinWorkspace(party: WorkspaceParty, c: Context) {
 
   const userInstance = userParty.get(userId);
 
-  await userInstance.fetch("/add-workspace", {
+  await userInstance.fetch("/service/add-workspace", {
     method: "POST",
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,

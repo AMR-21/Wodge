@@ -35,7 +35,7 @@ export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
   // remove from db too
 
   await Promise.all([
-    userInstance.fetch("/remove-workspace", {
+    userInstance.fetch("/service/remove-workspace", {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

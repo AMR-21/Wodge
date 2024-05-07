@@ -29,6 +29,7 @@ import { update } from "./handlers/update";
 import { uploadAvatar } from "./handlers/upload-avatar";
 import { cors } from "hono/cors";
 import { deleteAvatar } from "./handlers/delete-avatar";
+import { serviceMiddleware } from "../lib/service-middleware";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -48,14 +49,20 @@ export default class UserParty implements Party.Server, UserPartyInterface {
         credentials: true,
       })
     );
+
     this.app.post("/replicache-pull", userPull.bind(null, this));
     this.app.post("/replicache-push", userPush.bind(null, this));
 
-    this.app.post("/add-workspace", addWorkspace.bind(null, this));
+    this.app.use("/service/*", serviceMiddleware.bind(null, this.room));
 
-    this.app.post("/remove-workspace", removeWorkspace.bind(null, this));
+    this.app.post("/service/add-workspace", addWorkspace.bind(null, this));
 
-    this.app.post("/poke", poke.bind(null, this));
+    this.app.post(
+      "/service/remove-workspace",
+      removeWorkspace.bind(null, this)
+    );
+
+    this.app.post("/service/poke", poke.bind(null, this));
 
     this.app.post("/update", update.bind(null, this));
     this.app
@@ -141,16 +148,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   async onRequest(req: Party.Request) {
     //@ts-ignore
     return this.app.fetch(req);
-    // switch (req.method) {
-    //   case "POST":
-    //     return await handlePost(req, this);
-    //   case "GET":
-    //     return await handleGet(req, this);
-    //   case "OPTIONS":
-    //     return ok();
-    //   default:
-    //     return notImplemented();
-    // }
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
@@ -158,7 +155,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     if (req.method === "OPTIONS") {
       return ok();
     }
-    if (getRoute(req) === "/update") return req;
+    if (getRoute(req).startsWith("/service")) return req;
 
     try {
       const user = await getCurrentUser(req, lobby);

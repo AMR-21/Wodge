@@ -20,7 +20,7 @@ export async function removeMember(
   const userInstance = userParty.get(memberId);
 
   const [res1, res2] = await Promise.all([
-    userInstance.fetch("/remove-workspace", {
+    userInstance.fetch("/service/remove-workspace", {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

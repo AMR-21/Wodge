@@ -2,19 +2,34 @@ import { Context } from "hono";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { HeadObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getS3Client } from "../../lib/get-s3-client";
-import {
-  getBucketAddress,
-  makeUserAvatarKey,
-  makeWorkspaceAvatarKey,
-  REPLICACHE_VERSIONS_KEY,
-} from "@repo/data";
+import { makeUserAvatarKey, PublicUserType } from "@repo/data";
 import UserParty from "../user-party";
 
 export async function deleteAvatar(party: UserParty, c: Context) {
   const s3Client = getS3Client(party.room);
 
   const bucket = "avatars";
-  const key = makeUserAvatarKey(party.room.id);
+  let key = makeUserAvatarKey(party.room.id);
+
+  const res = await fetch(
+    `${party.room.env.AUTH_DOMAIN}/api/update-user-avatar`,
+    {
+      method: "DELETE",
+      headers: {
+        authorization: party.room.env.SERVICE_KEY as string,
+        userId: party.room.id,
+      },
+    }
+  );
+
+  if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
+
+  const { user } = await res.json<{ user: PublicUserType }>();
+
+  if (!user) return c.json({ error: "Failed to delete avatar" }, 400);
+  key = user.avatar?.split("/").pop()!;
+
+  if (!key) return c.json({ error: "Failed to delete avatar" }, 400);
 
   const checkFile = await getSignedUrl(
     s3Client,
@@ -38,19 +53,6 @@ export async function deleteAvatar(party: UserParty, c: Context) {
     });
 
     if (response.status === 204) {
-      const res = await fetch(
-        `${party.room.env.AUTH_DOMAIN}/api/update-user-avatar`,
-        {
-          method: "DELETE",
-          headers: {
-            authorization: party.room.env.SERVICE_KEY as string,
-            userId: party.room.id,
-          },
-        }
-      );
-
-      if (!res.ok) return c.json({ error: "Failed to update avatar" }, 400);
-
       const workspaceParty = party.room.context.parties.workspace!;
 
       const req = [...party.workspacesStore].map((wid) => {

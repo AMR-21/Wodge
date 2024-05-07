@@ -10,12 +10,6 @@ import { produce } from "immer";
 import { Context } from "hono";
 
 export async function addWorkspace(party: UserParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
-
-  if (serviceKey !== party.room.env.SERVICE_KEY) {
-    return badRequest();
-  }
-
   const workspaceId = c.req.header("workspaceId");
   if (!workspaceId) return badRequest();
 

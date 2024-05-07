@@ -17,42 +17,13 @@ import {
   PresenceMap,
 } from "../types";
 
-import {
-  Invites,
-  ID_LENGTH,
-  PokeMessage,
-  makeWorkspaceMembersKey,
-  REPLICACHE_VERSIONS_KEY,
-  isOwner,
-  isAdmin,
-} from "@repo/data";
+import { Invites, ID_LENGTH, PokeMessage } from "@repo/data";
 import { Hono } from "hono";
-import { uploadFile } from "./handlers/upload-file";
 import { startFn } from "./start-fn";
 import { cors } from "hono/cors";
-import { workspacePull } from "./handlers/workspace-pull";
-import { createWorkspace } from "./handlers/create-workspace";
-import { workspacePush } from "./handlers/workspace-push";
-import { createInvite } from "./handlers/create-invite";
-import { joinWorkspace } from "./handlers/join-workspace";
-import { handlePresence } from "./handlers/presence";
-import { updateWorkspace } from "./handlers/update-workspace";
-import { channelPoke } from "./handlers/channel-poke";
-import { leaveWorkspace } from "./handlers/leave-workspace";
-import { deleteWorkspace } from "./handlers/delete-workspace";
-import { getMembership } from "./handlers/get-membership";
-import { getInvites } from "./handlers/get-invites";
-import { getMembersInfo } from "./handlers/get-members-info";
-import { authChannel } from "./handlers/auth-channel";
-import { uploadAvatar } from "./handlers/upload-avatar";
-import { deleteFile } from "./handlers/delete-file";
-import { listFiles } from "./handlers/list-files";
-import { downloadFile } from "./handlers/download-file";
-import { memberUpdateHandler } from "./handlers/member-update";
-import { serviceMiddleware } from "./routes/service-middleware";
+
 import { setupUsersRoutes } from "./routes/users-routes";
 import { setupMembershipsRoutes } from "./routes/memberships-routes";
-import { adminMiddleware } from "./routes/admin-middleware";
 import { setupServiceRoutes } from "./routes/service-routes";
 import { setupAdministrativeRoutes } from "./routes/administrative-routes";
 
@@ -113,7 +84,7 @@ export default class WorkspaceParty
       return ok();
     }
 
-    if (getRoute(req) === "/service/auth-channel") return req;
+    if (getRoute(req).startsWith("/service")) return req;
 
     try {
       // maybe removed when bindings are supported
@@ -145,7 +116,7 @@ export default class WorkspaceParty
     const userParty = this.room.context.parties.user!;
 
     if (userId) {
-      return await userParty.get(userId).fetch("/poke", {
+      return await userParty.get(userId).fetch("/service/poke", {
         method: "POST",
         headers: {
           authorization: this.room.env.SERVICE_KEY as string,
@@ -159,7 +130,7 @@ export default class WorkspaceParty
 
     await Promise.all(
       Object.keys(Object.fromEntries(this.presenceMap)).map((userId) => {
-        return userParty.get(userId).fetch("/poke", {
+        return userParty.get(userId).fetch("/service/poke", {
           method: "POST",
           headers: {
             authorization: this.room.env.SERVICE_KEY as string,

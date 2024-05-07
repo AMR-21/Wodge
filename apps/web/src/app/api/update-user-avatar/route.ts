@@ -38,8 +38,9 @@ export async function DELETE(req: Request) {
     return new Response(null, { status: 400 });
   }
 
-  await updateUserById(userId, {
+  const { user } = await updateUserById(userId, {
     avatar: null,
   });
-  return new Response(null, { status: 200 });
+
+  return Response.json({ user }, { status: 200 });
 }

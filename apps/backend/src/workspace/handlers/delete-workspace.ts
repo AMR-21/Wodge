@@ -13,7 +13,7 @@ export async function deleteWorkspace(party: WorkspaceParty) {
   const userParty = party.room.context.parties.user!;
 
   const deletes = party.workspaceMembers.data.members.map((m) =>
-    userParty.get(m.id).fetch("/remove-workspace", {
+    userParty.get(m.id).fetch("/service/remove-workspace", {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

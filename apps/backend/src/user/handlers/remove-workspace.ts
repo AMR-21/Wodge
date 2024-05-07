@@ -9,12 +9,6 @@ import {
 import { Context } from "hono";
 
 export async function removeWorkspace(party: UserParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
-
-  if (serviceKey !== party.room.env.SERVICE_KEY) {
-    return badRequest();
-  }
-
   const { workspaceId } = <{ workspaceId: string }>await c.req.json();
 
   if (!workspaceId) return badRequest();

@@ -28,12 +28,12 @@ export async function POST(req: NextRequest) {
   // 3. Check if there is a new profile avatar
 
   // 4. Update user data
-  const res = await updateUserById(user.id, {
+  const { updatedUser, error } = await updateUserById(user.id, {
     ...data,
     updatedAt: new Date(),
   });
 
-  if (res.user) {
+  if (updatedUser) {
     //inform workspaces
     await fetch(
       `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user.id}/update`,
@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
         },
       },
     );
-    return Response.json({ success: true, user: res.user });
+    return Response.json({ success: true, user: updatedUser });
   }
 
-  return Response.json({ error: res.error }, { status: 400 });
+  return Response.json({ error }, { status: 400 });
 }

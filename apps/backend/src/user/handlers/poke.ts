@@ -5,12 +5,6 @@ import { PokeMessage } from "@repo/data";
 import { Context } from "hono";
 
 export async function poke(party: UserParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
-
-  if (serviceKey !== party.room.env.SERVICE_KEY) {
-    return unauthorized();
-  }
-
   const body = <PokeMessage>await c.req.json();
 
   party.poke(body);

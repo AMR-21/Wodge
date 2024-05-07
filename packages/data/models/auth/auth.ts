@@ -54,13 +54,12 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
   try {
     const db = createDb();
 
-    const user = await db
-      .update(users)
-      .set(data)
-      .where(eq(users.id, userId))
-      .returning();
+    const [user, updated] = await db.batch([
+      db.query.users.findFirst({ where: eq(users.id, userId) }),
+      db.update(users).set(data).where(eq(users.id, userId)).returning(),
+    ]);
 
-    return { user: user[0] as UserType };
+    return { user, updatedUser: updated[0] };
   } catch (e) {
     if (!(e instanceof Error)) return { error: "Internal server error" };
 

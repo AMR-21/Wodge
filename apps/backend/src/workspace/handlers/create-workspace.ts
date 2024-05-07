@@ -69,7 +69,7 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
   const userInstance = userParty.get(userId);
 
   // Should not fail
-  const res2 = await userInstance.fetch("/add-workspace", {
+  const res2 = await userInstance.fetch("/service/add-workspace", {
     method: "POST",
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,
