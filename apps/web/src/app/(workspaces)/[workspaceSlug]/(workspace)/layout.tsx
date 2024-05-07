@@ -1,7 +1,7 @@
 "use client";
 
-import { AppHeader } from "@/components/workspace/app-header";
-import { SidebarWrapper } from "@/components/workspace/sidebar/sidebar-wrapper";
+import { AppHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/app-header";
+import { SidebarWrapper } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-wrapper";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";

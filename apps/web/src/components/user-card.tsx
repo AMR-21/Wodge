@@ -38,7 +38,7 @@ export function UserCard({ className }: { className?: string }) {
         >
           <SafeAvatar
             src={user.avatar}
-            className="h-10 w-10 rounded-full border-2 border-primary/30"
+            className="h-10 w-10"
             fallback={user.displayName}
           />
           <div>

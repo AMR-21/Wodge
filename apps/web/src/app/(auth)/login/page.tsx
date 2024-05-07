@@ -1,7 +1,7 @@
 "use client";
 
 import { Logo } from "@/components/logo";
-import { LoginWrapper } from "@/components/auth/login-wrapper";
+import { LoginWrapper } from "@/app/(auth)/login/login-wrapper";
 import { useEffect } from "react";
 import {
   localStoragePersister,

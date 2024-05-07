@@ -1,4 +1,4 @@
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
+import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -6,12 +6,12 @@ import { useCurrentResources } from "@repo/ui/hooks/use-current-resources";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import Link from "next/link";
 
-import { AdvancedUploadButton } from "@/components/resources/advanced-upload";
+import { AdvancedUploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/advanced-upload";
 
-import { File } from "@/components/resources/file";
-import { Folder } from "@/components/resources/folder";
+import { File } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/file";
+import { Folder } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/folder";
 import { useRouter } from "next/navigation";
-import { FoldersBreadcrumbs } from "@/components/resources/folders-breadcrumbs";
+import { FoldersBreadcrumbs } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/folders-breadcrumbs";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
 
 const paths = [

@@ -2,7 +2,7 @@
 
 import { ThreadAction } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/thread/[teamId]/[channelId]/thread-actions";
 import { ThreadMessagesList } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/thread/[teamId]/[channelId]/thread-msgs-list";
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
+import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { OfflineEditor, useThreadEditor } from "@repo/editor";
 import { Button } from "@repo/ui/components/ui/button";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";

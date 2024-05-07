@@ -1,6 +1,6 @@
 "use client";
 
-import { GroupSettings } from "@/components/settings/groups/group-settings";
+import { GroupSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/groups/group-settings";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useMemo } from "react";
 

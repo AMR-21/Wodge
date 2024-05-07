@@ -1,4 +1,4 @@
-import { WorkspaceSettings } from "@/components/settings/general/workspace-settings";
+import { WorkspaceSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/(general)/workspace-settings";
 
 function WorkspaceSettingsPage() {
   return <WorkspaceSettings />;

@@ -1,5 +1,5 @@
 import { SafeDiv } from "@/components/safe-div";
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
+import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { Thread, ThreadMessage } from "@repo/data";
 import { OfflineEditor, useThreadEditor } from "@repo/editor";
 import { Button } from "@repo/ui/components/ui/button";

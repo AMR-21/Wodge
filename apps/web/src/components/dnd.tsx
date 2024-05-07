@@ -29,11 +29,11 @@ import { CSS } from "@dnd-kit/utilities";
 import {
   SidebarItem,
   SidebarItemProps,
-} from "@/components/workspace/sidebar-item";
+} from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item";
 import { Channel, Team } from "@repo/data";
 import { RiDraggable } from "react-icons/ri";
 import { clear } from "console";
-import { Teamspaces } from "@/components/workspace/sidebar/teamspaces";
+import { Teamspaces } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/teamspaces";
 import { useAppState } from "@repo/ui/store/store";
 import { produce } from "immer";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";

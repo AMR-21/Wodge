@@ -1,4 +1,4 @@
-import { GroupSettings } from "@/components/settings/groups/group-settings";
+import { GroupSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/groups/group-settings";
 
 function NewGroupPage() {
   return <GroupSettings isAddition />;

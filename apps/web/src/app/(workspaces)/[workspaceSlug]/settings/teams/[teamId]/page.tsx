@@ -1,6 +1,6 @@
 "use client";
 
-import { TeamSettings } from "@/components/settings/teams/team-settings";
+import { TeamSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/teams/team-settings";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useMemo } from "react";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { AddWorkspaceDialog } from "@/components/workspaces/add-workspace-dialog";
-import { WorkspacesList } from "@/components/workspaces/workspaces-list";
+import { AddWorkspaceDialog } from "@/app/(workspaces)/add-workspace-dialog";
+import { WorkspacesList } from "@/app/(workspaces)/workspaces-list";
 import { Button } from "@repo/ui/components/ui/button";
 import { UserCard } from "@/components/user-card";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";

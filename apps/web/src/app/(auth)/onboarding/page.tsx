@@ -1,7 +1,7 @@
 "use client";
 
-import { OnboardingProvider } from "@/components/onboarding/onboarding-context";
-import { OnboardingSteps } from "@/components/onboarding/onboarding-steps";
+import { OnboardingProvider } from "@/app/(auth)/onboarding/onboarding-context";
+import { OnboardingSteps } from "@/app/(auth)/onboarding/onboarding-steps";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
 function OnboardingPage() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { RecentCarousel } from "@/components/home/recent-carousel";
+import { RecentCarousel } from "@/components/recent-carousel";
 import { Button } from "@repo/ui/components/ui/button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { Plus } from "lucide-react";

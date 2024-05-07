@@ -37,7 +37,9 @@ export const SafeAvatar = memo(
           </Avatar>
         )}
         {!src && (
-          <Avatar className={cn("h-12 w-12", className)}>
+          <Avatar
+            className={cn("h-12 w-12 ring-[1.5px] ring-primary/30", className)}
+          >
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}
             </AvatarFallback>

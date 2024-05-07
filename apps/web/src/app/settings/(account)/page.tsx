@@ -1,4 +1,4 @@
-import { AccountSettings } from "@/components/settings/account/account-settings";
+import { AccountSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/account/account-settings";
 
 function AccountSettingsPage() {
   return <AccountSettings />;

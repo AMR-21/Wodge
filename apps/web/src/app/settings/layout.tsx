@@ -1,7 +1,7 @@
 "use client";
 
-import { SettingsContent } from "@/components/settings/settings";
-import { SettingsSidebar } from "@/components/settings/settings-sidebar";
+import { SettingsContent } from "@/app/(workspaces)/[workspaceSlug]/settings/settings";
+import { SettingsSidebar } from "@/app/(workspaces)/[workspaceSlug]/settings/settings-sidebar";
 import { Sheet } from "@repo/ui/components/ui/sheet";
 
 function SettingsLayout({ children }: { children: React.ReactNode }) {

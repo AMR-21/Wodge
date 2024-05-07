@@ -1,4 +1,4 @@
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
+import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { OfflineEditor, useThreadEditor } from "@repo/editor";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";

@@ -1,16 +1,11 @@
 "use client";
 
-import { BlockEditor } from "@repo/editor";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 
-import YPartyKitProvider from "y-partykit/provider";
-import * as Y from "yjs";
-import useYProvider from "y-partykit/react";
 import { useParams } from "next/navigation";
-import { env } from "@repo/env";
-import { Page } from "@/components/Page";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+import { PageEditor } from "../../../page-editor";
 
 function ChannelPage() {
   useUpdateRecentlyVisited("page");
@@ -27,7 +22,7 @@ function ChannelPage() {
   if (!user || !workspaceId) return null;
 
   return (
-    <Page
+    <PageEditor
       channelId={channelId}
       folderId={folderId}
       user={user}

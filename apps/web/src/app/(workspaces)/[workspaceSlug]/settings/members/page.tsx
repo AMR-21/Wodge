@@ -1,4 +1,4 @@
-import { MembersSettings } from "@/components/settings/members/members-settings";
+import { MembersSettings } from "@/app/(workspaces)/[workspaceSlug]/settings/members/members-settings";
 
 function MembersSettingsPage() {
   return <MembersSettings />;

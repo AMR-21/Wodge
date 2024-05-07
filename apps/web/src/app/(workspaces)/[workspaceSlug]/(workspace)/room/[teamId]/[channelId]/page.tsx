@@ -1,9 +1,12 @@
 "use client";
 
-import { MessageList, msgsAtom } from "@/components/room/message-list";
-import { RoomHeader } from "@/components/room/room-header";
-import { SidebarItemBtn } from "@/components/workspace/sidebar-item-btn";
-import { SimpleEditor, useMessageEditor } from "@repo/editor";
+import {
+  MessageList,
+  msgsAtom,
+} from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/message-list";
+import { RoomHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/room-header";
+import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
+import { OfflineEditor, useMessageEditor } from "@repo/editor";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useAtom } from "jotai";
@@ -11,7 +14,7 @@ import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
 import "@uppy/core/dist/style.min.css";
 
-import { UploadButton } from "@/components/room/upload-button";
+import { UploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/upload-button";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
@@ -69,7 +72,7 @@ function ChannelPage() {
             }
           }}
         >
-          <SimpleEditor editor={editor} />
+          <OfflineEditor editor={editor} />
         </div>
         <SidebarItemBtn Icon={Send} className="ml-2" onClick={onSubmit} />
       </div>
