@@ -2,8 +2,14 @@ import { createGroupMutation } from "@repo/data/models/workspace/mutators/create
 import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { Group, makeWorkspaceStructureKey } from "@repo/data";
+import { PushAuth } from "../handlers/workspace-push";
 
-export async function createGroup(party: WorkspaceParty, params: RunnerParams) {
+export async function createGroup(
+  party: WorkspaceParty,
+  params: RunnerParams,
+  auth: PushAuth
+) {
+  if (!auth.isOwnerOrAdmin) return;
   party.workspaceStructure.data = createGroupMutation({
     currentUserId: params.userId,
     structure: party.workspaceStructure.data,

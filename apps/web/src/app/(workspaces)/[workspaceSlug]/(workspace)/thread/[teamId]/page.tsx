@@ -13,6 +13,7 @@ import { useMemo } from "react";
 
 import { PostsList } from "./posts-list";
 import { QAsList } from "./qas-list";
+import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 
 function ThreadsPage() {
   const { structure } = useCurrentWorkspace();
@@ -38,12 +39,14 @@ function ThreadsPage() {
           </TabsList>
         </div>
 
-        <TabsContent value="posts">
-          <PostsList team={team} />
-        </TabsContent>
-        <TabsContent value="qa">
-          <QAsList team={team} />
-        </TabsContent>
+        <ScrollArea className="h-full w-full px-2 py-2">
+          <TabsContent value="posts">
+            <PostsList team={team} />
+          </TabsContent>
+          <TabsContent value="qa">
+            <QAsList team={team} />
+          </TabsContent>
+        </ScrollArea>
       </Tabs>
     </div>
   );

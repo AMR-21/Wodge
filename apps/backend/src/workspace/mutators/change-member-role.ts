@@ -3,11 +3,15 @@ import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { WorkspaceMembers, makeWorkspaceMembersKey } from "@repo/data";
 import { produce } from "immer";
+import { PushAuth } from "../handlers/workspace-push";
 
 export async function changeMemberRole(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  auth: PushAuth
 ) {
+  if (!auth.isOwnerOrAdmin) return;
+
   party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
     draft.data = changeMemberRoleMutation({
       members: draft.data,

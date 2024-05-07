@@ -25,64 +25,7 @@ function ChannelPage() {
   useUpdateRecentlyVisited("thread");
   const path = useChannelPath();
 
-  const { user } = useCurrentUser();
-
-  const { teamId, channelId } = useParams<{
-    teamId: string;
-    channelId: string;
-  }>();
-
-  const { member } = useMember(path?.thread?.createdBy);
-  const editor = useThreadEditor({
-    placeholder: "Add a comment...",
-  });
-  const { workspaceRep } = useCurrentWorkspace();
-
   const rep = useCurrentThreadRep();
-
-  useEffect(() => {
-    if (path?.thread?.isResolved) {
-      editor?.setEditable(false);
-      editor?.commands.clearContent();
-    } else {
-      editor?.setEditable(true);
-    }
-  }, [path]);
-
-  if (!path) return null;
-
-  async function onSubmit() {
-    if (editor && user) {
-      const content = editor.getHTML();
-
-      await rep?.mutate.createMessage({
-        id: nanoid(),
-        author: user.id,
-        content,
-        date: new Date().toISOString(),
-        type: "message",
-      });
-
-      editor.commands.clearContent();
-    }
-  }
-
-  async function toggleThread() {
-    // add message to thread
-    if (user)
-      await rep?.mutate.createMessage({
-        id: nanoid(),
-        author: user.id,
-        content: "toggle",
-        date: new Date().toISOString(),
-        type: path?.thread?.isResolved ? "open" : "close",
-      });
-
-    await workspaceRep?.mutate.toggleThread({
-      teamId,
-      threadId: channelId,
-    });
-  }
 
   if (path?.thread?.type === "post") return <PostPage rep={rep} />;
 

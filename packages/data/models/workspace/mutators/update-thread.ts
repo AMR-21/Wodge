@@ -9,17 +9,19 @@ import {
 } from "../../..";
 import { WorkspaceStructure } from "../../../schemas/workspace.schema";
 
-interface CreateTeamArgs {
+interface UpdateThreadsArgs {
   thread: Thread;
   teamId: string;
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
+  userId: string;
 }
 
 export function updateThreadMutation({
   thread,
   teamId,
   structure,
-}: CreateTeamArgs) {
+  userId,
+}: UpdateThreadsArgs) {
   // Validate the data
   const validateFields = ThreadSchema.safeParse(thread);
 
@@ -32,6 +34,9 @@ export function updateThreadMutation({
     // Check if team not found
     if (!team) throw new Error("Team not found");
     // Check if folder not found
+
+    if (thread.createdBy !== userId)
+      throw new Error("You are not the creator of this thread");
 
     const threadIdx = team.threads.findIndex((ch) => ch.id === newThread.id);
     if (threadIdx === -1) {

@@ -9,11 +9,15 @@ import {
 import { updateRoomMutation } from "@repo/data/models/workspace/mutators/update-room";
 import { updateThreadMutation } from "@repo/data/models/workspace/mutators/update-thread";
 import { updateFolderMutation } from "@repo/data/models/workspace/mutators/update-folder";
+import { PushAuth } from "../handlers/workspace-push";
 
 export async function updateFolder(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  auth: PushAuth
 ) {
+  if (!auth.isOwnerOrAdmin && !auth.isTeamModerator) return;
+
   const { teamId, ...folder } = params.mutation.args as NewFolderArgs;
 
   if (!teamId || !folder) return;

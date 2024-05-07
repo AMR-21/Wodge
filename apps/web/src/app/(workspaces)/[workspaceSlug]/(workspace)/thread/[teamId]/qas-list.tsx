@@ -12,13 +12,11 @@ export function QAsList({ team }: { team?: DrObj<Team> }) {
   );
 
   return (
-    <ScrollArea className="h-full w-full px-2 py-2">
-      <div className="pb-4">
-        <ThreadEditor isQA />
-        <div className="flex flex-col gap-1.5 py-4">
-          {qas?.map((post) => <Post isQA key={post.id} post={post} />)}
-        </div>
+    <div className="pb-4">
+      <ThreadEditor isQA />
+      <div className="flex flex-col gap-1.5 py-4">
+        {qas?.map((post) => <Post isQA key={post.id} post={post} />)}
       </div>
-    </ScrollArea>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
-import type * as Party from "partykit/server";
-import { badRequest, json, ok, unauthorized } from "../../lib/http-utils";
+import { badRequest, json, unauthorized } from "../../lib/http-utils";
 import WorkspaceParty from "../workspace-party";
 import {
   Member,

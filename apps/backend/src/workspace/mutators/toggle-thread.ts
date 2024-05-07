@@ -1,4 +1,5 @@
 import { RunnerParams } from "../../lib/replicache";
+import { PushAuth } from "../handlers/workspace-push";
 import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
 import { toggleThreadMutation } from "@repo/data/models/workspace/mutators/toggle-thread";
@@ -6,7 +7,7 @@ import { toggleThreadMutation } from "@repo/data/models/workspace/mutators/toggl
 export async function toggleThread(
   party: WorkspaceParty,
   params: RunnerParams,
-  isAdmin: boolean
+  auth: PushAuth
 ) {
   const { teamId, threadId } = params.mutation.args as {
     teamId: string;
@@ -20,7 +21,7 @@ export async function toggleThread(
     teamId,
     threadId,
     curUserId: params.userId,
-    isAdmin,
+    isAdmin: auth.isOwnerOrAdmin || auth.isTeamModerator,
   });
 
   party.workspaceStructure.lastModifiedVersion = params.nextVersion;

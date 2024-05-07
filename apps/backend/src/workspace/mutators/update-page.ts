@@ -4,8 +4,14 @@ import { Channel, makeWorkspaceStructureKey } from "@repo/data";
 import { createPageMutation } from "@repo/data/models/workspace/mutators/create-page";
 import { NewPageArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { updatePageMutation } from "@repo/data/models/workspace/mutators/update-page";
+import { PushAuth } from "../handlers/workspace-push";
 
-export async function updatePage(party: WorkspaceParty, params: RunnerParams) {
+export async function updatePage(
+  party: WorkspaceParty,
+  params: RunnerParams,
+  auth: PushAuth
+) {
+  if (!auth.isOwnerOrAdmin && !auth.isTeamModerator) return;
   const { folderId, teamId, ...page } = params.mutation.args as NewPageArgs;
 
   if (!folderId || !teamId || !page) return;

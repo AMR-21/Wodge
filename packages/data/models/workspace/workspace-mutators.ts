@@ -291,10 +291,15 @@ export const workspaceMutators = {
 
     const { teamId, ...thread } = data;
 
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
     const newStructure = updateThreadMutation({
       thread,
       teamId,
       structure,
+      userId: user.id,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);
@@ -387,12 +392,18 @@ export const workspaceMutators = {
       makeWorkspaceStructureKey()
     )) as WorkspaceStructure;
 
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
     const newStructure = deleteChannelMutation({
       channelId: data.channelId,
       folderId: data?.folderId,
       structure,
       teamId: data.teamId,
       type: data.type,
+      isAdmin: true,
+      userId: user.id,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

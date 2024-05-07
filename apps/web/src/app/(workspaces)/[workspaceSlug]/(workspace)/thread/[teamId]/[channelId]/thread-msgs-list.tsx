@@ -36,7 +36,7 @@ export const ThreadMessagesList = memo(
 
     return (
       <div className="py-4">
-        {thread.type === "post" && (
+        {thread.type === "post" && messages && messages.length > 0 && (
           <p className="pb-2 text-sm font-medium text-muted-foreground">
             Comments
           </p>

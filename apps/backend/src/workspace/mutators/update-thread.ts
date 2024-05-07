@@ -7,10 +7,12 @@ import {
 } from "@repo/data/models/workspace/workspace-mutators";
 import { updateRoomMutation } from "@repo/data/models/workspace/mutators/update-room";
 import { updateThreadMutation } from "@repo/data/models/workspace/mutators/update-thread";
+import { PushAuth } from "../handlers/workspace-push";
 
 export async function updateThread(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  auth: PushAuth
 ) {
   const { teamId, ...thread } = params.mutation.args as NewThreadArgs;
 
@@ -20,6 +22,7 @@ export async function updateThread(
     structure: party.workspaceStructure.data,
     teamId,
     thread,
+    userId: params.userId,
   });
 
   party.workspaceStructure.lastModifiedVersion = params.nextVersion;

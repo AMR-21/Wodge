@@ -3,11 +3,15 @@ import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { WorkspaceMembers, makeWorkspaceMembersKey } from "@repo/data";
 import { produce } from "immer";
+import { PushAuth } from "../handlers/workspace-push";
 
 export async function removeMember(
   party: WorkspaceParty,
-  params: RunnerParams
+  params: RunnerParams,
+  auth: PushAuth
 ) {
+  if (!auth.isOwnerOrAdmin) return;
+
   const memberId = params.mutation.args as string;
 
   const newState = removeMemberMutation({

@@ -87,7 +87,8 @@ export const Post = memo(
               }}
               onEdit={onEdit}
               canEdit={post.createdBy === user?.id}
-              canDelete={post.createdBy === user?.id || isPrivileged}
+              // canDelete={post.createdBy === user?.id || isPrivileged}
+              canDelete={true}
             />
           </div>
 

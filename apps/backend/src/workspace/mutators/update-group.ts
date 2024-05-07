@@ -3,27 +3,30 @@ import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { WorkspaceStructure, makeWorkspaceStructureKey } from "@repo/data";
 import { GroupUpdateArgs } from "@repo/data/models/workspace/workspace-mutators";
+import { PushAuth } from "../handlers/workspace-push";
 
-export async function updateGroup(party: WorkspaceParty, params: RunnerParams) {
-  try {
-    const { groupId, groupUpdate } = params.mutation.args as GroupUpdateArgs;
+export async function updateGroup(
+  party: WorkspaceParty,
+  params: RunnerParams,
+  auth: PushAuth
+) {
+  if (!auth.isOwnerOrAdmin) return;
 
-    const curMembers = party.workspaceMembers.data.members.map((m) => m.id);
+  const { groupId, groupUpdate } = params.mutation.args as GroupUpdateArgs;
 
-    party.workspaceStructure.data = groupUpdateRunner({
-      structure: party.workspaceStructure.data,
-      groupUpdate,
-      groupId,
-      curMembers,
-    }) as WorkspaceStructure;
+  const curMembers = party.workspaceMembers.data.members.map((m) => m.id);
 
-    party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure.data = groupUpdateRunner({
+    structure: party.workspaceStructure.data,
+    groupUpdate,
+    groupId,
+    curMembers,
+  }) as WorkspaceStructure;
 
-    await party.room.storage.put(
-      makeWorkspaceStructureKey(),
-      party.workspaceStructure
-    );
-  } catch (e) {
-    return;
-  }
+  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+
+  await party.room.storage.put(
+    makeWorkspaceStructureKey(),
+    party.workspaceStructure
+  );
 }

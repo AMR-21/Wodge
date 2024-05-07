@@ -3,17 +3,19 @@ import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
 import { createThreadMutation } from "@repo/data/models/workspace/mutators/create-thread";
+import { PushAuth } from "../handlers/workspace-push";
 
 export async function createThread(
   party: WorkspaceParty,
   params: RunnerParams,
-  isPrivileged: boolean
+  auth: PushAuth
 ) {
   const { teamId, ...thread } = params.mutation.args as NewThreadArgs;
 
   if (!teamId || !thread) return;
 
-  if (thread.type === "post" && !isPrivileged) return;
+  if (thread.type === "post" && !auth.isOwnerOrAdmin && !auth.isTeamModerator)
+    return;
 
   party.workspaceStructure.data = createThreadMutation({
     curUserId: params.userId,

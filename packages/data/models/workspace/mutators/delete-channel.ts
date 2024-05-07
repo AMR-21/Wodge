@@ -9,7 +9,13 @@ export function deleteChannelMutation({
   folderId,
   channelId,
   type,
-}: WorkspaceChannelMutation & { type: ChannelsTypes }) {
+  userId,
+  isAdmin,
+}: WorkspaceChannelMutation & {
+  type: ChannelsTypes;
+  isAdmin: boolean;
+  userId: string;
+}) {
   const newStructure = produce(structure, (draft) => {
     // Check if the team not existing
     const teamIdx = draft.teams.findIndex((t) => t.id === teamId);
@@ -32,6 +38,11 @@ export function deleteChannelMutation({
     }
 
     if (type === "thread") {
+      const thread = team.threads.find((c) => c.id === channelId);
+
+      if (thread && thread.createdBy !== userId && !isAdmin)
+        throw new Error("You are not allowed to delete this thread");
+
       draft.teams[teamIdx]!.threads = team.threads.filter(
         (c) => c.id !== channelId
       );
