@@ -107,7 +107,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
       const workspace = WorkspaceParty.get(wid);
 
-      await workspace.fetch("/presence", {
+      await workspace.fetch("/service/presence", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -122,7 +122,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       // Register to all workspaces - on connect
       await Promise.all(
         wid.map((id) =>
-          WorkspaceParty.get(id).fetch("/presence", {
+          WorkspaceParty.get(id).fetch("/service/presence", {
             method: "POST",
             headers: {
               "content-type": "application/json",

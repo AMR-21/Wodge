@@ -57,10 +57,14 @@ export async function updateWorkspaceById(
   }
 ) {
   const db = createDb();
-  return await db
-    .update(workspaces)
-    .set(data)
-    .where(eq(workspaces.id, workspaceId));
+
+  const [wrk] = await db.batch([
+    db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
+    }),
+    db.update(workspaces).set(data).where(eq(workspaces.id, workspaceId)),
+  ]);
+  return wrk;
 }
 
 export async function addWorkspaceMember(userId: string, workspaceId: string) {

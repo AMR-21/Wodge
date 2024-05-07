@@ -4,16 +4,10 @@ import { nanoid } from "nanoid";
 import { Context } from "hono";
 import { getBucketAddress, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 import { n } from "vitest/dist/reporters-LqC_WI4d.js";
+import { getS3Client } from "../../lib/get-s3-client";
 
 export async function uploadFile(party: WorkspaceParty, c: Context) {
-  const s3Client = new S3Client({
-    region: "us-east-1",
-    endpoint: party.room.env.ENDPOINT as string,
-    credentials: {
-      accessKeyId: party.room.env.ACCESS_KEY as string,
-      secretAccessKey: party.room.env.SECRET_KEY as string,
-    },
-  });
+  const s3Client = getS3Client(party.room);
 
   const teamId = c.req.param("teamId");
 

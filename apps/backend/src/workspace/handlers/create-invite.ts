@@ -1,14 +1,10 @@
-import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { Invite, InviteSchema, WORKSPACE_INVITES_KEY } from "@repo/data";
 import { nanoid } from "nanoid";
-import { badRequest, json, unauthorized } from "../../lib/http-utils";
-import { isAllowed } from "../../lib/utils";
+import { badRequest, json } from "../../lib/http-utils";
 import { Context } from "hono";
 
 export async function createInvite(party: WorkspaceParty, c: Context) {
-  // if (!isAllowed(c.req, party, ["admin"])) return unauthorized();
-
   const userId = c.req.header("x-user-id")!;
 
   const body = await c.req.json();

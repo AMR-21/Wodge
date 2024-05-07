@@ -7,6 +7,7 @@ import {
   getBucketAddress,
   makeWorkspaceAvatarKey,
   REPLICACHE_VERSIONS_KEY,
+  Workspace,
 } from "@repo/data";
 import { badRequest } from "../../lib/http-utils";
 
@@ -18,13 +19,32 @@ export async function deleteFile(
   if (mode === "file" && !c.req.param("path")) return badRequest();
 
   const bucket = mode === "file" ? getBucketAddress(party.room.id) : "avatars";
+
   const teamId = (mode === "file" && c.req.param("teamId")) || undefined;
 
   const s3Client = getS3Client(party.room);
 
-  let key = teamId
-    ? teamId + "/" + atob(c.req.param("path"))
-    : makeWorkspaceAvatarKey(party.room.id);
+  let key = teamId + "/" + atob(c.req.param("path"));
+
+  // delete avatar in db
+  if (mode === "avatar") {
+    // Inform the DB
+    const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
+      method: "DELETE",
+      headers: {
+        authorization: party.room.env.SERVICE_KEY as string,
+        workspaceId: party.room.id,
+      },
+    });
+
+    if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
+
+    const { workspace } = await res.json<{ workspace: Workspace }>();
+
+    key = workspace.avatar?.split("/").pop()!;
+
+    if (!key) return c.json({ error: "Failed to delete avatar" }, 400);
+  }
 
   const checkFile = await getSignedUrl(
     s3Client,
@@ -48,40 +68,19 @@ export async function deleteFile(
     });
 
     if (response.status === 204) {
-      // delete avatar in db
+      const nextVersion = party.versions.get("globalVersion")! + 1;
+
+      party.versions.set("workspaceInfo", nextVersion);
+      party.versions.set("globalVersion", nextVersion);
+
+      await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
+
       if (mode === "avatar") {
-        // Inform the DB
-        const res = await fetch(
-          `${party.room.env.AUTH_DOMAIN}/api/update-avatar`,
-          {
-            method: "DELETE",
-            headers: {
-              authorization: party.room.env.SERVICE_KEY as string,
-              workspaceId: party.room.id,
-            },
-          }
-        );
-
-        if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
-
-        const nextVersion = party.versions.get("workspaceInfo")! + 1;
-
-        party.versions.set("workspaceInfo", nextVersion);
-        party.versions.set("globalVersion", nextVersion);
-
-        await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions);
-
         await party.poke();
       } else {
-        const nextVersion = party.versions.get("workspaceInfo")! + 1;
-
-        party.versions.set("workspaceInfo", nextVersion);
-        party.versions.set("globalVersion", nextVersion);
-
-        await party.room.storage.put(REPLICACHE_VERSIONS_KEY, party.versions),
-          await party.poke({
-            type: "team-files",
-          });
+        await party.poke({
+          type: "team-files",
+        });
       }
 
       return c.json({ message: "File deleted successfully" }, 200);

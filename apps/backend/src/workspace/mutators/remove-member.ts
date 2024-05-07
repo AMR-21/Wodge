@@ -14,29 +14,12 @@ export async function removeMember(
 
   const memberId = params.mutation.args as string;
 
-  const newState = removeMemberMutation({
-    memberId,
-    members: party.workspaceMembers.data,
-  }) as WorkspaceMembers;
-
-  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
-    draft.data = newState;
-    draft.lastModifiedVersion = params.nextVersion;
-  });
-
-  await party.room.storage.put(
-    makeWorkspaceMembersKey(),
-    party.workspaceMembers
-  );
-
   // Update the user party
   const userParty = party.room.context.parties.user!;
 
   const userInstance = userParty.get(memberId);
 
-  // remove from db too
-
-  await Promise.all([
+  const [res1, res2] = await Promise.all([
     userInstance.fetch("/remove-workspace", {
       method: "POST",
       headers: {
@@ -52,6 +35,23 @@ export async function removeMember(
       body: JSON.stringify({ workspaceId: party.room.id, memberId }),
     }),
   ]);
+
+  if (!res1.ok || !res2.ok) throw new Error("Failed to remove member");
+
+  const newState = removeMemberMutation({
+    memberId,
+    members: party.workspaceMembers.data,
+  }) as WorkspaceMembers;
+
+  party.workspaceMembers = produce(party.workspaceMembers, (draft) => {
+    draft.data = newState;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
+
+  await party.room.storage.put(
+    makeWorkspaceMembersKey(),
+    party.workspaceMembers
+  );
 
   await party.poke({
     type: "workspaceMembers",

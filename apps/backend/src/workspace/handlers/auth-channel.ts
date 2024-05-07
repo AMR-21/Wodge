@@ -5,7 +5,6 @@ import {
   canView,
   ChannelsTypes,
   isAdmin,
-  isOwner,
   isTeamMember,
   isTeamModerator,
 } from "@repo/data";
@@ -22,8 +21,6 @@ export interface AuthChannelResponse {
 }
 
 export function authChannel(party: WorkspaceParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
-
   // from rep wrapper
   const workspaceId = c.req.header("x-workspace-id");
   const teamId = c.req.header("x-team-id") as string | undefined;
@@ -33,12 +30,6 @@ export function authChannel(party: WorkspaceParty, c: Context) {
   const userId = c.req.header("x-user-id") as string;
   const channelId = c.req.header("x-channel-id") as string;
   const channelType = c.req.header("x-channel-type") as ChannelsTypes;
-
-  // Verify service key
-  if (serviceKey !== party.room.env.SERVICE_KEY)
-    return json({
-      success: false,
-    } satisfies AuthChannelResponse);
 
   if (workspaceId !== party.room.id) return unauthorized();
 

@@ -4,12 +4,9 @@ import {
   defaultWorkspaceStructure,
   makeWorkspaceMembersKey,
   makeWorkspaceStructureKey,
-  REPLICACHE_VERSIONS_KEY,
-  WORKSPACE_INVITES_KEY,
-  WORKSPACE_PRESENCE_KEY,
 } from "@repo/data";
 
-import { ok } from "../../lib/http-utils";
+import { badRequest, ok } from "../../lib/http-utils";
 
 export async function deleteWorkspace(party: WorkspaceParty) {
   // Update the user party
@@ -27,7 +24,7 @@ export async function deleteWorkspace(party: WorkspaceParty) {
 
   // remove from db too
 
-  await Promise.all([
+  const responses = await Promise.all([
     ...deletes,
     fetch(`${party.room.env.AUTH_DOMAIN}/api/delete-workspace`, {
       method: "POST",
@@ -37,6 +34,8 @@ export async function deleteWorkspace(party: WorkspaceParty) {
       body: JSON.stringify({ workspaceId: party.room.id }),
     }),
   ]);
+
+  if (responses.some((r) => !r.ok)) return badRequest();
 
   await party.poke({
     type: "deleteWorkspace",

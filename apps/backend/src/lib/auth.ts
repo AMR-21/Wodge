@@ -157,7 +157,7 @@ export const checkMembershipEdge = async (
   if (!workspace) return false;
 
   // 3. Get the current user membership
-  const res = await workspace.fetch("/membership", {
+  const res = await workspace.fetch("/service/membership", {
     headers: {
       authorization: lobby.env.SERVICE_KEY as string,
       "x-user-id": userId,
@@ -203,7 +203,7 @@ export const authorizeChannel = async (
 
   if (type === "page" && !folderId) return badRequest();
 
-  const res = await workspaceParty.fetch("/auth-channel", {
+  const res = await workspaceParty.fetch("/service/auth-channel", {
     headers: {
       //@ts-ignore
       "x-workspace-id": workspaceId,

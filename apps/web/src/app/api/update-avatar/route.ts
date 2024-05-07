@@ -34,9 +34,9 @@ export async function DELETE(req: Request) {
     return new Response(null, { status: 400 });
   }
 
-  await updateWorkspaceById(workspaceId, {
+  const wrk = await updateWorkspaceById(workspaceId, {
     avatar: null,
   });
 
-  return new Response(null, { status: 200 });
+  return Response.json({ workspace: wrk });
 }

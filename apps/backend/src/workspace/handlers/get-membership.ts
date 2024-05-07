@@ -4,14 +4,7 @@ import { json } from "../../lib/http-utils";
 import { Context } from "hono";
 
 export function getMembership(party: WorkspaceParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
   const userId = c.req.header("x-user-id");
-
-  // Verify service key
-  if (serviceKey !== party.room.env.SERVICE_KEY)
-    return json({
-      success: false,
-    });
 
   if (!userId)
     return json({

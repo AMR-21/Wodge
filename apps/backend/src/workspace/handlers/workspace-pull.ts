@@ -1,12 +1,7 @@
-import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { PatcherParams, repPull } from "../../lib/replicache";
 import { PatchOperation } from "replicache";
-import {
-  makeWorkspaceKey,
-  makeWorkspaceMembersKey,
-  makeWorkspaceStructureKey,
-} from "@repo/data";
+import { makeWorkspaceMembersKey, makeWorkspaceStructureKey } from "@repo/data";
 import { Context } from "hono";
 
 export async function workspacePull(party: WorkspaceParty, c: Context) {

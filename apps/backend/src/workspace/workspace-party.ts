@@ -23,6 +23,8 @@ import {
   PokeMessage,
   makeWorkspaceMembersKey,
   REPLICACHE_VERSIONS_KEY,
+  isOwner,
+  isAdmin,
 } from "@repo/data";
 import { Hono } from "hono";
 import { uploadFile } from "./handlers/upload-file";
@@ -47,6 +49,12 @@ import { deleteFile } from "./handlers/delete-file";
 import { listFiles } from "./handlers/list-files";
 import { downloadFile } from "./handlers/download-file";
 import { memberUpdateHandler } from "./handlers/member-update";
+import { serviceMiddleware } from "./routes/service-middleware";
+import { setupUsersRoutes } from "./routes/users-routes";
+import { setupMembershipsRoutes } from "./routes/memberships-routes";
+import { adminMiddleware } from "./routes/admin-middleware";
+import { setupServiceRoutes } from "./routes/service-routes";
+import { setupAdministrativeRoutes } from "./routes/administrative-routes";
 
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
@@ -73,46 +81,17 @@ export default class WorkspaceParty
       })
     );
 
-    this.app.post("/replicache-pull", workspacePull.bind(null, this));
+    // Authenticated users routes from the edge
+    setupUsersRoutes(this);
 
-    this.app.post("/replicache-push", workspacePush.bind(null, this));
+    // Setup memberships routes
+    setupMembershipsRoutes(this);
 
-    this.app.post("/create", createWorkspace.bind(null, this));
+    // Service routes
+    setupServiceRoutes(this);
 
-    this.app.post("/create-invite", createInvite.bind(null, this));
-
-    this.app.post("/join", joinWorkspace.bind(null, this));
-
-    this.app.post("/presence", handlePresence.bind(null, this));
-
-    this.app.post("/update", updateWorkspace.bind(null, this));
-
-    this.app.post("/poke", channelPoke.bind(null, this));
-
-    this.app.post("/leave", leaveWorkspace.bind(null, this));
-
-    this.app.post("/member-update", memberUpdateHandler.bind(null, this));
-
-    this.app
-      .get("/files/:teamId/:path?", listFiles.bind(null, this))
-      .post(uploadFile.bind(null, this))
-      .delete(deleteFile.bind(null, this, "file"));
-
-    this.app.get("/file/:teamId/:path", downloadFile.bind(null, this));
-
-    this.app
-      .post("/avatar", uploadAvatar.bind(null, this))
-      .delete(deleteFile.bind(null, this, "avatar"));
-
-    this.app.delete("/", deleteWorkspace.bind(null, this));
-
-    this.app.get("/membership", getMembership.bind(null, this));
-
-    this.app.get("/invites", getInvites.bind(null, this));
-
-    this.app.get("/members-info", getMembersInfo.bind(null, this));
-
-    this.app.get("/auth-channel", authChannel.bind(null, this));
+    // Administrative routes
+    setupAdministrativeRoutes(this);
 
     await startFn(this);
   }
@@ -120,20 +99,6 @@ export default class WorkspaceParty
   async onRequest(req: Party.Request) {
     // @ts-ignore
     return this.app.fetch(req);
-
-    // switch (req.method) {
-    //   case "POST":
-    //     return await handlePost(req, this);
-    //   case "OPTIONS":
-    //     return ok();
-    //   case "GET":
-    //     return await handleGet(req, this);
-    //   case "PATCH":
-    //     this.poke();
-    //     return ok();
-    //   default:
-    //     return notImplemented();
-    // }
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
@@ -148,7 +113,7 @@ export default class WorkspaceParty
       return ok();
     }
 
-    if (getRoute(req) === "/auth-channel") return req;
+    if (getRoute(req) === "/service/auth-channel") return req;
 
     try {
       // maybe removed when bindings are supported

@@ -6,12 +6,6 @@ import { checkMembership } from "../../lib/auth";
 import { Context } from "hono";
 
 export async function handlePresence(party: WorkspaceParty, c: Context) {
-  const serviceKey = c.req.header("Authorization");
-
-  if (serviceKey !== party.room.env.SERVICE_KEY) {
-    return unauthorized();
-  }
-
   const body = await c.req.json();
 
   const validatedFields = PresenceRequestSchema.safeParse(body);

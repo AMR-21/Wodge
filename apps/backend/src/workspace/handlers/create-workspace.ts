@@ -1,4 +1,3 @@
-import * as Party from "partykit/server";
 import WorkspaceParty from "../workspace-party";
 import { badRequest, error, ok, unauthorized } from "../../lib/http-utils";
 import {
@@ -9,13 +8,10 @@ import {
   makeWorkspaceStructureKey,
   NewWorkspaceSchema,
   REPLICACHE_VERSIONS_KEY,
-  TEAM_MEMBERS_ROLE,
   Workspace,
   WORKSPACE_PRESENCE_KEY,
-  WORKSPACE_TEAM_ID_LENGTH,
 } from "@repo/data";
 import { produce } from "immer";
-import { nanoid } from "nanoid";
 import { Context } from "hono";
 import { CreateBucketCommand } from "@aws-sdk/client-s3";
 import { getS3Client } from "../../lib/get-s3-client";
@@ -45,7 +41,6 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
   const { data } = validatedFields;
 
   // 4. create the new workspace in the db and initialize the durable object
-  // Todo do it with bindings instead of request
 
   const newWorkspace: Workspace = {
     ...data,
@@ -66,7 +61,6 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
     }
   );
 
-  // Todo enhance and check dup slug error
   if (!res.ok) return badRequest();
 
   // 5. Add workspace to user data
@@ -74,6 +68,7 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
 
   const userInstance = userParty.get(userId);
 
+  // Should not fail
   const res2 = await userInstance.fetch("/add-workspace", {
     method: "POST",
     headers: {
@@ -130,9 +125,10 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
       Bucket: getBucketAddress(party.room.id),
     };
     const command = new CreateBucketCommand(input);
-    const response = await s3Client.send(command);
-    return c.json(response, 200);
+    await s3Client.send(command);
+
+    return ok();
   } catch (error) {
-    return c.json(error, 400);
+    return badRequest();
   }
 }
