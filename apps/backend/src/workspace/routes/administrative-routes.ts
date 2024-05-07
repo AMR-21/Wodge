@@ -4,11 +4,10 @@ import { deleteWorkspace } from "../handlers/delete-workspace";
 import { getInvites } from "../handlers/get-invites";
 import { updateWorkspace } from "../handlers/update-workspace";
 import { uploadAvatar } from "../handlers/upload-avatar";
+import { isAdminMiddleware } from "../middlewares/is-admin";
 import WorkspaceParty from "../workspace-party";
-import { adminMiddleware } from "./admin-middleware";
-
 export function setupAdministrativeRoutes(party: WorkspaceParty) {
-  party.app.use(adminMiddleware.bind(null, party));
+  party.app.use(isAdminMiddleware.bind(null, party));
   party.app.get("/invites", getInvites.bind(null, party));
   party.app.post("/create-invite", createInvite.bind(null, party));
   party.app.post("/update", updateWorkspace.bind(null, party));

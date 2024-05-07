@@ -35,7 +35,6 @@ export function useCanView({
   useEffect(() => {
     setGrant(
       isAdminOrOwner ||
-        isTeamMod ||
         canEdit({
           members,
           structure,

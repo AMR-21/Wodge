@@ -30,11 +30,10 @@ export function useCanEdit({
   const [grant, setGrant] = useState(false);
 
   const isAdminOrOwner = useIsOwnerOrAdmin();
-  const isTeamMod = useIsTeamModerator(forceTeamId);
 
   useEffect(() => {
     setGrant(
-      isAdminOrOwner || isTeamMod ||
+      isAdminOrOwner ||
         canEdit({
           members,
           structure,

@@ -17,13 +17,24 @@ export async function uploadFile(party: WorkspaceParty, c: Context) {
 
   if (c.req.param("path")) path = atob(c.req.param("path")!);
 
+  if (path && path.includes(teamId))
+    return c.json({ error: "Invalid path" }, 400);
+
+  const channelId = c.req.param("channelId");
+
   const fileId = nanoid();
 
   const body = await c.req.parseBody();
 
   const file = body["file"] as File;
 
-  const key = teamId + "/" + (path || fileId);
+  let key = teamId + "/";
+
+  if (channelId) {
+    key = key + channelId + "/" + (path || fileId);
+  } else {
+    key = key + (path || fileId);
+  }
 
   const bucket = getBucketAddress(party.room.id);
 

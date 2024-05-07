@@ -13,7 +13,25 @@ export async function downloadFile(party: WorkspaceParty, c: Context) {
   const bucket = getBucketAddress(party.room.id);
 
   const path = atob(c.req.param("path"));
-  let key = c.req.param("teamId") + "/" + path;
+
+  const isRedirect = !!c.req.query("redirect");
+
+  const teamId = c.req.param("teamId");
+
+  if (!teamId) return c.json({ message: "TeamId is required" }, 400);
+
+  let key = teamId + "/";
+
+  if (path && path.includes(teamId))
+    return c.json({ error: "Invalid path" }, 400);
+
+  const channelId = c.req.param("channelId");
+
+  if (channelId) {
+    key = key + channelId + "/" + path;
+  } else {
+    key = key + path;
+  }
 
   const checkFile = await getSignedUrl(
     s3Client,
@@ -35,6 +53,9 @@ export async function downloadFile(party: WorkspaceParty, c: Context) {
       }),
       { expiresIn: 3600 }
     );
+
+    if (isRedirect) return c.redirect(downloadUrl, 302);
+
     return c.json({ downloadUrl }, 200);
   }
 }

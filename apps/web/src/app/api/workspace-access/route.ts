@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { memberships } from "@repo/data";
 import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
@@ -8,14 +8,15 @@ export const runtime = "edge";
 
 export async function POST(req: Request) {
   const db = createDb();
+  const supabase = createClient();
   const serviceKey = req.headers.get("authorization");
 
   if (env.SERVICE_KEY !== serviceKey)
     return new Response(null, { status: 401 });
 
-  const session = await auth();
+  const user = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user || !user.data.user?.id) {
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
 
   const membership = await db.query.memberships.findFirst({
     where: and(
-      eq(memberships.userId, session.user.id),
+      eq(memberships.userId, user.data.user.id),
       eq(memberships.workspaceId, workspaceId),
     ),
   });
