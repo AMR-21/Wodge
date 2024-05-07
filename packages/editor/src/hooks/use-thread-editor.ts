@@ -9,7 +9,6 @@ interface UseEditorProps {
 export function useThreadEditor({ content, placeholder }: UseEditorProps = {}) {
   const editor = useEditor({
     content,
-    autofocus: true,
 
     extensions: [
       ...ExtensionKit({
