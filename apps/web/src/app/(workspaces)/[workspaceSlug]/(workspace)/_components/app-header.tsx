@@ -67,7 +67,7 @@ export function AppHeader() {
   return (
     <div
       className={
-        "flex h-12 w-full items-center bg-background px-2 py-2 transition-all"
+        "flex h-12 w-full items-center bg-background py-2 pl-2 pr-4 transition-all"
       }
     >
       <div className="flex w-full items-center py-2.5">

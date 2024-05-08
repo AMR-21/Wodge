@@ -304,9 +304,6 @@ importers:
       next:
         specifier: 14.1.0
         version: 14.1.0(@babel/core@7.24.4)(react-dom@18.2.0)(react@18.2.0)
-      next-auth:
-        specifier: 5.0.0-beta.9
-        version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
@@ -469,9 +466,6 @@ importers:
       nanoid:
         specifier: ^5.0.6
         version: 5.0.7
-      next-auth:
-        specifier: ^5.0.0-beta.4
-        version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       partysocket:
         specifier: ^1.0.0
         version: 1.0.1
@@ -964,9 +958,6 @@ importers:
       next:
         specifier: 14.1.0
         version: 14.1.0(@babel/core@7.24.4)(react-dom@18.2.0)(react@18.2.0)
-      next-auth:
-        specifier: ^5.0.0-beta.4
-        version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
@@ -14671,27 +14662,6 @@ packages:
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
-
-  /next-auth@5.0.0-beta.9(next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-BWFiwJ/wzfxWpHnGpAoFsXHSlVofWgFns6tjtIGeDrXfEf3D+afnBpmzCNyek2RNYDVgMHi8Q5uXzFoNBd2l5g==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.1
-      next: ^14
-      nodemailer: ^6.6.5
-      react: ^18.2.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
-    dependencies:
-      '@auth/core': 0.26.3
-      next: 14.1.0(@babel/core@7.24.4)(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-    dev: false
 
   /next-themes@0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-B+AKNfYNIzh0vqQQKqQItTS8evEouKD7H5Hj3kmuPERwddR2TxvDSFZuTj6T7Jfn1oyeUyJMydPl1Bkxkh0W7A==}

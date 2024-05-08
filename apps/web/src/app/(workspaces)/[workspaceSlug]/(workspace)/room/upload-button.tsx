@@ -19,6 +19,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
 import { env } from "@repo/env";
+import Webcam from "@uppy/webcam";
 
 import Audio from "@uppy/audio";
 
@@ -53,11 +54,12 @@ export function UploadButton({
         },
       })
         .use(Audio)
+        .use(Webcam)
         .use(XHRUpload, {
           limit: 1,
 
           method: "POST",
-          endpoint: `${env.NEXT_PUBLIC_FS_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${"messages+" + teamId}`,
+          endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${"messages+" + teamId}`,
           headers: {
             "x-workspace-id": bucketId,
           },
@@ -77,7 +79,8 @@ export function UploadButton({
 
             cancel();
           }
-        }),
+        })
+        .on("dashboard:show-panel", () => {}),
     [rep],
   );
 
@@ -85,6 +88,14 @@ export function UploadButton({
     uppyRef.cancelAll();
     setOpen(false);
   }
+
+  uppyRef.on("dashboard:show-panel", (p) => {
+    console.log("show panel", p);
+  });
+
+  uppyRef.on("dashboard:modal-closed", () => {
+    console.log("cancel all");
+  });
 
   async function completeUpload(fileId: string, signedUrl: string) {
     if (!user) return;
@@ -105,14 +116,13 @@ export function UploadButton({
       <PopoverTrigger asChild>
         <SidebarItemBtn Icon={Plus} className="mr-2" />
       </PopoverTrigger>
-      <PopoverContent className="w-fit p-0">
+      <PopoverContent className="p-1">
         <Dashboard
           uppy={uppyRef}
           id="dashboard"
           height={240}
           width={240}
-          className="flex justify-center"
-          theme="auto"
+          className="simple flex justify-center "
         />
       </PopoverContent>
     </Popover>

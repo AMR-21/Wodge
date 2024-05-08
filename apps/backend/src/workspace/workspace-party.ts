@@ -49,6 +49,7 @@ export default class WorkspaceParty
       cors({
         origin: "http://localhost:3000",
         credentials: true,
+        allowHeaders: ["x-file-path"],
       })
     );
 
@@ -109,7 +110,7 @@ export default class WorkspaceParty
   }
 
   async poke(
-    { type, id, userId }: WorkspacePokeProps = {
+    { type, id, userId, teamId }: WorkspacePokeProps = {
       type: "workspace",
     }
   ) {
@@ -124,6 +125,7 @@ export default class WorkspaceParty
         body: JSON.stringify({
           type,
           id: id || this.room.id,
+          teamId,
         }),
       });
     }
@@ -138,6 +140,7 @@ export default class WorkspaceParty
           body: JSON.stringify({
             type,
             id: id || this.room.id,
+            teamId,
           }),
         });
       })
@@ -150,4 +153,5 @@ interface WorkspacePokeProps {
   type: PokeMessage["type"];
   id?: string;
   userId?: string;
+  teamId?: string;
 }

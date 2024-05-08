@@ -71,6 +71,7 @@ export type PokeMessage = {
     | "team-files"
     | "workspaceMembers";
   id?: string;
+  teamId?: string;
 };
 
 // export type UserType = z.infer<typeof UserSchema>;

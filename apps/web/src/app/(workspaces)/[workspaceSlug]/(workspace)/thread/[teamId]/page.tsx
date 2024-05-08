@@ -28,7 +28,7 @@ function ThreadsPage() {
   return (
     <div className="flex h-full w-full flex-col gap-4">
       <Tabs defaultValue="posts" className="h-full">
-        <div className="px-2">
+        <div className="pr-2">
           <TabsList className="w-full">
             <TabsTrigger value="posts" className="w-full">
               Posts
@@ -39,7 +39,7 @@ function ThreadsPage() {
           </TabsList>
         </div>
 
-        <ScrollArea className="h-full w-full px-2 py-2">
+        <ScrollArea className="h-full w-full py-2 pr-2">
           <TabsContent value="posts">
             <PostsList team={team} />
           </TabsContent>

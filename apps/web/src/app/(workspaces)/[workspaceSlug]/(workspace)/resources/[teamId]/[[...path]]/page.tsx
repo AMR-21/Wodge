@@ -4,31 +4,20 @@ import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
 import { useCurrentResources } from "@repo/ui/hooks/use-current-resources";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import Link from "next/link";
 
 import { AdvancedUploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/advanced-upload";
 
-import { File } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/file";
-import { Folder } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/folder";
 import { useRouter } from "next/navigation";
 import { FoldersBreadcrumbs } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/folders-breadcrumbs";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
-
-const paths = [
-  "x.pdf",
-  "y.pdf",
-  "amr/t.pdf",
-  "ali/tsd.pdf",
-  "amr/yasser/s.pdf",
-  "amr/yasser/ali/s.pdf",
-];
+import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { Folders } from "./folders";
+import { Files } from "./files";
 
 function TeamResourcePage({
-  params: { path, teamId, workspaceSlug },
+  params: { path },
 }: {
   params: {
-    workspaceSlug: string;
-    teamId: string;
     path: string[];
   };
 }) {
@@ -38,39 +27,33 @@ function TeamResourcePage({
 
   const { workspaceId } = useCurrentWorkspace();
 
-  const { files, dirs, curPath } = useCurrentResources();
+  const { files, dirs } = useCurrentResources();
 
   const router = useRouter();
 
+  const isTeamModerator = useIsTeamModerator();
+
   if (!workspaceId) return null;
 
-  if (files?.length === 0 && dirs?.length === 0 && path?.length > 0) {
+  if ((files?.length === 0 || dirs?.length === 0) && path?.length > 0) {
     router.back();
   }
 
   return (
-    <div className="flex w-full flex-col py-4">
+    <div className="flex w-full flex-col">
       <h2 className="text-xl">{activePath?.team.name} Resources</h2>
-      <div className="flex h-8 items-center px-3 py-1.5">
+      <div className="flex h-8 items-center py-1.5">
         <FoldersBreadcrumbs />
-        <div className="ml-4">
-          <AdvancedUploadButton bucketId={workspaceId} />
-        </div>
+        {isTeamModerator && (
+          <div className="ml-1.5 shrink-0">
+            <AdvancedUploadButton workspaceId={workspaceId} />
+          </div>
+        )}
       </div>
       <ScrollArea className="py-2.5">
         <div className="flex w-full flex-col divide-y-[1px]">
-          {dirs.map((d, i) => (
-            <Link
-              key={i}
-              href={`/${workspaceSlug}/resources/${teamId}/${curPath ? curPath + "/" : ""}${d}`}
-              className="w-full"
-            >
-              <Folder name={d} key={i} />
-            </Link>
-          ))}
-          {files.map((p, i) => (
-            <File name={p} key={i} curPath={curPath} wid={workspaceId} />
-          ))}
+          <Folders workspaceId={workspaceId} />
+          <Files workspaceId={workspaceId} />
         </div>
       </ScrollArea>
     </div>

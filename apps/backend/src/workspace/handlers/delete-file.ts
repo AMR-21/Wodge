@@ -80,6 +80,7 @@ export async function deleteFile(
       } else {
         await party.poke({
           type: "team-files",
+          teamId,
         });
       }
 

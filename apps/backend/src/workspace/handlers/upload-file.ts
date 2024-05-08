@@ -1,9 +1,8 @@
 import WorkspaceParty from "../workspace-party";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { nanoid } from "nanoid";
 import { Context } from "hono";
 import { getBucketAddress, REPLICACHE_VERSIONS_KEY } from "@repo/data";
-import { n } from "vitest/dist/reporters-LqC_WI4d.js";
 import { getS3Client } from "../../lib/get-s3-client";
 
 export async function uploadFile(party: WorkspaceParty, c: Context) {
@@ -15,7 +14,8 @@ export async function uploadFile(party: WorkspaceParty, c: Context) {
 
   let path;
 
-  if (c.req.param("path")) path = atob(c.req.param("path")!);
+  if (c.req.param("path") || c.req.header("x-file-path"))
+    path = atob((c.req.param("path") || c.req.header("x-file-path"))!);
 
   if (path && path.includes(teamId))
     return c.json({ error: "Invalid path" }, 400);
@@ -58,6 +58,7 @@ export async function uploadFile(party: WorkspaceParty, c: Context) {
 
     await party.poke({
       type: "team-files",
+      teamId,
     });
 
     return c.json({ response, fileId }, 200);

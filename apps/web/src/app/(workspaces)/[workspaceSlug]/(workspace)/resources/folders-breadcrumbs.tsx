@@ -10,6 +10,7 @@ import { Home } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Fragment } from "react";
+import { SidebarItemBtn } from "../_components/sidebar-item-btn";
 
 export function FoldersBreadcrumbs() {
   const { workspaceSlug, teamId, path } = useParams<{
@@ -20,22 +21,22 @@ export function FoldersBreadcrumbs() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className="gap-0 sm:gap-0">
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
             <Link href={`/${workspaceSlug}/resources/${teamId}`}>
-              <Home className="size-4" />
+              <SidebarItemBtn Icon={Home} />
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
-        {path?.length > 0 && <BreadcrumbSeparator />}
+        {path?.length > 0 && <BreadcrumbSeparator className="pr-1" />}
         {path?.length > 3 ? (
           <>
             <BreadcrumbItem>
               <BreadcrumbEllipsis />
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator className="px-1" />
             {path?.slice(path.length - 2).map((p, i) => (
               <Fragment key={i}>
                 <BreadcrumbItem>
@@ -47,7 +48,7 @@ export function FoldersBreadcrumbs() {
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {i === 1 ? null : <BreadcrumbSeparator />}
+                {i === 1 ? null : <BreadcrumbSeparator className="px-1" />}
               </Fragment>
             ))}
           </>
@@ -64,7 +65,9 @@ export function FoldersBreadcrumbs() {
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {i === path.length - 1 ? null : <BreadcrumbSeparator />}
+                {i === path.length - 1 ? null : (
+                  <BreadcrumbSeparator className="px-1" />
+                )}
               </Fragment>
             ))}
           </>

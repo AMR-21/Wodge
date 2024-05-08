@@ -148,14 +148,6 @@ function SortableTeamspace({
               {type === "room" && (
                 <Channels type="room" teamId={team.id} channels={team.rooms} />
               )}
-
-              {/* {type === "thread" && (
-                <Channels
-                  type="thread"
-                  teamId={team.id}
-                  channels={team.threads}
-                />
-              )} */}
             </>
           )}
         </div>
@@ -192,7 +184,7 @@ export const Teamspace = React.forwardRef<
         })}
       >
         <SafeAvatar
-          className="mr-1.5 h-5 w-5 shrink-0 rounded-md border border-primary/30 text-xs"
+          className="mr-1.5 h-5 w-5 shrink-0 rounded-md"
           fallbackClassName="select-none rounded-md text-xs uppercase"
           fallback={team.name}
           src={team.avatar}
