@@ -31,6 +31,7 @@ export * from "./components/ui/breadcrumb";
 export * from "./components/ui/toggle";
 export * from "./components/ui/carousel";
 export * from "./components/ui/input-otp";
+export * from "./components/ui/aspect-ratio";
 
 export * from "./components/data-table";
 export * from "./components/user-avatar";

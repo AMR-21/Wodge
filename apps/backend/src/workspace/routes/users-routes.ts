@@ -37,7 +37,7 @@ export function setupUsersRoutes(party: WorkspaceParty) {
 
   party.app
     .get(
-      "/file/:teamId/:channelId/:path",
+      "/file/:teamId/:channelId/:path?",
       canViewMiddleware.bind(null, party),
       downloadFile.bind(null, party)
     )

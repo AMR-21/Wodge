@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  MessageList,
-  msgsAtom,
-} from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/message-list";
 import { RoomHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/room-header";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { OfflineEditor, useMessageEditor } from "@repo/editor";
@@ -18,6 +14,8 @@ import { UploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/roo
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+import { useParams } from "next/navigation";
+import { MessageList } from "./message-list";
 
 function ChannelPage() {
   useUpdateRecentlyVisited("room");
@@ -26,7 +24,10 @@ function ChannelPage() {
   const { user } = useCurrentUser();
   const { workspaceId } = useCurrentWorkspace();
 
-  const [msgs, setMsgs] = useAtom(msgsAtom);
+  const { channelId, teamId } = useParams<{
+    channelId: string;
+    teamId: string;
+  }>();
 
   const rep = useCurrentRoomRep();
 
@@ -62,7 +63,12 @@ function ChannelPage() {
         {/* </div> */}
       </ScrollArea>
       <div className="flex shrink-0 items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">
-        <UploadButton bucketId={workspaceId} rep={rep} />
+        <UploadButton
+          workspaceId={workspaceId}
+          channelId={channelId}
+          teamId={teamId}
+          rep={rep}
+        />
 
         <div
           className="flex h-full w-full items-center overflow-hidden"

@@ -15,7 +15,7 @@ export const MessageSchema = z.object({
   // reactions: z.array()
   reactions: z.array(ReactionSchema).default([]),
   type: z
-    .enum(["text", "mention", "image", "voice", "video", "file"])
+    .enum(["text", "mention", "image", "audio", "video", "file"])
     .default("text"),
 });
 

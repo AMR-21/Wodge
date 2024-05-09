@@ -8,6 +8,7 @@ import { env } from "@repo/env";
 import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
 import { toast } from "@repo/ui/components/ui/toast";
 import { Checkbox } from "@repo/ui/components/ui/checkbox";
+import { download } from "@/utils";
 
 export function File({
   name,
@@ -40,38 +41,9 @@ export function File({
         className="invisible ml-2 group-hover:visible"
         onClick={async () => {
           // download file
-          try {
-            const path = curPath ? curPath + "/" : "";
-            const res = await fetch(
-              `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${teamId}/${btoa(path + name)}`,
-              { credentials: "include" },
-            );
-
-            if (!res.ok) throw new Error("Failed to download file");
-
-            const data = await res.json<{ downloadUrl?: string }>();
-
-            if (!data || !data.downloadUrl)
-              throw new Error("Failed to download file");
-
-            if (data.downloadUrl) {
-              const tempLink = document.createElement("a");
-              tempLink.href = data.downloadUrl;
-              tempLink.setAttribute("download", ""); // This attribute triggers the download instead of navigation
-              tempLink.style.display = "none"; // Hide the anchor element
-
-              // Append the anchor element to the document body
-              document.body.appendChild(tempLink);
-
-              // Simulate a click on the anchor element
-              tempLink.click();
-
-              // Clean up - remove the anchor element from the document body
-              document.body.removeChild(tempLink);
-            }
-          } catch (e) {
-            toast.error("Failed to download file");
-          }
+          const path = curPath ? curPath + "/" : "";
+          const url = `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${teamId}/${btoa(path + name)}`;
+          await download(url);
         }}
       />
       <SidebarItemBtn

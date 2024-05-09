@@ -11,15 +11,9 @@ interface sendMsgArgs {
   // structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
 }
 
-export function sendMessageMutation({
-  message,
-  curUserId,
-  // teamId,
-  // roomId,
-  arr,
-  // structure,
-}: sendMsgArgs) {
+export function sendMessageMutation({ message, curUserId, arr }: sendMsgArgs) {
   const validateFields = MessageSchema.safeParse(message);
+
   if (!validateFields.success) throw new Error("Invalid message data");
 
   const { data: newMessage } = validateFields;

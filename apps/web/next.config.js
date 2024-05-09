@@ -14,7 +14,7 @@ const nextConfig = {
  * Add Cloudflare bindings for Next.js development mode.
  */
 
-if (process.env.NODE_ENV === "development") {
+https: if (process.env.NODE_ENV === "development") {
   await setupDevPlatform();
 }
 

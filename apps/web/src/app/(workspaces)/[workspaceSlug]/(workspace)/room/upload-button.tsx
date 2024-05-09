@@ -13,10 +13,10 @@ import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/react";
 import { useParams } from "next/navigation";
 import { useSetAtom } from "jotai";
-import { msgsAtom } from "./message-list";
+import { msgsAtom } from "./[teamId]/[channelId]/message-list";
 import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
-import { roomMutators } from "@repo/data";
+import { Message, roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
 import { env } from "@repo/env";
 import Webcam from "@uppy/webcam";
@@ -24,15 +24,18 @@ import Webcam from "@uppy/webcam";
 import Audio from "@uppy/audio";
 
 export function UploadButton({
-  bucketId,
+  workspaceId,
+  channelId,
+  teamId,
   rep,
 }: {
-  bucketId: string;
+  workspaceId: string;
+  teamId: string;
+  channelId: string;
   rep?: Replicache<typeof roomMutators>;
 }) {
   const [open, setOpen] = useState(false);
 
-  const { teamId } = useParams<{ teamId: string }>();
   const setMessages = useSetAtom(msgsAtom);
   const { user } = useCurrentUser();
   const queryClient = useQueryClient();
@@ -57,28 +60,30 @@ export function UploadButton({
         .use(Webcam)
         .use(XHRUpload, {
           limit: 1,
-
+          withCredentials: true,
           method: "POST",
-          endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/object/put/${btoa(bucketId).toLowerCase()}/${"messages+" + teamId}`,
-          headers: {
-            "x-workspace-id": bucketId,
-          },
+          endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}`,
         })
         .on("complete", (e) => {
+          let type = e.successful[0]?.type?.split("/")[0];
+
+          if (type !== "audio" && type !== "video" && type !== "image")
+            type = "file";
+
+          // console.log("type", type, e);
+
+          // const img = document.createElement("img");
+          // img.style.display = "none";
+          // img.src = e.successful[0]?.preview;
+          // document.body.appendChild(img);
+          // console.log(img.naturalWidth, img.naturalHeight);
+          // document.body.removeChild(img);
+
+          const name = e.successful[0]?.name;
           const fileId = e.successful[0]?.response?.body?.fileId as
             | string
             | undefined;
-
-          if (fileId && user) {
-            setOpen(false);
-
-            completeUpload(
-              fileId,
-              e.successful[0]?.response?.body?.signedUrl as string,
-            );
-
-            cancel();
-          }
+          completeUpload(fileId, type as Message["type"], name);
         })
         .on("dashboard:show-panel", () => {}),
     [rep],
@@ -89,26 +94,25 @@ export function UploadButton({
     setOpen(false);
   }
 
-  uppyRef.on("dashboard:show-panel", (p) => {
-    console.log("show panel", p);
-  });
-
-  uppyRef.on("dashboard:modal-closed", () => {
-    console.log("cancel all");
-  });
-
-  async function completeUpload(fileId: string, signedUrl: string) {
+  async function completeUpload(
+    fileId?: string,
+    type?: Message["type"],
+    name?: string,
+  ) {
     if (!user) return;
+
+    if (!fileId || !type || !name) return;
+
     await rep?.mutate.sendMessage({
       sender: user.id,
-      content: "aa",
+      content: name,
       date: new Date().toISOString(),
       id: fileId,
-      type: "image",
+      type,
       reactions: [],
     });
 
-    queryClient.setQueryData(["image", fileId], signedUrl);
+    // queryClient.setQueryData(["image", fileId], signedUrl);
   }
 
   return (

@@ -51,7 +51,7 @@ export async function downloadFile(party: WorkspaceParty, c: Context) {
         Key: key,
         ResponseContentDisposition: "attachment",
       }),
-      { expiresIn: 3600 }
+      { expiresIn: isRedirect ? 24 * 60 * 60 * 7 : 3600 }
     );
 
     if (isRedirect) return c.redirect(downloadUrl, 302);
