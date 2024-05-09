@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@repo/ui/lib/utils";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import {
   Database,
   Home,
@@ -62,10 +62,11 @@ const tabs: Tab[] = [
 
 export function Sidebar() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
-  const activeChan = usePathname().split("/").at(2)?.slice(1) as ChannelsTypes;
   const { workspaceSlug } = useCurrentWorkspace();
 
   const [activeSidebar, setActiveSidebar] = useAtom(activeSidebarAtom);
+
+  const { teamId } = useParams<{ teamId: string }>();
 
   return (
     <ScrollArea>
@@ -92,6 +93,14 @@ export function Sidebar() {
                   {...(tab.val === "home" && {
                     href: `${baseUrl}/`,
                   })}
+                  {...(tab.val === "resources" &&
+                    teamId && {
+                      href: `${baseUrl}/resources/${teamId}`,
+                    })}
+                  {...(tab.val === "thread" &&
+                    teamId && {
+                      href: `${baseUrl}/thread/${teamId}`,
+                    })}
                   onClick={() => {
                     if (tab.val && tab.val !== "settings") {
                       setActiveSidebar(tab.val);

@@ -13,6 +13,7 @@ import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
 import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
 import { Folders } from "./folders";
 import { Files } from "./files";
+import { Button } from "@repo/ui/components/ui/button";
 
 function TeamResourcePage({
   params: { path },

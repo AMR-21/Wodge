@@ -14,7 +14,6 @@ import { useMemo } from "react";
 import { cn } from "@repo/ui/lib/utils";
 import { Folders } from "./folders";
 import { useAtom, useAtomValue } from "jotai";
-import { openTeamsAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import {
   Collapsible,
@@ -27,7 +26,7 @@ import { TeamRoomsMore } from "./team-rooms-more";
 import { useParams, usePathname } from "next/navigation";
 import { useIsTeamMember } from "@repo/ui/hooks/use-is-team-member";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import { activeSidebarAtom } from "./sidebar-atoms";
+import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -46,7 +45,6 @@ export function Teamspaces({ isPages = false, type }: TeamspacesProps) {
     () => structure.teams?.map((t) => t.id) || [],
     [structure.teams],
   );
-  const [openTeams, setOpenTeams] = useAtom(openTeamsAtom);
 
   return (
     <div className="h-full min-h-full shrink-0">
@@ -101,7 +99,9 @@ function SortableTeamspace({
   const isSomethingOver = index === overIndex;
   const isTeamOver = active?.data?.current?.type === "team";
 
-  const isOpen = useAtomValue(openTeamsAtom).includes(team.id);
+  const [openTeams, setOpenTeams] = useAtom(openTeamsAtom);
+
+  const isOpen = !!openTeams[team.id];
 
   const isChannelOver =
     active?.data?.current?.type === "channel" &&
@@ -121,7 +121,12 @@ function SortableTeamspace({
   if (!isTeamMemberOrModerator) return null;
 
   return (
-    <Collapsible>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={(o) => {
+        setOpenTeams((prev) => ({ ...prev, [team.id]: o }));
+      }}
+    >
       <CollapsibleTrigger asChild>
         <div
           className={cn(
