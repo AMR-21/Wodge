@@ -32,6 +32,8 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Toggle } from "@repo/ui/components/ui/toggle";
 import Link from "next/link";
 import { useState } from "react";
+import { createPortal } from "react-dom";
+import RoomPage from "../room/[teamId]/[channelId]/call/page";
 
 export function AppHeader() {
   const [isSidebarOpen, setSidebar] = useAtom(isSidebarOpenAtom);
@@ -161,7 +163,7 @@ export function AppHeader() {
                 size="sm"
                 onClick={async () => {
                   setIsConnecting(true);
-                  lk_room
+                  const room = lk_room
                     ? await disconnectFromCurrentRoom()
                     : await connectToRoom({
                         workspaceId: workspaceId,
@@ -169,6 +171,15 @@ export function AppHeader() {
                         teamId: teamId,
                         channelName: path?.room?.name,
                       });
+
+                  if (room) {
+                    console.log("called");
+                    createPortal(<RoomPage />, document.body);
+                    createPortal(
+                      <div className="absolute top-0 h-10 w-10 bg-red-500" />,
+                      document.body,
+                    );
+                  }
 
                   setIsConnecting(false);
                 }}

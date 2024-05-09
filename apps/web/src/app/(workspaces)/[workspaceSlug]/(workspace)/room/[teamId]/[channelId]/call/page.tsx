@@ -1,24 +1,10 @@
 "use client";
 
 import "@livekit/components-styles";
-import {
-  LiveKitRoom,
-  VideoConference,
-  GridLayout,
-  ParticipantTile,
-  RoomAudioRenderer,
-  ControlBar,
-  useTracks,
-  LayoutContext,
-  LayoutContextProvider,
-  PreJoin,
-} from "@livekit/components-react";
-import { Track } from "livekit-client";
-import { useEffect, useState } from "react";
+import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { env } from "@repo/env";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { useAppState } from "@repo/ui/store/store";
 import { Button } from "@repo/ui/components/ui/button";
 import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
@@ -36,13 +22,20 @@ export default function RoomPage() {
     channelId: string;
   }>();
 
+  const dataRef = useMemo(() => {
+    return { teamId, channelId };
+  }, [room]);
+
   const path = useChannelPath();
 
   const { workspaceId } = useCurrentWorkspace();
 
   if (!room)
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-4">
+      <div
+        className="absolute flex w-full flex-col items-center justify-center gap-4"
+        suppressHydrationWarning
+      >
         <p>Start or join the call to engage with members</p>
         <Button
           size="sm"
@@ -66,7 +59,7 @@ export default function RoomPage() {
 
   if (room.id !== channelId)
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-4">
+      <div className="absolute top-0 flex w-full flex-col items-center justify-center gap-4">
         <p>Start or join the call to engage with members</p>
         <Button
           size="sm"
@@ -95,16 +88,13 @@ export default function RoomPage() {
     );
 
   return (
-    <div className="h-full w-full">
+    <div className="absolute top-0 h-full w-full">
       <LiveKitRoom
-        token={""}
+        token=""
         room={room.room}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
         data-lk-theme="default"
         className="flex w-full flex-col"
-        options={{
-          disconnectOnPageLeave: false,
-        }}
         onDisconnected={async () => {
           console.log("Disconnected from room");
           await disconnectFromCurrentRoom();

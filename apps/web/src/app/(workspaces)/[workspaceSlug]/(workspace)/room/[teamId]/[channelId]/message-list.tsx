@@ -102,7 +102,6 @@ export const MessageList = memo(
         block: "end",
       });
     }
-    const ref = useRef<HTMLDivElement>(null);
     useEffect(() => {
       if (listRef.current)
         // listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -110,6 +109,14 @@ export const MessageList = memo(
           block: "end",
         });
     }, [messages]);
+
+    async function onDelete(msg: MessageType) {
+      await rep?.mutate.deleteMessage(msg);
+    }
+
+    async function onEdit(msg: MessageType, newContent: string) {
+      await rep?.mutate.editMessage({ message: msg, newContent });
+    }
 
     if (!workspaceId) return null;
 
@@ -124,6 +131,8 @@ export const MessageList = memo(
               key={m.id}
               prevMsg={messages[i - 1]}
               workspaceId={workspaceId}
+              onDelete={onDelete}
+              onSuccessEdit={onEdit}
             />
           );
         })}

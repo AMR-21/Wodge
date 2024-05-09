@@ -28,7 +28,6 @@ export const WorkspaceContext = createContext<
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const workspaceInfo = useWorkspaceSubscription();
-
   return (
     <WorkspaceContext.Provider value={workspaceInfo}>
       {children}

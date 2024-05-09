@@ -4,9 +4,17 @@ import { PatchOperation } from "replicache";
 
 import RoomParty from "./room-party";
 import { Context } from "hono";
+import { unauthorized } from "../lib/http-utils";
 
 export async function roomPull(party: RoomParty, c: Context) {
   const userId = c.req.header("x-user-id")!;
+
+  const isAdmin = c.req.header("x-admin") === "true";
+  const isOwner = c.req.header("x-owner") === "true";
+  const isTeamModerator = c.req.header("x-team-moderator") === "true";
+  const canView = c.req.header("x-can-view") === "true";
+  if (!canView && !isAdmin && !isOwner && !isTeamModerator)
+    return unauthorized();
   return await repPull({
     req: c.req,
     storage: party.room.storage,

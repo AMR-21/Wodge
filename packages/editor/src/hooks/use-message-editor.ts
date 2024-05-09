@@ -21,9 +21,13 @@ const MessageNewLine = Extension.create({
     }
   },
 })
-
-export function useMessageEditor() {
+interface UseEditorProps {
+  content?: string
+  placeholder?: string
+}
+export function useMessageEditor({ content, placeholder }: UseEditorProps = {}) {
   const editor = useEditor({
+    content,
     autofocus: true,
     extensions: [
       StarterKit.configure({
@@ -36,7 +40,7 @@ export function useMessageEditor() {
       }),
       Highlight,
       Placeholder.configure({
-        placeholder: 'Type a message',
+        placeholder: placeholder || 'Type a message',
       }),
       Typography,
       Link.extend({ inclusive: false }).configure({

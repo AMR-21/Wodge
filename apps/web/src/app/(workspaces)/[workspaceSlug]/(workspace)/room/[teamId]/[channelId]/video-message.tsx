@@ -35,9 +35,12 @@ export function VideoMessage({
     staleTime: 24 * 60 * 60 * 7,
   });
   return (
-    <div className="h-[10.125rem] w-72  rounded-md">
+    <div className="  rounded-md">
       {data && (
-        <video controls className="aspect-video rounded-md ">
+        <video
+          controls
+          className="aspect-video max-h-[10.125rem] max-w-72 rounded-md "
+        >
           <source src={data} type="video/webm" />
         </video>
       )}

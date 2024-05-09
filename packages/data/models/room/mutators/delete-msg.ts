@@ -4,16 +4,26 @@ import { DrObj, Message, MessageSchema, WorkspaceStructure } from "../../..";
 interface deleteMsgArgs {
   // message: Message;
   // senderId: string;
-  msgId: string;
+  msg: Message;
   // teamId: string;
   // roomId: string;
-  arr: Message[];
-  structure: WorkspaceStructure | DrObj<WorkspaceStructure>;
+  arr: Message[] | DrObj<Message[]>;
+  userId: string;
+  isPrivileged: boolean;
 }
 
-export function deleteMsg({ msgId,arr, structure }: deleteMsgArgs) {
-  const newStructure = produce(structure, (draft) => {
-    arr = arr.filter(m => m.id !== msgId)
+export function deleteMessageMutation({
+  msg,
+  arr,
+  isPrivileged,
+  userId,
+}: deleteMsgArgs) {
+  if (!isPrivileged && msg.sender !== userId)
+    throw new Error("You are not allowed to delete this message");
+
+  const newArr = produce(arr, (draft) => {
+    return draft.filter((m) => m.id !== msg.id);
   });
-  return newStructure;
+
+  return newArr as Message[];
 }
