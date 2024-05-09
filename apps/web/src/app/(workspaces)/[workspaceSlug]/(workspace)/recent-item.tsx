@@ -2,9 +2,11 @@ import { DrObj, Page, Room, Thread } from "@repo/data";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { RecentlyVisitedItem } from "@repo/ui/store/atoms";
 import { format } from "date-fns";
+import { useSetAtom } from "jotai";
 import { Database, MessageCircle, Newspaper, NotebookText } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { activeSidebarAtom } from "./_components/sidebar-atoms";
 
 export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
   let Icon;
@@ -12,6 +14,7 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
   let folder;
 
   const { structure } = useCurrentWorkspace();
+  const setSidebarAtom = useSetAtom(activeSidebarAtom);
 
   const { workspaceSlug } = useParams<{ workspaceSlug: string }>();
 
@@ -48,7 +51,12 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
   }
 
   return (
-    <Link href={url}>
+    <Link
+      href={url}
+      onClick={() => {
+        setSidebarAtom(item.type);
+      }}
+    >
       <div className="group/item rounded-md border border-border bg-background">
         <div className="relative h-6 bg-secondary/40 px-3 ">
           <Icon className="absolute bottom-0 h-5 w-5 translate-y-1/2 opacity-50 transition-all group-hover/item:opacity-100" />

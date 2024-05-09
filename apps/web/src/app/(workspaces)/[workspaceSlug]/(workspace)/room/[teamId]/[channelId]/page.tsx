@@ -16,6 +16,7 @@ import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
 import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
 import { useParams } from "next/navigation";
 import { MessageList } from "./message-list";
+import { useCanEdit } from "@repo/ui/hooks/use-can-edit";
 
 function ChannelPage() {
   useUpdateRecentlyVisited("room");
@@ -29,6 +30,9 @@ function ChannelPage() {
     teamId: string;
   }>();
 
+  const canEdit = useCanEdit({
+    type: "room",
+  });
   const rep = useCurrentRoomRep();
 
   async function onSubmit() {
@@ -63,24 +67,33 @@ function ChannelPage() {
         {/* </div> */}
       </ScrollArea>
       <div className="flex shrink-0 items-end rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1">
-        <UploadButton
-          workspaceId={workspaceId}
-          channelId={channelId}
-          teamId={teamId}
-          rep={rep}
-        />
+        {!canEdit && (
+          <p className="text-muted-foreground">
+            Your are not allowed to send messages in this room.
+          </p>
+        )}
+        {canEdit && (
+          <>
+            <UploadButton
+              workspaceId={workspaceId}
+              channelId={channelId}
+              teamId={teamId}
+              rep={rep}
+            />
 
-        <div
-          className="flex h-full w-full items-center overflow-hidden"
-          onKeyDown={(e) => {
-            if (e.code === "Enter" && !e.shiftKey && !e.ctrlKey) {
-              onSubmit();
-            }
-          }}
-        >
-          <OfflineEditor editor={editor} />
-        </div>
-        <SidebarItemBtn Icon={Send} className="ml-2" onClick={onSubmit} />
+            <div
+              className="flex h-full w-full items-center overflow-hidden"
+              onKeyDown={(e) => {
+                if (e.code === "Enter" && !e.shiftKey && !e.ctrlKey) {
+                  onSubmit();
+                }
+              }}
+            >
+              <OfflineEditor editor={editor} />
+            </div>
+            <SidebarItemBtn Icon={Send} className="ml-2" onClick={onSubmit} />
+          </>
+        )}
       </div>
     </div>
   );

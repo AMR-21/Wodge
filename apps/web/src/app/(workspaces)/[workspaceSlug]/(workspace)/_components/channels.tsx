@@ -44,6 +44,9 @@ import {
   DialogTrigger,
 } from "@repo/ui/components/ui/dialog";
 import { AddRoomForm } from "./add-room-form";
+import { recentlyVisitedAtom } from "@repo/ui/store/atoms";
+import { useSetAtom } from "jotai";
+import { produce } from "immer";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -178,8 +181,8 @@ export const Channel = React.forwardRef<
     { channel, activeIndex, folderId, teamId, isDragging, type, ...props },
     ref,
   ) => {
-    const { workspaceSlug, workspaceRep } = useCurrentWorkspace();
-
+    const { workspaceSlug, workspaceRep, workspaceId } = useCurrentWorkspace();
+    const setRecentAtom = useSetAtom(recentlyVisitedAtom);
     const { channelId } = useParams() as { channelId: string };
 
     // const icon =
@@ -235,6 +238,16 @@ export const Channel = React.forwardRef<
                         type,
                         teamId,
                         folderId,
+                      });
+
+                      setRecentAtom((prev) => {
+                        if (!workspaceId || !prev[workspaceId]) return prev;
+                        const newRecent = produce(prev, (draft) => {
+                          draft[workspaceId] = draft[workspaceId]!.filter(
+                            (r) => r.channelId !== channel.id,
+                          );
+                        });
+                        return newRecent;
                       });
                     }}
                   >

@@ -11,18 +11,15 @@ import {
 import {
   FileCog,
   FilePlus,
-  FolderCog,
-  FolderPlus,
+
   MoreHorizontal,
   Settings,
 } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { AddPageForm } from "./add-page-form";
-import { AddFolderForm } from "./add-folder-form";
-import { useState } from "react";
+
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
-import { ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
+import { ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 import { AddRoomForm } from "./add-room-form";
 

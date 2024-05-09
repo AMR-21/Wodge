@@ -14,55 +14,58 @@ import {
 import { SidebarItem } from "./sidebar-item";
 import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
 import { Teamspaces } from "./teamspaces";
 import { ChannelsTypes } from "@repo/data";
 import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { activeSidebarAtom } from "./sidebar-atoms";
 
 interface Tab {
   Icon: LucideIcon;
   label: string;
-  href?: string;
+  val?: ChannelsTypes | "settings" | "home";
 }
 
 const tabs: Tab[] = [
   {
     Icon: Home,
     label: "home",
-    href: "/",
+    val: "home",
   },
   {
     Icon: NotebookText,
     label: "pages",
-    href: "/page",
+    val: "page",
   },
   {
     Icon: MessageCircle,
     label: "rooms",
-    href: "/room",
+    val: "room",
   },
   {
     Icon: Newspaper,
     label: "threads",
-    href: "/thread",
+    val: "thread",
   },
   {
     Icon: Database,
     label: "resources",
-    href: "/resources",
+    val: "resources",
   },
   {
     Icon: Settings,
     label: "settings",
-    href: "/settings",
+    val: "settings",
   },
 ];
 
 export function Sidebar() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
-  const activeChan = usePathname().split("/").at(2) as ChannelsTypes;
+  const activeChan = usePathname().split("/").at(2)?.slice(1) as ChannelsTypes;
   const { workspaceSlug } = useCurrentWorkspace();
+
+  const [activeSidebar, setActiveSidebar] = useAtom(activeSidebarAtom);
 
   return (
     <ScrollArea>
@@ -82,11 +85,18 @@ export function Sidebar() {
                   key={tab.label}
                   Icon={tab.Icon}
                   className="capitalize"
-                  isActive={
-                    activeChan === tab.href?.slice(1) ||
-                    (!activeChan && tab.label === "home")
-                  }
-                  {...(tab.href && { href: baseUrl + tab.href })}
+                  isActive={activeSidebar === tab.val}
+                  {...(tab.val === "settings" && {
+                    href: `${baseUrl}/settings`,
+                  })}
+                  {...(tab.val === "home" && {
+                    href: `${baseUrl}/`,
+                  })}
+                  onClick={() => {
+                    if (tab.val && tab.val !== "settings") {
+                      setActiveSidebar(tab.val);
+                    }
+                  }}
                 >
                   {tab.label}
                 </SidebarItem>
@@ -94,8 +104,11 @@ export function Sidebar() {
             })}
           </ul>
 
-          {activeChan ? (
-            <Teamspaces type={activeChan} isPages={activeChan === "page"} />
+          {activeSidebar !== "home" ? (
+            <Teamspaces
+              type={activeSidebar}
+              isPages={activeSidebar === "page"}
+            />
           ) : (
             <Teamspaces type="page" isPages />
           )}

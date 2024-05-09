@@ -15,6 +15,9 @@ import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
 import { useEditEditor } from "./[channelId]/use-edit-editor";
 import { cn } from "@repo/ui/lib/utils";
 import { CheckCircle2, CircleDot } from "lucide-react";
+import { useSetAtom } from "jotai";
+import { recentlyVisitedAtom } from "@repo/ui/store/atoms";
+import { produce } from "immer";
 
 export const Post = memo(
   ({
@@ -33,11 +36,12 @@ export const Post = memo(
 
     const { isEditing, setIsEditing, onCancelEdit, onEdit } = useEditEditor();
 
-    const { workspaceRep } = useCurrentWorkspace();
+    const { workspaceRep, workspaceId } = useCurrentWorkspace();
     const { member } = useMember(post.createdBy);
     const { user } = useCurrentUser();
     const isPrivileged = useIsTeamModerator();
     const router = useRouter();
+    const setRecentAtom = useSetAtom(recentlyVisitedAtom);
 
     const Icon = post.isResolved ? CheckCircle2 : CircleDot;
 
@@ -83,12 +87,22 @@ export const Post = memo(
                   type: "thread",
                 });
 
-                if (opened) router.back();
+                setRecentAtom((prev) => {
+                  if (!workspaceId || !prev[workspaceId]) return prev;
+                  const newRecent = produce(prev, (draft) => {
+                    draft[workspaceId] = draft[workspaceId]!.filter(
+                      (r) => r.channelId !== post.id,
+                    );
+                  });
+                  return newRecent;
+                });
+
+                if (opened)
+                  router.replace(`/${workspaceSlug}/thread/${teamId}`);
               }}
               onEdit={onEdit}
               canEdit={post.createdBy === user?.id}
-              // canDelete={post.createdBy === user?.id || isPrivileged}
-              canDelete={true}
+              canDelete={post.createdBy === user?.id || isPrivileged}
             />
           </div>
 

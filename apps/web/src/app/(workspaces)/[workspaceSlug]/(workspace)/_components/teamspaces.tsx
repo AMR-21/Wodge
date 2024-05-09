@@ -24,9 +24,10 @@ import {
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
 import { TeamRoomsMore } from "./team-rooms-more";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useIsTeamMember } from "@repo/ui/hooks/use-is-team-member";
 import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { activeSidebarAtom } from "./sidebar-atoms";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -168,12 +169,16 @@ export const Teamspace = React.forwardRef<
 >(({ team, isChanFoldOver, type, isDragging, ...props }, ref) => {
   const { teamId } = useParams<{ teamId?: string }>();
   const { workspaceSlug } = useCurrentWorkspace();
+  const activeSideBar = useAtomValue(activeSidebarAtom);
+  const activeChan = usePathname().split("/").at(2) || "home";
 
   return (
     <li ref={ref} className="group flex grow" {...props}>
       <SidebarItem
         aria-disabled={isDragging}
-        isActive={isChanFoldOver || team.id === teamId}
+        isActive={
+          isChanFoldOver || (team.id === teamId && activeSideBar === activeChan)
+        }
         noIcon
         collapsible={type !== "thread" && type !== "resources"}
         {...(type === "thread" && {

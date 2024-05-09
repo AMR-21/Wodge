@@ -27,6 +27,9 @@ import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
 import { nanoid } from "nanoid";
 import { Folder, ID_LENGTH, Page, WORKSPACE_GROUP_ID_LENGTH } from "@repo/data";
 import Link from "next/link";
+import { recentlyVisitedAtom } from "@repo/ui/store/atoms";
+import { useSetAtom } from "jotai";
+import { produce } from "immer";
 
 interface TeamMoreProps {
   teamId: string;
@@ -36,7 +39,9 @@ interface TeamMoreProps {
 
 export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
   const [activeTab, setActiveTab] = useState("folder");
-  const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
+  const { workspaceRep, workspaceSlug, workspaceId } = useCurrentWorkspace();
+
+  const setRecentAtom = useSetAtom(recentlyVisitedAtom);
 
   async function createBlankPage() {
     await workspaceRep?.mutate.createPage({
@@ -156,6 +161,17 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
                   await workspaceRep?.mutate.deleteFolder({
                     teamId,
                     folderId,
+                  });
+
+                  setRecentAtom((prev) => {
+                    if (!workspaceId || !prev[workspaceId] || !folder)
+                      return prev;
+                    const newRecent = produce(prev, (draft) => {
+                      draft[workspaceId] = draft[workspaceId]!.filter(
+                        (r) => r.folderId !== folder.id,
+                      );
+                    });
+                    return newRecent;
                   });
                 }}
               >
