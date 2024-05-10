@@ -23,16 +23,12 @@ import { DrObj, Task } from '@repo/data'
 
 interface Props {
   task: Task | DrObj<Task>
-  deleteTask: (id: string, colId: string) => void
-  updateTask: (id: string, colId: string, content: string) => void
-  isFirst?: boolean
-  isLast?: boolean
   index?: number
 }
 export type Mutable<Type> = {
   -readonly [Key in keyof Type]: Type[Key]
 }
-function TaskCard({ task, deleteTask, updateTask, isLast, index }: Props) {
+function TaskCard({ task, index }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false)
   const [editMode, setEditMode] = useState(false)
 

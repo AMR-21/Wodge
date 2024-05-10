@@ -13,21 +13,21 @@ import { Input } from '@repo/ui/components/ui/input'
 import { cn } from '@repo/ui/lib/utils'
 import { Button } from '@repo/ui/components/ui/button'
 import { SidebarItemBtn } from '@repo/ui/components/data-table/sidebar-item-btn'
-import { Column, DrObj, Task } from '@repo/data'
+import { Column, DrObj, pageMutators, Task } from '@repo/data'
+import { Replicache } from 'replicache'
+import { nanoid } from 'nanoid'
 
 interface Props {
   column: Column | DrObj<Column>
-  deleteColumn: (id: string) => void
-  updateColumn: (id: string, title: string) => void
-
-  createTask: (columnId: string) => void
-  updateTask: (id: string, content: string) => void
-  deleteTask: (id: string) => void
   tasks: Task[] | DrObj<Task>[]
+  boardId: string
+  rep?: Replicache<typeof pageMutators>
 }
 
-function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks, deleteTask, updateTask }: Props) {
+function ColumnContainer({ column, tasks, rep, boardId }: Props) {
   const [editMode, setEditMode] = useState(false)
+
+  const [name, setName] = useState(column.title)
 
   const tasksIds = useMemo(() => {
     return tasks.map(task => task.id)
@@ -47,7 +47,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
     transform: CSS.Transform.toString(transform),
   }
 
-  const ref = useRef<HTMLInputElement>(null)
+  const ref = useRef<HTMLParagraphElement>(null)
 
   if (editMode) {
     ref.current?.focus()
@@ -55,37 +55,51 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
 
   return (
     <div ref={setNodeRef}>
-      <div className="group flex w-80 flex-col rounded-md bg-secondary/30 p-2 transition-all">
+      <div className="group flex w-80 flex-col rounded-md bg-secondary/30 p-2 transition-all select-none">
         {/* Column title */}
         <div style={style} {...attributes} {...listeners} className="flex max-w-80 cursor-grab items-center pb-3">
-          <div className="flex w-full items-center gap-1">
-            <Input
+          <div className="flex w-full items-start gap-1">
+            {/* <Input
               ref={ref}
               className={cn(
                 'mr-1 w-fit min-w-0 rounded border p-0 px-1 text-base font-medium outline-none focus-visible:border-none disabled:cursor-grab disabled:opacity-100',
               )}
-              value={column.title}
-              onChange={e => updateColumn(column.id, e.target.value)}
+              value={name}
+              onChange={e => setName(e.target.value)}
               autoFocus
-              // onBlur={() => {
-              //   setEditMode(false);
-              // }}
-              // onKeyDown={(e) => {
-              //   if (e.key !== "Enter") return;
-              //   setEditMode(false);
-              // }}
               disabled={!editMode}
               inRow
-            />
-            {/* <div className="text-sm text-muted-foreground transition-all group-hover:text-foreground">
-                {tasks.length || 0}
-              </div> */}
+            /> */}
+
+            <p
+              ref={ref}
+              contentEditable={editMode}
+              suppressContentEditableWarning
+              className={cn(
+                'overflow-hidden font-medium focus:outline-none break-words max-h-32 truncate pr-1',
+                editMode && 'cursor-text',
+              )}
+              onInput={e => {
+                e.stopPropagation()
+                //@ts-ignore
+                setName(e.target.innerText)
+              }}
+              onKeyDown={e => {
+                e.stopPropagation()
+              }}
+              autoFocus
+            >
+              {column.title}
+            </p>
+            <div className="text-sm text-muted-foreground transition-all group-hover:text-foreground py-1">
+              {tasks.length || 0}
+            </div>
             {!editMode && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarItemBtn
                     Icon={MoreHorizontal}
-                    className="invisible ml-auto transition-all group-hover:visible"
+                    className="invisible my-0.5 ml-auto transition-all group-hover:visible"
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -101,8 +115,12 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
 
                   <DropdownMenuItem
                     className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-                    onClick={() => {
-                      deleteColumn(column.id)
+                    onClick={async () => {
+                      await rep?.mutate.deleteColumn({
+                        boardId,
+                        ...column,
+                      })
+                      // deleteColumn(column.id)
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -114,11 +132,24 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
 
             {editMode && (
               <>
-                <SidebarItemBtn className="ml-auto hover:text-green-600 dark:hover:text-green-500" Icon={Check} />
                 <SidebarItemBtn
-                  className="hover:text-red-600 dark:hover:text-red-500"
+                  className="ml-auto hover:text-green-600 dark:hover:text-green-500 my-0.5"
+                  Icon={Check}
+                  onClick={async () => {
+                    await rep?.mutate.updateColumn({
+                      boardId,
+                      ...column,
+                      title: name,
+                    })
+
+                    setEditMode(false)
+                  }}
+                />
+                <SidebarItemBtn
+                  className="hover:text-red-600 my-0.5 dark:hover:text-red-500"
                   Icon={X}
                   onClick={() => {
+                    setName(column.title)
                     setEditMode(false)
                   }}
                 />
@@ -131,15 +162,7 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
         <div className="flex flex-col gap-1.5  ">
           <SortableContext items={tasksIds}>
             {tasks.map((task, i) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                isFirst={i === 0}
-                isLast={i === tasks.length - 1}
-                index={i}
-                deleteTask={deleteTask}
-                updateTask={updateTask}
-              />
+              <TaskCard key={task.id} task={task} index={i} />
             ))}
           </SortableContext>
         </div>
@@ -149,8 +172,17 @@ function ColumnContainer({ column, deleteColumn, updateColumn, createTask, tasks
         <Button
           variant="ghost"
           className="mt-2 gap-1.5 opacity-70 transition-all hover:opacity-100"
-          onClick={() => {
-            createTask(column.id)
+          onClick={async () => {
+            await rep?.mutate.createTask({
+              boardId,
+              col: column,
+              task: {
+                columnId: column.id,
+                id: nanoid(6),
+                includeTime: false,
+              },
+            })
+            // createTask(column.id)
           }}
         >
           <Plus className="h-4 w-4 " />

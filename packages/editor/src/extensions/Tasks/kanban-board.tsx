@@ -16,14 +16,12 @@ import { Plus } from 'lucide-react'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
 import { nanoid } from 'nanoid'
 import { NodeViewWrapper, NodeViewWrapperProps } from '@tiptap/react'
-import { usePageDoc } from '../../../../../apps/web/src/app/(workspaces)/[workspaceSlug]/(workspace)/page/provider'
-import { useAtomValue } from 'jotai'
-import { yDocAtom } from '.'
 import { useCurrentPageRep } from '@repo/ui/hooks/use-page-rep'
 import { useSubscribe } from '@repo/ui/hooks/use-subscribe'
 import { ReadTransaction } from 'replicache'
 import { Board, Column, Task } from '@repo/data'
 import TaskCard from './task-card'
+import { Button } from '@repo/ui/components/ui/button'
 
 function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
   const rep = useCurrentPageRep()
@@ -49,7 +47,12 @@ function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
   )
 
   return (
-    <NodeViewWrapper>
+    <NodeViewWrapper
+      onClick={(e: React.MouseEvent) => {
+        e.stopPropagation()
+        console.log()
+      }}
+    >
       <div className="flex w-full items-center overflow-x-auto overflow-y-auto border border-border p-4">
         <DndContext
           sensors={sensors}
@@ -65,62 +68,34 @@ function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
                   <ColumnContainer
                     key={col.id}
                     column={col}
-                    deleteColumn={deleteColumn}
-                    updateColumn={updateColumn}
-                    createTask={createTask}
-                    deleteTask={deleteTask}
-                    updateTask={updateTask}
+                    boardId={boardId}
+                    rep={rep}
                     tasks={board?.tasks?.filter(task => task.columnId === col.id)}
                   />
                 ))}
               </SortableContext>
             </div>
 
-            {/* <Button
-            className="h-[60px] w-[350px] justify-start gap-2"
-            variant="ghost"
-            >
-            <Plus className="h-4 w-4" />
-            Add column
-          </Button> */}
-            <button
+            <Button
+              className="h-9 w-80 justify-start gap-2"
+              variant="ghost"
               onClick={async () => {
-                // createNewColumn()
-                console.log('create col')
-
-                // console.log(rep)
-
                 await rep?.mutate.createColumn({
-                  id: nanoid(6),
                   boardId,
-                  title: 'New Column',
+                  id: nanoid(6),
+                  title: 'New column',
                 })
               }}
-              className="
-            flex 
-      h-[60px]
-      w-[350px]
-      min-w-[350px]
-      cursor-pointer
-      gap-2
-      rounded-lg
-      border-2
-      border-border
-      bg-background
-      p-4
-      ring-rose-500
-      hover:ring-2
-      "
             >
-              <Plus className="h-6 w-6" />
-              Add Column
-            </button>
+              <Plus className="h-4 w-4" />
+              Add column
+            </Button>
           </div>
 
           {createPortal(
             <DragOverlay dropAnimation={null}>
               {activeColumn && <ColumnTitle column={activeColumn} />}
-              {activeTask && <TaskCard task={activeTask} deleteTask={deleteTask} updateTask={updateTask} />}
+              {activeTask && <TaskCard task={activeTask} />}
             </DragOverlay>,
             document.body,
           )}
