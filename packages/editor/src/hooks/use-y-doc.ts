@@ -3,6 +3,8 @@ import useYProvider from 'y-partykit/react'
 
 import * as Y from 'yjs'
 import { IndexeddbPersistence } from 'y-indexeddb'
+import { useAtom, useSetAtom } from 'jotai'
+import { yDocAtom } from '../extensions/Tasks'
 
 interface YDocProps {
   channelId: string
@@ -12,6 +14,7 @@ interface YDocProps {
 }
 
 export function useYDoc({ channelId, folderId, teamId, workspaceId }: YDocProps) {
+  const setYDoc = useSetAtom(yDocAtom)
   const yDoc = new Y.Doc()
   const idbProvider = new IndexeddbPersistence(channelId, yDoc)
 
@@ -28,6 +31,8 @@ export function useYDoc({ channelId, folderId, teamId, workspaceId }: YDocProps)
       }),
     },
   })
+
+  setYDoc(provider.doc)
 
   return { provider, idbProvider }
 }

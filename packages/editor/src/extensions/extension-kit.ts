@@ -55,6 +55,7 @@ import YPartyKitProvider from 'y-partykit/provider'
 import { AiWriter } from './AiWriter'
 import { AiImage } from './AiImage'
 import { AiPrompts } from './Ai'
+import Tasks from './Tasks'
 
 interface ExtensionKitProps {
   provider?: YPartyKitProvider
@@ -84,6 +85,7 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi', placeholder 
   Selection,
   Heading,
   HorizontalRule,
+  Tasks,
   StarterKit.configure({
     document: false,
     dropcursor: false,

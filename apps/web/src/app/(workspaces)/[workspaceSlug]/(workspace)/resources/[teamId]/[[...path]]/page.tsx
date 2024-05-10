@@ -14,6 +14,8 @@ import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
 import { Folders } from "./folders";
 import { Files } from "./files";
 import { Button } from "@repo/ui/components/ui/button";
+import KanbanBoard from "../../../page/[teamId]/[folderId]/kanban-board";
+import { MemberMultiSelect } from "../../../page/[teamId]/[folderId]/member-multi-select";
 
 function TeamResourcePage({
   params: { path },
@@ -51,6 +53,7 @@ function TeamResourcePage({
           </div>
         )}
       </div>
+
       <ScrollArea className="py-2.5">
         <div className="flex w-full flex-col divide-y-[1px]">
           <Folders workspaceId={workspaceId} />

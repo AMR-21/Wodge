@@ -54,7 +54,6 @@ function ChannelPage() {
   }
 
   if (!workspaceId) return null;
-  console.log(window?.history.state);
 
   return (
     <div className="flex h-full w-full flex-col  pb-4 pt-2">

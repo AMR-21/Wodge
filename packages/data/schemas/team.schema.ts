@@ -4,9 +4,9 @@ import {
   WORKSPACE_GROUP_ID_LENGTH,
   WORKSPACE_TEAM_ID_LENGTH,
 } from "./config";
-import { PageSchema } from "./channel.schema";
 import { ThreadSchema } from "./thread.schema";
 import { RoomSchema } from "./room.schema";
+import { PageSchema } from "./page.schema";
 
 export const TagSchema = z.object({
   name: z.string().max(70),

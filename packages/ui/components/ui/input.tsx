@@ -44,10 +44,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <Label
               htmlFor={props.id}
               className={cn(
-                "absolute left-3 top-1/2 translate-y-[-50%] capitalize  transition-all peer-focus:top-3 peer-focus:pt-1.5 peer-focus:text-xs peer-focus:text-primary dark:peer-focus:text-primary-base",
+                "dark:peer-focus:text-primary-base absolute left-3 top-1/2 translate-y-[-50%]  capitalize transition-all peer-focus:top-3 peer-focus:pt-1.5 peer-focus:text-xs peer-focus:text-primary",
                 props.value && "top-3 pt-1.5 text-xs text-foreground/80 ",
                 props["aria-invalid"] &&
-                  "text-destructive peer-focus:text-destructive dark:text-destructive-base dark:peer-focus:text-destructive-base",
+                  "dark:text-destructive-base dark:peer-focus:text-destructive-base text-destructive peer-focus:text-destructive",
               )}
             >
               {label}
@@ -65,7 +65,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           props["aria-invalid"] &&
             "border-destructive focus-visible:ring-destructive",
           inRow &&
-            "h-auto  min-w-28 border-none bg-transparent focus-visible:border-none",
+            "h-auto min-w-28 border-none bg-transparent focus-visible:border-none",
           className,
         )}
         ref={ref}

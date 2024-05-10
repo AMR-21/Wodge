@@ -19,6 +19,7 @@ export * from "./schemas/team.schema";
 export * from "./schemas/channel.schema";
 export * from "./schemas/thread.schema";
 export * from "./schemas/room.schema";
+export * from "./schemas/page.schema";
 export * from "./schemas/config";
 
 /**
@@ -60,5 +61,7 @@ export type DrObj<T> = DeepReadonlyObject<T>;
 export * from "./models/workspace/workspace-shared-model";
 export * from "./models/room/room-mutators";
 export * from "./models/thread/thread-mutators";
+export * from "./models/page/page-mutators";
 export * from "./models/room/create-room-rep";
 export * from "./models/thread/create-thread-rep";
+export * from "./models/page/create-page-rep";

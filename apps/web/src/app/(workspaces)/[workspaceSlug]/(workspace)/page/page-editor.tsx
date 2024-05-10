@@ -4,6 +4,7 @@ import { BlockEditor, useYDoc } from "@repo/editor";
 import { env } from "@repo/env";
 import useYProvider from "y-partykit/react";
 import * as Y from "yjs";
+import { usePageDoc } from "./provider";
 
 export function PageEditor({
   channelId,

@@ -9,12 +9,15 @@ import PartySocket from "partysocket";
 import { createWorkspaceRep } from "./create-workspace-rep";
 import { createSocket } from "./create-socket";
 import { userMutators } from "@repo/data/models/user/user-mutators";
-import { roomMutators, threadMutators } from "@repo/data";
+import { pageMutators, roomMutators, threadMutators } from "@repo/data";
 import { CreateChannelArgs, createChannelRep } from "./create-channel-rep";
 import { Room } from "livekit-client";
 import { env } from "@repo/env";
 
-type ChannelMutators = typeof roomMutators | typeof threadMutators;
+type ChannelMutators =
+  | typeof roomMutators
+  | typeof threadMutators
+  | typeof pageMutators;
 
 interface ConnectionParams {
   workspaceId?: string;

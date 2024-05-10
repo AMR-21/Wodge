@@ -13,6 +13,7 @@ import {
   Sparkles,
   SquareCode,
   Table,
+  Trello,
 } from 'lucide-react'
 import { Group } from './types'
 
@@ -176,6 +177,16 @@ export const GROUPS: Group[] = [
         shouldBeHidden: editor => editor.isActive('columns'),
         action: editor => {
           editor.chain().focus().insertTableOfContents().run()
+        },
+      },
+      {
+        name: 'kanbanBoard',
+        label: 'Kanban Board',
+        icon: Trello,
+        description: 'Insert a kanban board',
+        shouldBeHidden: editor => editor.isActive('columns'),
+        action: editor => {
+          editor.chain().focus().insertContent({ type: 'kanban-board' }).run()
         },
       },
     ],

@@ -15,7 +15,6 @@ import { PublicUserType, users } from '../../../data'
 
 import { useCanEdit } from '@repo/ui/hooks/use-can-edit'
 
-// TODO AI
 export const useBlockEditor = ({
   ydoc,
   provider,
@@ -25,7 +24,6 @@ export const useBlockEditor = ({
   provider: YPartyKitProvider
   user: typeof users.$inferSelect
 }) => {
-  const canEdit = useCanEdit({ type: 'page' })
   // console.log({ canEdit })
   const editor = useEditor(
     {
@@ -46,24 +44,6 @@ export const useBlockEditor = ({
             avatar: user?.avatar,
           },
         }),
-        // Ai.configure({
-        //   appId: TIPTAP_AI_APP_ID,
-        //   token: aiToken,
-        //   baseUrl: TIPTAP_AI_BASE_URL,
-        //   autocompletion: true,
-        //   onLoading: () => {
-        //     setIsAiLoading(true)
-        //     setAiError(null)
-        //   },
-        //   onSuccess: () => {
-        //     setIsAiLoading(false)
-        //     setAiError(null)
-        //   },
-        //   onError: error => {
-        //     setIsAiLoading(false)
-        //     setAiError(error.message)
-        //   },
-        // }),
       ],
       editorProps: {
         attributes: {
@@ -93,15 +73,6 @@ export const useBlockEditor = ({
   }, [editor?.storage.collaborationCursor?.users])
 
   const characterCount = editor?.storage.characterCount || { characters: () => 0, words: () => 0 }
-
-  // useEffect(() => {
-  //   provider?.on('status', (event: { status: WebSocketStatus }) => {
-  //     console.log({ event })
-  //     // setCollabState(event.status)
-  //   })
-  // }, [provider])
-
-  // window.editor = editor
 
   return {
     editor,

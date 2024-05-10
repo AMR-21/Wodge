@@ -54,7 +54,7 @@ export const BlockEditor = ({
     <div className="flex flex-col h-full w-full" ref={menuContainerRef}>
       <ScrollArea className="flex-1">
         <div className="relative flex flex-col flex-1 h-full  ">
-          <EditorContent editor={editor} ref={editorRef} className="flex-1 overflow-y-auto" />
+          <EditorContent editor={editor} ref={editorRef} className="flex-1 w-full" />
           <ContentItemMenu editor={editor} />
           <LinkMenu editor={editor} appendTo={menuContainerRef} />
           <TextMenu editor={editor} />

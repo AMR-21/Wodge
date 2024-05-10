@@ -3,6 +3,7 @@ import type * as Party from "partykit/server";
 import WorkspaceParty from "../workspace/workspace-party";
 import RoomParty from "../room/room-party";
 import ThreadParty from "../thread/thread-party";
+import PageParty from "../page/page-party";
 
 export function getMember(userId: string, party: WorkspaceParty) {
   return party.workspaceMembers.data.members.find(
@@ -47,7 +48,7 @@ export function isAllowed(req: Party.Request, party: WorkspaceParty) {
 
 export async function pokeWorkspace(
   wid: string,
-  party: RoomParty | ThreadParty
+  party: RoomParty | ThreadParty | PageParty
 ) {
   const workspaceParty = party.room.context.parties.workspace?.get(wid);
 

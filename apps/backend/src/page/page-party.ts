@@ -8,25 +8,25 @@
 import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
-import { notImplemented, ok, unauthorized } from "../lib/http-utils";
+import { ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getCurrentUser } from "../lib/auth";
-import {
-  PokeMessage,
-  REPLICACHE_VERSIONS_KEY,
-  makeWorkspacesStoreKey,
-} from "@repo/data";
 import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
-import { handlePost } from "./page-post";
 import { Hono } from "hono";
 import { prompt } from "./prompt";
+import { PagePartyInterface, ServerPageBoards, Versions } from "../types";
+import { startFn } from "./start-fn";
+import { pagePull } from "./page-pull";
+import { pagePush } from "./page-push";
 
-export default class PageParty implements Party.Server {
+export default class PageParty implements Party.Server, PagePartyInterface {
   // options: Party.ServerOptions = {
   //   hibernate: true,
   // };
   ai: Ai;
+  boards: ServerPageBoards;
+  versions: Versions;
 
   app: Hono = new Hono().basePath("/parties/page/:pageId");
 
@@ -36,6 +36,10 @@ export default class PageParty implements Party.Server {
 
   async onStart() {
     this.app.post("/prompt", prompt.bind(null, this));
+    this.app.post("/replicache-pull", pagePull.bind(null, this));
+
+    this.app.post("/replicache-push", pagePush.bind(null, this));
+    startFn(this);
   }
 
   async onConnect(conn: Party.Connection) {

@@ -13,8 +13,6 @@ interface SidebarItemBtnProps extends ButtonProps {
   isVisible?: () => boolean;
   sr?: string;
   href?: string;
-  destructive?: boolean;
-  success?: boolean;
 }
 
 export const SidebarItemBtn = React.forwardRef<
@@ -31,8 +29,6 @@ export const SidebarItemBtn = React.forwardRef<
       sr,
       onClick,
       href,
-      destructive,
-      success,
       ...props
     },
     ref,
@@ -62,7 +58,6 @@ export const SidebarItemBtn = React.forwardRef<
         className={cn(
           "group/sidebtn z-20 aria-expanded:text-accent-foreground",
           !isVisible() && "invisible",
-          destructive && "text-destructive",
           className,
         )}
         onClick={(e) => {
