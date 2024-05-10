@@ -52,6 +52,7 @@ function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
         e.stopPropagation()
         console.log()
       }}
+      className="select-none"
     >
       <div className="flex w-full items-center overflow-x-auto overflow-y-auto border border-border p-4">
         <DndContext
@@ -66,6 +67,7 @@ function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
               <SortableContext items={columnsId}>
                 {board?.columns?.map(col => (
                   <ColumnContainer
+                    editor={editor}
                     key={col.id}
                     column={col}
                     boardId={boardId}

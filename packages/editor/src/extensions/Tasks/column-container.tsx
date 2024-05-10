@@ -16,15 +16,19 @@ import { SidebarItemBtn } from '@repo/ui/components/data-table/sidebar-item-btn'
 import { Column, DrObj, pageMutators, Task } from '@repo/data'
 import { Replicache } from 'replicache'
 import { nanoid } from 'nanoid'
+import { Editor } from '@tiptap/react'
 
 interface Props {
   column: Column | DrObj<Column>
   tasks: Task[] | DrObj<Task>[]
   boardId: string
+  editor: Editor
   rep?: Replicache<typeof pageMutators>
 }
 
-function ColumnContainer({ column, tasks, rep, boardId }: Props) {
+import { useEditable } from 'use-editable'
+
+function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
   const [editMode, setEditMode] = useState(false)
 
   const [name, setName] = useState(column.title)
@@ -49,8 +53,33 @@ function ColumnContainer({ column, tasks, rep, boardId }: Props) {
 
   const ref = useRef<HTMLParagraphElement>(null)
 
-  if (editMode) {
-    ref.current?.focus()
+  const edit = useEditable(ref, setName, {
+    disabled: !editMode,
+  })
+
+  useEffect(() => {
+    editor?.setEditable(!editMode)
+
+    if (editMode && ref.current) {
+      const range = document.createRange()
+      const selection = window.getSelection()
+      range.setStart(ref.current, ref.current.childNodes.length)
+      range.collapse(true)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+    }
+  }, [editMode])
+
+  async function editColumn(e: React.KeyboardEvent<HTMLParagraphElement>) {
+    if (editMode && e.key === 'Enter') {
+      await rep?.mutate.updateColumn({
+        boardId,
+        ...column,
+        title: name,
+      })
+
+      setEditMode(false)
+    }
   }
 
   return (
@@ -59,37 +88,28 @@ function ColumnContainer({ column, tasks, rep, boardId }: Props) {
         {/* Column title */}
         <div style={style} {...attributes} {...listeners} className="flex max-w-80 cursor-grab items-center pb-3">
           <div className="flex w-full items-start gap-1">
-            {/* <Input
-              ref={ref}
-              className={cn(
-                'mr-1 w-fit min-w-0 rounded border p-0 px-1 text-base font-medium outline-none focus-visible:border-none disabled:cursor-grab disabled:opacity-100',
-              )}
-              value={name}
-              onChange={e => setName(e.target.value)}
-              autoFocus
-              disabled={!editMode}
-              inRow
-            /> */}
-
             <p
               ref={ref}
-              contentEditable={editMode}
+              // contentEditable={editMode}
               suppressContentEditableWarning
               className={cn(
                 'overflow-hidden font-medium focus:outline-none break-words max-h-32 truncate pr-1',
                 editMode && 'cursor-text',
               )}
-              onInput={e => {
-                e.stopPropagation()
-                //@ts-ignore
-                setName(e.target.innerText)
-              }}
-              onKeyDown={e => {
-                e.stopPropagation()
+              onKeyDown={async e => {
+                if (editMode && e.key === 'Enter') {
+                  await rep?.mutate.updateColumn({
+                    boardId,
+                    ...column,
+                    title: name,
+                  })
+
+                  setEditMode(false)
+                }
               }}
               autoFocus
             >
-              {column.title}
+              {name}
             </p>
             <div className="text-sm text-muted-foreground transition-all group-hover:text-foreground py-1">
               {tasks.length || 0}
@@ -150,6 +170,7 @@ function ColumnContainer({ column, tasks, rep, boardId }: Props) {
                   Icon={X}
                   onClick={() => {
                     setName(column.title)
+
                     setEditMode(false)
                   }}
                 />
