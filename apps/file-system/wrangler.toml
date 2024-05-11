@@ -1,7 +1,0 @@
-name = "file-system"
-compatibility_date = "2023-12-01"
-
-node_compat = true
-main = "src/index.ts"
-[site]
-bucket = "./public"
