@@ -6,10 +6,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Button } from "@repo/ui/components/ui/button";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Monitor, MoonStar, Sun } from "lucide-react";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 
 function Wrapper({
   title,

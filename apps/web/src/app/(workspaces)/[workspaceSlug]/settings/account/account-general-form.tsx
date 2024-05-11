@@ -5,9 +5,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/ui/form";
+} from "@/components/ui/form";
 import { SettingsContentAction, SettingsContentSection } from "../settings";
-import { Input } from "@repo/ui/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import {
   PublicUserSchema,
@@ -17,15 +17,15 @@ import {
   Workspace,
   WorkspaceSchema,
 } from "@repo/data";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
-import { toast } from "@repo/ui/components/ui/toast";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { toast } from "@/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export function AccountGeneralForm() {
   const queryClient = useQueryClient();

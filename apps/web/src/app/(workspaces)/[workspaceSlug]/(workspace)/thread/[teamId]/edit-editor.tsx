@@ -1,10 +1,11 @@
 import { SafeDiv } from "@/components/safe-div";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { Thread, ThreadMessage } from "@repo/data";
-import { OfflineEditor, useThreadEditor } from "@repo/editor";
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEffect } from "react";
+import { useThreadEditor } from "@/hooks/use-thread-editor";
+import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 
 export function EditEditor({
   isQA = false,

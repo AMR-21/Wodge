@@ -11,21 +11,21 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { Folders } from "./folders";
 import { useAtom, useAtomValue } from "jotai";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/components/ui/collapsible";
+} from "@/components/ui/collapsible";
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
 import { TeamRoomsMore } from "./team-rooms-more";
 import { useParams, usePathname } from "next/navigation";
-import { useIsTeamMember } from "@repo/ui/hooks/use-is-team-member";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { useIsTeamMember } from "@/hooks/use-is-team-member";
+import { SafeAvatar } from "@/components/safe-avatar";
 import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
 
 interface TeamspacesProps {

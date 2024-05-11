@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { SafeAvatar } from "@/components/safe-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +9,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import { toast } from "@repo/ui/components/ui/toast";
-import { UserAvatar } from "@repo/ui/components/user-avatar";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { cn } from "@repo/ui/lib/utils";
+} from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/toast";
+import { UserAvatar } from "@/components/user-avatar";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { cn } from "@/lib/utils";
 import { Check, LogOut, Monitor, MoonStar, Settings2, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";

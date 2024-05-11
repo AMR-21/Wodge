@@ -3,9 +3,9 @@
 import { SettingsContent } from "@/app/(workspaces)/[workspaceSlug]/settings/settings";
 import { SettingsSidebar } from "@/app/(workspaces)/[workspaceSlug]/settings/settings-sidebar";
 import { isAdmin, isOwner } from "@repo/data";
-import { Sheet } from "@repo/ui/components/ui/sheet";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Sheet } from "@/components/ui/sheet";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

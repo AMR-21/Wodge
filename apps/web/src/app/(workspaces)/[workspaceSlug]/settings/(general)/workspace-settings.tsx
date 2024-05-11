@@ -9,18 +9,18 @@ import {
   SettingsContentHeader,
   SettingsContentSection,
 } from "../settings";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { WorkspaceDangerZone } from "./workspace-danger-zone";
 import { WorkspaceGeneralForm } from "./workspace-general-form";
-import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { useIsOwnerOrAdmin } from "@/hooks/use-is-owner-or-admin";
 import { AvatarBtn } from "@/components/avatar-btn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
-import { toast } from "@repo/ui/components/ui/toast";
-import { useAvatarUrl } from "@repo/ui/hooks/use-avatar-url";
-import { useUpload } from "@repo/ui/hooks/use-upload";
-import { useDelete } from "@repo/ui/hooks/use-delete";
+import { toast } from "@/components/ui/toast";
+import { useAvatarUrl } from "@/hooks/use-avatar-url";
+import { useUpload } from "@/hooks/use-upload";
+import { useDelete } from "@/hooks/use-delete";
 
 export function WorkspaceSettings() {
   const { workspace, workspaceRep } = useCurrentWorkspace();

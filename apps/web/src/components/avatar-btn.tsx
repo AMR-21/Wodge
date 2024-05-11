@@ -1,18 +1,9 @@
-import { getAvatarAddress } from "@repo/data";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
-import { UseMutateFunction } from "@tanstack/react-query";
-import { clear } from "console";
-import { set } from "lodash";
 import { X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { TooltipWrapper } from "./tooltip-wrapper";
+import { cn } from "@/lib/utils";
+import { SafeAvatar } from "./safe-avatar";
+import { Button } from "./ui/button";
 
 interface AvatarCompProps {
   fallback?: string | null;

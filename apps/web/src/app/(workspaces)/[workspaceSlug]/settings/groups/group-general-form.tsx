@@ -12,19 +12,14 @@ import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
 import { ColorPicker } from "../color-picker";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { hexToRgb } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { toast } from "@repo/ui/components/ui/toast";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { hexToRgb } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export function GroupGeneralForm({ group }: { group?: DrObj<Group> }) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();

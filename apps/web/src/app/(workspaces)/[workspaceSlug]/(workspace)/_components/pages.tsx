@@ -18,9 +18,9 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useCanView } from "@repo/ui/hooks/use-can-view";
+import { cn } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useCanView } from "@/hooks/use-can-view";
 
 export function Pages({
   channels,

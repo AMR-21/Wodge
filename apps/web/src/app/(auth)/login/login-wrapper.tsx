@@ -9,8 +9,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Separator } from "@repo/ui/components/ui/separator";
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export function LoginWrapper() {
   return (

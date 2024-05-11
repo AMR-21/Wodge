@@ -3,8 +3,8 @@ import {
   WorkspaceMembers,
   WorkspaceStructure,
 } from "../schemas/workspace.schema";
-import { ChannelsTypes, Page } from "../schemas/channel.schema";
-import { DrObj, Room, Thread } from "..";
+import { ChannelsTypes } from "../schemas/channel.schema";
+import { DrObj, Page, Room, Thread } from "..";
 
 interface Common {
   structure: WorkspaceStructure | DrObj<WorkspaceStructure>;

@@ -10,17 +10,17 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useMemo } from "react";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { useAtomValue } from "jotai";
 import { openFoldersAtom } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/atoms";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/components/ui/collapsible";
+} from "@/components/ui/collapsible";
 import { Channels } from "./channels";
 import { TeamMore } from "./team-more";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function Folders({
   folders,

@@ -10,10 +10,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function NewInviteForm({
   setIsOpen,

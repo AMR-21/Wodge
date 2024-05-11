@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Step,
-  Stepper,
-  StepperContainer,
-} from "@repo/ui/components/ui/stepper";
+import { Step, Stepper, StepperContainer } from "@/components/ui/stepper";
 import { EmailForm } from "./email-form";
 import { OTP } from "./otp";
 

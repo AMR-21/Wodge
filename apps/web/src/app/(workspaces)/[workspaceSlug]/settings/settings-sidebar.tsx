@@ -1,9 +1,9 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { SidebarItemBtn } from "../(workspace)/_components/sidebar-item-btn";
 import { Building2, PanelLeft, User2, UserCircle } from "lucide-react";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   SettingsSidebarCollapsibleItem,
   SettingsSidebarHeader,
@@ -12,9 +12,9 @@ import {
 } from "./settings";
 import { GroupsSidebar } from "./groups/groups-sidebar";
 import { TeamsSidebar } from "./teams/teams-sidebar";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { Sheet, SheetContent } from "@repo/ui/components/ui/sheet";
-import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useIsOwnerOrAdmin } from "@/hooks/use-is-owner-or-admin";
 import { useParams } from "next/navigation";
 
 export function SettingsSidebar() {

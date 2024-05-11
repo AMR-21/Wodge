@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useStepper } from "@repo/ui/components/ui/stepper";
+import { useStepper } from "@/components/ui/stepper";
 import {
   Form,
   FormControl,
@@ -13,16 +13,16 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/ui/form";
-import { UserAvatar } from "@repo/ui/components/user-avatar";
-import { Input } from "@repo/ui/components/ui/input";
+} from "@/components/ui/form";
+import { UserAvatar } from "@/components/user-avatar";
+import { Input } from "@/components/ui/input";
 import { PublicUserType, UpdateUserSchema } from "@repo/data";
 import { updateProfile } from "@/actions/user-actions";
-import { toast } from "@repo/ui/components/ui/toast";
+import { toast } from "@/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AvatarBtn } from "../../../components/avatar-btn";
-import { useUpload } from "@repo/ui/hooks/use-upload";
-import { useDelete } from "@repo/ui/hooks/use-delete";
+import { useUpload } from "@/hooks/use-upload";
+import { useDelete } from "@/hooks/use-delete";
 import { useOnboarding } from "./onboarding-context";
 
 export function CompleteProfileForm() {

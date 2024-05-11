@@ -2,7 +2,7 @@
 
 import { Invite, Invites } from "@repo/data";
 import { env } from "@repo/env";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useQuery } from "@tanstack/react-query";
 
 function getInviteLink(invites?: Invites): Invite | undefined {

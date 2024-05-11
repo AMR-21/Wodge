@@ -4,17 +4,15 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
+} from "@/components/ui/popover";
 import { SidebarItemBtn } from "../_components/sidebar-item-btn";
 import { Plus } from "lucide-react";
 import Uppy from "@uppy/core";
 import { useMemo, useState } from "react";
 import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/react";
-import { useParams } from "next/navigation";
 import { useSetAtom } from "jotai";
-import { msgsAtom } from "./[teamId]/[channelId]/message-list";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
 import { Message, roomMutators } from "@repo/data";
 import { Replicache } from "replicache";
@@ -36,9 +34,7 @@ export function UploadButton({
 }) {
   const [open, setOpen] = useState(false);
 
-  const setMessages = useSetAtom(msgsAtom);
   const { user } = useCurrentUser();
-  const queryClient = useQueryClient();
 
   const uppyRef = useMemo(
     () =>
@@ -112,7 +108,6 @@ export function UploadButton({
       reactions: [],
     });
 
-    // queryClient.setQueryData(["image", fileId], signedUrl);
   }
 
   return (

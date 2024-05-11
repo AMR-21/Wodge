@@ -10,26 +10,26 @@ import {
   PanelLeft,
   PhoneCall,
 } from "lucide-react";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { useAtom } from "jotai";
-import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
+import { isSidebarOpenAtom } from "@/store/global-atoms";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@repo/ui/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 import { useParams, useRouter } from "next/navigation";
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
-import { useAppState } from "@repo/ui/store/store";
+import { useChannelPath } from "@/hooks/use-channel-path";
+import { useAppState } from "@/store/store";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { Button } from "@repo/ui/components/ui/button";
-import { Toggle } from "@repo/ui/components/ui/toggle";
+} from "@/components/ui/popover";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
 import Link from "next/link";
 import { useState } from "react";
 import { createPortal } from "react-dom";

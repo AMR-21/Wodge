@@ -3,8 +3,8 @@ import { Message } from "./message";
 import { memo, useEffect, useLayoutEffect, useRef } from "react";
 import { Message as MessageType, roomMutators } from "@repo/data";
 import { ReadTransaction, Replicache } from "replicache";
-import { useSubscribe } from "@repo/ui/hooks/use-subscribe";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useSubscribe } from "@/hooks/use-subscribe";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useParams } from "next/navigation";
 
 export const lastSenderIdAtom = atom<string>("");

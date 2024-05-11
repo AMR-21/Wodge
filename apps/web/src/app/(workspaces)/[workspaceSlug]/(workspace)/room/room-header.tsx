@@ -1,4 +1,4 @@
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
+import { useChannelPath } from "@/hooks/use-channel-path";
 import { memo } from "react";
 
 export const RoomHeader = memo(() => {

@@ -1,9 +1,10 @@
 import { SafeDiv } from "@/components/safe-div";
 import { Message } from "@repo/data";
-import { OfflineEditor, useMessageEditor } from "@repo/editor";
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEffect } from "react";
+import { useMessageEditor } from "@/hooks/use-message-editor";
+import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 
 export function EditEditor({
   content,

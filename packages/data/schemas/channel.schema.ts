@@ -5,7 +5,6 @@ export type ChannelsTypes = "page" | "room" | "thread" | "resources";
 
 export const ChannelSchema = z.object({
   id: z.string().length(ID_LENGTH),
-  // act as title
   name: z.string().max(70).min(1),
   avatar: z.string().optional(),
   viewGroups: z.array(

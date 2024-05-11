@@ -1,4 +1,4 @@
-import { Dialog, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,17 +7,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import {
-  FileCog,
-  FilePlus,
-
-  MoreHorizontal,
-  Settings,
-} from "lucide-react";
+} from "@/components/ui/dropdown-menu";
+import { FileCog, FilePlus, MoreHorizontal, Settings } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { nanoid } from "nanoid";
 import { ID_LENGTH } from "@repo/data";
 import Link from "next/link";

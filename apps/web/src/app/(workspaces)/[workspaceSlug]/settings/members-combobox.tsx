@@ -5,21 +5,21 @@ import {
   PopoverContent,
   PopoverTrigger,
   PopoverClose,
-} from "@repo/ui/components/ui/popover";
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@repo/ui/components/ui/command";
+} from "@/components/ui/command";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { Button } from "@repo/ui/components/ui/button";
-import { useMember } from "@repo/ui/hooks/use-member";
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useMember } from "@/hooks/use-member";
 import { type Member as MemberType } from "@repo/data";
 
 interface MembersComboboxProps {

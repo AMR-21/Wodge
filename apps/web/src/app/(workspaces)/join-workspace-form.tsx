@@ -12,11 +12,11 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { DialogClose } from "@repo/ui/components/ui/dialog";
-import { Button } from "@repo/ui/components/ui/button";
-import { toast } from "@repo/ui/components/ui/toast";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { DialogClose } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function JoinWorkspaceForm() {

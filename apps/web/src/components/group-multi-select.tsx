@@ -1,21 +1,17 @@
-import { BRAND_COLOR, Channel, DrObj, Group, Team } from "@repo/data";
-import { Button, buttonVariants } from "@repo/ui/components/ui/button";
+import { BRAND_COLOR, DrObj, Group } from "@repo/data";
+import { Button, buttonVariants } from "@/components/ui/button";
+
+import { Check, ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@repo/ui/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
-import { cn } from "@repo/ui/lib/utils";
-import { group } from "console";
-import { Check, ChevronDown } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+} from "./ui/command";
 
 interface GroupMultiSelectProps {
   baseGroups: readonly DrObj<Group>[];
@@ -25,7 +21,7 @@ interface GroupMultiSelectProps {
 
 const teamMember: Group = {
   id: "team-members",
-  name: "Team members",
+  name: " members",
   color: BRAND_COLOR,
   members: [],
   createdBy: "",

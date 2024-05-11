@@ -1,14 +1,6 @@
 import { z } from "zod";
 import { ChannelSchema } from "./channel.schema";
 
-//  id: string
-//   columnId: string
-//   content?: string
-//   title?: string
-//   due?: DateRange
-//   assignee?: string[]
-//   priority?: 'low' | 'medium' | 'high'
-//   includeTime: boolean
 export const TaskSchema = z.object({
   id: z.string(),
   columnId: z.string(),

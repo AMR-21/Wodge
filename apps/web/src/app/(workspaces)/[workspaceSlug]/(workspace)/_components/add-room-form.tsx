@@ -9,13 +9,13 @@ import {
   Room,
   RoomSchema,
 } from "@repo/data";
-import { Button, buttonVariants } from "@repo/ui/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogTrigger,
-} from "@repo/ui/components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -23,18 +23,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { PopoverClose } from "@repo/ui/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/ui/radio-group";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { PopoverClose } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+} from "@/components/ui/select";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { nanoid } from "nanoid";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";

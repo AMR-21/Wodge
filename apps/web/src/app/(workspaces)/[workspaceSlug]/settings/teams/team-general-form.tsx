@@ -4,21 +4,19 @@ import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
 import { nanoid } from "nanoid";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-import { useSubmitToast } from "@/components/use-submit-toast";
-import { toast } from "@repo/ui/components/ui/toast";
 import { useRouter } from "next/navigation";
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Button } from "@/components/ui/button";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();

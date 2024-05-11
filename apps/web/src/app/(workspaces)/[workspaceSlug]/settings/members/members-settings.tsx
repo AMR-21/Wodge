@@ -8,8 +8,8 @@ import { membersColumns } from "./members-columns";
 import { Mutable } from "@/lib/utils";
 import { DrObj, Member } from "@repo/data";
 import { SettingsSearchInput } from "../settings-search-input";
-import { DataTable } from "@repo/ui/components/data-table/data-table";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { DataTable } from "@/components/data-table/data-table";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function MembersSettings() {
   const { members, workspaceRep, workspaceId } = useCurrentWorkspace();

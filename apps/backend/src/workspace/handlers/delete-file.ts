@@ -39,7 +39,7 @@ export async function deleteFile(
 
     if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
 
-    const { workspace } = await res.json<{ workspace: Workspace }>();
+    const { workspace } = (await res.json()) as { workspace: Workspace };
 
     key = workspace.avatar?.split("/").pop()!;
 

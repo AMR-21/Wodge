@@ -10,7 +10,7 @@ import {
   removeTeamMembers,
 } from "../../models/workspace/mutators/team-members";
 import {
-  addTeamFolderszMutation,
+  addTeamFolderMutation,
   deleteTeamFoldersMutation,
 } from "../../models/workspace/mutators/team-folders";
 import exp from "constants";
@@ -103,7 +103,7 @@ describe("Workspace teams' unit mutations", () => {
     const s1 = updateTeamInfoMutation({
       structure,
       teamId,
-      update: { name: "New Name" },
+      update: { name: "New Name", avatar: "" },
     });
 
     expect(s1).toEqual({
@@ -116,7 +116,7 @@ describe("Workspace teams' unit mutations", () => {
       updateTeamInfoMutation({
         structure,
         teamId,
-        update: { name: "" },
+        update: { name: "", avatar: "" },
       })
     ).toThrowError(/^Invalid team update data$/);
   });
@@ -211,19 +211,17 @@ describe("Workspace teams' unit mutations", () => {
     const dirId = nanoid(WORKSPACE_TEAM_ID_LENGTH);
 
     expect(
-      addTeamFoldersMutation({
+      addTeamFolderMutation({
         structure,
         teamId,
         update: {
-          folders: [
-            {
-              name: "Account",
-              id: dirId,
-              channels: [],
-              editGroups: [],
-              viewGroups: [],
-            },
-          ],
+          folder: {
+            name: "Account",
+            id: dirId,
+            channels: [],
+            editGroups: [],
+            viewGroups: [],
+          },
         },
       })
     ).toEqual({
@@ -247,7 +245,7 @@ describe("Workspace teams' unit mutations", () => {
 
     // Test: update team folders with invalid data
     expect(() =>
-      addTeamFoldersMutation({
+      addTeamFolderMutation({
         structure,
         teamId,
         //@ts-ignore
@@ -255,55 +253,49 @@ describe("Workspace teams' unit mutations", () => {
       })
     ).toThrowError(/^Invalid team update data$/);
 
-    const s2 = addTeamFoldersMutation({
+    const s2 = addTeamFolderMutation({
       structure,
       teamId,
       update: {
-        folders: [
-          {
+        folder: {
+          name: "Account",
+          id: dirId,
+          channels: [],
+          editGroups: [],
+          viewGroups: [],
+        },
+      },
+    });
+
+    // non existence team
+    expect(() =>
+      addTeamFolderMutation({
+        structure: s2,
+        teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
+        update: {
+          folder: {
             name: "Account",
             id: dirId,
             channels: [],
             editGroups: [],
             viewGroups: [],
           },
-        ],
-      },
-    });
-
-    // non existence team
-    expect(() =>
-      addTeamFoldersMutation({
-        structure: s2,
-        teamId: nanoid(WORKSPACE_TEAM_ID_LENGTH),
-        update: {
-          folders: [
-            {
-              name: "Account",
-              id: dirId,
-              channels: [],
-              editGroups: [],
-              viewGroups: [],
-            },
-          ],
         },
       })
     ).toThrowError(/^Team does not exist$/);
 
     expect(() =>
-      addTeamFoldersMutation({
+      addTeamFolderMutation({
         structure: s2,
         teamId,
         update: {
-          folders: [
-            {
-              name: "Account",
-              id: dirId,
-              channels: [],
-              editGroups: [],
-              viewGroups: [],
-            },
-          ],
+          folder: {
+            name: "Account",
+            id: dirId,
+            channels: [],
+            editGroups: [],
+            viewGroups: [],
+          },
         },
       })
     ).toThrowError(/^Folder already exists in team$/);

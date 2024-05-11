@@ -1,12 +1,13 @@
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import { OfflineEditor, useThreadEditor } from "@repo/editor";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { SafeAvatar } from "@/components/safe-avatar";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
 import { threadMutators } from "@repo/data";
 import { Replicache } from "replicache";
-import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
+import { TooltipWrapper } from "@/components/tooltip-wrapper";
+import { useThreadEditor } from "@/hooks/use-thread-editor";
+import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 
 export function CommentEditor({
   rep,

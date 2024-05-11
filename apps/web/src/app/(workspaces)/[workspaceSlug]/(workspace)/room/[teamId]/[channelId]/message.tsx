@@ -1,22 +1,20 @@
-import { useMember } from "@repo/ui/hooks/use-member";
-import { differenceInMinutes, format, sub } from "date-fns";
+import { useMember } from "@/hooks/use-member";
+import { differenceInMinutes, format } from "date-fns";
 import { DrObj, Message as MessageType } from "@repo/data";
-import { MoreHorizontal } from "lucide-react";
-import React, { memo, useRef, useState } from "react";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import React, { memo, useRef } from "react";
+import { SafeAvatar } from "@/components/safe-avatar";
 import { SafeDiv } from "@/components/safe-div";
-import { SidebarItemBtn } from "@repo/ui/components/data-table/sidebar-item-btn";
 import { ImageMessage } from "./image-message";
 import { AudioMessage } from "./audio-message";
 import { FileMessage } from "./file-message";
 import { VideoMessage } from "./video-message";
 import { MessageDropDown } from "../../message-dropdown";
-import { useCanEdit } from "@repo/ui/hooks/use-can-edit";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { useCanEdit } from "@/hooks/use-can-edit";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "../../../thread/[teamId]/[channelId]/use-edit-editor";
 import { EditEditor } from "./edit-editor";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 
 export const Message = memo(
   ({

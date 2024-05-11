@@ -1,18 +1,18 @@
-import { Button } from "@repo/ui/components/ui/button";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useChannelPath } from "@/hooks/use-channel-path";
 import { ThreadAction } from "./thread-actions";
 import { ThreadMessagesList } from "./thread-msgs-list";
 import { CheckCircle2, CircleDot } from "lucide-react";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useMember } from "@repo/ui/hooks/use-member";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useMember } from "@/hooks/use-member";
 import { useParams } from "next/navigation";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { Replicache } from "replicache";
 import { Thread, threadMutators } from "@repo/data";
 import { Post } from "../post";
 import { CommentEditor } from "./comment-editor";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 
 export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {

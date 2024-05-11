@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Download, File } from "lucide-react";
 import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
 import { env } from "@repo/env";
-import { download, getSrcLink } from "@/utils";
+import { download, getSrcLink } from "@/lib/utils";
 import { useState } from "react";
 
 export function FileMessage({

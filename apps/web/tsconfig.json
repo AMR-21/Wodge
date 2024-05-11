@@ -18,7 +18,8 @@
     ".next/types/**/*.ts",
     "../../packages/ui/components/data-table/settings-data-table.tsx",
     "src/components/workspace/sidebar/add-to-team.tsx",
-    "src/components/resources/advanced-uploadtsx"
+    "src/components/resources/advanced-uploadtsx",
+    "src/lib/utils/is-custom-node-selected.ts"
   ],
   "exclude": ["node_modules"]
 }

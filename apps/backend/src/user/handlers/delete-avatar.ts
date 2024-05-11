@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { HeadObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getS3Client } from "../../lib/get-s3-client";
-import { makeUserAvatarKey, PublicUserType } from "@repo/data";
+import { makeUserAvatarKey, PublicUserType, UserType } from "@repo/data";
 import UserParty from "../user-party";
 
 export async function deleteAvatar(party: UserParty, c: Context) {
@@ -24,7 +24,7 @@ export async function deleteAvatar(party: UserParty, c: Context) {
 
   if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
 
-  const { user } = await res.json<{ user: PublicUserType }>();
+  const { user } = (await res.json()) as { user: UserType };
 
   if (!user) return c.json({ error: "Failed to delete avatar" }, 400);
   key = user.avatar?.split("/").pop()!;

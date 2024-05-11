@@ -1,7 +1,7 @@
 "use client";
 
 import { users, UserType } from "@repo/data";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useTransition } from "react";
 

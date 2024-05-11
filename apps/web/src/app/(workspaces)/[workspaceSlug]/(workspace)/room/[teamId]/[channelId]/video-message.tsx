@@ -1,4 +1,4 @@
-import { getSrcLink } from "@/utils";
+import { getSrcLink } from "@/lib/utils";
 import { DrObj, Message } from "@repo/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";

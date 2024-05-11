@@ -1,15 +1,15 @@
 import { Member, PublicUserType } from "@repo/data";
 import { queryClient } from "@repo/data/lib/query-client";
-import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
-import { Header } from "@repo/ui/components/data-table/header";
+import { DataTableActions } from "@/components/data-table/data-table-action";
+import { Header } from "@/components/data-table/header";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { buttonVariants } from "@repo/ui/components/ui/button";
-import { Checkbox } from "@repo/ui/components/ui/checkbox";
+} from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -17,9 +17,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select";
-import { useMember } from "@repo/ui/hooks/use-member";
-import { cn } from "@repo/ui/lib/utils";
+} from "@/components/ui/select";
+import { useMember } from "@/hooks/use-member";
+import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { DeepReadonly } from "replicache";

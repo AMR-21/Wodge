@@ -1,8 +1,8 @@
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Post } from "../post";
 import { Replicache } from "replicache";
 import { threadMutators } from "@repo/data";
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
+import { useChannelPath } from "@/hooks/use-channel-path";
 import { CommentEditor } from "./comment-editor";
 import { ThreadMessagesList } from "./thread-msgs-list";
 

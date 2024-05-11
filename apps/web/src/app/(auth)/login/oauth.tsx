@@ -2,7 +2,7 @@
 
 import { RiGoogleFill as Google } from "react-icons/ri";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 export function OAuth() {

@@ -3,16 +3,16 @@ import { useState } from "react";
 import { Check, Copy, Repeat } from "lucide-react";
 import { NewInviteForm } from "./new-invite-form";
 import { Invite } from "@repo/data";
-import { Skeleton } from "@repo/ui/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
-import { toast } from "@repo/ui/components/ui/toast";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+} from "@/components/ui/popover";
+import { toast } from "@/components/ui/toast";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useInvites } from "./use-invites";
-import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
+import { TooltipWrapper } from "@/components/tooltip-wrapper";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 
 function makeLink(token: string, wid: string) {

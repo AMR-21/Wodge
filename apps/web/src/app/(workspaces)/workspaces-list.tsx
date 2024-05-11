@@ -1,6 +1,6 @@
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { WorkspaceItem } from "./workspace-item";
-import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
+import { useUserWorkspaces } from "@/hooks/use-user-workspaces";
 
 export function WorkspacesList() {
   const { userWorkspaces, isUserWorkspacesPending } = useUserWorkspaces();

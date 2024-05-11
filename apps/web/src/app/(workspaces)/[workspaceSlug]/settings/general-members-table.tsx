@@ -3,8 +3,8 @@ import { useTable } from "./use-table";
 import { Mutable } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 import { MembersCombobox } from "./members-combobox";
-import { Input } from "@repo/ui/components/ui/input";
-import { DataTable } from "@repo/ui/components/data-table/data-table";
+import { Input } from "@/components/ui/input";
+import { DataTable } from "@/components/data-table/data-table";
 import { SettingsSearchInput } from "./settings-search-input";
 
 interface MembersTableProps<TData> {

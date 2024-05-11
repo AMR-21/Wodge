@@ -8,11 +8,11 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
-import { cn } from "@repo/ui/lib/utils";
-import { inputVariants } from "@repo/ui/components/ui/input";
-import { Separator } from "@repo/ui/components/ui/separator";
-import { Button, ButtonProps } from "@repo/ui/components/ui/button";
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { inputVariants } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Button, ButtonProps } from "@/components/ui/button";
 
 const presetColors = [
   BRAND_COLOR,

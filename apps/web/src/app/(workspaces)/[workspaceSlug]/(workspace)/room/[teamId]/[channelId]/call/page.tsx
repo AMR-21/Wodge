@@ -4,10 +4,10 @@ import "@livekit/components-styles";
 import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useAppState } from "@repo/ui/store/store";
-import { Button } from "@repo/ui/components/ui/button";
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useAppState } from "@/store/store";
+import { Button } from "@/components/ui/button";
+import { useChannelPath } from "@/hooks/use-channel-path";
 
 export default function RoomPage() {
   const room = useAppState((s) => s.room);

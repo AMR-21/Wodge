@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
-import { useUserWorkspaces } from "@repo/ui/hooks/use-user-workspaces";
-import { cn } from "@repo/ui/lib/utils";
-import { buttonVariants } from "@repo/ui/components/ui/button";
+import { useUserWorkspaces } from "@/hooks/use-user-workspaces";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Building2,
   Check,
@@ -35,13 +31,13 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+} from "@/components/ui/dropdown-menu";
+import { useIsOwnerOrAdmin } from "@/hooks/use-is-owner-or-admin";
 import { createClient } from "@/lib/supabase/client";
-import { toast } from "@repo/ui/components/ui/toast";
+import { toast } from "@/components/ui/toast";
 import { useParams, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { SafeAvatar } from "@/components/safe-avatar";
 
 export function WorkspaceSwitcher() {
   const { workspace, workspaceSlug } = useCurrentWorkspace();

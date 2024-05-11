@@ -6,7 +6,7 @@ import {
   localStoragePersister,
   queryClient,
 } from "@repo/data/lib/query-client";
-import { WorkspaceProvider } from "@repo/ui/components/workspace-provider";
+import { WorkspaceProvider } from "@/components/workspace-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }}
     >
       <WorkspaceProvider>{children}</WorkspaceProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} position="left" />
     </PersistQueryClientProvider>
   );
 }

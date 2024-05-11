@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { useParams, usePathname } from "next/navigation";
 import {
   Database,
@@ -12,13 +12,13 @@ import {
   Settings,
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAtom, useAtomValue } from "jotai";
-import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
+import { isSidebarOpenAtom } from "@/store/global-atoms";
 import { Teamspaces } from "./teamspaces";
 import { ChannelsTypes } from "@repo/data";
-import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { useIsOwnerOrAdmin } from "@/hooks/use-is-owner-or-admin";
 import { activeSidebarAtom } from "./sidebar-atoms";
 
 interface Tab {

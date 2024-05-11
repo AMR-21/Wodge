@@ -38,6 +38,14 @@ yarn-error.log*
 .DS_Store
 *.pem
 
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
 # Wrangler
 .dev.vars
 /.wrangler/
+
+
+/tsconfig.tsbuildinfo/

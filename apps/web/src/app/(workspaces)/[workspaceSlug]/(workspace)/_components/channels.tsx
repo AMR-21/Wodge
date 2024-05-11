@@ -26,8 +26,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { cn } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useParams } from "next/navigation";
 import {
   DropdownMenu,
@@ -35,16 +35,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import { useCanView } from "@repo/ui/hooks/use-can-view";
+} from "@/components/ui/dropdown-menu";
+import { useCanView } from "@/hooks/use-can-view";
 import { AddPageForm } from "./add-page-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@repo/ui/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AddRoomForm } from "./add-room-form";
-import { recentlyVisitedAtom } from "@repo/ui/store/atoms";
+import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { useSetAtom } from "jotai";
 import { produce } from "immer";
 

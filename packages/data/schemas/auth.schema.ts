@@ -1,13 +1,5 @@
-import {
-  integer,
-  sqliteTable,
-  text,
-  primaryKey,
-} from "drizzle-orm/sqlite-core";
-import type { AdapterAccount } from "@auth/core/adapters";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { nanoid } from "nanoid";
-import { relations } from "drizzle-orm";
-import { workspaces } from "./workspace.schema";
 
 export const users = sqliteTable("users", {
   id: text("id")
@@ -28,50 +20,3 @@ export const users = sqliteTable("users", {
 });
 
 export type UserType = typeof users.$inferSelect;
-// export const usersRelations = relations(users, ({ many }) => ({
-//   members: many(workspaces),
-// }));
-
-// export const accounts = sqliteTable(
-//   "accounts",
-//   {
-//     userId: text("user_id")
-//       .notNull()
-//       .references(() => users.id, { onDelete: "cascade" }),
-//     type: text("type").$type<AdapterAccount["type"]>().notNull(),
-//     provider: text("provider").notNull(),
-//     providerAccountId: text("provider_account_id").notNull(),
-//     refresh_token: text("refresh_token"),
-//     access_token: text("access_token"),
-//     expires_at: integer("expires_at"),
-//     token_type: text("token_type"),
-//     scope: text("scope"),
-//     id_token: text("id_token"),
-//     session_state: text("session_state"),
-//   },
-//   (account) => ({
-//     compoundKey: primaryKey({
-//       columns: [account.provider, account.providerAccountId],
-//     }),
-//   })
-// );
-
-// export const sessions = sqliteTable("sessions", {
-//   sessionToken: text("session_token").notNull().primaryKey(),
-//   userId: text("user_id")
-//     .notNull()
-//     .references(() => users.id, { onDelete: "cascade" }),
-//   expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-// });
-
-// export const verificationTokens = sqliteTable(
-//   "verification_tokens",
-//   {
-//     identifier: text("id").notNull(),
-//     token: text("token").notNull(),
-//     expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-//   },
-//   (vt) => ({
-//     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-//   })
-// );

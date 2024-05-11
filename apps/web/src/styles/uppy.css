@@ -1,0 +1,219 @@
+.uppy-Dashboard-inner {
+  @apply border-none bg-transparent text-foreground;
+}
+
+[data-uppy-drag-drop-supported="true"] .uppy-Dashboard-AddFiles {
+  @apply border-none;
+}
+
+.uppy-Dashboard-AddFiles-title {
+  @apply text-foreground;
+}
+
+.uppy-Dashboard-browse,
+.uppy-u-reset.uppy-c-btn.uppy-Dashboard-browse {
+  @apply border-b-[1px] border-b-transparent text-sky-500;
+
+  &:hover {
+    @apply border-b-sky-500;
+  }
+}
+
+.uppy-DashboardContent-bar {
+  @apply border-none bg-transparent text-foreground;
+}
+
+.uppy-DashboardContent-back,
+.uppy-StatusBar-actionBtn {
+  @apply p-1 text-xs text-muted-foreground transition-all hover:bg-secondary hover:text-foreground;
+}
+
+.uppy-Dashboard-Item {
+  @apply border-none;
+}
+
+/* .uppy-StatusBar-actions {
+  @apply border-none bg-transparent;
+} */
+.uppy-StatusBar.is-waiting .uppy-StatusBar-actionBtn--upload {
+  @apply w-full rounded-md bg-primary px-3 py-2 text-primary-foreground hover:bg-primary/90;
+}
+
+.uppy-StatusBar:not([aria-hidden="true"]).is-waiting {
+  @apply border-none;
+}
+
+.uppy-StatusBar.is-waiting .uppy-StatusBar-actions {
+  @apply border-none bg-transparent p-0;
+}
+.uppy-StatusBar:not([aria-hidden="true"]).is-waiting {
+  @apply border-none bg-transparent;
+}
+
+.uppy-DashboardContent-back:focus,
+.uppy-DashboardContent-save:focus,
+.uppy-StatusBar-actionBtn:focus {
+  @apply bg-secondary;
+}
+
+.uppy-StatusBar-actionBtn,
+.uppy-StatusBar-actionBtn--retry {
+  @apply text-red-500 hover:text-red-50;
+}
+
+.uppy-StatusBar-actionBtn,
+.uppy-StatusBar-actionBtn--success {
+  @apply text-sky-500 hover:text-red-50;
+}
+
+.uppy-StatusBar {
+  @apply bg-transparent text-foreground;
+}
+
+.uppy-StatusBar-statusPrimary {
+  @apply text-foreground;
+}
+
+.uppy-StatusBar-statusIndicator {
+  @apply fill-green-500;
+}
+
+.uppy-StatusBar.is-complete .uppy-StatusBar-progress {
+  @apply bg-green-500;
+}
+
+.uppy-StatusBar.is-error .uppy-StatusBar-statusIndicator {
+  @apply fill-red-500;
+}
+
+.uppy-StatusBar.is-error .uppy-StatusBar-progress {
+  @apply bg-red-500;
+}
+
+.uppy-DashboardContent-title {
+  @apply text-sm;
+  line-height: 40px;
+}
+
+.uppy-StatusBar:before {
+  @apply mx-auto h-0.5 overflow-hidden rounded-full;
+}
+
+.uppy-StatusBar-actionBtn--done {
+  @apply p-1 text-xs text-muted-foreground transition-all hover:bg-secondary hover:text-green-600 dark:hover:text-green-500;
+}
+.uppy-Dashboard-AddFilesPanel {
+  background: none;
+  @apply border border-border bg-background;
+}
+
+.uppy-c-icon {
+  @apply cursor-pointer;
+}
+
+.uppy-DashboardTab {
+  @apply border-none;
+}
+
+.simple .uppy-Dashboard-AddFiles-title {
+  @apply mt-0 pl-2.5 text-left;
+}
+
+[dir="ltr"] .uppy-DashboardTab-inner {
+  @apply m-0;
+}
+
+[data-uppy-drag-drop-supported="true"] .uppy-Dashboard-AddFiles {
+  @apply m-0;
+}
+.uppy-Dashboard-AddFiles-list {
+  @apply flex-none gap-1;
+}
+
+.uppy-Dashboard-AddFiles-list > span[role="presentation"] {
+  @apply flex flex-col gap-1;
+}
+.uppy-u-reset.uppy-c-btn.uppy-DashboardTab-btn {
+  @apply flex w-full items-center justify-start gap-1 rounded-md  bg-transparent pl-1 pr-2 font-medium text-muted-foreground transition-all hover:bg-accent hover:text-foreground;
+
+  &:hover {
+    & > .uppy-DashboardTab-inner > svg,
+    & > .uppy-DashboardTab-inner > svg > path {
+      @apply fill-foreground text-foreground;
+    }
+  }
+}
+.uppy-DashboardTab-name {
+  @apply font-medium;
+}
+
+.uppy-DashboardTab-btn:hover {
+  @apply bg-transparent;
+}
+
+.uppy-DashboardTab-inner {
+  @apply bg-transparent;
+}
+
+.uppy-DashboardTab-inner > svg,
+.uppy-DashboardTab-inner > svg > path {
+  @apply h-7 w-7 bg-transparent fill-muted-foreground p-0 text-muted-foreground;
+}
+
+.uppy-Root {
+  @apply !text-foreground;
+
+  font-family: inherit !important;
+  font: inherit !important;
+}
+
+.uppy-DashboardContent-panel {
+  @apply border border-border/50 bg-background;
+}
+
+.uppy-DashboardContent-addMore {
+  @apply bg-transparent;
+}
+
+.uppy-DashboardContent-addMore > svg {
+  @apply h-3 w-3 bg-transparent fill-muted-foreground transition-all hover:fill-foreground;
+}
+/* [dir="ltr"] .uppy-DashboardContent-addMore > svg {
+  @apply fill-foreground text-foreground;
+} */
+.uppy-DashboardContent-addMore:focus {
+  @apply bg-transparent;
+}
+
+.uppy-u-reset.uppy-c-btn.uppy-Audio-button,
+.uppy-u-reset.uppy-c-btn.uppy-Webcam-button.uppy-Webcam-button--picture,
+.uppy-u-reset.uppy-c-btn.uppy-Webcam-button {
+  @apply rounded-md bg-accent  p-1.5 text-muted-foreground;
+
+  &:hover {
+    & > svg > path {
+      @apply fill-accent-foreground;
+    }
+  }
+
+  & > svg {
+    @apply h-6 w-6;
+
+    & > path {
+      @apply fill-muted-foreground;
+    }
+  }
+}
+
+.uppy-Audio-audioContainer {
+  @apply bg-transparent px-1;
+}
+
+.uppy-Audio-player {
+  @apply w-full;
+}
+
+.uppy-Audio-buttonContainer,
+.uppy-Webcam-buttonContainer {
+  @apply ml-0 flex gap-1 justify-self-center;
+}

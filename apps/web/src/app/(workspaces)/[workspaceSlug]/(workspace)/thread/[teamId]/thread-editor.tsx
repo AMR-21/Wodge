@@ -1,15 +1,16 @@
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import { OfflineEditor, useThreadEditor } from "@repo/editor";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
-import { cn } from "@repo/ui/lib/utils";
+import { SafeAvatar } from "@/components/safe-avatar";
+import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
+import { cn } from "@/lib/utils";
 import { Image, Vote } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useParams } from "next/navigation";
 import { memo } from "react";
+import { useThreadEditor } from "@/hooks/use-thread-editor";
+import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 
 export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
   const { workspaceRep } = useCurrentWorkspace();

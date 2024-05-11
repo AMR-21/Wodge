@@ -7,8 +7,8 @@ import { TeamGeneralForm } from "./team-general-form";
 import { GeneralMembersTable } from "../general-members-table";
 import { useTable } from "../use-table";
 
-import { Button } from "@repo/ui/components/ui/button";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Button } from "@/components/ui/button";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { teamMembersColumns } from "./team-members-columns";
 
 export function TeamSettings({

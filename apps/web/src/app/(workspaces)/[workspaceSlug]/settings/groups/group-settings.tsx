@@ -7,10 +7,10 @@ import { DrObj, Group } from "@repo/data";
 import { GroupMembersSettings } from "./group-members-settings";
 import { GroupGeneralForm } from "./group-general-form";
 
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useMember } from "@repo/ui/hooks/use-member";
-import { Button } from "@repo/ui/components/ui/button";
-import { toast } from "@repo/ui/components/ui/toast";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useMember } from "@/hooks/use-member";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 
 export function GroupSettings({
   group,

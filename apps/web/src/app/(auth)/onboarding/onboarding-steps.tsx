@@ -9,8 +9,8 @@ import {
   Step,
   Stepper,
   StepperContainer,
-} from "@repo/ui/components/ui/stepper";
-import { Loader } from "@repo/ui/components/ui/loader";
+} from "@/components/ui/stepper";
+import { Loader } from "@/components/ui/loader";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export function OnboardingSteps() {

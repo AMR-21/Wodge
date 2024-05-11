@@ -4,8 +4,8 @@ import { PanelLeftClose, Search } from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { useAtom } from "jotai";
-import { isSidebarOpenAtom } from "@repo/ui/store/atoms";
-import { cn } from "@repo/ui/lib/utils";
+import { isSidebarOpenAtom } from "@/store/global-atoms";
+import { cn } from "@/lib/utils";
 
 export function SidebarHeader() {
   const [isSidebarOpen, setSidebar] = useAtom(isSidebarOpenAtom);

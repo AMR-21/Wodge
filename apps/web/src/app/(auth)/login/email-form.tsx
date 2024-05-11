@@ -1,16 +1,11 @@
 import { createClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@repo/ui/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { Loader } from "@repo/ui/components/ui/loader";
-import { useStepper } from "@repo/ui/components/ui/stepper";
-import { toast } from "@repo/ui/components/ui/toast";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
+import { useStepper } from "@/components/ui/stepper";
+import { toast } from "@/components/ui/toast";
 import { useAtom, useSetAtom } from "jotai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

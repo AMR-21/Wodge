@@ -6,17 +6,17 @@ import {
   ID_LENGTH,
   WORKSPACE_GROUP_ID_LENGTH,
 } from "@repo/data";
-import { Button } from "@repo/ui/components/ui/button";
-import { DialogClose, DialogContent } from "@repo/ui/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { DialogClose, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 import { nanoid } from "nanoid";
 import { useRef } from "react";

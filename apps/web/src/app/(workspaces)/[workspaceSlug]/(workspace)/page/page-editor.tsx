@@ -1,10 +1,6 @@
+import BlockEditor from "@/components/editor/block-editor/block-editor";
+import { useYDoc } from "@/hooks/use-y-doc";
 import { users } from "@repo/data";
-
-import { BlockEditor, useYDoc } from "@repo/editor";
-import { env } from "@repo/env";
-import useYProvider from "y-partykit/react";
-import * as Y from "yjs";
-import { usePageDoc } from "./provider";
 
 export function PageEditor({
   channelId,

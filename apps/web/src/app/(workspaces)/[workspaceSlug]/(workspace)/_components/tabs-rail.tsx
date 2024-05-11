@@ -1,7 +1,7 @@
 "use client";
 
-import { TooltipWrapper } from "@repo/ui/components/tooltip-wrapper";
-import { Button } from "@repo/ui/components/ui/button";
+import { TooltipWrapper } from "@/components/tooltip-wrapper";
+import { Button } from "@/components/ui/button";
 import {
   Component,
   FileStack,
@@ -16,8 +16,8 @@ import {
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { cn } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 interface Tab {
   Icon: LucideIcon;
@@ -59,7 +59,7 @@ const tabs: Tab[] = [
 
 export function TabsRail() {
   return (
-    <aside className="bg-dim flex w-12 max-w-12 flex-col items-center gap-2.5 border-r border-r-border/50 px-1.5 py-2.5">
+    <aside className="flex w-12 max-w-12 flex-col items-center gap-2.5 border-r border-r-border/50 bg-dim px-1.5 py-2.5">
       {/* <div className="flex h-12 min-h-12 items-center ">
         <WorkspaceSwitcher />
       </div> */}

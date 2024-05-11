@@ -4,9 +4,9 @@ import "server-only";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 
-import { currentUser } from "@/lib/utils";
 import { updateUserById } from "@repo/data/server";
 import { UpdateUserSchema } from "@repo/data";
+import { currentUser } from "@/lib/supabase/current-user";
 
 export async function updateProfile(rawData: z.infer<typeof UpdateUserSchema>) {
   // 1. Authenticate access

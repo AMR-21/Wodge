@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser } from "@/lib/utils";
+import { currentUser } from "@/lib/supabase/current-user";
 import {
   NewWorkspace,
   NewWorkspaceSchema,
@@ -12,7 +12,6 @@ import { createDb } from "@repo/data/server";
 import { eq } from "drizzle-orm";
 import "server-only";
 
-// Todo move it to DO when the bindings are supported
 export async function updateWorkspace(
   workspaceId: string,
   data: Pick<Workspace, "name" | "slug">,

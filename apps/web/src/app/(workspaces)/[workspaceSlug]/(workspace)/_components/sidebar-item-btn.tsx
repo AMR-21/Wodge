@@ -3,8 +3,8 @@
 import * as React from "react";
 import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
-import { Button, ButtonProps } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 interface SidebarItemBtnProps extends ButtonProps {
@@ -73,4 +73,3 @@ export const SidebarItemBtn = React.forwardRef<
   },
 );
 
-// SidebarItemBtn.displayName = "SidebarItemBtn";

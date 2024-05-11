@@ -1,4 +1,4 @@
-import { useCurrentResources } from "@repo/ui/hooks/use-current-resources";
+import { useCurrentResources } from "@/hooks/use-current-resources";
 import { File } from "./file";
 
 export function Files({ workspaceId }: { workspaceId: string }) {

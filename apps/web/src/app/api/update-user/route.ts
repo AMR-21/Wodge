@@ -1,4 +1,4 @@
-import { currentUser } from "@/lib/utils";
+import { currentUser } from "@/lib/supabase/current-user";
 import { UpdateUserSchema } from "@repo/data";
 import { updateUserById } from "@repo/data/server";
 import { env } from "@repo/env";

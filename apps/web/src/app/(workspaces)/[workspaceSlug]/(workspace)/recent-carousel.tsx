@@ -4,8 +4,8 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@repo/ui/components/ui/carousel";
-import { useRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+} from "@/components/ui/carousel";
+import { useRecentlyVisited } from "@/hooks/use-recently-visited";
 import { ChannelsTypes } from "@repo/data";
 import { RecentItem } from "./recent-item";
 

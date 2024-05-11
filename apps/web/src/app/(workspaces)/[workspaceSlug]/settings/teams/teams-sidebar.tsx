@@ -2,11 +2,11 @@
 
 import { SettingsCollapsiblePlaceHolder } from "../settings";
 import { SidebarItem } from "../../(workspace)/_components/sidebar-item";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { usePathname } from "next/navigation";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { SheetClose } from "@repo/ui/components/ui/sheet";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { SheetClose } from "@/components/ui/sheet";
 
 export function TeamsSidebar() {
   const { structure, workspaceSlug } = useCurrentWorkspace();

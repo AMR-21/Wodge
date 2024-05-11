@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@repo/ui/components/ui/input-otp";
-import { Loader } from "@repo/ui/components/ui/loader";
-import { PrevBtn } from "@repo/ui/components/ui/stepper";
+} from "@/components/ui/input-otp";
+import { Loader } from "@/components/ui/loader";
+import { PrevBtn } from "@/components/ui/stepper";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { emailAtom } from "./email-atom";

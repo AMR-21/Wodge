@@ -7,7 +7,6 @@ export const ThreadSchema = ChannelSchema.omit({
   editGroups: true,
   viewGroups: true,
 }).extend({
-  // post it the post/question
   content: z.string().min(1).max(4096),
   type: z.enum(["post", "qa"]),
   createdBy: z.string(),

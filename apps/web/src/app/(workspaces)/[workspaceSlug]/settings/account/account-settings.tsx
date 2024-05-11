@@ -9,20 +9,20 @@ import {
   SettingsContentHeader,
   SettingsContentSection,
 } from "../settings";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useIsOwnerOrAdmin } from "@repo/ui/hooks/use-is-owner-or-admin";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useIsOwnerOrAdmin } from "@/hooks/use-is-owner-or-admin";
 import { AvatarBtn } from "@/components/avatar-btn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
-import { toast } from "@repo/ui/components/ui/toast";
-import { useAvatarUrl } from "@repo/ui/hooks/use-avatar-url";
+import { toast } from "@/components/ui/toast";
+import { useAvatarUrl } from "@/hooks/use-avatar-url";
 import { WorkspaceGeneralForm } from "../(general)/workspace-general-form";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { AccountGeneralForm } from "./account-general-form";
 import { ModeToggle } from "@/components/toggle";
-import { useUpload } from "@repo/ui/hooks/use-upload";
-import { useDelete } from "@repo/ui/hooks/use-delete";
+import { useUpload } from "@/hooks/use-upload";
+import { useDelete } from "@/hooks/use-delete";
 
 export function AccountSettings() {
   const { user } = useCurrentUser();

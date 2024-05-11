@@ -1,26 +1,22 @@
 import { DrObj, Member, PublicUserType } from "@repo/data";
 import { queryClient } from "@repo/data/lib/query-client";
-import { DataTableActions } from "@repo/ui/components/data-table/data-table-action";
+import { DataTableActions } from "@/components/data-table/data-table-action";
 import {
   DataTableHeaderSelect,
   DataTableRowSelect,
-} from "@repo/ui/components/data-table/data-table-select";
-import { Header } from "@repo/ui/components/data-table/header";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { buttonVariants } from "@repo/ui/components/ui/button";
+} from "@/components/data-table/data-table-select";
+import { Header } from "@/components/data-table/header";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select";
-import { useMember } from "@repo/ui/hooks/use-member";
-import { cn } from "@repo/ui/lib/utils";
+} from "@/components/ui/select";
+import { useMember } from "@/hooks/use-member";
+import { cn } from "@/lib/utils";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";

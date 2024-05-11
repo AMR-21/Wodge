@@ -1,4 +1,4 @@
-import { useCurrentResources } from "@repo/ui/hooks/use-current-resources";
+import { useCurrentResources } from "@/hooks/use-current-resources";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Folder } from "./folder";

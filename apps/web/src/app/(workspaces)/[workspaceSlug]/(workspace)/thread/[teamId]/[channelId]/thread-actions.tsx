@@ -1,5 +1,5 @@
 import { PublicUserType, ThreadMessage } from "@repo/data";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CheckCircle2, CircleDot } from "lucide-react";
 

@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { AddWorkspaceDialog } from "@/app/(workspaces)/add-workspace-dialog";
 import { WorkspacesList } from "@/app/(workspaces)/workspaces-list";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { UserCard } from "@/components/user-card";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function WorkspacesPage() {
   const router = useRouter();

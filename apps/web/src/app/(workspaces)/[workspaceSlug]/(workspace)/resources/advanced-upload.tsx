@@ -4,7 +4,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover";
+} from "@/components/ui/popover";
 import { SidebarItemBtn } from "../_components/sidebar-item-btn";
 import { Plus } from "lucide-react";
 import Uppy from "@uppy/core";
@@ -13,8 +13,8 @@ import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/react";
 import { useParams } from "next/navigation";
 import { env } from "@repo/env";
-import { Input } from "@repo/ui/components/ui/input";
-import { Label } from "@repo/ui/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function AdvancedUploadButton({ workspaceId }: { workspaceId: string }) {
   const [open, setOpen] = useState(false);

@@ -1,13 +1,9 @@
 import { Workspace } from "@repo/data";
 import { ChevronRight, Cloud, Laptop } from "lucide-react";
 import Link from "next/link";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
-import { Skeleton } from "@repo/ui/components/ui/skeleton";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SafeAvatar } from "@/components/safe-avatar";
 
 export function WorkspaceItem({ workspace }: { workspace: Workspace }) {
   return (

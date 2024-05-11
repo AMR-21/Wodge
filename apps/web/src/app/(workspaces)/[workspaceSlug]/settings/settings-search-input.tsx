@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@repo/ui/components/ui/input";
-import { cn } from "@repo/ui/lib/utils";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 import { Search, X } from "lucide-react";
 import { useRef } from "react";

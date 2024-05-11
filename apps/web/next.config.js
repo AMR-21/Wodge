@@ -6,7 +6,10 @@ import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
 const nextConfig = {
   transpilePackages: ["@radix-ui"],
   typescript: {
-    ignoreBuildErrors: true,
+    // ignoreBuildErrors: true,
+  },
+  experimental: {
+    // typedRoutes: true,
   },
 };
 

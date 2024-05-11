@@ -1,6 +1,6 @@
 import { DrObj, Team } from "@repo/data";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { TabsContent } from "@repo/ui/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { TabsContent } from "@/components/ui/tabs";
 import { ThreadEditor } from "./thread-editor";
 import { Post } from "./post";
 import { useMemo } from "react";

@@ -16,25 +16,27 @@ import {
 } from "..";
 import { UserId } from "./tests";
 
-export function createTestThread (data?: Partial<Thread>) {
+export function createTestThread(data?: Partial<Thread>) {
   const newThread: Thread = {
     id: nanoid(ID_LENGTH),
-    name: "Test Thread",
-    editGroups: [TEAM_MEMBERS_ROLE],
-    viewGroups: [TEAM_MEMBERS_ROLE],
-    ...data
-  }
-  return newThread
-  
+    type: "post",
+    content: "Test Thread",
+    createdAt: new Date().toISOString(),
+    createdBy: UserId,
+    ...data,
+  };
+  return newThread;
 }
-export function createThreadMessage (data?: Partial<ThreadMessage>) {
+export function createThreadMessage(data?: Partial<ThreadMessage>) {
   const newThreadMessage: ThreadMessage = {
     id: nanoid(ID_LENGTH),
     author: UserId,
     content: "Test Message",
-    ...data
-  }
-  return newThreadMessage
+    date: new Date().toISOString(),
+    type: "message",
+    ...data,
+  };
+  return newThreadMessage;
 }
 
 export function createTestTeam(data?: Partial<Team>) {
@@ -55,7 +57,6 @@ export function createTestTeam(data?: Partial<Team>) {
     rooms: [],
     default: false,
     threads: [],
-    slug: "test-team",
     tags: [],
     moderators: [],
     ...data,
@@ -93,7 +94,6 @@ export function createTestRoom(data?: Partial<Room>) {
     avatar: "",
     editGroups: ["team-members"],
     viewGroups: ["team-members"],
-    messages: [],
     ...data,
   };
   return room;

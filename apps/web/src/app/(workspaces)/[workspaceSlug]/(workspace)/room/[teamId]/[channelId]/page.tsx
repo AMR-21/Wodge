@@ -2,21 +2,22 @@
 
 import { RoomHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/room-header";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import { OfflineEditor, useMessageEditor } from "@repo/editor";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useAtom } from "jotai";
 import { Send } from "lucide-react";
 import { nanoid } from "nanoid";
 import "@uppy/core/dist/style.min.css";
 
 import { UploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/upload-button";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useCurrentRoomRep } from "@repo/ui/hooks/use-room-rep";
-import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useCurrentRoomRep } from "@/hooks/use-room-rep";
+import { useUpdateRecentlyVisited } from "@/hooks/use-recently-visited";
 import { useParams } from "next/navigation";
 import { MessageList } from "./message-list";
-import { useCanEdit } from "@repo/ui/hooks/use-can-edit";
+import { useCanEdit } from "@/hooks/use-can-edit";
+import OfflineEditor from "@/components/editor/block-editor/offline-editor";
+import { useMessageEditor } from "@/hooks/use-message-editor";
 
 function ChannelPage() {
   useUpdateRecentlyVisited("room");

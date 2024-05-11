@@ -1,5 +1,5 @@
-import { buttonVariants } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { Folder as FolderIcon } from "lucide-react";
 

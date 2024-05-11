@@ -3,11 +3,11 @@
 import { useContext } from "react";
 import { SettingsCollapsiblePlaceHolder } from "../settings";
 import { SidebarItem } from "../../(workspace)/_components/sidebar-item";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { cn } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { usePathname } from "next/navigation";
-import { SheetClose } from "@repo/ui/components/ui/sheet";
+import { SheetClose } from "@/components/ui/sheet";
 
 export function GroupsSidebar() {
   const { structure, workspaceSlug } = useCurrentWorkspace();

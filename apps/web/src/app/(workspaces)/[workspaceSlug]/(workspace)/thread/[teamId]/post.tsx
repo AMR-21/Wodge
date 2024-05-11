@@ -1,22 +1,22 @@
 import { DrObj, Thread } from "@repo/data";
 import { format } from "date-fns";
 import { SafeDiv } from "../../../../../../components/safe-div";
-import { useMember } from "@repo/ui/hooks/use-member";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useMember } from "@/hooks/use-member";
+import { SafeAvatar } from "@/components/safe-avatar";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useParams, useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import Link from "next/link";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { ThreadDropDown } from "../thread-dropdown";
 import { EditEditor } from "./edit-editor";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "./[channelId]/use-edit-editor";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { CheckCircle2, CircleDot } from "lucide-react";
 import { useSetAtom } from "jotai";
-import { recentlyVisitedAtom } from "@repo/ui/store/atoms";
+import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { produce } from "immer";
 
 export const Post = memo(

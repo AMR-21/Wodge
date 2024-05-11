@@ -1,12 +1,12 @@
 import { DrObj, Page, Room, Thread } from "@repo/data";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { RecentlyVisitedItem } from "@repo/ui/store/atoms";
 import { format } from "date-fns";
 import { useSetAtom } from "jotai";
 import { Database, MessageCircle, Newspaper, NotebookText } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { activeSidebarAtom } from "./_components/sidebar-atoms";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { RecentlyVisitedItem } from "@/store/global-atoms";
 
 export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
   let Icon;

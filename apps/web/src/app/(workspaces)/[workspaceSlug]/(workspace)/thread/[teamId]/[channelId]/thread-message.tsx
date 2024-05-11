@@ -1,13 +1,13 @@
 import { Thread, ThreadMessage as ThreadMessageType } from "@repo/data";
-import { useMember } from "@repo/ui/hooks/use-member";
+import { useMember } from "@/hooks/use-member";
 import { ThreadAction } from "./thread-actions";
 import { format } from "date-fns";
-import { SafeAvatar } from "@repo/ui/components/safe-avatar";
+import { SafeAvatar } from "@/components/safe-avatar";
 
 import { ThreadDropDown } from "../../thread-dropdown";
 import { SafeDiv } from "@/components/safe-div";
-import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { useEditEditor } from "./use-edit-editor";
 import { EditEditor } from "../edit-editor";
 

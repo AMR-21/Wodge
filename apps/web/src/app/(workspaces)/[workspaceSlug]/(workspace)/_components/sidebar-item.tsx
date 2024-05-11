@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { ChevronRight, Hash, LucideIcon } from "lucide-react";
-import { buttonVariants } from "@repo/ui/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { forwardRef } from "react";
 import { IconType } from "react-icons/lib";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@/lib/utils";
 
 export interface SidebarItemProps extends React.HTMLAttributes<HTMLDivElement> {
   Icon?: LucideIcon | IconType | null;

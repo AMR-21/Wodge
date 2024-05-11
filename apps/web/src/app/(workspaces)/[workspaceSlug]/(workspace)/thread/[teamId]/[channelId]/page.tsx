@@ -1,9 +1,9 @@
 "use client";
 
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
+import { useChannelPath } from "@/hooks/use-channel-path";
 
-import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
-import { useCurrentThreadRep } from "@repo/ui/hooks/use-thread-rep";
+import { useUpdateRecentlyVisited } from "@/hooks/use-recently-visited";
+import { useCurrentThreadRep } from "@/hooks/use-thread-rep";
 
 import { PostPage } from "./post-page";
 import { QAPage } from "./qa-page";

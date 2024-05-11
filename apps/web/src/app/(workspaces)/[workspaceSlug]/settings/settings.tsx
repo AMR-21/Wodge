@@ -6,17 +6,17 @@ import { LucideIcon, PanelLeft, Plus, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../(workspace)/_components/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
-import { useIsDesktop } from "@repo/ui/hooks/use-is-desktop";
-import { cn } from "@repo/ui/lib/utils";
-import { Button, ButtonProps } from "@repo/ui/components/ui/button";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { cn } from "@/lib/utils";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@repo/ui/components/ui/collapsible";
+} from "@/components/ui/collapsible";
 import { useState } from "react";
-import { SheetClose, SheetTrigger } from "@repo/ui/components/ui/sheet";
+import { SheetClose, SheetTrigger } from "@/components/ui/sheet";
 
 interface SettingsCollapsibleItemProps {
   label: string;

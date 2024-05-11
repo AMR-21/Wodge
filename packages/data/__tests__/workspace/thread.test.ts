@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 import {
-  createTestChannel,
   createTestStructure,
   createTestTeam,
   createTestThread,
@@ -11,10 +10,7 @@ import { deleteThreadMutation } from "../../models/workspace/mutators/delete-thr
 import { deleteThreadMessageMutation } from "../../models/thread/mutators/delete-thread-message";
 import { createThreadMessageMutation } from "../../models/thread/mutators/create-thread-message";
 import { editThreadMessageMutation } from "../../models/thread/mutators/edit.thread.message";
-import { nanoid } from "nanoid";
 import { user } from "../tests";
-
-import exp from "constants";
 
 describe("Workspace threads' unit mutations", () => {
   test("Create a thread", async () => {
@@ -24,6 +20,7 @@ describe("Workspace threads' unit mutations", () => {
     const newstr = createThreadMutation({
       thread: thread,
       teamId: team.id,
+      curUserId: user.id,
       structure,
     });
 
@@ -63,15 +60,12 @@ describe("Workspace threads' unit mutations", () => {
     const structure = createTestStructure({ teams: [team] });
     const msg = createThreadMessage();
     //console.log("created",msg);
-    const msgsarray = [createThreadMessage()];
-    //console.log(msgsarray);
+    const msgsArray = [createThreadMessage()];
+    //console.log(msgsArray);
     const newMsgsArray = createThreadMessageMutation({
-      threadid: thread.id,
-      teamId: team.id,
-      structure,
+      msgsArray,
+      userId: user.id,
       msg,
-      msgsarray,
-      user: user,
     });
     //console.log("created",newMsgsArray[1]);
     //console.log(newMsgsArray);
@@ -83,15 +77,12 @@ describe("Workspace threads' unit mutations", () => {
     const structure = createTestStructure({ teams: [team] });
     const msg = createThreadMessage();
     //console.log("created",msg);
-    const msgsarray = [msg];
-    //console.log(msgsarray);
+    const msgsArray = [msg];
     const newMsgsArray = deleteThreadMessageMutation({
-      threadid: thread.id,
-      teamId: team.id,
-      structure,
       msg,
-      msgsarray,
-      user: msg.author,
+      msgsArray,
+      userId: user.id,
+      isPrivileged: true,
     });
     //console.log("created",newMsgsArray[1]);
     //console.log(newMsgsArray);
@@ -103,16 +94,13 @@ describe("Workspace threads' unit mutations", () => {
     const structure = createTestStructure({ teams: [team] });
     const msg = createThreadMessage();
     //console.log("created",msg.content);
-    const msgsarray = [msg];
+    const msgsArray = [msg];
 
     const newMsgsArray1 = editThreadMessageMutation({
-      threadid: thread.id,
-      teamId: team.id,
-      structure,
       msg,
-      msgsarray,
-      newcontent: "edited",
-      user: msg.author,
+      msgsArray,
+      newContent: "edited",
+      userId: user.id,
     });
     //console.log("new",newMsgsArray1[0]?.content );
     expect(newMsgsArray1).toContainEqual({

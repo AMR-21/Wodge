@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/ui/tabs";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
 
 import { PostsList } from "./posts-list";
 import { QAsList } from "./qas-list";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function ThreadsPage() {
   const { structure } = useCurrentWorkspace();

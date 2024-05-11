@@ -18,8 +18,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
-import { cn } from "@repo/ui/lib/utils";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { cn } from "@/lib/utils";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function Pages({
   channels,

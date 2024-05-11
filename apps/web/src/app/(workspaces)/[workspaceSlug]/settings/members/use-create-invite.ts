@@ -1,7 +1,7 @@
 import { Invite } from "@repo/data";
 import { env } from "@repo/env";
-import { toast } from "@repo/ui/components/ui/toast";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { toast } from "@/components/ui/toast";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useCreateInvite(setIsOpen: (open: boolean) => void) {

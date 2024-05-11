@@ -1,21 +1,18 @@
 "use client";
 
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { useChannelPath } from "@repo/ui/hooks/use-channel-path";
-import { useCurrentResources } from "@repo/ui/hooks/use-current-resources";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useChannelPath } from "@/hooks/use-channel-path";
+import { useCurrentResources } from "@/hooks/use-current-resources";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 import { AdvancedUploadButton } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/advanced-upload";
 
 import { useRouter } from "next/navigation";
 import { FoldersBreadcrumbs } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/resources/folders-breadcrumbs";
-import { useUpdateRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
-import { useIsTeamModerator } from "@repo/ui/hooks/use-is-team-moderator";
+import { useUpdateRecentlyVisited } from "@/hooks/use-recently-visited";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { Folders } from "./folders";
 import { Files } from "./files";
-import { Button } from "@repo/ui/components/ui/button";
-import KanbanBoard from "../../../page/[teamId]/[folderId]/kanban-board";
-import { MemberMultiSelect } from "../../../page/[teamId]/[folderId]/member-multi-select";
 
 function TeamResourcePage({
   params: { path },

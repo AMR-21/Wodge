@@ -5,7 +5,7 @@ import {
 } from "@repo/data";
 import { memo, useEffect } from "react";
 import { ReadTransaction, Replicache } from "replicache";
-import { useSubscribe } from "@repo/ui/hooks/use-subscribe";
+import { useSubscribe } from "@/hooks/use-subscribe";
 import { ThreadMessage } from "./thread-message";
 
 export const ThreadMessagesList = memo(

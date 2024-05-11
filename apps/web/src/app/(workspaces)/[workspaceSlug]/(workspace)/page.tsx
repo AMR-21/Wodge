@@ -1,8 +1,6 @@
 "use client";
 
-import { useCurrentUser } from "@repo/ui/hooks/use-current-user";
-import { useCurrentWorkspace } from "@repo/ui/hooks/use-current-workspace";
-import { useRecentlyVisited } from "@repo/ui/hooks/use-recently-visited";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { RecentCarousel } from "./recent-carousel";
 
 function HomePage() {
