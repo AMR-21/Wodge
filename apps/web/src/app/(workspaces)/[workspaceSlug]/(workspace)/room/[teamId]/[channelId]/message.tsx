@@ -9,14 +9,11 @@ import { AudioMessage } from "./audio-message";
 import { FileMessage } from "./file-message";
 import { VideoMessage } from "./video-message";
 import { MessageDropDown } from "../../message-dropdown";
-import { useCanEdit } from "@/hooks/use-can-edit";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "../../../thread/[teamId]/[channelId]/use-edit-editor";
 import { EditEditor } from "./edit-editor";
 import { cn } from "@/lib/utils";
-import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
-import { MoreHorizontal } from "lucide-react";
 
 export const Message = memo(
   ({
@@ -60,7 +57,7 @@ export const Message = memo(
               {format(message.date, "HH:mm")}
             </p>
 
-            <div className="MessageEditor overflow-hidden text-balance break-words pl-9">
+            <div className="MessageEditor w-full overflow-hidden text-balance break-words pl-9">
               {isEditing ? (
                 <EditEditor
                   content={message as MessageType}
@@ -87,50 +84,6 @@ export const Message = memo(
             />
           </div>
         </div>
-      );
-      return (
-        <div className="group flex overflow-hidden rounded-md transition-all hover:bg-secondary/40 ">
-          {/* <div className="group relative flex justify-between rounded-md px-1.5 py-0.5"> */}
-          <p
-            className={cn(
-              "invisible absolute left-1 top-1/2 -translate-y-1/2 text-xs text-muted-foreground transition-all group-hover:visible",
-              isEditing && "top-0 translate-y-1/2",
-            )}
-          >
-            {format(message.date, "HH:mm")}
-          </p>
-
-          <div className="w-full pl-9">
-            {isEditing ? (
-              <EditEditor
-                content={message as MessageType}
-                onCancelEdit={() => onCancelEdit()}
-                onSuccessEdit={(newContent) => {
-                  onSuccessEdit?.(message as MessageType, newContent);
-                  setIsEditing(false);
-                }}
-              />
-            ) : (
-              <Content m={message} workspaceId={workspaceId} />
-            )}
-          </div>
-          <SidebarItemBtn
-            Icon={MoreHorizontal}
-            className="shrink-0 basis-full"
-          />
-
-          {/* <MessageDropDown
-              canEdit={user?.id === message.sender && message.type === "text"}
-              canDelete={isTeamModerator || user?.id === message.sender}
-              onDelete={() => {
-                onDelete?.(message as MessageType);
-              }}
-              onEdit={() => {
-                setIsEditing(true);
-              }}
-            /> */}
-        </div>
-        // </div>
       );
     }
 

@@ -33,7 +33,6 @@ export function MessageEditor({
     if (editor) {
       if (editor.isEmpty) return;
 
-      const text = editor.getText();
       const content = editor.getHTML();
       if (!content || !user) return;
 

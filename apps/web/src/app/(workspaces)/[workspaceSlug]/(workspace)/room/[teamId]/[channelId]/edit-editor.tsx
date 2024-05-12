@@ -21,7 +21,7 @@ export function EditEditor({
     content: content.content,
   });
 
-  async function editThread() {
+  async function editMessage() {
     const text = editor?.getHTML();
     if (!text || !user) return;
 
@@ -33,19 +33,21 @@ export function EditEditor({
   }, [editor]);
 
   return (
-    <div className="flex w-full flex-1 flex-col bg-transparent p-0">
+    <div className="flex flex-col overflow-hidden bg-transparent p-0">
       <div
-        className="flex h-full w-full items-start"
         onKeyDown={(e) => {
-          if (e.key === "Enter" && e.ctrlKey) {
-            editThread();
+          if (e.key === "Enter") {
+            editMessage();
           }
         }}
       >
-        {!editor && <SafeDiv className="BlockEditor" html={content.content} />}
-        <OfflineEditor editor={editor} isThread />
+        {!editor && (
+          <SafeDiv className="MessageEditor" html={content.content} />
+        )}
+        <OfflineEditor editor={editor} />
       </div>
-      <div className="ml-0.5 flex items-center pl-8">
+
+      <div className="flex w-full items-center self-end py-2">
         <Button
           size="fit"
           variant="secondary"
@@ -58,7 +60,7 @@ export function EditEditor({
           size="fit"
           className="w-20"
           disabled={editor?.isEmpty}
-          onClick={editThread}
+          onClick={editMessage}
         >
           Save
         </Button>

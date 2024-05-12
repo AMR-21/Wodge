@@ -64,9 +64,9 @@ export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
             }}
           >
             <SafeAvatar src={user?.avatar} className="mr-3 h-7 w-7" />
-            <OfflineEditor editor={editor} isThread />
+            <OfflineEditor editor={editor} isThread className="w-full" />
           </div>
-          <div className="ml-0.5 flex items-center pl-8">
+          <div className="ml-0.5 flex items-center py-1.5 pl-8">
             <SidebarItemBtn
               className="p-1.5"
               Icon={Image}

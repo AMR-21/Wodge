@@ -27,6 +27,7 @@ import { useParams, usePathname } from "next/navigation";
 import { useIsTeamMember } from "@/hooks/use-is-team-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -118,6 +119,8 @@ function SortableTeamspace({
 
   const isTeamMemberOrModerator = useIsTeamMember(team.id);
 
+  const isTeamModerator = useIsTeamModerator();
+
   if (!isTeamMemberOrModerator) return null;
 
   return (
@@ -135,6 +138,7 @@ function SortableTeamspace({
           )}
         >
           <Teamspace
+            isMod={isTeamModerator}
             team={team}
             type={type}
             isChanFoldOver={isChanFoldOver}
@@ -166,54 +170,63 @@ interface DraggableProps {
   isChanFoldOver?: boolean;
   isDragging: boolean;
   type: ChannelsTypes;
+  isMod: boolean;
 }
 
 export const Teamspace = React.forwardRef<
   HTMLLIElement,
   { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
->(({ team, isChanFoldOver, type, isDragging, ...props }, ref) => {
-  const { teamId } = useParams<{ teamId?: string }>();
-  const { workspaceSlug } = useCurrentWorkspace();
-  const activeSideBar = useAtomValue(activeSidebarAtom);
-  const activeChan = usePathname().split("/").at(2) || "home";
+>(
+  (
+    { team, isChanFoldOver, type, isMod = false, isDragging, ...props },
+    ref,
+  ) => {
+    const { teamId } = useParams<{ teamId?: string }>();
+    const { workspaceSlug } = useCurrentWorkspace();
+    const activeSideBar = useAtomValue(activeSidebarAtom);
+    const activeChan = usePathname().split("/").at(2) || "home";
 
-  return (
-    <li ref={ref} className="group flex grow" {...props}>
-      <SidebarItem
-        aria-disabled={isDragging}
-        isActive={
-          isChanFoldOver || (team.id === teamId && activeSideBar === activeChan)
-        }
-        noIcon
-        collapsible={type !== "thread" && type !== "resources"}
-        {...(type === "thread" && {
-          href: `/${workspaceSlug}/thread/${team.id}`,
-        })}
-        {...(type === "resources" && {
-          href: `/${workspaceSlug}/resources/${team.id}`,
-        })}
-      >
-        <SafeAvatar
-          className="mr-1.5 h-5 w-5 shrink-0 rounded-md"
-          fallbackClassName="select-none rounded-md text-xs uppercase"
-          fallback={team.name}
-          src={team.avatar}
-        />
-
-        <span className="select-none truncate">{team.name}</span>
-
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          className="ml-auto"
+    return (
+      <li ref={ref} className="group flex grow" {...props}>
+        <SidebarItem
+          aria-disabled={isDragging}
+          isActive={
+            isChanFoldOver ||
+            (team.id === teamId && activeSideBar === activeChan)
+          }
+          noIcon
+          collapsible={type !== "thread" && type !== "resources"}
+          {...(type === "thread" && {
+            href: `/${workspaceSlug}/thread/${team.id}`,
+          })}
+          {...(type === "resources" && {
+            href: `/${workspaceSlug}/resources/${team.id}`,
+          })}
         >
-          {type === "page" && <TeamMore teamId={team.id} />}
-          {type === "room" && <TeamRoomsMore teamId={team.id} />}
-        </div>
-      </SidebarItem>
-    </li>
-  );
-});
+          <SafeAvatar
+            className="mr-1.5 h-5 w-5 shrink-0 rounded-md"
+            fallbackClassName="select-none rounded-md text-xs uppercase"
+            fallback={team.name}
+            src={team.avatar}
+          />
+
+          <span className="select-none truncate">{team.name}</span>
+
+          {isMod && (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              className="ml-auto"
+            >
+              {type === "page" && <TeamMore teamId={team.id} />}
+              {type === "room" && <TeamRoomsMore teamId={team.id} />}
+            </div>
+          )}
+        </SidebarItem>
+      </li>
+    );
+  },
+);
 
 // Teamspace.displayName = "Teamspace";

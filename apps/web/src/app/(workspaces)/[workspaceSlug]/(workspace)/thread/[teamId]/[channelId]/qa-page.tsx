@@ -50,48 +50,47 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   const Icon = path?.thread?.isResolved ? CircleDot : CheckCircle2;
 
   return (
-    <div className="flex h-full max-h-dvh w-full flex-col gap-4 p-1.5">
-      <ScrollArea className="">
-        <div className="relative  flex flex-col gap-2.5">
-          <div className="absolute left-5 top-1/2 -z-10 h-[86.5%] w-[2px] -translate-y-1/2 bg-border/70" />
+    <div className="h-full px-2 py-3">
+      <div className="relative flex flex-1 flex-col gap-2.5">
+        <div className="absolute left-5 top-1/2 -z-10 h-[86.5%] w-[2px] -translate-y-1/2 bg-border/70" />
 
-          <div className="flex items-center justify-between">
-            <ThreadAction
-              msg={{
-                id: "",
-                author: path?.thread?.createdBy || "",
-                content: "",
-                type: "open",
-                date: path?.thread?.createdAt || "",
-              }}
-              member={member}
-              isFirst
+        <div className="flex items-center justify-between">
+          <ThreadAction
+            msg={{
+              id: "",
+              author: path?.thread?.createdBy || "",
+              content: "",
+              type: "open",
+              date: path?.thread?.createdAt || "",
+            }}
+            member={member}
+            isFirst
+          />
+
+          <Button
+            variant="secondary"
+            size="sm"
+            className={cn("gap-1.5")}
+            onClick={toggleThread}
+          >
+            <Icon
+              className={cn(
+                "h-4 w-4 shrink-0",
+                path?.thread?.isResolved
+                  ? "text-green-600 dark:text-green-500"
+                  : "text-purple-600 dark:text-purple-500",
+              )}
             />
-
-            <Button
-              variant="secondary"
-              size="sm"
-              className={cn("gap-1.5")}
-              onClick={toggleThread}
-            >
-              <Icon
-                className={cn(
-                  "h-4 w-4 shrink-0",
-                  path?.thread?.isResolved
-                    ? "text-green-600 dark:text-green-500"
-                    : "text-purple-600 dark:text-purple-500",
-                )}
-              />
-              {path?.thread?.isResolved ? "Reopen thread" : "Close thread"}
-            </Button>
-          </div>
-
-          <Post post={path.thread} opened isQA />
-
-          <ThreadMessagesList thread={path.thread} rep={rep} />
+            {path?.thread?.isResolved ? "Reopen thread" : "Close thread"}
+          </Button>
         </div>
-      </ScrollArea>
+
+        <Post post={path.thread} opened isQA />
+
+        <ThreadMessagesList thread={path.thread} rep={rep} />
+      </div>
       <CommentEditor rep={rep} isQA />
+      <div className="h-3 w-full bg-transparent" />
     </div>
   );
 }

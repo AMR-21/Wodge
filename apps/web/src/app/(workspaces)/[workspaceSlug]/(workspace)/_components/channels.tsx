@@ -43,6 +43,7 @@ import { AddRoomForm } from "./add-room-form";
 import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { useSetAtom } from "jotai";
 import { produce } from "immer";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -135,6 +136,8 @@ function SortableChannel({
     forceFolderId: folderId,
   });
 
+  const isTeamMod = useIsTeamModerator();
+
   if (!canView) return null;
 
   return (
@@ -148,6 +151,7 @@ function SortableChannel({
       )}
     >
       <Channel
+        isMod={isTeamMod}
         channel={channel}
         activeIndex={activeIndex}
         isDragging={isDragging}
@@ -166,6 +170,7 @@ interface DraggableProps {
   type: ChannelsTypes;
   teamId: string;
   folderId?: string;
+  isMod: boolean;
 }
 
 export const Channel = React.forwardRef<
@@ -174,7 +179,16 @@ export const Channel = React.forwardRef<
     React.HTMLAttributes<HTMLLIElement>
 >(
   (
-    { channel, activeIndex, folderId, teamId, isDragging, type, ...props },
+    {
+      channel,
+      activeIndex,
+      isMod = false,
+      folderId,
+      teamId,
+      isDragging,
+      type,
+      ...props
+    },
     ref,
   ) => {
     const { workspaceSlug, workspaceRep, workspaceId } = useCurrentWorkspace();
@@ -208,68 +222,70 @@ export const Channel = React.forwardRef<
           href={`/${workspaceSlug}/${type}/${teamId}${type === "page" ? "/" + folderId : ""}/${channel.id}`}
         >
           <span className="select-none truncate">{channel.name}</span>
-          <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
-            <Dialog>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarItemBtn
-                    Icon={MoreHorizontal}
-                    className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
-                  />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48">
-                  <DialogTrigger asChild>
-                    <DropdownMenuItem className="gap-2 text-sm">
-                      <Pencil className="h-4 w-4 " />
-                      Edit {type}
-                    </DropdownMenuItem>
-                  </DialogTrigger>
+          {isMod && (
+            <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+              <Dialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarItemBtn
+                      Icon={MoreHorizontal}
+                      className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-48">
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem className="gap-2 text-sm">
+                        <Pencil className="h-4 w-4 " />
+                        Edit {type}
+                      </DropdownMenuItem>
+                    </DialogTrigger>
 
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-                    onClick={async () => {
-                      await workspaceRep?.mutate.deleteChannel({
-                        channelId: channel.id,
-                        type,
-                        teamId,
-                        folderId,
-                      });
-
-                      setRecentAtom((prev) => {
-                        if (!workspaceId || !prev[workspaceId]) return prev;
-                        const newRecent = produce(prev, (draft) => {
-                          draft[workspaceId] = draft[workspaceId]!.filter(
-                            (r) => r.channelId !== channel.id,
-                          );
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
+                      onClick={async () => {
+                        await workspaceRep?.mutate.deleteChannel({
+                          channelId: channel.id,
+                          type,
+                          teamId,
+                          folderId,
                         });
-                        return newRecent;
-                      });
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Delete {type}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
 
-              {type === "page" && (
-                <AddPageForm
-                  teamId={teamId}
-                  folderId={folderId}
-                  page={channel as Page}
-                />
-              )}
+                        setRecentAtom((prev) => {
+                          if (!workspaceId || !prev[workspaceId]) return prev;
+                          const newRecent = produce(prev, (draft) => {
+                            draft[workspaceId] = draft[workspaceId]!.filter(
+                              (r) => r.channelId !== channel.id,
+                            );
+                          });
+                          return newRecent;
+                        });
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete {type}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
-              {type === "room" && (
-                <AddRoomForm
-                  teamId={teamId}
-                  folderId={folderId}
-                  room={channel as Room}
-                />
-              )}
-            </Dialog>
-          </div>
+                {type === "page" && (
+                  <AddPageForm
+                    teamId={teamId}
+                    folderId={folderId}
+                    page={channel as Page}
+                  />
+                )}
+
+                {type === "room" && (
+                  <AddRoomForm
+                    teamId={teamId}
+                    folderId={folderId}
+                    room={channel as Room}
+                  />
+                )}
+              </Dialog>
+            </div>
+          )}
         </SidebarItem>
       </li>
     );

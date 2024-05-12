@@ -1,8 +1,7 @@
 import * as React from "react";
 
 import { SidebarItem } from "./sidebar-item";
-import { FolderIcon, MoreHorizontal } from "lucide-react";
-import { SidebarItemBtn } from "./sidebar-item-btn";
+import { FolderIcon } from "lucide-react";
 import { DrObj, type Folder as FolderType } from "@repo/data";
 import {
   SortableContext,
@@ -20,7 +19,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Channels } from "./channels";
 import { TeamMore } from "./team-more";
-import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 
 export function Folders({
   folders,
@@ -92,6 +91,8 @@ function SortableDirectory({
   const isAbove = activeIndex > overIndex;
   const isBelow = activeIndex < overIndex;
 
+  const isTeamMod = useIsTeamModerator();
+
   return (
     <Collapsible
       defaultOpen={isRoot}
@@ -112,6 +113,7 @@ function SortableDirectory({
             )}
           >
             <Folder
+              isMod={isTeamMod}
               folder={folder}
               teamId={teamId}
               isChannelOver={isChannelOver}
@@ -143,44 +145,52 @@ interface DraggableProps {
   isChannelOver?: boolean;
   isDragging: boolean;
   teamId: string;
+  isMod: boolean;
 }
 
 export const Folder = React.forwardRef<
   HTMLLIElement,
   { folder: DrObj<FolderType> } & DraggableProps &
     React.HTMLAttributes<HTMLLIElement>
->(({ folder, teamId, isChannelOver, isDragging, ...props }, ref) => {
-  return (
-    <li ref={ref} className="group flex grow items-center" {...props}>
-      {/* <GripVertical
+>(
+  (
+    { folder, isMod = false, teamId, isChannelOver, isDragging, ...props },
+    ref,
+  ) => {
+    return (
+      <li ref={ref} className="group flex grow items-center" {...props}>
+        {/* <GripVertical
         className={cn(
           "invisible h-3.5 w-3.5 text-black group-hover:visible",
           activeIndex && activeIndex !== -1 && "invisible",
         )}
       /> */}
-      <SidebarItem
-        aria-disabled={isDragging}
-        isActive={isChannelOver}
-        Icon={FolderIcon}
-        collapsible
-      >
-        <span className="select-none truncate">{folder.name}</span>
-
-        <div
-          className="ml-auto"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+        <SidebarItem
+          aria-disabled={isDragging}
+          isActive={isChannelOver}
+          Icon={FolderIcon}
+          collapsible
         >
-          <TeamMore
-            folderId={folder.id}
-            teamId={teamId}
-            folder={folder as FolderType}
-          />
-        </div>
-      </SidebarItem>
-    </li>
-  );
-});
+          <span className="select-none truncate">{folder.name}</span>
+
+          {isMod && (
+            <div
+              className="ml-auto"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <TeamMore
+                folderId={folder.id}
+                teamId={teamId}
+                folder={folder as FolderType}
+              />
+            </div>
+          )}
+        </SidebarItem>
+      </li>
+    );
+  },
+);
 
 // Folder.displayName = "Folder";

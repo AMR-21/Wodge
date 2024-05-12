@@ -12,11 +12,9 @@ export function PostPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   if (!path || !path?.thread) return null;
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <ScrollArea className="">
-        <Post post={path.thread} opened />
-        <ThreadMessagesList thread={path.thread} rep={rep} />
-      </ScrollArea>
+    <div className="flex w-full flex-col gap-4 px-2 py-3">
+      <Post post={path.thread} opened />
+      <ThreadMessagesList thread={path.thread} rep={rep} />
       <CommentEditor rep={rep} />
     </div>
   );
