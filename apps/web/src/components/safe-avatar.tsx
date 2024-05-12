@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from "react";
+import { forwardRef, memo, useEffect, useMemo, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/lib/utils";
 
@@ -8,28 +8,35 @@ interface SafeAvatarProps {
   className?: string;
   fallbackClassName?: string;
   isBlob?: boolean;
+  color?: string;
 }
 
-export const SafeAvatar = memo(
-  ({
-    src,
-    className,
-    fallback,
-    fallbackClassName,
-    isBlob = false,
-  }: SafeAvatarProps) => {
-    const avatarRef = useRef<HTMLImageElement>(null);
-
+export const SafeAvatar = forwardRef<HTMLDivElement, SafeAvatarProps>(
+  (
+    {
+      src,
+      className,
+      fallback,
+      fallbackClassName,
+      isBlob = false,
+      color,
+    }: SafeAvatarProps,
+    ref,
+  ) => {
     return (
       <>
         {src && (
           <Avatar
+            ref={ref}
             className={cn(
-              "h-12 w-12 rounded-full ring-[1.5px] ring-primary/30",
+              "h-12 w-12 rounded-full ",
+              !color && "ring-[1.5px] ring-primary/30",
+              color && "border-2",
               className,
             )}
+            {...(color && { style: { borderColor: color } })}
           >
-            <AvatarImage ref={avatarRef} src={src} />
+            <AvatarImage src={src} />
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}
             </AvatarFallback>
@@ -37,7 +44,14 @@ export const SafeAvatar = memo(
         )}
         {!src && (
           <Avatar
-            className={cn("h-12 w-12 ring-[1.5px] ring-primary/30", className)}
+            ref={ref}
+            className={cn(
+              "h-12 w-12 rounded-full ",
+              !color && "ring-[1.5px] ring-primary/30",
+              color && "border-2",
+              className,
+            )}
+            {...(color && { style: { borderColor: color } })}
           >
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}

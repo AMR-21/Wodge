@@ -132,7 +132,7 @@ export const ExtensionKit = ({
   Emoji.configure({
     enableEmoticons: true,
     emojis: gitHubEmojis,
-    // suggestion: emojiSuggestion,
+    suggestion: emojiSuggestion,
   }),
   TextAlign.extend({
     addKeyboardShortcuts() {

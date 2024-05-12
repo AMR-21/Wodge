@@ -1,17 +1,8 @@
 "use client";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Camera,
-  Headset,
-  Mic,
-  MonitorUp,
-  PanelLeft,
-  PhoneCall,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, PanelLeft, PhoneCall } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { isCallWindowOpenAtom, isSidebarOpenAtom } from "@/store/global-atoms";
 import {
   Breadcrumb,
@@ -21,52 +12,29 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import { useChannelPath } from "@/hooks/use-channel-path";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useCurrentWorkspace } from "@/components/workspace-provider";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
-import Link from "next/link";
-import { useState } from "react";
-import { createPortal } from "react-dom";
-import RoomPage from "../room/[teamId]/[channelId]/call/page";
 import { useAppStore } from "@/store/app-store-provider";
+import { editorUsersAtoms } from "@/components/editor/block-editor/atoms";
+import { EditorInfo } from "@/components/editor/block-editor/editor-info";
 
 export function AppHeader() {
   const [isSidebarOpen, setSidebar] = useAtom(isSidebarOpenAtom);
 
-  const { teamId, workspaceSlug } = useParams<{
+  const { teamId } = useParams<{
     teamId?: string;
     workspaceSlug: string;
   }>();
 
-  const { workspaceId, workspace } = useCurrentWorkspace();
   const path = useChannelPath();
 
   const lk_room = useAppStore((s) => s.room);
 
   const router = useRouter();
 
-  const {
-    connectToRoom,
-    disconnectFromCurrentRoom,
-    toggleCam,
-    toggleMic,
-    toggleScreen,
-  } = useAppStore((s) => s.actions);
-
-  const [isConnecting, setIsConnecting] = useState(false);
-
-  const micStatus = useAppStore((s) => s.micStatus);
-  const camStatus = useAppStore((s) => s.camStatus);
-  const screenStatus = useAppStore((s) => s.screenStatus);
-
   const openSidebar = setSidebar.bind(null, true);
 
   const setCallWindow = useSetAtom(isCallWindowOpenAtom);
+
+  const displayUsers = useAtomValue(editorUsersAtoms);
 
   return (
     <div
@@ -116,6 +84,11 @@ export function AppHeader() {
           </Breadcrumb>
         )}
 
+        {displayUsers && displayUsers.length > 0 && path?.page && (
+          <div className="mx-auto flex justify-center">
+            <EditorInfo users={displayUsers} />
+          </div>
+        )}
         <SidebarItemBtn
           iconClassName={cn(
             "h-5 w-5",
@@ -124,6 +97,7 @@ export function AppHeader() {
           Icon={PhoneCall}
           className={cn(
             "invisible ml-auto",
+            !displayUsers || (displayUsers.length === 0 && "ml-auto"),
             path?.room && "visible",
             lk_room && "animate-pulse duration-1000 hover:animate-none",
           )}

@@ -22,6 +22,7 @@ function ChannelPage() {
   if (!user || !workspaceId) return null;
 
   return (
+    <div className="h-full w-full px-2 py-3">
       <PageEditor
         channelId={channelId}
         folderId={folderId}
@@ -29,6 +30,7 @@ function ChannelPage() {
         teamId={teamId}
         workspaceId={workspaceId}
       />
+    </div>
   );
 }
 
