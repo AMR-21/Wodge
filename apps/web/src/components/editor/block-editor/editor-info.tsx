@@ -8,7 +8,6 @@ export type EditorInfoProps = {
 };
 
 export const EditorInfo = memo(({ users }: EditorInfoProps) => {
-  console.log(users);
   return (
     <div className="flex items-center py-2">
       <div className="flex flex-row items-center">
