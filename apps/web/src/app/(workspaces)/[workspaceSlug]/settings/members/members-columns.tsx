@@ -3,11 +3,6 @@ import { queryClient } from "@repo/data/lib/query-client";
 import { DataTableActions } from "@/components/data-table/data-table-action";
 import { Header } from "@/components/data-table/header";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -23,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { DeepReadonly } from "replicache";
+import { SafeAvatar } from "@/components/safe-avatar";
 
 interface MembersColumnsProps {
   removeMember: (memberId: string) => void;
@@ -87,10 +83,11 @@ export function membersColumns({
 
         return (
           <div className="flex items-center gap-4">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={member?.avatar} alt={member?.displayName} />
-              <AvatarFallback>{member?.displayName.at(0)}</AvatarFallback>
-            </Avatar>
+            <SafeAvatar
+              src={member?.avatar}
+              fallback={member?.displayName}
+              className="h-8 w-8"
+            />
             <div className="flex flex-col">
               <div className="flex gap-1 text-[0.8125rem]">
                 <p>{member?.displayName}</p>

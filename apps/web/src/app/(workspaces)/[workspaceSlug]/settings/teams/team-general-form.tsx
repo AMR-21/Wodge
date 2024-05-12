@@ -4,19 +4,18 @@ import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
 import { nanoid } from "nanoid";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { SafeAvatar } from "@/components/safe-avatar";
 
 export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
@@ -82,13 +81,13 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
         <div className="space-y-2">
           <p className="text-sm">Icon & Name</p>
 
-          <div className="flex w-64 items-end gap-2">
-            <Avatar className="h-8 w-8 rounded-md">
-              {/* <AvatarImage src={form.watch("avatar")} /> */}
-              <AvatarFallback className="rounded-md capitalize">
-                {form.watch("name")?.[0] || ""}
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex w-64 items-center  gap-2">
+            <SafeAvatar
+              src={team?.avatar}
+              fallback={form.watch("name")?.[0] || ""}
+              className="h-7 w-7 rounded-md"
+              fallbackClassName="rounded-md"
+            />
             <FormField
               control={form.control}
               name="name"
