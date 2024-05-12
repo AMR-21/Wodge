@@ -69,60 +69,57 @@ export function Sidebar() {
   const { teamId } = useParams<{ teamId: string }>();
 
   return (
-    <ScrollArea>
-      <aside
-        className={cn(
-          "h-full max-h-full min-h-0 shrink-0 grow bg-dim  px-2.5 py-1.5 transition-all",
-          !isSidebarOpen && "px-0",
+    // <ScrollArea className="flex-1">
+    <aside
+      className={cn(
+        "h-full max-h-full min-h-0 flex-1 shrink-0 grow  overflow-y-auto bg-dim px-2.5 py-1.5 transition-all",
+        !isSidebarOpen && "px-0",
+      )}
+    >
+      <div className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-1">
+          {tabs.map((tab) => {
+            const baseUrl = `/${workspaceSlug}`;
+
+            return (
+              <SidebarItem
+                key={tab.label}
+                Icon={tab.Icon}
+                className="capitalize"
+                isActive={activeSidebar === tab.val}
+                {...(tab.val === "settings" && {
+                  href: `${baseUrl}/settings`,
+                })}
+                {...(tab.val === "home" && {
+                  href: `${baseUrl}/`,
+                })}
+                {...(tab.val === "resources" &&
+                  teamId && {
+                    href: `${baseUrl}/resources/${teamId}`,
+                  })}
+                {...(tab.val === "thread" &&
+                  teamId && {
+                    href: `${baseUrl}/thread/${teamId}`,
+                  })}
+                onClick={() => {
+                  if (tab.val && tab.val !== "settings") {
+                    setActiveSidebar(tab.val);
+                  }
+                }}
+              >
+                {tab.label}
+              </SidebarItem>
+            );
+          })}
+        </ul>
+
+        {activeSidebar !== "home" ? (
+          <Teamspaces type={activeSidebar} isPages={activeSidebar === "page"} />
+        ) : (
+          <Teamspaces type="page" isPages />
         )}
-      >
-        <div className="flex flex-col gap-4">
-          <ul className="flex flex-col gap-1">
-            {tabs.map((tab) => {
-              const baseUrl = `/${workspaceSlug}`;
-
-              return (
-                <SidebarItem
-                  key={tab.label}
-                  Icon={tab.Icon}
-                  className="capitalize"
-                  isActive={activeSidebar === tab.val}
-                  {...(tab.val === "settings" && {
-                    href: `${baseUrl}/settings`,
-                  })}
-                  {...(tab.val === "home" && {
-                    href: `${baseUrl}/`,
-                  })}
-                  {...(tab.val === "resources" &&
-                    teamId && {
-                      href: `${baseUrl}/resources/${teamId}`,
-                    })}
-                  {...(tab.val === "thread" &&
-                    teamId && {
-                      href: `${baseUrl}/thread/${teamId}`,
-                    })}
-                  onClick={() => {
-                    if (tab.val && tab.val !== "settings") {
-                      setActiveSidebar(tab.val);
-                    }
-                  }}
-                >
-                  {tab.label}
-                </SidebarItem>
-              );
-            })}
-          </ul>
-
-          {activeSidebar !== "home" ? (
-            <Teamspaces
-              type={activeSidebar}
-              isPages={activeSidebar === "page"}
-            />
-          ) : (
-            <Teamspaces type="page" isPages />
-          )}
-        </div>
-      </aside>
-    </ScrollArea>
+      </div>
+    </aside>
+    // </ScrollArea>
   );
 }

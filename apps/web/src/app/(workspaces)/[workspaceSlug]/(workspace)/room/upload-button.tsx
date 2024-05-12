@@ -27,7 +27,7 @@ export function UploadButton({
   teamId,
   rep,
 }: {
-  workspaceId: string;
+  workspaceId?: string;
   teamId: string;
   channelId: string;
   rep?: Replicache<typeof roomMutators>;
@@ -85,11 +85,6 @@ export function UploadButton({
     [rep],
   );
 
-  function cancel() {
-    uppyRef.cancelAll();
-    setOpen(false);
-  }
-
   async function completeUpload(
     fileId?: string,
     type?: Message["type"],
@@ -107,7 +102,6 @@ export function UploadButton({
       type,
       reactions: [],
     });
-
   }
 
   return (

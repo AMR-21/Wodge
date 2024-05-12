@@ -12,6 +12,7 @@ export interface RecentlyVisitedItem {
 }
 
 export const isSidebarOpenAtom = atom(true);
+export const isCallWindowOpenAtom = atom(false);
 
 export const recentlyVisitedAtom = atomWithStorage<
   Record<string, RecentlyVisitedItem[]>

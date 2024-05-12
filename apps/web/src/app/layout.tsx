@@ -2,15 +2,22 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "@uppy/dashboard/dist/style.min.css";
+import "@uppy/core/dist/style.min.css";
 import "@uppy/audio/dist/style.min.css";
 import "@uppy/webcam/dist/style.min.css";
 import "@/styles/uppy.css";
+import "@/styles/calls.css";
 import "@/styles/editor.css";
 import "@/styles/globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
+import { Provider } from "jotai";
 import { Toaster } from "@/components/ui/toast";
+import RoomPage from "./(workspaces)/[workspaceSlug]/(workspace)/room/[teamId]/[channelId]/call/page";
+import { AppStoreProvider } from "@/store/app-store-provider";
+import { memo } from "react";
+import { CallWindow } from "./(workspaces)/[workspaceSlug]/(workspace)/room/[teamId]/[channelId]/call-window";
 
 /** Runtime = edge require in order to make next-auth works with cf-pages */
 export const runtime = "edge";
@@ -34,18 +41,29 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="relative overflow-hidden font-sans">
-        <Providers>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </Providers>
+        <AppStoreProvider>
+          <Provider>
+            <Providers>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+                <CallWindow />
+              </ThemeProvider>
+            </Providers>
+          </Provider>
+        </AppStoreProvider>
         <Toaster richColors />
       </body>
     </html>
   );
 }
+
+const CallPage = memo(({}) => (
+  <div className="absolute right-0 top-0 w-3/4 bg-red-500">
+    <RoomPage />
+  </div>
+));

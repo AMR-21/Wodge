@@ -36,10 +36,6 @@ export const isSessionValid = (
  * next-auth endpoint
  */
 
-// curl -X GET 'https://uqkkqllielmukapbadjn.supabase.co/auth/v1/user' \
-// -H "apikey: SUPABASE_KEY" \
-// -H "Authorization: Bearer USER_TOKEN"
-
 export const getCurrentUser = async (
   req: Party.Request,
   lobby: Party.Lobby
@@ -59,30 +55,6 @@ export const getCurrentUser = async (
         acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
         return acc;
       }, {});
-
-  const supabase = createClient(
-    lobby.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    lobby.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-    {
-      auth: { persistSession: false },
-    }
-  );
-
-  // console.log(
-  //   await supabase.auth.getUser(
-  //     "eyJhbGciOiJIUzI1NiIsImtpZCI6IklyZTNVbGlFckFxMVU5SGciLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzE0NDIxMTE3LCJpYXQiOjE3MTQ0MTc1MTcsImlzcyI6Imh0dHBzOi8vdXFra3FsbGllbG11a2FwYmFkam4uc3VwYWJhc2UuY28vYXV0aC92MSIsInN1YiI6ImJmYzM4YTBlLTkzMDAtNDlmZC04ZTI4LWY1NzA4MTNjMzcxOSIsImVtYWlsIjoiYW1yeWFzc2VyNTIwMDFAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJnaXRodWIiLCJwcm92aWRlcnMiOlsiZ2l0aHViIl19LCJ1c2VyX21ldGFkYXRhIjp7ImF2YXRhcl91cmwiOiJodHRwczovL2F2YXRhcnMuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvNjk3NjIxMzI_dj00IiwiZW1haWwiOiJhbXJ5YXNzZXI1MjAwMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZnVsbF9uYW1lIjoiQU1SIFlBU1NFUiIsImlzcyI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20iLCJuYW1lIjoiQU1SIFlBU1NFUiIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiQU1SLTIxIiwicHJvdmlkZXJfaWQiOiI2OTc2MjEzMiIsInN1YiI6IjY5NzYyMTMyIiwidXNlcl9uYW1lIjoiQU1SLTIxIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoib2F1dGgiLCJ0aW1lc3RhbXAiOjE3MTQ0MTc1MTd9XSwic2Vzc2lvbl9pZCI6ImIzOWNiMDc0LWY3ZGEtNGI1OC1hZmNhLTJjYzZmMmRhYjBlMiIsImlzX2Fub255bW91cyI6ZmFsc2V9.PIRmP7EzFHYbMJquNdW1POLituFb6U81dgMY42oUQ6M"
-  //   )
-  // );
-  // console.log(parseCookie(cookie));
-  // console.log(
-  //   await fetch(`${lobby.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/user`, {
-  //     headers: {
-  //       apikey: lobby.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-  //       // Authorization: `Bearer ${cookie}`,
-  //       cookie: cookie,
-  //     },
-  //   })
-  // );
 
   // Fetch the session from the auth endpoint validated by the CSRF token
   const res = await fetch(`${lobby.env.AUTH_DOMAIN}/auth/user`, {
@@ -124,6 +96,7 @@ export const authWorkspaceAccess = async (
 
   const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/workspace-access`, {
     headers: {
+      method: "POST",
       Accept: "application/json",
       authorization: lobby.env.SERVICE_KEY as string,
       cookie,

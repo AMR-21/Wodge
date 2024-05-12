@@ -4,8 +4,6 @@ import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
 import { and, eq } from "drizzle-orm";
 
-export const runtime = "edge";
-
 export async function POST(req: Request) {
   const db = createDb();
   const supabase = createClient();

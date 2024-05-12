@@ -26,7 +26,7 @@ export function MessageDropDown({
       <DropdownMenuTrigger asChild>
         <SidebarItemBtn
           Icon={MoreHorizontal}
-          className="invisible ml-auto h-fit transition-all group-hover:visible aria-expanded:visible"
+          className="invisible ml-auto h-fit shrink-0 transition-all hover:bg-transparent group-hover:visible aria-expanded:visible"
         />
       </DropdownMenuTrigger>
 

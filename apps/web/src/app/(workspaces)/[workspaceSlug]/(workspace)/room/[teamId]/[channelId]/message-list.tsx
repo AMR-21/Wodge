@@ -23,14 +23,8 @@ export const MessageList = memo(
 
     const listRef = useRef<HTMLDivElement>(null);
 
-    function scrollList() {
-      listRef.current?.scrollIntoView({
-        block: "end",
-      });
-    }
     useEffect(() => {
       if (listRef.current)
-        // listRef.current.scrollTop = listRef.current.scrollHeight;
         listRef.current.scrollIntoView({
           block: "end",
         });
@@ -49,8 +43,8 @@ export const MessageList = memo(
     if (!messages || messages.length === 0) return null;
 
     return (
-      <div className="flex flex-col pb-2 pt-4" ref={listRef}>
-        {messages?.map((m, i, arr) => {
+      <div className="flex flex-col" ref={listRef}>
+        {messages?.map((m, i) => {
           return (
             <Message
               message={m}
@@ -62,7 +56,6 @@ export const MessageList = memo(
             />
           );
         })}
-        {/* <div className="h-2 w-2 bg-red-400" ref={ref} />; */}
       </div>
     );
   },

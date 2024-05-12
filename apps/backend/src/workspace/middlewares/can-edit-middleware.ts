@@ -40,7 +40,7 @@ export async function canEditMiddleware(
       members: party.workspaceMembers.data,
       userId,
     }) &&
-    isOwner({
+    !isOwner({
       members: party.workspaceMembers.data,
       userId,
     })

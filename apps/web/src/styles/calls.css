@@ -1,0 +1,12 @@
+.lk-control-bar {
+  @apply border-none;
+}
+
+.lk-button {
+  @apply bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/90;
+
+  &[aria-pressed="true"],
+  &:not(:disabled):hover {
+    @apply bg-secondary/80 text-secondary-foreground hover:bg-secondary/60;
+  }
+}

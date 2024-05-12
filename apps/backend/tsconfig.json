@@ -1,6 +1,9 @@
 {
   "extends": "@repo/ts/tsconfig.json",
   "compilerOptions": {
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

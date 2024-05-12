@@ -49,7 +49,7 @@ export async function canViewMiddleware(
       members: party.workspaceMembers.data,
       userId,
     }) &&
-    isOwner({
+    !isOwner({
       members: party.workspaceMembers.data,
       userId,
     })

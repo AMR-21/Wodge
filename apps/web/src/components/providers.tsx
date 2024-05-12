@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }}
     >
       <WorkspaceProvider>{children}</WorkspaceProvider>
-      <ReactQueryDevtools initialIsOpen={false} position="left" />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="relative" />
     </PersistQueryClientProvider>
   );
 }

@@ -4,13 +4,14 @@ import { AppHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_compo
 import { SidebarWrapper } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-wrapper";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { cn } from "@/lib/utils";
 import { isSidebarOpenAtom } from "@/store/global-atoms";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const isDesktop = useIsDesktop();
-  const setSidebarOpen = useSetAtom(isSidebarOpenAtom);
+  const [isSidebarOpen, setSidebarOpen] = useAtom(isSidebarOpenAtom);
 
   useEffect(() => {
     setSidebarOpen(isDesktop);
@@ -20,10 +21,15 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh w-full ">
       <SidebarWrapper />
 
-      <div className="flex h-full w-full flex-col px-4 py-2.5">
+      <div className="flex h-full w-full flex-col  ">
         <AppHeader />
-        {/* <div className="lg:max-w-32xl container flex max-w-xl flex-1  overflow-y-hidden sm:max-w-2xl xl:max-w-5xl"> */}
-        <div className="flex flex-1 overflow-y-hidden px-2" id="content-node">
+        <div
+          className={cn(
+            "w-[calc(100vw-15rem)] flex-1 overflow-y-auto transition-all",
+            !isSidebarOpen && "w-[calc(100vw-0rem)]",
+            isSidebarOpen && "w-[calc(100vw-15rem)]",
+          )}
+        >
           {children}
         </div>
       </div>

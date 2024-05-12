@@ -15,6 +15,8 @@ import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "../../../thread/[teamId]/[channelId]/use-edit-editor";
 import { EditEditor } from "./edit-editor";
 import { cn } from "@/lib/utils";
+import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
+import { MoreHorizontal } from "lucide-react";
 
 export const Message = memo(
   ({
@@ -47,7 +49,48 @@ export const Message = memo(
 
     if (isHeaderHideable) {
       return (
-        <div className="group relative flex break-words rounded-md px-1.5 py-0.5 transition-all hover:bg-secondary/40">
+        <div className="group w-full rounded-md transition-all hover:bg-secondary/40">
+          <div className="relative flex px-1.5 py-0.5">
+            <p
+              className={cn(
+                "invisible absolute left-1 top-1/2 -translate-y-1/2 text-xs text-muted-foreground transition-all group-hover:visible",
+                isEditing && "top-0 translate-y-1/2",
+              )}
+            >
+              {format(message.date, "HH:mm")}
+            </p>
+
+            <div className="MessageEditor overflow-hidden text-balance break-words pl-9">
+              {isEditing ? (
+                <EditEditor
+                  content={message as MessageType}
+                  onCancelEdit={() => onCancelEdit()}
+                  onSuccessEdit={(newContent) => {
+                    onSuccessEdit?.(message as MessageType, newContent);
+                    setIsEditing(false);
+                  }}
+                />
+              ) : (
+                <Content m={message} workspaceId={workspaceId} />
+              )}
+            </div>
+
+            <MessageDropDown
+              canEdit={user?.id === message.sender && message.type === "text"}
+              canDelete={isTeamModerator || user?.id === message.sender}
+              onDelete={() => {
+                onDelete?.(message as MessageType);
+              }}
+              onEdit={() => {
+                setIsEditing(true);
+              }}
+            />
+          </div>
+        </div>
+      );
+      return (
+        <div className="group flex overflow-hidden rounded-md transition-all hover:bg-secondary/40 ">
+          {/* <div className="group relative flex justify-between rounded-md px-1.5 py-0.5"> */}
           <p
             className={cn(
               "invisible absolute left-1 top-1/2 -translate-y-1/2 text-xs text-muted-foreground transition-all group-hover:visible",
@@ -56,6 +99,7 @@ export const Message = memo(
           >
             {format(message.date, "HH:mm")}
           </p>
+
           <div className="w-full pl-9">
             {isEditing ? (
               <EditEditor
@@ -70,21 +114,28 @@ export const Message = memo(
               <Content m={message} workspaceId={workspaceId} />
             )}
           </div>
-
-          <MessageDropDown
-            canEdit={user?.id === message.sender && message.type === "text"}
-            canDelete={isTeamModerator || user?.id === message.sender}
-            onDelete={() => onDelete?.(message as MessageType)}
-            onEdit={() => {
-              setIsEditing(true);
-            }}
+          <SidebarItemBtn
+            Icon={MoreHorizontal}
+            className="shrink-0 basis-full"
           />
+
+          {/* <MessageDropDown
+              canEdit={user?.id === message.sender && message.type === "text"}
+              canDelete={isTeamModerator || user?.id === message.sender}
+              onDelete={() => {
+                onDelete?.(message as MessageType);
+              }}
+              onEdit={() => {
+                setIsEditing(true);
+              }}
+            /> */}
         </div>
+        // </div>
       );
     }
 
     return (
-      <div className="group break-words rounded-md p-1.5 transition-all hover:bg-secondary/40">
+      <div className="group rounded-md p-1.5 transition-all hover:bg-secondary/40 ">
         <div className="flex items-start gap-2">
           <SafeAvatar
             className="h-7 w-7"
@@ -94,7 +145,7 @@ export const Message = memo(
 
           <div className="flex items-center gap-2">
             <p className="text-sm">{member?.displayName}</p>
-            <p className="pt-0.5 text-xs text-muted-foreground">
+            <p className="align-self-start pt-0.5 text-xs text-muted-foreground">
               {format(message.date, "yyyy/MM/dd HH:mm")}
             </p>
           </div>
@@ -139,7 +190,10 @@ function Content({
   return (
     <>
       {m.type === "text" && (
-        <SafeDiv className="MessageEditor text-sm" html={m.content} />
+        <SafeDiv
+          className="MessageEditor mr-1 overflow-hidden text-balance break-words"
+          html={m.content}
+        />
       )}
       {m.type === "image" && (
         <ImageMessage message={m} workspaceId={workspaceId} />

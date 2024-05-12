@@ -50,8 +50,7 @@ export const BlockEditor = ({
 
   return (
     <div className="flex flex-col h-full w-full" ref={menuContainerRef}>
-      <ScrollArea className="flex-1">
-        <div className="relative flex flex-col flex-1 h-full  ">
+        <div className="relative flex flex-col flex-1 h-full">
           <EditorContent editor={editor} ref={editorRef} className="flex-1 w-full" />
           <ContentItemMenu editor={editor} />
           <LinkMenu editor={editor} appendTo={menuContainerRef} />
@@ -61,7 +60,6 @@ export const BlockEditor = ({
           <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
           <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
         </div>
-      </ScrollArea>
       <div className="flex  justify-between p-3">
         <EditorInfo users={displayedUsers} />
         <EditorCounts characters={characterCount.characters()} words={characterCount.words()} />

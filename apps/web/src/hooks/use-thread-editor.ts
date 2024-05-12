@@ -1,4 +1,3 @@
-
 import ExtensionKit from "@/components/editor/extensions/extension-kit";
 import { useEditor } from "@tiptap/react";
 
@@ -21,8 +20,7 @@ export function useThreadEditor({ content, placeholder }: UseEditorProps = {}) {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        class:
-          "outline-0 max-w-lg sm:max-w-xl lg:max-w-2xl xl:max-w-4xl BlockEditor",
+        class: "outline-0 BlockEditor",
       },
     },
   });
