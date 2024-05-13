@@ -87,10 +87,11 @@ export function AppHeader() {
         )}
 
         {displayUsers && displayUsers.length > 0 && path?.page && (
-          <div className="mx-auto flex justify-center">
+          <div className="ml-auto flex justify-center">
             <EditorInfo users={displayUsers} />
           </div>
         )}
+
         <SidebarItemBtn
           iconClassName={cn(
             "h-5 w-5",
@@ -98,9 +99,9 @@ export function AppHeader() {
           )}
           Icon={PhoneCall}
           className={cn(
-            "invisible ml-auto",
+            "hidden ",
             !displayUsers || (displayUsers.length === 0 && "ml-auto"),
-            path?.room && "visible",
+            path?.room && "block",
             lk_room && "animate-pulse duration-1000 hover:animate-none",
           )}
           onClick={() => {
