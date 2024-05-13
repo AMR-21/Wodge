@@ -4,7 +4,14 @@ import * as React from "react";
 import { RowData, Table as TableType, flexRender } from "@tanstack/react-table";
 
 import { Updater } from "use-immer";
-import { Table, TableBody, TableCell, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
@@ -29,6 +36,8 @@ interface DataTableProps<TData> {
   label?: string;
   withForm?: boolean;
   placeholder?: string;
+  className?: string;
+  withHeader?: boolean;
 }
 
 function DataTable<TData>({
@@ -36,30 +45,34 @@ function DataTable<TData>({
   label,
   withForm,
   placeholder,
+  className,
+  withHeader,
 }: DataTableProps<TData>) {
   if (!table.options?.meta) return null;
   // const [isEditing, setIsEditing] = React.useState(false);
   const { isEditing, setIsEditing, setEdited } = table.options.meta;
 
   return (
-    <div className="">
+    <div className={className}>
       <Table>
-        {/* <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader> */}
+        {withHeader && (
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+        )}
         <TableBody>
           {table.getCenterRows()?.length > 0 ? (
             table.getCenterRows().map((row) => (

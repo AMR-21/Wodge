@@ -36,6 +36,8 @@ export function AppHeader() {
 
   const displayUsers = useAtomValue(editorUsersAtoms);
 
+  if (!path) return null;
+
   return (
     <div
       className={

@@ -1,13 +1,13 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
-import { Board, Column } from "../../../schemas/page.schema";
+import { Board, Task } from "../../../schemas/page.schema";
 
-export function deleteColumnMutation({
-  col,
+export function deleteTaskMutation({
+  task,
   boards,
   boardId,
 }: {
-  col: Column;
+  task: Task;
   boards: Board[] | DrObj<Board[]>;
   boardId: string;
 }) {
@@ -18,11 +18,7 @@ export function deleteColumnMutation({
       return draft;
     }
 
-    draft[bIdx]!.columns = draft[bIdx]!.columns.filter((c) => c.id !== col.id);
-
-    draft[bIdx]!.tasks = draft[bIdx]!.tasks.filter(
-      (t) => t.columnId !== col.id
-    );
+    draft[bIdx]!.tasks = draft[bIdx]!.tasks.filter((t) => t.id !== task.id);
 
     return draft;
   });

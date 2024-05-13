@@ -56,7 +56,7 @@ export const SidebarItemBtn = React.forwardRef<
         variant="ghost"
         size="fit"
         className={cn(
-          "group/sidebtn z-20 aria-expanded:text-accent-foreground",
+          "group/sidebtn z-20 aria-expanded:visible aria-expanded:text-accent-foreground",
           !isVisible() && "invisible",
           className,
         )}

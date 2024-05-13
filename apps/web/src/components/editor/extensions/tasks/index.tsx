@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import KanbanBoard from "./kanban-board";
+import KanbanBoard from "./tasks";
 import { nanoid } from "nanoid";
 
 import { atom } from "jotai";

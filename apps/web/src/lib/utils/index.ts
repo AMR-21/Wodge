@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { RefObject } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -25,6 +26,16 @@ export function randomElement(array: Array<any>) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+export function focusElement(ref: RefObject<any>) {
+  if (!ref.current) return;
+  const range = document.createRange();
+  const selection = window.getSelection();
+  range.setStart(ref.current, ref.current.childNodes.length);
+  range.collapse(true);
+  selection?.removeAllRanges();
+  selection?.addRange(range);
+}
+
 export * from "./time-utils";
 export * from "./cssVar";
 export * from "./get-render-container";
@@ -32,4 +43,4 @@ export * from "./is-text-selected";
 export * from "./is-custom-node-selected";
 export * from "./api";
 export * from "./constants";
-export * from "./files-utils"
+export * from "./files-utils";

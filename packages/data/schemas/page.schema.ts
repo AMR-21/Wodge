@@ -4,7 +4,7 @@ import { ChannelSchema } from "./channel.schema";
 export const TaskSchema = z.object({
   id: z.string(),
   columnId: z.string(),
-  content: z.string().optional(),
+  overview: z.string().optional(),
   title: z.string().optional(),
   due: z
     .object({

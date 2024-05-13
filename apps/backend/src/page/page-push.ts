@@ -8,6 +8,10 @@ import { createColumn } from "./create-column";
 import { deleteColumn } from "./delete-column";
 import { updateColumn } from "./update-column";
 import { createTask } from "./create-task";
+import { editTask } from "./edit-task";
+import { deleteTask } from "./delete-task";
+import { moveColumns } from "./move-columns";
+import { moveTasks } from "./move-tasks";
 
 export async function pagePush(party: PageParty, c: Context) {
   const wid = c.req.header("x-workspace-id");
@@ -45,14 +49,14 @@ function runner(party: PageParty, req: HonoRequest) {
         return await updateColumn(party, params);
       case "createTask":
         return await createTask(party, params);
-
-      //   return await editMessage(party, params);
-      // case "deleteMessage":
-      //   return await deleteMessage(
-      //     party,
-      //     params,
-      //     isAdmin || isOwner || isTeamModerator
-      //   );
+      case "editTask":
+        return await editTask(party, params);
+      case "deleteTask":
+        return await deleteTask(party, params);
+      case "moveColumns":
+        return await moveColumns(party, params);
+      case "moveTasks":
+        return await moveTasks(party, params);
 
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);

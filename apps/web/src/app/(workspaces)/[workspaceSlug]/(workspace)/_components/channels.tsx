@@ -44,6 +44,7 @@ import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { useSetAtom } from "jotai";
 import { produce } from "immer";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
+import { Button } from "@/components/ui/button";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -195,6 +196,8 @@ export const Channel = React.forwardRef<
     const setRecentAtom = useSetAtom(recentlyVisitedAtom);
     const { channelId } = useParams() as { channelId: string };
 
+    const [isDeleting, setIsDeleting] = React.useState(false);
+
     // const icon =
     let icon: LucideIcon | undefined;
 
@@ -232,9 +235,9 @@ export const Channel = React.forwardRef<
                       className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
                     />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48">
+                  <DropdownMenuContent>
                     <DialogTrigger asChild>
-                      <DropdownMenuItem className="gap-2 text-sm">
+                      <DropdownMenuItem className="">
                         <Pencil className="h-4 w-4 " />
                         Edit {type}
                       </DropdownMenuItem>
@@ -242,23 +245,14 @@ export const Channel = React.forwardRef<
 
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-                      onClick={async () => {
+                      disclosure
+                      destructive
+                      onDisclosureConfirm={async () => {
                         await workspaceRep?.mutate.deleteChannel({
                           channelId: channel.id,
-                          type,
                           teamId,
+                          type,
                           folderId,
-                        });
-
-                        setRecentAtom((prev) => {
-                          if (!workspaceId || !prev[workspaceId]) return prev;
-                          const newRecent = produce(prev, (draft) => {
-                            draft[workspaceId] = draft[workspaceId]!.filter(
-                              (r) => r.channelId !== channel.id,
-                            );
-                          });
-                          return newRecent;
                         });
                       }}
                     >

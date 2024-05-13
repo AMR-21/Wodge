@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Check, MoreHorizontal, X } from "lucide-react";
+import { Check, MoreHorizontal, Trash2, X } from "lucide-react";
 import { Row, Table } from "@tanstack/react-table";
 import { Children } from "react";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
@@ -73,12 +73,16 @@ export function DataTableActions<TData>({
                 return (
                   <DropdownMenuItem
                     key={idx}
-                    onClick={item?.action}
                     disabled={item?.disabled}
-                    className={cn(
-                      item?.destructive && "!text-red-500 hover:!text-red-500",
-                    )}
+                    destructive={item?.destructive}
+                    disclosure={item?.destructive}
+                    {...(item?.destructive
+                      ? { onDisclosureConfirm: item?.action }
+                      : {
+                          onClick: item?.action,
+                        })}
                   >
+                    <Trash2 className="h-4 w-4" />
                     {item?.label}
                   </DropdownMenuItem>
                 );

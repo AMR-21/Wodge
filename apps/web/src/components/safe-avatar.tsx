@@ -29,12 +29,14 @@ export const SafeAvatar = forwardRef<HTMLDivElement, SafeAvatarProps>(
           <Avatar
             ref={ref}
             className={cn(
-              "h-12 w-12 rounded-full ",
-              !color && "ring-[1.5px] ring-primary/30",
-              color && "border-2",
+              "h-12 w-12 rounded-full ring-[1.5px] ring-primary/30",
               className,
             )}
-            {...(color && { style: { borderColor: color } })}
+            {...(color && {
+              style: {
+                "--tw-ring-color": color,
+              } as React.CSSProperties,
+            })}
           >
             <AvatarImage src={src} />
             <AvatarFallback className={fallbackClassName}>
@@ -46,12 +48,14 @@ export const SafeAvatar = forwardRef<HTMLDivElement, SafeAvatarProps>(
           <Avatar
             ref={ref}
             className={cn(
-              "h-12 w-12 rounded-full ",
-              !color && "ring-[1.5px] ring-primary/30",
-              color && "border-2",
+              "h-12 w-12 rounded-full ring-[1.5px] ring-primary/30",
               className,
             )}
-            {...(color && { style: { borderColor: color } })}
+            {...(color && {
+              style: {
+                "--tw-ring-color": color,
+              } as React.CSSProperties,
+            })}
           >
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}

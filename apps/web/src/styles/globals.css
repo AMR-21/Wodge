@@ -9,13 +9,12 @@ body,
 }
 
 ::-webkit-scrollbar {
-  @apply h-1.5 w-1.5 bg-neutral-500/20 rounded-none;
+  @apply h-1.5 w-1.5 rounded-none bg-neutral-500/20;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neutral-500/50 rounded-none;
+  @apply rounded-none bg-neutral-500/50;
 }
-
 
 @layer base {
   :root {
@@ -35,7 +34,7 @@ body,
     --accent-foreground: 240 5.9% 10%;
     --dim: 0 0% 97%;
     --dim-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
@@ -60,7 +59,7 @@ body,
     --accent-foreground: 0 0% 98%;
     --dim: 240 13% 3%;
     --dim-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 80% 51%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
@@ -121,4 +120,3 @@ body,
 .lk-chat-toggle {
   @apply !hidden;
 }
-

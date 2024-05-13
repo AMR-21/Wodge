@@ -137,7 +137,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem
-                    className="gap-2 text-sm"
                     onClick={() => {
                       setEditMode(true);
                     }}
@@ -147,13 +146,13 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
-                    className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-                    onClick={async () => {
+                    destructive
+                    disclosure
+                    onDisclosureConfirm={async () => {
                       await rep?.mutate.deleteColumn({
                         boardId,
                         ...column,
                       });
-                      // deleteColumn(column.id)
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -193,10 +192,18 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
         </div>
 
         {/* Column task container */}
-        <div className="flex flex-col gap-1.5  ">
+        <div className="flex flex-col gap-1.5">
           <SortableContext items={tasksIds}>
             {tasks.map((task, i) => (
-              <TaskCard key={task.id} task={task} index={i} />
+              <TaskCard
+                key={task.id}
+                task={task as Task}
+                index={i}
+                rep={rep}
+                boardId={boardId}
+                col={column}
+                editor={editor}
+              />
             ))}
           </SortableContext>
         </div>
@@ -209,7 +216,7 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
           onClick={async () => {
             await rep?.mutate.createTask({
               boardId,
-              col: column,
+              col: column.id,
               task: {
                 columnId: column.id,
                 id: nanoid(6),

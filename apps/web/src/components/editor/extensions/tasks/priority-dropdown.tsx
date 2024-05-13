@@ -3,19 +3,25 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ChevronUpCircle, X } from "lucide-react";
 import { DrObj, Task } from "@repo/data";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
+import { Badge } from "@/components/ui/badge";
 
 export function PriorityDropdown({
-  task,
+  priority,
+  onSelect,
   bigger,
+  isEditing,
 }: {
-  task: Task | DrObj<Task>;
+  priority?: Task["priority"];
   bigger?: boolean;
+  isEditing?: boolean;
+  onSelect?: (priority?: "low" | "medium" | "high") => void;
 }) {
   return (
     <DropdownMenu>
@@ -23,12 +29,12 @@ export function PriorityDropdown({
         <div
           className={cn(
             buttonVariants({ variant: "ghost", size: bigger ? "sm" : "fit" }),
-            "justify-start gap-2 text-sm ",
-            !!!task.priority && "text-muted-foreground",
-            !!task.priority &&
-              "group/priority gap-1 text-foreground opacity-100",
+            "justify-start gap-2 text-sm aria-disabled:opacity-85",
+            !!!priority && "text-muted-foreground",
+            !!priority && "group/priority gap-1 text-foreground opacity-100",
             bigger && "text-sm",
           )}
+          aria-disabled={!isEditing}
         >
           {bigger && (
             <div className="flex w-36 items-center gap-2">
@@ -37,7 +43,7 @@ export function PriorityDropdown({
             </div>
           )}
 
-          {!!!task.priority && (
+          {!!!priority && (
             <>
               {!bigger && (
                 <ChevronUpCircle className="h-4 w-4 text-foreground" />
@@ -46,27 +52,29 @@ export function PriorityDropdown({
             </>
           )}
 
-          {!!task.priority && (
-            <>
-              <Priority priority={task.priority} />
-
-              <SidebarItemBtn
-                Icon={X}
-                className="invisible transition-all hover:text-red-500 group-hover/priority:visible"
-              />
-            </>
-          )}
+          {!!priority && <Priority priority={priority} />}
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={bigger ? "center" : "start"} className="w-32">
-        <DropdownMenuItem className="py-1">
+      <DropdownMenuContent align={bigger ? "center" : "start"} className="w-44">
+        <DropdownMenuItem
+          className="group/priority"
+          onClick={() => onSelect?.("low")}
+        >
           <Priority priority="low" />
         </DropdownMenuItem>
-        <DropdownMenuItem className="py-1">
+        <DropdownMenuItem className="" onClick={() => onSelect?.("medium")}>
           <Priority priority="medium" />
         </DropdownMenuItem>
-        <DropdownMenuItem className="py-1">
+        <DropdownMenuItem className="" onClick={() => onSelect?.("high")}>
           <Priority priority="high" />
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() => onSelect?.(undefined)}
+          disabled={!!!priority}
+        >
+          <X className="h-4 w-4 " />
+          Remove Priority
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -74,16 +82,16 @@ export function PriorityDropdown({
 }
 function Priority({ priority }: { priority: "low" | "medium" | "high" }) {
   return (
-    <div
+    <Badge
       className={cn(
-        "h-fit w-fit rounded-md px-2 py-0.5 text-xs font-medium capitalize ",
-
-        priority === "low" && "bg-green-600 dark:bg-green-700",
-        priority === "medium" && "bg-yellow-600 dark:bg-yellow-700",
-        priority === "high" && "bg-red-600 dark:bg-red-700",
+        "justify-between gap-1 capitalize",
+        priority === "low" && "bg-green-600 text-green-50 dark:bg-green-700",
+        priority === "medium" &&
+          "bg-yellow-600 text-yellow-50 dark:bg-yellow-700",
+        priority === "high" && "bg-red-600 text-red-50 dark:bg-red-700",
       )}
     >
       {priority}
-    </div>
+    </Badge>
   );
 }

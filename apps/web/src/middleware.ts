@@ -10,17 +10,17 @@ import {
 } from "./routes";
 
 export async function middleware(request: NextRequest) {
-  const { response, user } = await updateSession(request);
-
-  let curUser = await getUserById(user.data.user?.id);
   const { nextUrl } = request;
-
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
 
   // order matters here
   if (isApiRoute) {
-    return response;
+    return;
   }
+
+  const { response, user } = await updateSession(request);
+
+  let curUser = await getUserById(user.data.user?.id);
 
   // handle saving user data on our side
   if (user.data.user && !curUser) {
@@ -28,18 +28,18 @@ export async function middleware(request: NextRequest) {
 
     const { id, email, user_metadata } = user.data.user;
 
-    console.log({ id, email, user_metadata });
-
-    curUser = await db
-      .insert(users)
-      .values({
-        id: id,
-        email: email!,
-        displayName: user_metadata?.full_name || "",
-        avatar: user_metadata?.avatar_url || "",
-      })
-      .returning()
-      .get();
+    try {
+      curUser = await db
+        .insert(users)
+        .values({
+          id: id,
+          email: email!,
+          displayName: user_metadata?.full_name || "",
+          avatar: user_metadata?.avatar_url || "",
+        })
+        .returning()
+        .get();
+    } catch {}
   }
 
   const isLoggedIn = !!curUser;

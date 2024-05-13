@@ -2,13 +2,11 @@ import { produce } from "immer";
 import { DrObj } from "../../..";
 import { Board, Column, Task } from "../../../schemas/page.schema";
 
-export function createTaskMutation({
-  col,
+export function editTaskMutation({
   task,
   boards,
   boardId,
 }: {
-  col: string;
   task: Task;
   boards: Board[] | DrObj<Board[]>;
   boardId: string;
@@ -18,14 +16,11 @@ export function createTaskMutation({
 
     if (!board) return;
 
-    const column = board.columns?.find((c) => c.id === col);
+    const taskIndex = board.tasks?.findIndex((t) => t.id === task.id);
 
-    if (!column) return draft;
+    if (taskIndex === -1) return draft;
 
-    board.tasks.push({
-      ...task,
-      columnId: column.id,
-    });
+    board.tasks[taskIndex] = task;
 
     return draft;
   });

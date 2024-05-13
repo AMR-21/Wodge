@@ -33,10 +33,12 @@ export const useBlockEditor = ({
         CollaborationCursor.configure({
           provider,
           user: {
-            name: user?.username,
+            username: user?.username,
             color: randomElement(userColors),
             avatar: user?.avatar,
-          },
+            displayName: user?.displayName,
+            userId: user?.id,
+          } as Omit<EditorUser, "clientId">,
         }),
       ],
       editorProps: {
@@ -57,12 +59,7 @@ export const useBlockEditor = ({
     }
 
     return editor.storage.collaborationCursor?.users.map((user: EditorUser) => {
-      const names = user.name?.split(" ");
-      const firstName = names?.[0];
-      const lastName = names?.[names.length - 1];
-      const initials = `${firstName?.[0] || "?"}${lastName?.[0] || "?"}`;
-
-      return { ...user, initials: initials.length ? initials : "?" };
+      return { ...user };
     });
   }, [editor?.storage.collaborationCursor?.users]);
 

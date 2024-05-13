@@ -16,21 +16,28 @@ import { useMember } from "@/hooks/use-member";
 import { cn } from "@/lib/utils";
 import { Check, Users2 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 
 import { canView, Member } from "@repo/data";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { isEditing } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/room/[teamId]/[channelId]/atoms";
 
 interface MemberMultiSelectProps {
   onChange?: (...event: any[]) => void;
   preset?: string[];
   bigger?: boolean;
+  isEditing?: boolean;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
 }
 
 export function MemberMultiSelect({
   onChange,
   preset,
   bigger,
+  isEditing,
+  open,
+  setOpen,
 }: MemberMultiSelectProps) {
   const [value, setValue] = useState<string[]>(preset || []);
 
@@ -57,55 +64,44 @@ export function MemberMultiSelect({
     [teamId, channelId, structure, membersArr],
   );
 
-  useEffect(() => {
-    onChange?.(value);
-  }, [value]);
+  // useEffect(() => {
+  //   onChange?.(value);
+  // }, [value]);
 
   function onSelect(m: Member) {
     if (value.some((v) => v === m.id)) {
-      setValue((v) => v.filter((mb) => mb !== m.id));
+      setValue((v) => {
+        const newV = v.filter((mb) => mb !== m.id);
+        onChange?.(newV);
+        return newV;
+      });
     } else {
-      setValue((v) => [
-        ...new Set([...v, members.find((mb) => mb.id === m.id)!.id]),
-      ]);
+      setValue((v) => {
+        const newV = [
+          ...new Set([...v, members.find((mb) => mb.id === m.id)!.id]),
+        ];
+
+        onChange?.(newV);
+
+        return newV;
+      });
     }
   }
 
+  if (!isEditing)
+    return <Trigger members={members} value={value} bigger={bigger} />;
+
   return (
-    <Popover>
+    <Popover
+      {...(open &&
+        setOpen && {
+          open,
+          onOpenChange: setOpen,
+        })}
+    >
       <PopoverTrigger asChild>
-        <div
-          className={cn(
-            buttonVariants({ variant: "ghost", size: bigger ? "sm" : "fit" }),
-            "max-h-7 justify-start gap-2 overflow-hidden text-sm",
-            bigger && "max-h-20 text-sm",
-          )}
-        >
-          {bigger && (
-            <div className="flex w-36 items-center gap-2">
-              <Users2 className="text h-4 w-4" />
-              <p className="text-muted-foreground">Collaborators</p>
-            </div>
-          )}
-          {value.length === 0 && (
-            <>
-              {!bigger && <Users2 className="text h-4 w-4" />}
-              <p className="text-muted-foreground">
-                {bigger ? "Empty" : "Add assignee"}
-              </p>
-            </>
-          )}
-          {value.length >= 1 && (
-            <MemberItem
-              bigger
-              memberObj={members.find((m) => m.id === value[0])}
-            />
-          )}
-          {value.length > 1 && (
-            <p className={cn("text-xs text-muted-foreground")}>
-              +{value.length - 1} more
-            </p>
-          )}
+        <div>
+          <Trigger members={members} value={value} bigger={bigger} isEditing />
         </div>
       </PopoverTrigger>
       <PopoverContent className="bg-transparent p-0">
@@ -154,7 +150,6 @@ function MemberItem({
           member?.displayName + " " + member?.email + " " + member?.username
         }
         onSelect={() => {
-          console.log("onSelect");
           onSelect?.(memberObj);
         }}
       >
@@ -163,7 +158,7 @@ function MemberItem({
             <SafeAvatar
               src={member?.avatar}
               fallback={member?.displayName}
-              className="h-6 w-6"
+              className={"h-6 w-6"}
             />
             <p className="flex select-none items-center truncate">
               {member.displayName}
@@ -191,7 +186,7 @@ function MemberItem({
         fallback={member?.displayName}
         className={cn("h-4 w-4", bigger && "h-5 w-5")}
       />
-      <p className="flex select-none items-center truncate">
+      <p className="!mt-0 flex select-none items-center truncate">
         {member.displayName}
         <span className="ml-1 text-xs text-muted-foreground">
           @{member.username}
@@ -200,3 +195,52 @@ function MemberItem({
     </div>
   );
 }
+
+const Trigger = forwardRef<
+  HTMLDivElement,
+  {
+    value: string[];
+    members: Member[];
+    bigger?: boolean;
+    isEditing?: boolean;
+  }
+>(({ members, value, bigger, isEditing = false }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        buttonVariants({ variant: "ghost", size: bigger ? "sm" : "fit" }),
+        "max-h-7 w-full justify-start gap-2 overflow-hidden text-sm aria-disabled:opacity-85",
+        !isEditing && "bg-transparent hover:bg-transparent",
+        bigger && "max-h-20 text-sm",
+      )}
+      aria-disabled={!isEditing}
+    >
+      {bigger && (
+        <div className="flex w-36 items-center gap-2">
+          <Users2 className="text h-4 w-4" />
+          <p className="text-muted-foreground">Collaborators</p>
+        </div>
+      )}
+      {value.length === 0 && (
+        <>
+          {!bigger && <Users2 className="text h-4 w-4" />}
+          <p className="text-muted-foreground">
+            {bigger ? "Empty" : "Add assignee"}
+          </p>
+        </>
+      )}
+      {value.length >= 1 && (
+        <MemberItem
+          bigger={bigger}
+          memberObj={members.find((m) => m.id === value[0])}
+        />
+      )}
+      {value.length > 1 && (
+        <p className={cn("!mt-0 text-xs text-muted-foreground")}>
+          +{value.length - 1} more
+        </p>
+      )}
+    </div>
+  );
+});

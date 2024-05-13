@@ -18,23 +18,20 @@ import { DateRange } from "react-day-picker";
 import { DrObj, Task } from "@repo/data";
 
 export function DateTimePicker({
-  preset,
   bigger,
+  date,
+  onSetDate,
+  includeTime,
+  setIncludeTime,
+  isEditing,
 }: {
-  preset?: Task["due"];
   bigger?: boolean;
+  date?: DateRange;
+  onSetDate?: (d: DateRange | undefined) => void | Promise<void>;
+  includeTime?: boolean;
+  setIncludeTime?: (c: boolean) => void;
+  isEditing?: boolean;
 }) {
-  const [date, setDate] = React.useState<DateRange | undefined>(() => {
-    if (preset)
-      return {
-        from: preset?.from ? new Date(preset?.from) : undefined,
-        to: preset?.to ? new Date(preset?.to) : undefined,
-      };
-
-    return undefined;
-  });
-  const [includeTime, setIncludeTime] = React.useState<boolean>(false);
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -42,10 +39,11 @@ export function DateTimePicker({
           variant={"ghost"}
           size={bigger ? "sm" : "fit"}
           className={cn(
-            "justify-start gap-2 text-left text-xs font-normal",
+            "justify-start gap-2 overflow-hidden truncate text-left text-sm font-normal disabled:opacity-85",
             !date && "text-sm text-muted-foreground",
             bigger && "text-sm",
           )}
+          disabled={!isEditing}
         >
           {bigger && (
             <div className="flex w-36 items-center gap-2">
@@ -55,14 +53,14 @@ export function DateTimePicker({
           )}
           {date?.from ? (
             date.to ? (
-              <>
+              <p className="overflow-hidden truncate">
                 {format(
                   date.from,
                   includeTime ? "LLL dd, y HH:mm" : "LLL dd, y",
                 )}{" "}
                 -{" "}
                 {format(date.to, includeTime ? "LLL dd, y HH:mm" : "LLL dd, y")}
-              </>
+              </p>
             ) : (
               format(date.from, includeTime ? "LLL dd, y HH:mm" : "LLL dd, y")
             )
@@ -86,7 +84,7 @@ export function DateTimePicker({
           mode="range"
           numberOfMonths={1}
           selected={date}
-          onSelect={setDate}
+          onSelect={onSetDate}
           initialFocus
         />
 
@@ -98,10 +96,10 @@ export function DateTimePicker({
             <Switch
               id="time-toggle"
               onCheckedChange={(c) => {
-                setIncludeTime(c);
+                setIncludeTime?.(c);
 
                 if (!c) {
-                  setDate({
+                  onSetDate?.({
                     from: date?.from
                       ? new Date(date.from.setHours(0, 0, 0, 0))
                       : undefined,
@@ -121,7 +119,7 @@ export function DateTimePicker({
                 <TimePickerDemo
                   disabled={!includeTime}
                   setDate={(d) => {
-                    setDate({
+                    onSetDate?.({
                       from: d,
                       to: date?.to,
                     });
@@ -135,7 +133,7 @@ export function DateTimePicker({
                 <TimePickerDemo
                   disabled={!includeTime}
                   setDate={(d) => {
-                    setDate({
+                    onSetDate?.({
                       to: d,
                       from: date?.from,
                     });
@@ -153,7 +151,7 @@ export function DateTimePicker({
             variant="ghost"
             size="fit"
             onClick={() => {
-              setDate(undefined);
+              onSetDate?.(undefined);
             }}
           >
             Clear

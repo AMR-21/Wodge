@@ -5,6 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 import { cn } from "@/lib/utils";
 import { Check, ChevronRight, Dot } from "lucide-react";
+import { Button } from "./button";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -66,7 +67,7 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       className={cn(
         "blur-effect z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md dark:bg-popover/70",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "w-44 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         className,
       )}
       {...props}
@@ -79,18 +80,102 @@ const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
+    disclosure?: boolean;
+    destructive?: boolean;
+    onDisclosureConfirm?: (
+      e?: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => void | Promise<void>;
   }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      inset && "pl-8",
+>(
+  (
+    {
       className,
-    )}
-    {...props}
-  />
-));
+      destructive,
+      disclosure,
+      onDisclosureConfirm,
+      inset,
+      ...props
+    },
+    ref,
+  ) => {
+    const [isDisclosureOpen, setIsDisclosureOpen] = React.useState(false);
+    const [isActive, setIsActive] = React.useState(false);
+    const [isPending, setIsPending] = React.useState(false);
+    return (
+      <DropdownMenuPrimitive.Item
+        ref={ref}
+        className={cn(
+          "relative flex h-7 cursor-pointer select-none items-center gap-2 rounded-sm px-1.5  text-sm outline-none transition-colors focus:bg-accent/50 focus:text-accent-foreground  data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+          inset && "pl-8",
+          destructive && "text-destructive focus:text-destructive",
+          disclosure && "overflow-hidden",
+          isDisclosureOpen && "bg-transparent focus:bg-transparent",
+          className,
+        )}
+        {...(disclosure && {
+          onClick: (e) => {
+            e.preventDefault();
+            setTimeout(() => {
+              setIsActive(true);
+            }, 800);
+            setIsDisclosureOpen(true);
+          },
+        })}
+        {...props}
+      >
+        {disclosure ? (
+          <>
+            <div
+              className={cn(
+                "absolute top-1/2 flex w-full -translate-y-1/2 items-center gap-2 transition-transform",
+                isDisclosureOpen && "top-0 -translate-y-full",
+              )}
+            >
+              {props.children}
+            </div>
+            <div
+              className={cn(
+                "absolute left-0 flex w-full translate-y-7 gap-1 transition-transform",
+                isDisclosureOpen && "top-0 translate-y-0  ",
+              )}
+            >
+              <Button
+                variant={destructive ? "destructive" : "secondary"}
+                size="fit"
+                className="basis-1/2"
+                onClick={async () => {
+                  if (!isActive) return;
+                  setIsPending(true);
+                  await onDisclosureConfirm?.();
+                  setIsDisclosureOpen(false);
+                  setIsActive(false);
+                  setIsPending(false);
+                }}
+                isPending={isPending}
+              >
+                Confirm
+              </Button>
+              <Button
+                size="fit"
+                variant="secondary"
+                className="basis-1/2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDisclosureOpen(false);
+                  setIsActive(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </>
+        ) : (
+          props.children
+        )}
+      </DropdownMenuPrimitive.Item>
+    );
+  },
+);
 // // DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
 const DropdownMenuCheckboxItem = React.forwardRef<
