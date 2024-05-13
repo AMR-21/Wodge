@@ -7,6 +7,8 @@ import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
 import { Context, HonoRequest } from "hono";
 import { deleteMessage } from "./delete-message";
 import { editMessage } from "./edit-message";
+import { vote } from "./vote";
+import { removeVote } from "./remove-vote";
 
 export async function roomPush(party: RoomParty, c: Context) {
   const wid = c.req.header("x-workspace-id");
@@ -34,6 +36,7 @@ function runner(party: RoomParty, req: HonoRequest) {
     const isOwner = req.header("x-owner") === "true";
     const isTeamModerator = req.header("x-team-moderator") === "true";
     const canEdit = req.header("x-can-edit") === "true";
+    const canView = req.header("x-can-view") === "true";
 
     switch (params.mutation.name) {
       case "sendMessage":
@@ -48,6 +51,16 @@ function runner(party: RoomParty, req: HonoRequest) {
 
       case "editMessage":
         return await editMessage(party, params);
+
+      case "vote":
+        if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
+          return;
+        return await vote(party, params);
+
+      case "removeVote":
+        if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
+          return;
+        return await removeVote(party, params);
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);
     }

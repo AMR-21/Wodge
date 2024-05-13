@@ -7,7 +7,10 @@ import { Post } from "./post";
 
 export function PostsList({ team }: { team?: DrObj<Team> }) {
   const posts = useMemo(
-    () => team?.threads.filter((thread) => thread.type === "post"),
+    () =>
+      team?.threads.filter(
+        (thread) => thread.type === "post" || thread.type === "poll",
+      ),
     [team?.threads],
   );
 

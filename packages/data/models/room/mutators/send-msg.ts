@@ -1,6 +1,5 @@
 import { produce } from "immer";
 import { DrObj, Message, MessageSchema, WorkspaceStructure } from "../../..";
-import { dataTagSymbol } from "@tanstack/react-query";
 
 interface sendMsgArgs {
   message: Message;
@@ -28,7 +27,13 @@ export function sendMessageMutation({ message, curUserId, arr }: sendMsgArgs) {
   // });
 
   const newArr = produce(arr, (draft) => {
-    draft.push(newMessage);
+    draft.push({
+      ...newMessage,
+      date: new Date().toISOString(),
+      ...(newMessage.type === "poll" && {
+        votes: Array.from({ length: newMessage.pollOptions.length }, () => 0),
+      }),
+    });
   });
 
   return newArr as Message[];

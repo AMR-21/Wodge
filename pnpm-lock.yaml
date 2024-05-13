@@ -594,9 +594,6 @@ importers:
       '@dnd-kit/sortable':
         specifier: ^8.0.0
         version: 8.0.0(@dnd-kit/core@6.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@dnd-kit/utilities':
-        specifier: ^3.2.2
-        version: 3.2.2(react@18.2.0)
       '@repo/env':
         specifier: workspace:*
         version: link:../env
@@ -13457,7 +13454,7 @@ snapshots:
 
   is-core-module@2.13.1:
     dependencies:
-      hasown: 2.0.0
+      hasown: 2.0.2
 
   is-data-view@1.0.1:
     dependencies:

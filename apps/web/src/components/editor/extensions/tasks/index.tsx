@@ -1,15 +1,15 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import KanbanBoard from "./tasks";
 import { nanoid } from "nanoid";
 
 import { atom } from "jotai";
 import * as Y from "yjs";
+import { Tasks as TasksComp } from "./tasks";
 
 export const yDocAtom = atom<Y.Doc | undefined>(undefined);
 
 export const Tasks = Node.create({
-  name: "kanban-board",
+  name: "tasks",
   group: "block",
   isolating: true,
   selectable: false,
@@ -17,16 +17,16 @@ export const Tasks = Node.create({
   parseHTML() {
     return [
       {
-        tag: "kanban-board",
+        tag: "tasks",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["kanban-board", mergeAttributes(HTMLAttributes)];
+    return ["tasks", mergeAttributes(HTMLAttributes)];
   },
   addNodeView() {
-    return ReactNodeViewRenderer(KanbanBoard);
+    return ReactNodeViewRenderer(TasksComp);
   },
 
   addAttributes() {

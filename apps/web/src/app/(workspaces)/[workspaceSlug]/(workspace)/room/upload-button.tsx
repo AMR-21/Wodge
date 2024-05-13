@@ -101,13 +101,16 @@ export function UploadButton({
       id: fileId,
       type,
       reactions: [],
+      pollOptions: [],
+      pollVoters: [],
+      votes: [],
     });
   }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <SidebarItemBtn Icon={Plus} className="mr-2" />
+        <SidebarItemBtn Icon={Plus} className="" />
       </PopoverTrigger>
       <PopoverContent className="p-1">
         <Dashboard

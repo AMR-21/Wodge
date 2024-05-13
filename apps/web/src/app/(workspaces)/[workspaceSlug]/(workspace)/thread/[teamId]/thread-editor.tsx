@@ -11,6 +11,8 @@ import { useParams } from "next/navigation";
 import { memo } from "react";
 import { useThreadEditor } from "@/hooks/use-thread-editor";
 import OfflineEditor from "@/components/editor/block-editor/offline-editor";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { PollMaker } from "../../../../../../components/poll-maker";
 
 export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
   const { workspaceRep } = useCurrentWorkspace();
@@ -34,6 +36,9 @@ export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
       teamId,
       type: isQA ? "qa" : "post",
       createdAt: new Date().toISOString(),
+      pollOptions: [],
+      pollVoters: [],
+      votes: [],
     });
 
     editor?.commands.clearContent();
@@ -76,11 +81,18 @@ export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
               }}
             />
             {!isQA && (
-              <SidebarItemBtn
-                className="p-1.5"
-                Icon={Vote}
-                iconClassName="w-4 h-4"
-              />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <SidebarItemBtn
+                    className="p-1.5"
+                    Icon={Vote}
+                    iconClassName="w-4 h-4"
+                  />
+                </DialogTrigger>
+                <DialogContent>
+                  <PollMaker />
+                </DialogContent>
+              </Dialog>
             )}
             <SubmitButton
               isEmpty={editor?.isEmpty}

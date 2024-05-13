@@ -8,6 +8,9 @@ import { useMemo } from "react";
 
 import { PostsList } from "./posts-list";
 import { QAsList } from "./qas-list";
+import PollUI from "../../../../../../components/poll";
+import { PollMaker } from "../../../../../../components/poll-maker";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 function ThreadsPage() {
   const { structure } = useCurrentWorkspace();

@@ -33,25 +33,29 @@ export function ThreadDropDown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          disabled={!canEdit}
-          className="gap-2 text-sm"
-          onClick={() => {
-            onEdit?.();
-          }}
-        >
-          <Pencil className="h-4 w-4 " />
-          Edit {label}
-        </DropdownMenuItem>
+        {label !== "poll" && (
+          <>
+            <DropdownMenuItem
+              disabled={!canEdit}
+              onClick={() => {
+                onEdit?.();
+              }}
+            >
+              <Pencil className="h-4 w-4 " />
+              Edit {label}
+            </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+            <DropdownMenuSeparator />
+          </>
+        )}
 
         <DropdownMenuItem
           disabled={!canDelete}
-          className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-          onClick={() => {
+          onDisclosureConfirm={() => {
             onDelete?.();
           }}
+          destructive
+          disclosure
         >
           <Trash2 className="h-4 w-4" />
           Delete {label}

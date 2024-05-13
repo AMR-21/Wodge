@@ -190,7 +190,7 @@ export const GROUPS: Group[] = [
         description: "Insert a kanban board",
         shouldBeHidden: (editor) => editor.isActive("columns"),
         action: (editor) => {
-          editor.chain().focus().insertContent({ type: "kanban-board" }).run();
+          editor.chain().focus().insertContent({ type: "tasks" }).run();
         },
       },
     ],

@@ -18,6 +18,7 @@ import { CheckCircle2, CircleDot } from "lucide-react";
 import { useSetAtom } from "jotai";
 import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { produce } from "immer";
+import PollUI from "../../../../../../components/poll";
 
 export const Post = memo(
   ({
@@ -79,7 +80,7 @@ export const Post = memo(
             </div>
 
             <ThreadDropDown
-              label={isQA ? "question" : "post"}
+              label={isQA ? "question" : post.type === "poll" ? "poll" : "post"}
               onDelete={async () => {
                 await workspaceRep?.mutate.deleteChannel({
                   channelId: post.id,
@@ -109,19 +110,39 @@ export const Post = memo(
           {isEditing ? (
             <div className="w-full pl-9">
               <EditEditor
-                content={post}
+                content={post as Thread}
                 onCancelEdit={onCancelEdit}
                 onSuccessEdit={async (text: string) => {
                   await workspaceRep?.mutate.updateThread({
                     ...post,
                     content: text,
                     teamId,
+                    pollVoters: [],
+                    votes: [],
+                    pollOptions: [],
                   });
 
                   setIsEditing(false);
                 }}
               />
             </div>
+          ) : post.type === "poll" ? (
+            <>
+              <SafeDiv
+                className="BlockEditor w-full overflow-hidden text-balance break-words pl-9"
+                html={post.content}
+              />
+              <span className="py-2 pl-9 text-sm text-muted-foreground">
+                Poll - select one answer
+              </span>
+              <PollUI
+                isRoom={false}
+                options={(post.pollOptions as string[]) || []}
+                votes={(post.votes as number[]) || []}
+                pollVoters={(post.pollVoters as Thread["pollVoters"]) || []}
+                id={post.id}
+              />
+            </>
           ) : (
             <SafeDiv
               className="BlockEditor w-full overflow-hidden text-balance break-words pl-9"
@@ -130,7 +151,7 @@ export const Post = memo(
           )}
         </div>
 
-        {!opened && (
+        {!opened && post.type !== "poll" && (
           <Button
             variant="ghost"
             size="sm"

@@ -36,7 +36,13 @@ export function createThreadMutation({
     } else {
       // check that every group id on the new page exists the workspace structure
 
-      team.threads.unshift(newThread); // Add thread
+      team.threads.unshift({
+        ...newThread,
+        createdAt: new Date().toISOString(),
+        ...(newThread.type === "poll" && {
+          votes: Array.from({ length: newThread.pollOptions.length }, () => 0),
+        }),
+      }); // Add thread
     }
   });
   return newStructure as WorkspaceStructure;

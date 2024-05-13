@@ -15,8 +15,22 @@ export const MessageSchema = z.object({
   // reactions: z.array()
   reactions: z.array(ReactionSchema).default([]),
   type: z
-    .enum(["text", "mention", "image", "audio", "video", "file"])
+    .enum(["text", "mention", "image", "audio", "video", "file", "poll"])
     .default("text"),
+  isEdited: z.boolean().default(false).optional(),
+
+  pollOptions: z.array(z.string()).optional().default([]),
+  votes: z.array(z.number()).optional().default([]),
+  pollVoters: z
+    .array(
+      z.object({
+        voter: z.string(),
+        option: z.number(),
+      })
+    )
+    .optional()
+    .default([]),
+  isVoteOpen: z.boolean().default(true).optional(),
 });
 
 export const RoomSchema = ChannelSchema.extend({});

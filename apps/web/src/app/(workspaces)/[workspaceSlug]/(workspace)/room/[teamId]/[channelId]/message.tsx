@@ -14,6 +14,7 @@ import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "../../../thread/[teamId]/[channelId]/use-edit-editor";
 import { EditEditor } from "./edit-editor";
 import { cn } from "@/lib/utils";
+import PollUI from "@/components/poll";
 
 export const Message = memo(
   ({
@@ -81,6 +82,7 @@ export const Message = memo(
               onEdit={() => {
                 setIsEditing(true);
               }}
+              isPoll={message.type === "poll"}
             />
           </div>
         </div>
@@ -112,6 +114,7 @@ export const Message = memo(
             onEdit={() => {
               setIsEditing(true);
             }}
+            isPoll={message.type === "poll"}
           />
         </div>
         <div className="pl-9">
@@ -142,6 +145,24 @@ function Content({
 }) {
   return (
     <>
+      {m.type === "poll" && (
+        <>
+          <SafeDiv
+            className="BlockEditor w-full overflow-hidden text-balance break-words"
+            html={m.content}
+          />
+          <span className="py-2 text-sm text-muted-foreground">
+            Poll - select one answer
+          </span>
+          <PollUI
+            options={(m.pollOptions as string[]) || []}
+            votes={(m.votes as number[]) || []}
+            pollVoters={(m.pollVoters as MessageType["pollVoters"]) || []}
+            id={m.id}
+            isRoom
+          />
+        </>
+      )}
       {m.type === "text" && (
         <SafeDiv
           className="MessageEditor mr-1 overflow-hidden text-balance break-words"

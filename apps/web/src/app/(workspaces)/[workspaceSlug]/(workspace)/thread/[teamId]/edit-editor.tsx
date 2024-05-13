@@ -48,7 +48,7 @@ export function EditEditor({
         }}
       >
         {!editor && <SafeDiv className="BlockEditor" html={content.content} />}
-        <OfflineEditor editor={editor} isThread className="w-full bg-red-500" />
+        <OfflineEditor editor={editor} isThread className="w-full" />
       </div>
       <div className="ml-0.5 flex items-center py-1.5 pl-8">
         <Button

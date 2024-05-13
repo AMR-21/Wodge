@@ -13,12 +13,14 @@ interface MessageDropDownProps {
   onDelete?: () => void;
   canEdit?: boolean;
   canDelete?: boolean;
+  isPoll?: boolean;
 }
 
 export function MessageDropDown({
   onDelete,
   onEdit,
   canDelete,
+  isPoll,
   canEdit,
 }: MessageDropDownProps) {
   return (
@@ -31,23 +33,26 @@ export function MessageDropDown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          disabled={!canEdit}
-          className="gap-2 text-sm"
-          onClick={() => {
-            onEdit?.();
-          }}
-        >
-          <Pencil className="h-4 w-4 " />
-          Edit message
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
+        {!isPoll && (
+          <>
+            <DropdownMenuItem
+              disabled={!canEdit}
+              onClick={() => {
+                onEdit?.();
+              }}
+            >
+              <Pencil className="h-4 w-4 " />
+              Edit message
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
 
         <DropdownMenuItem
           disabled={!canDelete}
-          className="gap-2 text-sm text-red-500  focus:text-red-600 dark:focus:text-red-400"
-          onClick={() => {
+          disclosure
+          destructive
+          onDisclosureConfirm={() => {
             onDelete?.();
           }}
         >

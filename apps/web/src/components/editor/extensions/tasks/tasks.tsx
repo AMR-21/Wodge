@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
 import { Plus } from "lucide-react";
 
-function KanbanBoard({ editor, node, getPos }: NodeViewWrapperProps) {
+export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const rep = useCurrentPageRep();
 
   const { snapshot: boards } = useSubscribe(rep, (tx: ReadTransaction) =>
@@ -199,5 +199,3 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
     </div>
   );
 }
-
-export default KanbanBoard;

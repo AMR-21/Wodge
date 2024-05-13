@@ -6,7 +6,6 @@ import { queryClient } from "../../lib/query-client";
 import { deleteMessageMutation } from "./mutators/delete-msg";
 import { editMessageMutation } from "./mutators/edit-msg";
 import { voteMutation } from "./mutators/vote";
-import { removeRoomVoteMutation } from "./mutators/remove-vote";
 
 export interface EditMessageProps {
   message: Message;
@@ -90,7 +89,7 @@ export const roomMutators = {
 
     if (!user) throw new Error("User not found");
 
-    const newStructure = removeRoomVoteMutation({
+    const newStructure = voteMutation({
       ...data,
       msgsArr: msgs as Message[],
       msgId: data.msgId,

@@ -1,7 +1,7 @@
 import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 import { UploadButton } from "../../upload-button";
 import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
-import { Send } from "lucide-react";
+import { Send, SendHorizonal, Vote } from "lucide-react";
 import { useMessageEditor } from "@/hooks/use-message-editor";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useParams } from "next/navigation";
@@ -10,6 +10,8 @@ import { useCanEdit } from "@/hooks/use-can-edit";
 import { Replicache } from "replicache";
 import { roomMutators } from "@repo/data";
 import { nanoid } from "nanoid";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { PollMaker } from "../../../../../../../components/poll-maker";
 
 export function MessageEditor({
   rep,
@@ -43,6 +45,9 @@ export function MessageEditor({
         id: nanoid(),
         type: "text",
         reactions: [],
+        pollOptions: [],
+        pollVoters: [],
+        votes: [],
       });
 
       editor.commands.clearContent();
@@ -64,7 +69,18 @@ export function MessageEditor({
             teamId={teamId}
             rep={rep}
           />
-
+          <Dialog>
+            <DialogTrigger asChild>
+              <SidebarItemBtn
+                className="ml-0.5 mr-2"
+                Icon={Vote}
+                iconClassName="w-4 h-4"
+              />
+            </DialogTrigger>
+            <DialogContent>
+              <PollMaker isRoom />
+            </DialogContent>
+          </Dialog>
           <div
             className="flex h-full w-full items-center overflow-hidden"
             onKeyDown={(e) => {
@@ -76,7 +92,7 @@ export function MessageEditor({
             <OfflineEditor editor={editor} />
           </div>
           <SidebarItemBtn
-            Icon={Send}
+            Icon={SendHorizonal}
             className="ml-2"
             onClick={onSubmit}
             disabled={editor?.isEmpty}
