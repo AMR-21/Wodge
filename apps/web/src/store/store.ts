@@ -18,26 +18,11 @@ type ChannelMutators =
   | typeof threadMutators
   | typeof pageMutators;
 
-export interface ConnectionParams {
-  workspaceId?: string;
-  channelId?: string;
-  teamId?: string;
-  channelName?: string;
-  workspaceSlug?: string;
-  workspaceName?: string;
-  teamName?: string;
-}
-
-export interface RoomCall extends ConnectionParams {
-  room: Room;
-}
-
 export interface AppStore {
   userStore?: Replicache<typeof userMutators>;
   workspaces: Record<string, Replicache<typeof workspaceMutators>>;
   activeChanRep?: Replicache<ChannelMutators>;
   socket?: PartySocket;
-  room?: RoomCall;
 
   actions: {
     addWorkspace: (

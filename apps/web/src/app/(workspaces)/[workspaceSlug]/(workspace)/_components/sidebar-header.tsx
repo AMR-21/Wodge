@@ -1,6 +1,11 @@
 "use client";
 
-import { PanelLeftClose, Search } from "lucide-react";
+import {
+  ArrowDownWideNarrow,
+  Filter,
+  PanelLeftClose,
+  Search,
+} from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { useAtom } from "jotai";
@@ -22,7 +27,7 @@ export function SidebarHeader() {
 
       <div className=" ml-auto flex shrink-0  items-center gap-1">
         <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
-        <SidebarItemBtn Icon={Search} />
+        <SidebarItemBtn Icon={ArrowDownWideNarrow} />
       </div>
     </div>
   );

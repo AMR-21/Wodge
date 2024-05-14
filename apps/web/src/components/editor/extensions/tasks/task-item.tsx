@@ -170,7 +170,7 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
-                    Delete column
+                    Delete task
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

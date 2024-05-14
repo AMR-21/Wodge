@@ -1,6 +1,6 @@
 "use client";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { ArrowLeft, ArrowRight, PanelLeft, PhoneCall } from "lucide-react";
+import { ArrowLeft, ArrowRight, PanelLeft, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { isCallWindowOpenAtom, isSidebarOpenAtom } from "@/store/global-atoms";
@@ -15,6 +15,7 @@ import { useChannelPath } from "@/hooks/use-channel-path";
 import { useAppStore } from "@/store/store";
 import { editorUsersAtoms } from "@/components/editor/block-editor/atoms";
 import { EditorInfo } from "@/components/editor/block-editor/editor-info";
+import { roomAtom } from "../room/[teamId]/[channelId]/atoms";
 
 export function AppHeader() {
   const [isSidebarOpen, setSidebar] = useAtom(isSidebarOpenAtom);
@@ -26,8 +27,7 @@ export function AppHeader() {
 
   const path = useChannelPath();
 
-  const lk_room = useAppStore((s) => s.room);
-
+  const lk_room = useAtomValue(roomAtom);
   const router = useRouter();
 
   const openSidebar = setSidebar.bind(null, true);
@@ -35,8 +35,6 @@ export function AppHeader() {
   const setCallWindow = useSetAtom(isCallWindowOpenAtom);
 
   const displayUsers = useAtomValue(editorUsersAtoms);
-
-  if (!path) return null;
 
   return (
     <div
@@ -58,16 +56,20 @@ export function AppHeader() {
           />
         )}
 
-        <SidebarItemBtn
-          onClick={() => router.back()}
-          Icon={ArrowLeft}
-          className="mr-0.5"
-        />
-        <SidebarItemBtn
-          onClick={() => router.forward()}
-          Icon={ArrowRight}
-          className="mr-2"
-        />
+        {path && (
+          <>
+            <SidebarItemBtn
+              onClick={() => router.back()}
+              Icon={ArrowLeft}
+              className="mr-0.5"
+            />
+            <SidebarItemBtn
+              onClick={() => router.forward()}
+              Icon={ArrowRight}
+              className="mr-2"
+            />
+          </>
+        )}
 
         {teamId && (
           <Breadcrumb className="overflow-hidden">
@@ -97,7 +99,7 @@ export function AppHeader() {
             "h-5 w-5",
             lk_room && "text-green-600 dark:text-green-500",
           )}
-          Icon={PhoneCall}
+          Icon={Video}
           className={cn(
             "hidden ",
             !path?.page && "ml-auto",

@@ -39,7 +39,7 @@ export function UserCard() {
   return (
     <div
       className={cn(
-        "flex max-h-12 min-h-7 w-60 items-center overflow-hidden  border-r  border-t border-border/50 bg-background px-2 py-2 transition-all",
+        "flex max-h-12 min-h-7 w-60 items-center overflow-hidden  border-r  border-t border-border/50 bg-background px-1.5 py-2 transition-all",
         !isSidebarOpen && " w-0 px-0",
       )}
     >

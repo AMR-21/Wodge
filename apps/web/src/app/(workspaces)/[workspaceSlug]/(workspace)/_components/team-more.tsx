@@ -64,10 +64,9 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
         update: {
           folder: {
             name: "New folder",
-            viewGroups: ["team-members"],
-            editGroups: ["team-members"],
             id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
             channels: [],
+            parentFolder: folderId,
           },
         },
       },
@@ -105,30 +104,26 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
             </DialogTrigger>
           </DropdownMenuGroup>
           {/* TODO USE IT FOR NESTED FOLDERS */}
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Folders</DropdownMenuLabel>
+            <DropdownMenuItem className="gap-2 text-sm" onClick={createFolder}>
+              <FolderPlus className="h-4 w-4" />
+              New folder
+            </DropdownMenuItem>
+
+            <DialogTrigger asChild>
+              <DropdownMenuItem
+                className="gap-2 text-sm"
+                onClick={() => setActiveTab("folder")}
+              >
+                <FolderCog className="h-4 w-4" />
+                Custom folder
+              </DropdownMenuItem>
+            </DialogTrigger>
+          </DropdownMenuGroup>
           {!folderId && (
             <>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>Folders</DropdownMenuLabel>
-                <DropdownMenuItem
-                  className="gap-2 text-sm"
-                  onClick={createFolder}
-                >
-                  <FolderPlus className="h-4 w-4" />
-                  New folder
-                </DropdownMenuItem>
-
-                <DialogTrigger asChild>
-                  <DropdownMenuItem
-                    className="gap-2 text-sm"
-                    onClick={() => setActiveTab("folder")}
-                  >
-                    <FolderCog className="h-4 w-4" />
-                    Custom folder
-                  </DropdownMenuItem>
-                </DialogTrigger>
-              </DropdownMenuGroup>
-
               <DropdownMenuSeparator />
 
               <DropdownMenuGroup>
@@ -156,8 +151,9 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
                 </DropdownMenuItem>
               </DialogTrigger>
               <DropdownMenuItem
-                className="gap-2 text-sm text-red-500 hover:text-red-400"
-                onClick={async () => {
+                destructive
+                disclosure
+                onDisclosureConfirm={async () => {
                   await workspaceRep?.mutate.deleteFolder({
                     teamId,
                     folderId,
@@ -187,7 +183,9 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
         <AddPageForm teamId={teamId} folderId={folderId} />
       )}
 
-      {activeTab === "folder" && <AddFolderForm teamId={teamId} />}
+      {activeTab === "folder" && (
+        <AddFolderForm teamId={teamId} parentOverride={folderId} />
+      )}
 
       {activeTab === "folderEdit" && (
         <AddFolderForm teamId={teamId} folder={folder} />

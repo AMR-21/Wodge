@@ -30,9 +30,9 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
 
   const board = useMemo(() => boards?.find((b) => b.id === boardId), [boards]);
 
-  const boardView = boardViewAtom[boardId];
+  const boardView = boardViewAtom[boardId] || "kanban";
 
-  if (!board) return null;
+  // if (!board) return null;
   return (
     <NodeViewWrapper
       // onClick={(e: React.MouseEvent) => {
@@ -133,7 +133,7 @@ interface TableViewProps {
 }
 function TableView({ board, rep, boardId, editor }: TableViewProps) {
   const table = useTable({
-    data: board.tasks || [],
+    data: board?.tasks || [],
     columns: tasksColumns({
       onDeleteTask: async (t) => {
         await rep?.mutate.deleteTask({
@@ -152,7 +152,7 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
     }),
   });
 
-  if (!board.tasks || board.tasks.length === 0)
+  if (!board?.tasks || board.tasks.length === 0)
     return (
       <div className="flex w-full items-center justify-center overflow-y-auto">
         <Button
@@ -162,7 +162,7 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
           onClick={async () => {
             // const col = board.columns?.[0] || ;
             const colId = nanoid(6);
-            if (board.columns.length === 0) {
+            if (!board?.columns || board?.columns?.length === 0) {
               await rep?.mutate.createColumn({
                 boardId,
                 id: colId,
@@ -171,9 +171,9 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
             }
             await rep?.mutate.createTask({
               boardId,
-              col: board.columns?.[0]?.id || colId,
+              col: board?.columns?.[0]?.id || colId,
               task: {
-                columnId: board.columns?.[0]?.id || colId,
+                columnId: board?.columns?.[0]?.id || colId,
                 id: nanoid(6),
                 includeTime: false,
               },

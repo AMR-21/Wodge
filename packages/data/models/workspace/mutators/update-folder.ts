@@ -40,20 +40,6 @@ export function updateFolderMutation({
     if (folderIdx === -1) {
       throw new Error("folder not found");
     } else {
-      // check that every group id on the new page exists the workspace structure
-      newFolder.editGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-      newFolder.viewGroups.forEach((groupId) => {
-        if (groupId === TEAM_MEMBERS_ROLE) return;
-        if (!draft.groups.find((g) => g.id === groupId)) {
-          throw new Error("Group not found");
-        }
-      });
-
       team.folders[folderIdx]! = newFolder; // Add page
     }
   });

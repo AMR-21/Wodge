@@ -35,12 +35,12 @@ function TeamResourcePage({
 
   if (!workspaceId) return null;
 
-  if ((files?.length === 0 || dirs?.length === 0) && path?.length > 0) {
-    router.back();
-  }
+  // if ((files?.length === 0 || dirs?.length === 0) && path?.length > 0) {
+  //   router.back();
+  // }
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col px-2 py-3">
       <h2 className="text-xl">{activePath?.team.name} Resources</h2>
       <div className="flex h-8 items-center py-1.5">
         <FoldersBreadcrumbs />

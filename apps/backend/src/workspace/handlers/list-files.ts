@@ -3,16 +3,16 @@ import WorkspaceParty from "../workspace-party";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { getBucketAddress } from "@repo/data";
 import { getS3Client } from "../../lib/get-s3-client";
+import { unauthorized } from "@/lib/http-utils";
 
 export async function listFiles(party: WorkspaceParty, c: Context) {
   const s3Client = getS3Client(party.room);
-  let path = "";
 
-  if (c.req.param("path")) path = atob(c.req.param("path")!);
+  const teamId = c.req.param("teamId");
 
   const input = {
     Bucket: getBucketAddress(party.room.id),
-    Prefix: path,
+    Prefix: teamId,
   };
 
   const command = new ListObjectsV2Command(input);

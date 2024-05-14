@@ -17,13 +17,8 @@ export const FolderSchema = z.object({
   id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
   name: z.string().max(70).min(1),
   channels: z.array(PageSchema),
-  // As a preset of underline channels
-  viewGroups: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
-  editGroups: z.array(
-    z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
-  ),
+
+  parentFolder: z.string().optional(),
 });
 
 export const TeamSchema = z.object({

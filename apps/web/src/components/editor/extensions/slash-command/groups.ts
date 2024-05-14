@@ -5,6 +5,7 @@ import {
   Heading2,
   Heading3,
   Image,
+  Kanban,
   List,
   ListOrdered,
   ListTodo,
@@ -184,13 +185,13 @@ export const GROUPS: Group[] = [
         },
       },
       {
-        name: "kanbanBoard",
-        label: "Kanban Board",
-        icon: Trello,
+        name: "tasksDb",
+        label: "Tasks DB",
+        icon: Kanban,
         description: "Insert a kanban board",
         shouldBeHidden: (editor) => editor.isActive("columns"),
         action: (editor) => {
-          editor.chain().focus().insertContent({ type: "tasks" }).run();
+          editor.chain().focus().insertContent({ type: "tasks-db" }).run();
         },
       },
     ],

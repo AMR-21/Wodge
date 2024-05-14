@@ -8,8 +8,8 @@ import { Tasks as TasksComp } from "./tasks";
 
 export const yDocAtom = atom<Y.Doc | undefined>(undefined);
 
-export const Tasks = Node.create({
-  name: "tasks",
+export const TasksDB = Node.create({
+  name: "tasks-db",
   group: "block",
   isolating: true,
   selectable: false,
@@ -17,13 +17,13 @@ export const Tasks = Node.create({
   parseHTML() {
     return [
       {
-        tag: "tasks",
+        tag: "tasks-db",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["tasks", mergeAttributes(HTMLAttributes)];
+    return ["tasks-db", mergeAttributes(HTMLAttributes)];
   },
   addNodeView() {
     return ReactNodeViewRenderer(TasksComp);

@@ -34,10 +34,11 @@ import {
 import Link from "next/link";
 import { CallCard } from "./call-card";
 import { UserCard } from "./user-card";
+import { roomAtom } from "../room/[teamId]/[channelId]/atoms";
 
 export function SidebarWrapper() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
-  const { room } = useAppStore((s) => s);
+  const room = useAtomValue(roomAtom);
 
   return (
     <div
@@ -50,7 +51,7 @@ export function SidebarWrapper() {
 
       <Sidebar />
 
-      {!false && <CallCard />}
+      {room && <CallCard />}
 
       <UserCard />
     </div>

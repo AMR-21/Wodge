@@ -31,7 +31,7 @@ export async function uploadFile(party: WorkspaceParty, c: Context) {
   let key = teamId + "/";
 
   if (channelId) {
-    key = key + channelId + "/" + (path || fileId);
+    key = "private_" + key + channelId + "/" + (path || fileId);
   } else {
     key = key + (path || fileId);
   }

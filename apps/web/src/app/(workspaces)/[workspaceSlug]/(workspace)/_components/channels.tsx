@@ -117,6 +117,7 @@ function SortableChannel({
       teamId,
       idx,
     },
+    disabled: true,
   });
 
   const isSomethingOver = index === overIndex;

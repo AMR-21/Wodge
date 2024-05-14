@@ -1,7 +1,6 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
 import { Board } from "../../../schemas/page.schema";
-import { arrayMove } from "@dnd-kit/sortable";
 export function moveTasksMutation({
   t1,
   tOrC2,
@@ -33,18 +32,25 @@ export function moveTasksMutation({
     ) {
       board.tasks[activeIndex]!.columnId = board.tasks[overIndex]!.columnId;
 
-      board.tasks = arrayMove(board.tasks, activeIndex, overIndex);
+      const temp = board.tasks[activeIndex];
+      if (!temp) return;
+      if (!board.tasks[overIndex]) return;
+      board.tasks[activeIndex] = board.tasks[overIndex];
+      board.tasks[overIndex] = temp;
+
       return draft;
     }
     if (isOverColumn) {
       board.tasks[activeIndex]!.columnId = tOrC2;
     }
 
-    board.tasks = arrayMove(
-      board.tasks,
-      activeIndex,
-      isOverColumn ? activeIndex : overIndex
-    );
+    const temp = board.tasks[activeIndex];
+    if (!temp) return;
+    if (!board.tasks[overIndex]) return;
+    board.tasks[activeIndex] = isOverColumn
+      ? board.tasks[activeIndex]!
+      : board.tasks[overIndex];
+    board.tasks[overIndex] = temp;
 
     return draft;
   });

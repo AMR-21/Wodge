@@ -24,9 +24,11 @@ import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 export function Folders({
   folders,
   teamId,
+  parentOverride = false,
 }: {
   folders: readonly DrObj<FolderType>[];
   teamId: string;
+  parentOverride?: boolean;
 }) {
   const foldersIds = useMemo(() => folders?.map((d) => d.id) || [], [folders]);
 
@@ -36,9 +38,16 @@ export function Folders({
         items={foldersIds}
         strategy={verticalListSortingStrategy}
       >
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col-reverse gap-1">
           {folders?.map((f, i) => (
-            <SortableDirectory key={f.id} folder={f} teamId={teamId} idx={i} />
+            <SortableDirectory
+              key={f.id}
+              folder={f}
+              teamId={teamId}
+              idx={i}
+              folders={folders}
+              override={parentOverride}
+            />
           ))}
         </ul>
       </SortableContext>
@@ -51,10 +60,14 @@ function SortableDirectory({
   folder,
   teamId,
   idx,
+  folders,
+  override,
 }: {
   folder: DrObj<FolderType>;
   teamId: string;
   idx: number;
+  folders: readonly DrObj<FolderType>[];
+  override: boolean;
 }) {
   const {
     attributes,
@@ -93,6 +106,13 @@ function SortableDirectory({
 
   const isTeamMod = useIsTeamModerator();
 
+  const childFolders = useMemo(
+    () => folders.filter((f) => f.parentFolder === folder.id),
+    [folders],
+  );
+
+  if (!override && folder.parentFolder) return null;
+
   return (
     <Collapsible
       defaultOpen={isRoot}
@@ -124,11 +144,26 @@ function SortableDirectory({
         )}
       </CollapsibleTrigger>
       <CollapsibleContent
-        className={cn("transition-all", !isRoot && "py-1  pl-[0.9375rem]")}
+        className={cn("transition-all ", !isRoot && "py-1 pl-3.5")}
       >
         <div
-          className={cn(!isRoot && "border-l border-border p-0 pl-[0.3025rem]")}
+          className={cn(
+            "space-y-1",
+            !isRoot && "p-0 pl-2",
+            !isRoot && folder.channels.length > 0 && "border-l border-border",
+          )}
         >
+          {folder.channels.length === 0 && (
+            <span className="px-2 text-xs text-muted-foreground">
+              No pages found
+            </span>
+          )}
+
+          <Folders
+            folders={childFolders}
+            teamId={teamId}
+            parentOverride={true}
+          />
           <Channels
             teamId={teamId}
             channels={folder.channels}

@@ -1,7 +1,6 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
 import { Board, Column, Task } from "../../../schemas/page.schema";
-import { arrayMove } from "@dnd-kit/sortable";
 export function moveColumnsMutation({
   c1,
   c2,
@@ -23,7 +22,13 @@ export function moveColumnsMutation({
     const activeIndex = board.columns.findIndex((c) => c.id === c1);
     const overIndex = board.columns.findIndex((c) => c.id === c2);
 
-    board.columns = arrayMove(board.columns, activeIndex, overIndex);
+    if (activeIndex > -1 && overIndex > -1) {
+      const temp = board.columns[activeIndex];
+
+      if (!temp) return;
+      board.columns[activeIndex] = board.columns[overIndex]!;
+      board.columns[overIndex] = temp;
+    }
 
     return draft;
   });

@@ -19,29 +19,42 @@ import { Input } from "@/components/ui/input";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 import { nanoid } from "nanoid";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function AddFolderForm({
   teamId,
   folder,
+  parentOverride,
 }: {
   teamId: string;
   folder?: Folder;
+  parentOverride?: string;
 }) {
   const { workspaceRep, structure } = useCurrentWorkspace();
   const form = useForm<Folder>({
     resolver: zodResolver(FolderSchema),
     defaultValues: {
       name: folder?.name || "",
-      viewGroups: folder?.viewGroups || ["team-members"],
-      editGroups: folder?.editGroups || ["team-members"],
       id: folder?.id || nanoid(WORKSPACE_GROUP_ID_LENGTH),
       channels: folder?.channels || [],
+      parentFolder: folder?.parentFolder || parentOverride || "",
     },
   });
 
   const closeRef = useRef<HTMLButtonElement>(null);
+
+  const team = useMemo(
+    () => structure.teams.find((t) => t.id === teamId),
+    [structure.teams, teamId],
+  );
 
   async function onSubmit(data: Folder) {
     if (folder) {
@@ -120,6 +133,35 @@ export function AddFolderForm({
               );
             }}
           /> */}
+
+          <FormField
+            control={form.control}
+            name="parentFolder"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Parent folder</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Assign a parent folder" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {team?.folders
+                      .filter((f) => f.id !== folder?.id)
+                      .map((f) => (
+                        <SelectItem key={f.id} value={f.id}>
+                          {f.id.startsWith("root-") ? "Root" : f.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
 
           <Button type="submit" className="w-full">
             {folder ? "Update" : "Create"} folder

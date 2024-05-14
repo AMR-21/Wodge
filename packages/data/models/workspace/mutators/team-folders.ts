@@ -35,18 +35,14 @@ export function addTeamFolderMutation({
   if (structure.teams[teamIdx]!.folders.some((f) => f.id === folder.id))
     throw new Error("Folder already exists in team");
 
-  folder.editGroups.forEach((groupId) => {
-    if (groupId === TEAM_MEMBERS_ROLE) return;
-    if (!structure.groups.find((g) => g.id === groupId)) {
-      throw new Error("Group not found");
-    }
-  });
-  folder.viewGroups.forEach((groupId) => {
-    if (groupId === TEAM_MEMBERS_ROLE) return;
-    if (!structure.groups.find((g) => g.id === groupId)) {
-      throw new Error("Group not found");
-    }
-  });
+  if (folder.parentFolder) {
+    if (
+      !structure.teams[teamIdx]!.folders.some(
+        (f) => f.id === folder.parentFolder
+      )
+    )
+      throw new Error("Parent folder does not exist in team");
+  }
 
   // 3. Update the dirs
   const newStructure = produce(structure, (draft) => {

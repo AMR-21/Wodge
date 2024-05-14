@@ -43,7 +43,7 @@ import { ImageUpload } from "./image-upload";
 import { ImageBlock } from "./image-block";
 import { Columns, Column } from "./multi-column";
 import { emojiSuggestion } from "./emoji-suggestions";
-import { Tasks } from "./tasks";
+import { TasksDB } from "./tasks";
 import { AiPrompts } from "./ai";
 import { API } from "@/lib/utils";
 
@@ -78,7 +78,7 @@ export const ExtensionKit = ({
   Selection,
   Heading,
   HorizontalRule,
-  Tasks,
+  TasksDB,
   StarterKit.configure({
     document: false,
     dropcursor: false,

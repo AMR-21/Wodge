@@ -28,7 +28,7 @@ export async function downloadFile(party: WorkspaceParty, c: Context) {
   const channelId = c.req.param("channelId");
 
   if (channelId) {
-    key = key + channelId + "/" + path;
+    key = "private_" + key + channelId + "/" + path;
   } else {
     key = key + path;
   }

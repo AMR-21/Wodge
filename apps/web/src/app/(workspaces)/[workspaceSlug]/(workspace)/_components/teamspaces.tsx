@@ -28,6 +28,7 @@ import { useIsTeamMember } from "@/hooks/use-is-team-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -148,8 +149,8 @@ function SortableTeamspace({
         </div>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="py-1 pl-[0.9375rem]">
-        <div className="border-l border-border p-0 pl-1.5">
+      <CollapsibleContent className="py-1 pl-4">
+        <div className="border-l border-border p-0 pl-2.5">
           {/* <Separator orientation="vertical" className="bg-yellow-300" /> */}
 
           {isPages && <Folders teamId={team.id} folders={team.folders} />}
@@ -195,20 +196,37 @@ export const Teamspace = React.forwardRef<
             (team.id === teamId && activeSideBar === activeChan)
           }
           noIcon
-          collapsible={type !== "thread" && type !== "resources"}
+          // collapsible={}
           {...(type === "thread" && {
             href: `/${workspaceSlug}/thread/${team.id}`,
           })}
           {...(type === "resources" && {
             href: `/${workspaceSlug}/resources/${team.id}`,
           })}
+          className="group/collapsible"
         >
-          <SafeAvatar
-            className="mr-1.5 h-5 w-5 shrink-0 rounded-md"
-            fallbackClassName="select-none rounded-md text-xs uppercase"
-            fallback={team.name}
-            src={team.avatar}
-          />
+          <div className="relative -ml-0.5 mr-2 h-5 w-5 ">
+            <SidebarItemBtn
+              className={cn(
+                "invisible absolute p-0.5 transition-transform",
+                type !== "thread" &&
+                  type !== "resources" &&
+                  "group-hover/collapsible:visible group-aria-expanded/collapsible:rotate-90",
+              )}
+              Icon={ChevronRight}
+            />
+            <SafeAvatar
+              className={cn(
+                "absolute left-0 top-0 h-5 w-5 shrink-0 rounded-md ",
+                type !== "thread" &&
+                  type !== "resources" &&
+                  "group-hover/collapsible:invisible",
+              )}
+              fallbackClassName="select-none rounded-md text-xs uppercase"
+              fallback={team.name}
+              src={team.avatar}
+            />
+          </div>
 
           <span className="select-none truncate">{team.name}</span>
 
