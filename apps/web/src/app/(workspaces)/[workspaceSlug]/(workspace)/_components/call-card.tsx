@@ -1,22 +1,76 @@
-import { Camera, MonitorUp, PhoneCall, PhoneOff } from "lucide-react";
+import {
+  Camera,
+  MonitorOff,
+  MonitorUp,
+  PhoneCall,
+  PhoneOff,
+  Rss,
+  ScreenShare,
+  ScreenShareOff,
+  Video,
+  VideoOff,
+} from "lucide-react";
 import { SidebarItemBtn } from "./sidebar-item-btn";
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { useAtom, useAtomValue } from "jotai";
 import { isCallWindowOpenAtom, isSidebarOpenAtom } from "@/store/global-atoms";
-import { useAppStore } from "@/store/app-store-provider";
 import { cn } from "@/lib/utils";
+import {
+  callQualityAtom,
+  camDeviceAtom,
+  camStatusAtom,
+  roomAtom,
+  screenStatusAtom,
+} from "../room/[teamId]/[channelId]/atoms";
+import { useCallback, useDeferredValue } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Track } from "livekit-client";
+import { toast } from "sonner";
 
 export function CallCard() {
   const [isCallWindowOpen, setCallWindow] = useAtom(isCallWindowOpenAtom);
-  const {
-    micStatus,
-    camStatus,
-    screenStatus,
-    actions: { toggleCam, toggleMic, toggleScreen },
-    room,
-  } = useAppStore((s) => s);
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
+
+  const room = useAtomValue(roomAtom);
+  const [camStatus, setCamStatus] = useAtom(camStatusAtom);
+  const [screenStatus, setScreenStatus] = useAtom(screenStatusAtom);
+
+  const camDevice = useAtomValue(camDeviceAtom);
+  const quality = useAtomValue(callQualityAtom);
+
+  const onChangeCam = useCallback(
+    (c: boolean) => {
+      setCamStatus(c);
+      room?.room.localParticipant.setCameraEnabled(c, {
+        deviceId: camDevice,
+      });
+    },
+    [room],
+  );
+
+  const deferredScreenStatus = useDeferredValue(screenStatus);
+
+  const onChangeScreen = useCallback(
+    async (c: boolean) => {
+      try {
+        await room?.room.localParticipant.setScreenShareEnabled(c, {
+          selfBrowserSurface: "include",
+          audio: true,
+        });
+        setScreenStatus(c);
+      } catch (e) {
+        toast.error("Failed to share screen");
+        setScreenStatus(false);
+      }
+    },
+    [room],
+  );
 
   return (
     <div
@@ -25,8 +79,15 @@ export function CallCard() {
         !isSidebarOpen && "w-0 px-0",
       )}
     >
-      <div className="flex items-center gap-2 text-green-600 dark:text-green-500">
-        <PhoneCall className="size-4" />
+      <div
+        className={cn(
+          "flex items-center gap-1 pl-0.5 text-foreground",
+          quality === "excellent" && "text-green-500 dark:text-green-600",
+          quality === "good" && "text-yellow-500 dark:text-yellow-600",
+          quality === "poor" && "text-destructive",
+        )}
+      >
+        <Rss className="size-4" />
         <p className="">Connected</p>
       </div>
 
@@ -49,28 +110,83 @@ export function CallCard() {
           variant="outline"
           className="group basis-1/3"
           pressed={camStatus}
-          onPressedChange={() => {
-            toggleCam();
-          }}
+          onPressedChange={onChangeCam}
         >
-          <Camera className="size-5 group-data-[state=on]:text-green-600 dark:group-data-[state=on]:text-green-500" />
+          {camStatus ? (
+            <Video className="size-5 group-data-[state=on]:text-green-600 dark:group-data-[state=on]:text-green-500" />
+          ) : (
+            <VideoOff className="size-5" />
+          )}
         </Toggle>
 
-        <Toggle
-          variant="outline"
-          className="group basis-1/3"
-          pressed={screenStatus}
-          onPressedChange={() => {
-            toggleScreen();
-          }}
-        >
-          <MonitorUp className="size-5 group-data-[state=on]:text-green-600 dark:group-data-[state=on]:text-green-500" />
-        </Toggle>
+        {!deferredScreenStatus ? (
+          <>
+            <Toggle
+              variant="outline"
+              className="group basis-1/3"
+              pressed={screenStatus}
+              onPressedChange={onChangeScreen}
+            >
+              <ScreenShare className="size-5" />
+            </Toggle>
+          </>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Toggle
+                pressed={true}
+                variant="outline"
+                className="group basis-1/3"
+              >
+                <ScreenShareOff className="size-5 text-green-600 dark:text-green-500" />
+              </Toggle>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top">
+              <DropdownMenuItem
+                onClick={async () => {
+                  try {
+                    const track =
+                      await room?.room.localParticipant.createScreenTracks({
+                        selfBrowserSurface: "include",
+                        audio: true,
+                      });
+
+                    if (track && track[0]) {
+                      const cur =
+                        room?.room.localParticipant.getTrackPublication(
+                          Track.Source.ScreenShare,
+                        );
+
+                      if (cur && cur.track)
+                        await Promise.all([
+                          room?.room.localParticipant.publishTrack(track[0]),
+                          room?.room.localParticipant.unpublishTrack(cur.track),
+                        ]);
+                      else
+                        await room?.room.localParticipant.publishTrack(
+                          track[0],
+                        );
+                    }
+                  } catch (e) {
+                    toast.warning("Changing shared screen cancelled");
+                  }
+                }}
+              >
+                <ScreenShare className="size-4" />
+                Change screen
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onChangeScreen.bind(null, false)}>
+                <ScreenShareOff className="size-4" />
+                Stop sharing
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         <SidebarItemBtn
           Icon={PhoneOff}
           className="group/close basis-1/3"
-          iconClassName="size-5 group-hover/close:text-red-600 dark:group-hover/close:text-red-500"
+          iconClassName="size-5 group-hover/close:text-red-600 dark:group-hover/close:text-red-500 text-accent-foreground"
           variant="outline"
           onClick={async () => {
             await room?.room.disconnect();

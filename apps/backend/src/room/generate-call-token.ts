@@ -19,7 +19,8 @@ export async function generateCallToken(party: RoomParty, c: Context) {
     party.room.env.LIVEKIT_API_KEY as string,
     party.room.env.LIVEKIT_API_SECRET as string,
     {
-      identity: participantName,
+      identity: user.id,
+      name: participantName,
       // token to expire after 10 minutes
       ttl: "10m",
     }

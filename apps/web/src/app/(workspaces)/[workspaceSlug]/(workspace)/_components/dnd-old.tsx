@@ -34,7 +34,7 @@ import { Channel, Team } from "@repo/data";
 import { RiDraggable } from "react-icons/ri";
 import { clear } from "console";
 import { Teamspaces } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/teamspaces";
-import { useAppState } from "@/store/store";
+import { useAppStore } from "@/store/store";
 import { produce } from "immer";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 

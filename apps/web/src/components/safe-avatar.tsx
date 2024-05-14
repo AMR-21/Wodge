@@ -38,7 +38,7 @@ export const SafeAvatar = forwardRef<HTMLDivElement, SafeAvatarProps>(
               } as React.CSSProperties,
             })}
           >
-            <AvatarImage src={src} />
+            <AvatarImage src={src} alt={fallback || ""} />
             <AvatarFallback className={fallbackClassName}>
               {fallback?.[0]}
             </AvatarFallback>

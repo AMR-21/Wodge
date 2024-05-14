@@ -1,10 +1,10 @@
 import { useParams } from "next/navigation";
-import {  useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Replicache } from "replicache";
 import { createRoomRep, roomMutators } from "@repo/data";
 import { useCurrentUser } from "./use-current-user";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
-import { useAppState } from "@/store/store";
+import { useAppStore } from "@/store/store";
 
 export function useCurrentRoomRep() {
   const { structure, workspaceId } = useCurrentWorkspace();
@@ -14,7 +14,7 @@ export function useCurrentRoomRep() {
     channelId: string;
   }>();
 
-  const { setChannelRep } = useAppState().actions;
+  const { setChannelRep } = useAppStore().actions;
 
   const { user } = useCurrentUser();
 

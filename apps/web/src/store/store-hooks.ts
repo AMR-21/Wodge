@@ -1,8 +1,8 @@
-import { useAppState } from "./store";
+import { useAppStore } from "./store";
 
-export const useUserStore = () => useAppState((s) => s.userStore);
+export const useUserStore = () => useAppStore((s) => s.userStore);
 
 export const useWorkspaceStore = (wid: string) =>
-  useAppState((s) => s.workspaces[wid]);
+  useAppStore((s) => s.workspaces[wid]);
 
-export const useActions = () => useAppState((s) => s.actions);
+export const useActions = () => useAppStore((s) => s.actions);

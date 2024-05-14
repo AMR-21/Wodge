@@ -6,7 +6,7 @@ import { PublicUserType, users } from "@repo/data";
 import { usePathname } from "next/navigation";
 
 import { createUserRep } from "@/store/create-user-rep";
-import { useAppState } from "@/store/store";
+import { useAppStore } from "@/store/store";
 
 type Session = {
   sessionToken: string;
@@ -16,7 +16,7 @@ type Session = {
 };
 
 export function useCurrentUser() {
-  const { connectSocket } = useAppState.getState().actions;
+  const { connectSocket } = useAppStore((s) => s.actions);
 
   const pathname = usePathname();
   const { data, isPending } = useQuery({
@@ -38,8 +38,8 @@ export function useCurrentUser() {
 
   useEffect(() => {
     if (!isPending && data) {
-      if (!useAppState.getState().userStore) createUserRep(data?.id);
-      if (!useAppState.getState().socket) connectSocket(data?.id);
+      if (!useAppStore.getState().userStore) createUserRep(data?.id);
+      if (!useAppStore.getState().socket) connectSocket(data?.id);
     }
   }, [data, isPending]);
 

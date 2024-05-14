@@ -3,7 +3,7 @@ import { PokeMessage } from "@repo/data";
 import { env } from "@repo/env";
 import { queryClient } from "@repo/data/lib/query-client";
 
-import { useAppState } from "./store";
+import { useAppStore } from "./store";
 
 export function createSocket(userId: string) {
   const socket = new PartySocket({
@@ -12,8 +12,8 @@ export function createSocket(userId: string) {
     room: userId,
   });
 
-  const userStore = useAppState.getState().userStore;
-  const { addWorkspace, removeWorkspace } = useAppState.getState().actions;
+  const userStore = useAppStore.getState().userStore;
+  const { addWorkspace, removeWorkspace } = useAppStore.getState().actions;
 
   socket.addEventListener("message", (e) => {
     const data = JSON.parse(e.data) as { sub: string } & PokeMessage;
@@ -24,7 +24,7 @@ export function createSocket(userId: string) {
       switch (data.type) {
         case "workspace":
           if (!data.id) return;
-          const workspaces = useAppState.getState().workspaces;
+          const workspaces = useAppStore.getState().workspaces;
           const workspace = workspaces?.[data.id];
           let rep;
 
@@ -43,7 +43,7 @@ export function createSocket(userId: string) {
           return rep ? rep.pull() : workspace?.pull();
 
         case "channel":
-          const repCh = useAppState.getState().activeChanRep;
+          const repCh = useAppStore.getState().activeChanRep;
           if (repCh && data.id && repCh.name.includes(data.id)) repCh.pull();
           return;
 
@@ -57,7 +57,7 @@ export function createSocket(userId: string) {
           });
 
         case "workspaceMembers":
-          const workspaces2 = useAppState.getState().workspaces;
+          const workspaces2 = useAppStore.getState().workspaces;
           if (data.id && workspaces2[data.id]) workspaces2[data.id]?.pull();
           return queryClient.invalidateQueries({
             queryKey: [data.id, "members"],

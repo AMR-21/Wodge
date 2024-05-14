@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { SafeAvatar } from "@/components/safe-avatar";
-import { useAppStore } from "@/store/app-store-provider";
+import { useAppStore } from "@/store/store";
 import { Toggle } from "@/components/ui/toggle";
 import {
   Camera,
@@ -50,7 +50,7 @@ export function SidebarWrapper() {
 
       <Sidebar />
 
-      {room && <CallCard />}
+      {!false && <CallCard />}
 
       <UserCard />
     </div>

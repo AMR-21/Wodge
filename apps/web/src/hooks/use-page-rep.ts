@@ -4,7 +4,7 @@ import { Replicache } from "replicache";
 import { createPageRep, pageMutators } from "@repo/data";
 import { useCurrentUser } from "./use-current-user";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
-import { useAppState } from "@/store/store";
+import { useAppStore } from "@/store/store";
 
 export function useCurrentPageRep() {
   const { structure, workspaceId } = useCurrentWorkspace();
@@ -15,7 +15,7 @@ export function useCurrentPageRep() {
     folderId: string;
   }>();
 
-  const { setChannelRep } = useAppState().actions;
+  const { setChannelRep } = useAppStore().actions;
 
   const { user } = useCurrentUser();
 

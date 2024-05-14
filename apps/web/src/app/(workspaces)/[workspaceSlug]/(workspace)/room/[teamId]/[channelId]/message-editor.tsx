@@ -55,7 +55,7 @@ export function MessageEditor({
   }
 
   return (
-    <div className=" flex shrink-0 items-end border-t border-border/50 bg-dim px-3.5 py-3">
+    <div className=" flex h-12 shrink-0 items-end  overflow-hidden border-t border-border/50 bg-dim px-3.5 pb-2.5 pt-2">
       {!canEdit && (
         <p className="text-muted-foreground">
           Your are not allowed to send messages in this room.
@@ -82,7 +82,7 @@ export function MessageEditor({
             </DialogContent>
           </Dialog>
           <div
-            className="flex h-full w-full items-center overflow-hidden"
+            className="flex w-full items-center overflow-hidden "
             onKeyDown={(e) => {
               if (e.code === "Enter" && !e.shiftKey && !e.ctrlKey) {
                 onSubmit();

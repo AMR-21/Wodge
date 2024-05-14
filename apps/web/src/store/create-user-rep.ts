@@ -10,10 +10,10 @@ import { env } from "@repo/env";
 import { replicacheWrapper } from "@repo/data";
 import { userMutators } from "@repo/data/models/user/user-mutators";
 
-import { useAppState } from "./store";
+import { useAppStore } from "./store";
 
 export function createUserRep(userId: string) {
-  useAppState.setState({
+  useAppStore.setState({
     userStore: new Replicache<typeof userMutators>({
       name: userId,
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,

@@ -123,12 +123,18 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.3(react@18.2.0))
+      '@livekit/components-core':
+        specifier: ^0.10.0
+        version: 0.10.0(@livekit/protocol@1.16.0)(livekit-client@2.1.0)(tslib@2.6.2)
       '@livekit/components-react':
         specifier: ^2.1.2
-        version: 2.1.2(@livekit/protocol@1.13.0)(livekit-client@2.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(tslib@2.6.2)
+        version: 2.1.2(@livekit/protocol@1.16.0)(livekit-client@2.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(tslib@2.6.2)
       '@livekit/components-styles':
         specifier: ^1.0.11
         version: 1.0.11
+      '@livekit/protocol':
+        specifier: ^1.16.0
+        version: 1.16.0
       '@radix-ui/react-accordion':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.2.25)(@types/react@18.2.78)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -588,9 +594,6 @@ importers:
       '@dnd-kit/core':
         specifier: ^6.1.0
         version: 6.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@dnd-kit/modifiers':
-        specifier: ^7.0.0
-        version: 7.0.0(@dnd-kit/core@6.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@dnd-kit/sortable':
         specifier: ^8.0.0
         version: 8.0.0(@dnd-kit/core@6.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -627,6 +630,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
       replicache:
         specifier: ^14.1.0
         version: 14.2.2
@@ -1940,9 +1946,6 @@ packages:
   '@floating-ui/core@1.6.0':
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
 
-  '@floating-ui/dom@1.6.1':
-    resolution: {integrity: sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==}
-
   '@floating-ui/dom@1.6.3':
     resolution: {integrity: sha512-RnDthu3mzPlQ31Ss/BTwQ1zjzIhr3lk1gZB1OC56h/1vEtaXkESrOqL5fQVMfXpwGtRwX+YsZBdyHtJMQnkArw==}
 
@@ -2048,6 +2051,9 @@ packages:
 
   '@livekit/protocol@1.13.0':
     resolution: {integrity: sha512-M3U36VgRfb0VutWG6pnozXusL+mkYstbCctTLUyCIyye36Ztv1wA9zYpyYvz7VnsgmCn+g/g0eB2rnAkTVwcnA==}
+
+  '@livekit/protocol@1.16.0':
+    resolution: {integrity: sha512-xZZTZVh2FmWmUgNS3n+oGNbA4GcS4XOwhg8CWy75jenYxbgQ89ds7ixfMQ+F+oxktcXfJ1qsph086oRTlg8e5Q==}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -9093,11 +9099,6 @@ snapshots:
     dependencies:
       '@floating-ui/utils': 0.2.1
 
-  '@floating-ui/dom@1.6.1':
-    dependencies:
-      '@floating-ui/core': 1.6.0
-      '@floating-ui/utils': 0.2.1
-
   '@floating-ui/dom@1.6.3':
     dependencies:
       '@floating-ui/core': 1.6.0
@@ -9105,7 +9106,7 @@ snapshots:
 
   '@floating-ui/react-dom@2.0.8(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@floating-ui/dom': 1.6.1
+      '@floating-ui/dom': 1.6.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
@@ -9184,20 +9185,20 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@livekit/components-core@0.10.0(@livekit/protocol@1.13.0)(livekit-client@2.1.0)(tslib@2.6.2)':
+  '@livekit/components-core@0.10.0(@livekit/protocol@1.16.0)(livekit-client@2.1.0)(tslib@2.6.2)':
     dependencies:
       '@floating-ui/dom': 1.6.3
-      '@livekit/protocol': 1.13.0
+      '@livekit/protocol': 1.16.0
       email-regex: 5.0.0
       livekit-client: 2.1.0
       loglevel: 1.9.1
       rxjs: 7.8.1
       tslib: 2.6.2
 
-  '@livekit/components-react@2.1.2(@livekit/protocol@1.13.0)(livekit-client@2.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(tslib@2.6.2)':
+  '@livekit/components-react@2.1.2(@livekit/protocol@1.16.0)(livekit-client@2.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(tslib@2.6.2)':
     dependencies:
-      '@livekit/components-core': 0.10.0(@livekit/protocol@1.13.0)(livekit-client@2.1.0)(tslib@2.6.2)
-      '@livekit/protocol': 1.13.0
+      '@livekit/components-core': 0.10.0(@livekit/protocol@1.16.0)(livekit-client@2.1.0)(tslib@2.6.2)
+      '@livekit/protocol': 1.16.0
       '@react-hook/latest': 1.0.3(react@18.2.0)
       clsx: 2.1.0
       livekit-client: 2.1.0
@@ -9209,6 +9210,10 @@ snapshots:
   '@livekit/components-styles@1.0.11': {}
 
   '@livekit/protocol@1.13.0':
+    dependencies:
+      '@bufbuild/protobuf': 1.8.0
+
+  '@livekit/protocol@1.16.0':
     dependencies:
       '@bufbuild/protobuf': 1.8.0
 
@@ -13734,7 +13739,7 @@ snapshots:
 
   livekit-server-sdk@2.1.2:
     dependencies:
-      '@livekit/protocol': 1.13.0
+      '@livekit/protocol': 1.16.0
       camelcase-keys: 7.0.2
       jose: 5.2.0
 

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import { useChannelPath } from "@/hooks/use-channel-path";
-import { useAppStore } from "@/store/app-store-provider";
+import { useAppStore } from "@/store/store";
 import { editorUsersAtoms } from "@/components/editor/block-editor/atoms";
 import { EditorInfo } from "@/components/editor/block-editor/editor-info";
 
@@ -100,7 +100,7 @@ export function AppHeader() {
           Icon={PhoneCall}
           className={cn(
             "hidden ",
-            !displayUsers || (displayUsers.length === 0 && "ml-auto"),
+            !path?.page && "ml-auto",
             path?.room && "block",
             lk_room && "animate-pulse duration-1000 hover:animate-none",
           )}
