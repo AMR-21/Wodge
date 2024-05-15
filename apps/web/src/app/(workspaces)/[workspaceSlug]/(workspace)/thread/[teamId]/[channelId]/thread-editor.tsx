@@ -12,9 +12,19 @@ import { memo } from "react";
 import { useThreadEditor } from "@/hooks/use-thread-editor";
 import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { PollMaker } from "../../../../../../components/poll-maker";
+import { PollMaker } from "@/components/poll-maker";
+import { Replicache } from "replicache";
+import { threadMutators } from "@repo/data";
 
-export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
+export function ThreadEditor({
+  isQA = false,
+  isComment = false,
+  rep,
+}: {
+  isQA?: boolean;
+  isComment?: boolean;
+  rep?: Replicache<typeof threadMutators>;
+}) {
   const { workspaceRep } = useCurrentWorkspace();
   const { user } = useCurrentUser();
   const { teamId } = useParams<{ teamId: string }>();
@@ -25,21 +35,35 @@ export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
 
   const isPrivileged = useIsTeamModerator();
 
+  const { postId } = useParams<{ postId: string }>();
+
   async function createThread() {
     const text = editor?.getHTML();
     if (!text || !user) return;
-
-    await workspaceRep?.mutate.createThread({
-      createdBy: user.id,
-      content: text,
-      id: nanoid(),
-      teamId,
-      type: isQA ? "qa" : "post",
-      createdAt: new Date().toISOString(),
-      pollOptions: [],
-      pollVoters: [],
-      votes: [],
-    });
+    if (isComment) {
+      if (!postId) return;
+      await rep?.mutate.createComment({
+        author: user.id,
+        content: text,
+        id: nanoid(6),
+        createdAt: new Date().toISOString(),
+        postId,
+        type: "message",
+      });
+    } else {
+      await rep?.mutate.createPost({
+        author: user.id,
+        comments: [],
+        content: text,
+        createdAt: new Date().toISOString(),
+        id: nanoid(6),
+        pollOptions: [],
+        pollVoters: [],
+        reactions: [],
+        type: isQA ? "qa" : "post",
+        votes: [],
+      });
+    }
 
     editor?.commands.clearContent();
   }
@@ -90,7 +114,7 @@ export function ThreadEditor({ isQA = false }: { isQA?: boolean }) {
                   />
                 </DialogTrigger>
                 <DialogContent>
-                  <PollMaker />
+                  <PollMaker isRoom={false} />
                 </DialogContent>
               </Dialog>
             )}

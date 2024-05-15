@@ -13,7 +13,7 @@ export default class ThreadParty implements Party.Server, ThreadPartyInterface {
     hibernate: true,
   };
 
-  threadMessages: ServerThreadMessages;
+  threadPosts: ServerThreadMessages;
   versions: Versions;
 
   app: Hono = new Hono().basePath("/parties/thread/:threadId");

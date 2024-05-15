@@ -4,21 +4,21 @@ import { format } from "date-fns";
 import { CheckCircle2, CircleDot } from "lucide-react";
 
 export function ThreadAction({
-  msg,
+  comment,
   member,
   isFirst,
 }: {
-  msg: ThreadMessage;
+  comment: ThreadMessage;
   member?: PublicUserType;
   isFirst?: boolean;
 }) {
-  const Icon = msg.type === "open" ? CircleDot : CheckCircle2;
+  const Icon = comment.type === "open" ? CircleDot : CheckCircle2;
   return (
     <div className="z-50 flex items-center gap-3 pl-[0.5625rem] text-sm">
       <Icon
         className={cn(
           "h-6 w-6 shrink-0 rounded-full border-2 border-background  p-0.5 ",
-          msg.type === "open"
+          comment.type === "open"
             ? "bg-green-600 text-green-50 dark:bg-green-500"
             : "bg-purple-600 text-purple-50 dark:bg-purple-500",
         )}
@@ -26,11 +26,15 @@ export function ThreadAction({
       <div className="flex gap-1">
         <p>@{member?.username || "workspace_member"}</p>
         <p className="text-muted-foreground">
-          {msg.type === "open" ? (isFirst ? "opened" : "reopened") : "closed"}{" "}
+          {comment.type === "open"
+            ? isFirst
+              ? "opened"
+              : "reopened"
+            : "closed"}{" "}
           the thread
         </p>
         <p className="pt-0.5 text-xs text-muted-foreground">
-          {msg.date && format(msg.date, "yyyy/MM/dd h:mm a")}
+          {comment.createdAt && format(comment.createdAt, "yyyy/MM/dd h:mm a")}
         </p>
       </div>
     </div>

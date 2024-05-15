@@ -31,7 +31,6 @@ import { ChannelsTypes } from "../../schemas/channel.schema";
 import { Folder, Team } from "../../schemas/team.schema";
 import { Room } from "../../schemas/room.schema";
 import { Thread } from "../../schemas/thread.schema";
-import { toggleThreadMutation } from "./mutators/toggle-thread";
 import { deleteChannelMutation } from "./mutators/delete-channel";
 import { updatePageMutation } from "./mutators/update-page";
 import { updateRoomMutation } from "./mutators/update-room";
@@ -359,37 +358,6 @@ export const workspaceMutators = {
       curUserId: user.id,
       teamId,
       structure,
-    });
-
-    await tx.set(makeWorkspaceStructureKey(), newStructure);
-  },
-
-  async toggleThread(
-    tx: WriteTransaction,
-    data: {
-      teamId: string;
-      threadId: string;
-    }
-  ) {
-    const structure = (await tx.get<WorkspaceStructure>(
-      makeWorkspaceStructureKey()
-    )) as WorkspaceStructure;
-
-    const members = await tx.get<WorkspaceMembers>(makeWorkspaceMembersKey());
-
-    const user = queryClient.getQueryData<PublicUserType>(["user"]);
-
-    if (!user) throw new Error("User not found");
-
-    const isAdmin =
-      members?.createdBy === user.id ||
-      members?.members.find((m) => m.id === user.id)?.role === "admin";
-
-    const newStructure = toggleThreadMutation({
-      structure,
-      curUserId: user.id,
-      isAdmin,
-      ...data,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

@@ -35,9 +35,6 @@ export function updateThreadMutation({
     if (!team) throw new Error("Team not found");
     // Check if folder not found
 
-    if (thread.createdBy !== userId)
-      throw new Error("You are not the creator of this thread");
-
     const threadIdx = team.threads.findIndex((ch) => ch.id === newThread.id);
     if (threadIdx === -1) {
       throw new Error("Page not found");

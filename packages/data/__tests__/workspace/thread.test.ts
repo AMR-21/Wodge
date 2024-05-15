@@ -7,9 +7,9 @@ import {
 } from "../utils";
 import { createThreadMutation } from "../../models/workspace/mutators/create-thread";
 import { deleteThreadMutation } from "../../models/workspace/mutators/delete-thread";
-import { deleteThreadMessageMutation } from "../../models/thread/mutators/delete-thread-message";
-import { createThreadMessageMutation } from "../../models/thread/mutators/create-thread-message";
-import { editThreadMessageMutation } from "../../models/thread/mutators/edit.thread.message";
+import { deleteThreadMessageMutation } from "../../models/thread/mutators/delete-comment";
+import { createThreadMessageMutation } from "../../models/thread/mutators/create-comment";
+import { editThreadMessageMutation } from "../../models/thread/mutators/edit-comment";
 import { user } from "../tests";
 
 describe("Workspace threads' unit mutations", () => {

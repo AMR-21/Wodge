@@ -2,6 +2,7 @@ import {
   Thread,
   ThreadMessage as ThreadMessageType,
   threadMutators,
+  ThreadPost,
 } from "@repo/data";
 import { memo, useEffect } from "react";
 import { ReadTransaction, Replicache } from "replicache";
@@ -11,46 +12,51 @@ import { ThreadMessage } from "./thread-message";
 export const ThreadMessagesList = memo(
   ({
     rep,
-    thread,
+    comments,
+    post,
+    isQA = false,
   }: {
     rep?: Replicache<typeof threadMutators>;
-    thread: Thread;
+    comments?: ThreadMessageType[];
+    post?: ThreadPost;
+    isQA?: boolean;
   }) => {
-    const { snapshot: messages, isPending } = useSubscribe(
-      rep,
-      (tx: ReadTransaction) => tx.get<ThreadMessageType[]>("messages"),
-    );
-
-    async function onDeleteMsg(msg: ThreadMessageType) {
-      await rep?.mutate.deleteMessage(msg);
+    async function onDeleteMsg(comment: ThreadMessageType) {
+      if (!post) return;
+      await rep?.mutate.deleteComment({
+        ...comment,
+        postId: post?.id,
+      });
     }
 
-    async function onEditMsg(msg: ThreadMessageType, newContent: string) {
-      await rep?.mutate.editMessage({
-        msg,
+    async function onEditMsg(comment: ThreadMessageType, newContent: string) {
+      if (!post) return;
+      await rep?.mutate.editComment({
+        comment,
+        postId: post?.id,
         newContent,
       });
     }
 
-    if (!messages) return null;
+    if (!comments) return null;
 
     return (
-      <div className="py-2.5">
-        {thread.type === "post" && messages && messages.length > 0 && (
+      <div className={!isQA ? "py-2.5" : "mb-2.5"}>
+        {!isQA && comments.length > 0 && (
           <p className="pb-2 text-sm font-medium text-muted-foreground">
             Comments
           </p>
         )}
 
         <div className="flex flex-col gap-2.5">
-          {messages?.map((m) => (
+          {comments?.map((m) => (
             <ThreadMessage
-              type={thread.type}
-              msg={m}
+              type={isQA ? "qa" : "post"}
+              comment={m}
               key={m.id}
               onDeleteMsg={onDeleteMsg}
               onEditMsg={onEditMsg}
-              isResolved={thread.isResolved}
+              isResolved={post?.isResolved}
             />
           ))}
         </div>

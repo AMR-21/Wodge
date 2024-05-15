@@ -11,7 +11,6 @@ import { deleteTeam } from "../mutators/delete-team";
 import { createPage } from "../mutators/create-page";
 import { createRoom } from "../mutators/create-room";
 import { createThread } from "../mutators/create-thread";
-import { toggleThread } from "../mutators/toggle-thread";
 import { isAdmin, isOwner, isTeamModerator } from "@repo/data";
 import { deleteChannel } from "../mutators/delete-channel";
 import { updatePage } from "../mutators/update-page";
@@ -60,7 +59,6 @@ const functions: Record<
   updateRoom,
   updateThread,
 
-  toggleThread,
   deleteChannel,
   deleteFolder,
   vote,

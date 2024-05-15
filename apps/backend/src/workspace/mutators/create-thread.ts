@@ -10,12 +10,9 @@ export async function createThread(
   params: RunnerParams,
   auth: PushAuth
 ) {
+  if (!auth.isOwnerOrAdmin && !auth.isTeamModerator) return;
+
   const { teamId, ...thread } = params.mutation.args as NewThreadArgs;
-
-  if (!teamId || !thread) return;
-
-  if (thread.type === "post" && !auth.isOwnerOrAdmin && !auth.isTeamModerator)
-    return;
 
   party.workspaceStructure.data = createThreadMutation({
     curUserId: params.userId,

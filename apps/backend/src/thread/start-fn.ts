@@ -3,7 +3,7 @@ import { Versions } from "../types";
 import ThreadParty from "./thread-party";
 
 export async function startFn(party: ThreadParty) {
-  party.threadMessages = (await party.room.storage.get("messages")) || {
+  party.threadPosts = (await party.room.storage.get("posts")) || {
     data: [],
     lastModifiedVersion: 0,
     deleted: false,

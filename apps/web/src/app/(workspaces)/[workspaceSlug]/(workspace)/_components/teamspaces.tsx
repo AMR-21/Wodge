@@ -22,13 +22,14 @@ import {
 } from "@/components/ui/collapsible";
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
-import { TeamRoomsMore } from "./team-rooms-more";
+import { TeamThreadsMore } from "./team-threads-more";
 import { useParams, usePathname } from "next/navigation";
 import { useIsTeamMember } from "@/hooks/use-is-team-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { TeamRoomsMore } from "./team-rooms-more";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -159,6 +160,14 @@ function SortableTeamspace({
               {type === "room" && (
                 <Channels type="room" teamId={team.id} channels={team.rooms} />
               )}
+
+              {type === "thread" && (
+                <Channels
+                  type="thread"
+                  teamId={team.id}
+                  channels={team.threads}
+                />
+              )}
             </>
           )}
         </div>
@@ -196,10 +205,6 @@ export const Teamspace = React.forwardRef<
             (team.id === teamId && activeSideBar === activeChan)
           }
           noIcon
-          // collapsible={}
-          {...(type === "thread" && {
-            href: `/${workspaceSlug}/thread/${team.id}`,
-          })}
           {...(type === "resources" && {
             href: `/${workspaceSlug}/resources/${team.id}`,
           })}
@@ -209,8 +214,8 @@ export const Teamspace = React.forwardRef<
             <SidebarItemBtn
               className={cn(
                 "invisible absolute p-0.5 transition-transform",
-                type !== "thread" &&
-                  type !== "resources" &&
+
+                type !== "resources" &&
                   "group-hover/collapsible:visible group-aria-expanded/collapsible:rotate-90",
               )}
               Icon={ChevronRight}
@@ -218,9 +223,8 @@ export const Teamspace = React.forwardRef<
             <SafeAvatar
               className={cn(
                 "absolute left-0 top-0 h-5 w-5 shrink-0 rounded-md ",
-                type !== "thread" &&
-                  type !== "resources" &&
-                  "group-hover/collapsible:invisible",
+
+                type !== "resources" && "group-hover/collapsible:invisible",
               )}
               fallbackClassName="select-none rounded-md text-xs uppercase"
               fallback={team.name}
@@ -239,6 +243,7 @@ export const Teamspace = React.forwardRef<
             >
               {type === "page" && <TeamMore teamId={team.id} />}
               {type === "room" && <TeamRoomsMore teamId={team.id} />}
+              {type === "thread" && <TeamThreadsMore teamId={team.id} />}
             </div>
           )}
         </SidebarItem>

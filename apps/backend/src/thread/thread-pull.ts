@@ -18,11 +18,11 @@ function patcher(party: ThreadParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    if (party.threadMessages.lastModifiedVersion > fromVersion) {
+    if (party.threadPosts.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: "messages",
-        value: party.threadMessages.data,
+        key: "posts",
+        value: party.threadPosts.data,
       });
     }
 

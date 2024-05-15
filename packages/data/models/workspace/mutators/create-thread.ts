@@ -22,9 +22,6 @@ export function createThreadMutation({
 
   const { data: newThread } = validateFields;
 
-  if (newThread.createdBy !== curUserId)
-    throw new Error("User not authorized to create thread");
-
   const newStructure = produce(structure, (draft) => {
     const team = draft.teams.find((t) => t.id === teamId);
     // Check if team not found
@@ -36,13 +33,7 @@ export function createThreadMutation({
     } else {
       // check that every group id on the new page exists the workspace structure
 
-      team.threads.unshift({
-        ...newThread,
-        createdAt: new Date().toISOString(),
-        ...(newThread.type === "poll" && {
-          votes: Array.from({ length: newThread.pollOptions.length }, () => 0),
-        }),
-      }); // Add thread
+      team.threads.push(newThread); // Add thread
     }
   });
   return newStructure as WorkspaceStructure;
