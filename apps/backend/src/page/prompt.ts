@@ -33,7 +33,7 @@ export async function prompt(party: PageParty, c: Context) {
       (item: { case: string }) => item.case === action
     );
     if (template) {
-      prompt_header = template.prompt_header;
+      prompt_header = template.prompt_header + "do the mentioned above giving the data below and no yapping just give the answer directly";
       prompt = prompt_header + "" + data;
       const { response } = await party.ai.run("@cf/meta/llama-2-7b-chat-fp16", {
         prompt: `"${prompt}"`,
