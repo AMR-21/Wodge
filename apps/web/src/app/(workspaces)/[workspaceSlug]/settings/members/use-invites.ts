@@ -4,6 +4,7 @@ import { Invite, Invites } from "@repo/data";
 import { env } from "@repo/env";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 function getInviteLink(invites?: Invites): Invite | undefined {
   if (!invites) return;
@@ -19,7 +20,11 @@ function getInviteLink(invites?: Invites): Invite | undefined {
 export function useInvites() {
   const { workspaceId } = useCurrentWorkspace();
 
-  const { data: invites, isPending } = useQuery<Invites>({
+  const {
+    data: invites,
+    isPending,
+    isError,
+  } = useQuery<Invites>({
     queryKey: ["invites", workspaceId],
     queryFn: async () => {
       const res = await fetch(
@@ -33,6 +38,8 @@ export function useInvites() {
     enabled: !!workspaceId,
     staleTime: 0,
   });
+
+  if (isError) toast.error("Failed to fetch invites");
 
   const inviteLink = getInviteLink(invites);
 

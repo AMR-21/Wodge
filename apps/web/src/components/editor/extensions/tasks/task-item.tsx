@@ -18,6 +18,7 @@ import { MemberMultiSelect } from "./member-multi-select";
 import { DateTimePicker } from "./date-time-picker";
 import { PriorityDropdown } from "./priority-dropdown";
 import { TaskState } from "./task-card";
+import { toast } from "sonner";
 
 interface TaskItemProps {
   task: Task;
@@ -62,21 +63,25 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
     }, [isEditing]);
 
     async function onEdit() {
-      if (!boardId) return;
+      try {
+        if (!boardId) return;
 
-      await rep?.mutate.editTask({
-        boardId,
-        task: {
-          ...task,
-          title,
-          due: due as Task["due"],
-          assignee,
-          priority,
-          includeTime,
-        },
-      });
+        await rep?.mutate.editTask({
+          boardId,
+          task: {
+            ...task,
+            title,
+            due: due as Task["due"],
+            assignee,
+            priority,
+            includeTime,
+          },
+        });
 
-      setIsEditing(false);
+        setIsEditing(false);
+      } catch {
+        toast.error("Failed to edit task");
+      }
     }
     return (
       <div
@@ -162,11 +167,15 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
                     destructive
                     disclosure
                     onDisclosureConfirm={async () => {
-                      if (!boardId) return;
-                      await rep?.mutate.deleteTask({
-                        task,
-                        boardId,
-                      });
+                      try {
+                        if (!boardId) return;
+                        await rep?.mutate.deleteTask({
+                          task,
+                          boardId,
+                        });
+                      } catch {
+                        toast.error("Failed to delete task");
+                      }
                     }}
                   >
                     <Trash2 className="h-4 w-4" />

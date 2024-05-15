@@ -61,6 +61,9 @@ export function WorkspaceGeneralForm() {
       });
       // }
     },
+    onError() {
+      toast.error("Workspace update failed");
+    },
   });
 
   async function onSubmit(data: Pick<Workspace, "name" | "slug">) {

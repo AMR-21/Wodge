@@ -20,6 +20,7 @@ import { env } from "@repo/env";
 import Webcam from "@uppy/webcam";
 
 import Audio from "@uppy/audio";
+import { toast } from "sonner";
 
 export function UploadButton({
   workspaceId,
@@ -94,17 +95,21 @@ export function UploadButton({
 
     if (!fileId || !type || !name) return;
 
-    await rep?.mutate.sendMessage({
-      sender: user.id,
-      content: name,
-      date: new Date().toISOString(),
-      id: fileId,
-      type,
-      reactions: [],
-      pollOptions: [],
-      pollVoters: [],
-      votes: [],
-    });
+    try {
+      await rep?.mutate.sendMessage({
+        sender: user.id,
+        content: name,
+        date: new Date().toISOString(),
+        id: fileId,
+        type,
+        reactions: [],
+        pollOptions: [],
+        pollVoters: [],
+        votes: [],
+      });
+    } catch {
+      toast.error("Message send failed");
+    }
   }
 
   return (

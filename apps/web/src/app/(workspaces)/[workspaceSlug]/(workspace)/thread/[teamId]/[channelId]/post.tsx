@@ -26,6 +26,7 @@ import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { produce } from "immer";
 import PollUI from "@/components/poll";
 import { Replicache } from "replicache";
+import { toast } from "sonner";
 
 export const Post = memo(
   ({
@@ -107,22 +108,26 @@ export const Post = memo(
                 isQA ? "question" : post?.type === "poll" ? "poll" : "post"
               }
               onDelete={async () => {
-                if (!post && !comment) return;
-                if (comment) {
-                  if (!postId) return;
-                  await rep?.mutate.deleteComment({
-                    ...comment,
-                    postId: postId,
-                  });
-                } else {
-                  if (!post) return;
-                  await rep?.mutate.deletePost({
-                    ...post,
-                  });
-                }
+                try {
+                  if (!post && !comment) return;
+                  if (comment) {
+                    if (!postId) return;
+                    await rep?.mutate.deleteComment({
+                      ...comment,
+                      postId: postId,
+                    });
+                  } else {
+                    if (!post) return;
+                    await rep?.mutate.deletePost({
+                      ...post,
+                    });
+                  }
 
-                if (opened)
-                  router.replace(`/${workspaceSlug}/thread/${teamId}`);
+                  if (opened)
+                    router.replace(`/${workspaceSlug}/thread/${teamId}`);
+                } catch {
+                  toast.error("Deletion failed");
+                }
               }}
               onEdit={onEdit}
               canEdit={author === user?.id}
@@ -136,21 +141,25 @@ export const Post = memo(
                 content={post as ThreadPost}
                 onCancelEdit={onCancelEdit}
                 onSuccessEdit={async (text: string) => {
-                  if (!isComment) {
-                    if (!post) return;
-                    await rep?.mutate.editPost({
-                      ...post,
-                      newContent: text,
-                    });
-                  } else {
-                    if (!comment) return;
-                    await rep?.mutate.editComment({
-                      comment,
-                      newContent: text,
-                      postId: comment.id,
-                    });
+                  try {
+                    if (!isComment) {
+                      if (!post) return;
+                      await rep?.mutate.editPost({
+                        ...post,
+                        newContent: text,
+                      });
+                    } else {
+                      if (!comment) return;
+                      await rep?.mutate.editComment({
+                        comment,
+                        newContent: text,
+                        postId: comment.id,
+                      });
+                    }
+                    setIsEditing(false);
+                  } catch {
+                    toast.error("Edit failed");
                   }
-                  setIsEditing(false);
                 }}
               />
             </div>

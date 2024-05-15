@@ -16,6 +16,7 @@ import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
 export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const rep = useCurrentPageRep();
@@ -136,16 +137,24 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
     data: board?.tasks || [],
     columns: tasksColumns({
       onDeleteTask: async (t) => {
-        await rep?.mutate.deleteTask({
-          task: t as Task,
-          boardId,
-        });
+        try {
+          await rep?.mutate.deleteTask({
+            task: t as Task,
+            boardId,
+          });
+        } catch {
+          toast.error("Failed to delete task");
+        }
       },
       onEditTask: async (t) => {
-        await rep?.mutate.editTask({
-          boardId,
-          task: t as Task,
-        });
+        try {
+          await rep?.mutate.editTask({
+            boardId,
+            task: t as Task,
+          });
+        } catch {
+          toast.error("Failed to edit task");
+        }
       },
       editor,
       board,
@@ -161,23 +170,27 @@ function TableView({ board, rep, boardId, editor }: TableViewProps) {
           size="sm"
           onClick={async () => {
             // const col = board.columns?.[0] || ;
-            const colId = nanoid(6);
-            if (!board?.columns || board?.columns?.length === 0) {
-              await rep?.mutate.createColumn({
+            try {
+              const colId = nanoid(6);
+              if (!board?.columns || board?.columns?.length === 0) {
+                await rep?.mutate.createColumn({
+                  boardId,
+                  id: colId,
+                  title: "New column",
+                });
+              }
+              await rep?.mutate.createTask({
                 boardId,
-                id: colId,
-                title: "New column",
+                col: board?.columns?.[0]?.id || colId,
+                task: {
+                  columnId: board?.columns?.[0]?.id || colId,
+                  id: nanoid(6),
+                  includeTime: false,
+                },
               });
+            } catch {
+              toast.error("Failed to add task");
             }
-            await rep?.mutate.createTask({
-              boardId,
-              col: board?.columns?.[0]?.id || colId,
-              task: {
-                columnId: board?.columns?.[0]?.id || colId,
-                id: nanoid(6),
-                includeTime: false,
-              },
-            });
           }}
         >
           <Plus className="h-4 w-4" />

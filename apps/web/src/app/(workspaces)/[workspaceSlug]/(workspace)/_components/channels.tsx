@@ -47,6 +47,7 @@ import { produce } from "immer";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { Button } from "@/components/ui/button";
 import { AddThreadForm } from "./add-thread-form";
+import { toast } from "sonner";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -251,12 +252,16 @@ export const Channel = React.forwardRef<
                       disclosure
                       destructive
                       onDisclosureConfirm={async () => {
-                        await workspaceRep?.mutate.deleteChannel({
-                          channelId: channel.id,
-                          teamId,
-                          type,
-                          folderId,
-                        });
+                        try {
+                          await workspaceRep?.mutate.deleteChannel({
+                            channelId: channel.id,
+                            teamId,
+                            type,
+                            folderId,
+                          });
+                        } catch {
+                          toast.error(`Delete ${type} failed`);
+                        }
                       }}
                     >
                       <Trash2 className="h-4 w-4" />

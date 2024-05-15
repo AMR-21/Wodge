@@ -6,6 +6,7 @@ import { ReadTransaction, Replicache } from "replicache";
 import { useSubscribe } from "@/hooks/use-subscribe";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export const lastSenderIdAtom = atom<string>("");
 
@@ -31,11 +32,19 @@ export const MessageList = memo(
     }, [messages]);
 
     async function onDelete(msg: MessageType) {
-      await rep?.mutate.deleteMessage(msg);
+      try {
+        await rep?.mutate.deleteMessage(msg);
+      } catch {
+        toast.error("Message deletion failed");
+      }
     }
 
     async function onEdit(msg: MessageType, newContent: string) {
-      await rep?.mutate.editMessage({ message: msg, newContent });
+      try {
+        await rep?.mutate.editMessage({ message: msg, newContent });
+      } catch {
+        toast.error("Message edition failed");
+      }
     }
 
     if (!workspaceId) return null;

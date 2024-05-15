@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 
-import { ok, unauthorized } from "../lib/http-utils";
+import { error, notFound, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getCurrentUser } from "../lib/auth";
 import { ServerThreadMessages, ThreadPartyInterface, Versions } from "../types";
 import { startFn } from "./start-fn";
@@ -24,6 +24,10 @@ export default class ThreadParty implements Party.Server, ThreadPartyInterface {
     this.app.post("/replicache-pull", threadPull.bind(null, this));
 
     this.app.post("/replicache-push", threadPush.bind(null, this));
+
+    this.app.onError((err, c) => {
+      return error("Something went wrong");
+    });
 
     await startFn(this);
   }

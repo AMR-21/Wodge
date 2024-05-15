@@ -95,6 +95,11 @@ export const AiWriterView = ({
           body: JSON.stringify(payload),
         },
       );
+      if (!response.ok) {
+        setIsFetching(false);
+        toast.error("Failed to fetch prompt");
+        return;
+      }
 
       const json = await response.json<{ response: string }>();
 

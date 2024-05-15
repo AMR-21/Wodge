@@ -6,7 +6,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 export function useMembersInfo() {
   const { workspaceId } = useCurrentWorkspace();
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: [workspaceId, "members"],
     queryFn: async () => {
       const res = await fetch(
@@ -23,6 +23,10 @@ export function useMembersInfo() {
     },
     enabled: !!workspaceId,
   });
+
+  if (isError) {
+    console.error("Failed to fetch members data");
+  }
 
   return { membersInfo: data || [], isMembersPending: isPending };
 }

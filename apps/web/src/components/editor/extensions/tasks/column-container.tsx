@@ -28,6 +28,7 @@ import {
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
   const [editMode, setEditMode] = useState(false);
@@ -78,18 +79,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
     }
   }, [editMode]);
 
-  async function editColumn(e: React.KeyboardEvent<HTMLParagraphElement>) {
-    if (editMode && e.key === "Enter") {
-      await rep?.mutate.updateColumn({
-        boardId,
-        ...column,
-        title: name,
-      });
-
-      setEditMode(false);
-    }
-  }
-
   return (
     <div ref={setNodeRef}>
       <div className="group flex w-80 select-none flex-col rounded-md bg-secondary/30 p-2 transition-all">
@@ -111,13 +100,17 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
               )}
               onKeyDown={async (e) => {
                 if (editMode && e.key === "Enter") {
-                  await rep?.mutate.updateColumn({
-                    boardId,
-                    ...column,
-                    title: name,
-                  });
+                  try {
+                    await rep?.mutate.updateColumn({
+                      boardId,
+                      ...column,
+                      title: name,
+                    });
 
-                  setEditMode(false);
+                    setEditMode(false);
+                  } catch {
+                    toast.error("Failed to update column");
+                  }
                 }
               }}
               autoFocus
@@ -149,10 +142,14 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                     destructive
                     disclosure
                     onDisclosureConfirm={async () => {
-                      await rep?.mutate.deleteColumn({
-                        boardId,
-                        ...column,
-                      });
+                      try {
+                        await rep?.mutate.deleteColumn({
+                          boardId,
+                          ...column,
+                        });
+                      } catch {
+                        toast.error("Failed to delete column");
+                      }
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -168,13 +165,17 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                   className="my-0.5 ml-auto hover:text-green-600 dark:hover:text-green-500"
                   Icon={Check}
                   onClick={async () => {
-                    await rep?.mutate.updateColumn({
-                      boardId,
-                      ...column,
-                      title: name,
-                    });
+                    try {
+                      await rep?.mutate.updateColumn({
+                        boardId,
+                        ...column,
+                        title: name,
+                      });
 
-                    setEditMode(false);
+                      setEditMode(false);
+                    } catch {
+                      toast.error("Failed to update column");
+                    }
                   }}
                 />
                 <SidebarItemBtn
@@ -214,16 +215,19 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
           variant="ghost"
           className="mt-2 gap-1.5 opacity-70 transition-all hover:opacity-100"
           onClick={async () => {
-            await rep?.mutate.createTask({
-              boardId,
-              col: column.id,
-              task: {
-                columnId: column.id,
-                id: nanoid(6),
-                includeTime: false,
-              },
-            });
-            // createTask(column.id)
+            try {
+              await rep?.mutate.createTask({
+                boardId,
+                col: column.id,
+                task: {
+                  columnId: column.id,
+                  id: nanoid(6),
+                  includeTime: false,
+                },
+              });
+            } catch {
+              toast.error("Failed to create task");
+            }
           }}
         >
           <Plus className="h-4 w-4 " />

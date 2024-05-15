@@ -8,6 +8,7 @@ import { memo, useEffect } from "react";
 import { ReadTransaction, Replicache } from "replicache";
 import { useSubscribe } from "@/hooks/use-subscribe";
 import { ThreadMessage } from "./thread-message";
+import { toast } from "sonner";
 
 export const ThreadMessagesList = memo(
   ({
@@ -22,20 +23,28 @@ export const ThreadMessagesList = memo(
     isQA?: boolean;
   }) => {
     async function onDeleteMsg(comment: ThreadMessageType) {
-      if (!post) return;
-      await rep?.mutate.deleteComment({
-        ...comment,
-        postId: post?.id,
-      });
+      try {
+        if (!post) return;
+        await rep?.mutate.deleteComment({
+          ...comment,
+          postId: post?.id,
+        });
+      } catch {
+        toast.error("Delete comment failed");
+      }
     }
 
     async function onEditMsg(comment: ThreadMessageType, newContent: string) {
-      if (!post) return;
-      await rep?.mutate.editComment({
-        comment,
-        postId: post?.id,
-        newContent,
-      });
+      try {
+        if (!post) return;
+        await rep?.mutate.editComment({
+          comment,
+          postId: post?.id,
+          newContent,
+        });
+      } catch {
+        toast.error("Edit comment failed");
+      }
     }
 
     if (!comments) return null;

@@ -38,6 +38,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { nanoid } from "nanoid";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddRoomForm({
   folderId,
@@ -63,21 +64,26 @@ export function AddRoomForm({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   async function onSubmit(data: Room) {
-    if (room) {
-      await workspaceRep?.mutate.updateRoom({
+    try {
+      if (room) {
+        await workspaceRep?.mutate.updateRoom({
+          teamId,
+          ...data,
+        });
+        return closeRef.current?.click();
+      }
+
+      await workspaceRep?.mutate.createRoom({
         teamId,
         ...data,
       });
-      return closeRef.current?.click();
+      form.reset();
+      form.setValue("id", nanoid(ID_LENGTH));
+      closeRef.current?.click();
+    } catch {
+      if (room) toast.error("Room update failed");
+      else toast.error("Room creation failed");
     }
-
-    await workspaceRep?.mutate.createRoom({
-      teamId,
-      ...data,
-    });
-    form.reset();
-    form.setValue("id", nanoid(ID_LENGTH));
-    closeRef.current?.click();
   }
 
   return (

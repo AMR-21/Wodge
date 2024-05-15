@@ -16,6 +16,7 @@ import { nanoid } from "nanoid";
 import { ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 import { AddRoomForm } from "./add-room-form";
+import { toast } from "sonner";
 
 interface TeamMoreProps {
   teamId: string;
@@ -25,15 +26,19 @@ export function TeamRoomsMore({ teamId }: TeamMoreProps) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
 
   async function createBlankRoom() {
-    await workspaceRep?.mutate.createRoom({
-      teamId,
-      name: "New room",
+    try {
+      await workspaceRep?.mutate.createRoom({
+        teamId,
+        name: "New room",
 
-      id: nanoid(ID_LENGTH),
-      editGroups: ["team-members"],
-      viewGroups: ["team-members"],
-      avatar: "",
-    });
+        id: nanoid(ID_LENGTH),
+        editGroups: ["team-members"],
+        viewGroups: ["team-members"],
+        avatar: "",
+      });
+    } catch {
+      toast.error("Room creation failed");
+    }
   }
 
   return (

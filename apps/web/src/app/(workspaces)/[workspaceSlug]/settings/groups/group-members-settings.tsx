@@ -6,6 +6,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useMembersInfo } from "@/hooks/use-members-info";
 import { useMemo } from "react";
 import { groupMembersColumns } from "./group-members-columns";
+import { toast } from "sonner";
 
 export function GroupMembersSettings({ group }: { group?: DrObj<Group> }) {
   const { members, structure, workspaceRep, workspaceId } =
@@ -27,30 +28,38 @@ export function GroupMembersSettings({ group }: { group?: DrObj<Group> }) {
   });
 
   async function removeMember(memberId: string) {
-    if (!group) return;
-    await workspaceRep?.mutate.updateGroup({
-      groupId: group.id,
-      groupUpdate: {
-        action: "removeMembers",
-        update: {
-          members: [memberId],
+    try {
+      if (!group) return;
+      await workspaceRep?.mutate.updateGroup({
+        groupId: group.id,
+        groupUpdate: {
+          action: "removeMembers",
+          update: {
+            members: [memberId],
+          },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Remove member failed");
+    }
   }
 
   async function addMember(memberId: string) {
-    if (!group) return;
+    try {
+      if (!group) return;
 
-    await workspaceRep?.mutate.updateGroup({
-      groupId: group.id,
-      groupUpdate: {
-        action: "addMembers",
-        update: {
-          members: [memberId],
+      await workspaceRep?.mutate.updateGroup({
+        groupId: group.id,
+        groupUpdate: {
+          action: "addMembers",
+          update: {
+            members: [memberId],
+          },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Add member failed");
+    }
   }
 
   return (

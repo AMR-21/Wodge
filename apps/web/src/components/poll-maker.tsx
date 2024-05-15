@@ -14,6 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { MAX_OPTIONS, MIN_OPTIONS } from "@repo/data";
 import { useCurrentRoomRep } from "@/hooks/use-room-rep";
 import { useCurrentThreadRep } from "@/hooks/use-thread-rep";
+import { toast } from "sonner";
 
 export function PollMaker({ isRoom }: { isRoom: boolean }) {
   const [newOption, setNewOption] = useState<string>("");
@@ -128,35 +129,39 @@ export function PollMaker({ isRoom }: { isRoom: boolean }) {
         size="sm"
         disabled={!canSubmit}
         onClick={async () => {
-          if (!user) return;
-          if (!isRoom)
-            await tRep?.mutate.createPost({
-              type: "poll",
-              content: question,
-              createdAt: new Date().toISOString(),
-              author: user.id,
-              id: nanoid(),
-              pollOptions: options,
-              votes: [],
-              pollVoters: [],
-              comments: [],
-              reactions: [],
-            });
+          try {
+            if (!user) return;
+            if (!isRoom)
+              await tRep?.mutate.createPost({
+                type: "poll",
+                content: question,
+                createdAt: new Date().toISOString(),
+                author: user.id,
+                id: nanoid(),
+                pollOptions: options,
+                votes: [],
+                pollVoters: [],
+                comments: [],
+                reactions: [],
+              });
 
-          if (isRoom)
-            await rep?.mutate.sendMessage({
-              content: question,
-              date: new Date().toISOString(),
-              id: nanoid(),
-              sender: user.id,
-              type: "poll",
-              pollOptions: options,
-              pollVoters: [],
-              votes: [],
-              reactions: [],
-            });
+            if (isRoom)
+              await rep?.mutate.sendMessage({
+                content: question,
+                date: new Date().toISOString(),
+                id: nanoid(),
+                sender: user.id,
+                type: "poll",
+                pollOptions: options,
+                pollVoters: [],
+                votes: [],
+                reactions: [],
+              });
 
-          closeRef.current?.click();
+            closeRef.current?.click();
+          } catch {
+            toast.error("Failed to create poll");
+          }
         }}
       >
         Create poll

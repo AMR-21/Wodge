@@ -10,7 +10,7 @@ export function useCurrentResources() {
   const { workspaceId } = useCurrentWorkspace();
 
   // fetch teamResources from server
-  const { data } = useQuery({
+  const { data, isError } = useQuery({
     queryFn: async () => {
       const res = await fetch(
         `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}/${btoa(teamId)}`,
@@ -21,9 +21,6 @@ export function useCurrentResources() {
 
       const data = await res.json<string[]>();
 
-      console.log("called");
-
-      console.log(data);
       if (!data || data.length === 0) return ["team"];
 
       return data?.map((d) => d.slice(WORKSPACE_TEAM_ID_LENGTH + 1)) || [];
@@ -51,6 +48,10 @@ export function useCurrentResources() {
   ];
 
   const files = levelItems?.filter((p) => !p.includes("/")) || [];
+
+  if (isError) {
+    console.error("Failed to fetch resources");
+  }
 
   return { files, dirs, curPath, curLevel };
 }

@@ -2,6 +2,7 @@ import { getSrcLink } from "@/lib/utils";
 import { DrObj, Message } from "@repo/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export function AudioMessage({
   message,
@@ -15,7 +16,7 @@ export function AudioMessage({
     teamId: string;
   }>();
 
-  const { data, isPending, isFetching } = useQuery({
+  const { data, isPending, isFetching, isError } = useQuery({
     queryKey: ["audio", message.id],
     queryFn: async () => {
       const res = await fetch(
@@ -25,6 +26,7 @@ export function AudioMessage({
         },
       );
 
+      if (!res.ok) throw new Error("Failed to fetch audio");
       const { downloadUrl } = await res.json<{
         downloadUrl: string;
       }>();
@@ -35,6 +37,8 @@ export function AudioMessage({
 
     staleTime: 24 * 60 * 60 * 7,
   });
+
+  if (isError) toast.error("Failed to fetch audio");
 
   return (
     <>

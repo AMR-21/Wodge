@@ -17,6 +17,7 @@ import { ID_LENGTH } from "@repo/data";
 import Link from "next/link";
 import { AddRoomForm } from "./add-room-form";
 import { AddThreadForm } from "./add-thread-form";
+import { toast } from "sonner";
 
 interface TeamMoreProps {
   teamId: string;
@@ -26,14 +27,18 @@ export function TeamThreadsMore({ teamId }: TeamMoreProps) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
 
   async function createBlankRoom() {
-    await workspaceRep?.mutate.createThread({
-      teamId,
-      name: "New thread",
-      editGroups: [],
-      viewGroups: [],
-      id: nanoid(ID_LENGTH),
-      avatar: "",
-    });
+    try {
+      await workspaceRep?.mutate.createThread({
+        teamId,
+        name: "New thread",
+        editGroups: [],
+        viewGroups: [],
+        id: nanoid(ID_LENGTH),
+        avatar: "",
+      });
+    } catch {
+      toast.error("Room creation failed");
+    }
   }
 
   return (

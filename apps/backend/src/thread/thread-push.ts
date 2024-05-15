@@ -39,48 +39,52 @@ function runner(party: ThreadParty, req: HonoRequest) {
   const isTeamModerator = req.header("x-team-moderator") === "true";
 
   return async (params: RunnerParams) => {
-    switch (params.mutation.name) {
-      case "createComment":
-        return await createComment(party, params);
-      case "editComment":
-        return await editComment(party, params);
-      case "deleteComment":
-        return await deleteComment(
-          party,
-          params,
-          isAdmin || isOwner || isTeamModerator
-        );
+    try {
+      switch (params.mutation.name) {
+        case "createComment":
+          return await createComment(party, params);
+        case "editComment":
+          return await editComment(party, params);
+        case "deleteComment":
+          return await deleteComment(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
 
-      case "createPost":
-        return await createPost(
-          party,
-          params,
-          isAdmin || isOwner || isTeamModerator
-        );
-      case "deletePost":
-        return await deletePost(
-          party,
-          params,
-          isAdmin || isOwner || isTeamModerator
-        );
-      case "togglePost":
-        return await togglePost(
-          party,
-          params,
-          isAdmin || isOwner || isTeamModerator
-        );
+        case "createPost":
+          return await createPost(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
+        case "deletePost":
+          return await deletePost(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
+        case "togglePost":
+          return await togglePost(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
 
-      case "editPost":
-        return await editPost(party, params);
+        case "editPost":
+          return await editPost(party, params);
 
-      case "vote":
-        return await vote(party, params);
+        case "vote":
+          return await vote(party, params);
 
-      case "removeVote":
-        return await removeVote(party, params);
+        case "removeVote":
+          return await removeVote(party, params);
 
-      default:
-        throw new Error("Unknown mutation: " + params.mutation.name);
+        default:
+          throw new Error("Unknown mutation: " + params.mutation.name);
+      }
+    } catch {
+      return;
     }
   };
 }

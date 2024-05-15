@@ -14,6 +14,7 @@ import { Thread, ThreadPost } from "@repo/data";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useCurrentRoomRep } from "@/hooks/use-room-rep";
 import { useCurrentThreadRep } from "@/hooks/use-thread-rep";
+import { toast } from "sonner";
 
 export default function PollUI({
   id,
@@ -39,23 +40,31 @@ export default function PollUI({
   const rep = useCurrentRoomRep();
   const tRep = useCurrentThreadRep();
   const sendVote = async (option: number) => {
-    if (!vote)
-      isRoom
-        ? await rep?.mutate.vote({ msgId: id, option })
-        : await tRep?.mutate.vote({
-            postId: id,
-            option,
-          });
+    try {
+      if (!vote)
+        isRoom
+          ? await rep?.mutate.vote({ msgId: id, option })
+          : await tRep?.mutate.vote({
+              postId: id,
+              option,
+            });
+    } catch {
+      toast.error("Failed to vote");
+    }
   };
 
   const removeVote = async () => {
-    if (vote !== undefined)
-      isRoom
-        ? await rep?.mutate.removeVote({ msgId: id, option: vote })
-        : await tRep?.mutate.removeVote({
-            postId: id,
-            option: vote,
-          });
+    try {
+      if (vote !== undefined)
+        isRoom
+          ? await rep?.mutate.removeVote({ msgId: id, option: vote })
+          : await tRep?.mutate.removeVote({
+              postId: id,
+              option: vote,
+            });
+    } catch {
+      toast.error("Failed to remove vote");
+    }
   };
 
   return (

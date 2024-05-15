@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export function AddFolderForm({
   teamId,
@@ -57,25 +58,30 @@ export function AddFolderForm({
   );
 
   async function onSubmit(data: Folder) {
-    if (folder) {
-      await workspaceRep?.mutate.updateFolder({
+    try {
+      if (folder) {
+        await workspaceRep?.mutate.updateFolder({
+          teamId,
+          ...data,
+        });
+
+        return closeRef.current?.click();
+      }
+      await workspaceRep?.mutate.updateTeam({
         teamId,
-        ...data,
+        teamUpdate: {
+          action: "addFolder",
+          update: { folder: data },
+        },
       });
 
-      return closeRef.current?.click();
+      form.reset();
+      form.setValue("id", nanoid(WORKSPACE_GROUP_ID_LENGTH));
+      closeRef.current?.click();
+    } catch {
+      if (folder) toast.error("Folder update failed");
+      else toast.error("Folder creation failed");
     }
-    await workspaceRep?.mutate.updateTeam({
-      teamId,
-      teamUpdate: {
-        action: "addFolder",
-        update: { folder: data },
-      },
-    });
-
-    form.reset();
-    form.setValue("id", nanoid(WORKSPACE_GROUP_ID_LENGTH));
-    closeRef.current?.click();
   }
 
   return (

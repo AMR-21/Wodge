@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import { useSubscribe } from "@/hooks/use-subscribe";
 import { useMemo } from "react";
+import { toast } from "sonner";
 
 export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   const { postId } = useParams<{ postId: string }>();
@@ -30,16 +31,20 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
 
   async function toggleThread() {
     const isResolved = post?.isResolved;
-    if (user) {
-      await rep?.mutate.togglePost(postId);
-      await rep?.mutate.createComment({
-        author: user.id,
-        content: "toggle",
-        createdAt: new Date().toISOString(),
-        id: nanoid(6),
-        postId: postId,
-        type: isResolved ? "open" : "close",
-      });
+    try {
+      if (user) {
+        await rep?.mutate.togglePost(postId);
+        await rep?.mutate.createComment({
+          author: user.id,
+          content: "toggle",
+          createdAt: new Date().toISOString(),
+          id: nanoid(6),
+          postId: postId,
+          type: isResolved ? "open" : "close",
+        });
+      }
+    } catch {
+      toast.error("Action failed");
     }
   }
 

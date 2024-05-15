@@ -12,6 +12,7 @@ import { roomMutators } from "@repo/data";
 import { nanoid } from "nanoid";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PollMaker } from "../../../../../../../components/poll-maker";
+import { toast } from "sonner";
 
 export function MessageEditor({
   rep,
@@ -38,19 +39,23 @@ export function MessageEditor({
       const content = editor.getHTML();
       if (!content || !user) return;
 
-      await rep?.mutate.sendMessage({
-        sender: user.id,
-        content: content,
-        date: new Date().toISOString(),
-        id: nanoid(),
-        type: "text",
-        reactions: [],
-        pollOptions: [],
-        pollVoters: [],
-        votes: [],
-      });
+      try {
+        await rep?.mutate.sendMessage({
+          sender: user.id,
+          content: content,
+          date: new Date().toISOString(),
+          id: nanoid(),
+          type: "text",
+          reactions: [],
+          pollOptions: [],
+          pollVoters: [],
+          votes: [],
+        });
 
-      editor.commands.clearContent();
+        editor.commands.clearContent();
+      } catch {
+        toast.error("Message send failed");
+      }
     }
   }
 

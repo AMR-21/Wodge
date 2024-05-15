@@ -10,6 +10,7 @@ import { DrObj, Member } from "@repo/data";
 import { SettingsSearchInput } from "../settings-search-input";
 import { DataTable } from "@/components/data-table/data-table";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
+import { toast } from "sonner";
 
 export function MembersSettings() {
   const { members, workspaceRep, workspaceId } = useCurrentWorkspace();
@@ -22,11 +23,19 @@ export function MembersSettings() {
   const nMembers = table.getFilteredRowModel().rows.length;
 
   async function removeMember(memberId: string) {
-    await workspaceRep?.mutate.removeMember(memberId);
+    try {
+      await workspaceRep?.mutate.removeMember(memberId);
+    } catch {
+      toast.error("Remove member failed");
+    }
   }
 
   async function changeMemberRole(memberId: string, role: Member["role"]) {
-    await workspaceRep?.mutate.changeMemberRole({ memberId, role });
+    try {
+      await workspaceRep?.mutate.changeMemberRole({ memberId, role });
+    } catch {
+      toast.error("Change member role failed");
+    }
   }
 
   return (

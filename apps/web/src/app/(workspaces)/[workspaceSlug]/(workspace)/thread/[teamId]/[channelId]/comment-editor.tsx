@@ -9,6 +9,7 @@ import { TooltipWrapper } from "@/components/tooltip-wrapper";
 import { useThreadEditor } from "@/hooks/use-thread-editor";
 import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export function CommentEditor({
   rep,
@@ -30,16 +31,20 @@ export function CommentEditor({
     const text = editor?.getHTML();
     if (!text || !user) return;
 
-    await rep?.mutate.createComment({
-      author: user.id,
-      content: text,
-      createdAt: new Date().toISOString(),
-      id: nanoid(),
-      type: "message",
-      postId,
-    });
+    try {
+      await rep?.mutate.createComment({
+        author: user.id,
+        content: text,
+        createdAt: new Date().toISOString(),
+        id: nanoid(),
+        type: "message",
+        postId,
+      });
 
-    editor?.commands.clearContent();
+      editor?.commands.clearContent();
+    } catch {
+      toast.error("Send comment failed");
+    }
   }
 
   return (

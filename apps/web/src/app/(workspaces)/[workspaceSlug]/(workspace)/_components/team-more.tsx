@@ -30,6 +30,7 @@ import Link from "next/link";
 import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { useSetAtom } from "jotai";
 import { produce } from "immer";
+import { toast } from "sonner";
 
 interface TeamMoreProps {
   teamId: string;
@@ -44,33 +45,41 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
   const setRecentAtom = useSetAtom(recentlyVisitedAtom);
 
   async function createBlankPage() {
-    await workspaceRep?.mutate.createPage({
-      folderId: folderId || "root-" + teamId,
-      teamId,
-      name: "New page",
+    try {
+      await workspaceRep?.mutate.createPage({
+        folderId: folderId || "root-" + teamId,
+        teamId,
+        name: "New page",
 
-      id: nanoid(ID_LENGTH),
-      editGroups: ["team-members"],
-      viewGroups: ["team-members"],
-      avatar: "",
-    });
+        id: nanoid(ID_LENGTH),
+        editGroups: ["team-members"],
+        viewGroups: ["team-members"],
+        avatar: "",
+      });
+    } catch {
+      toast.error("Page creation failed");
+    }
   }
 
   async function createFolder() {
-    await workspaceRep?.mutate.updateTeam({
-      teamId,
-      teamUpdate: {
-        action: "addFolder",
-        update: {
-          folder: {
-            name: "New folder",
-            id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
-            channels: [],
-            parentFolder: folderId,
+    try {
+      await workspaceRep?.mutate.updateTeam({
+        teamId,
+        teamUpdate: {
+          action: "addFolder",
+          update: {
+            folder: {
+              name: "New folder",
+              id: nanoid(WORKSPACE_GROUP_ID_LENGTH),
+              channels: [],
+              parentFolder: folderId,
+            },
           },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Folder creation failed");
+    }
   }
 
   return (
@@ -154,21 +163,14 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
                 destructive
                 disclosure
                 onDisclosureConfirm={async () => {
-                  await workspaceRep?.mutate.deleteFolder({
-                    teamId,
-                    folderId,
-                  });
-
-                  setRecentAtom((prev) => {
-                    if (!workspaceId || !prev[workspaceId] || !folder)
-                      return prev;
-                    const newRecent = produce(prev, (draft) => {
-                      draft[workspaceId] = draft[workspaceId]!.filter(
-                        (r) => r.folderId !== folder.id,
-                      );
+                  try {
+                    await workspaceRep?.mutate.deleteFolder({
+                      teamId,
+                      folderId,
                     });
-                    return newRecent;
-                  });
+                  } catch {
+                    toast.error("Folder deletion failed");
+                  }
                 }}
               >
                 <Trash2 className="h-4 w-4" />

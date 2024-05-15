@@ -23,6 +23,7 @@ import { useAtomValue } from "jotai";
 import { isSidebarOpenAtom } from "@/store/global-atoms";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import { TaskState } from "./task-card";
+import { toast } from "sonner";
 interface TaskSheetProps {
   task: Task;
   boardId?: string;
@@ -75,19 +76,22 @@ export const TaskSheet = forwardRef<HTMLDivElement, TaskSheetProps>(
 
     async function onEdit() {
       if (!boardId) return;
-
-      await rep?.mutate.editTask({
-        boardId,
-        task: {
-          ...task,
-          title,
-          priority,
-          assignee,
-          due: due as Task["due"],
-          overview: editor?.getJSON() as unknown as string,
-          includeTime,
-        },
-      });
+      try {
+        await rep?.mutate.editTask({
+          boardId,
+          task: {
+            ...task,
+            title,
+            priority,
+            assignee,
+            due: due as Task["due"],
+            overview: editor?.getJSON() as unknown as string,
+            includeTime,
+          },
+        });
+      } catch {
+        toast.error("Failed to edit task");
+      }
     }
 
     return (

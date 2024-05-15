@@ -19,7 +19,7 @@ export function useCurrentUser() {
   const { connectSocket } = useAppStore((s) => s.actions);
 
   const pathname = usePathname();
-  const { data, isPending } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await fetch("/auth/user");
@@ -35,6 +35,7 @@ export function useCurrentUser() {
   });
 
   // if (!isPending && !data) throw Error("Error loading user");
+  if (isError) throw Error("Error loading user");
 
   useEffect(() => {
     if (!isPending && data) {

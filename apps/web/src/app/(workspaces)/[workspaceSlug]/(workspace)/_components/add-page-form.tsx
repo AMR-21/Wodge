@@ -36,6 +36,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { nanoid } from "nanoid";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddPageForm({
   folderId,
@@ -65,23 +66,28 @@ export function AddPageForm({
   }, [page]);
 
   async function onSubmit(data: Page) {
-    if (page) {
-      await workspaceRep?.mutate.updatePage({
+    try {
+      if (page) {
+        await workspaceRep?.mutate.updatePage({
+          folderId: folderId || "root-" + teamId,
+          teamId,
+          ...data,
+        });
+        return closeRef.current?.click();
+      }
+
+      await workspaceRep?.mutate.createPage({
         folderId: folderId || "root-" + teamId,
         teamId,
         ...data,
       });
-      return closeRef.current?.click();
+      form.reset();
+      form.setValue("id", nanoid(ID_LENGTH));
+      closeRef.current?.click();
+    } catch {
+      if (page) toast.error("Page update failed");
+      else toast.error("Page creation failed");
     }
-
-    await workspaceRep?.mutate.createPage({
-      folderId: folderId || "root-" + teamId,
-      teamId,
-      ...data,
-    });
-    form.reset();
-    form.setValue("id", nanoid(ID_LENGTH));
-    closeRef.current?.click();
   }
 
   return (

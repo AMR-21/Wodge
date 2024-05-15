@@ -1,6 +1,7 @@
 import { Extension } from "@tiptap/core";
 import { env } from "@repo/env";
 import { Prompt } from "@repo/data";
+import { toast } from "sonner";
 
 interface PromptOpts {
   action: Prompt["action"];
@@ -49,6 +50,10 @@ export const AiPrompts = Extension.create({
             },
           );
 
+          if (!res.ok) {
+            toast.error("Failed to fetch prompt");
+            return editor.chain().focus().run();
+          }
           const { response } = await res.json<{ response: string }>();
 
           return editor

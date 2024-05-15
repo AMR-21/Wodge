@@ -20,6 +20,7 @@ import { nanoid } from "nanoid";
 import { createPortal } from "react-dom";
 import { Plus } from "lucide-react";
 import TaskCard from "./task-card";
+import { toast } from "sonner";
 
 export function KanbanView({
   board,
@@ -84,11 +85,15 @@ export function KanbanView({
             className="h-9 w-80 justify-start gap-2"
             variant="ghost"
             onClick={async () => {
-              await rep?.mutate.createColumn({
-                boardId,
-                id: nanoid(6),
-                title: "New column",
-              });
+              try {
+                await rep?.mutate.createColumn({
+                  boardId,
+                  id: nanoid(6),
+                  title: "New column",
+                });
+              } catch {
+                toast.error("Failed to create column");
+              }
             }}
           >
             <Plus className="h-4 w-4" />
@@ -137,31 +142,44 @@ export function KanbanView({
       // return arrayMove(tasks, activeIndex, overIndex)
       // })
 
-      await rep?.mutate.moveTasks({
-        boardId,
-        t1: activeId as string,
-        isOverColumn: false,
-        tOrC2: overId as string,
-      });
+      try {
+        await rep?.mutate.moveTasks({
+          boardId,
+          t1: activeId as string,
+          isOverColumn: false,
+          tOrC2: overId as string,
+        });
+      } catch {
+        toast.error("Failed to move task");
+      }
     }
 
     const isOverAColumn = over.data.current?.type === "Column";
     // Im dropping a Task over a column
+
     if (isActiveATask && isOverAColumn) {
-      await rep?.mutate.moveTasks({
-        boardId,
-        t1: activeId as string,
-        isOverColumn: true,
-        tOrC2: overId as string,
-      });
+      try {
+        await rep?.mutate.moveTasks({
+          boardId,
+          t1: activeId as string,
+          isOverColumn: true,
+          tOrC2: overId as string,
+        });
+      } catch {
+        toast.error("Failed to move task");
+      }
     }
 
     if (isActiveColumn && isOverAColumn) {
-      await rep?.mutate.moveColumns({
-        c1: activeId as string,
-        c2: overId as string,
-        boardId,
-      });
+      try {
+        await rep?.mutate.moveColumns({
+          c1: activeId as string,
+          c2: overId as string,
+          boardId,
+        });
+      } catch {
+        toast.error("Failed to move column");
+      }
     }
   }
 

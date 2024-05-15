@@ -37,32 +37,35 @@ function runner(party: RoomParty, req: HonoRequest) {
     const isTeamModerator = req.header("x-team-moderator") === "true";
     const canEdit = req.header("x-can-edit") === "true";
     const canView = req.header("x-can-view") === "true";
+    try {
+      switch (params.mutation.name) {
+        case "sendMessage":
+          if (!canEdit && !isAdmin && !isOwner && !isTeamModerator) return;
+          return await sendMessage(party, params);
+        case "deleteMessage":
+          return await deleteMessage(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
 
-    switch (params.mutation.name) {
-      case "sendMessage":
-        if (!canEdit && !isAdmin && !isOwner && !isTeamModerator) return;
-        return await sendMessage(party, params);
-      case "deleteMessage":
-        return await deleteMessage(
-          party,
-          params,
-          isAdmin || isOwner || isTeamModerator
-        );
+        case "editMessage":
+          return await editMessage(party, params);
 
-      case "editMessage":
-        return await editMessage(party, params);
+        case "vote":
+          if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
+            return;
+          return await vote(party, params);
 
-      case "vote":
-        if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
-          return;
-        return await vote(party, params);
-
-      case "removeVote":
-        if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
-          return;
-        return await removeVote(party, params);
-      default:
-        throw new Error("Unknown mutation: " + params.mutation.name);
+        case "removeVote":
+          if (!canView && !canEdit && !isAdmin && !isOwner && !isTeamModerator)
+            return;
+          return await removeVote(party, params);
+        default:
+          throw new Error("Unknown mutation: " + params.mutation.name);
+      }
+    } catch {
+      return;
     }
   };
 }

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAvatarAddress } from "@repo/data";
 
 export function useAvatarUrl(id?: string) {
-  const { data } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["avatar", id],
     queryFn: async () => {
       const res = await fetch(getAvatarAddress(id));
@@ -17,6 +17,10 @@ export function useAvatarUrl(id?: string) {
     },
     enabled: !!id,
   });
+
+  if (isError) {
+    console.error("Failed to fetch avatar");
+  }
 
   return data;
 }

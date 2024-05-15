@@ -4,18 +4,14 @@ import { DrObj, Team, TeamSchema, WORKSPACE_TEAM_ID_LENGTH } from "@repo/data";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
 import { nanoid } from "nanoid";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { SafeAvatar } from "@/components/safe-avatar";
+import { toast } from "sonner";
 
 export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
   const { workspaceRep, workspaceSlug } = useCurrentWorkspace();
@@ -48,27 +44,31 @@ export function TeamGeneralForm({ team }: { team?: DrObj<Team> }) {
 
   async function onSubmit(data: Pick<Team, "id" | "name" | "avatar">) {
     let flag = false;
+    try {
+      if (isAddition) {
+        await workspaceRep?.mutate.createTeam(data);
+        flag = true;
+      }
 
-    if (isAddition) {
-      await workspaceRep?.mutate.createTeam(data);
-      flag = true;
-    }
-
-    if (!isAddition) {
-      await workspaceRep?.mutate.updateTeam({
-        teamId: team.id,
-        teamUpdate: {
-          action: "updateInfo",
-          update: {
-            name: data.name,
-            avatar: data.avatar,
+      if (!isAddition) {
+        await workspaceRep?.mutate.updateTeam({
+          teamId: team.id,
+          teamUpdate: {
+            action: "updateInfo",
+            update: {
+              name: data.name,
+              avatar: data.avatar,
+            },
           },
-        },
-      });
-    }
+        });
+      }
 
-    form.reset();
-    flag && router.push(`/${workspaceSlug}/settings/teams/${data.id}`);
+      form.reset();
+      flag && router.push(`/${workspaceSlug}/settings/teams/${data.id}`);
+    } catch {
+      if (isAddition) toast.error("Failed to create team");
+      else toast.error("Failed to update team");
+    }
   }
 
   return (

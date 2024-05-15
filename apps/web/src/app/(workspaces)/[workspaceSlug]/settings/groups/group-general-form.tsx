@@ -51,27 +51,31 @@ export function GroupGeneralForm({ group }: { group?: DrObj<Group> }) {
 
   async function onSubmit(data: Omit<Group, "members" | "createdBy">) {
     let flag = false;
-    if (isAddition) {
-      await workspaceRep?.mutate.createGroup(data);
+    try {
+      if (isAddition) {
+        await workspaceRep?.mutate.createGroup(data);
 
-      flag = true;
-    }
+        flag = true;
+      }
 
-    if (!isAddition)
-      await workspaceRep?.mutate.updateGroup({
-        groupId: data.id,
-        groupUpdate: {
-          action: "updateInfo",
-          update: {
-            name: data.name,
-            color: data.color,
+      if (!isAddition)
+        await workspaceRep?.mutate.updateGroup({
+          groupId: data.id,
+          groupUpdate: {
+            action: "updateInfo",
+            update: {
+              name: data.name,
+              color: data.color,
+            },
           },
-        },
-      });
+        });
 
-    setColored(false);
+      setColored(false);
 
-    if (flag) router.push(`/${workspaceSlug}/settings/groups/${data.id}`);
+      if (flag) router.push(`/${workspaceSlug}/settings/groups/${data.id}`);
+    } catch {
+      toast.error("Group operation failed");
+    }
   }
 
   return (

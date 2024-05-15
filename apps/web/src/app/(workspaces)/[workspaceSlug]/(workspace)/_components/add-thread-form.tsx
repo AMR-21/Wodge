@@ -40,6 +40,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { nanoid } from "nanoid";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddThreadForm({
   folderId,
@@ -63,22 +64,27 @@ export function AddThreadForm({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   async function onSubmit(data: Thread) {
-    if (thread) {
-      await workspaceRep?.mutate.updateThread({
+    try {
+      if (thread) {
+        await workspaceRep?.mutate.updateThread({
+          teamId,
+          ...data,
+        });
+        return closeRef.current?.click();
+      }
+
+      await workspaceRep?.mutate.createThread({
         teamId,
+
         ...data,
       });
-      return closeRef.current?.click();
+      form.reset();
+      form.setValue("id", nanoid(ID_LENGTH));
+      closeRef.current?.click();
+    } catch {
+      if (thread) toast.error("Thread update failed");
+      else toast.error("Thread creation failed");
     }
-
-    await workspaceRep?.mutate.createThread({
-      teamId,
-
-      ...data,
-    });
-    form.reset();
-    form.setValue("id", nanoid(ID_LENGTH));
-    closeRef.current?.click();
   }
 
   return (

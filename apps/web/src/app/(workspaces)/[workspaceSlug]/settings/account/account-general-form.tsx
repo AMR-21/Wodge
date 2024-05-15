@@ -72,6 +72,9 @@ export function AccountGeneralForm() {
         queryKey: ["user"],
       });
     },
+    onError() {
+      toast.error("Account update failed");
+    },
   });
 
   async function onSubmit(

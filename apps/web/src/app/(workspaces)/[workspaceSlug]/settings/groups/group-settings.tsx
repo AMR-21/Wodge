@@ -25,8 +25,12 @@ export function GroupSettings({
 
   async function deleteGroup() {
     if (!group) return;
-    await workspaceRep?.mutate.deleteGroup(group.id);
-    toast.success("Group deleted");
+    try {
+      await workspaceRep?.mutate.deleteGroup(group.id);
+      toast.success("Group deleted");
+    } catch {
+      toast.error("Failed to delete group");
+    }
   }
 
   return (

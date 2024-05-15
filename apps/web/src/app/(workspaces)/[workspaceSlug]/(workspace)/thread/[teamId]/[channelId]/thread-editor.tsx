@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PollMaker } from "@/components/poll-maker";
 import { Replicache } from "replicache";
 import { threadMutators } from "@repo/data";
+import { toast } from "sonner";
 
 export function ThreadEditor({
   isQA = false,
@@ -39,33 +40,37 @@ export function ThreadEditor({
 
   async function createThread() {
     const text = editor?.getHTML();
-    if (!text || !user) return;
-    if (isComment) {
-      if (!postId) return;
-      await rep?.mutate.createComment({
-        author: user.id,
-        content: text,
-        id: nanoid(6),
-        createdAt: new Date().toISOString(),
-        postId,
-        type: "message",
-      });
-    } else {
-      await rep?.mutate.createPost({
-        author: user.id,
-        comments: [],
-        content: text,
-        createdAt: new Date().toISOString(),
-        id: nanoid(6),
-        pollOptions: [],
-        pollVoters: [],
-        reactions: [],
-        type: isQA ? "qa" : "post",
-        votes: [],
-      });
-    }
+    try {
+      if (!text || !user) return;
+      if (isComment) {
+        if (!postId) return;
+        await rep?.mutate.createComment({
+          author: user.id,
+          content: text,
+          id: nanoid(6),
+          createdAt: new Date().toISOString(),
+          postId,
+          type: "message",
+        });
+      } else {
+        await rep?.mutate.createPost({
+          author: user.id,
+          comments: [],
+          content: text,
+          createdAt: new Date().toISOString(),
+          id: nanoid(6),
+          pollOptions: [],
+          pollVoters: [],
+          reactions: [],
+          type: isQA ? "qa" : "post",
+          votes: [],
+        });
+      }
 
-    editor?.commands.clearContent();
+      editor?.commands.clearContent();
+    } catch {
+      toast.error("Create post failed");
+    }
   }
 
   return (

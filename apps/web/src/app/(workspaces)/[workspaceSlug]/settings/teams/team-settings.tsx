@@ -10,6 +10,7 @@ import { useTable } from "../use-table";
 import { Button } from "@/components/ui/button";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { teamMembersColumns } from "./team-members-columns";
+import { toast } from "sonner";
 
 export function TeamSettings({
   team,
@@ -41,51 +42,67 @@ export function TeamSettings({
   });
 
   async function addMember(memberId: string) {
-    if (!team) return;
-    await workspaceRep?.mutate.updateTeam({
-      teamId: team.id,
-      teamUpdate: {
-        action: "addMembers",
-        update: {
-          members: [memberId],
+    try {
+      if (!team) return;
+      await workspaceRep?.mutate.updateTeam({
+        teamId: team.id,
+        teamUpdate: {
+          action: "addMembers",
+          update: {
+            members: [memberId],
+          },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Add member failed");
+    }
   }
 
   async function removeMember(memberId: string) {
-    if (!team) return;
-    await workspaceRep?.mutate.updateTeam({
-      teamId: team.id,
-      teamUpdate: {
-        action: "removeMembers",
-        update: {
-          members: [memberId],
+    try {
+      if (!team) return;
+      await workspaceRep?.mutate.updateTeam({
+        teamId: team.id,
+        teamUpdate: {
+          action: "removeMembers",
+          update: {
+            members: [memberId],
+          },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Remove member failed");
+    }
   }
 
   async function changeTeamMemberRole(
     memberId: string,
     role: "teamMember" | "moderator",
   ) {
-    if (!team) return;
-    await workspaceRep?.mutate.updateTeam({
-      teamId: team.id,
-      teamUpdate: {
-        action: "changeTeamMemberRole",
-        update: {
-          memberId,
-          role,
+    try {
+      if (!team) return;
+      await workspaceRep?.mutate.updateTeam({
+        teamId: team.id,
+        teamUpdate: {
+          action: "changeTeamMemberRole",
+          update: {
+            memberId,
+            role,
+          },
         },
-      },
-    });
+      });
+    } catch {
+      toast.error("Change member role failed");
+    }
   }
 
   async function deleteTeam() {
-    if (!team) return;
-    await workspaceRep?.mutate.deleteTeam(team.id);
+    try {
+      if (!team) return;
+      await workspaceRep?.mutate.deleteTeam(team.id);
+    } catch {
+      toast.error("Failed to delete team");
+    }
   }
 
   return (

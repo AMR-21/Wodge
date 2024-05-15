@@ -41,6 +41,9 @@ export function CompleteProfileForm() {
 
       return true;
     },
+    onError() {
+      toast.error("SOmething went wrong");
+    },
   });
 
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
