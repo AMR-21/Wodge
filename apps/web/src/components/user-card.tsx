@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/toast";
-import { UserAvatar } from "@/components/user-avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
 import { Check, LogOut, Monitor, MoonStar, Settings2, Sun } from "lucide-react";

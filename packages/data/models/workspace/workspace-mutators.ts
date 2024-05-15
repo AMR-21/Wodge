@@ -38,8 +38,6 @@ import { updateThreadMutation } from "./mutators/update-thread";
 import { updateFolderMutation } from "./mutators/update-folder";
 import { deleteFolderMutation } from "./mutators/delete-folder";
 import { Page } from "../../schemas/page.schema";
-import { voteMutation } from "./mutators/vote";
-import { removeVoteMutation } from "./mutators/remove-vote";
 
 export interface TeamUpdateArgs {
   teamUpdate: TeamUpdate;
@@ -397,41 +395,6 @@ export const workspaceMutators = {
       folderId: data.folderId,
       structure,
       teamId: data.teamId,
-    });
-
-    await tx.set(makeWorkspaceStructureKey(), newStructure);
-  },
-
-  async vote(tx: WriteTransaction, data: VoteArgs) {
-    const structure = (await tx.get<WorkspaceStructure>(
-      makeWorkspaceStructureKey()
-    )) as WorkspaceStructure;
-
-    const user = queryClient.getQueryData<PublicUserType>(["user"]);
-
-    if (!user) throw new Error("User not found");
-
-    const newStructure = voteMutation({
-      ...data,
-      structure,
-      curUserId: user.id,
-    });
-
-    await tx.set(makeWorkspaceStructureKey(), newStructure);
-  },
-  async removeVote(tx: WriteTransaction, data: VoteArgs) {
-    const structure = (await tx.get<WorkspaceStructure>(
-      makeWorkspaceStructureKey()
-    )) as WorkspaceStructure;
-
-    const user = queryClient.getQueryData<PublicUserType>(["user"]);
-
-    if (!user) throw new Error("User not found");
-
-    const newStructure = removeVoteMutation({
-      ...data,
-      structure,
-      curUserId: user.id,
     });
 
     await tx.set(makeWorkspaceStructureKey(), newStructure);

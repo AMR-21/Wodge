@@ -47,8 +47,6 @@ export function createTeamMutation({
         name: "root",
         channels: [],
         id: "root-" + newTeamBase.id,
-        editGroups: [TEAM_MEMBERS_ROLE],
-        viewGroups: [TEAM_MEMBERS_ROLE],
       },
     ],
     tags: [],

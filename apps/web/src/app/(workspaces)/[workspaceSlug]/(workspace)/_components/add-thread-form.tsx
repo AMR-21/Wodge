@@ -93,7 +93,7 @@ export function AddThreadForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Room name</FormLabel>
+                <FormLabel>Thread name</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="new room" />
                 </FormControl>

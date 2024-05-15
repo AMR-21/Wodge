@@ -35,7 +35,7 @@ export function moveTasksMutation({
       const temp = board.tasks[activeIndex];
       if (!temp) return;
       if (!board.tasks[overIndex]) return;
-      board.tasks[activeIndex] = board.tasks[overIndex];
+      board.tasks[activeIndex] = board.tasks[overIndex]!;
       board.tasks[overIndex] = temp;
 
       return draft;
@@ -49,7 +49,7 @@ export function moveTasksMutation({
     if (!board.tasks[overIndex]) return;
     board.tasks[activeIndex] = isOverColumn
       ? board.tasks[activeIndex]!
-      : board.tasks[overIndex];
+      : board.tasks[overIndex]!;
     board.tasks[overIndex] = temp;
 
     return draft;

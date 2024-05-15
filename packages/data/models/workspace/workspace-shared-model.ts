@@ -35,8 +35,6 @@ export const createRootFolder = (teamId: string): Folder => ({
   name: "root",
   channels: [createWelcomePage()],
   id: "root-" + teamId,
-  editGroups: [TEAM_MEMBERS_ROLE],
-  viewGroups: [TEAM_MEMBERS_ROLE],
 });
 
 export const createDefaultTeam = (createdBy: string): Team => {

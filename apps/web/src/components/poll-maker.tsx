@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { MAX_OPTIONS, MIN_OPTIONS } from "@repo/data";
 import { useCurrentRoomRep } from "@/hooks/use-room-rep";
+import { useCurrentThreadRep } from "@/hooks/use-thread-rep";
 
 export function PollMaker({ isRoom }: { isRoom: boolean }) {
   const [newOption, setNewOption] = useState<string>("");
@@ -23,6 +24,7 @@ export function PollMaker({ isRoom }: { isRoom: boolean }) {
   const [options, setOptions] = useState<string[]>([]);
   const newOptionRef = useRef<HTMLInputElement>(null);
   const rep = useCurrentRoomRep();
+  const tRep = useCurrentThreadRep();
 
   const addNewOption = () => {
     if (newOption?.trim().length !== 0) {
@@ -128,16 +130,17 @@ export function PollMaker({ isRoom }: { isRoom: boolean }) {
         onClick={async () => {
           if (!user) return;
           if (!isRoom)
-            await workspaceRep?.mutate.createThread({
+            await tRep?.mutate.createPost({
               type: "poll",
               content: question,
               createdAt: new Date().toISOString(),
-              createdBy: user.id,
+              author: user.id,
               id: nanoid(),
-              teamId,
               pollOptions: options,
               votes: [],
               pollVoters: [],
+              comments: [],
+              reactions: [],
             });
 
           if (isRoom)

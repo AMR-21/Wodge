@@ -20,11 +20,11 @@ export const EditorInfo = memo(({ users, maxLength = 5 }: EditorInfoProps) => {
 
     return users
       .map((user) => {
-        if (set.has(user.username)) {
+        if (set.has(user?.username)) {
           return null;
         }
 
-        set.add(user.username);
+        set.add(user?.username);
         return user;
       })
       .filter((u) => !!u);
@@ -35,15 +35,15 @@ export const EditorInfo = memo(({ users, maxLength = 5 }: EditorInfoProps) => {
       <div className="flex items-center py-2">
         <div className="flex flex-row items-center">
           <div className="relative ml-3 flex flex-row items-center">
-            {usersSet.map((user: EditorUser) => {
+            {usersSet?.map((user, i) => {
               return (
-                <div key={user.clientId} className="-ml-2">
-                  <TooltipWrapper content={user.username}>
+                <div key={user?.clientId} className="-ml-2">
+                  <TooltipWrapper content={user?.username}>
                     <SafeAvatar
                       className="h-6 w-6"
-                      src={user.avatar}
-                      fallback={user.username}
-                      color={user.color}
+                      src={user?.avatar}
+                      fallback={user?.username}
+                      color={user?.color}
                     />
                   </TooltipWrapper>
                 </div>
@@ -61,21 +61,21 @@ export const EditorInfo = memo(({ users, maxLength = 5 }: EditorInfoProps) => {
                 <DropdownMenuContent className="select-none">
                   {usersSet.map((user) => (
                     <DropdownMenuItem
-                      key={user.clientId}
+                      key={user?.clientId}
                       className="flex items-center"
                     >
                       <SafeAvatar
                         className="mr-2 h-6 w-6"
-                        src={user.avatar}
-                        fallback={user.username}
-                        color={user.color}
+                        src={user?.avatar}
+                        fallback={user?.username}
+                        color={user?.color}
                       />
 
                       <p className="mr-1 truncate text-sm">
-                        {user.displayName}
+                        {user?.displayName}
                       </p>
                       <p className="truncate text-xs text-muted-foreground">
-                        @{user.username}
+                        @{user?.username}
                       </p>
                     </DropdownMenuItem>
                   ))}

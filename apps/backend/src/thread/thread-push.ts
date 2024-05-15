@@ -11,6 +11,8 @@ import { createPost } from "./create-post";
 import { deletePost } from "./delete-post";
 import { editPost } from "./edit-post";
 import { togglePost } from "./toggle-post";
+import { vote } from "./vote";
+import { removeVote } from "./remove-vote";
 
 export async function threadPush(party: ThreadParty, c: Context) {
   const wid = c.req.header("x-workspace-id");
@@ -70,6 +72,12 @@ function runner(party: ThreadParty, req: HonoRequest) {
 
       case "editPost":
         return await editPost(party, params);
+
+      case "vote":
+        return await vote(party, params);
+
+      case "removeVote":
+        return await removeVote(party, params);
 
       default:
         throw new Error("Unknown mutation: " + params.mutation.name);

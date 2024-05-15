@@ -80,16 +80,7 @@ export function canEdit({
       isTeamModerator({ structure, userId, teamId })
     );
   } else {
-    const chan = channel as Thread;
-
-    if (chan.type === "post")
-      return (
-        isTeamModerator({ structure, userId, teamId }) ||
-        isAdmin({ members, userId }) ||
-        isOwner({ members, userId })
-      );
-
-    return true;
+    return isTeamModerator({ structure, userId, teamId });
   }
 }
 

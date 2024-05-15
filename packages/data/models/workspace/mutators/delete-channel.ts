@@ -38,11 +38,6 @@ export function deleteChannelMutation({
     }
 
     if (type === "thread") {
-      const thread = team.threads.find((c) => c.id === channelId);
-
-      if (thread && thread.createdBy !== userId && !isAdmin)
-        throw new Error("You are not allowed to delete this thread");
-
       draft.teams[teamIdx]!.threads = team.threads.filter(
         (c) => c.id !== channelId
       );

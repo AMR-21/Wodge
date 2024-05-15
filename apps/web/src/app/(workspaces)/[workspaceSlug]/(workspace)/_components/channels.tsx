@@ -16,6 +16,7 @@ import {
   DrObj,
   Page,
   Room,
+  Thread,
   type Channel as ChannelType,
 } from "@repo/data";
 import {
@@ -45,6 +46,7 @@ import { useSetAtom } from "jotai";
 import { produce } from "immer";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { Button } from "@/components/ui/button";
+import { AddThreadForm } from "./add-thread-form";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -276,6 +278,13 @@ export const Channel = React.forwardRef<
                     teamId={teamId}
                     folderId={folderId}
                     room={channel as Room}
+                  />
+                )}
+                {type === "thread" && (
+                  <AddThreadForm
+                    teamId={teamId}
+                    folderId={folderId}
+                    thread={channel as Thread}
                   />
                 )}
               </Dialog>

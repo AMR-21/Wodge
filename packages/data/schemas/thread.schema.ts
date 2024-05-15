@@ -1,30 +1,21 @@
 import { z } from "zod";
 
 import { ChannelSchema } from "./channel.schema";
+import { WORKSPACE_GROUP_ID_LENGTH } from "./config";
 
-export const ThreadSchema = ChannelSchema.omit({
-  // name: true,
-  editGroups: true,
-  viewGroups: true,
-}).extend({
-  // content: z.string().min(1).max(4096),
-  // type: z.enum(["post", "qa", "poll"]),
-  // createdBy: z.string(),
-  // isResolved: z.boolean().default(false).optional(),
-  // isEdited: z.boolean().default(false).optional(),
-  // createdAt: z.string().datetime(),
-  // pollOptions: z.array(z.string()).optional().default([]),
-  // votes: z.array(z.number()).optional().default([]),
-  // pollVoters: z
-  //   .array(
-  //     z.object({
-  //       voter: z.string(),
-  //       option: z.number(),
-  //     })
-  //   )
-  //   .optional()
-  //   .default([]),
-  // isVoteOpen: z.boolean().default(true).optional(),
+export const ThreadSchema = ChannelSchema.extend({
+  viewGroups: z
+    .array(
+      z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+    )
+    .optional()
+    .default(["team-members"]),
+  editGroups: z
+    .array(
+      z.string().length(WORKSPACE_GROUP_ID_LENGTH).or(z.literal("team-members"))
+    )
+    .optional()
+    .default(["team-members"]),
 });
 
 export const ThreadMessageSchema = z.object({

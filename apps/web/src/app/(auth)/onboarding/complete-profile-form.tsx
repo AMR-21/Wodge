@@ -14,16 +14,14 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { UserAvatar } from "@/components/user-avatar";
 import { Input } from "@/components/ui/input";
 import { PublicUserType, UpdateUserSchema } from "@repo/data";
-import { updateProfile } from "@/actions/user-actions";
-import { toast } from "@/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AvatarBtn } from "../../../components/avatar-btn";
 import { useUpload } from "@/hooks/use-upload";
 import { useDelete } from "@/hooks/use-delete";
 import { useOnboarding } from "./onboarding-context";
+import { toast } from "sonner";
 
 export function CompleteProfileForm() {
   const { user, startTransition } = useOnboarding();

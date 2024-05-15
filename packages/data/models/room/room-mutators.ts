@@ -13,7 +13,6 @@ export interface EditMessageProps {
   newContent: string;
 }
 export interface VoteArgs {
-  teamId: string;
   msgId: string;
   option: number;
 }

@@ -10,9 +10,10 @@ import { useEffect, useMemo, useState } from "react";
 import { PollOptions } from "./poll-options";
 import { useParams } from "next/navigation";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
-import { Thread } from "@repo/data";
+import { Thread, ThreadPost } from "@repo/data";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useCurrentRoomRep } from "@/hooks/use-room-rep";
+import { useCurrentThreadRep } from "@/hooks/use-thread-rep";
 
 export default function PollUI({
   id,
@@ -24,7 +25,7 @@ export default function PollUI({
   id: string;
   options: string[];
   votes?: number[];
-  pollVoters?: Thread["pollVoters"];
+  pollVoters?: ThreadPost["pollVoters"];
   isRoom: boolean;
 }) {
   const { teamId } = useParams<{ teamId: string }>();
@@ -36,13 +37,13 @@ export default function PollUI({
   );
 
   const rep = useCurrentRoomRep();
+  const tRep = useCurrentThreadRep();
   const sendVote = async (option: number) => {
     if (!vote)
       isRoom
-        ? await rep?.mutate.vote({ msgId: id, teamId, option })
-        : await workspaceRep?.mutate.vote({
-            teamId,
-            threadId: id,
+        ? await rep?.mutate.vote({ msgId: id, option })
+        : await tRep?.mutate.vote({
+            postId: id,
             option,
           });
   };
@@ -50,10 +51,9 @@ export default function PollUI({
   const removeVote = async () => {
     if (vote !== undefined)
       isRoom
-        ? await rep?.mutate.removeVote({ msgId: id, teamId, option: vote })
-        : await workspaceRep?.mutate.removeVote({
-            teamId,
-            threadId: id,
+        ? await rep?.mutate.removeVote({ msgId: id, option: vote })
+        : await tRep?.mutate.removeVote({
+            postId: id,
             option: vote,
           });
   };

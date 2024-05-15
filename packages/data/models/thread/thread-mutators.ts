@@ -9,13 +9,18 @@ import { createPostMutation } from "./mutators/create-post";
 import { deletePostMutation } from "./mutators/delete-post";
 import { editPostMutation } from "./mutators/edit-post";
 import { togglePostMutation } from "./mutators/toggle-post";
+import { postVoteMutation } from "./mutators/vote";
+import { removePostVoteMutation } from "./mutators/remove-vote";
 
 export interface EditThreadMessageArg {
   comment: ThreadMessage;
   newContent: string;
   postId: string;
 }
-
+export interface PostVoteArgs {
+  postId: string;
+  option: number;
+}
 export const threadMutators = {
   async createPost(tx: WriteTransaction, data: ThreadPost) {
     const posts = (await tx.get<ThreadPost[]>("posts")) || [];
@@ -144,5 +149,38 @@ export const threadMutators = {
     });
 
     await tx.set("posts", newPosts);
+  },
+
+  async vote(tx: WriteTransaction, data: PostVoteArgs) {
+    const posts = await tx.get<ThreadPost[]>("posts");
+
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
+    const newStructure = postVoteMutation({
+      ...data,
+      postsArr: posts as ThreadPost[],
+      postId: data.postId,
+      curUserId: user.id,
+    });
+
+    await tx.set("posts", newStructure);
+  },
+  async removeVote(tx: WriteTransaction, data: PostVoteArgs) {
+    const posts = await tx.get<ThreadPost[]>("posts");
+
+    const user = queryClient.getQueryData<PublicUserType>(["user"]);
+
+    if (!user) throw new Error("User not found");
+
+    const newStructure = removePostVoteMutation({
+      ...data,
+      postsArr: posts as ThreadPost[],
+      postId: data.postId,
+      curUserId: user.id,
+    });
+
+    await tx.set("posts", newStructure);
   },
 };
