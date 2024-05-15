@@ -113,7 +113,7 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
       task,
       index,
     },
-    disabled: isEditing,
+    // disabled: isEditing,
   });
 
   const isTaskOver =
@@ -147,7 +147,11 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div>
+        <div
+          onClick={() => {
+            console.log("clicked");
+          }}
+        >
           <TaskItem
             state={state}
             task={task}

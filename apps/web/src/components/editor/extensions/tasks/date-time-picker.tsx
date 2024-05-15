@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DateRange } from "react-day-picker";
 import { DrObj, Task } from "@repo/data";
+import { Editor } from "@tiptap/react";
 
 export function DateTimePicker({
   bigger,
@@ -24,6 +25,8 @@ export function DateTimePicker({
   includeTime,
   setIncludeTime,
   isEditing,
+
+  editor,
 }: {
   bigger?: boolean;
   date?: DateRange;
@@ -31,9 +34,16 @@ export function DateTimePicker({
   includeTime?: boolean;
   setIncludeTime?: (c: boolean) => void;
   isEditing?: boolean;
+  editor?: Editor | null;
 }) {
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    editor?.setEditable(!open);
+  }, [open]);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"ghost"}
@@ -78,7 +88,10 @@ export function DateTimePicker({
       </PopoverTrigger>
       <PopoverContent
         align={bigger ? "center" : "start"}
-        className="w-auto p-0"
+        className="z-40 w-auto p-0"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <Calendar
           mode="range"

@@ -45,9 +45,9 @@ export function OnboardingSteps() {
         </Step>
         <Step index={4}>
           <Outro />
-          <NextBtn className="w-4/6" asChild>
-            <Link href={DEFAULT_LOGIN_REDIRECT}>Get started</Link>
-          </NextBtn>
+          <Link href={DEFAULT_LOGIN_REDIRECT} prefetch>
+            <NextBtn className="w-4/6">Get started</NextBtn>
+          </Link>
         </Step>
       </StepperContainer>
     </Stepper>

@@ -32,12 +32,15 @@ export const useBlockEditor = ({
         }),
         CollaborationCursor.configure({
           provider,
+
           user: {
+            name: user?.username,
             username: user?.username,
             color: randomElement(userColors),
             avatar: user?.avatar,
             displayName: user?.displayName,
             userId: user?.id,
+            initials: user?.username,
           } as Omit<EditorUser, "clientId">,
         }),
       ],

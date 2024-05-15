@@ -10,7 +10,7 @@ import { useEditable } from "use-editable";
 import { useEffect, useRef, useState } from "react";
 import { cn, focusElement, Mutable } from "@/lib/utils";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import { Check, ChevronDown, PencilLine, X } from "lucide-react";
+import { Check, ChevronDown, EarIcon, PencilLine, X } from "lucide-react";
 import { Editor } from "@tiptap/react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import {
@@ -146,9 +146,13 @@ export function tasksColumns({
       header: () => <Header className=" !text-sm !font-medium">Status</Header>,
       cell: ({ row }) => {
         const col = board.columns?.find((c) => c.id === row.original.columnId);
+        const [open, setOpen] = useState(false);
 
+        useEffect(() => {
+          editor?.setEditable(!open);
+        }, [open]);
         return (
-          <DropdownMenu>
+          <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
               <div
                 className={cn(
@@ -217,6 +221,7 @@ export function tasksColumns({
       cell: ({ row }) => {
         return (
           <DateTimePicker
+            editor={editor}
             date={row.original.due as DateRange | undefined}
             onSetDate={(due) => {
               onEditTask({ ...row.original, due: due as Task["due"] });

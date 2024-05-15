@@ -46,15 +46,15 @@ export const getCurrentUser = async (
 
   if (!cookie) throw new Error("No cookie found");
 
-  const parseCookie = (str: string) =>
-    str
-      .split(";")
-      .map((v) => v.split("="))
-      .reduce((acc, v) => {
-        //@ts-ignore
-        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-        return acc;
-      }, {});
+  // const parseCookie = (str: string) =>
+  //   str
+  //     .split(";")
+  //     .map((v) => v.split("="))
+  //     .reduce((acc, v) => {
+  //       //@ts-ignore
+  //       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+  //       return acc;
+  //     }, {});
 
   // Fetch the session from the auth endpoint validated by the CSRF token
   const res = await fetch(`${lobby.env.AUTH_DOMAIN}/auth/user`, {
