@@ -56,12 +56,6 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const ses = await supabase.auth.getSession();
-  if (ses.data.session?.access_token) {
-    const jwt = jwtDecode(ses.data.session?.access_token);
-
-    console.log({ jwt });
-  }
   const user = await supabase.auth.getUser();
   return { response, user };
 }

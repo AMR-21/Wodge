@@ -1,8 +1,8 @@
+// @ts-nocheck
 import type { Config } from "drizzle-kit";
 import crypto from "node:crypto";
 
 const DB_HOST = "local";
-
 const baseConfig: Partial<Config> = {
   schema: [
     "./node_modules/@repo/data/schemas/auth.schema.ts",

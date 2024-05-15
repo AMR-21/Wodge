@@ -40,9 +40,7 @@ export async function middleware(request: NextRequest) {
         })
         .returning()
         .get();
-    } catch {
-      console.log("error saving user");
-    }
+    } catch {}
   }
 
   const isLoggedIn = !!curUser;
