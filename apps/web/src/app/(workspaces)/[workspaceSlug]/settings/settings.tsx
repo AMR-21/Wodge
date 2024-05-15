@@ -2,7 +2,14 @@
 
 import { SidebarItem } from "../(workspace)/_components/sidebar-item";
 
-import { LucideIcon, PanelLeft, Plus, X } from "lucide-react";
+import {
+  LucideIcon,
+  PanelLeft,
+  Plus,
+  ShieldPlusIcon,
+  Users2,
+  X,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { SidebarItemBtn } from "../(workspace)/_components/sidebar-item-btn";
 import { IconType } from "react-icons/lib";
@@ -89,11 +96,13 @@ function SettingsSidebarCollapsibleItem({
     />
   );
 
+  const Icon = label === "groups" ? ShieldPlusIcon : Users2;
+
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <SidebarItem
-          noIcon
+          Icon={Icon}
           className={cn("group justify-start py-1.5 pl-2.5 pr-1.5 capitalize")}
           isActive={curPage === label}
           collapsible
