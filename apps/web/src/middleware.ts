@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
 
   const { response, user } = await updateSession(request);
 
+  // console.log({ user: user });
   let curUser = await getUserById(user.data.user?.id);
 
   // handle saving user data on our side
@@ -39,7 +40,9 @@ export async function middleware(request: NextRequest) {
         })
         .returning()
         .get();
-    } catch {}
+    } catch {
+      console.log("error saving user");
+    }
   }
 
   const isLoggedIn = !!curUser;

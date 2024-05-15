@@ -35,14 +35,14 @@ export function CompleteProfileForm() {
       });
 
       if (!res.ok) {
-        toast.error("Username already exists.");
+        toast.error("Something went wrong");
         return false;
       }
 
       return true;
     },
     onError() {
-      toast.error("SOmething went wrong");
+      toast.error("Something went wrong");
     },
   });
 

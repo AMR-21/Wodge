@@ -1,6 +1,7 @@
 import { env } from "@repo/env";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { jwtDecode } from "jwt-decode";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -55,7 +56,12 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const user = await supabase.auth.getUser();
+  const ses = await supabase.auth.getSession();
+  if (ses.data.session?.access_token) {
+    const jwt = jwtDecode(ses.data.session?.access_token);
 
+    console.log({ jwt });
+  }
+  const user = await supabase.auth.getUser();
   return { response, user };
 }

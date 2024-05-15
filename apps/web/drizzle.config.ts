@@ -14,6 +14,7 @@ const baseConfig: Partial<Config> = {
 export default DB_HOST === "local"
   ? ({
       ...baseConfig,
+      dialect: "sqlite",
       driver: "better-sqlite",
       dbCredentials: {
         url: `./.wrangler/state/v3/d1/miniflare-D1DatabaseObject/${mfIdFromName(

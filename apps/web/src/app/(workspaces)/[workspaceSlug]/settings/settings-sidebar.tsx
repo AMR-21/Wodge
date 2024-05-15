@@ -74,6 +74,7 @@ export function SettingsSidebar() {
   if (isDesktop)
     return (
       <div
+        suppressHydrationWarning
         className={cn(
           "flex h-dvh w-56 shrink-0 grow flex-col border-r border-border/50 bg-dim px-6 py-10 transition-all",
         )}
@@ -83,7 +84,11 @@ export function SettingsSidebar() {
     );
 
   return (
-    <SheetContent side="left" className="w-56 bg-dim py-10">
+    <SheetContent
+      side="left"
+      className="w-56 bg-dim py-10"
+      suppressHydrationWarning
+    >
       {jsx}
     </SheetContent>
   );
