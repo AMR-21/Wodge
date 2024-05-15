@@ -28,7 +28,8 @@ export function createCommentMutation({
     const post = draft.find((p) => p.id === postId);
     if (!post) throw new Error("post not found");
 
-    if (post.isResolved) throw new Error("post is resolved");
+    if (post.isResolved && comment.type === "message")
+      throw new Error("post is resolved");
 
     //check if the message is unique in the array
     if (post.comments.some((c) => c.id === newComment.id))

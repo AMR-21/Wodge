@@ -19,8 +19,6 @@ import { updateThread } from "../mutators/update-thread";
 import { updateFolder } from "../mutators/update-folder";
 import { deleteFolder } from "../mutators/delete-folder";
 import { Context, HonoRequest } from "hono";
-import { vote } from "../mutators/vote";
-import { removeVote } from "../mutators/remove-vote";
 
 export interface PushAuth {
   isOwnerOrAdmin: boolean;
@@ -61,8 +59,6 @@ const functions: Record<
 
   deleteChannel,
   deleteFolder,
-  vote,
-  removeVote,
 };
 
 export async function workspacePush(party: WorkspaceParty, c: Context) {

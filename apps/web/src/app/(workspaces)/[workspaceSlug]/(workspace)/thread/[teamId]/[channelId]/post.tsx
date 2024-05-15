@@ -20,7 +20,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { useEditEditor } from "./use-edit-editor";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, CircleDot } from "lucide-react";
+import { CheckCircle2, CircleDot, MessageCircle } from "lucide-react";
 import { useSetAtom } from "jotai";
 import { recentlyVisitedAtom } from "@/store/global-atoms";
 import { produce } from "immer";
@@ -58,13 +58,18 @@ export const Post = memo(
     const router = useRouter();
     const setRecentAtom = useSetAtom(recentlyVisitedAtom);
 
-    const { channelId } = useParams<{ channelId: string }>();
+    const { channelId, postId } = useParams<{
+      channelId: string;
+      postId?: string;
+    }>();
 
     const Icon = post?.isResolved ? CheckCircle2 : CircleDot;
 
+    const commentsLength = post?.comments.length || 0;
+
     return (
       <div className="group overflow-hidden rounded-md border border-border/50 bg-dim ">
-        <div className="flex w-full flex-col items-start px-2 py-4">
+        <div className="flex w-full flex-col items-start px-2 pb-2 pt-4">
           <div className="flex w-full items-start gap-2">
             <SafeAvatar
               src={member?.avatar}
@@ -103,21 +108,18 @@ export const Post = memo(
               }
               onDelete={async () => {
                 if (!post && !comment) return;
-                await workspaceRep?.mutate.deleteChannel({
-                  channelId: (post?.id || comment?.id) as string,
-                  teamId,
-                  type: "thread",
-                });
-
-                setRecentAtom((prev) => {
-                  if (!workspaceId || !prev[workspaceId]) return prev;
-                  const newRecent = produce(prev, (draft) => {
-                    draft[workspaceId] = draft[workspaceId]!.filter(
-                      (r) => r.channelId !== post?.id,
-                    );
+                if (comment) {
+                  if (!postId) return;
+                  await rep?.mutate.deleteComment({
+                    ...comment,
+                    postId: postId,
                   });
-                  return newRecent;
-                });
+                } else {
+                  if (!post) return;
+                  await rep?.mutate.deletePost({
+                    ...post,
+                  });
+                }
 
                 if (opened)
                   router.replace(`/${workspaceSlug}/thread/${teamId}`);
@@ -178,20 +180,20 @@ export const Post = memo(
         </div>
 
         {!opened && post?.type !== "poll" && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="group/btn w-full justify-start rounded-none border-t border-border/50 pl-11 text-sm"
-            asChild
+          <Link
+            href={`/${workspaceSlug}/thread/${teamId}/${channelId}/${isQA ? "thread" : "post"}/${post?.id || comment?.id}`}
           >
-            <Link
-              href={`/${workspaceSlug}/thread/${teamId}/${channelId}/${isQA ? "thread" : "post"}/${post?.id || comment?.id}`}
+            <Button
+              variant="ghost"
+              size="fit"
+              className="group/btn mb-4 ml-10 justify-start gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
-              <span className="opacity-50 transition-all group-hover/btn:opacity-100">
-                Open {isQA ? "question" : "post"}
-              </span>
-            </Link>
-          </Button>
+              <MessageCircle className="h-4 w-4" />
+              {commentsLength} comment{commentsLength === 1 ? "" : "s"}
+              {/* <span className="opacity-50 transition-all group-hover/btn:opacity-100"> */}
+              {/* </span> */}
+            </Button>
+          </Link>
         )}
       </div>
     );

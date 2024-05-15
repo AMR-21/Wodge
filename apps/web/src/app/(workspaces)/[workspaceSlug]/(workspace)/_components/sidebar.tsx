@@ -97,10 +97,6 @@ export function Sidebar() {
                   teamId && {
                     href: `${baseUrl}/resources/${teamId}`,
                   })}
-                {...(tab.val === "thread" &&
-                  teamId && {
-                    href: `${baseUrl}/thread/${teamId}`,
-                  })}
                 onClick={() => {
                   if (tab.val && tab.val !== "settings") {
                     setActiveSidebar(tab.val);

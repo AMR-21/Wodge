@@ -41,9 +41,9 @@ export const ThreadMessagesList = memo(
     if (!comments) return null;
 
     return (
-      <div className={!isQA ? "py-2.5" : "mb-2.5"}>
+      <div className={!isQA ? "" : "mb-2.5"}>
         {!isQA && comments.length > 0 && (
-          <p className="pb-2 text-sm font-medium text-muted-foreground">
+          <p className="py-2.5 text-sm font-medium text-muted-foreground">
             Comments
           </p>
         )}
