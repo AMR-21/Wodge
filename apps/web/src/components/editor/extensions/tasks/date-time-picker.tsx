@@ -17,7 +17,9 @@ import { Switch } from "@/components/ui/switch";
 import { DateRange } from "react-day-picker";
 import { DrObj, Task } from "@repo/data";
 import { Editor } from "@tiptap/react";
-
+import { atom, useAtom } from "jotai";
+import { openDatePicker } from "./atom";
+import { on } from "events";
 export function DateTimePicker({
   bigger,
   date,
@@ -25,8 +27,7 @@ export function DateTimePicker({
   includeTime,
   setIncludeTime,
   isEditing,
-
-  editor,
+  onBlur,
 }: {
   bigger?: boolean;
   date?: DateRange;
@@ -34,16 +35,20 @@ export function DateTimePicker({
   includeTime?: boolean;
   setIncludeTime?: (c: boolean) => void;
   isEditing?: boolean;
-  editor?: Editor | null;
+  onBlur?: () => void;
 }) {
   const [open, setOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    editor?.setEditable(!open);
-  }, [open]);
-
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={(c) => {
+        setOpen(c);
+        if (!c) {
+          onBlur?.();
+        }
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant={"ghost"}
@@ -66,13 +71,16 @@ export function DateTimePicker({
               <p className="overflow-hidden truncate">
                 {format(
                   date.from,
-                  includeTime ? "LLL dd, y HH:mm" : "LLL dd, y",
+                  includeTime ? "LLL dd, yy HH:mm" : "LLL dd, y",
                 )}{" "}
                 -{" "}
-                {format(date.to, includeTime ? "LLL dd, y HH:mm" : "LLL dd, y")}
+                {format(
+                  date.to,
+                  includeTime ? "LLL dd, yy HH:mm" : "LLL dd, y",
+                )}
               </p>
             ) : (
-              format(date.from, includeTime ? "LLL dd, y HH:mm" : "LLL dd, y")
+              format(date.from, includeTime ? "LLL dd, yy HH:mm" : "LLL dd, y")
             )
           ) : (
             <>
@@ -88,7 +96,7 @@ export function DateTimePicker({
       </PopoverTrigger>
       <PopoverContent
         align={bigger ? "center" : "start"}
-        className="z-40 w-auto p-0"
+        className=" w-auto p-0"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -99,6 +107,7 @@ export function DateTimePicker({
           selected={date}
           onSelect={onSetDate}
           initialFocus
+          weekStartsOn={6}
         />
 
         <div className="space-y-4 border-t border-border p-3">
@@ -108,16 +117,17 @@ export function DateTimePicker({
             </Label>
             <Switch
               id="time-toggle"
+              checked={includeTime}
               onCheckedChange={(c) => {
                 setIncludeTime?.(c);
 
                 if (!c) {
                   onSetDate?.({
                     from: date?.from
-                      ? new Date(date.from.setHours(0, 0, 0, 0))
+                      ? new Date(new Date(date?.from).setHours(0, 0, 0, 0))
                       : undefined,
                     to: date?.to
-                      ? new Date(date.to.setHours(0, 0, 0, 0))
+                      ? new Date(new Date(date?.to).setHours(0, 0, 0, 0))
                       : undefined,
                   });
                 }
@@ -137,7 +147,7 @@ export function DateTimePicker({
                       to: date?.to,
                     });
                   }}
-                  date={date?.from}
+                  date={date?.from && new Date(date.from)}
                 />
               </div>
 
@@ -151,7 +161,7 @@ export function DateTimePicker({
                       from: date?.from,
                     });
                   }}
-                  date={date?.to}
+                  date={date?.to && new Date(date.to)}
                 />
               </div>
             </div>

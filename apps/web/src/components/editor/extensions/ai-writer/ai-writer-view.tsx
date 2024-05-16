@@ -80,39 +80,30 @@ export const AiWriterView = ({
     };
 
     try {
-      // const { baseUrl, appId, token } = aiOptions
-      const response = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt`,
+      const eventSource = new EventSource(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt/${btoa(payload.prompt)}`,
         {
-          method: "POST",
-          headers: {
-            "x-workspace-id": workspaceId,
-            "x-team-id": teamId,
-            "x-folder-id": folderId,
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(payload),
+          withCredentials: true,
         },
       );
-      if (!response.ok) {
+
+      // Add event listeners to handle different types of events
+      eventSource.addEventListener("message", function (event) {
+        // Handle message event
+
+        if (event.data === "[DONE]") {
+          setIsFetching(false);
+          return eventSource.close();
+        }
+        const { response } = JSON.parse(event.data);
+
+        setPreviewText((t) => (t ? t + response : response)?.trim());
+      });
+
+      eventSource.addEventListener("error", function (event) {
         setIsFetching(false);
         toast.error("Failed to fetch prompt");
-        return;
-      }
-
-      const json = await response.json<{ response: string }>();
-
-      const text = json.response;
-      if (!text.length) {
-        setIsFetching(false);
-
-        return;
-      }
-
-      setPreviewText(text);
-
-      setIsFetching(false);
+      });
     } catch (errPayload: any) {
       const errorMessage = errPayload?.response?.data?.error;
       const message =

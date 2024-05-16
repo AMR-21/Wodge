@@ -12,17 +12,20 @@ import {
   LiveKitRoom,
   MediaDeviceMenu,
   PreJoin,
+  useCreateLayoutContext,
   useDisconnectButton,
   useLocalParticipantPermissions,
+  usePinnedTracks,
   VideoConference as VideoConf,
 } from "@livekit/components-react";
 import { useAtom, useAtomValue } from "jotai";
 import { useParams } from "next/navigation";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, use, useCallback, useEffect, useMemo, useState } from "react";
 import { VideoConference } from "./video-conference";
 import {
   camDeviceAtom,
   camStatusAtom,
+  isCarouselOpenAtom,
   isFullScreenAtom,
   micDeviceAtom,
   micStatusAtom,
@@ -34,6 +37,7 @@ import { disconnectFromRoom } from "./disconnect-from-room";
 import { Room, Track } from "livekit-client";
 import {
   ChevronDown,
+  ChevronLeft,
   ChevronUp,
   LogOut,
   Maximize,
@@ -43,6 +47,7 @@ import {
   PhoneOff,
   ScreenShare,
   ScreenShareOff,
+  Users2,
   Video,
   VideoOff,
 } from "lucide-react";
@@ -127,7 +132,7 @@ export const CallWindow = memo(({}) => {
   return (
     <div
       className={cn(
-        "invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4 bg-background transition-all",
+        "invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4 bg-background  transition-all",
         isSidebarOpen && "w-[calc(100vw-15rem)]",
         !isSidebarOpen && "w-[calc(100vw-0rem)]",
         isCallWindowOpen && "visible",
@@ -149,7 +154,7 @@ export const CallWindow = memo(({}) => {
       >
         <VideoConference className="flex-1" />
 
-        <div className="absolute bottom-0 w-full shrink-0 translate-y-full transition-all group-hover/call:translate-y-0">
+        <div className="absolute bottom-0 w-full shrink-0 translate-y-0 transition-all group-hover/call:translate-y-0">
           <ControlBtns />
         </div>
       </LiveKitRoom>
@@ -171,10 +176,29 @@ function ControlBtns() {
   const { buttonProps } = useDisconnectButton({
     className: "rounded-full p-3",
   });
+  const [isCarouselOpen, setIsCarouselOpen] = useAtom(isCarouselOpenAtom);
 
   return (
     <div className="flex shrink-0 items-center gap-2 bg-transparent px-3 py-4 shadow-lg">
-      <div className="relative ml-auto">
+      <div className="ml-auto">
+        <Button
+          variant="secondary"
+          size="fit"
+          className="gap-1 rounded-full p-3.5"
+          onClick={() => {
+            setIsCarouselOpen(!isCarouselOpen);
+          }}
+        >
+          <ChevronLeft
+            className={cn(
+              "size-5 transition-all",
+              isCarouselOpen && "rotate-180",
+            )}
+          />
+          <Users2 className="size-5" />
+        </Button>
+      </div>
+      <div className="relative ">
         <TrackToggle source={Track.Source.Microphone} onChange={setMicStatus}>
           {micStatus ? (
             <Mic className="size-5" />

@@ -28,12 +28,11 @@ interface TaskSheetProps {
   task: Task;
   boardId?: string;
   state: TaskState;
-  col?: Column;
   rep?: Replicache<typeof pageMutators>;
 }
 
 export const TaskSheet = forwardRef<HTMLDivElement, TaskSheetProps>(
-  ({ task, boardId, col, state, rep, ...props }, ref) => {
+  ({ task, boardId, state, rep, ...props }, ref) => {
     const {
       assignee,
       due,
@@ -161,7 +160,7 @@ export const TaskSheet = forwardRef<HTMLDivElement, TaskSheetProps>(
 
         <div className="overflow-y-auto">
           <div className="px-6">
-            <OfflineEditor editor={editor} className=" pl-0.5" isThread />
+            <OfflineEditor editor={editor} className="z-50 pl-0.5" isThread />
           </div>
         </div>
       </SheetContent>

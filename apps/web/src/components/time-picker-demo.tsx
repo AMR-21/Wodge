@@ -18,7 +18,6 @@ export function TimePickerDemo({
   const minuteRef = React.useRef<HTMLInputElement>(null);
   const hourRef = React.useRef<HTMLInputElement>(null);
   const secondRef = React.useRef<HTMLInputElement>(null);
-
   return (
     <div
       className={cn(

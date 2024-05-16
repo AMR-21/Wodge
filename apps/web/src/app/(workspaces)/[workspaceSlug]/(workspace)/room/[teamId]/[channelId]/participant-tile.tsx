@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { useMember } from "@/hooks/use-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { TrackMutedIndicator } from "./track-muted-indicator";
+import { Button } from "@/components/ui/button";
 
 /**
  * The `ParticipantContextIfNeeded` component only creates a `ParticipantContext`
@@ -116,8 +117,6 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
 ) {
   const trackReference = useEnsureTrackRef(trackRef);
 
-  // const member =
-
   const { elementProps } = useParticipantTile<HTMLDivElement>({
     htmlProps,
     disableSpeakingIndicator,
@@ -170,10 +169,10 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
       {...elementProps}
       className={cn(
         // elementProps.className,
-        "flex cursor-pointer flex-col gap-[0.375rem] overflow-hidden rounded-md  bg-background opacity-0 ring-2 ring-transparent data-[lk-video-muted=true]:opacity-100 data-[lk-video-source=camera]:opacity-100 data-[lk-video-source=screen_share]:opacity-100",
+        "group/focus flex cursor-pointer flex-col gap-[0.375rem] overflow-hidden  rounded-md  border-2 bg-background  opacity-0 data-[lk-video-muted=true]:opacity-100 data-[lk-video-source=camera]:opacity-100 data-[lk-video-source=screen_share]:opacity-100",
         (isScreenSharing || isCamSharing) && "opacity-100",
         trackReference.participant.isSpeaking &&
-          "ring-green-500 dark:ring-green-600",
+          "border-green-500 dark:border-green-600",
       )}
       onClick={(e) => {
         elementProps.onClick?.(e);
@@ -212,7 +211,7 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
               )}
               <div
                 className={cn(
-                  "pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-background transition-opacity",
+                  "pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-background opacity-100 transition-opacity",
                   (isScreenSharing || isCamSharing) && "opacity-0",
                 )}
               >

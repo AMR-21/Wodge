@@ -8,17 +8,17 @@
 import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
-import { ok, unauthorized } from "../lib/http-utils";
+import { getRoute, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, getCurrentUser } from "../lib/auth";
 import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
 import { Hono } from "hono";
-import { prompt } from "./prompt";
 import { PagePartyInterface, ServerPageBoards, Versions } from "../types";
 import { startFn } from "./start-fn";
 import { pagePull } from "./page-pull";
 import { pagePush } from "./page-push";
+import { prompt } from "@/lib/prompt";
 
 export default class PageParty implements Party.Server, PagePartyInterface {
   // options: Party.ServerOptions = {
@@ -36,6 +36,8 @@ export default class PageParty implements Party.Server, PagePartyInterface {
 
   async onStart() {
     this.app.post("/prompt", prompt.bind(null, this));
+    this.app.get("/prompt/:prompt/:action?", prompt.bind(null, this));
+
     this.app.post("/replicache-pull", pagePull.bind(null, this));
 
     this.app.post("/replicache-push", pagePush.bind(null, this));
@@ -51,7 +53,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
       },
       callback: {
         async handler(yDoc) {
-          console.log("a callback @", new Date().toISOString());
+          // console.log("a callback @", new Date().toISOString());
         },
       },
     });
@@ -92,6 +94,8 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     if (req.method === "OPTIONS") {
       return ok();
     }
+
+    if (getRoute(req).startsWith("/prompt")) return req;
 
     try {
       const user = await getCurrentUser(req, lobby);

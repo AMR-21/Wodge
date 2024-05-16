@@ -75,7 +75,7 @@ export const ExtensionKit = ({
   // }),
   AiPrompts,
   Column,
-  Selection,
+  // Selection,
   Heading,
   HorizontalRule,
   TasksDB,

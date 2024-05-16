@@ -1,16 +1,30 @@
-import { Board, DrObj, Member, PublicUserType, Task } from "@repo/data";
+import {
+  Board,
+  DrObj,
+  Member,
+  pageMutators,
+  PublicUserType,
+  Task,
+} from "@repo/data";
 import { queryClient } from "@repo/data/lib/query-client";
 
 import { SelectItem } from "@/components/ui/select";
 import { useMember } from "@/hooks/use-member";
 import { ColumnDef } from "@tanstack/react-table";
-import { DeepReadonly } from "replicache";
+import { DeepReadonly, Replicache } from "replicache";
 import { Header } from "@/components/data-table/header";
 import { useEditable } from "use-editable";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { cn, focusElement, Mutable } from "@/lib/utils";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import { Check, ChevronDown, EarIcon, PencilLine, X } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  EarIcon,
+  PanelRight,
+  PencilLine,
+  X,
+} from "lucide-react";
 import { Editor } from "@tiptap/react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import {
@@ -24,11 +38,16 @@ import { DateTimePicker } from "./date-time-picker";
 import { DateRange } from "react-day-picker";
 import { PriorityDropdown } from "./priority-dropdown";
 import { DataTableActions } from "@/components/data-table/data-table-action";
+import { Calendar } from "@/components/ui/calendar";
+import { useQueryClient } from "@tanstack/react-query";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { TaskSheet } from "./task-sheet";
 interface TasksColumnsProps {
   onDeleteTask: (task: Task | DrObj<Task>) => void;
   onEditTask: (task: Task | DrObj<Task>) => void;
   editor?: Editor | null;
   board: DrObj<Board>;
+  rep?: Replicache<typeof pageMutators>;
 }
 
 export function tasksColumns({
@@ -36,6 +55,7 @@ export function tasksColumns({
   onEditTask,
   editor,
   board,
+  rep,
 }: TasksColumnsProps): ColumnDef<DeepReadonly<Task>>[] {
   return [
     // {
@@ -90,6 +110,22 @@ export function tasksColumns({
           }
         }, [isEditing]);
 
+        // const [due, setDue] = useState<DateRange | undefined>(
+        //   row.original?.due as DateRange | undefined,
+        // );
+
+        // const [assignee, setAssignee] = useState<string[] | undefined>(
+        //   (row.original?.assignee as string[]) || [],
+        // );
+
+        // const [priority, setPriority] = useState<Task["priority"] | undefined>(
+        //   row.original?.priority,
+        // );
+
+        // const [includeTime, setIncludeTime] = useState(
+        //   row.original.includeTime,
+        // );
+
         return (
           <div className="group/task flex h-full w-full max-w-64 items-center ">
             <p
@@ -135,6 +171,33 @@ export function tasksColumns({
                   onClick={setIsEditing.bind(null, true)}
                   className="invisible ml-auto transition-all group-hover/task:visible"
                 />
+                {/* <Sheet>
+                  <SheetTrigger asChild>
+                    <SidebarItemBtn
+                      Icon={PanelRight}
+                      className="invisible transition-all group-hover/row:visible"
+                    />
+                  </SheetTrigger>
+                  <TaskSheet
+                    state={{
+                      due,
+                      title,
+                      assignee,
+                      priority,
+                      isEditing,
+                      setDue,
+                      setTitle,
+                      setAssignee,
+                      setPriority,
+                      setIsEditing,
+                      includeTime,
+                      setIncludeTime,
+                    }}
+                    task={row.original as Task}
+                    boardId={board.id}
+                    rep={rep}
+                  />
+                </Sheet> */}
               </>
             )}
           </div>
@@ -192,22 +255,19 @@ export function tasksColumns({
       ),
 
       cell: ({ row }) => {
-        const [open, setOpen] = useState(false);
+        const [assignee, setAssignee] = useState(row.original.assignee);
 
-        useEffect(() => {
-          if (open) {
-            editor?.setEditable(false);
-          }
-        }, [open]);
         return (
           <div onClick={(e) => e.stopPropagation()}>
             <MemberMultiSelect
-              preset={row.original.assignee as Mutable<string[]>}
-              onChange={(assignee) => {
-                onEditTask({ ...row.original, assignee });
+              preset={assignee as string[]}
+              onChange={setAssignee}
+              onBlur={() => {
+                onEditTask({
+                  ...row.original,
+                  assignee,
+                });
               }}
-              open={open}
-              setOpen={setOpen}
               isEditing
             />
           </div>
@@ -219,16 +279,25 @@ export function tasksColumns({
       header: () => <Header className="pl-1 !text-sm !font-medium">Due</Header>,
 
       cell: ({ row }) => {
+        const [due, setDue] = useState(
+          row.original.due as DateRange | undefined,
+        );
+        const [includeTime, setIncludeTime] = useState(
+          row.original.includeTime,
+        );
+
         return (
           <DateTimePicker
-            editor={editor}
-            date={row.original.due as DateRange | undefined}
-            onSetDate={(due) => {
-              onEditTask({ ...row.original, due: due as Task["due"] });
-            }}
-            includeTime={row.original.includeTime}
-            setIncludeTime={(includeTime) => {
-              onEditTask({ ...row.original, includeTime });
+            date={due}
+            onSetDate={setDue}
+            includeTime={includeTime}
+            setIncludeTime={setIncludeTime}
+            onBlur={() => {
+              onEditTask({
+                ...row.original,
+                due: due as Task["due"],
+                includeTime,
+              });
             }}
             isEditing
           />
@@ -280,3 +349,5 @@ export function tasksColumns({
     },
   ];
 }
+
+//

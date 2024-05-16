@@ -22,6 +22,7 @@ import { createPortal } from "react-dom";
 import { Plus } from "lucide-react";
 import TaskCard from "./task-card";
 import { toast } from "sonner";
+import { useCurrentPageRep } from "@/hooks/use-page-rep";
 
 export function KanbanView({
   board,
@@ -52,6 +53,7 @@ export function KanbanView({
     () => board?.columns.map((col) => col.id) || [],
     [board?.columns],
   );
+
   return (
     <div className="flex w-full items-center overflow-x-auto overflow-y-auto pb-4">
       <DndContext
@@ -89,6 +91,7 @@ export function KanbanView({
             className="h-9 w-80 justify-start gap-2"
             variant="ghost"
             onClick={async () => {
+              console.log("Creating column");
               try {
                 await rep?.mutate.createColumn({
                   boardId,

@@ -51,20 +51,26 @@ export function UserCard() {
                 size: "fit",
                 variant: "ghost",
               }),
-              "select-none justify-start gap-3 ",
+              "group/card relative w-full select-none justify-start gap-3 overflow-hidden",
             )}
           >
             <SafeAvatar
               src={user?.avatar}
               className={cn(
-                "h-8 w-8",
+                "h-6 w-6",
                 isSpeaking && "ring-green-500 dark:ring-green-600",
               )}
             />
-            <div>
-              <p className="text-sm">{user?.displayName}</p>
-              <p className="text-xs text-muted-foreground">@{user?.username}</p>
-            </div>
+            <p
+              className={cn(
+                "absolute left-9 top-full translate-y-full text-sm transition-all group-hover/card:top-1/2 group-hover/card:-translate-y-1/2",
+              )}
+            >
+              @{user?.username}
+            </p>
+            <p className="absolute left-9 top-1/2 -translate-y-1/2 text-sm transition-all group-hover/card:top-0 group-hover/card:-translate-y-full">
+              {user?.displayName}
+            </p>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

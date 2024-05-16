@@ -13,6 +13,7 @@ import {
 } from "@livekit/components-core";
 import {
   CarouselLayout,
+  // CarouselLayout,
   ConnectionStateToast,
   ControlBar,
   // FocusLayout,
@@ -31,6 +32,8 @@ import * as React from "react";
 import { ParticipantTile } from "./participant-tile";
 import { FocusLayout } from "./focus-layout";
 import { cn } from "@/lib/utils";
+import { useAtom, useAtomValue } from "jotai";
+import { isCarouselOpenAtom } from "./atoms";
 
 /**
  * @public
@@ -102,7 +105,10 @@ export function VideoConference({
     (track) => !isEqualTrackRef(track, focusTrack),
   );
 
+  const [isCarouselOpen, setIsCarouselOpen] = useAtom(isCarouselOpenAtom);
+
   React.useEffect(() => {
+    if (!focusTrack) setIsCarouselOpen(false);
     // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.
     if (
       screenShareTracks.some((track) => track.publication.isSubscribed) &&
@@ -160,8 +166,17 @@ export function VideoConference({
               </div>
             ) : (
               <div className="relative flex h-full w-full items-stretch justify-center">
-                <FocusLayoutContainer>
+                <FocusLayoutContainer
+                  className={cn(
+                    "lk-focus-layout transition-all",
+                    !isCarouselOpen && "grid-cols-1",
+                  )}
+                >
                   <CarouselLayout
+                    className={cn(
+                      "lk-carousel transition-all",
+                      !isCarouselOpen && "w-0",
+                    )}
                     orientation="vertical"
                     tracks={carouselTracks}
                   >

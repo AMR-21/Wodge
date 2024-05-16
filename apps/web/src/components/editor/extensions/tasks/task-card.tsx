@@ -73,8 +73,8 @@ export interface TaskState {
   setIsEditing: (isEditing: boolean) => void;
   setIncludeTime: (includeTime: boolean) => void;
 
-  isAbove: boolean;
-  isBelow: boolean;
+  isAbove?: boolean;
+  isBelow?: boolean;
 }
 
 function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
@@ -106,6 +106,7 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
     over,
     index: curIndex,
     activeIndex,
+    isDragging,
   } = useSortable({
     id: task.id,
     data: {
@@ -113,7 +114,7 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
       task,
       index,
     },
-    // disabled: isEditing,
+    disabled: isEditing,
   });
 
   const isTaskOver =
@@ -146,12 +147,8 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <div
-          onClick={() => {
-            console.log("clicked");
-          }}
-        >
+      <SheetTrigger disabled={isDragging} asChild>
+        <div>
           <TaskItem
             state={state}
             task={task}
@@ -165,13 +162,7 @@ function TaskCard({ boardId, task, index, col, rep, editor }: TaskCardProps) {
           />
         </div>
       </SheetTrigger>
-      <TaskSheet
-        state={state}
-        task={task}
-        boardId={boardId}
-        col={col}
-        rep={rep}
-      />
+      <TaskSheet state={state} task={task} boardId={boardId} rep={rep} />
     </Sheet>
   );
 }

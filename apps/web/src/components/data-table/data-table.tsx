@@ -38,6 +38,7 @@ interface DataTableProps<TData> {
   placeholder?: string;
   className?: string;
   withHeader?: boolean;
+  
 }
 
 function DataTable<TData>({
@@ -88,11 +89,11 @@ function DataTable<TData>({
                 ))}
               </TableRow>
             ))
-          ) : (
+          ) : placeholder ? (
             <TableRow>
               <TableCell className="h-12 text-center">{placeholder}</TableCell>
             </TableRow>
-          )}
+          ) : null}
           {table.getBottomRows()?.length > 0 &&
             table.getBottomRows().map((row) => (
               <TableRow

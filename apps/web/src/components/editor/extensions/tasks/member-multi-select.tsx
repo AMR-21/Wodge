@@ -27,8 +27,7 @@ interface MemberMultiSelectProps {
   preset?: string[];
   bigger?: boolean;
   isEditing?: boolean;
-  open?: boolean;
-  setOpen?: (open: boolean) => void;
+  onBlur?: () => void;
 }
 
 export function MemberMultiSelect({
@@ -36,10 +35,10 @@ export function MemberMultiSelect({
   preset,
   bigger,
   isEditing,
-  open,
-  setOpen,
+  onBlur,
 }: MemberMultiSelectProps) {
   const [value, setValue] = useState<string[]>(preset || []);
+  const [open, setOpen] = useState(false);
 
   const { channelId, teamId, folderId } = useParams<{
     channelId: string;
@@ -64,15 +63,15 @@ export function MemberMultiSelect({
     [teamId, channelId, structure, membersArr],
   );
 
-  // useEffect(() => {
-  //   onChange?.(value);
-  // }, [value]);
+  useEffect(() => {
+    onChange?.(value);
+  }, [value]);
 
   function onSelect(m: Member) {
     if (value.some((v) => v === m.id)) {
       setValue((v) => {
         const newV = v.filter((mb) => mb !== m.id);
-        onChange?.(newV);
+        // onChange?.(newV);
         return newV;
       });
     } else {
@@ -81,7 +80,7 @@ export function MemberMultiSelect({
           ...new Set([...v, members.find((mb) => mb.id === m.id)!.id]),
         ];
 
-        onChange?.(newV);
+        // onChange?.(newV);
 
         return newV;
       });
@@ -93,11 +92,11 @@ export function MemberMultiSelect({
 
   return (
     <Popover
-      {...(open &&
-        setOpen && {
-          open,
-          onOpenChange: setOpen,
-        })}
+      open={open}
+      onOpenChange={(c) => {
+        setOpen(c);
+        onBlur?.();
+      }}
     >
       <PopoverTrigger asChild>
         <div>
@@ -226,7 +225,7 @@ const Trigger = forwardRef<
         <>
           {!bigger && <Users2 className="text h-4 w-4" />}
           <p className="text-muted-foreground">
-            {bigger ? "Empty" : "Add assignee"}
+            {bigger ? "Empty" : "Add assignees"}
           </p>
         </>
       )}

@@ -14,6 +14,8 @@ export const TasksDB = Node.create({
   isolating: true,
   selectable: false,
 
+  defining: true,
+
   parseHTML() {
     return [
       {
@@ -34,6 +36,12 @@ export const TasksDB = Node.create({
       "data-id": {
         default: nanoid(6),
       },
+    };
+  },
+
+  addStorage() {
+    return {
+      id: nanoid(6),
     };
   },
 });

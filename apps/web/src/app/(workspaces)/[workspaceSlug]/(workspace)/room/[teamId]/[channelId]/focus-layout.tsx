@@ -3,6 +3,11 @@ import type { TrackReferenceOrPlaceholder } from "@livekit/components-core";
 import type { ParticipantClickEvent } from "@livekit/components-core";
 import { ParticipantTile } from "./participant-tile";
 import { mergeProps } from "./merge-props";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { createPortal } from "react-dom";
+import { isCarouselOpenAtom } from "./atoms";
+import { useAtomValue } from "jotai";
 
 /** @public */
 export interface FocusLayoutContainerProps
@@ -32,7 +37,18 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 /**
  * The `FocusLayout` component is just a light wrapper around the `ParticipantTile` to display a single participant.
  * @public
- */
+//  */
+//     top: 50%;
+//     left: 0.5rem;
+//     z-index: 50;
+//     transform: translateY(-50%);
 export function FocusLayout({ trackRef, ...htmlProps }: FocusLayoutProps) {
-  return <ParticipantTile trackRef={trackRef} {...htmlProps} />;
+  const isCarouselOpen = useAtomValue(isCarouselOpenAtom);
+  return (
+    <ParticipantTile
+      trackRef={trackRef}
+      {...htmlProps}
+      className={cn(htmlProps.className, isCarouselOpen && "w-full")}
+    />
+  );
 }

@@ -14,3 +14,4 @@ export const camStatusAtom = atom<boolean>(false);
 export const screenStatusAtom = atom<boolean>(false);
 export const callQualityAtom = atom<string>("");
 export const isSpeakingAtom = atom<boolean>(false);
+export const isCarouselOpenAtom = atom<boolean>(true);
