@@ -39,7 +39,7 @@ export function AppHeader() {
   return (
     <div
       className={
-        "mt-1.5 flex h-12 w-full items-center border-b border-border/80 bg-dim py-2.5 pl-2 pr-4  transition-all"
+        "mt-1.5 flex h-12 w-full items-center  bg-background py-2.5 pl-2 pr-4  transition-all"
       }
     >
       <div className="flex w-full items-center">

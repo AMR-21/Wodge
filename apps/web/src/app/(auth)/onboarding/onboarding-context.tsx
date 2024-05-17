@@ -23,11 +23,12 @@ export function OnboardingProvider({
   const [isPending, startTransition] = useTransition();
 
   const queryClient = useQueryClient();
-  useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ["user"],
-    });
-  }, []);
+
+  // useEffect(() => {
+  //   queryClient.invalidateQueries({
+  //     queryKey: ["user"],
+  //   });
+  // }, []);
 
   return (
     <Context.Provider

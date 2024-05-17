@@ -75,7 +75,7 @@ export async function middleware(request: NextRequest) {
     return Response.redirect(new URL("/onboarding", nextUrl));
   }
 
-  // // User is authentic, has profile, and trying to access onboarding route
+  // User is authentic, has profile, and trying to access onboarding route
   if (isOnboardingRoute && hasUsername) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }

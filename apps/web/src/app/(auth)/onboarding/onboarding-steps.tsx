@@ -12,9 +12,12 @@ import {
 } from "@/components/ui/stepper";
 import { Loader } from "@/components/ui/loader";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function OnboardingSteps() {
   const { isPending } = useOnboarding();
+  const router = useRouter();
 
   return (
     <Stepper className="max-w-lg">
@@ -45,9 +48,10 @@ export function OnboardingSteps() {
         </Step>
         <Step index={4}>
           <Outro />
-          <Link href={DEFAULT_LOGIN_REDIRECT} prefetch>
-            <NextBtn className="w-4/6">Get started</NextBtn>
-          </Link>
+
+          <Button className="w-4/6" asChild>
+            <Link href={DEFAULT_LOGIN_REDIRECT}>Get started</Link>
+          </Button>
         </Step>
       </StepperContainer>
     </Stepper>

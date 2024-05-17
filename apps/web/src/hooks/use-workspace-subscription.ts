@@ -16,13 +16,20 @@ import {
 } from "@repo/data";
 
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 export function useWorkspaceSubscription() {
   const [workspaceRep, setWorkspaceRep] = useState<Replicache<
     typeof workspaceMutators
   > | null>(null);
   const router = useRouter();
+
+  const pathname = usePathname();
+
+  const isNotConcerned =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/onboarding") ||
+    pathname.startsWith("/settings");
 
   const { workspaceSlug } = useParams() as { workspaceSlug: string };
 
@@ -43,7 +50,7 @@ export function useWorkspaceSubscription() {
     if (isPending) return;
 
     let timerId: any;
-    if (!workspace) {
+    if (!workspace && !isNotConcerned) {
       timerId = setTimeout(() => {
         router.push("/");
       }, 1000);

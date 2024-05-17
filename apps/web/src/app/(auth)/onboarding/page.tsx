@@ -8,6 +8,7 @@ function OnboardingPage() {
   const { user } = useCurrentUser();
 
   if (!user) return null;
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <OnboardingProvider user={user}>
