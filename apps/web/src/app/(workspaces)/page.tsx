@@ -17,10 +17,11 @@ function WorkspacesPage() {
   // if (!isCached) return null;
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden ">
-      <UserCard className="absolute right-10 top-10" />
+    <div className="dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative  flex h-full  w-full flex-col items-center   justify-center  overflow-hidden bg-background ">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background  opacity-85 [mask-image:radial-gradient(ellipse_at_center)]" />
+      <UserCard className="absolute right-10 top-10 z-20" />
       <Button
-        className="group absolute left-10 top-10 items-center text-sm"
+        className="group absolute left-10 top-10 z-20 items-center text-sm"
         size="sm"
         variant="secondary"
         onClick={() => router.back()}
@@ -28,7 +29,7 @@ function WorkspacesPage() {
         Back
       </Button>
 
-      <div className="flex w-full max-w-xs flex-col">
+      <div className="z-20 flex w-full max-w-xs flex-col">
         <p className="mb-2 text-xs text-muted-foreground">Your Workspaces</p>
 
         <ScrollArea className="max-h-72 rounded-md border border-border/50 bg-dim">

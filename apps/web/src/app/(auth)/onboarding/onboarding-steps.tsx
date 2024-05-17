@@ -20,7 +20,7 @@ export function OnboardingSteps() {
   const router = useRouter();
 
   return (
-    <Stepper className="max-w-lg">
+    <Stepper className="z-20 max-w-lg">
       <StepperContainer>
         <Step index={1}>
           <Welcome />

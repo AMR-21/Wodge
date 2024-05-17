@@ -70,15 +70,15 @@ export async function middleware(request: NextRequest) {
     return Response.redirect(new URL("/login", nextUrl));
   }
 
-  // User is authentic but has no profile
-  if (!hasUsername && !isOnboardingRoute) {
-    return Response.redirect(new URL("/onboarding", nextUrl));
-  }
+  // // User is authentic but has no profile
+  // if (!hasUsername && !isOnboardingRoute) {
+  //   return Response.redirect(new URL("/onboarding", nextUrl));
+  // }
 
-  // User is authentic, has profile, and trying to access onboarding route
-  if (isOnboardingRoute && hasUsername) {
-    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  }
+  // // User is authentic, has profile, and trying to access onboarding route
+  // if (isOnboardingRoute && hasUsername) {
+  //   return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  // }
 
   return response;
 }

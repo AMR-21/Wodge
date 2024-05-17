@@ -63,7 +63,7 @@ export function EmailForm() {
             <FormItem>
               {/* <FormLabel className="text-muted-foreground">Email</FormLabel> */}
               <FormControl>
-                <Input {...field} label="Email" />
+                <Input {...field} className="bg-background" label="Email" />
               </FormControl>
             </FormItem>
           )}

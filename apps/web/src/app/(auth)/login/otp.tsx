@@ -47,15 +47,15 @@ export function OTP() {
         className="mt-0"
       >
         <InputOTPGroup className="w-full">
-          <InputOTPSlot className="h-12 w-12 text-lg" index={0} />
-          <InputOTPSlot className="h-12 w-12 text-lg" index={1} />
-          <InputOTPSlot className="h-12 w-12 text-lg" index={2} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={0} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={1} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={2} />
         </InputOTPGroup>
         <InputOTPSeparator />
         <InputOTPGroup>
-          <InputOTPSlot className="h-12 w-12 text-lg" index={3} />
-          <InputOTPSlot className="h-12 w-12 text-lg" index={4} />
-          <InputOTPSlot className="h-12 w-12 text-lg" index={5} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={3} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={4} />
+          <InputOTPSlot className="h-12 w-12 bg-background text-lg" index={5} />
         </InputOTPGroup>
       </InputOTP>
 

@@ -90,7 +90,7 @@ export function CompleteProfileForm() {
 
   return (
     <Form {...form}>
-      <div className="flex flex-col space-y-3">
+      <div className="z-20 flex flex-col space-y-3">
         <div className="flex justify-center">
           <AvatarBtn
             avatar={user?.avatar}
@@ -116,7 +116,11 @@ export function CompleteProfileForm() {
                   Display name
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="John Doe" className="peer" />
+                  <Input
+                    {...field}
+                    placeholder="John Doe"
+                    className="peer bg-background"
+                  />
                 </FormControl>
                 <FormDescription withError collapsible>
                   This how people will see you. Use whatever you want.
@@ -133,7 +137,11 @@ export function CompleteProfileForm() {
                   Username
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} className="peer" placeholder="johndoe" />
+                  <Input
+                    {...field}
+                    className="peer bg-background"
+                    placeholder="johndoe"
+                  />
                 </FormControl>
                 <FormDescription withError collapsible>
                   Only letters, numbers, dashes, and underscores.

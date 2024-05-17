@@ -9,7 +9,7 @@ const raleway = Raleway({
 
 export function Logo({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="z-20 flex items-center gap-2">
       <span
         className={cn(
           raleway.className,
