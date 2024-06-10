@@ -11,7 +11,8 @@ import { PrevBtn } from "@/components/ui/stepper";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { emailAtom } from "./email-atom";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { env } from "@repo/env";
 
 export function OTP() {
   const [isPending, setIsPending] = useState(false);
@@ -19,6 +20,9 @@ export function OTP() {
   const supabase = createClient();
   const email = useAtomValue(emailAtom);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect");
 
   async function onSubmit() {
     setIsPending(true);
@@ -30,11 +34,11 @@ export function OTP() {
       token: otp,
       type: "email",
       options: {
-        redirectTo: "http://localhost:3000/",
+        redirectTo: `${env.NEXT_PUBLIC_APP_DOMAIN}${redirect || "/"}`,
       },
     });
 
-    if (!error) router.replace("/");
+    if (!error) router.replace(redirect || "/");
     setIsPending(false);
   }
 

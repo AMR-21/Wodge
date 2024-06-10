@@ -12,13 +12,15 @@ export async function POST(req: Request) {
 
   const userId = req.headers.get("userId");
 
-  if (!userId || !workspaceId) {
+  const token = req.headers.get("token");
+
+  if (!userId || !workspaceId || !token) {
     return new Response(null, { status: 401 });
   }
 
-  const res = await addWorkspaceMember(userId, workspaceId);
+  const invite = await addWorkspaceMember(userId, workspaceId, token);
 
-  if (!res) return new Response(null, { status: 400 });
+  if (!invite) return new Response(null, { status: 400 });
 
-  return Response.json({ workspace: res });
+  return Response.json({ invite });
 }

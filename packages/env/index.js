@@ -27,6 +27,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
     NEXT_PUBLIC_SUPABASE_URL: z.string(),
     NEXT_PUBLIC_AVATARS_URL: z.string(),
+    NEXT_PUBLIC_APP_DOMAIN: z.string(),
   },
 
   runtimeEnv: {
@@ -50,5 +51,6 @@ export const env = createEnv({
     FS_DOMAIN: process.env.FS_DOMAIN,
     USER_AVATAR_BUCKET: process.env.USER_AVATAR_BUCKET,
     SERVICE_KEY: process.env.SERVICE_KEY,
+    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
   },
 });

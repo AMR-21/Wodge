@@ -72,13 +72,13 @@ export const addWorkspaceMember = (
   userId: string,
   role: Member["role"],
   invite: Invite
-) => ({
-  id: userId,
-  role,
-  joinInfo: {
-    joinedAt: new Date().toISOString(),
-    token: invite.token,
-    createdBy: invite.createdBy,
-    method: invite.method,
-  },
-});
+) =>
+  ({
+    id: userId,
+    role,
+    joinInfo: {
+      joinedAt: new Date().toISOString(),
+      token: invite.token!,
+      createdBy: invite.createdBy!,
+    },
+  }) satisfies Member;

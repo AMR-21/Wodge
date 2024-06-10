@@ -29,7 +29,8 @@ export function useWorkspaceSubscription() {
   const isNotConcerned =
     pathname.startsWith("/login") ||
     pathname.startsWith("/onboarding") ||
-    pathname.startsWith("/settings");
+    pathname.startsWith("/settings") ||
+    pathname.split("/").at(2) === "join";
 
   const { workspaceSlug } = useParams() as { workspaceSlug: string };
 
@@ -80,7 +81,6 @@ export function useWorkspaceSubscription() {
       return tx.get<WorkspaceStructure>(makeWorkspaceStructureKey());
     },
     {
-      dependencies: [workspaceRep],
       default: defaultWorkspaceStructure(),
     },
   );
@@ -93,7 +93,6 @@ export function useWorkspaceSubscription() {
       return tx.get<WorkspaceMembers>(makeWorkspaceMembersKey());
     },
     {
-      dependencies: [workspaceRep],
       default: defaultWorkspaceMembers(),
     },
   );

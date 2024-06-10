@@ -11,9 +11,32 @@ import { SettingsSearchInput } from "../settings-search-input";
 import { DataTable } from "@/components/data-table/data-table";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { env } from "@repo/env";
 
 export function MembersSettings() {
-  const { members, workspaceRep, workspaceId } = useCurrentWorkspace();
+  const { members, workspaceRep, workspaceId, workspace } =
+    useCurrentWorkspace();
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (c: boolean) => {
+      await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/invite-link`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        },
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-workspaces"],
+      });
+    },
+  });
 
   const { table } = useTable({
     data: (members?.members as Mutable<DrObj<Member>[]>) || [],
@@ -38,6 +61,8 @@ export function MembersSettings() {
     }
   }
 
+  if (!workspace) return null;
+
   return (
     <div className="w-full shrink-0 grow divide-y-[1px] divide-border/70">
       <SettingsContentHeader
@@ -45,7 +70,18 @@ export function MembersSettings() {
         description="Manage members in this workspace"
       />
 
-      <SettingsContentSection header="Invite Link">
+      <SettingsContentSection
+        header="Invite Link"
+        action={
+          <Switch
+            defaultChecked={workspace?.isInviteLinkEnabled || false}
+            onCheckedChange={mutate}
+            checked={workspace?.isInviteLinkEnabled || false}
+            disabled={isPending}
+            className="disabled:cursor-progress disabled:opacity-100"
+          />
+        }
+      >
         <InviteLink />
       </SettingsContentSection>
 

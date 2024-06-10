@@ -2,6 +2,7 @@
 import "server-only";
 
 import {
+  invites,
   memberships,
   Workspace,
   workspaces,
@@ -9,6 +10,7 @@ import {
 // import { db } from "../../server";
 import { and, eq } from "drizzle-orm";
 import { createDb } from "../../server";
+import { nanoid } from "nanoid";
 
 /**
  * DB operations on a workspace
@@ -22,6 +24,11 @@ export async function createWorkspace(data: Workspace) {
       db
         .insert(memberships)
         .values({ workspaceId: data.id!, userId: data.owner }),
+      db.insert(invites).values({
+        workspaceId: data.id!,
+        createdBy: data.owner,
+        token: nanoid(8),
+      }),
     ]);
 
     return { workspace: workspace[0] };
@@ -67,12 +74,34 @@ export async function updateWorkspaceById(
   return wrk;
 }
 
-export async function addWorkspaceMember(userId: string, workspaceId: string) {
+export async function addWorkspaceMember(
+  userId: string,
+  workspaceId: string,
+  token: string
+) {
   const db = createDb();
-  await db.insert(memberships).values({ userId, workspaceId });
-  return await db.query.workspaces.findFirst({
-    where: eq(workspaces.id, workspaceId),
-  });
+
+  try {
+    const data = await db
+      .select()
+      .from(invites)
+      .innerJoin(workspaces, eq(workspaces.id, invites.workspaceId))
+      .where(eq(invites.token, token))
+      .get();
+
+    if (
+      !data ||
+      data.invites.workspaceId !== workspaceId ||
+      !data.workspaces.isInviteLinkEnabled
+    )
+      return null;
+
+    await db.insert(memberships).values({ userId, workspaceId });
+
+    return data.invites;
+  } catch {
+    return null;
+  }
 }
 
 export async function removeMember(userId: string, workspaceId: string) {

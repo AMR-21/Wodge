@@ -65,20 +65,31 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // User is not authentic and trying to access a protected route
-  if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/login", nextUrl));
+  if (nextUrl.pathname.split("/").at(2) === "join") {
+    if (!isLoggedIn) {
+      return Response.redirect(
+        new URL(`/login?redirect=${nextUrl.pathname}`, nextUrl),
+      );
+    }
+    return response;
   }
 
-  // // User is authentic but has no profile
-  // if (!hasUsername && !isOnboardingRoute) {
-  //   return Response.redirect(new URL("/onboarding", nextUrl));
-  // }
+  // User is not authentic and trying to access a protected route
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(
+      new URL(`/login?redirect=${nextUrl.pathname}`, nextUrl),
+    );
+  }
 
-  // // User is authentic, has profile, and trying to access onboarding route
-  // if (isOnboardingRoute && hasUsername) {
-  //   return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  // }
+  // User is authentic but has no profile
+  if (!hasUsername && !isOnboardingRoute) {
+    return Response.redirect(new URL("/onboarding", nextUrl));
+  }
+
+  // User is authentic, has profile, and trying to access onboarding route
+  if (isOnboardingRoute && hasUsername) {
+    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  }
 
   return response;
 }

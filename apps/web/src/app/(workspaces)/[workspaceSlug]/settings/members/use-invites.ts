@@ -24,7 +24,7 @@ export function useInvites() {
     data: invites,
     isPending,
     isError,
-  } = useQuery<Invites>({
+  } = useQuery<Invite[]>({
     queryKey: ["invites", workspaceId],
     queryFn: async () => {
       const res = await fetch(
@@ -33,7 +33,10 @@ export function useInvites() {
           credentials: "include",
         },
       );
-      return res.json();
+
+      const data = await res.json<{ invites?: Invite[] }>();
+
+      return data?.invites || [];
     },
     enabled: !!workspaceId,
     staleTime: 0,
@@ -41,7 +44,7 @@ export function useInvites() {
 
   if (isError) toast.error("Failed to fetch invites");
 
-  const inviteLink = getInviteLink(invites);
+  // const inviteLink = getInviteLink(invites);
 
-  return { invites, inviteLink, isPending };
+  return { invites, isLinkLoading: isPending };
 }

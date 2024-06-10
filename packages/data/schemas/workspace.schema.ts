@@ -1,10 +1,5 @@
 import { z } from "zod";
-import {
-  BRAND_COLOR,
-  ID_LENGTH,
-  WORKSPACE_GROUP_ID_LENGTH,
-  WORKSPACE_TEAM_ID_LENGTH,
-} from "./config";
+import { BRAND_COLOR, ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "./config";
 import { TeamSchema } from "./team.schema";
 import {
   integer,
@@ -13,7 +8,7 @@ import {
   text,
 } from "drizzle-orm/sqlite-core";
 import { users } from "./auth.schema";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
 
@@ -31,6 +26,9 @@ export const workspaces = sqliteTable("workspaces", {
   createdAt: integer("created_at", { mode: "timestamp" })
     .$defaultFn(() => new Date())
     .notNull(),
+  isInviteLinkEnabled: integer("is_invite_link_enabled", {
+    mode: "boolean",
+  }).default(true),
 });
 
 export const memberships = sqliteTable(
@@ -68,6 +66,23 @@ export const userToWorkspaces = relations(memberships, ({ one }) => ({
     references: [workspaces.id],
   }),
 }));
+
+export const invites = sqliteTable(
+  "invites",
+  {
+    token: text("token").unique().notNull(),
+    createdBy: text("created_by").references(() => users.id),
+    emails: text("emails"),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id),
+  },
+  (table) => ({
+    primaryKey: primaryKey({
+      columns: [table.token, table.workspaceId],
+    }),
+  })
+);
 
 export const WorkspaceSchema = createInsertSchema(workspaces, {
   name: z.string().min(1).max(70),
@@ -107,7 +122,7 @@ export const InviteSchema = z.object({
 export const MemberSchema = z.object({
   id: z.string(),
   role: z.enum(["owner", "admin", "member"]),
-  joinInfo: InviteSchema.pick({ method: true }).extend({
+  joinInfo: z.object({
     token: z.string(),
     createdBy: z.string(),
     joinedAt: z.string().datetime(),
@@ -163,9 +178,6 @@ export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
 
 export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 
-export type Invite = z.infer<typeof InviteSchema> & {
-  createdBy: string;
-  token: string;
-};
+export type Invite = typeof invites.$inferSelect;
 export type Invites = Map<string, Invite>;
 export type NewInvite = z.infer<typeof InviteSchema>;

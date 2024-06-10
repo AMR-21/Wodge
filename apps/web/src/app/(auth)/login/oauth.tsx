@@ -4,15 +4,21 @@ import { RiGoogleFill as Google } from "react-icons/ri";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { useSearchParams } from "next/navigation";
+import { env } from "@repo/env";
 
 export function OAuth() {
   const supabase = createClient();
+
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect");
 
   async function onClick(provider: "google" | "github") {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: "http://localhost:3000/auth/callback",
+        redirectTo: `${env.NEXT_PUBLIC_APP_DOMAIN}/auth/callback?next=${redirect || "/"}`,
       },
     });
   }

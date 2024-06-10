@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
   const members = await getUserInfoById(membersIds);
 
-  if (!members) return new Response(null, { status: 404 });
+  if (members === null) return new Response(null, { status: 404 });
 
   return Response.json(members);
 }

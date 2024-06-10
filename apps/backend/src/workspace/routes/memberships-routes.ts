@@ -4,5 +4,5 @@ import WorkspaceParty from "../workspace-party";
 
 export function setupMembershipsRoutes(party: WorkspaceParty) {
   party.app.post("/create", createWorkspace.bind(null, party));
-  party.app.post("/join", joinWorkspace.bind(null, party));
+  party.app.post("/join/:token", joinWorkspace.bind(null, party));
 }

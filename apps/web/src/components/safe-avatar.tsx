@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, memo, useEffect, useMemo, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { cn } from "@/lib/utils";

@@ -3,7 +3,6 @@ import { JoinWorkspaceSchema } from "@repo/data";
 
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -16,8 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function JoinWorkspaceForm() {
   const form = useForm<z.infer<typeof JoinWorkspaceSchema>>({
@@ -31,35 +29,8 @@ export function JoinWorkspaceForm() {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (url: string) => {
-      const res = await fetch(url, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!res.ok) throw new Error("Failed to join workspace");
-
-      const data = (await res.json()) as {
-        workspaceId: string;
-        workspaceSlug: string;
-      };
-      return data?.workspaceSlug;
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["user-workspaces"],
-      });
-
-      router.push(`/${data}`);
-    },
-    onError: (e) => {
-      toast.error(e.message);
-    },
-  });
-
   async function onSubmit(data: z.infer<typeof JoinWorkspaceSchema>) {
-    mutate(data.url);
+    router.push(data.url);
   }
 
   return (
@@ -91,7 +62,7 @@ export function JoinWorkspaceForm() {
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" className="basis-2/3" isPending={isPending}>
+          <Button type="submit" className="basis-2/3">
             Join Workspace
           </Button>
         </div>
