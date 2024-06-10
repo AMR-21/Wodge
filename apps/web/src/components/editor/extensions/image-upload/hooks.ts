@@ -1,4 +1,6 @@
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { API } from "@/lib/utils";
+import { useParams } from "next/navigation";
 import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -9,11 +11,21 @@ export const useUploader = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const { workspaceId } = useCurrentWorkspace();
+
+  const { teamId, channelId } = useParams<{
+    teamId: string;
+    channelId: string;
+  }>();
+
   const uploadFile = useCallback(
     async (file?: File) => {
       setLoading(true);
+      if (!file || !workspaceId) return setLoading(false);
       try {
-        const url = await API.uploadImage();
+        const url = await API.uploadImage(file, workspaceId, teamId, channelId);
+
+        if (!url) return setLoading(false);
 
         onUpload(url);
       } catch (errPayload: any) {

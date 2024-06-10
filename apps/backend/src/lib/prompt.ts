@@ -8,12 +8,12 @@ const promptTemplates = [
   {
     case: "fix",
     prompt_header:
-      "Leverage cutting-edge grammatical analysis algorithms to meticulously identify and rectify any syntactical, grammatical, or structural anomalies present in the provided text, ensuring utmost linguistic coherence and precision.",
+      "Leverage cutting-edge grammatical analysis algorithms to meticulously identify and rectify any syntactical, grammatical, or structural anomalies present in the following text, ensuring utmost linguistic coherence and precision, The text: ",
   },
   {
     case: "shorter",
     prompt_header:
-      "Employ sophisticated content condensation methodologies utilizing advanced summarization techniques to distill the essence of the provided text, eliminating redundancies and extraneous details while retaining salient information and preserving narrative integrity.",
+      "Employ sophisticated content condensation methodologies utilizing advanced summarization techniques to distill the essence of the following text, eliminating redundancies and extraneous details while retaining salient information and preserving narrative integrity, The text: ",
   },
   {
     case: "longer",
@@ -38,7 +38,7 @@ const promptTemplates = [
   {
     case: "translate",
     prompt_header:
-      "Leverage state-of-the-art multilingual translation algorithms to proficiently transmute the linguistic representation of the provided text into a specified target language, ensuring semantic fidelity, cultural sensitivity, and linguistic nuance preservation.",
+      "Leverage state-of-the-art multilingual translation algorithms to proficiently transmute the linguistic representation of the provided text into a specified target language, ensuring semantic fidelity, cultural sensitivity, and linguistic nuance preservation. The text: ",
   },
   {
     case: "complete",
@@ -56,30 +56,19 @@ const prepend =
   "do the mentioned giving the instruction above using the data below and no yapping just give the answer directly don't tell me anything but the answer and don't introduce the answer to me the answer and just the answer if no instruction is giving just answer the question directly without end indication: ";
 
 export async function prompt(party: PageParty, c: Context) {
-  // console.log("prompt");
-  // return new Response("ok", {
-  //   headers: {
-  //     ...CORS,
-  //     "Content-Type": "text/event-stream",
-  //   },
-  // });
-
-  // let { prompt: data, action, toneOrLang } = await c.req.json<Prompt>();
-
   const data = atob(c.req.param("prompt"));
   const action = c.req.param("action") && atob(c.req.param("action"));
 
-  // console.log("prompt", data, action);
   // This is a normal prompt to run, no action specified
   if (!action) {
-    // Pick the suitable AI model
-    // ctrl+space to see the list of available models or run npx partykit ai models or visit https://docs.partykit.io/reference/partykit-ai/
     const prompt = prepend + data;
+
     const response = await party.ai.run(
       //@ts-ignore
       "@cf/mistral/mistral-7b-instruct-v0.1",
       {
         prompt: `"${prompt}"`,
+
         max_tokens: 2048,
         stream: true,
       }
@@ -94,21 +83,30 @@ export async function prompt(party: PageParty, c: Context) {
   }
 
   if (action) {
-    // run a prompt based on action
-    let response;
-    let prompt_header;
-    let data; // get data from context
-
-    // Find the corresponding prompt header from the prompt_templates.json file
     const template = promptTemplates.find(
       (item: { case: string }) => item.case === action
     );
+
+    const lang = c.req.param("lang") && atob(c.req.param("lang"));
+
     if (template) {
-      const prompt = prepend + "" + data;
+      let prompt = template.prompt_header + data;
+
+      if (lang) {
+        prompt = prompt + " The target language: " + lang;
+      }
+
       const { response } = await party.ai.run(
         "@cf/mistral/mistral-7b-instruct-v0.1",
         {
-          prompt: `"${prompt}"`,
+          // prompt: `"${prompt}"`,
+          messages: [
+            {
+              role: "system",
+              content: prepend,
+            },
+            { role: "user", content: prompt },
+          ],
           max_tokens: 2048,
         }
       );

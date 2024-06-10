@@ -90,7 +90,7 @@ export const AIDropdown = ({
               Make longer
             </DropdownButton>
           </Dropdown.Item>
-          <Dropdown.Sub>
+          {/* <Dropdown.Sub>
             <Dropdown.SubTrigger>
               <DropdownButton>
                 <Icon Icon={Mic} />
@@ -110,7 +110,7 @@ export const AIDropdown = ({
                 ))}
               </Surface>
             </Dropdown.SubContent>
-          </Dropdown.Sub>
+          </Dropdown.Sub> */}
           <Dropdown.Item onClick={onTldr}>
             <DropdownButton>
               <Icon Icon={MoreHorizontal} />

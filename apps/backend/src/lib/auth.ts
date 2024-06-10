@@ -87,7 +87,6 @@ export const authWorkspaceAccess = async (
   req: Party.Request,
   lobby: Party.Lobby
 ) => {
-  // TODO: replace this by the binding within partykit when supported
   // 1. read user session and membership from db in 1 batch
   const cookie = req.headers.get("cookie");
 
@@ -95,8 +94,8 @@ export const authWorkspaceAccess = async (
   if (!cookie) return false;
 
   const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/workspace-access`, {
+    method: "POST",
     headers: {
-      method: "POST",
       Accept: "application/json",
       authorization: lobby.env.SERVICE_KEY as string,
       cookie,

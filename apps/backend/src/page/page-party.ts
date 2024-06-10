@@ -35,8 +35,8 @@ export default class PageParty implements Party.Server, PagePartyInterface {
   }
 
   async onStart() {
-    this.app.post("/prompt", prompt.bind(null, this));
-    this.app.get("/prompt/:prompt/:action?", prompt.bind(null, this));
+    // this.app.post("/prompt", prompt.bind(null, this));
+    this.app.get("/prompt/:prompt/:action?/:lang?", prompt.bind(null, this));
 
     this.app.post("/replicache-pull", pagePull.bind(null, this));
 
@@ -44,18 +44,25 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     startFn(this);
   }
 
-  async onConnect(conn: Party.Connection) {
+  async onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
+    const canEdit =
+      ctx.request.headers.get("x-can-edit") === "true" ||
+      ctx.request.headers.get("x-owner") === "true" ||
+      ctx.request.headers.get("x-admin") === "true" ||
+      ctx.request.headers.get("x-team-moderator") === "true";
+
     return await onConnect(conn, this.room, {
       // ...options
 
+      readOnly: !canEdit,
       persist: {
         mode: "snapshot",
       },
-      callback: {
-        async handler(yDoc) {
-          // console.log("a callback @", new Date().toISOString());
-        },
-      },
+      // callback: {
+      //   async handler(yDoc) {
+      //     // console.log("a callback @", new Date().toISOString());
+      //   },
+      // },
     });
   }
 
@@ -73,7 +80,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     try {
       const user = await getCurrentUser(req, lobby);
 
-      return authorizeChannel(
+      return await authorizeChannel(
         req,
         lobby,
         user.id,
@@ -100,7 +107,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     try {
       const user = await getCurrentUser(req, lobby);
 
-      return authorizeChannel(
+      return await authorizeChannel(
         req,
         lobby,
         user.id,

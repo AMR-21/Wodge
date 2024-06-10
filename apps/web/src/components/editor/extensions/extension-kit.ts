@@ -107,27 +107,27 @@ export const ExtensionKit = ({
   ImageBlock,
   FileHandler.configure({
     allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
-    onDrop: (currentEditor, files, pos) => {
-      files.forEach(async () => {
-        const url = await API.uploadImage();
+    // onDrop: (currentEditor, files, pos) => {
+    //   files.forEach(async () => {
+    //     const url = await API.uploadImage();
 
-        currentEditor.chain().setImageBlockAt({ pos, src: url }).focus().run();
-      });
-    },
-    onPaste: (currentEditor, files) => {
-      files.forEach(async () => {
-        const url = await API.uploadImage();
+    //     currentEditor.chain().setImageBlockAt({ pos, src: url }).focus().run();
+    //   });
+    // },
+    // onPaste: (currentEditor, files) => {
+    //   files.forEach(async () => {
+    //     const url = await API.uploadImage();
 
-        return currentEditor
-          .chain()
-          .setImageBlockAt({
-            pos: currentEditor.state.selection.anchor,
-            src: url,
-          })
-          .focus()
-          .run();
-      });
-    },
+    //     return currentEditor
+    //       .chain()
+    //       .setImageBlockAt({
+    //         pos: currentEditor.state.selection.anchor,
+    //         src: url,
+    //       })
+    //       .focus()
+    //       .run();
+    //   });
+    // },
   }),
   Emoji.configure({
     enableEmoticons: true,

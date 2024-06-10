@@ -32,30 +32,11 @@ export const AiPrompts = Extension.create({
 
           const { from, to } = view.state.selection;
           const prompt = state.doc.textBetween(from, to, " ");
-          const eventSource = new EventSource(
-            `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt`,
-          );
 
-          // Add event listeners to handle different types of events
-          eventSource.addEventListener("message", function (event) {
-            // Handle message event
-            console.log("Message received:", event.data);
-          });
-
-          eventSource.addEventListener("open", function (event) {
-            // Handle open event (connection is established)
-            console.log("Connection opened");
-          });
-
-          eventSource.addEventListener("error", function (event) {
-            // Handle error event
-            console.error("Error occurred:", event);
-          });
-
+          console.log(toneOrLang);
           const res = await fetch(
-            `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt`,
+            `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt/${btoa(prompt)}/${btoa(action!)}${toneOrLang ? "/" + btoa(toneOrLang) : ""} `,
             {
-              method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 "x-workspace-id": workspaceId,
@@ -63,9 +44,9 @@ export const AiPrompts = Extension.create({
                 "x-folder-id": folderId,
               },
               credentials: "include",
-              body: JSON.stringify({ action, toneOrLang, prompt } as Prompt & {
-                toneOrLang?: string;
-              }),
+              // body: JSON.stringify({ action, toneOrLang, prompt } as Prompt & {
+              //   toneOrLang?: string;
+              // }),
             },
           );
 
@@ -78,7 +59,10 @@ export const AiPrompts = Extension.create({
           return editor
             .chain()
             .focus()
-            .insertContentAt({ from, to }, response || "")
+            .insertContentAt(
+              { from, to },
+              response.trim().replace(/"/g, "") || "",
+            )
             .run();
         },
     };

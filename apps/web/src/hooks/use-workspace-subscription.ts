@@ -54,7 +54,7 @@ export function useWorkspaceSubscription() {
     if (!workspace && !isNotConcerned) {
       timerId = setTimeout(() => {
         router.push("/");
-      }, 1000);
+      }, 3000);
     }
     // return;
 
