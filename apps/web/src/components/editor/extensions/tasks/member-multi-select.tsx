@@ -28,6 +28,7 @@ interface MemberMultiSelectProps {
   bigger?: boolean;
   isEditing?: boolean;
   onBlur?: () => void;
+  icon?: boolean;
 }
 
 export function MemberMultiSelect({
@@ -36,6 +37,7 @@ export function MemberMultiSelect({
   bigger,
   isEditing,
   onBlur,
+  icon = true,
 }: MemberMultiSelectProps) {
   const [value, setValue] = useState<string[]>(preset || []);
   const [open, setOpen] = useState(false);
@@ -88,7 +90,9 @@ export function MemberMultiSelect({
   }
 
   if (!isEditing)
-    return <Trigger members={members} value={value} bigger={bigger} />;
+    return (
+      <Trigger icon={icon} members={members} value={value} bigger={bigger} />
+    );
 
   return (
     <Popover
@@ -100,7 +104,13 @@ export function MemberMultiSelect({
     >
       <PopoverTrigger asChild>
         <div>
-          <Trigger members={members} value={value} bigger={bigger} isEditing />
+          <Trigger
+            icon={icon}
+            members={members}
+            value={value}
+            bigger={bigger}
+            isEditing
+          />
         </div>
       </PopoverTrigger>
       <PopoverContent className="bg-transparent p-0">
@@ -202,13 +212,17 @@ const Trigger = forwardRef<
     members: Member[];
     bigger?: boolean;
     isEditing?: boolean;
+    icon?: boolean;
   }
->(({ members, value, bigger, isEditing = false }, ref) => {
+>(({ members, value, bigger, isEditing = false, icon }, ref) => {
   return (
     <div
       ref={ref}
       className={cn(
-        buttonVariants({ variant: "ghost", size: bigger ? "sm" : "fit" }),
+        buttonVariants({
+          variant: icon ? "ghost" : "outline",
+          size: bigger || !icon ? "sm" : "fit",
+        }),
         "max-h-7 w-full justify-start gap-2 overflow-hidden text-sm aria-disabled:opacity-85",
         !isEditing && "bg-transparent hover:bg-transparent",
         bigger && "max-h-20 text-sm",
@@ -223,9 +237,11 @@ const Trigger = forwardRef<
       )}
       {value.length === 0 && (
         <>
-          {!bigger && <Users2 className="text h-4 w-4" />}
+          {!bigger && (
+            <Users2 className={cn("text h-4 w-4", !icon && "hidden")} />
+          )}
           <p className="text-muted-foreground">
-            {bigger ? "Empty" : "Add assignees"}
+            {bigger ? "Empty" : icon ? "Add assignees" : "Assignees"}
           </p>
         </>
       )}

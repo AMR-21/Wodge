@@ -150,7 +150,9 @@ function SortableTeamspace({
         </div>
       </CollapsibleTrigger>
 
-      <CollapsibleContent className="py-1 pl-4">
+      <CollapsibleContent
+        className={cn("py-1 pl-4", type === "resources" && "hidden")}
+      >
         <div className="border-l border-border p-0 pl-2.5">
           {/* <Separator orientation="vertical" className="bg-yellow-300" /> */}
 

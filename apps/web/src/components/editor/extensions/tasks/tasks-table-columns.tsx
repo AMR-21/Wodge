@@ -326,8 +326,6 @@ export function tasksColumns({
     {
       id: "actions",
       cell: ({ row, table }) => {
-        const member = row.original;
-
         return (
           <DataTableActions
             row={row}

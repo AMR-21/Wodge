@@ -15,11 +15,38 @@ interface TableViewProps {
   rep?: Replicache<typeof pageMutators>;
   boardId: string;
   editor?: Editor | null;
+  priority?: string;
+  title?: string;
+  assignees?: string[];
 }
-export function TableView({ board, rep, boardId, editor }: TableViewProps) {
+export function TableView({
+  board,
+  rep,
+  boardId,
+  editor,
+  priority,
+  title,
+  assignees,
+}: TableViewProps) {
+  const tasks = useMemo(() => {
+    let tasks = board?.tasks || [];
+    if (priority) tasks = tasks.filter((t) => t.priority === priority);
+
+    if (title)
+      tasks = tasks.filter((t) =>
+        t.title?.toLowerCase().includes(title.toLowerCase()),
+      );
+
+    if (assignees?.length)
+      tasks = tasks.filter((t) =>
+        t.assignee?.some((a) => assignees.includes(a)),
+      );
+
+    return tasks;
+  }, [board, title, priority, assignees]);
 
   const table = useTable({
-    data: board?.tasks || [],
+    data: tasks,
     columns: tasksColumns({
       onDeleteTask: async (t) => {
         try {

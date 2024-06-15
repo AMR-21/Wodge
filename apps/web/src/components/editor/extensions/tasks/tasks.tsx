@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 
 import { Editor, NodeViewWrapper, NodeViewWrapperProps } from "@tiptap/react";
 import { useCurrentPageRep } from "@/hooks/use-page-rep";
@@ -18,6 +18,16 @@ import { nanoid } from "nanoid";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { TableView } from "./table-view";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { MemberMultiSelect } from "./member-multi-select";
 
 export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const rep = useCurrentPageRep();
@@ -25,6 +35,10 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const { snapshot: boards } = useSubscribe(rep, (tx: ReadTransaction) =>
     tx.get<Board[]>("boards"),
   );
+
+  const [priority, setPriority] = useState("");
+  const [title, setTitle] = useState("");
+  const [assignees, setAssignees] = useState<string[]>([]);
 
   const [boardViewAtom, setBoardViewAtom] = useAtom(boardsViews);
 
@@ -55,7 +69,47 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
             Table
           </ToggleGroupItem>
         </ToggleGroup>
-        <span className="ml-auto">filters</span>
+        <Separator orientation="vertical" className="h-full" />
+
+        <p className="text-muted-foreground">|</p>
+        <p className="text-sm text-muted-foreground">Filters</p>
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+        />
+        <Select value={priority} onValueChange={setPriority}>
+          <SelectTrigger>
+            <SelectValue placeholder="Priority" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="low">Low</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <MemberMultiSelect
+          preset={assignees}
+          isEditing
+          onChange={setAssignees}
+          icon={false}
+        />
+
+        <Button
+          disabled={!title && !priority && !assignees.length}
+          className=""
+          onClick={() => {
+            setTitle("");
+            setPriority("");
+            setAssignees([]);
+          }}
+          variant="outline"
+          size="sm"
+        >
+          Clear
+        </Button>
       </div>
 
       {boardView === "kanban" && (
@@ -64,6 +118,9 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           editor={editor}
           boardId={boardId}
           rep={rep}
+          priority={priority}
+          title={title}
+          assignees={assignees}
         />
       )}
       {boardView === "table" && (
@@ -72,6 +129,9 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           rep={rep}
           boardId={boardId}
           editor={editor}
+          priority={priority}
+          title={title}
+          assignees={assignees}
         />
       )}
     </NodeViewWrapper>

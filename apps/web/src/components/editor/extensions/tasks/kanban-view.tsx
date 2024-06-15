@@ -29,11 +29,17 @@ export function KanbanView({
   editor,
   boardId,
   rep,
+  priority,
+  title,
+  assignees,
 }: {
   board: Board;
   editor: Editor;
   boardId: string;
   rep?: Replicache<typeof pageMutators>;
+  priority?: string;
+  title?: string;
+  assignees?: string[];
 }) {
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -53,6 +59,23 @@ export function KanbanView({
     () => board?.columns.map((col) => col.id) || [],
     [board?.columns],
   );
+
+  const tasks = useMemo(() => {
+    let tasks = board?.tasks || [];
+    if (priority) tasks = tasks.filter((t) => t.priority === priority);
+
+    if (title)
+      tasks = tasks.filter((t) =>
+        t.title?.toLowerCase().includes(title.toLowerCase()),
+      );
+
+    if (assignees?.length)
+      tasks = tasks.filter((t) =>
+        t.assignee?.some((a) => assignees.includes(a)),
+      );
+
+    return tasks;
+  }, [board, title, priority, assignees]);
 
   return (
     <div className="flex w-full items-center overflow-x-auto overflow-y-auto pb-4">
@@ -79,9 +102,7 @@ export function KanbanView({
                   column={col}
                   boardId={boardId}
                   rep={rep}
-                  tasks={board?.tasks?.filter(
-                    (task) => task.columnId === col.id,
-                  )}
+                  tasks={tasks.filter((task) => task.columnId === col.id)}
                 />
               ))}
             </SortableContext>
