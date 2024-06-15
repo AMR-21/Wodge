@@ -32,7 +32,7 @@ export function File({
         "group items-center justify-start gap-2 rounded-none py-4 ",
       )}
     >
-      <Checkbox className="mr-1.5" />
+      {/* <Checkbox className="mr-1.5" /> */}
       <FileIcon className="h-4 w-4" />
       <span>{name}</span>
       <SidebarItemBtn

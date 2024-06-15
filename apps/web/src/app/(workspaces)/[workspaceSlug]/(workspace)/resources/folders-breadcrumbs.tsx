@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Home } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Fragment } from "react";
 import { SidebarItemBtn } from "../_components/sidebar-item-btn";
 
@@ -19,15 +19,18 @@ export function FoldersBreadcrumbs() {
     path: string[];
   }>();
 
+  const router = useRouter();
+
   return (
     <Breadcrumb>
       <BreadcrumbList className="gap-0 sm:gap-0">
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href={`/${workspaceSlug}/resources/${teamId}`}>
-              <SidebarItemBtn Icon={Home} />
-            </Link>
-          </BreadcrumbLink>
+          <SidebarItemBtn
+            Icon={Home}
+            onClick={() => {
+              router.push(`/${workspaceSlug}/resources/${teamId}/`);
+            }}
+          />
         </BreadcrumbItem>
 
         {path?.length > 0 && <BreadcrumbSeparator className="pr-1" />}

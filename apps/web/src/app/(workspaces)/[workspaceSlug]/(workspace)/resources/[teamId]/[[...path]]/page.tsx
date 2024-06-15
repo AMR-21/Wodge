@@ -40,7 +40,7 @@ function TeamResourcePage({
   // }
 
   return (
-    <div className="flex w-full flex-col px-2 py-3">
+    <div className="flex w-full flex-col px-4 py-3">
       <h2 className="text-xl">{activePath?.team.name} Resources</h2>
       <div className="flex h-8 items-center py-1.5">
         <FoldersBreadcrumbs />
