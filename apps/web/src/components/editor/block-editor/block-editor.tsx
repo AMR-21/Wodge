@@ -1,7 +1,7 @@
 "use client";
 
 import { EditorContent } from "@tiptap/react";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
 import { TiptapProps } from "./types";
 import { UserType } from "@repo/data";
 import { useBlockEditor } from "@/hooks/use-block-editor";
@@ -14,8 +14,7 @@ import ColumnsMenu from "../extensions/multi-column/columns-menu";
 import TableRowMenu from "../extensions/table/table-row";
 import TableColumnMenu from "../extensions/table/table-column";
 import ImageBlockMenu from "../extensions/image-block/image-block-menu";
-import { EditorInfo } from "./editor-info";
-import { EditorCounts } from "./editor-counts";
+
 import { useSetAtom } from "jotai";
 import { editorUsersAtoms } from "./atoms";
 
@@ -71,16 +70,8 @@ export const BlockEditor = ({
         <TableColumnMenu editor={editor} appendTo={menuContainerRef} />
         <ImageBlockMenu editor={editor} appendTo={menuContainerRef} />
       </div>
-
-      {/* <div className="flex  justify-between p-3">
-        <EditorInfo users={displayedUsers} />
-        <EditorCounts
-          characters={characterCount.characters()}
-          words={characterCount.words()}
-        />
-      </div> */}
     </div>
   );
 };
 
-export default BlockEditor;
+export default memo(BlockEditor);

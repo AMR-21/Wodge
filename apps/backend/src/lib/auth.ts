@@ -93,10 +93,10 @@ export const authWorkspaceAccess = async (
   const workspaceId = lobby.id;
   if (!cookie) return false;
 
-  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/api/workspace-access`, {
-    method: "POST",
+  console.log("called");
+
+  const res = await fetch(`${lobby.env.APP_DOMAIN}/api/workspace-access`, {
     headers: {
-      Accept: "application/json",
       authorization: lobby.env.SERVICE_KEY as string,
       cookie,
       workspaceId,

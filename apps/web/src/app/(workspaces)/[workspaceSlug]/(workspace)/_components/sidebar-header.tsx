@@ -27,7 +27,7 @@ export function SidebarHeader() {
 
       <div className=" ml-auto flex shrink-0  items-center gap-1">
         <SidebarItemBtn Icon={PanelLeftClose} onClick={closeSidebar} />
-        <SidebarItemBtn Icon={ArrowDownWideNarrow} />
+        {/* <SidebarItemBtn Icon={ArrowDownWideNarrow} /> */}
       </div>
     </div>
   );

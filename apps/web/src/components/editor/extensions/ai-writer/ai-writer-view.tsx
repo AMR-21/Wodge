@@ -3,7 +3,7 @@ import {
   NodeViewWrapper,
   NodeViewWrapperProps,
 } from "@tiptap/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { env } from "@repo/env";
 import { useParams } from "next/navigation";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/editor/ui/Textarea";
 import { Icon } from "@/components/editor/ui/icon";
 import { Check, Repeat, Sparkles, Trash2 } from "lucide-react";
 import { tones } from "@/lib/utils";
+import { useOnClickOutside } from "usehooks-ts";
 
 export interface DataProps {
   text: string;
@@ -48,20 +49,12 @@ export const AiWriterView = ({
     addHeading: false,
     language: undefined,
   });
-  const currentTone = tones.find((t) => t.value === data.tone);
   const [previewText, setPreviewText] = useState<string | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const textareaId = useMemo(() => nanoid(), []);
 
   const generateText = useCallback(async () => {
-    const {
-      text: dataText,
-      tone,
-      textLength,
-      textUnit,
-      addHeading,
-      language,
-    } = data;
+    const { text: dataText } = data;
 
     if (!data.text) {
       toast.error("Please enter a description");
@@ -134,19 +127,15 @@ export const AiWriterView = ({
     [],
   );
 
-  const onUndoClick = useCallback(() => {
-    setData((prevData) => ({ ...prevData, tone: undefined }));
-  }, []);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const createItemClickHandler = useCallback((tone: AiToneOption) => {
-    return () => {
-      setData((prevData) => ({ ...prevData, tone: tone.value }));
-    };
-  }, []);
+  useOnClickOutside(ref, () => {
+    if (!isFetching && !previewText) discard();
+  });
 
   return (
     <NodeViewWrapper data-drag-handle>
-      <Panel noShadow className="w-full ">
+      <Panel noShadow className="w-full " ref={ref}>
         <div className="flex flex-col bg-dim p-1">
           {previewText && (
             <>
@@ -171,41 +160,7 @@ export const AiWriterView = ({
             className="mb-2"
           />
           <div className="flex flex-row items-center justify-between gap-1">
-            <div className="flex w-auto justify-between gap-1">
-              {/* <Dropdown.Root>
-                <Dropdown.Trigger asChild>
-                  <Button variant="tertiary">
-                    <Icon Icon={Mic} />
-                    {currentTone?.label || 'Change tone'}
-                    <Icon Icon={ChevronDown} />
-                  </Button>
-                </Dropdown.Trigger>
-                <Dropdown.Portal>
-                  <Dropdown.Content side="bottom" align="start" asChild>
-                    <Surface className="p-2 min-w-[12rem] ">
-                      {!!data.tone && (
-                        <>
-                          <Dropdown.Item asChild>
-                            <DropdownButton isActive={data.tone === undefined} onClick={onUndoClick}>
-                              <Icon Icon={Undo2} />
-                              Reset
-                            </DropdownButton>
-                          </Dropdown.Item>
-                          <Toolbar.Divider horizontal />
-                        </>
-                      )}
-                      {tones.map(tone => (
-                        <Dropdown.Item asChild key={tone.value}>
-                          <DropdownButton isActive={tone.value === data.tone} onClick={createItemClickHandler(tone)}>
-                            {tone.label}
-                          </DropdownButton>
-                        </Dropdown.Item>
-                      ))}
-                    </Surface>
-                  </Dropdown.Content>
-                </Dropdown.Portal>
-              </Dropdown.Root> */}
-            </div>
+            <div className="flex w-auto justify-between gap-1"></div>
             <div className="flex w-auto justify-between gap-1">
               {true && (
                 <Button
@@ -232,7 +187,11 @@ export const AiWriterView = ({
               <Button
                 size="sm"
                 variant="default"
-                onClick={generateText}
+                onClick={() => {
+                  if (previewText) setPreviewText(undefined);
+                  generateText();
+                }}
+                disabled={isFetching || data.text === ""}
                 style={{ whiteSpace: "nowrap" }}
                 isPending={isFetching}
                 className="w-36"

@@ -156,6 +156,7 @@
     "y-partykit": "^0.0.28",
     "y-prosemirror": "^1.2.3",
     "y-webrtc": "^10.3.0",
+    "y-websocket": "^2.0.3",
     "yjs": "^13.6.14",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"

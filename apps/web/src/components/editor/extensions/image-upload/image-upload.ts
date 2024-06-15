@@ -1,5 +1,6 @@
 import { Node, ReactNodeViewRenderer } from "@tiptap/react";
 import ImageUploadComp from "./image-upload-comp";
+import { memo } from "react";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -46,7 +47,7 @@ export const ImageUpload = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageUploadComp);
+    return ReactNodeViewRenderer(memo(ImageUploadComp));
   },
 });
 

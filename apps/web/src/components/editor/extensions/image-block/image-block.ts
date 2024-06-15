@@ -3,6 +3,7 @@ import { mergeAttributes, Range } from "@tiptap/core";
 
 import { ImageBlockView } from "./image-block-view";
 import Image from "../image/image";
+import { memo } from "react";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -110,7 +111,7 @@ export const ImageBlock = Image.extend({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageBlockView);
+    return ReactNodeViewRenderer(memo(ImageBlockView));
   },
 });
 

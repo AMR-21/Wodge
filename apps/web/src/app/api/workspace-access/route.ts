@@ -4,7 +4,8 @@ import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
 import { and, eq } from "drizzle-orm";
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
+  console.log("called");
   const db = createDb();
   const supabase = createClient();
   const serviceKey = req.headers.get("authorization");
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const workspaceId = req.headers.get("workspace-id");
+  const workspaceId = req.headers.get("workspaceId");
 
   if (!workspaceId) return new Response("Unauthorized", { status: 401 });
 

@@ -29,6 +29,7 @@ export const workspaces = sqliteTable("workspaces", {
   isInviteLinkEnabled: integer("is_invite_link_enabled", {
     mode: "boolean",
   }).default(true),
+  isPremium: integer("is_premium", { mode: "boolean" }).default(false),
 });
 
 export const memberships = sqliteTable(
