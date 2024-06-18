@@ -2,7 +2,7 @@
   "cases": [
     {
       "case": "fix",
-      "prompt_header": "Leverage cutting-edge grammatical analysis algorithms to meticulously identify and rectify any syntactical, grammatical, or structural anomalies present in the provided text, ensuring utmost linguistic coherence and precision."
+      "prompt_header": "correct the words the user says and just give out the corrected words and don't even say anything else."
     },
     {
       "case": "shorter",
