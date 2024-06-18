@@ -1,6 +1,11 @@
 import type * as Party from "partykit/server";
 import RoomParty from "./room-party";
-import { AccessToken } from "livekit-server-sdk";
+import {
+  AccessToken,
+  CreateOptions,
+  Room,
+  RoomServiceClient,
+} from "livekit-server-sdk";
 import { UserType } from "@repo/data";
 import { json } from "../lib/http-utils";
 import { Context } from "hono";

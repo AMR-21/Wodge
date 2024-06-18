@@ -30,6 +30,7 @@ import { Toolbar } from "../ui/toolbar";
 import { Icon } from "../ui/icon";
 import { Surface } from "../ui/surface";
 import { ColorPicker } from "../color-picker";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 // We memorize the button so each button is not rerendered
 // on every editor state change
@@ -48,6 +49,8 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
   const states = useTextMenuStates(editor);
   const blockOptions = useTextMenuContentTypes(editor);
 
+  const { workspace } = useCurrentWorkspace();
+
   return (
     <BubbleMenu
       tippyOptions={{
@@ -60,18 +63,22 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
       className="z-50"
     >
       <Toolbar.Wrapper>
-        <AIDropdown
-          onCompleteSentence={commands.onCompleteSentence}
-          onEmojify={commands.onEmojify}
-          onFixSpelling={commands.onFixSpelling}
-          onMakeLonger={commands.onMakeLonger}
-          onMakeShorter={commands.onMakeShorter}
-          onSimplify={commands.onSimplify}
-          onTldr={commands.onTldr}
-          onTone={commands.onTone}
-          onTranslate={commands.onTranslate}
-        />
-        <Toolbar.Divider />
+        {workspace?.isPremium && (
+          <>
+            <AIDropdown
+              onCompleteSentence={commands.onCompleteSentence}
+              onEmojify={commands.onEmojify}
+              onFixSpelling={commands.onFixSpelling}
+              onMakeLonger={commands.onMakeLonger}
+              onMakeShorter={commands.onMakeShorter}
+              onSimplify={commands.onSimplify}
+              onTldr={commands.onTldr}
+              onTone={commands.onTone}
+              onTranslate={commands.onTranslate}
+            />
+            <Toolbar.Divider />
+          </>
+        )}
         <MemoContentTypePicker options={blockOptions} />
         <MemoFontFamilyPicker
           onChange={commands.onSetFont}
