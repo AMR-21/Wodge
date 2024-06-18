@@ -23,6 +23,8 @@ import { Plus } from "lucide-react";
 import TaskCard from "./task-card";
 import { toast } from "sonner";
 import { useCurrentPageRep } from "@/hooks/use-page-rep";
+import { DateRange } from "react-day-picker";
+import { isAfter, isBefore, isEqual } from "date-fns";
 
 export function KanbanView({
   board,
@@ -32,6 +34,7 @@ export function KanbanView({
   priority,
   title,
   assignees,
+  due,
 }: {
   board: Board;
   editor: Editor;
@@ -40,6 +43,7 @@ export function KanbanView({
   priority?: string;
   title?: string;
   assignees?: string[];
+  due?: DateRange;
 }) {
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -74,8 +78,38 @@ export function KanbanView({
         t.assignee?.some((a) => assignees.includes(a)),
       );
 
+    if (due) {
+      tasks = tasks.filter((t) => {
+        if (!t.due) return false;
+
+        // Given a range
+        if (due.from && due.to && t.due.from && t.due.to) {
+          return (
+            (isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from)) &&
+            (isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to))
+          );
+        }
+
+        if (due.from && t.due.from && !due.to && !t.due.to)
+          return isEqual(due.from, t.due.from);
+
+        if (due.to && t.due.to && !due.from && !t.due.from)
+          return isEqual(due.to, t.due.to);
+
+        if (due.from && t.due.from) {
+          return isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from);
+        }
+
+        if (due.to && t.due.to) {
+          return isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to);
+        }
+
+        return false;
+      });
+    }
+
     return tasks;
-  }, [board, title, priority, assignees]);
+  }, [board, title, priority, assignees, due]);
 
   return (
     <div className="flex w-full items-center overflow-x-auto overflow-y-auto pb-4">

@@ -226,6 +226,7 @@ const Trigger = forwardRef<
         "max-h-7 w-full justify-start gap-2 overflow-hidden text-sm aria-disabled:opacity-85",
         !isEditing && "bg-transparent hover:bg-transparent",
         bigger && "max-h-20 text-sm",
+        !icon && "max-h-full",
       )}
       aria-disabled={!isEditing}
     >

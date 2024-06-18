@@ -15,7 +15,7 @@ import { tasksColumns } from "./tasks-table-columns";
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
-import { Plus } from "lucide-react";
+import { KanbanIcon, ListFilter, Plus, Table, X } from "lucide-react";
 import { toast } from "sonner";
 import { TableView } from "./table-view";
 import {
@@ -28,6 +28,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { MemberMultiSelect } from "./member-multi-select";
+import { DateTimePicker } from "./date-time-picker";
+import { DateRange } from "react-day-picker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Toggle } from "@/components/ui/toggle";
 
 export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const rep = useCurrentPageRep();
@@ -39,6 +48,9 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
   const [priority, setPriority] = useState("");
   const [title, setTitle] = useState("");
   const [assignees, setAssignees] = useState<string[]>([]);
+  const [due, setDue] = useState<DateRange>();
+  const [includeTime, setIncludeTime] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [boardViewAtom, setBoardViewAtom] = useAtom(boardsViews);
 
@@ -50,7 +62,7 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
 
   return (
     <NodeViewWrapper className="select-none">
-      <div className="flex w-full items-center gap-2 pb-4">
+      <div className="flex w-full items-center gap-2 pb-2">
         <ToggleGroup
           defaultValue={boardView || "kanban"}
           value={boardView || "kanban"}
@@ -62,22 +74,57 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           }
           type="single"
         >
-          <ToggleGroupItem variant="outline" value="kanban">
-            Kanban
+          <ToggleGroupItem variant="outline" size="sm" value="kanban">
+            <KanbanIcon className="size-4" />
           </ToggleGroupItem>
-          <ToggleGroupItem value="table" variant="outline">
-            Table
+          <ToggleGroupItem value="table" size="sm" variant="outline">
+            <Table className="size-4" />
           </ToggleGroupItem>
         </ToggleGroup>
-        <Separator orientation="vertical" className="h-full" />
 
-        <p className="text-muted-foreground">|</p>
-        <p className="text-sm text-muted-foreground">Filters</p>
+        <Popover>
+          <PopoverTrigger asChild></PopoverTrigger>
+
+          <PopoverContent></PopoverContent>
+        </Popover>
+
+        <Toggle
+          size="sm"
+          variant="outline"
+          pressed={isFilterOpen}
+          onPressedChange={setIsFilterOpen}
+        >
+          <ListFilter
+            className={cn(
+              "size-4",
+              (title || priority || assignees.length || due) &&
+                "text-blue-500 dark:text-blue-600",
+            )}
+          />
+        </Toggle>
+      </div>
+
+      <div
+        className={cn(
+          "invisible flex h-0 items-center gap-2",
+          isFilterOpen && "visible h-[calc(100%)] pb-2 pt-1",
+        )}
+      >
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
         />
+
+        <DateTimePicker
+          isFilter
+          isEditing
+          date={due}
+          onSetDate={setDue}
+          includeTime={includeTime}
+          setIncludeTime={setIncludeTime}
+        />
+
         <Select value={priority} onValueChange={setPriority}>
           <SelectTrigger>
             <SelectValue placeholder="Priority" />
@@ -98,17 +145,18 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
         />
 
         <Button
-          disabled={!title && !priority && !assignees.length}
-          className=""
+          disabled={!title && !priority && !assignees.length && !due}
+          className="px-1.5"
           onClick={() => {
             setTitle("");
             setPriority("");
             setAssignees([]);
+            setDue(undefined);
           }}
           variant="outline"
           size="sm"
         >
-          Clear
+          <X className="size-4" />
         </Button>
       </div>
 
@@ -121,6 +169,7 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           priority={priority}
           title={title}
           assignees={assignees}
+          due={due}
         />
       )}
       {boardView === "table" && (
@@ -132,6 +181,7 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           priority={priority}
           title={title}
           assignees={assignees}
+          due={due}
         />
       )}
     </NodeViewWrapper>

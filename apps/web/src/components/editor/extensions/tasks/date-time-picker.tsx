@@ -15,11 +15,6 @@ import { TimePickerDemo } from "@/components/time-picker-demo";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DateRange } from "react-day-picker";
-import { DrObj, Task } from "@repo/data";
-import { Editor } from "@tiptap/react";
-import { atom, useAtom } from "jotai";
-import { openDatePicker } from "./atom";
-import { on } from "events";
 export function DateTimePicker({
   bigger,
   date,
@@ -28,6 +23,7 @@ export function DateTimePicker({
   setIncludeTime,
   isEditing,
   onBlur,
+  isFilter = false,
 }: {
   bigger?: boolean;
   date?: DateRange;
@@ -35,6 +31,7 @@ export function DateTimePicker({
   includeTime?: boolean;
   setIncludeTime?: (c: boolean) => void;
   isEditing?: boolean;
+  isFilter?: boolean;
   onBlur?: () => void;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -51,12 +48,13 @@ export function DateTimePicker({
     >
       <PopoverTrigger asChild>
         <Button
-          variant={"ghost"}
-          size={bigger ? "sm" : "fit"}
+          variant={isFilter ? "outline" : "ghost"}
+          size={bigger || isFilter ? "sm" : "fit"}
           className={cn(
             "justify-start gap-2 overflow-hidden truncate text-left text-sm font-normal disabled:opacity-85",
             !date && "text-sm text-muted-foreground",
             bigger && "text-sm",
+            isFilter && "w-full",
           )}
           disabled={!isEditing}
         >
@@ -84,12 +82,12 @@ export function DateTimePicker({
             )
           ) : (
             <>
-              {!bigger && (
+              {!bigger && !isFilter && (
                 <CalendarDays
                   className={cn("h-4 w-4 text-foreground", bigger && "h-4 w-4")}
                 />
               )}
-              <span>{bigger ? "Empty" : "Add Due"}</span>
+              <span>{bigger ? "Empty" : isFilter ? "Due" : "Add Due"}</span>
             </>
           )}
         </Button>

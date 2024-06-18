@@ -9,6 +9,9 @@ import { useMemo } from "react";
 import { Replicache } from "replicache";
 import { toast } from "sonner";
 import { tasksColumns } from "./tasks-table-columns";
+import { DateRange } from "react-day-picker";
+import { isEqual } from "lodash";
+import { isAfter, isBefore } from "date-fns";
 
 interface TableViewProps {
   board: Board;
@@ -18,6 +21,7 @@ interface TableViewProps {
   priority?: string;
   title?: string;
   assignees?: string[];
+  due?: DateRange;
 }
 export function TableView({
   board,
@@ -27,6 +31,7 @@ export function TableView({
   priority,
   title,
   assignees,
+  due,
 }: TableViewProps) {
   const tasks = useMemo(() => {
     let tasks = board?.tasks || [];
@@ -42,8 +47,38 @@ export function TableView({
         t.assignee?.some((a) => assignees.includes(a)),
       );
 
+    if (due) {
+      tasks = tasks.filter((t) => {
+        if (!t.due) return false;
+
+        // Given a range
+        if (due.from && due.to && t.due.from && t.due.to) {
+          return (
+            (isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from)) &&
+            (isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to))
+          );
+        }
+
+        if (due.from && t.due.from && !due.to && !t.due.to)
+          return isEqual(due.from, t.due.from);
+
+        if (due.to && t.due.to && !due.from && !t.due.from)
+          return isEqual(due.to, t.due.to);
+
+        if (due.from && t.due.from) {
+          return isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from);
+        }
+
+        if (due.to && t.due.to) {
+          return isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to);
+        }
+
+        return false;
+      });
+    }
+
     return tasks;
-  }, [board, title, priority, assignees]);
+  }, [board, title, priority, assignees, due]);
 
   const table = useTable({
     data: tasks,
