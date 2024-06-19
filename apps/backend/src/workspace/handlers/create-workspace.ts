@@ -49,17 +49,14 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
     id: party.room.id,
   };
 
-  const res = await fetch(
-    `${party.room.env.AUTH_DOMAIN}/api/create-workspace`,
-    {
-      method: "POST",
-      headers: {
-        // Accept: "application/json",
-        authorization: party.room.env.SERVICE_KEY as string,
-      },
-      body: JSON.stringify(newWorkspace),
-    }
-  );
+  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/create-workspace`, {
+    method: "POST",
+    headers: {
+      // Accept: "application/json",
+      authorization: party.room.env.SERVICE_KEY as string,
+    },
+    body: JSON.stringify(newWorkspace),
+  });
 
   if (!res.ok) return badRequest();
 

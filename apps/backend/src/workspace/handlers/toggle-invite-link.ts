@@ -4,7 +4,7 @@ import { badRequest, ok } from "@/lib/http-utils";
 
 export async function toggleInviteLink(party: WorkspaceParty, c: Context) {
   const res = await fetch(
-    `${party.room.env.AUTH_DOMAIN}/api/toggle-invite-link`,
+    `${party.room.env.APP_DOMAIN}/api/toggle-invite-link`,
     {
       method: "PATCH",
       headers: {

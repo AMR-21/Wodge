@@ -23,7 +23,7 @@ export async function uploadAvatar(party: UserParty, c: Context) {
     };
     // Inform the DB
     const res = await fetch(
-      `${party.room.env.AUTH_DOMAIN}/api/update-user-avatar`,
+      `${party.room.env.APP_DOMAIN}/api/update-user-avatar`,
       {
         method: "POST",
         headers: {

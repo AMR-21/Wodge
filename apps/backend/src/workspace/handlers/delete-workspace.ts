@@ -26,7 +26,7 @@ export async function deleteWorkspace(party: WorkspaceParty) {
 
   const responses = await Promise.all([
     ...deletes,
-    fetch(`${party.room.env.AUTH_DOMAIN}/api/delete-workspace`, {
+    fetch(`${party.room.env.APP_DOMAIN}/api/delete-workspace`, {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

@@ -42,7 +42,7 @@ export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
       },
       body: JSON.stringify({ workspaceId: party.room.id }),
     }),
-    fetch(`${party.room.env.AUTH_DOMAIN}/api/remove-member`, {
+    fetch(`${party.room.env.APP_DOMAIN}/api/remove-member`, {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

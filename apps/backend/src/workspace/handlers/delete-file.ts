@@ -29,7 +29,7 @@ export async function deleteFile(
   // delete avatar in db
   if (mode === "avatar") {
     // Inform the DB
-    const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
+    const res = await fetch(`${party.room.env.APP_DOMAIN}/api/update-avatar`, {
       method: "DELETE",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,

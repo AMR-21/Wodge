@@ -3,7 +3,7 @@ import WorkspaceParty from "../workspace-party";
 import { badRequest, ok } from "@/lib/http-utils";
 
 export async function getInvites(party: WorkspaceParty, c: Context) {
-  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/get-invites`, {
+  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/get-invites`, {
     headers: {
       workspaceId: party.room.id,
       authorization: party.room.env.SERVICE_KEY as string,
