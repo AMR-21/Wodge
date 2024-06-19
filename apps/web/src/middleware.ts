@@ -18,6 +18,13 @@ export async function middleware(request: NextRequest) {
     return;
   }
 
+  if (
+    nextUrl.pathname === "/auth/user" ||
+    nextUrl.pathname === "/auth/callback"
+  ) {
+    return;
+  }
+
   const { response, user } = await updateSession(request);
 
   // console.log({ user: user });
@@ -50,12 +57,6 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
 
-  if (
-    nextUrl.pathname === "/auth/user" ||
-    nextUrl.pathname === "/auth/callback"
-  ) {
-    return response;
-  }
   // auth routes ex. login, onboarding
   if (isAuthRoute) {
     if (isLoggedIn) {
