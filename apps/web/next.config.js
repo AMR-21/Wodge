@@ -16,6 +16,7 @@ const nextConfig = withPWA({
   },
   experimental: {
     // typedRoutes: true,
+    cpus: 4,
   },
 });
 
