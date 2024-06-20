@@ -22,11 +22,7 @@ const promptTemplates = [
     prompt_header:
       "Utilize expansive expansion techniques and comprehensive elaboration strategies to augment the depth and breadth of the provided text, incorporating nuanced insights, detailed explanations, and additional contextual information to enrich the content and enhance reader understanding. just give the expanded text and nothing else.",
   },
-  // { faksana
-  //   case: "tone",
-  //   prompt_header:
-  //     "Apply nuanced tone modulation algorithms to harmonize the linguistic tonality of the provided text with a specified style or mood, ensuring seamless integration of stylistic elements and linguistic nuances to evoke desired emotional responses and reader engagement.",
-  // },
+
   {
     case: "tldr",
     prompt_header:
@@ -42,11 +38,7 @@ const promptTemplates = [
     prompt_header:
       "Translate the following text into the target language, ensuring accurate and contextually appropriate linguistic conversion that preserves the original meaning, tone, and intent of the source text. just give the translated text and nothing else. the translation should be in ",
   },
-  // it is similar to "longer" {
-  //   case: "complete",
-  //   prompt_header:
-  //     "Generate supplementary content synergistically aligned with the thematic elements and narrative trajectory of the provided text, augmenting its comprehensiveness, depth, and informativeness through contextually relevant elaborations, expansions, or extensions.",
-  // },
+
   {
     case: "default",
     prompt_header:
@@ -54,23 +46,22 @@ const promptTemplates = [
   },
 ];
 
-//NO NEED FOR IT NOW const prepend =
-//   "do the mentioned giving the instruction above using the data below and no yapping just give the answer directly don't tell me anything but the answer and don't introduce the answer to me the answer and just the answer if no instruction is giving just answer the question directly without end indication: ";
+
 
 export async function prompt(party: PageParty, c: Context) {
   const data = atob(c.req.param("prompt"));
   const action = c.req.param("action") && atob(c.req.param("action"));
+  const model = openai.chat("gpt-3.5-turbo");
 
   // This is a normal prompt to run, no action specified
   if (!action) {
     const prompt = data;
-    const model = openai.chat("gpt-3.5-turbo");
     const response = await streamText({
       model: model,
       prompt: `"${prompt}"`,
     });
     const aiStreamResponse = await response.toAIStreamResponse();
-    const body = await aiStreamResponse.text(); 
+    const body = await aiStreamResponse.text();
     return new Response(body, {
       headers: {
         ...CORS,
@@ -85,7 +76,6 @@ export async function prompt(party: PageParty, c: Context) {
     );
 
     const lang = c.req.param("lang") && atob(c.req.param("lang"));
-    // const tone = c.req.param("tone") && atob(c.req.param("tone"));
 
     if (template) {
       let prompt = template.prompt_header;
@@ -93,21 +83,11 @@ export async function prompt(party: PageParty, c: Context) {
       if (lang) {
         prompt = prompt + lang;
       }
-
-      const { response } = await party.ai.run(
-        "@hf/thebloke/openhermes-2.5-mistral-7b-awq",
-        {
-          // prompt: `"${prompt}"`,
-          messages: [
-            {
-              role: "system",
-              content: prompt,
-            },
-            { role: "user", content: data },
-          ],
-          max_tokens: 2048,
-        }
-      );
+      const response = await streamText({
+        model: model,
+        system: prompt,
+        prompt: `"${data}"`,
+      });
       return json({ response });
 
       // Run the AI model based on the action
