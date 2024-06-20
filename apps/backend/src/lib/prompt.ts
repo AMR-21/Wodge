@@ -3,6 +3,8 @@ import { Context } from "hono";
 import { Prompt } from "@repo/data";
 import { type Ai } from "partykit-ai";
 import PageParty from "@/page/page-party";
+import { CoreMessage, streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 const promptTemplates = [
   {
@@ -62,19 +64,14 @@ export async function prompt(party: PageParty, c: Context) {
   // This is a normal prompt to run, no action specified
   if (!action) {
     const prompt = data;
-
-    const response = await party.ai.run(
-      //@ts-ignore
-      "@hf/thebloke/openhermes-2.5-mistral-7b-awq",
-      {
-        prompt: `"${prompt}"`,
-
-        max_tokens: 2048,
-        stream: true,
-      }
-    );
-
-    return new Response(response, {
+    const model = openai.chat("gpt-3.5-turbo");
+    const response = await streamText({
+      model: model,
+      prompt: `"${prompt}"`,
+    });
+    const aiStreamResponse = await response.toAIStreamResponse();
+    const body = await aiStreamResponse.text(); 
+    return new Response(body, {
       headers: {
         ...CORS,
         "Content-Type": "text/event-stream",

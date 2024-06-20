@@ -7,11 +7,13 @@
     "deploy": "partykit deploy"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.32",
     "@aws-sdk/client-s3": "^3.554.0",
     "@aws-sdk/s3-request-presigner": "^3.554.0",
     "@supabase/supabase-js": "2.39.8",
+    "ai": "^3.2.1",
     "cookie-parse": "^0.4.0",
-    "hono": "^4.2.3",
+    "hono": "^4.2.4",
     "immer": "^10.0.3",
     "livekit-server-sdk": "^2.1.2",
     "nanoid": "^5.0.5",
