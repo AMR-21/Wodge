@@ -8,7 +8,7 @@ import {
 } from "../lib/http-utils";
 
 import * as jose from "jose";
-import { getCurrentUser, verify, verifyToken } from "../lib/auth";
+import { verify, verifyToken } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -48,7 +48,7 @@ export default class WorkspaceParty
   async onStart() {
     this.app.use(
       cors({
-        origin: "http://localhost:3000",
+        origin: this.room.env.APP_DOMAIN as string,
         credentials: true,
         allowHeaders: ["x-file-path"],
       })

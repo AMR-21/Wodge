@@ -119,6 +119,21 @@ export async function repPull({ req, storage, versions, patcher }: PullProps) {
         lastMutationIDChanges[extractClientId(c.id)!] = c.lastMutationID;
     });
 
+    if (fromVersion > globalVersion) {
+      return json(
+        {
+          lastMutationIDChanges,
+          cookie: globalVersion,
+          patch: [
+            {
+              op: "clear",
+            },
+          ],
+        },
+        200
+      );
+    }
+
     // Get the operations
     const patch = await patcher({ fromVersion, versions });
 

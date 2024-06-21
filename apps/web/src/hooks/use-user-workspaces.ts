@@ -3,13 +3,16 @@
 import { useCurrentUser } from "./use-current-user";
 import { Workspace } from "@repo/data";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 
 export function useUserWorkspaces() {
   const { user } = useCurrentUser();
+  const pathname = usePathname();
 
-  const { data, isPending,isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["user-workspaces"],
     queryFn: async () => {
+      if (pathname === "/login") return [];
       const res = await fetch(`/api/user-workspaces`);
 
       if (!res.ok) throw new Error("Failed to fetch workspaces data");
@@ -19,7 +22,7 @@ export function useUserWorkspaces() {
       return data;
     },
 
-    enabled: !!user?.id,
+    enabled: !!user?.id || pathname === "/login",
   });
 
   if (isError) {

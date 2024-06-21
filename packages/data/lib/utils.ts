@@ -22,7 +22,11 @@ export function replicacheWrapper<Request, Result>(
         },
       });
 
-      if (!res.ok) throw new Error("Network response was not ok");
+      if (res.status === 401) {
+        queryClient.invalidateQueries({
+          queryKey: ["user-workspaces"],
+        });
+      }
 
       const response = await res.json();
 
