@@ -1,13 +1,14 @@
 import type * as Party from "partykit/server";
 
 import { ok, unauthorized } from "../lib/http-utils";
-import { authorizeChannel, getCurrentUser, verifyToken } from "../lib/auth";
+import { authorizeChannel, verifyToken } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 import { Hono } from "hono";
 import { startFn } from "./start-fn";
 import { roomPush } from "./room-push";
 import { roomPull } from "./room-pull";
 import { generateCallToken } from "./generate-call-token";
+import { cors } from "hono/cors";
 
 export default class RoomParty implements Party.Server, RoomPartyInterface {
   options: Party.ServerOptions = {
@@ -22,6 +23,11 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
+    this.app.use(
+      cors({
+        origin: "*",
+      })
+    );
     this.app.post("/replicache-push", roomPush.bind(null, this));
     this.app.post("/replicache-pull", roomPull.bind(null, this));
 

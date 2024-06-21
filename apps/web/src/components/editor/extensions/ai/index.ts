@@ -43,7 +43,6 @@ export const AiPrompts = Extension.create({
                 "x-team-id": teamId,
                 "x-folder-id": folderId,
               },
-              credentials: "include",
               // body: JSON.stringify({ action, toneOrLang, prompt } as Prompt & {
               //   toneOrLang?: string;
               // }),

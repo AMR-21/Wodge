@@ -49,8 +49,7 @@ export default class WorkspaceParty
     this.app.use(
       cors({
         origin: "*",
-        credentials: true,
-        allowHeaders: ["x-file-path"],
+        allowHeaders: ["x-file-path", "x-user-id"],
       })
     );
 

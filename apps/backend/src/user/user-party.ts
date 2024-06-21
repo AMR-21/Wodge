@@ -47,7 +47,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     this.app.use(
       cors({
         origin: "*",
-        credentials: true,
+        allowHeaders: ["x-file-path", "x-user-id"],
       })
     );
 

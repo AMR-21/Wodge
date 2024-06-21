@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     return;
   }
 
-  const { response, user } = await updateSession(request);
+  let { response, user } = await updateSession(request);
 
   // console.log({ user: user });
   let curUser = await getUserById(user.data.user?.id);
@@ -55,21 +55,8 @@ export async function middleware(request: NextRequest) {
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
 
   if (isApiRoute) {
-    response.headers.set("x-user-id", user.data.user?.id || "");
-    response.headers.set("x-username", curUser?.username || "");
-    if (process.env.NODE_ENV === "development") return response;
-
-    const responseHeaders = new Headers(response.headers);
-    responseHeaders.set("x-user-id", user.data.user?.id || "");
-    responseHeaders.set("x-username", curUser?.username || "");
-
-    const prodResponse = NextResponse.next({
-      request: {
-        headers: responseHeaders,
-      },
-    });
-
-    return prodResponse;
+    // request.headers.set("x-user-id", curUser?.id || "");
+    return response;
   }
 
   // auth routes ex. login, onboarding

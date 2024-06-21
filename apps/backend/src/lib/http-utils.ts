@@ -13,10 +13,8 @@ import type * as Party from "partykit/server";
  */
 export const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PATCH",
-  "Access-Control-Allow-Credentials": "true",
-  "Access-Control-Allow-Headers":
-    "Authorization, Content-Type, X-Replicache-RequestID, x-team-id, x-workspace-id, x-folder-id, x-file-path, x-is-message-file, x-user-id, domain, id, is-upload",
+  "Access-Control-Allow-Methods": "*",
+  "Access-Control-Allow-Headers": "Authorization,*",
 };
 
 /**

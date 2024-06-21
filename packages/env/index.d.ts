@@ -6,9 +6,7 @@ type Env = Readonly<{
   RESEND_EMAIL_FROM: string;
   NEXT_PUBLIC_BACKEND_DOMAIN: string;
   NEXT_PUBLIC_REPLICACHE_KEY: string;
-  USER_AVATAR_BUCKET: string;
   SERVICE_KEY: string;
-  FS_DOMAIN: string;
   NEXT_PUBLIC_FS_DOMAIN: string;
   LIVEKIT_API_KEY: string;
   LIVEKIT_API_SECRET: string;

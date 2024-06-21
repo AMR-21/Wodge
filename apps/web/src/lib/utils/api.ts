@@ -39,7 +39,6 @@ export class API {
 
     const linkRes = await fetch(
       `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}/${btoa(data.fileId)}?token=${token}`,
-      { credentials: "include" },
     );
 
     const link = await linkRes.json<{ downloadUrl: string }>();

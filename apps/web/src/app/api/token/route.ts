@@ -1,7 +1,9 @@
 import { sign } from "@/lib/utils/sign";
+import { env } from "@repo/env";
 
 export async function GET(req: Request) {
   // console.log(req.headers);
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });
@@ -13,7 +15,7 @@ export async function GET(req: Request) {
     isUpload === "true" ? "1h" : "1m",
   );
 
-  return new Response(JSON.stringify({ token }), {
+  return new Response(JSON.stringify({ token, domain: env.APP_DOMAIN }), {
     headers: {
       "Content-Type": "application/json",
     },

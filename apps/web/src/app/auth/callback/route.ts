@@ -30,13 +30,15 @@ export async function GET(request: Request) {
       },
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    console.log({ error, domain: env.APP_DOMAIN });
+    console.log({ error, domain: env.NEXT_PUBLIC_APP_DOMAIN });
 
     if (!error) {
-      return NextResponse.redirect(`${env.APP_DOMAIN}${next}`);
+      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_DOMAIN}${next}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${env.APP_DOMAIN}/auth/auth-code-error`);
+  return NextResponse.redirect(
+    `${env.NEXT_PUBLIC_APP_DOMAIN}/auth/auth-code-error`,
+  );
 }

@@ -61,7 +61,6 @@ export function UploadButton({
           .use(Webcam)
           .use(XHRUpload, {
             limit: 1,
-            withCredentials: true,
             method: "POST",
             endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}`,
             headers: {

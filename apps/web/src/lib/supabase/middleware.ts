@@ -57,5 +57,16 @@ export async function updateSession(request: NextRequest) {
   );
 
   const user = await supabase.auth.getUser();
+
+  if (user) {
+    request.headers.set("x-user-id", user.data.user?.id || "");
+
+    response = NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
+
   return { response, user };
 }

@@ -75,9 +75,6 @@ export const AiWriterView = ({
     try {
       const eventSource = new EventSource(
         `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/page/${channelId}/prompt/${btoa(payload.prompt)}`,
-        {
-          withCredentials: true,
-        },
       );
 
       // Add event listeners to handle different types of events

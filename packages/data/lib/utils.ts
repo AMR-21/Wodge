@@ -13,7 +13,6 @@ export function replicacheWrapper<Request, Result>(
     try {
       const res = await fetch(`/api/replicache/${mode}`, {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify(requestBody),
         headers: {
           ...headers,

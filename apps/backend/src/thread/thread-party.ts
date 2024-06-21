@@ -7,6 +7,7 @@ import { startFn } from "./start-fn";
 import { Hono } from "hono";
 import { threadPush } from "./thread-push";
 import { threadPull } from "./thread-pull";
+import { cors } from "hono/cors";
 
 export default class ThreadParty implements Party.Server, ThreadPartyInterface {
   options: Party.ServerOptions = {
@@ -21,6 +22,11 @@ export default class ThreadParty implements Party.Server, ThreadPartyInterface {
   constructor(readonly room: Party.Room) {}
 
   async onStart() {
+    this.app.use(
+      cors({
+        origin: "*",
+      })
+    );
     this.app.post("/replicache-pull", threadPull.bind(null, this));
 
     this.app.post("/replicache-push", threadPush.bind(null, this));

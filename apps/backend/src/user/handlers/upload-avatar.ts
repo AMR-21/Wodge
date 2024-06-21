@@ -4,6 +4,7 @@ import { makeUserAvatarKey, REPLICACHE_VERSIONS_KEY } from "@repo/data";
 import UserParty from "../user-party";
 import { getS3Client } from "../../lib/get-s3-client";
 import { nanoid } from "nanoid";
+import { json } from "@/lib/http-utils";
 
 export async function uploadAvatar(party: UserParty, c: Context) {
   const s3Client = getS3Client(party.room);
@@ -52,9 +53,8 @@ export async function uploadAvatar(party: UserParty, c: Context) {
 
     await Promise.all(req);
 
-    return c.json({ response, key }, 200);
+    return json({ key, response });
   } catch (error) {
-    console.log(error);
-    return c.json(error, 400);
+    return json({ error }, 400);
   }
 }

@@ -53,7 +53,6 @@ export function AdvancedUploadButton({ workspaceId }: { workspaceId: string }) {
           formData: true,
           method: "POST",
           endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}`,
-          withCredentials: true,
           headers: (file) => {
             const folder = inputRef.current?.value;
             const filePath = folder

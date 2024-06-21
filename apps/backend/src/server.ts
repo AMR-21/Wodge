@@ -10,7 +10,9 @@ export default class Server implements Party.Server {
     lobby: Party.FetchLobby,
     ctx: Party.ExecutionContext
   ) {
-    return new Response("Hello, from Wodge", { status: 403 });
+    return new Response("Hello, from Wodge " + lobby.env.APP_DOMAIN, {
+      status: 200,
+    });
   }
 }
 
