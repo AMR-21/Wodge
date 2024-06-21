@@ -2,7 +2,7 @@ import WorkspaceParty from "../workspace-party";
 import { error, json } from "../../lib/http-utils";
 
 export async function getMembersInfo(party: WorkspaceParty) {
-  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/member`, {
+  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/member`, {
     method: "POST",
     headers: {
       Authorization: party.room.env.SERVICE_KEY as string,

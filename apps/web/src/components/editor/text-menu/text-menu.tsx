@@ -63,7 +63,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
       className="z-50"
     >
       <Toolbar.Wrapper>
-        {true && (
+        {workspace?.isPremium && (
           <>
             <AIDropdown
               onCompleteSentence={commands.onCompleteSentence}

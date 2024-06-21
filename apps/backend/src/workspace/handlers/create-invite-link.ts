@@ -6,7 +6,7 @@ export async function createInviteLink(party: WorkspaceParty, c: Context) {
   const userId = c.req.header("x-user-id")!;
 
   const res = await fetch(
-    `${party.room.env.APP_DOMAIN}/api/create-invite-link`,
+    `${party.room.env.AUTH_DOMAIN}/api/create-invite-link`,
     {
       method: "POST",
       headers: {

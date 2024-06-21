@@ -28,7 +28,7 @@ export async function joinWorkspace(party: WorkspaceParty, c: Context) {
   if (isMember) return badRequest();
 
   // 2. Add user to the workspace in the db
-  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/join-workspace`, {
+  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/join-workspace`, {
     method: "POST",
     headers: {
       // Accept: "application/json",

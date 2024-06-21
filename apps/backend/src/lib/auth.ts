@@ -48,7 +48,7 @@ export const getCurrentUser = async (
   if (!cookie) throw new Error("No cookie found");
 
   // Fetch the session from the auth endpoint validated by the CSRF token
-  const res = await fetch(`${lobby.env.APP_DOMAIN}/auth/user`, {
+  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/auth/user`, {
     headers: {
       Accept: "application/json",
       Cookie: cookie,

@@ -5,8 +5,8 @@ compatibility_date = "2024-01-29"
 
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "wodge"
-database_id = "f17da2ae-c255-422f-99ad-b8b93733b758"
+database_name = "wodge-db"
+database_id = "06551e4a-854a-4b7d-b493-e95f0eea223f"
 preview_database_id = "DB"
 migrations_dir = "./node_modules/@repo/data/migrations"
 

@@ -1,33 +1,24 @@
-const { setupDevPlatform } = require("@cloudflare/next-on-pages/next-dev");
-const withPWA = require("next-pwa")({
-  dest: "public",
-  disable: process.env.NODE_ENV === "development",
-  register: true,
-  skipWaiting: true,
-});
+import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
 
 // await import("./node_modules/@repo/env/index.js");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withPWA({
+const nextConfig = {
   transpilePackages: ["@radix-ui"],
   typescript: {
     // ignoreBuildErrors: true,
   },
   experimental: {
     // typedRoutes: true,
-    cpus: 4,
   },
-});
+};
 
 /**
  * Add Cloudflare bindings for Next.js development mode.
  */
 
-(async () => {
-  if (process.env.NODE_ENV === "development") {
-    await setupDevPlatform();
-  }
-})();
+https: if (process.env.NODE_ENV === "development") {
+  await setupDevPlatform();
+}
 
-module.exports = nextConfig;
+export default nextConfig;

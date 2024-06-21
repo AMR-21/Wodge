@@ -9,7 +9,7 @@ export async function getUserWorkspaces(party: UserParty, c: Context) {
 
   // Todo read the user workspaces from db binding instead
 
-  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/user-workspaces`, {
+  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/user-workspaces`, {
     headers: {
       // Accept: "application/json",
       authorization: party.room.env.SERVICE_KEY as string,

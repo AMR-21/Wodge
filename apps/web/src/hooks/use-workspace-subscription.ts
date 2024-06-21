@@ -51,11 +51,11 @@ export function useWorkspaceSubscription() {
     if (isPending) return;
 
     let timerId: any;
-    // if (!workspace && !isNotConcerned) {
-    //   timerId = setTimeout(() => {
-    //     router.push("/");
-    //   }, 3000);
-    // }
+    if (!workspace && !isNotConcerned) {
+      timerId = setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
     // return;
 
     // if (workspaceRep && workspaceRep.name.includes(workspaceId)) return;

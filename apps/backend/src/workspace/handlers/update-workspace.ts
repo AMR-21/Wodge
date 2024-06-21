@@ -20,15 +20,18 @@ export async function updateWorkspace(party: WorkspaceParty, c: Context) {
 
   const { data } = validatedFields;
 
-  const res = await fetch(`${party.room.env.APP_DOMAIN}/api/update-workspace`, {
-    method: "POST",
-    headers: {
-      // Accept: "application/json",
-      authorization: party.room.env.SERVICE_KEY as string,
-      workspaceId: party.room.id,
-    },
-    body: JSON.stringify(data),
-  });
+  const res = await fetch(
+    `${party.room.env.AUTH_DOMAIN}/api/update-workspace`,
+    {
+      method: "POST",
+      headers: {
+        // Accept: "application/json",
+        authorization: party.room.env.SERVICE_KEY as string,
+        workspaceId: party.room.id,
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!res.ok) return badRequest();
 

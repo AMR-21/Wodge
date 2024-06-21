@@ -22,7 +22,7 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
       ContentType: file.type,
     };
     // Inform the DB
-    const res = await fetch(`${party.room.env.APP_DOMAIN}/api/update-avatar`, {
+    const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
       method: "POST",
       headers: {
         authorization: party.room.env.SERVICE_KEY as string,
