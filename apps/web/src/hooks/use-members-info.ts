@@ -9,7 +9,7 @@ export function useMembersInfo() {
   const { data, isPending, isError } = useQuery({
     queryKey: [workspaceId, "members"],
     queryFn: async () => {
-      const res = await fetch(`/api/members/${workspaceId}`);
+      const res = await fetch(`/api/workspaces/${workspaceId}/members`);
 
       if (!res.ok) throw new Error("Failed to fetch members data");
 

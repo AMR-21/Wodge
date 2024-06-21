@@ -37,7 +37,7 @@ export function useYDoc({
         teamId,
         workspaceId,
         token: await (async () => {
-          const res = await fetch(`/api/token`);
+          const res = await fetch(`/api/users/token`);
 
           if (!res.ok) return "";
 

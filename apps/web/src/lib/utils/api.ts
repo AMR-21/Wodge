@@ -12,7 +12,7 @@ export class API {
 
     formData.append("file", file);
 
-    const tokenRes = await fetch("/api/token", {
+    const tokenRes = await fetch("/api/users/token", {
       headers: {
         "is-upload": "true",
       },

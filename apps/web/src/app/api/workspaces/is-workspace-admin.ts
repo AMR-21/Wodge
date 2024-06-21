@@ -1,0 +1,15 @@
+import { sign } from "@/lib/utils/sign";
+import { env } from "@repo/env";
+
+export async function isWorkspaceAdmin(userId: string, workspaceId: string) {
+  const token = await sign({ userId });
+
+  const res = await fetch(
+    `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/isAdmin?token=${token}`,
+    { headers: { authorization: env.SERVICE_KEY as string } },
+  );
+
+  if (res.ok) return true;
+
+  return false;
+}

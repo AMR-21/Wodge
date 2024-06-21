@@ -11,9 +11,12 @@ export function useDelete(
     mutationFn: async () => {
       if (!id) return false;
 
-      const res = await fetch(`/api/avatar/${domain}/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/${domain}${domain === "user" ? "" : "s"}/${id}/avatar`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!res.ok) {
         throw new Error("Failed to delete avatar");

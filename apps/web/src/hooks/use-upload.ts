@@ -11,7 +11,7 @@ export function useUpload(
     mutationFn: async (data: FormData) => {
       if (!id) return false;
 
-      const tokenRes = await fetch("/api/token");
+      const tokenRes = await fetch("/api/users/token");
 
       if (!tokenRes.ok) {
         throw new Error("Failed to get token");
@@ -20,7 +20,7 @@ export function useUpload(
       const { token } = await tokenRes.json<{ token: string }>();
 
       const uploadRes = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/avatar?token=${token}`,
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}${domain === "user" ? "" : "s"}/${id}/avatar?token=${token}`,
         {
           method: "POST",
           body: data,
@@ -33,7 +33,7 @@ export function useUpload(
 
       const { key } = await uploadRes.json<{ key: string }>();
 
-      const updateRes = await fetch(`/api/avatar/${domain}/${id}`, {
+      const updateRes = await fetch(`/api/${domain}s/${id}/avatar`, {
         method: "POST",
         headers: {
           key,

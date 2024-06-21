@@ -53,8 +53,6 @@ export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
 
   const userInstance = userParty.get(memberId);
 
-  // remove from db too
-
   const res = await userInstance.fetch("/service/remove-workspace", {
     method: "POST",
     headers: {

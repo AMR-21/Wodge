@@ -24,7 +24,7 @@ export function MembersSettings() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (c: boolean) => {
-      await fetch(`/api/toggle-invite-link/${workspaceId}`, {
+      await fetch(`/api/workspaces/${workspaceId}/invite`, {
         method: "PATCH",
       });
     },
@@ -44,8 +44,8 @@ export function MembersSettings() {
 
   async function removeMember(memberId: string) {
     try {
-      await fetch(`/api/remove-member/${workspaceId}/${memberId}`, {
-        method: "POST",
+      await fetch(`/api/workspaces/${workspaceId}/members/${memberId}`, {
+        method: "DELETE",
       });
       await workspaceRep?.mutate.removeMember(memberId);
     } catch {
@@ -78,7 +78,7 @@ export function MembersSettings() {
             onCheckedChange={mutate}
             checked={workspace?.isInviteLinkEnabled || false}
             disabled={isPending}
-            className="disabled:cursor-progress disabled:opacity-100"
+            className="disabled:cursor-progress "
           />
         }
       >

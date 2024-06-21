@@ -1,14 +1,7 @@
 import type * as Party from "partykit/server";
-import {
-  getRoute,
-  notFound,
-  notImplemented,
-  ok,
-  unauthorized,
-} from "../lib/http-utils";
+import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
 
-import * as jose from "jose";
-import { verify, verifyToken } from "../lib/auth";
+import { verifyToken } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -18,7 +11,7 @@ import {
   PresenceMap,
 } from "../types";
 
-import { Invites, ID_LENGTH, PokeMessage } from "@repo/data";
+import { Invites, PokeMessage } from "@repo/data";
 import { Hono } from "hono";
 import { startFn } from "./start-fn";
 import { cors } from "hono/cors";

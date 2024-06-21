@@ -4,7 +4,7 @@ export function useUploadToken() {
   const { data: token } = useQuery({
     queryKey: ["upload-token"],
     queryFn: async () => {
-      const res = await fetch(`/api/token`, {
+      const res = await fetch(`/api/users/token`, {
         headers: {
           "is-upload": "true",
         },

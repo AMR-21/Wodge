@@ -16,7 +16,7 @@ export function WorkspaceDangerZone() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/leave-workspace/${workspaceId}`, {
+      const res = await fetch(`/api/workspaces/${workspaceId}/leave`, {
         method: "POST",
       });
 
@@ -35,12 +35,9 @@ export function WorkspaceDangerZone() {
 
   const { mutate: deleteWorkspace, isPending: isDeleting } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(
-        `/api/delete-workspace/${workspaceId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const res = await fetch(`/api/workspaces/${workspaceId}`, {
+        method: "DELETE",
+      });
 
       if (!res.ok) throw new Error("Failed to delete workspace");
     },

@@ -27,7 +27,7 @@ export function useInvites() {
   } = useQuery<Invite[]>({
     queryKey: ["invites", workspaceId],
     queryFn: async () => {
-      const res = await fetch(`/api/get-invites/${workspaceId}`);
+      const res = await fetch(`/api/workspaces/${workspaceId}/invite`);
 
       const data = await res.json<{ invites?: Invite[] }>();
 

@@ -1,8 +1,8 @@
 import { RunnerParams } from "@/lib/replicache";
 import RoomParty from "./room-party";
-import { VoteArgs } from "./room-mutators";
 import { removeRoomVoteMutation } from "@repo/data/models/room/mutators/remove-vote";
 import { produce } from "immer";
+import { VoteArgs } from "@repo/data";
 
 export async function removeVote(party: RoomParty, params: RunnerParams) {
   const vote = params.mutation.args as VoteArgs;

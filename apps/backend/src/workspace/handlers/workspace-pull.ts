@@ -21,6 +21,15 @@ function patcher(party: WorkspaceParty, userId: string) {
 
     const { workspaceMembers, workspaceStructure } = party;
 
+    const globalVersion = party.versions.get("global")!;
+
+    if (fromVersion > globalVersion) {
+      patch.push({
+        op: "clear",
+      });
+      return patch;
+    }
+
     if (party.versions.get("workspaceInfo")! > fromVersion) {
       await party.poke({
         type: "workspaceInfo",

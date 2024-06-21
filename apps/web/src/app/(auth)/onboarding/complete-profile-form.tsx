@@ -29,7 +29,7 @@ export function CompleteProfileForm() {
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: z.infer<typeof UpdateUserSchema>) => {
-      const res = await fetch("/api/update-user", {
+      const res = await fetch("/api/user/update", {
         method: "POST",
         body: JSON.stringify(data),
       });

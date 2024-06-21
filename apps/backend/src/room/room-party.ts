@@ -31,7 +31,7 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
     this.app.post("/replicache-push", roomPush.bind(null, this));
     this.app.post("/replicache-pull", roomPull.bind(null, this));
 
-    this.app.get("/call-token", generateCallToken.bind(null, this));
+    this.app.get("/token", generateCallToken.bind(null, this));
 
     await startFn(this);
   }

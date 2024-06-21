@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { SidebarItemBtn } from "./sidebar-item-btn";
-import { LogOut, Mic, MicOff, Settings } from "lucide-react";
+import { LogOut, Mic, MicOff, RefreshCcw, Settings } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { isSidebarOpenAtom } from "@/store/global-atoms";
 import { useAtom, useAtomValue } from "jotai";
@@ -21,6 +21,7 @@ import {
   micStatusAtom,
   roomAtom,
 } from "../room/[teamId]/[channelId]/atoms";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function UserCard() {
   const { user } = useCurrentUser();
@@ -32,6 +33,8 @@ export function UserCard() {
   const isSpeaking = useAtomValue(isSpeakingAtom);
 
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const [micStatus, setMicStatus] = useAtom(micStatusAtom);
   const room = useAtomValue(roomAtom);
@@ -74,6 +77,15 @@ export function UserCard() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
+          <DropdownMenuItem
+            className="gap-2 text-sm"
+            onClick={() => {
+              queryClient.invalidateQueries({});
+            }}
+          >
+            <RefreshCcw className="h-4 w-4" />
+            Sync
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={async () => {
               const supabase = createClient();

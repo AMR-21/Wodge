@@ -14,7 +14,7 @@ export function createSocket(userId: string) {
 
     query: async () => ({
       token: await (async () => {
-        const res = await fetch(`/api/token`);
+        const res = await fetch(`/api/users/token`);
 
         if (!res.ok) return "";
 

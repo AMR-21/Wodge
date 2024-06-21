@@ -36,7 +36,7 @@ export function CreateWorkspaceForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: NewWorkspace & { id: string }) => {
-      const res = await fetch(`/api/create-workspace`, {
+      const res = await fetch(`/api/workspaces/new`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),

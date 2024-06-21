@@ -12,7 +12,7 @@ export function useUserWorkspaces() {
   const { data, isPending, isError } = useQuery({
     queryKey: ["user-workspaces"],
     queryFn: async () => {
-      const res = await fetch(`/api/user-workspaces`);
+      const res = await fetch(`/api/users/workspaces`);
 
       if (!res.ok) throw new Error("Failed to fetch workspaces data");
 

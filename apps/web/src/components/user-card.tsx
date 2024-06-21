@@ -13,14 +13,25 @@ import {
 import { toast } from "@/components/ui/toast";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
-import { Check, LogOut, Monitor, MoonStar, Settings2, Sun } from "lucide-react";
+import {
+  Check,
+  LogOut,
+  Monitor,
+  MoonStar,
+  RefreshCcw,
+  Settings2,
+  Sun,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function UserCard({ className }: { className?: string }) {
   const { user } = useCurrentUser();
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const { theme, setTheme } = useTheme();
   // TODO add skeleton
@@ -93,6 +104,16 @@ export function UserCard({ className }: { className?: string }) {
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
+
+        <DropdownMenuItem
+          className="gap-2 text-sm"
+          onClick={() => {
+            queryClient.invalidateQueries({});
+          }}
+        >
+          <RefreshCcw className="h-4 w-4" />
+          Sync
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           className="gap-2 text-sm"

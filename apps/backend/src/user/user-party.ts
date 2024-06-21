@@ -8,15 +8,10 @@
 import type * as Party from "partykit/server";
 
 // import { handlePost } from "./endpoints/user-post";
-import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { verify, verifyToken } from "../lib/auth";
-import {
-  PokeMessage,
-  REPLICACHE_VERSIONS_KEY,
-  makeWorkspacesStoreKey,
-} from "@repo/data";
+import { notImplemented, ok, unauthorized } from "../lib/http-utils";
+import { verifyToken } from "../lib/auth";
+import { PokeMessage } from "@repo/data";
 import { UserPartyInterface, Versions } from "../types";
-// import { handleGet } from "./endpoints/user-get";
 import { Hono } from "hono";
 import { userPull } from "./handlers/user-pull";
 import { startFn } from "./start-fn";
@@ -69,8 +64,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     this.app
       .post("/avatar", uploadAvatar.bind(null, this))
       .delete(deleteAvatar.bind(null, this));
-
-    this.app.get("/workspaces", getUserWorkspaces.bind(null, this));
 
     await startFn(this);
   }

@@ -48,7 +48,7 @@ export const AiWriterView = ({
     isLoading,
     setInput,
   } = useChat({
-    api: `/api/ai/${workspaceId}`,
+    api: `/api/workspaces/${workspaceId}/ai`,
   });
 
   const textareaId = useMemo(() => nanoid(), []);

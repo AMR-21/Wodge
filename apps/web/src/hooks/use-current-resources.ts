@@ -13,7 +13,7 @@ export function useCurrentResources() {
   const { data, isError } = useQuery({
     queryFn: async () => {
       const res = await fetch(
-        `/api/files/${workspaceId}/${teamId}/${btoa(teamId)}`,
+        `/api/workspaces/${workspaceId}/files/${teamId}/${btoa(teamId)}`,
       );
 
       const data = await res.json<string[]>();

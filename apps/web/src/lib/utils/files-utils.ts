@@ -7,7 +7,7 @@ export async function getSrcLink(
   cid: string,
   tid: string,
 ) {
-  const tokenRes = await fetch("/api/token", {
+  const tokenRes = await fetch("/api/users/token", {
     headers: {
       "is-upload": "true",
     },

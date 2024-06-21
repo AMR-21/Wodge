@@ -40,7 +40,7 @@ export const connectToRoom = async ({
       disconnectOnPageLeave: false,
     });
 
-    const resp = await fetch("/api/call-token/" + channelId, {
+    const resp = await fetch(`/api/rooms/${channelId}/token`, {
       headers: {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,

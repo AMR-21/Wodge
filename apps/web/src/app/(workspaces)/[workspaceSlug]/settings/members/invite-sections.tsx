@@ -22,7 +22,7 @@ export function InviteLink() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await fetch(`/api/create-invite-link/${workspaceId}`, {
+      await fetch(`/api/workspaces/${workspaceId}/invite`, {
         method: "POST",
       });
     },

@@ -20,8 +20,6 @@ export async function createWorkspace(data: Workspace) {
     // Validate ws data
     const db = createDb();
 
-    console.log(data);
-
     const [workspace] = await db.batch([
       db.insert(workspaces).values(data).returning(),
       db
@@ -122,4 +120,23 @@ export async function removeMember(userId: string, workspaceId: string) {
 export async function deleteWorkspace(workspaceId: string) {
   const db = createDb();
   return await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
+}
+
+export async function isWorkspaceMember(userId: string, workspaceId: string) {
+  const db = createDb();
+
+  try {
+    const membership = await db.query.memberships.findFirst({
+      where: and(
+        eq(memberships.workspaceId, workspaceId),
+        eq(memberships.userId, userId)
+      ),
+    });
+
+    if (membership) return true;
+
+    return false;
+  } catch {
+    return false;
+  }
 }

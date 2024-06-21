@@ -53,7 +53,7 @@ export function File({
 
           try {
             const res = await fetch(
-              `/api/file/${wid}/${teamId}/${btoa(path + name)}`,
+              `/api/workspaces/${wid}/file/${teamId}/${btoa(path + name)}`,
               {
                 method: "DELETE",
               },

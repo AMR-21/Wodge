@@ -58,7 +58,7 @@ export function AccountGeneralForm() {
     mutationFn: async (
       data: Pick<PublicUserType, "username" | "displayName">,
     ) => {
-      await fetch(`/api/update-user`, {
+      await fetch(`/api/users/update`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(data),

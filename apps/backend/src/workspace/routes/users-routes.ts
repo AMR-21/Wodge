@@ -15,7 +15,6 @@ import { canViewMiddleware } from "../middlewares/can-view-middleware copy";
 export function setupUsersRoutes(party: WorkspaceParty) {
   party.app.post("/replicache-pull", workspacePull.bind(null, party));
   party.app.post("/replicache-push", workspacePush.bind(null, party));
-  party.app.get("/members-info", getMembersInfo.bind(null, party));
   party.app.post("/leave", leaveWorkspace.bind(null, party));
   party.app
     .use("/files/:teamId/:path?", isTeamMemberMiddleware.bind(null, party))

@@ -17,7 +17,7 @@ export function AcceptButton({ slug }: { slug: string }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/join/${workspaceId}/${token}`, {
+      const res = await fetch(`/api/workspaces/${workspaceId}/join/${token}`, {
         method: "POST",
       });
 
