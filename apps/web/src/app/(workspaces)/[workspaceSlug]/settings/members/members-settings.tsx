@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@repo/env";
+import { useMembersInfo } from "@/hooks/use-members-info";
 
 export function MembersSettings() {
   const { members, workspaceRep, workspaceId, workspace } =
@@ -23,13 +24,9 @@ export function MembersSettings() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (c: boolean) => {
-      await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/invite-link`,
-        {
-          method: "PATCH",
-          credentials: "include",
-        },
-      );
+      await fetch(`/api/toggle-invite-link/${workspaceId}`, {
+        method: "PATCH",
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -47,6 +44,9 @@ export function MembersSettings() {
 
   async function removeMember(memberId: string) {
     try {
+      await fetch(`/api/remove-member/${workspaceId}/${memberId}`, {
+        method: "POST",
+      });
       await workspaceRep?.mutate.removeMember(memberId);
     } catch {
       toast.error("Remove member failed");

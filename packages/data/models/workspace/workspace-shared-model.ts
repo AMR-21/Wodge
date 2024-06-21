@@ -14,6 +14,7 @@ import {
 } from "../../schemas/workspace.schema";
 import { Room } from "../../schemas/room.schema";
 import { Page } from "../../schemas/page.schema";
+import { Thread } from "../../schemas/thread.schema";
 
 export const createWelcomePage = (): Page => ({
   id: nanoid(ID_LENGTH),
@@ -24,6 +25,13 @@ export const createWelcomePage = (): Page => ({
 });
 
 export const createWelcomeRoom = (): Room => ({
+  id: nanoid(ID_LENGTH),
+  editGroups: [TEAM_MEMBERS_ROLE],
+  viewGroups: [TEAM_MEMBERS_ROLE],
+  name: "Welcome",
+  avatar: "",
+});
+export const createWelcomeThread = (): Thread => ({
   id: nanoid(ID_LENGTH),
   editGroups: [TEAM_MEMBERS_ROLE],
   viewGroups: [TEAM_MEMBERS_ROLE],
@@ -48,7 +56,7 @@ export const createDefaultTeam = (createdBy: string): Team => {
     createdBy: createdBy,
     default: true,
     folders: [createRootFolder(teamId)],
-    threads: [],
+    threads: [createWelcomeThread()],
     rooms: [createWelcomeRoom()],
     tags: [],
   };

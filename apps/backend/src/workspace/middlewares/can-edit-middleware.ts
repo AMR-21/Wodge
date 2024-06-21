@@ -22,6 +22,8 @@ export async function canEditMiddleware(
   const teamId = c.req.param("teamId");
   const channelId = c.req.param("channelId");
 
+  console.log("called");
+
   if (!teamId || !channelId) {
     return c.json({ message: "TeamId is required" }, 400);
   }
@@ -45,6 +47,8 @@ export async function canEditMiddleware(
       userId,
     })
   ) {
+    console.log("problem2");
+
     return unauthorized();
   }
 

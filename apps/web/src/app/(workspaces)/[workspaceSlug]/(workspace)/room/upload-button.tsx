@@ -90,7 +90,7 @@ export function UploadButton({
             completeUpload(fileId, type as Message["type"], name);
           })
           .on("dashboard:show-panel", () => {});
-  }, [rep]);
+  }, [rep, token]);
 
   async function completeUpload(
     fileId?: string,

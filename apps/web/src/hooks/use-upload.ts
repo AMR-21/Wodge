@@ -11,18 +11,36 @@ export function useUpload(
     mutationFn: async (data: FormData) => {
       if (!id) return false;
 
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/avatar`,
+      const tokenRes = await fetch("/api/token");
+
+      if (!tokenRes.ok) {
+        throw new Error("Failed to get token");
+      }
+
+      const { token } = await tokenRes.json<{ token: string }>();
+
+      const uploadRes = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/avatar?token=${token}`,
         {
           method: "POST",
           body: data,
-          credentials: "include",
         },
       );
 
-      if (!res.ok) {
+      if (!uploadRes.ok) {
         throw new Error("Failed to upload avatar");
       }
+
+      const { key } = await uploadRes.json<{ key: string }>();
+
+      const updateRes = await fetch(`/api/avatar/${domain}/${id}`, {
+        method: "POST",
+        headers: {
+          key,
+        },
+      });
+
+      if (!updateRes.ok) throw new Error("Failed to update avatar");
 
       return true;
     },

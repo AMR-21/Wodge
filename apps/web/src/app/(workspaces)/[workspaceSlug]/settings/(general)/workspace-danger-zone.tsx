@@ -16,13 +16,9 @@ export function WorkspaceDangerZone() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/leave`,
-        {
-          method: "POST",
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`/api/leave-workspace/${workspaceId}`, {
+        method: "POST",
+      });
 
       if (!res.ok) throw new Error("Failed to leave workspace");
     },
@@ -40,10 +36,9 @@ export function WorkspaceDangerZone() {
   const { mutate: deleteWorkspace, isPending: isDeleting } = useMutation({
     mutationFn: async () => {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}`,
+        `/api/delete-workspace/${workspaceId}`,
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
 

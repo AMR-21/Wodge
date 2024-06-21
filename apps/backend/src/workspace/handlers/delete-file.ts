@@ -24,24 +24,23 @@ export async function deleteFile(
 
   const s3Client = getS3Client(party.room);
 
-  let key = teamId + "/" + atob(c.req.param("path"));
+  let key = teamId + "/" + atob(c.req.param("path") || "");
 
   // delete avatar in db
   if (mode === "avatar") {
     // Inform the DB
-    const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
-      method: "DELETE",
-      headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
-        workspaceId: party.room.id,
-      },
-    });
-
-    if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
-
-    const { workspace } = (await res.json()) as { workspace: Workspace };
-
-    key = workspace.avatar?.split("/").pop()!;
+    // const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
+    //   method: "DELETE",
+    //   headers: {
+    //     authorization: party.room.env.SERVICE_KEY as string,
+    //     workspaceId: party.room.id,
+    //   },
+    // });
+    // if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
+    // const { workspace } = (await res.json()) as { workspace: Workspace };
+    // key = makeWorkspaceAvatarKey(party.room.id);
+    // if (!key) return c.json({ error: "Failed to delete avatar" }, 400);
+    key = c.req.query("key") || "";
 
     if (!key) return c.json({ error: "Failed to delete avatar" }, 400);
   }

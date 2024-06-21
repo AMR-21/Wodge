@@ -1,8 +1,25 @@
 import { env } from "@repo/env";
 import { toast } from "@/components/ui/toast";
 
-export function getSrcLink(id: string, wid: string, cid: string, tid: string) {
-  return `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${tid}/${cid}/${btoa(id)}`;
+export async function getSrcLink(
+  id: string,
+  wid: string,
+  cid: string,
+  tid: string,
+) {
+  const tokenRes = await fetch("/api/token", {
+    headers: {
+      "is-upload": "true",
+    },
+  });
+
+  if (!tokenRes.ok) {
+    toast.error("Failed to get token");
+    return;
+  }
+
+  const { token } = await tokenRes.json<{ token: string }>();
+  return `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${tid}/${cid}/${btoa(id)}?token=${token}`;
 }
 
 export async function download(url: string, name?: string) {

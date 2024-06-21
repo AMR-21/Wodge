@@ -12,9 +12,22 @@ export class API {
 
     formData.append("file", file);
 
+    const tokenRes = await fetch("/api/token", {
+      headers: {
+        "is-upload": "true",
+      },
+    });
+
+    if (!tokenRes.ok) {
+      toast.error("Failed to get token");
+      return;
+    }
+
+    const { token } = await tokenRes.json<{ token: string }>();
+
     const res = await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}`,
-      { method: "POST", body: formData, credentials: "include" },
+      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}?token=${token}`,
+      { method: "POST", body: formData },
     );
 
     if (!res.ok) {
@@ -25,7 +38,7 @@ export class API {
     const data = await res.json<{ fileId: string }>();
 
     const linkRes = await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}/${btoa(data.fileId)}`,
+      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}/${btoa(data.fileId)}?token=${token}`,
       { credentials: "include" },
     );
 

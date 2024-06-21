@@ -10,13 +10,10 @@ export function useDelete(
   const { mutate: deleteAvatar, isPending: isDeleting } = useMutation({
     mutationFn: async () => {
       if (!id) return false;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/avatar`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
+
+      const res = await fetch(`/api/avatar/${domain}/${id}`, {
+        method: "DELETE",
+      });
 
       if (!res.ok) {
         throw new Error("Failed to delete avatar");

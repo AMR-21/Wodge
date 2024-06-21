@@ -9,7 +9,7 @@ import type * as Party from "partykit/server";
 
 // import { handlePost } from "./endpoints/user-post";
 import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { getCurrentUser, verify, verifyToken } from "../lib/auth";
+import { verify, verifyToken } from "../lib/auth";
 import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
@@ -46,7 +46,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   async onStart() {
     this.app.use(
       cors({
-        origin: "",
+        origin: "http://localhost:3000",
         credentials: true,
       })
     );
@@ -113,40 +113,45 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     if (typeof wid === "string") {
       // Register to a specific workspace - on join
 
-      const workspace = WorkspaceParty.get(wid);
+      try {
+        const workspace = WorkspaceParty.get(wid);
 
-      await workspace.fetch("/service/presence", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: this.room.env.SERVICE_KEY as string,
-        },
-        body: JSON.stringify({
-          userId: this.room.id,
-          connect: connecting,
-        }),
-      });
+        await workspace.fetch("/service/presence", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: this.room.env.SERVICE_KEY as string,
+          },
+          body: JSON.stringify({
+            userId: this.room.id,
+            connect: connecting,
+          }),
+        });
+      } catch {}
     } else {
       // Register to all workspaces - on connect
-      await Promise.all(
-        wid.map((id) =>
-          WorkspaceParty.get(id).fetch("/service/presence", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              Authorization: this.room.env.SERVICE_KEY as string,
-            },
-            body: JSON.stringify({
-              userId: this.room.id,
-              connect: connecting,
-            }),
-          })
-        )
-      );
+      try {
+        await Promise.all(
+          wid.map((id) =>
+            WorkspaceParty.get(id).fetch("/service/presence", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                Authorization: this.room.env.SERVICE_KEY as string,
+              },
+              body: JSON.stringify({
+                userId: this.room.id,
+                connect: connecting,
+              }),
+            })
+          )
+        );
+      } catch {}
     }
   }
 
   async onRequest(req: Party.Request) {
+    // console.log(req.url);
     //@ts-ignore
     return this.app.fetch(req);
   }
@@ -160,24 +165,12 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     // verify token
     const payload = await verifyToken(req, lobby);
 
-    if (!payload || payload?.userId !== lobby.id || payload?.isUpload)
-      return unauthorized();
-
-    req.headers.set("x-user-id", payload.userId);
-    return req;
-    if (getRoute(req).startsWith("/service")) return req;
-
-    try {
-      const user = await getCurrentUser(req, lobby);
-
-      // Authorize the user by checking that session.userId matches the target user id (party id)
-      if (user.id !== lobby.id) throw new Error("Unauthorized");
-
-      // Request is authorized - forward it
-      return req;
-    } catch (e) {
+    if (!payload || payload?.userId !== lobby.id || payload?.isUpload) {
+      console.log("Problem 1");
       return unauthorized();
     }
+    req.headers.set("x-user-id", payload.userId);
+    return req;
   }
 
   static async onBeforeConnect(req: Party.Request, lobby: Party.Lobby) {
@@ -188,21 +181,14 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
     const payload = await verifyToken(req, lobby);
 
-    if (!payload || payload?.userId !== lobby.id) return unauthorized();
+    if (!payload || payload?.userId !== lobby.id) {
+      console.log("Problem 2");
+
+      return unauthorized();
+    }
 
     req.headers.set("x-user-id", payload.userId);
     return req;
-    try {
-      const user = await getCurrentUser(req, lobby);
-
-      // Authorize the user by checking that session.userId matches the target user id (party id)
-      if (user.id !== lobby.id) throw new Error("Unauthorized");
-
-      // Request is authorized - forward it
-      return req;
-    } catch (e) {
-      return unauthorized();
-    }
   }
 
   poke(data?: PokeMessage) {

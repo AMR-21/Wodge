@@ -3,12 +3,6 @@ import UserParty from "../user-party";
 import { ok, unauthorized } from "../../lib/http-utils";
 
 export async function update(party: UserParty, c: Context) {
-  const serviceKey = c.req.header("authorization");
-
-  if (serviceKey !== party.room.env.SERVICE_KEY) {
-    return unauthorized();
-  }
-
   const workspaceParty = party.room.context.parties.workspace!;
 
   const req = [...party.workspacesStore].map((wid) => {

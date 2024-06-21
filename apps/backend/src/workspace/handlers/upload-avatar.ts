@@ -22,16 +22,16 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
       ContentType: file.type,
     };
     // Inform the DB
-    const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
-      method: "POST",
-      headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
-        workspaceId: party.room.id,
-        key,
-      },
-    });
+    // const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
+    //   method: "POST",
+    //   headers: {
+    //     authorization: party.room.env.SERVICE_KEY as string,
+    //     workspaceId: party.room.id,
+    //     key,
+    //   },
+    // });
 
-    if (!res.ok) return c.json({ error: "Failed to update avatar" }, 400);
+    // if (!res.ok) return c.json({ error: "Failed to update avatar" }, 400);
 
     const command = new PutObjectCommand(input);
     const response = await s3Client.send(command);
@@ -44,7 +44,7 @@ export async function uploadAvatar(party: WorkspaceParty, c: Context) {
 
     await party.poke();
 
-    return c.json({ response }, 200);
+    return c.json({ response, key }, 200);
   } catch (error) {
     console.log("Error uploading avatar", error);
     return c.json(error, 400);

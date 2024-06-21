@@ -30,9 +30,15 @@ export function FileMessage({
         isPending={isPending}
         onClick={async () => {
           setIsPending(true);
-          await download(
-            getSrcLink(message.id, workspaceId, channelId, teamId),
+          const link = await getSrcLink(
+            message.id,
+            workspaceId,
+            channelId,
+            teamId,
           );
+
+          if (!link) throw new Error("Failed to get audio link");
+          await download(link);
           setIsPending(false);
         }}
       />

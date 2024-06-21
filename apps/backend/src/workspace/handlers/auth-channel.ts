@@ -70,8 +70,9 @@ export function authChannel(party: WorkspaceParty, c: Context) {
 
   if (
     !isTeamMember({ structure: party.workspaceStructure.data, userId, teamId })
-  )
+  ) {
     return json({ success: false });
+  }
 
   if (
     canEdit({

@@ -65,7 +65,7 @@ export function DataTableActions<TData>({
                 className={cn(menuItems?.length === 0 && "invisible")}
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="center">
+            <DropdownMenuContent align="center" className="w-52">
               {menuItems?.map((item, idx) => {
                 if (item.type === "separator") {
                   return <DropdownMenuSeparator key={idx} />;

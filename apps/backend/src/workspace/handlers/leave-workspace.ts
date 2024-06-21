@@ -1,9 +1,13 @@
 import { removeMemberMutation } from "@repo/data/models/workspace/mutators/remove-member";
 import WorkspaceParty from "../workspace-party";
-import { WorkspaceMembers, makeWorkspaceMembersKey } from "@repo/data";
+import {
+  WorkspaceMembers,
+  makeWorkspaceMembersKey,
+  makeWorkspaceStructureKey,
+} from "@repo/data";
 import { produce } from "immer";
 
-import { ok } from "../../lib/http-utils";
+import { badRequest, ok } from "../../lib/http-utils";
 import { Context } from "hono";
 
 export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
@@ -21,10 +25,27 @@ export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
     draft.lastModifiedVersion = globalVersion + 1;
   });
 
+  // remove the member from every group and every team
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data.teams.forEach((t) => {
+      if (t.members.includes(memberId))
+        t.members = t.members.filter((tt) => tt !== memberId);
+    });
+
+    draft.data.groups.forEach((g) => {
+      if (g.members.includes(memberId))
+        g.members = g.members.filter((gg) => gg !== memberId);
+    });
+
+    draft.lastModifiedVersion = globalVersion + 1;
+  });
+
   party.versions.set("globalVersion", globalVersion + 1);
+
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     REPLICACHE_VERSIONS_KEY: party.versions,
+    [makeWorkspaceStructureKey()]: party.workspaceStructure,
   });
 
   // Update the user party
@@ -34,22 +55,15 @@ export async function leaveWorkspace(party: WorkspaceParty, c: Context) {
 
   // remove from db too
 
-  await Promise.all([
-    userInstance.fetch("/service/remove-workspace", {
-      method: "POST",
-      headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
-      },
-      body: JSON.stringify({ workspaceId: party.room.id }),
-    }),
-    fetch(`${party.room.env.AUTH_DOMAIN}/api/remove-member`, {
-      method: "POST",
-      headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
-      },
-      body: JSON.stringify({ workspaceId: party.room.id, memberId }),
-    }),
-  ]);
+  const res = await userInstance.fetch("/service/remove-workspace", {
+    method: "POST",
+    headers: {
+      authorization: party.room.env.SERVICE_KEY as string,
+    },
+    body: JSON.stringify({ workspaceId: party.room.id }),
+  });
+
+  if (!res.ok) return badRequest();
 
   await party.poke({
     type: "workspaceMembers",

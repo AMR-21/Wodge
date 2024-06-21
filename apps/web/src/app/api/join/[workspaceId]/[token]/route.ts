@@ -36,7 +36,6 @@ export async function POST(
     },
   );
 
-  console.log(res.status);
   if (!res.ok) {
     console.log("no");
     const db = createDb();

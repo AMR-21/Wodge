@@ -2,7 +2,7 @@
  * Credits to partykit nextjs chat template
  */
 import type * as Party from "partykit/server";
-import { badRequest, error, ok, unauthorized } from "./http-utils";
+import { badRequest, error, getRoute, ok, unauthorized } from "./http-utils";
 import WorkspaceParty from "../workspace/workspace-party";
 import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
 import { ChannelsTypes, UserType } from "@repo/data";
@@ -30,74 +30,6 @@ export const isSessionValid = (
   return Boolean(
     session && (!session.expires || session.expires > new Date().toISOString())
   );
-};
-
-/**
- * Get the current session by the cookie in the request and from the
- * next-auth endpoint
- */
-
-export const getCurrentUser = async (
-  req: Party.Request,
-  lobby: Party.Lobby
-) => {
-  // Extract auth cookies from the request
-  // Should be on the same domain in order to work
-  const cookie = req.headers.get("cookie");
-
-  if (!cookie) throw new Error("No cookie found");
-
-  // Fetch the session from the auth endpoint validated by the CSRF token
-  const res = await fetch(`${lobby.env.AUTH_DOMAIN}/auth/user`, {
-    headers: {
-      Accept: "application/json",
-      Cookie: cookie,
-    },
-  });
-
-  if (!res.ok) throw new Error("Unauthorized");
-
-  const user = (await res.json()) as UserType;
-
-  // Validate the session
-  if (!user) throw new Error("Invalid Session");
-
-  // Set user id in a header for some use cases
-  req.headers.set("x-user-id", user.id);
-
-  req.headers.set("x-user-data", JSON.stringify(user));
-
-  return user;
-};
-
-/**
- *  Check if the user is authorized to access the workspace
- */
-
-export const authWorkspaceAccess = async (
-  req: Party.Request,
-  lobby: Party.Lobby
-) => {
-  // 1. read user session and membership from db in 1 batch
-  const cookie = req.headers.get("cookie");
-
-  const workspaceId = lobby.id;
-  if (!cookie) return false;
-
-  const res = await fetch(`${lobby.env.APP_DOMAIN}/api/workspace-access`, {
-    headers: {
-      authorization: lobby.env.SERVICE_KEY as string,
-      cookie,
-      workspaceId,
-    },
-  });
-
-  // console.log(workspaceId);
-  // 2. check if user is authentic
-  // 3. check if user is member of workspace
-  if (!res.ok) return false;
-
-  return true;
 };
 
 /**
@@ -199,7 +131,7 @@ export const verify = async (req: Party.Request, lobby: Party.Lobby) => {
   const token = req.headers.get("authorization");
 
   //Todo return to false
-  if (!token) return true;
+  if (!token) return false;
   try {
     const { payload } = await jose.jwtVerify(
       token,
@@ -220,7 +152,9 @@ export const verifyToken = async (req: Party.Request, lobby: Party.Lobby) => {
   if (!token || typeof token !== "string") {
     token = req.headers.get("authorization");
 
-    if (!token) return;
+    if (!token) {
+      return;
+    }
   }
 
   try {
@@ -229,10 +163,12 @@ export const verifyToken = async (req: Party.Request, lobby: Party.Lobby) => {
       new TextEncoder().encode(lobby.env.SERVICE_KEY as string)
     );
 
-    if (payload.exp && payload.exp < Date.now() / 1000) return;
+    if (payload.exp && payload.exp < Date.now() / 1000) {
+      return;
+    }
 
     return payload;
-  } catch {
+  } catch (e) {
     return;
   }
 };

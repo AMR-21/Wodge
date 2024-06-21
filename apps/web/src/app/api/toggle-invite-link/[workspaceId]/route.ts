@@ -3,20 +3,28 @@ import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
 import { sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { sign } from "../../../../lib/utils/sign";
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest,
+  { params: { workspaceId } }: { params: { workspaceId: string } },
+) {
   const db = createDb();
 
-  const serviceKey = req.headers.get("authorization");
+  const userId = req.headers.get("x-user-id");
 
-  if (env.SERVICE_KEY !== serviceKey)
-    return new Response(null, { status: 401 });
-
-  const workspaceId = req.headers.get("workspaceId");
-
-  if (!workspaceId) {
+  if (!userId) {
     return new Response(null, { status: 401 });
   }
+
+  const token = await sign({ userId });
+
+  const authRes = await fetch(
+    `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/isAdmin?token=${token}`,
+    { headers: { authorization: env.SERVICE_KEY as string } },
+  );
+
+  if (!authRes.ok) return new Response(null, { status: 401 });
 
   try {
     await db.run(
@@ -25,7 +33,6 @@ export async function PATCH(req: NextRequest) {
 
     return new Response(null, { status: 200 });
   } catch (e) {
-    console.log(e);
     return new Response(null, { status: 400 });
   }
 }

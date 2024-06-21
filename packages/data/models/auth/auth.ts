@@ -61,6 +61,7 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
 
     return { user, updatedUser: updated[0] };
   } catch (e) {
+    console.log(e);
     if (!(e instanceof Error)) return { error: "Internal server error" };
 
     switch (e.message) {

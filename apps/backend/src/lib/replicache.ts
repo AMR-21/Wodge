@@ -84,7 +84,9 @@ const clientStateNotFoundError = {};
 export async function repPull({ req, storage, versions, patcher }: PullProps) {
   const userId = req.header("x-user-id");
 
-  if (!userId) return unauthorized();
+  if (!userId) {
+    return unauthorized();
+  }
 
   const data = await req.json();
   const validatedData = PullRequestSchema.safeParse(data);
@@ -224,7 +226,6 @@ export async function repPush({ req, storage, versions, runner }: PushProps) {
       case clientStateNotFoundError:
         return json({ error: "ClientStateNotFound" }, 200);
       default:
-        console.log(e);
         return error("Internal server error");
     }
   }

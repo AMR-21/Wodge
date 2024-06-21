@@ -5,36 +5,6 @@ import { badRequest, ok } from "../../lib/http-utils";
 import { Context } from "hono";
 
 export async function updateWorkspace(party: WorkspaceParty, c: Context) {
-  // 1. authorize
-
-  // 2. Validate data
-  const body = await c.req.json();
-  const validatedFields = WorkspaceSchema.pick({
-    name: true,
-    slug: true,
-  }).safeParse(body);
-
-  if (!validatedFields.success) {
-    return badRequest();
-  }
-
-  const { data } = validatedFields;
-
-  const res = await fetch(
-    `${party.room.env.AUTH_DOMAIN}/api/update-workspace`,
-    {
-      method: "POST",
-      headers: {
-        // Accept: "application/json",
-        authorization: party.room.env.SERVICE_KEY as string,
-        workspaceId: party.room.id,
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  if (!res.ok) return badRequest();
-
   await party.poke();
 
   const nextVersion = party.versions.get("globalVersion")! + 1;

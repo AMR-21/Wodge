@@ -17,12 +17,12 @@ export function ImageMessage({
   const { data, isPending, isFetching } = useQuery({
     queryKey: ["image", message.id],
     queryFn: async () => {
-      const res = await fetch(
-        getSrcLink(message.id, workspaceId, channelId, teamId),
-        {
-          credentials: "include",
-        },
-      );
+      const link = await getSrcLink(message.id, workspaceId, channelId, teamId);
+
+      if (!link) throw new Error("Failed to get audio link");
+      const res = await fetch(link, {
+        credentials: "include",
+      });
 
       const { downloadUrl } = await res.json<{
         downloadUrl: string;

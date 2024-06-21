@@ -19,12 +19,12 @@ export function AudioMessage({
   const { data, isPending, isFetching, isError } = useQuery({
     queryKey: ["audio", message.id],
     queryFn: async () => {
-      const res = await fetch(
-        getSrcLink(message.id, workspaceId, channelId, teamId),
-        {
-          credentials: "include",
-        },
-      );
+      const link = await getSrcLink(message.id, workspaceId, channelId, teamId);
+
+      if (!link) throw new Error("Failed to get audio link");
+      const res = await fetch(link, {
+        credentials: "include",
+      });
 
       if (!res.ok) throw new Error("Failed to fetch audio");
       const { downloadUrl } = await res.json<{

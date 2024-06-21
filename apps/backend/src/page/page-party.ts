@@ -9,7 +9,7 @@ import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
 import { getRoute, ok, unauthorized } from "../lib/http-utils";
-import { authorizeChannel, getCurrentUser } from "../lib/auth";
+import { authorizeChannel, verifyToken } from "../lib/auth";
 import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
@@ -78,12 +78,22 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     }
 
     try {
-      const user = await getCurrentUser(req, lobby);
+      const payload = await verifyToken(req, lobby);
+
+      if (!payload || !payload?.userId || payload?.isUpload) {
+        return unauthorized();
+      }
+
+      req.headers.set("x-user-id", payload.userId as string);
+
+      if (payload?.username)
+        req.headers.set("x-username", payload.username as string);
 
       return await authorizeChannel(
         req,
         lobby,
-        user.id,
+        payload.userId as string,
+
         "page",
         queryString.parse(req.url) as {
           folderId: string;
@@ -105,12 +115,21 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     if (getRoute(req).startsWith("/prompt")) return req;
 
     try {
-      const user = await getCurrentUser(req, lobby);
+      const payload = await verifyToken(req, lobby);
+
+      if (!payload || !payload?.userId || payload?.isUpload) {
+        return unauthorized();
+      }
+
+      req.headers.set("x-user-id", payload.userId as string);
+
+      if (payload?.username)
+        req.headers.set("x-username", payload.username as string);
 
       return await authorizeChannel(
         req,
         lobby,
-        user.id,
+        payload.userId as string,
         "page",
         queryString.parse(req.url) as {
           folderId: string;

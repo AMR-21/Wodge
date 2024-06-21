@@ -40,7 +40,7 @@ export function useCurrentUser() {
   useEffect(() => {
     if (!isPending && data) {
       if (!useAppStore.getState().userStore) createUserRep(data?.id);
-      if (!useAppStore.getState().socket) connectSocket(data?.id);
+      if (!useAppStore.getState().socket && data.id) connectSocket(data?.id);
     }
   }, [data, isPending]);
 

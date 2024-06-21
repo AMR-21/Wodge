@@ -9,6 +9,7 @@ import {
   WORKSPACE_STRUCTURE_KEY,
   addWorkspaceMember,
   makeWorkspaceMembersKey,
+  makeWorkspaceStructureKey,
 } from "@repo/data";
 import { isMemberInWorkspace } from "../../lib/utils";
 import { produce } from "immer";
@@ -20,35 +21,12 @@ export async function joinWorkspace(party: WorkspaceParty, c: Context) {
 
   if (!userId) return unauthorized();
 
-  // if (!token) return badRequest();
-
   // // 1. check if the user is already a member
-  // const isMember = isMemberInWorkspace(userId, party);
+  const isMember = isMemberInWorkspace(userId, party);
 
-  // if (isMember) return badRequest();
-
-  // // 2. Add user to the workspace in the db
-  // const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/join-workspace`, {
-  //   method: "POST",
-  //   headers: {
-  //     // Accept: "application/json",
-  //     authorization: party.room.env.SERVICE_KEY as string,
-  //     workspaceId: party.room.id,
-  //     userId: userId,
-  //     token: token,
-  //   },
-  // });
-
-  // if (!res.ok) return badRequest();
+  if (isMember) return badRequest();
 
   const { invite } = await c.req.json<{ invite: Invite }>();
-
-  // try {
-  //   data = await res.json();
-  // } catch (e) {}
-
-  // if (!data) return badRequest();
-  // const { invite } = data;
 
   if (!invite) return badRequest();
   // if (!invite) return badRequest();
@@ -96,7 +74,7 @@ export async function joinWorkspace(party: WorkspaceParty, c: Context) {
     [WORKSPACE_INVITES_KEY]: party.invites,
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
-    [WORKSPACE_STRUCTURE_KEY]: party.workspaceStructure,
+    [makeWorkspaceStructureKey()]: party.workspaceStructure,
   });
 
   // Inform current members of the new user

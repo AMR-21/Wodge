@@ -16,6 +16,7 @@ export function useUploadToken() {
 
       return data.token;
     },
+    staleTime: 0,
   });
 
   return token;

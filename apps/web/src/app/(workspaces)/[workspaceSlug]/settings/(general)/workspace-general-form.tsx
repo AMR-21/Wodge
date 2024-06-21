@@ -43,14 +43,11 @@ export function WorkspaceGeneralForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: Pick<Workspace, "name" | "slug">) => {
-      await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/update`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(data),
-        },
-      );
+      await fetch(`/api/update-workspace/${workspaceId}`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
 
       return data;
     },

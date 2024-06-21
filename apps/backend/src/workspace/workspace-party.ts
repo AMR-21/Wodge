@@ -8,12 +8,7 @@ import {
 } from "../lib/http-utils";
 
 import * as jose from "jose";
-import {
-  authWorkspaceAccess,
-  getCurrentUser,
-  verify,
-  verifyToken,
-} from "../lib/auth";
+import { getCurrentUser, verify, verifyToken } from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -82,9 +77,11 @@ export default class WorkspaceParty
     if (
       route !== "/create" &&
       route !== "/join" &&
+      !route.startsWith("/service") &&
       !this.workspaceMembers.data.members.some((member) => member.id === userId)
-    )
+    ) {
       return unauthorized();
+    }
 
     // @ts-ignore
     return this.app.fetch(req);
@@ -104,38 +101,19 @@ export default class WorkspaceParty
 
     const payload = await verifyToken(req, lobby);
 
-    if (!payload || !payload?.userId) return unauthorized();
+    if (!payload || !payload?.userId) {
+      return unauthorized();
+    }
 
     const route = getRoute(req);
 
-    if (payload?.isUpload && !route.startsWith("/file")) return unauthorized();
+    if (payload?.isUpload && !route.startsWith("/file")) {
+      return unauthorized();
+    }
 
     req.headers.set("x-user-id", payload.userId as string);
 
     return req;
-
-    if (getRoute(req).startsWith("/service")) return req;
-
-    try {
-      // maybe removed when bindings are supported
-      const user = await getCurrentUser(req, lobby);
-      if (!user) return unauthorized();
-
-      const route = getRoute(req);
-      // Check if the request is to create or join the workspace then put user data in the headers
-      if (route === "/create" || route === "/join") {
-        return req;
-      }
-
-      // Check if the user is authorized to access the workspace
-      // i.e. is member of the workspace
-      if (!authWorkspaceAccess(req, lobby)) return unauthorized();
-
-      // Request is authorized - forward it
-      return req;
-    } catch (e) {
-      return unauthorized();
-    }
   }
 
   async poke(

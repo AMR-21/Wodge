@@ -1,4 +1,5 @@
 import { currentUser } from "@/lib/supabase/current-user";
+import { sign } from "@/lib/utils/sign";
 import { UpdateUserSchema } from "@repo/data";
 import { updateUserById } from "@repo/data/server";
 import { env } from "@repo/env";
@@ -7,9 +8,9 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   // 1. Authenticate access
 
-  const user = await currentUser();
+  const userId = req.headers.get("x-user-id");
 
-  if (!user) {
+  if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -28,20 +29,18 @@ export async function POST(req: NextRequest) {
   // 3. Check if there is a new profile avatar
 
   // 4. Update user data
-  const { updatedUser, error } = await updateUserById(user.id, {
+  const { updatedUser, error } = await updateUserById(userId, {
     ...data,
     updatedAt: new Date(),
   });
 
   if (updatedUser) {
+    const token = await sign({ userId });
     //inform workspaces
     await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/user/${user.id}/update`,
+      `${env.BACKEND_DOMAIN}/parties/user/${userId}/update?token=${token}`,
       {
         method: "POST",
-        headers: {
-          authorization: env.SERVICE_KEY,
-        },
       },
     );
     return Response.json({ success: true, user: updatedUser });

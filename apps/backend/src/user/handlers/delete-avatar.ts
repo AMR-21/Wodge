@@ -11,26 +11,6 @@ export async function deleteAvatar(party: UserParty, c: Context) {
   const bucket = "avatars";
   let key = makeUserAvatarKey(party.room.id);
 
-  const res = await fetch(
-    `${party.room.env.AUTH_DOMAIN}/api/update-user-avatar`,
-    {
-      method: "DELETE",
-      headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
-        userId: party.room.id,
-      },
-    }
-  );
-
-  if (!res.ok) return c.json({ error: "Failed to delete avatar" }, 400);
-
-  const { user } = (await res.json()) as { user: UserType };
-
-  if (!user) return c.json({ error: "Failed to delete avatar" }, 400);
-  key = user.avatar?.split("/").pop()!;
-
-  if (!key) return c.json({ error: "Failed to delete avatar" }, 400);
-
   const checkFile = await getSignedUrl(
     s3Client,
     new HeadObjectCommand({ Bucket: bucket, Key: key }),
@@ -40,7 +20,19 @@ export async function deleteAvatar(party: UserParty, c: Context) {
     method: "HEAD",
   });
   if (checkFileResponse.statusText === "Not Found") {
-    return c.json({ message: "File does not exist" }, 400);
+    const workspaceParty = party.room.context.parties.workspace!;
+
+    const req = [...party.workspacesStore].map((wid) => {
+      return workspaceParty.get(wid).fetch("/service/member-update", {
+        method: "POST",
+        headers: {
+          Authorization: party.room.env.SERVICE_KEY as string,
+        },
+      });
+    });
+
+    await Promise.all(req);
+    return c.json({ message: "File does not exist" }, 200);
   } else {
     const deleteUrl = await getSignedUrl(
       s3Client,
