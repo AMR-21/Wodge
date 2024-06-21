@@ -1,9 +1,16 @@
-import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
+//@ts-nocheck
 
-// await import("./node_modules/@repo/env/index.js");
+const { setupDevPlatform } = require("@cloudflare/next-on-pages/next-dev");
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+});
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withPWA({
   transpilePackages: ["@radix-ui"],
   typescript: {
     // ignoreBuildErrors: true,
@@ -11,14 +18,16 @@ const nextConfig = {
   experimental: {
     // typedRoutes: true,
   },
-};
+});
 
 /**
  * Add Cloudflare bindings for Next.js development mode.
  */
 
-https: if (process.env.NODE_ENV === "development") {
-  await setupDevPlatform();
-}
+(async () => {
+  if (process.env.NODE_ENV === "development") {
+    await setupDevPlatform();
+  }
+})();
 
-export default nextConfig;
+module.exports = nextConfig;
