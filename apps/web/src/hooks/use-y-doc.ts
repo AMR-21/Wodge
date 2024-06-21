@@ -32,10 +32,19 @@ export function useYDoc({
     party: "page",
     doc: idbProvider.doc,
     options: {
-      params: () => ({
+      params: async () => ({
         folderId,
         teamId,
         workspaceId,
+        token: await (async () => {
+          const res = await fetch(`/api/token`);
+
+          if (!res.ok) return "";
+
+          const data = await res.json<{ token: string }>();
+
+          return data.token;
+        })(),
       }),
     },
   });

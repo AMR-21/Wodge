@@ -6,7 +6,8 @@ import { badRequest, error, ok, unauthorized } from "./http-utils";
 import WorkspaceParty from "../workspace/workspace-party";
 import { AuthChannelResponse } from "../workspace/handlers/auth-channel";
 import { ChannelsTypes, UserType } from "@repo/data";
-import { createClient } from "@supabase/supabase-js";
+import * as jose from "jose";
+import queryString from "query-string";
 /**
  * Referenced from user client model
  */
@@ -46,16 +47,6 @@ export const getCurrentUser = async (
 
   if (!cookie) throw new Error("No cookie found");
 
-  // const parseCookie = (str: string) =>
-  //   str
-  //     .split(";")
-  //     .map((v) => v.split("="))
-  //     .reduce((acc, v) => {
-  //       //@ts-ignore
-  //       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-  //       return acc;
-  //     }, {});
-
   // Fetch the session from the auth endpoint validated by the CSRF token
   const res = await fetch(`${lobby.env.APP_DOMAIN}/auth/user`, {
     headers: {
@@ -92,8 +83,6 @@ export const authWorkspaceAccess = async (
 
   const workspaceId = lobby.id;
   if (!cookie) return false;
-
-  console.log("called");
 
   const res = await fetch(`${lobby.env.APP_DOMAIN}/api/workspace-access`, {
     headers: {
@@ -203,4 +192,47 @@ export const authorizeChannel = async (
   req.headers.set("x-team-moderator", body.isOwner ? "true" : "false");
 
   return req;
+};
+
+export const verify = async (req: Party.Request, lobby: Party.Lobby) => {
+  //verify jwt
+  const token = req.headers.get("authorization");
+
+  //Todo return to false
+  if (!token) return true;
+  try {
+    const { payload } = await jose.jwtVerify(
+      token,
+      new TextEncoder().encode(lobby.env.SERVICE_KEY as string)
+    );
+
+    if (payload.exp && payload.exp < Date.now() / 1000) return false;
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const verifyToken = async (req: Party.Request, lobby: Party.Lobby) => {
+  let token = queryString.parseUrl(req.url).query?.token;
+
+  if (!token || typeof token !== "string") {
+    token = req.headers.get("authorization");
+
+    if (!token) return;
+  }
+
+  try {
+    const { payload } = await jose.jwtVerify(
+      token,
+      new TextEncoder().encode(lobby.env.SERVICE_KEY as string)
+    );
+
+    if (payload.exp && payload.exp < Date.now() / 1000) return;
+
+    return payload;
+  } catch {
+    return;
+  }
 };

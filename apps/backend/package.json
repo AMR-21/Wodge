@@ -13,6 +13,7 @@
     "cookie-parse": "^0.4.0",
     "hono": "^4.2.3",
     "immer": "^10.0.3",
+    "jose": "^5.4.1",
     "livekit-server-sdk": "^2.1.2",
     "nanoid": "^5.0.5",
     "object-sizeof": "^2.6.4",

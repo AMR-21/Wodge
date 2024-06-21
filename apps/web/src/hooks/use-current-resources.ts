@@ -13,10 +13,7 @@ export function useCurrentResources() {
   const { data, isError } = useQuery({
     queryFn: async () => {
       const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}/${btoa(teamId)}`,
-        {
-          credentials: "include",
-        },
+        `/api/files/${workspaceId}/${teamId}/${btoa(teamId)}`,
       );
 
       const data = await res.json<string[]>();
@@ -49,9 +46,9 @@ export function useCurrentResources() {
 
   const files = levelItems?.filter((p) => !p.includes("/")) || [];
 
-  if (isError) {
-    console.error("Failed to fetch resources");
-  }
+  // if (isError) {
+  //   console.error("Failed to fetch resources");
+  // }
 
   return { files, dirs, curPath, curLevel };
 }

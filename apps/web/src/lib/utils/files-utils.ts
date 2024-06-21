@@ -7,7 +7,7 @@ export function getSrcLink(id: string, wid: string, cid: string, tid: string) {
 
 export async function download(url: string, name?: string) {
   try {
-    const res = await fetch(url, { credentials: "include" });
+    const res = await fetch(url);
 
     if (!res.ok) throw new Error("Failed to download file");
 
@@ -33,6 +33,7 @@ export async function download(url: string, name?: string) {
       document.body.removeChild(tempLink);
     }
   } catch (e) {
+    console.log(e);
     toast.error("Failed to download file");
   }
 }

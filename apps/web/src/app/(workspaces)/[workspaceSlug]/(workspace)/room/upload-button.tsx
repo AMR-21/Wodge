@@ -21,6 +21,7 @@ import Webcam from "@uppy/webcam";
 
 import Audio from "@uppy/audio";
 import { toast } from "sonner";
+import { useUploadToken } from "../../use-upload-token";
 
 export function UploadButton({
   workspaceId,
@@ -37,54 +38,59 @@ export function UploadButton({
 
   const { user } = useCurrentUser();
 
-  const uppyRef = useMemo(
-    () =>
-      new Uppy({
-        allowMultipleUploadBatches: false,
-        restrictions: {
-          allowedFileTypes: [
-            "image/*",
-            "text/*",
-            "audio/*",
-            "video/*",
-            "application/*",
-            ".ppsx",
-          ],
-          maxNumberOfFiles: 1,
-        },
-      })
-        .use(Audio)
-        .use(Webcam)
-        .use(XHRUpload, {
-          limit: 1,
-          withCredentials: true,
-          method: "POST",
-          endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}`,
+  const token = useUploadToken();
+
+  const uppyRef = useMemo(() => {
+    return !token
+      ? null
+      : new Uppy({
+          allowMultipleUploadBatches: false,
+          restrictions: {
+            allowedFileTypes: [
+              "image/*",
+              "text/*",
+              "audio/*",
+              "video/*",
+              "application/*",
+              ".ppsx",
+            ],
+            maxNumberOfFiles: 1,
+          },
         })
-        .on("complete", (e) => {
-          let type = e.successful[0]?.type?.split("/")[0];
+          .use(Audio)
+          .use(Webcam)
+          .use(XHRUpload, {
+            limit: 1,
+            withCredentials: true,
+            method: "POST",
+            endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}`,
+            headers: {
+              authorization: token,
+            },
+          })
+          .on("complete", (e) => {
+            let type = e.successful[0]?.type?.split("/")[0];
 
-          if (type !== "audio" && type !== "video" && type !== "image")
-            type = "file";
+            if (type !== "audio" && type !== "video" && type !== "image")
+              type = "file";
 
-          // console.log("type", type, e);
+            // console.log("type", type, e);
 
-          // const img = document.createElement("img");
-          // img.style.display = "none";
-          // img.src = e.successful[0]?.preview;
-          // document.body.appendChild(img);
-          // console.log(img.naturalWidth, img.naturalHeight);
-          // document.body.removeChild(img);
+            // const img = document.createElement("img");
+            // img.style.display = "none";
+            // img.src = e.successful[0]?.preview;
+            // document.body.appendChild(img);
+            // console.log(img.naturalWidth, img.naturalHeight);
+            // document.body.removeChild(img);
 
-          const name = e.successful[0]?.name;
-          const fileId = e.successful[0]?.response?.body?.fileId as
-            | string
-            | undefined;
-          completeUpload(fileId, type as Message["type"], name);
-        })
-        .on("dashboard:show-panel", () => {}),
-    [rep],
-  );
+            const name = e.successful[0]?.name;
+            const fileId = e.successful[0]?.response?.body?.fileId as
+              | string
+              | undefined;
+            completeUpload(fileId, type as Message["type"], name);
+          })
+          .on("dashboard:show-panel", () => {});
+  }, [rep]);
 
   async function completeUpload(
     fileId?: string,
@@ -111,6 +117,8 @@ export function UploadButton({
       toast.error("Message send failed");
     }
   }
+
+  if (!uppyRef) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

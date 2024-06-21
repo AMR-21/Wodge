@@ -5,7 +5,6 @@ import { env } from "@repo/env";
 import { and, eq } from "drizzle-orm";
 
 export async function GET(req: Request) {
-  console.log("called");
   const db = createDb();
   const supabase = createClient();
   const serviceKey = req.headers.get("authorization");

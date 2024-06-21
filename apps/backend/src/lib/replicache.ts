@@ -83,6 +83,7 @@ const clientStateNotFoundError = {};
 
 export async function repPull({ req, storage, versions, patcher }: PullProps) {
   const userId = req.header("x-user-id");
+
   if (!userId) return unauthorized();
 
   const data = await req.json();

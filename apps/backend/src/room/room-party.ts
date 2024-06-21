@@ -1,7 +1,7 @@
 import type * as Party from "partykit/server";
 
 import { ok, unauthorized } from "../lib/http-utils";
-import { authorizeChannel, getCurrentUser } from "../lib/auth";
+import { authorizeChannel, getCurrentUser, verifyToken } from "../lib/auth";
 import { RoomPartyInterface, ServerRoomMessages, Versions } from "../types";
 import { Hono } from "hono";
 import { startFn } from "./start-fn";
@@ -42,8 +42,18 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
     }
 
     try {
-      const user = await getCurrentUser(req, lobby);
-      return authorizeChannel(req, lobby, user.id, "room");
+      const payload = await verifyToken(req, lobby);
+
+      if (!payload || !payload?.userId || payload?.isUpload) {
+        return unauthorized();
+      }
+
+      req.headers.set("x-user-id", payload.userId as string);
+
+      if (payload?.username)
+        req.headers.set("x-username", payload.username as string);
+
+      return authorizeChannel(req, lobby, payload.userId as string, "room");
     } catch (e) {
       return unauthorized();
     }

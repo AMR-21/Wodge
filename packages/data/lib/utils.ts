@@ -11,15 +11,16 @@ export function replicacheWrapper<Request, Result>(
 ) {
   return async (requestBody: Request, requestID: string) => {
     try {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/${domain}/${id}/replicache-${mode}`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(requestBody),
-          headers,
-        }
-      );
+      const res = await fetch(`/api/replicache/${mode}`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(requestBody),
+        headers: {
+          ...headers,
+          domain,
+          id,
+        },
+      });
 
       if (!res.ok) throw new Error("Network response was not ok");
 

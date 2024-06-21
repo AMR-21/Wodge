@@ -10,6 +10,17 @@ export function createSocket(userId: string) {
     host: env.NEXT_PUBLIC_BACKEND_DOMAIN,
     party: "user",
     room: userId,
+    query: async () => ({
+      token: await (async () => {
+        const res = await fetch(`/api/token`);
+
+        if (!res.ok) return "";
+
+        const data = await res.json<{ token: string }>();
+
+        return data.token;
+      })(),
+    }),
   });
 
   const userStore = useAppStore.getState().userStore;

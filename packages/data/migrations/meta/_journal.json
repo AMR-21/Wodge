@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1713726338737,
-      "tag": "0000_lonely_blazing_skull",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1717913959193,
-      "tag": "0001_yellow_swarm",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1717914898282,
-      "tag": "0002_easy_post",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1718465136699,
-      "tag": "0003_loud_mac_gargan",
+      "when": 1718917824078,
+      "tag": "0000_warm_steel_serpent",
       "breakpoints": true
     }
   ]

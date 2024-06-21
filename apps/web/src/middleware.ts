@@ -14,9 +14,6 @@ export async function middleware(request: NextRequest) {
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
 
   // order matters here
-  if (isApiRoute) {
-    return;
-  }
 
   if (
     nextUrl.pathname === "/auth/user" ||
@@ -56,6 +53,12 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
+
+  if (isApiRoute) {
+    response.headers.set("x-user-id", user.data.user?.id || "");
+    response.headers.set("x-username", curUser?.username || "");
+    return response;
+  }
 
   // auth routes ex. login, onboarding
   if (isAuthRoute) {

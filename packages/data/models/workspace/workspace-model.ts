@@ -17,7 +17,10 @@ import { nanoid } from "nanoid";
  */
 export async function createWorkspace(data: Workspace) {
   try {
+    // Validate ws data
     const db = createDb();
+
+    console.log(data);
 
     const [workspace] = await db.batch([
       db.insert(workspaces).values(data).returning(),

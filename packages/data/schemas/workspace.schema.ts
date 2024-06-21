@@ -76,7 +76,7 @@ export const invites = sqliteTable(
     emails: text("emails"),
     workspaceId: text("workspace_id")
       .notNull()
-      .references(() => workspaces.id),
+      .references(() => workspaces.id, { onDelete: "cascade" }),
   },
   (table) => ({
     primaryKey: primaryKey({

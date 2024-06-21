@@ -40,16 +40,12 @@ export const connectToRoom = async ({
       disconnectOnPageLeave: false,
     });
 
-    const resp = await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/room/${channelId}/call-token`,
-      {
-        headers: {
-          "x-workspace-id": workspaceId,
-          "x-team-id": teamId,
-        },
-        credentials: "include",
+    const resp = await fetch("/api/call-token/" + channelId, {
+      headers: {
+        "x-workspace-id": workspaceId,
+        "x-team-id": teamId,
       },
-    );
+    });
 
     if (!resp.ok) throw new Error("Failed to connect to room");
 

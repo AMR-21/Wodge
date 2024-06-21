@@ -34,7 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^18.2.56",
     "@vitejs/plugin-react": "^4.2.1",
-    "drizzle-kit": "^0.20.13",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "fake-indexeddb": "^5.0.2",
     "jsdom": "^24.0.0",

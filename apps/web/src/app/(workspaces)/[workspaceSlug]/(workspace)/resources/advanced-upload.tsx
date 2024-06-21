@@ -15,6 +15,8 @@ import { useParams } from "next/navigation";
 import { env } from "@repo/env";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useQuery } from "@tanstack/react-query";
+import { useUploadToken } from "../../use-upload-token";
 
 export function AdvancedUploadButton({ workspaceId }: { workspaceId: string }) {
   const [open, setOpen] = useState(false);
@@ -28,43 +30,49 @@ export function AdvancedUploadButton({ workspaceId }: { workspaceId: string }) {
     if (path) setFolder(path.join("/"));
   }, [path]);
 
-  const uppyRef = useMemo(
-    () =>
-      new Uppy({
-        allowMultipleUploadBatches: true,
-        restrictions: {
-          allowedFileTypes: [
-            "image/*",
-            "text/*",
-            "audio/*",
-            "video/*",
-            "application/*",
-            ".ppsx",
-          ],
-          maxNumberOfFiles: 10,
-        },
-      }).use(XHRUpload, {
-        limit: 1,
-        method: "POST",
-        endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}`,
-        withCredentials: true,
-        headers(file) {
-          const folder = inputRef.current?.value;
-          const filePath = folder
-            ? folder + "/" + file.name
-            : path
-              ? path.join("/") + "/" + file.name
-              : file.name;
+  const token = useUploadToken();
 
-          const base64 = btoa(filePath);
+  const uppyRef = useMemo(() => {
+    return !token
+      ? null
+      : new Uppy({
+          allowMultipleUploadBatches: true,
+          restrictions: {
+            allowedFileTypes: [
+              "image/*",
+              "text/*",
+              "audio/*",
+              "video/*",
+              "application/*",
+              ".ppsx",
+            ],
+            maxNumberOfFiles: 10,
+          },
+        }).use(XHRUpload, {
+          limit: 1,
+          formData: true,
+          method: "POST",
+          endpoint: `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/files/${teamId}`,
+          withCredentials: true,
+          headers: (file) => {
+            const folder = inputRef.current?.value;
+            const filePath = folder
+              ? folder + "/" + file.name
+              : path
+                ? path.join("/") + "/" + file.name
+                : file.name;
 
-          return {
-            "x-file-path": base64,
-          };
-        },
-      }),
-    [],
-  );
+            const base64 = btoa(filePath);
+
+            return {
+              "x-file-path": base64,
+              authorization: token,
+            };
+          },
+        });
+  }, [token]);
+
+  if (!uppyRef) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

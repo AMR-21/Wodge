@@ -10,8 +10,8 @@
     "pages:build": "pnpm next-on-pages",
     "pages:start": "wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat --port 3000",
     "pages:preview": "pnpm pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat --port 3000",
-    "db:migration:local": "wrangler d1 migrations apply wodge-db --local",
-    "db:migration:cloud": "wrangler d1 migrations apply wodge-db",
+    "db:migration:local": "wrangler d1 migrations apply wodge --local",
+    "db:migration:cloud": "wrangler d1 migrations apply wodge --remote",
     "db:studio": "drizzle-kit studio",
     "add:comp": "pnpm dlx shadcn-ui add"
   },
@@ -120,6 +120,7 @@
     "immer": "^10.0.4",
     "input-otp": "^1.2.4",
     "isomorphic-dompurify": "^2.7.0",
+    "jose": "^5.4.1",
     "jotai": "^2.7.0",
     "jwt-decode": "^4.0.0",
     "livekit-client": "^2.1.0",

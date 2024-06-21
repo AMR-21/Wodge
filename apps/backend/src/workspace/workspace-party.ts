@@ -7,7 +7,13 @@ import {
   unauthorized,
 } from "../lib/http-utils";
 
-import { authWorkspaceAccess, getCurrentUser } from "../lib/auth";
+import * as jose from "jose";
+import {
+  authWorkspaceAccess,
+  getCurrentUser,
+  verify,
+  verifyToken,
+} from "../lib/auth";
 
 import {
   ServerWorkspaceMembers,
@@ -69,6 +75,17 @@ export default class WorkspaceParty
   }
 
   async onRequest(req: Party.Request) {
+    const route = getRoute(req);
+
+    const userId = req.headers.get("x-user-id");
+
+    if (
+      route !== "/create" &&
+      route !== "/join" &&
+      !this.workspaceMembers.data.members.some((member) => member.id === userId)
+    )
+      return unauthorized();
+
     // @ts-ignore
     return this.app.fetch(req);
   }
@@ -78,12 +95,24 @@ export default class WorkspaceParty
   }
 
   static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
-    if (lobby.id.length !== ID_LENGTH) return notFound();
+    // if (lobby.id.length !== ID_LENGTH) return notFound();
 
     // CORS preflight response
     if (req.method === "OPTIONS") {
       return ok();
     }
+
+    const payload = await verifyToken(req, lobby);
+
+    if (!payload || !payload?.userId) return unauthorized();
+
+    const route = getRoute(req);
+
+    if (payload?.isUpload && !route.startsWith("/file")) return unauthorized();
+
+    req.headers.set("x-user-id", payload.userId as string);
+
+    return req;
 
     if (getRoute(req).startsWith("/service")) return req;
 

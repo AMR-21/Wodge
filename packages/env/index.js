@@ -13,6 +13,7 @@ export const env = createEnv({
     LIVEKIT_API_KEY: z.string(),
     LIVEKIT_API_SECRET: z.string(),
     APP_DOMAIN: z.string(),
+    BACKEND_DOMAIN: z.string(),
   },
 
   client: {
@@ -28,6 +29,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     APP_DOMAIN: process.env.APP_DOMAIN,
+    BACKEND_DOMAIN: process.env.BACKEND_DOMAIN,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_AVATARS_URL: process.env.NEXT_PUBLIC_AVATARS_URL,

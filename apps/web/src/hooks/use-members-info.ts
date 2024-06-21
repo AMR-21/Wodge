@@ -9,12 +9,7 @@ export function useMembersInfo() {
   const { data, isPending, isError } = useQuery({
     queryKey: [workspaceId, "members"],
     queryFn: async () => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/members-info`,
-        {
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`/api/members/${workspaceId}`);
 
       if (!res.ok) throw new Error("Failed to fetch members data");
 

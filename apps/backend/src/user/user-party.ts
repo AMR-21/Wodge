@@ -9,7 +9,7 @@ import type * as Party from "partykit/server";
 
 // import { handlePost } from "./endpoints/user-post";
 import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
-import { getCurrentUser } from "../lib/auth";
+import { getCurrentUser, verify, verifyToken } from "../lib/auth";
 import {
   PokeMessage,
   REPLICACHE_VERSIONS_KEY,
@@ -30,6 +30,7 @@ import { uploadAvatar } from "./handlers/upload-avatar";
 import { cors } from "hono/cors";
 import { deleteAvatar } from "./handlers/delete-avatar";
 import { serviceMiddleware } from "../lib/service-middleware";
+import queryString from "query-string";
 
 export default class UserParty implements Party.Server, UserPartyInterface {
   options: Party.ServerOptions = {
@@ -45,7 +46,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   async onStart() {
     this.app.use(
       cors({
-        origin: "http://localhost:3000",
+        origin: "",
         credentials: true,
       })
     );
@@ -155,6 +156,15 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     if (req.method === "OPTIONS") {
       return ok();
     }
+
+    // verify token
+    const payload = await verifyToken(req, lobby);
+
+    if (!payload || payload?.userId !== lobby.id || payload?.isUpload)
+      return unauthorized();
+
+    req.headers.set("x-user-id", payload.userId);
+    return req;
     if (getRoute(req).startsWith("/service")) return req;
 
     try {
@@ -176,6 +186,12 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       return ok();
     }
 
+    const payload = await verifyToken(req, lobby);
+
+    if (!payload || payload?.userId !== lobby.id) return unauthorized();
+
+    req.headers.set("x-user-id", payload.userId);
+    return req;
     try {
       const user = await getCurrentUser(req, lobby);
 

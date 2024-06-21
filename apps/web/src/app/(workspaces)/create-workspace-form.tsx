@@ -36,15 +36,11 @@ export function CreateWorkspaceForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: NewWorkspace & { id: string }) => {
-      const { id, ...workspace } = data;
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${data.id}/create`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(workspace),
-        },
-      );
+      const res = await fetch(`/api/create-workspace`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
 
       if (!res.ok) throw new Error("Failed to create workspace");
 

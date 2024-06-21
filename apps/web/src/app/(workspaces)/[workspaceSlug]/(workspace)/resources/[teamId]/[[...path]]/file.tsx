@@ -41,7 +41,7 @@ export function File({
         onClick={async () => {
           // download file
           const path = curPath ? curPath + "/" : "";
-          const url = `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/file/${teamId}/${btoa(path + name)}`;
+          const url = `/api/file/${wid}/${teamId}/${btoa(path + name)}`;
           await download(url);
         }}
       />
@@ -53,10 +53,9 @@ export function File({
 
           try {
             const res = await fetch(
-              `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${wid}/files/${teamId}/${btoa(path + name)}`,
+              `/api/file/${wid}/${teamId}/${btoa(path + name)}`,
               {
                 method: "DELETE",
-                credentials: "include",
               },
             );
 

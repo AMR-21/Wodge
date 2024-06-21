@@ -14,7 +14,8 @@
     "add:comp": "turbo add:comp",
     "reset:app": "rm -r ./apps/web/.wrangler && rm -r ./apps/backend/.partykit",
     "init:app": "pnpm generate && pnpm migrate:local && mkdir -p ./apps/backend/.partykit",
-    "pull:secrets": "infisical export > ./apps/web/.env --path=/web && infisical export > ./apps/web/.dev.vars --path=/web && infisical export > ./apps/backend/.env --path=/web",
+    "pull:secrets:dev": "infisical export > ./apps/web/.env --path=/web --env=dev && infisical export > ./apps/web/.dev.vars --path=/web --env=dev && infisical export > ./apps/backend/.env --path=/web --env=dev",
+    "pull:secrets:prod": "infisical export > ./apps/web/.env --path=/web --env=prod && infisical export > ./apps/web/.dev.vars --path=/web --env=prod && infisical export > ./apps/backend/.env --path=/web --env=prod",
     "livekit": "livekit-server --dev --bind 0.0.0.0"
   },
   "devDependencies": {

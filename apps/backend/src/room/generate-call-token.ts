@@ -17,15 +17,15 @@ export async function generateCallToken(party: RoomParty, c: Context) {
   // identifier to be used for participant.
   // it's available as LocalParticipant.identity with livekit-client SDK
 
-  const user = JSON.parse(c.req.header("x-user-data")!) as UserType;
-  const participantName = user.username!;
+  const userId = c.req.header("x-user-id");
+  const username = c.req.header("x-username");
 
   const at = new AccessToken(
     party.room.env.LIVEKIT_API_KEY as string,
     party.room.env.LIVEKIT_API_SECRET as string,
     {
-      identity: user.id,
-      name: participantName,
+      identity: userId,
+      name: username || "User",
       // token to expire after 10 minutes
       ttl: "10m",
     }

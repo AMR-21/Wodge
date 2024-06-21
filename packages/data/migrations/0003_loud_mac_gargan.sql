@@ -1,1 +1,0 @@
-ALTER TABLE workspaces ADD `is_premium` integer DEFAULT false;
