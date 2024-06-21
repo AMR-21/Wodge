@@ -46,8 +46,6 @@ const promptTemplates = [
   },
 ];
 
-
-
 export async function prompt(party: PageParty, c: Context) {
   const data = atob(c.req.param("prompt"));
   const action = c.req.param("action") && atob(c.req.param("action"));
@@ -60,14 +58,18 @@ export async function prompt(party: PageParty, c: Context) {
       model: model,
       prompt: `"${prompt}"`,
     });
-    const aiStreamResponse = await response.toAIStreamResponse();
-    const body = await aiStreamResponse.text();
-    return new Response(body, {
+    return response.toAIStreamResponse({
       headers: {
         ...CORS,
-        "Content-Type": "text/event-stream",
       },
     });
+    // const body = await aiStreamResponse.text();
+    // return new Response(body, {
+    //   headers: {
+    //     ...CORS,
+    //     "Content-Type": "text/event-stream",
+    //   },
+    // });
   }
 
   if (action) {

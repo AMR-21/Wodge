@@ -36,7 +36,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
 
   async onStart() {
     // this.app.post("/prompt", prompt.bind(null, this));
-    this.app.get("/prompt/:prompt/:action?/:lang?", prompt.bind(null, this));
+    // this.app.get("/prompt/:prompt/:action?/:lang?", prompt.bind(null, this));
 
     this.app.post("/replicache-pull", pagePull.bind(null, this));
 
