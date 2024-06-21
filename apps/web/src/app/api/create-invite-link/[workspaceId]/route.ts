@@ -4,22 +4,28 @@ import { env } from "@repo/env";
 import { eq, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { NextRequest, NextResponse } from "next/server";
+import { sign } from "../../../../lib/utils/sign";
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  {
+    params: { workspaceId },
+  }: { params: { workspaceId: string; token: string } },
+) {
   const db = createDb();
 
-  const serviceKey = req.headers.get("authorization");
+  const userId = req.headers.get("x-user-id");
 
-  if (env.SERVICE_KEY !== serviceKey)
-    return new Response(null, { status: 401 });
+  if (!userId) return new Response(null, { status: 401 });
 
-  const workspaceId = req.headers.get("workspaceId");
+  const authToken = await sign({ userId });
 
-  const userId = req.headers.get("userId");
+  const res = await fetch(
+    `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/isAdmin?token=${authToken}`,
+    { headers: { authorization: env.SERVICE_KEY as string } },
+  );
 
-  if (!workspaceId || !userId) {
-    return new Response(null, { status: 401 });
-  }
+  if (!res.ok) return new Response(null, { status: 401 });
 
   try {
     const token = nanoid(8);

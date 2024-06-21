@@ -22,13 +22,9 @@ export function InviteLink() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/invite-link`,
-        {
-          method: "POST",
-          credentials: "include",
-        },
-      );
+      await fetch(`/api/create-invite-link/${workspaceId}`, {
+        method: "POST",
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

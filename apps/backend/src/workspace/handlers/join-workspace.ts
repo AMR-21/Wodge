@@ -15,42 +15,43 @@ import { produce } from "immer";
 import { Context } from "hono";
 
 export async function joinWorkspace(party: WorkspaceParty, c: Context) {
-  const token = c.req.param("token");
+  // const token = c.req.param("token");
   const userId = c.req.header("x-user-id");
 
   if (!userId) return unauthorized();
 
-  if (!token) return badRequest();
+  // if (!token) return badRequest();
 
-  // 1. check if the user is already a member
-  const isMember = isMemberInWorkspace(userId, party);
+  // // 1. check if the user is already a member
+  // const isMember = isMemberInWorkspace(userId, party);
 
-  if (isMember) return badRequest();
+  // if (isMember) return badRequest();
 
-  // 2. Add user to the workspace in the db
-  const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/join-workspace`, {
-    method: "POST",
-    headers: {
-      // Accept: "application/json",
-      authorization: party.room.env.SERVICE_KEY as string,
-      workspaceId: party.room.id,
-      userId: userId,
-      token: token,
-    },
-  });
+  // // 2. Add user to the workspace in the db
+  // const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/join-workspace`, {
+  //   method: "POST",
+  //   headers: {
+  //     // Accept: "application/json",
+  //     authorization: party.room.env.SERVICE_KEY as string,
+  //     workspaceId: party.room.id,
+  //     userId: userId,
+  //     token: token,
+  //   },
+  // });
 
-  if (!res.ok) return badRequest();
+  // if (!res.ok) return badRequest();
 
-  let data: { invite: Invite } | undefined;
+  const { invite } = await c.req.json<{ invite: Invite }>();
 
-  try {
-    data = await res.json();
-  } catch (e) {}
+  // try {
+  //   data = await res.json();
+  // } catch (e) {}
 
-  if (!data) return badRequest();
-  const { invite } = data;
+  // if (!data) return badRequest();
+  // const { invite } = data;
 
   if (!invite) return badRequest();
+  // if (!invite) return badRequest();
   // 3. Add workspace to user data
   const userParty = party.room.context.parties.user!;
 

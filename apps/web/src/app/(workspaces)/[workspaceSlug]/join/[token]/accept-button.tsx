@@ -17,13 +17,9 @@ export function AcceptButton({ slug }: { slug: string }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/join/${token}`,
-        {
-          method: "POST",
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`/api/join/${workspaceId}/${token}`, {
+        method: "POST",
+      });
 
       if (!res.ok) throw new Error("Failed to join workspace");
     },

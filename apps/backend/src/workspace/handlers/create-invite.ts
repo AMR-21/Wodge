@@ -20,8 +20,7 @@ export async function createInvite(party: WorkspaceParty, c: Context) {
   const newInvite: Invite = {
     createdBy: userId,
     token: nanoid(),
-    limit: method === "link" ? limit : Infinity,
-    method,
+
     // emails,
   };
 

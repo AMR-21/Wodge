@@ -27,12 +27,7 @@ export function useInvites() {
   } = useQuery<Invite[]>({
     queryKey: ["invites", workspaceId],
     queryFn: async () => {
-      const res = await fetch(
-        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/invites`,
-        {
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`/api/get-invites/${workspaceId}`);
 
       const data = await res.json<{ invites?: Invite[] }>();
 

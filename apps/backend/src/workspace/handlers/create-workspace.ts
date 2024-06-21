@@ -66,7 +66,7 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
   const userInstance = userParty.get(userId);
 
   // Should not fail
-  const res2 = await userInstance.fetch("/service/add-workspace", {
+  const res = await userInstance.fetch("/service/add-workspace", {
     method: "POST",
     headers: {
       authorization: party.room.env.SERVICE_KEY as string,
@@ -74,7 +74,7 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
     },
   });
 
-  if (!res2.ok) return badRequest();
+  if (!res.ok) return badRequest();
 
   // 6. add the workspace in the do
   const globalVersion = (party.versions.get("globalVersion") as number) || 0;
