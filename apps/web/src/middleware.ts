@@ -1,4 +1,4 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 import { createDb, getUserById } from "@repo/data/server";
 import { users } from "@repo/data";
@@ -57,7 +57,19 @@ export async function middleware(request: NextRequest) {
   if (isApiRoute) {
     response.headers.set("x-user-id", user.data.user?.id || "");
     response.headers.set("x-username", curUser?.username || "");
-    return response;
+    if (process.env.NODE_ENV === "development") return response;
+
+    const responseHeaders = new Headers(response.headers);
+    responseHeaders.set("x-user-id", user.data.user?.id || "");
+    responseHeaders.set("x-username", curUser?.username || "");
+
+    const prodResponse = NextResponse.next({
+      request: {
+        headers: responseHeaders,
+      },
+    });
+
+    return prodResponse;
   }
 
   // auth routes ex. login, onboarding

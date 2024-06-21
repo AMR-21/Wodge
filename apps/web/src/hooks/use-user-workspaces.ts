@@ -12,7 +12,6 @@ export function useUserWorkspaces() {
   const { data, isPending, isError } = useQuery({
     queryKey: ["user-workspaces"],
     queryFn: async () => {
-      if (pathname === "/login") return [];
       const res = await fetch(`/api/user-workspaces`);
 
       if (!res.ok) throw new Error("Failed to fetch workspaces data");
@@ -22,7 +21,7 @@ export function useUserWorkspaces() {
       return data;
     },
 
-    enabled: !!user?.id || pathname === "/login",
+    enabled: !!user?.id,
   });
 
   if (isError) {

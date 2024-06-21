@@ -1,6 +1,7 @@
 import { sign } from "@/lib/utils/sign";
 
 export async function GET(req: Request) {
+  // console.log(req.headers);
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });

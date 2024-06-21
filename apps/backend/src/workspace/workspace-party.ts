@@ -48,7 +48,7 @@ export default class WorkspaceParty
   async onStart() {
     this.app.use(
       cors({
-        origin: this.room.env.APP_DOMAIN as string,
+        origin: "*",
         credentials: true,
         allowHeaders: ["x-file-path"],
       })

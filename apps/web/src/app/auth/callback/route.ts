@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
 
+  console.log({ code, next, origin });
   if (code) {
     const cookieStore = cookies();
     const supabase = createServerClient(
@@ -29,11 +30,13 @@ export async function GET(request: Request) {
       },
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+    console.log({ error, domain: env.APP_DOMAIN });
+
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${env.APP_DOMAIN}${next}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  return NextResponse.redirect(`${env.APP_DOMAIN}/auth/auth-code-error`);
 }

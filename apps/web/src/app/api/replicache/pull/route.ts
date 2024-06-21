@@ -6,12 +6,13 @@ import { sign } from "../../../../lib/utils/sign";
 export async function POST(req: Request, res: NextResponse) {
   const userId = req.headers.get("x-user-id");
 
+  // console.log(req.headers);
+
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const domain = req.headers.get("domain");
-
   const id = req.headers.get("id");
 
   if (!domain || !id) {

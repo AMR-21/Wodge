@@ -46,7 +46,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   async onStart() {
     this.app.use(
       cors({
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true,
       })
     );
