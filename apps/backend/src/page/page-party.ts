@@ -18,7 +18,6 @@ import { PagePartyInterface, ServerPageBoards, Versions } from "../types";
 import { startFn } from "./start-fn";
 import { pagePull } from "./page-pull";
 import { pagePush } from "./page-push";
-import { prompt } from "@/lib/prompt";
 
 export default class PageParty implements Party.Server, PagePartyInterface {
   // options: Party.ServerOptions = {

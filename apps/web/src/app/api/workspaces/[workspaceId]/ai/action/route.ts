@@ -1,10 +1,10 @@
-import { CORS, json, ok } from "../lib/http-utils";
-import { Context } from "hono";
-import { Prompt } from "@repo/data";
-import { type Ai } from "partykit-ai";
-import PageParty from "@/page/page-party";
-import { CoreMessage, streamText } from "ai";
+import { NextRequest } from "next/server";
 import { openai } from "@ai-sdk/openai";
+
+import { generateText, streamText } from "ai";
+import { createDb } from "@repo/data/server";
+import { AiActionSchema, memberships, workspaces } from "@repo/data";
+import { and, eq } from "drizzle-orm";
 
 const promptTemplates = [
   {
@@ -39,6 +39,9 @@ const promptTemplates = [
       "Translate the following text into the target language, ensuring accurate and contextually appropriate linguistic conversion that preserves the original meaning, tone, and intent of the source text. just give the translated text and nothing else. the translation should be in ",
   },
 
+  //complete
+  //simplify
+
   {
     case: "default",
     prompt_header:
@@ -46,56 +49,64 @@ const promptTemplates = [
   },
 ];
 
-export async function prompt(party: PageParty, c: Context) {
-  const data = atob(c.req.param("prompt"));
-  const action = c.req.param("action") && atob(c.req.param("action"));
-  const model = openai.chat("gpt-3.5-turbo");
+export async function POST(
+  req: NextRequest,
+  { params: { workspaceId } }: { params: { workspaceId: string } },
+) {
+  const userId = req.headers.get("x-user-id");
 
-  // This is a normal prompt to run, no action specified
-  if (!action) {
-    const prompt = data;
-    const response = await streamText({
-      model: model,
-      prompt: `"${prompt}"`,
-    });
-    return response.toAIStreamResponse({
-      headers: {
-        ...CORS,
-      },
-    });
-    // const body = await aiStreamResponse.text();
-    // return new Response(body, {
-    //   headers: {
-    //     ...CORS,
-    //     "Content-Type": "text/event-stream",
-    //   },
-    // });
+  if (!userId) {
+    return new Response("Unauthorized", { status: 401 });
   }
 
-  if (action) {
-    const template = promptTemplates.find(
-      (item: { case: string }) => item.case === action
-    );
+  // Check if the workspace premium and user is a member
+  const db = createDb();
 
-    const lang = c.req.param("lang") && atob(c.req.param("lang"));
+  const [workspace, membership] = await db.batch([
+    db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
+    }),
 
-    if (template) {
-      let prompt = template.prompt_header;
+    db.query.memberships.findFirst({
+      where: and(
+        eq(memberships.workspaceId, workspaceId),
+        eq(memberships.userId, userId),
+      ),
+    }),
+  ]);
 
-      if (lang) {
-        prompt = prompt + lang;
-      }
-      const response = await streamText({
-        model: model,
-        system: prompt,
-        prompt: `"${data}"`,
-      });
-      return json({ response });
-
-      // Run the AI model based on the action
-    } else {
-      // If the action is not found in the templates, return an error
-      return json({ error: "Invalid action" }, 400);
-    }
+  if (!workspace || !membership) {
+    return new Response("Unauthorized", { status: 401 });
   }
+
+  if (!workspace.isPremium)
+    return new Response("Unauthorized", { status: 401 });
+
+  const body = await req.json();
+
+  const validatedFields = AiActionSchema.safeParse(body);
+
+  if (!validatedFields.success)
+    return new Response("Invalid request", { status: 400 });
+
+  const { text: userText, action, lang } = validatedFields.data;
+
+  if (action === "translate" && !lang)
+    return new Response("Invalid request", { status: 400 });
+
+  let systemPrompt = promptTemplates.find(
+    (item) => item.case === action,
+  )!.prompt_header;
+
+  if (lang) {
+    systemPrompt += lang;
+  }
+
+  const { text } = await generateText({
+    model: openai("gpt-3.5-turbo"),
+    system: systemPrompt,
+    prompt: userText,
+  });
+
+  return Response.json({ text });
 }
