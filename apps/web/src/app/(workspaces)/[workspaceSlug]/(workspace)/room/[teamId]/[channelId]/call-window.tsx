@@ -4,29 +4,23 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useChannelPath } from "@/hooks/use-channel-path";
 import { cn } from "@/lib/utils";
-import { useAppStore } from "@/store/store";
 import { isCallWindowOpenAtom, isSidebarOpenAtom } from "@/store/global-atoms";
 import {
-  ControlBar,
-  FocusLayout,
   LiveKitRoom,
-  MediaDeviceMenu,
-  PreJoin,
-  useCreateLayoutContext,
   useDisconnectButton,
-  useLocalParticipantPermissions,
-  usePinnedTracks,
   VideoConference as VideoConf,
 } from "@livekit/components-react";
 import { useAtom, useAtomValue } from "jotai";
 import { useParams } from "next/navigation";
-import { memo, use, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { VideoConference } from "./video-conference";
 import {
   camDeviceAtom,
   camStatusAtom,
+  isCamListOpenAtom,
   isCarouselOpenAtom,
   isFullScreenAtom,
+  isMicListOpenAtom,
   micDeviceAtom,
   micStatusAtom,
   roomAtom,
@@ -34,12 +28,10 @@ import {
 } from "./atoms";
 import { connectToRoom } from "./connect-to-room";
 import { disconnectFromRoom } from "./disconnect-from-room";
-import { Room, Track } from "livekit-client";
+import { Track } from "livekit-client";
 import {
-  ChevronDown,
-  ChevronLeft,
+  ChevronRight,
   ChevronUp,
-  LogOut,
   Maximize,
   Mic,
   MicOff,
@@ -50,6 +42,7 @@ import {
   Users2,
   Video,
   VideoOff,
+  X,
 } from "lucide-react";
 import { supportsScreenSharing } from "@livekit/components-core";
 import { TrackToggle } from "./track-toggle";
@@ -59,12 +52,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MediaDeviceList } from "./media-device-list";
+import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
 
 export const CallWindow = memo(({}) => {
-  // const room = useAppStore((s) => s.room);
-
   const room = useAtomValue(roomAtom);
-  // const roomObj = useMemo(() => room, [room]);
   const [isConnecting, setIsConnecting] = useState(false);
 
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
@@ -80,9 +71,12 @@ export const CallWindow = memo(({}) => {
 
   const { workspaceId, workspaceSlug, workspace } = useCurrentWorkspace();
   const [isFullScreen, setFullScreen] = useAtom(isFullScreenAtom);
+
+  const isMicListOpen = useAtomValue(isMicListOpenAtom);
+  const isCamListOpen = useAtomValue(isCamListOpenAtom);
+
   useEffect(() => {
     function toggle() {
-      console.log("fullscreen change");
       setFullScreen(!!document.fullscreenElement);
     }
     document.documentElement.addEventListener("fullscreenchange", toggle);
@@ -104,6 +98,11 @@ export const CallWindow = memo(({}) => {
         onClick={(e) => e.stopPropagation()}
         suppressHydrationWarning
       >
+        <SidebarItemBtn
+          className="absolute right-4 top-4 z-[60]"
+          Icon={X}
+          onClick={() => setCallWindow(false)}
+        />
         <p>Start or join the call to engage with members</p>
         <Button
           size="sm"
@@ -132,7 +131,7 @@ export const CallWindow = memo(({}) => {
   return (
     <div
       className={cn(
-        "invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4 bg-background  transition-all",
+        "h invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4  bg-background transition-all",
         isSidebarOpen && "w-[calc(100vw-15rem)]",
         !isSidebarOpen && "w-[calc(100vw-0rem)]",
         isCallWindowOpen && "visible",
@@ -154,7 +153,12 @@ export const CallWindow = memo(({}) => {
       >
         <VideoConference className="flex-1" />
 
-        <div className="absolute bottom-0 w-full shrink-0 translate-y-0 transition-all group-hover/call:translate-y-0">
+        <div
+          className={cn(
+            "invisible absolute bottom-0 z-50 w-full shrink-0 translate-y-full transition-all group-hover/call:visible group-hover/call:translate-y-0",
+            (isMicListOpen || isCamListOpen) && "visible translate-y-0",
+          )}
+        >
           <ControlBtns />
         </div>
       </LiveKitRoom>
@@ -168,10 +172,13 @@ function ControlBtns() {
   const [screenStatus, setScreenStatus] = useAtom(screenStatusAtom);
   const [micStatus, setMicStatus] = useAtom(micStatusAtom);
   const [camStatus, setCamStatus] = useAtom(camStatusAtom);
-  const [isFullScreen, setFullScreen] = useAtom(isFullScreenAtom);
+  const isFullScreen = useAtomValue(isFullScreenAtom);
 
   const [micDevice, setMicDevice] = useAtom(micDeviceAtom);
   const [camDevice, setCamDevice] = useAtom(camDeviceAtom);
+
+  const [isMicListOpen, setIsMicListOpen] = useAtom(isMicListOpenAtom);
+  const [isCamListOpen, setIsCamListOpen] = useAtom(isCamListOpenAtom);
 
   const { buttonProps } = useDisconnectButton({
     className: "rounded-full p-3",
@@ -189,7 +196,7 @@ function ControlBtns() {
             setIsCarouselOpen(!isCarouselOpen);
           }}
         >
-          <ChevronLeft
+          <ChevronRight
             className={cn(
               "size-5 transition-all",
               isCarouselOpen && "rotate-180",
@@ -206,7 +213,7 @@ function ControlBtns() {
             <MicOff className="size-5" />
           )}
         </TrackToggle>
-        <DropdownMenu>
+        <DropdownMenu open={isMicListOpen} onOpenChange={setIsMicListOpen}>
           <DropdownMenuTrigger asChild>
             <div
               className={cn(
@@ -218,7 +225,7 @@ function ControlBtns() {
               <ChevronUp className="size-3.5" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="top">
+          <DropdownMenuContent side="top" className="w-fit">
             <MediaDeviceList
               initialSelection={micDevice}
               kind="audioinput"
@@ -238,7 +245,7 @@ function ControlBtns() {
           )}
         </TrackToggle>
 
-        <DropdownMenu>
+        <DropdownMenu open={isCamListOpen} onOpenChange={setIsCamListOpen}>
           <DropdownMenuTrigger asChild>
             <div
               className={cn(

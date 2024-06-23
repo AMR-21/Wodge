@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import type {
   MessageDecoder,
   MessageEncoder,
@@ -13,15 +12,11 @@ import {
 } from "@livekit/components-core";
 import {
   CarouselLayout,
-  // CarouselLayout,
   ConnectionStateToast,
-  ControlBar,
-  // FocusLayout,
   FocusLayoutContainer,
   GridLayout,
   LayoutContextProvider,
   MessageFormatter,
-  // ParticipantTile,
   RoomAudioRenderer,
   useCreateLayoutContext,
   usePinnedTracks,
@@ -35,9 +30,6 @@ import { cn } from "@/lib/utils";
 import { useAtom, useAtomValue } from "jotai";
 import { isCarouselOpenAtom } from "./atoms";
 
-/**
- * @public
- */
 export interface VideoConferenceProps
   extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -47,24 +39,6 @@ export interface VideoConferenceProps
   SettingsComponent?: React.ComponentType;
 }
 
-/**
- * The `VideoConference` ready-made component is your drop-in solution for a classic video conferencing application.
- * It provides functionality such as focusing on one participant, grid view with pagination to handle large numbers
- * of participants, basic non-persistent chat, screen sharing, and more.
- *
- * @remarks
- * The component is implemented with other LiveKit components like `FocusContextProvider`,
- * `GridLayout`, `ControlBar`, `FocusLayoutContainer` and `FocusLayout`.
- * You can use this components as a starting point for your own custom video conferencing application.
- *
- * @example
- * ```tsx
- * <LiveKitRoom>
- *   <VideoConference />
- * <LiveKitRoom>
- * ```
- * @public
- */
 export function VideoConference({
   chatMessageFormatter,
   chatMessageDecoder,
@@ -109,7 +83,6 @@ export function VideoConference({
 
   React.useEffect(() => {
     if (!focusTrack) setIsCarouselOpen(false);
-    // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.
     if (
       screenShareTracks.some((track) => track.publication.isSubscribed) &&
       lastAutoFocusedScreenShareTrack.current === null
@@ -169,7 +142,7 @@ export function VideoConference({
                 <FocusLayoutContainer
                   className={cn(
                     "lk-focus-layout transition-all",
-                    !isCarouselOpen && "grid-cols-1",
+                    !isCarouselOpen && "carousel-closed grid-cols-1",
                   )}
                 >
                   <CarouselLayout

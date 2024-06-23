@@ -30,18 +30,9 @@ import { useMember } from "@/hooks/use-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { TrackMutedIndicator } from "./track-muted-indicator";
 import { Button } from "@/components/ui/button";
+import { isCarouselOpenAtom } from "./atoms";
+import { useAtomValue } from "jotai";
 
-/**
- * The `ParticipantContextIfNeeded` component only creates a `ParticipantContext`
- * if there is no `ParticipantContext` already.
- * @example
- * ```tsx
- * <ParticipantContextIfNeeded participant={trackReference.participant}>
- *  ...
- * </ParticipantContextIfNeeded>
- * ```
- * @public
- */
 export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;
@@ -57,9 +48,6 @@ export function ParticipantContextIfNeeded(
   );
 }
 
-/**
- * Only create a `TrackRefContext` if there is no `TrackRefContext` already.
- */
 function TrackRefContextIfNeeded(
   props: React.PropsWithChildren<{
     trackRef?: TrackReferenceOrPlaceholder;
@@ -74,8 +62,6 @@ function TrackRefContextIfNeeded(
     <>{props.children}</>
   );
 }
-
-/** @public */
 export interface ParticipantTileProps
   extends React.HTMLAttributes<HTMLDivElement> {
   /** The track reference to display. */
@@ -85,23 +71,7 @@ export interface ParticipantTileProps
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 }
 
-/**
- * The `ParticipantTile` component is the base utility wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `TrackLoop` component or by passing a track reference as property.
- *
- * @example Using the `ParticipantTile` component with a track reference:
- * ```tsx
- * <ParticipantTile trackRef={trackRef} />
- * ```
- * @example Using the `ParticipantTile` component as a child of the `TrackLoop` component:
- * ```tsx
- * <TrackLoop>
- *  <ParticipantTile />
- * </TrackLoop>
- * ```
- * @public
- */
-export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
+export const ParticipantTile = React.forwardRef<
   HTMLDivElement,
   ParticipantTileProps
 >(function ParticipantTile(
@@ -144,12 +114,13 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
   );
 
   const memberId = trackReference.participant?.identity;
-  const memberUsername = trackReference.participant?.name;
 
   const { member } = useMember(memberId);
 
   const isScreenSharing = trackReference.source === Track.Source.ScreenShare;
   const isCamSharing = trackReference.participant.isCameraEnabled;
+
+  const isCarouselOpen = useAtomValue(isCarouselOpenAtom);
 
   const { inFocus } = useFocusToggle({
     trackRef,
@@ -168,9 +139,9 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
       }
       {...elementProps}
       className={cn(
-        // elementProps.className,
-        "group/focus flex cursor-pointer flex-col gap-[0.375rem] overflow-hidden  rounded-md  border-2 bg-background  opacity-0 data-[lk-video-muted=true]:opacity-100 data-[lk-video-source=camera]:opacity-100 data-[lk-video-source=screen_share]:opacity-100",
+        "group/focus flex cursor-pointer flex-col gap-[0.375rem]  overflow-hidden rounded-md border-2 border-transparent bg-background  opacity-100 data-[lk-video-muted=true]:opacity-100 data-[lk-video-source=camera]:opacity-100 data-[lk-video-source=screen_share]:opacity-100",
         (isScreenSharing || isCamSharing) && "opacity-100",
+        isCarouselOpen && !inFocus && "border-border/40",
         trackReference.participant.isSpeaking &&
           "border-green-500 dark:border-green-600",
       )}
@@ -197,6 +168,7 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
                 trackReference.source === Track.Source.Camera ||
                 trackReference.source === Track.Source.ScreenShare) ? (
                 <VideoTrack
+                  className="z-40"
                   trackRef={trackReference}
                   onSubscriptionStatusChanged={handleSubscribe}
                   manageSubscription={autoManageSubscription}
@@ -211,8 +183,11 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
               )}
               <div
                 className={cn(
-                  "pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-background opacity-100 transition-opacity",
-                  (isScreenSharing || isCamSharing) && "opacity-0",
+                  "pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-md bg-background opacity-100 transition-opacity",
+                  (trackReference.publication?.kind === "video" ||
+                    isScreenSharing ||
+                    isCamSharing) &&
+                    "opacity-0",
                 )}
               >
                 <SafeAvatar
@@ -221,7 +196,7 @@ export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
                   className="h-20 w-20"
                 />
               </div>
-              <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between gap-2 p-1">
+              <div className="absolute bottom-1 left-1 right-1  z-[45] flex items-center justify-between gap-2 p-1">
                 <div className="flex items-center rounded-md bg-dim/50 p-1">
                   {trackReference.source === Track.Source.Camera ? (
                     <>

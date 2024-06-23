@@ -8,11 +8,19 @@ import {
   roomAtom,
   screenStatusAtom,
 } from "./atoms";
+import { isCallWindowOpenAtom } from "@/store/global-atoms";
 import { toast } from "sonner";
 
 export const disconnectFromRoom = async () => {
   try {
     const room = jotaiStore.get(roomAtom);
+
+    if (
+      jotaiStore.get(isFullScreenAtom) ||
+      document.fullscreenElement !== null
+    ) {
+      document.exitFullscreen();
+    }
 
     await room?.room.disconnect();
     jotaiStore.set(roomAtom, undefined);
@@ -22,10 +30,7 @@ export const disconnectFromRoom = async () => {
     jotaiStore.set(isSpeakingAtom, false);
     jotaiStore.set(isCarouselOpenAtom, true);
     jotaiStore.set(isFullScreenAtom, false);
-
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
+    jotaiStore.set(isCallWindowOpenAtom, false);
   } catch (e) {
     toast.error("Failed to disconnect from room");
   }

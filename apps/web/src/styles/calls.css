@@ -10,3 +10,11 @@
     @apply bg-secondary/80 text-secondary-foreground hover:bg-secondary/60;
   }
 }
+
+.carousel-closed > aside {
+  @apply hidden;
+}
+
+.lk-participant-media-video {
+  @apply !border-none !bg-background;
+}

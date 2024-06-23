@@ -14,16 +14,7 @@ const jiti = require("jiti")(__filename);
 jiti("./node_modules/@repo/env/index.ts");
 
 /** @type {import('next').NextConfig} */
-const nextConfig =
-  withPWA({
-    // transpilePackages: ["@radix-ui"],
-    typescript: {
-      // ignoreBuildErrors: true,
-    },
-    experimental: {
-      // typedRoutes: true,
-    },
-  }) || {};
+const nextConfig = withPWA({}) || {};
 
 /**
  * Add Cloudflare bindings for Next.js development mode.
