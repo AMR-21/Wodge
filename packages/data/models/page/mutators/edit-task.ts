@@ -1,29 +1,26 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
-import { Board, Column, Task } from "../../../schemas/page.schema";
+import { Task } from "../../../schemas/page.schema";
 
 export function editTaskMutation({
   task,
-  boards,
-  boardId,
+  tasks,
 }: {
   task: Task;
-  boards: Board[] | DrObj<Board[]>;
-  boardId: string;
+  tasks: Task[] | DrObj<Task[]>;
 }) {
-  const newBoards = produce(boards, (draft) => {
-    const board = draft.find((b) => b.id === boardId);
-
-    if (!board) return;
-
-    const taskIndex = board.tasks?.findIndex((t) => t.id === task.id);
+  const newTasks = produce(tasks, (draft) => {
+    const taskIndex = draft?.findIndex((t) => t.id === task.id);
 
     if (taskIndex === -1) return draft;
 
-    board.tasks[taskIndex] = task;
+    draft[taskIndex] = {
+      ...task,
+      title: task.title?.trim(),
+    };
 
     return draft;
   });
 
-  return newBoards as Board[];
+  return newTasks as Task[];
 }

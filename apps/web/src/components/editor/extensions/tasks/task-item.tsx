@@ -10,50 +10,40 @@ import { cn, focusElement } from "@/lib/utils";
 import { Column, pageMutators, Task } from "@repo/data";
 import { Editor } from "@tiptap/react";
 import { Check, MoreHorizontal, PencilLine, Trash2, X } from "lucide-react";
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { DateRange } from "react-day-picker";
 import { Replicache } from "replicache";
 import { useEditable } from "use-editable";
 import { MemberMultiSelect } from "./member-multi-select";
 import { DateTimePicker } from "./date-time-picker";
 import { PriorityDropdown } from "./priority-dropdown";
-import { TaskState } from "./task-card";
 import { toast } from "sonner";
+import { useTask } from "./task-provider";
 
 interface TaskItemProps {
   task: Task;
-  boardId?: string;
   col?: Column;
   rep?: Replicache<typeof pageMutators>;
   editor?: Editor | null;
-
-  state: TaskState;
+  isAbove?: boolean;
+  isBelow?: boolean;
 }
 
 export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
-  ({ task, boardId, col, rep, editor, state, ...props }, ref) => {
-    const {
-      isAbove,
-      isBelow,
-      assignee,
-      due,
-      isEditing,
-      priority,
-      setAssignee,
-      setDue,
-      setIsEditing,
-      setPriority,
-      setTitle,
-      title,
-      includeTime,
-      setIncludeTime,
-    } = state;
+  ({ task, col, rep, editor, isAbove, isBelow, ...props }, ref) => {
+    const { isEditing, setIsEditing, setTitle, title } = useTask();
 
     const titleRef = useRef<HTMLParagraphElement>(null);
 
-    useEditable(titleRef, setTitle, {
-      disabled: !isEditing,
-    });
+    useEditable(
+      titleRef,
+      (t) => {
+        setTitle(t.trim());
+      },
+      {
+        disabled: !isEditing,
+      },
+    );
 
     useEffect(() => {
       editor?.setEditable(!isEditing);
@@ -62,27 +52,24 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
       }
     }, [isEditing]);
 
-    async function onEdit() {
+    async function onEdit(
+      newTask?: Omit<Task, "id" | "columnId" | "includeTime">,
+      includeTime?: boolean,
+    ) {
       try {
-        if (!boardId) return;
-
         await rep?.mutate.editTask({
-          boardId,
           task: {
             ...task,
-            title,
-            due: due as Task["due"],
-            assignee,
-            priority,
-            includeTime,
+            includeTime: includeTime || task.includeTime,
+            ...newTask,
           },
         });
-
-        setIsEditing(false);
       } catch {
         toast.error("Failed to edit task");
       }
     }
+
+    const noTitle = title === "" || !title;
     return (
       <div
         ref={ref}
@@ -112,16 +99,18 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
             className={cn(
               "!my-0 max-h-32 w-full overflow-hidden  truncate break-words p-1 text-base font-medium focus:outline-none",
               isEditing && "cursor-text",
-              !title && !isEditing && "text-muted-foreground",
+              noTitle && "text-muted-foreground",
             )}
             onKeyDown={async (e) => {
               if (isEditing && e.key === "Enter") {
-                onEdit();
+                onEdit({ title });
+                setIsEditing(false);
               }
             }}
             autoFocus
           >
-            {title || "Untitled"}
+            {!isEditing && (noTitle ? "Untitled" : task?.title)}
+            {isEditing && title}
           </p>
 
           {isEditing ? (
@@ -129,19 +118,22 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
               <SidebarItemBtn
                 className="ml-auto hover:text-green-600 dark:hover:text-green-500"
                 Icon={Check}
-                onClick={onEdit}
+                onClick={() => {
+                  onEdit({ title });
+                  setIsEditing(false);
+                }}
               />
-              <SidebarItemBtn
+              {/* <SidebarItemBtn
                 className="hover:text-red-600 dark:hover:text-red-500"
                 Icon={X}
                 onClick={() => {
                   setIsEditing(false);
                   setTitle(task?.title);
                   setDue(task?.due as DateRange | undefined);
-                  setAssignee(task?.assignee);
+                  setAssignee(task?.assignee || []);
                   setPriority(task?.priority);
                 }}
-              />
+              /> */}
             </>
           ) : (
             <>
@@ -168,10 +160,8 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
                     disclosure
                     onDisclosureConfirm={async () => {
                       try {
-                        if (!boardId) return;
                         await rep?.mutate.deleteTask({
                           task,
-                          boardId,
                         });
                       } catch {
                         toast.error("Failed to delete task");
@@ -193,26 +183,30 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
             if (isEditing) e.stopPropagation();
           }}
         >
-          {((assignee && assignee.length > 0) || isEditing) && (
+          {((task?.assignee && task?.assignee.length > 0) || isEditing) && (
             <MemberMultiSelect
-              onChange={setAssignee}
-              preset={assignee}
+              value={task?.assignee || []}
+              setValue={(v) => {
+                onEdit({ assignee: v as string[] });
+              }}
               isEditing={isEditing}
             />
           )}
-          {(due || isEditing) && (
+          {(task?.due || isEditing) && (
             <DateTimePicker
-              date={due}
-              onSetDate={setDue}
+              date={task?.due as DateRange | undefined}
+              onSetDate={(d) => onEdit({ due: d as Task["due"] })}
               isEditing={isEditing}
-              includeTime={includeTime}
-              setIncludeTime={setIncludeTime}
+              includeTime={task?.includeTime}
+              setIncludeTime={(i) => onEdit({}, i)}
             />
           )}
-          {(priority || isEditing) && (
+          {(task?.priority || isEditing) && (
             <PriorityDropdown
-              onSelect={setPriority}
-              priority={priority}
+              onSelect={(p) => {
+                onEdit({ priority: p });
+              }}
+              priority={task?.priority}
               isEditing={isEditing}
             />
           )}

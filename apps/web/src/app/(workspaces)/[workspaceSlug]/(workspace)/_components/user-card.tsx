@@ -22,6 +22,7 @@ import {
   roomAtom,
 } from "../room/[teamId]/[channelId]/atoms";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export function UserCard() {
   const { user } = useCurrentUser();
@@ -35,6 +36,8 @@ export function UserCard() {
   const router = useRouter();
 
   const queryClient = useQueryClient();
+
+  const { workspaceRep } = useCurrentWorkspace();
 
   const [micStatus, setMicStatus] = useAtom(micStatusAtom);
   const room = useAtomValue(roomAtom);
@@ -80,6 +83,7 @@ export function UserCard() {
           <DropdownMenuItem
             className="gap-2 text-sm"
             onClick={() => {
+              workspaceRep?.pull();
               queryClient.invalidateQueries({});
             }}
           >

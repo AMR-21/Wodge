@@ -396,6 +396,9 @@ importers:
       ai:
         specifier: ^3.2.4
         version: 3.2.5(react@18.2.0)(solid-js@1.8.17)(svelte@4.2.18)(vue@3.4.29(typescript@5.3.3))(zod@3.22.4)
+      array-move:
+        specifier: ^4.0.0
+        version: 4.0.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -642,6 +645,9 @@ importers:
       '@tanstack/react-query-persist-client':
         specifier: ^5.27.5
         version: 5.29.2(@tanstack/react-query@5.29.2(react@18.2.0))(react@18.2.0)
+      array-move:
+        specifier: ^4.0.0
+        version: 4.0.0
       drizzle-orm:
         specifier: ^0.29.3
         version: 0.29.5(@cloudflare/workers-types@4.20240405.0)(@types/better-sqlite3@7.6.9)(@types/react@18.2.78)(better-sqlite3@9.5.0)(react@18.2.0)
@@ -4868,6 +4874,10 @@ packages:
   array-includes@3.1.7:
     resolution: {integrity: sha512-dlcsNBIiWhPkHdOEEKnehA+RNUWDc4UqFtnIXU4uuYDPtA4LDkr7qip2p0VvFAEXNDr0yWZ9PJyIRiGjRLQzwQ==}
     engines: {node: '>= 0.4'}
+
+  array-move@4.0.0:
+    resolution: {integrity: sha512-+RY54S8OuVvg94THpneQvFRmqWdAHeqtMzgMW6JNurHxe8rsS07cHQdfGkXnTUXiBcyZ0j3SiDIxxj0RPiqCkQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   array-union@1.0.2:
     resolution: {integrity: sha512-Dxr6QJj/RdU/hCaBjOfxW+q6lyuVE6JFWIrAUpuOOhoJJoQ99cUn3igRaHVB5P9WrgFVN0FfArM3x0cueOU8ng==}
@@ -14264,6 +14274,8 @@ snapshots:
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
       is-string: 1.0.7
+
+  array-move@4.0.0: {}
 
   array-union@1.0.2:
     dependencies:

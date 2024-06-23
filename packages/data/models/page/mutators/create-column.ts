@@ -1,28 +1,19 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
-import { Board, Column } from "../../../schemas/page.schema";
+import { Column } from "../../../schemas/page.schema";
 
 export function createColumnMutation({
   col,
-  boards,
-  boardId,
+  columns,
 }: {
   col: Column;
-  boards: Board[] | DrObj<Board[]>;
-  boardId: string;
+  columns: Column[] | DrObj<Column[]>;
 }) {
-  const newBoards = produce(boards, (draft) => {
-    const bIdx = draft.findIndex((b) => b.id === boardId);
-
-    if (bIdx === -1) {
-      draft.push({ id: boardId, columns: [col], tasks: [] });
-      return draft;
-    }
-
-    draft[bIdx]!.columns.push(col);
+  const newColumns = produce(columns, (draft) => {
+    draft.push(col);
 
     return draft;
   });
 
-  return newBoards as Board[];
+  return newColumns as Column[];
 }

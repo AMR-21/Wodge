@@ -1,23 +1,21 @@
-import { memo, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Editor, NodeViewWrapper, NodeViewWrapperProps } from "@tiptap/react";
-import { useCurrentPageRep } from "@/hooks/use-page-rep";
-import { useSubscribe } from "@/hooks/use-subscribe";
-import { ReadTransaction, Replicache } from "replicache";
-import { Board, pageMutators, Task } from "@repo/data";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useAtom } from "jotai";
-import { boardsViews } from "./atom";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  assigneesAtom,
+  dbsViewsAtom,
+  dueAtom,
+  includeTimeAtom,
+  priorityAtom,
+  titleAtom,
+} from "./atom";
 import { KanbanView } from "./kanban-view";
-import { useTable } from "@/app/(workspaces)/[workspaceSlug]/settings/use-table";
-import { tasksColumns } from "./tasks-table-columns";
-import { DataTable } from "@/components/data-table/data-table";
+
 import { Button } from "@/components/ui/button";
-import { nanoid } from "nanoid";
-import { KanbanIcon, ListFilter, Plus, Table, X } from "lucide-react";
-import { toast } from "sonner";
-import { TableView } from "./table-view";
+import { KanbanIcon, ListFilter, Table, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -25,11 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { MemberMultiSelect } from "./member-multi-select";
 import { DateTimePicker } from "./date-time-picker";
-import { DateRange } from "react-day-picker";
 import {
   Popover,
   PopoverContent,
@@ -37,32 +33,182 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/ui/toggle";
+import { DbProvider } from "./db-provider";
+import { useParams } from "next/navigation";
+import { TableView } from "./table-view";
 
 export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
-  const rep = useCurrentPageRep();
-
-  const { snapshot: boards } = useSubscribe(rep, (tx: ReadTransaction) =>
-    tx.get<Board[]>("boards"),
-  );
-
-  const [priority, setPriority] = useState("");
-  const [title, setTitle] = useState("");
-  const [assignees, setAssignees] = useState<string[]>([]);
-  const [due, setDue] = useState<DateRange>();
-  const [includeTime, setIncludeTime] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  const [boardViewAtom, setBoardViewAtom] = useAtom(boardsViews);
-
-  const boardId = useRef(node.attrs["data-id"]).current;
-
-  const board = useMemo(() => boards?.find((b) => b.id === boardId), [boards]);
-
-  const boardView = boardViewAtom[boardId] || "kanban";
-
   return (
     <NodeViewWrapper className="select-none">
+      <DbProvider>
+        <TasksHeader />
+        <KanbanWrapper editor={editor} />
+        <TableWrapper editor={editor} />
+      </DbProvider>
+    </NodeViewWrapper>
+  );
+}
+
+function TasksHeader() {
+  const { channelId } = useParams<{ channelId: string }>();
+  const [dbsViews, setDbsViews] = useAtom(dbsViewsAtom);
+  const dbView = dbsViews[channelId] || "kanban";
+
+  const [priority, setPriority] = useAtom(priorityAtom);
+  const [title, setTitle] = useAtom(titleAtom);
+  const [assignees, setAssignees] = useAtom(assigneesAtom);
+  const [due, setDue] = useAtom(dueAtom);
+  const [includeTime, setIncludeTime] = useAtom(includeTimeAtom);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  return (
+    <>
       <div className="flex w-full items-center gap-2 pb-2">
+        <ToggleGroup
+          defaultValue={dbView || "kanban"}
+          value={dbView || "kanban"}
+          onValueChange={(v) =>
+            setDbsViews({
+              ...dbsViews,
+              [channelId]: v as "kanban" | "table",
+            })
+          }
+          type="single"
+        >
+          <ToggleGroupItem variant="outline" size="sm" value="kanban">
+            <KanbanIcon className="size-4" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="table" size="sm" variant="outline">
+            <Table className="size-4" />
+          </ToggleGroupItem>
+        </ToggleGroup>
+
+        <Popover>
+          <PopoverTrigger asChild></PopoverTrigger>
+
+          <PopoverContent></PopoverContent>
+        </Popover>
+
+        <Toggle
+          size="sm"
+          variant="outline"
+          pressed={isFilterOpen}
+          onPressedChange={setIsFilterOpen}
+        >
+          <ListFilter
+            className={cn(
+              "size-4",
+              (title || priority || assignees.length || due) &&
+                "text-blue-500 dark:text-blue-600",
+            )}
+          />
+        </Toggle>
+      </div>
+
+      <div
+        className={cn(
+          "invisible flex h-0 items-center gap-2",
+          isFilterOpen && "visible h-[calc(100%)] pb-3 pt-1",
+        )}
+      >
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+        />
+
+        <DateTimePicker
+          isFilter
+          isEditing
+          date={due}
+          onSetDate={setDue}
+          includeTime={includeTime}
+          setIncludeTime={setIncludeTime}
+        />
+
+        <Select value={priority} onValueChange={setPriority}>
+          <SelectTrigger>
+            <SelectValue placeholder="Priority" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="low">Low</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <MemberMultiSelect
+          setValue={setAssignees}
+          value={assignees}
+          isEditing
+          icon={false}
+        />
+
+        <Button
+          disabled={!title && !priority && !assignees.length && !due}
+          className="px-1.5"
+          onClick={() => {
+            setTitle("");
+            setPriority("");
+            setAssignees([]);
+            setDue(undefined);
+          }}
+          variant="outline"
+          size="sm"
+        >
+          <X className="size-4" />
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function KanbanWrapper({ editor }: { editor: Editor }) {
+  const dbsViews = useAtomValue(dbsViewsAtom);
+
+  const { channelId } = useParams<{ channelId: string }>();
+
+  const dbView = dbsViews[channelId] || "kanban";
+
+  if (dbView !== "kanban") return null;
+
+  return <KanbanView editor={editor} />;
+}
+
+function TableWrapper({ editor }: { editor: Editor }) {
+  const dbsViews = useAtomValue(dbsViewsAtom);
+
+  const { channelId } = useParams<{ channelId: string }>();
+
+  const dbView = dbsViews[channelId] || "kanban";
+
+  if (dbView !== "table") return null;
+
+  return <TableView editor={editor} />;
+}
+
+// const [priority, setPriority] = useState("");
+// const [title, setTitle] = useState("");
+// const [assignees, setAssignees] = useState<string[]>([]);
+// const [due, setDue] = useState<DateRange>();
+// const [includeTime, setIncludeTime] = useState(false);
+// const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+// const [boardViewAtom, setBoardViewAtom] = useAtom(dbsViewsAtom);
+
+// const boardId = useRef(node.attrs["data-id"]).current;
+
+// const board = useMemo(() => {
+//   console.log("fetching boards");
+//   return boards?.find((b) => b.id === boardId);
+// }, [boards]);
+
+// const boardView = boardViewAtom[boardId] || "kanban";
+
+{
+  /* <div className="flex w-full items-center gap-2 pb-2">
         <ToggleGroup
           defaultValue={boardView || "kanban"}
           value={boardView || "kanban"}
@@ -183,7 +329,5 @@ export function Tasks({ editor, node, getPos }: NodeViewWrapperProps) {
           assignees={assignees}
           due={due}
         />
-      )}
-    </NodeViewWrapper>
-  );
+      )} */
 }

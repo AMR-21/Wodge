@@ -6,17 +6,16 @@ import { moveColumnsMutation } from "@repo/data/models/page/mutators/move-column
 
 export async function moveColumns(party: PageParty, params: RunnerParams) {
   const args = params.mutation.args as MoveColumnsArgs;
-  const d = moveColumnsMutation({
-    boardId: args.boardId,
+  const newColumns = moveColumnsMutation({
     c1: args.c1,
     c2: args.c2,
-    boards: party.boards.data,
+    columns: party.db.data.columns,
   });
 
-  party.boards = produce(party.boards, (draft) => {
-    draft.data = d;
+  party.db = produce(party.db, (draft) => {
+    draft.data.columns = newColumns;
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("boards", party.boards);
+  await party.room.storage.put("db", party.db);
 }

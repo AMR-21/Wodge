@@ -1,30 +1,13 @@
-import {
-  Board,
-  DrObj,
-  Member,
-  pageMutators,
-  PublicUserType,
-  Task,
-} from "@repo/data";
-import { queryClient } from "@repo/data/lib/query-client";
+import { Column, DrObj, pageMutators, Task } from "@repo/data";
 
-import { SelectItem } from "@/components/ui/select";
-import { useMember } from "@/hooks/use-member";
 import { ColumnDef } from "@tanstack/react-table";
 import { DeepReadonly, Replicache } from "replicache";
 import { Header } from "@/components/data-table/header";
 import { useEditable } from "use-editable";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn, focusElement, Mutable } from "@/lib/utils";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
-import {
-  Check,
-  ChevronDown,
-  EarIcon,
-  PanelRight,
-  PencilLine,
-  X,
-} from "lucide-react";
+import { Check, ChevronDown, PencilLine, X } from "lucide-react";
 import { Editor } from "@tiptap/react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import {
@@ -38,55 +21,20 @@ import { DateTimePicker } from "./date-time-picker";
 import { DateRange } from "react-day-picker";
 import { PriorityDropdown } from "./priority-dropdown";
 import { DataTableActions } from "@/components/data-table/data-table-action";
-import { Calendar } from "@/components/ui/calendar";
-import { useQueryClient } from "@tanstack/react-query";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { TaskSheet } from "./task-sheet";
 interface TasksColumnsProps {
   onDeleteTask: (task: Task | DrObj<Task>) => void;
   onEditTask: (task: Task | DrObj<Task>) => void;
   editor?: Editor | null;
-  board: DrObj<Board>;
-  rep?: Replicache<typeof pageMutators>;
+  columns: readonly Column[] | readonly DrObj<Column>[];
 }
 
 export function tasksColumns({
   onDeleteTask,
   onEditTask,
   editor,
-  board,
-  rep,
+  columns,
 }: TasksColumnsProps): ColumnDef<DeepReadonly<Task>>[] {
   return [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <div className="flex items-center">
-    //       <Checkbox
-    //         checked={
-    //           table.getIsAllPageRowsSelected() ||
-    //           (table.getIsSomePageRowsSelected() && "indeterminate")
-    //         }
-    //         onCheckedChange={(value) =>
-    //           table.toggleAllPageRowsSelected(!!value)
-    //         }
-    //         aria-label="Select all"
-    //       />
-    //     </div>
-    //   ),
-    //   cell: ({ row }) => (
-    //     <div className="flex items-center">
-    //       <Checkbox
-    //         checked={row.getIsSelected()}
-    //         onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //         aria-label="Select row"
-    //       />
-    //     </div>
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // },
-
     {
       id: "title",
       header: () => <Header className="!text-sm !font-medium">Title</Header>,
@@ -109,22 +57,6 @@ export function tasksColumns({
             focusElement(titleRef);
           }
         }, [isEditing]);
-
-        // const [due, setDue] = useState<DateRange | undefined>(
-        //   row.original?.due as DateRange | undefined,
-        // );
-
-        // const [assignee, setAssignee] = useState<string[] | undefined>(
-        //   (row.original?.assignee as string[]) || [],
-        // );
-
-        // const [priority, setPriority] = useState<Task["priority"] | undefined>(
-        //   row.original?.priority,
-        // );
-
-        // const [includeTime, setIncludeTime] = useState(
-        //   row.original.includeTime,
-        // );
 
         return (
           <div className="group/task flex h-full w-full max-w-64 items-center ">
@@ -171,33 +103,6 @@ export function tasksColumns({
                   onClick={setIsEditing.bind(null, true)}
                   className="invisible ml-auto transition-all group-hover/task:visible"
                 />
-                {/* <Sheet>
-                  <SheetTrigger asChild>
-                    <SidebarItemBtn
-                      Icon={PanelRight}
-                      className="invisible transition-all group-hover/row:visible"
-                    />
-                  </SheetTrigger>
-                  <TaskSheet
-                    state={{
-                      due,
-                      title,
-                      assignee,
-                      priority,
-                      isEditing,
-                      setDue,
-                      setTitle,
-                      setAssignee,
-                      setPriority,
-                      setIsEditing,
-                      includeTime,
-                      setIncludeTime,
-                    }}
-                    task={row.original as Task}
-                    boardId={board.id}
-                    rep={rep}
-                  />
-                </Sheet> */}
               </>
             )}
           </div>
@@ -208,7 +113,7 @@ export function tasksColumns({
       id: "status",
       header: () => <Header className=" !text-sm !font-medium">Status</Header>,
       cell: ({ row }) => {
-        const col = board.columns?.find((c) => c.id === row.original.columnId);
+        const col = columns?.find((c) => c.id === row.original.columnId);
         const [open, setOpen] = useState(false);
 
         useEffect(() => {
@@ -233,7 +138,7 @@ export function tasksColumns({
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-fit">
-              {board.columns?.map((col) => (
+              {columns?.map((col) => (
                 <DropdownMenuItem
                   key={col.id}
                   onSelect={() => {
@@ -255,13 +160,15 @@ export function tasksColumns({
       ),
 
       cell: ({ row }) => {
-        const [assignee, setAssignee] = useState(row.original.assignee);
+        const [assignee, setAssignee] = useState(row.original.assignee || []);
 
         return (
           <div onClick={(e) => e.stopPropagation()}>
             <MemberMultiSelect
-              preset={assignee as string[]}
-              onChange={setAssignee}
+              value={assignee as Mutable<string[]>}
+              setValue={
+                setAssignee as React.Dispatch<React.SetStateAction<string[]>>
+              }
               onBlur={() => {
                 onEditTask({
                   ...row.original,

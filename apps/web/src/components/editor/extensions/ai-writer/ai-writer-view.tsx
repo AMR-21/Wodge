@@ -1,22 +1,13 @@
-import {
-  Extension,
-  NodeViewWrapper,
-  NodeViewWrapperProps,
-} from "@tiptap/react";
+import { NodeViewWrapper, NodeViewWrapperProps } from "@tiptap/react";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { env } from "@repo/env";
-import { useParams } from "next/navigation";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { Button } from "@/components/ui/button";
-import { AiTone, AiToneOption } from "@/components/editor/block-editor/types";
+import { AiTone } from "@/components/editor/block-editor/types";
 import { nanoid } from "nanoid";
-import { toast } from "sonner";
-import { Prompt } from "@repo/data";
 import { Panel, PanelHeadline } from "@/components/editor/ui/Panel";
 import { Textarea } from "@/components/editor/ui/Textarea";
 import { Icon } from "@/components/editor/ui/icon";
 import { Check, Repeat, Sparkles, Trash2 } from "lucide-react";
-import { tones } from "@/lib/utils";
 import { useOnClickOutside } from "usehooks-ts";
 
 import { useChat } from "ai/react";

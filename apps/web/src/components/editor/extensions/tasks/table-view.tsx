@@ -1,40 +1,29 @@
 import { useTable } from "@/app/(workspaces)/[workspaceSlug]/settings/use-table";
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import { Board, pageMutators, Task } from "@repo/data";
+import { Task } from "@repo/data";
 import { Editor } from "@tiptap/react";
 import { Plus } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
-import { Replicache } from "replicache";
 import { toast } from "sonner";
 import { tasksColumns } from "./tasks-table-columns";
-import { DateRange } from "react-day-picker";
 import { isEqual } from "lodash";
 import { isAfter, isBefore } from "date-fns";
+import { useAtomValue } from "jotai";
+import { assigneesAtom, dueAtom, priorityAtom, titleAtom } from "./atom";
+import { useDb } from "./db-provider";
 
-interface TableViewProps {
-  board: Board;
-  rep?: Replicache<typeof pageMutators>;
-  boardId: string;
-  editor?: Editor | null;
-  priority?: string;
-  title?: string;
-  assignees?: string[];
-  due?: DateRange;
-}
-export function TableView({
-  board,
-  rep,
-  boardId,
-  editor,
-  priority,
-  title,
-  assignees,
-  due,
-}: TableViewProps) {
+export function TableView({ editor }: { editor: Editor }) {
+  const priority = useAtomValue(priorityAtom);
+  const title = useAtomValue(titleAtom);
+  const assignees = useAtomValue(assigneesAtom);
+  const due = useAtomValue(dueAtom);
+
+  const { columns, tasks: baseTasks, rep } = useDb();
+
   const tasks = useMemo(() => {
-    let tasks = board?.tasks || [];
+    let tasks = baseTasks;
     if (priority) tasks = tasks.filter((t) => t.priority === priority);
 
     if (title)
@@ -78,16 +67,15 @@ export function TableView({
     }
 
     return tasks;
-  }, [board, title, priority, assignees, due]);
+  }, [baseTasks, title, priority, assignees, due]);
 
   const table = useTable({
-    data: tasks,
+    data: (tasks as Task[]) || [],
     columns: tasksColumns({
       onDeleteTask: async (t) => {
         try {
           await rep?.mutate.deleteTask({
             task: t as Task,
-            boardId,
           });
         } catch {
           toast.error("Failed to delete task");
@@ -96,7 +84,6 @@ export function TableView({
       onEditTask: async (t) => {
         try {
           await rep?.mutate.editTask({
-            boardId,
             task: t as Task,
           });
         } catch {
@@ -104,8 +91,7 @@ export function TableView({
         }
       },
       editor,
-      board,
-      rep,
+      columns,
     }),
   });
 
@@ -119,21 +105,18 @@ export function TableView({
           variant="ghost"
           size="sm"
           onClick={async () => {
-            // const col = board.columns?.[0] || ;
             try {
               const colId = nanoid(6);
-              if (!board?.columns || board?.columns?.length === 0) {
+              if (!columns || columns?.length === 0) {
                 await rep?.mutate.createColumn({
-                  boardId,
                   id: colId,
                   title: "New column",
                 });
               }
               await rep?.mutate.createTask({
-                boardId,
-                col: board?.columns?.[0]?.id || colId,
+                col: columns?.[0]?.id || colId,
                 task: {
-                  columnId: board?.columns?.[0]?.id || colId,
+                  columnId: columns?.[0]?.id || colId,
                   id: nanoid(6),
                   includeTime: false,
                 },

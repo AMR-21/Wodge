@@ -6,19 +6,18 @@ import { CreateColumnArgs } from "@repo/data";
 
 export async function createColumn(party: PageParty, params: RunnerParams) {
   const args = params.mutation.args as CreateColumnArgs;
-  const d = createColumnMutation({
-    boardId: args.boardId,
-    boards: party.boards.data,
+  const newColumns = createColumnMutation({
     col: {
       id: args.id,
       title: args.title,
     },
+    columns: party.db.data.columns,
   });
 
-  party.boards = produce(party.boards, (draft) => {
-    draft.data = d;
+  party.db = produce(party.db, (draft) => {
+    draft.data.columns = newColumns;
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("boards", party.boards);
+  await party.room.storage.put("db", party.db);
 }

@@ -12,7 +12,6 @@ import { Editor } from "@tiptap/react";
 interface Props {
   column: Column | DrObj<Column>;
   tasks: Task[] | DrObj<Task>[];
-  boardId: string;
   editor: Editor;
   rep?: Replicache<typeof pageMutators>;
 }
@@ -30,7 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
+function ColumnContainer({ column, tasks, rep, editor }: Props) {
   const [editMode, setEditMode] = useState(false);
 
   const [name, setName] = useState(column.title);
@@ -102,7 +101,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                 if (editMode && e.key === "Enter") {
                   try {
                     await rep?.mutate.updateColumn({
-                      boardId,
                       ...column,
                       title: name,
                     });
@@ -144,7 +142,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                     onDisclosureConfirm={async () => {
                       try {
                         await rep?.mutate.deleteColumn({
-                          boardId,
                           ...column,
                         });
                       } catch {
@@ -167,7 +164,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                   onClick={async () => {
                     try {
                       await rep?.mutate.updateColumn({
-                        boardId,
                         ...column,
                         title: name,
                       });
@@ -201,7 +197,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
                 task={task as Task}
                 index={i}
                 rep={rep}
-                boardId={boardId}
                 col={column}
                 editor={editor}
               />
@@ -217,7 +212,6 @@ function ColumnContainer({ column, tasks, rep, boardId, editor }: Props) {
           onClick={async () => {
             try {
               await rep?.mutate.createTask({
-                boardId,
                 col: column.id,
                 task: {
                   columnId: column.id,

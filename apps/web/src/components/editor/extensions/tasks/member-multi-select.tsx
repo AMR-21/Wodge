@@ -29,17 +29,19 @@ interface MemberMultiSelectProps {
   isEditing?: boolean;
   onBlur?: () => void;
   icon?: boolean;
+  value?: string[];
+  setValue: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export function MemberMultiSelect({
-  onChange,
-  preset,
   bigger,
   isEditing,
   onBlur,
+  value = [],
+  setValue,
   icon = true,
 }: MemberMultiSelectProps) {
-  const [value, setValue] = useState<string[]>(preset || []);
+  // const [value, setValue] = useState<string[]>(preset || []);
   const [open, setOpen] = useState(false);
 
   const { channelId, teamId, folderId } = useParams<{
@@ -65,27 +67,19 @@ export function MemberMultiSelect({
     [teamId, channelId, structure, membersArr],
   );
 
-  useEffect(() => {
-    onChange?.(value);
-  }, [value]);
-
   function onSelect(m: Member) {
     if (value.some((v) => v === m.id)) {
-      setValue((v) => {
-        const newV = v.filter((mb) => mb !== m.id);
-        // onChange?.(newV);
-        return newV;
-      });
+      const newV = value.filter((mb) => mb !== m.id);
+      setValue(newV);
     } else {
-      setValue((v) => {
-        const newV = [
-          ...new Set([...v, members.find((mb) => mb.id === m.id)!.id]),
-        ];
+      const newV = [
+        ...new Set([
+          ...(value || []),
+          members.find((mb) => mb.id === m.id)!.id,
+        ]),
+      ];
 
-        // onChange?.(newV);
-
-        return newV;
-      });
+      setValue(newV);
     }
   }
 

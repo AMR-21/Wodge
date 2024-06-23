@@ -14,17 +14,14 @@ import queryString from "query-string";
 
 import { Ai } from "partykit-ai";
 import { Hono } from "hono";
-import { PagePartyInterface, ServerPageBoards, Versions } from "../types";
+import { PagePartyInterface, ServerPageDB, Versions } from "../types";
 import { startFn } from "./start-fn";
 import { pagePull } from "./page-pull";
 import { pagePush } from "./page-push";
 
 export default class PageParty implements Party.Server, PagePartyInterface {
-  // options: Party.ServerOptions = {
-  //   hibernate: true,
-  // };
   ai: Ai;
-  boards: ServerPageBoards;
+  db: ServerPageDB;
   versions: Versions;
 
   app: Hono = new Hono().basePath("/parties/page/:pageId");

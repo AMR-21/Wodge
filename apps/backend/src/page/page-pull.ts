@@ -1,4 +1,3 @@
-import type * as Party from "partykit/server";
 import { PatcherParams, repPull } from "../lib/replicache";
 import { PatchOperation } from "replicache";
 import { Context } from "hono";
@@ -27,11 +26,16 @@ function patcher(party: PageParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    if (party.boards.lastModifiedVersion > fromVersion) {
+    if (party.db.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
-        key: "boards",
-        value: party.boards.data,
+        key: "columns",
+        value: party.db.data.columns,
+      });
+      patch.push({
+        op: "put",
+        key: "tasks",
+        value: party.db.data.tasks,
       });
     }
 

@@ -1,59 +1,62 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
-import { Board } from "../../../schemas/page.schema";
+import { Column, Task } from "../../../schemas/page.schema";
+import { arrayMoveMutable } from "array-move";
 export function moveTasksMutation({
   t1,
   tOrC2,
-  boards,
-  boardId,
+  tasks,
+  columns,
   isOverColumn,
 }: {
   t1: string;
   tOrC2: string;
-  boards: Board[] | DrObj<Board[]>;
-  boardId: string;
+  tasks: Task[] | DrObj<Task[]>;
+  columns: Column[] | DrObj<Column[]>;
   isOverColumn: boolean;
 }) {
-  if (t1 === tOrC2) return boards as Board[];
+  if (t1 === tOrC2) return tasks as Task[];
 
-  const newBoards = produce(boards, (draft) => {
-    const board = draft.find((b) => b.id === boardId);
+  const newTasks = produce(tasks, (draft) => {
+    const activeIndex = draft.findIndex((c) => c.id === t1);
 
-    if (!board) return;
-
-    const activeIndex = board.tasks.findIndex((c) => c.id === t1);
     const overIndex = isOverColumn
-      ? board.columns.findIndex((c) => c.id === tOrC2)
-      : board.tasks.findIndex((c) => c.id === tOrC2);
+      ? columns.findIndex((c) => c.id === tOrC2)
+      : draft.findIndex((c) => c.id === tOrC2);
 
     if (
       !isOverColumn &&
-      board.tasks[activeIndex]?.columnId != board.tasks[overIndex]?.columnId
+      draft[activeIndex]?.columnId != draft[overIndex]?.columnId
     ) {
-      board.tasks[activeIndex]!.columnId = board.tasks[overIndex]!.columnId;
+      draft[activeIndex]!.columnId = draft[overIndex]!.columnId;
 
-      const temp = board.tasks[activeIndex];
-      if (!temp) return;
-      if (!board.tasks[overIndex]) return;
-      board.tasks[activeIndex] = board.tasks[overIndex]!;
-      board.tasks[overIndex] = temp;
+      arrayMoveMutable(draft, activeIndex, overIndex);
 
       return draft;
-    }
-    if (isOverColumn) {
-      board.tasks[activeIndex]!.columnId = tOrC2;
+    } else {
+      const temp = draft[activeIndex];
+      if (!temp) return;
+      if (!draft[overIndex]) return;
+      draft[activeIndex] = draft[overIndex]!;
+      draft[overIndex] = temp;
     }
 
-    const temp = board.tasks[activeIndex];
-    if (!temp) return;
-    if (!board.tasks[overIndex]) return;
-    board.tasks[activeIndex] = isOverColumn
-      ? board.tasks[activeIndex]!
-      : board.tasks[overIndex]!;
-    board.tasks[overIndex] = temp;
+    if (isOverColumn) {
+      draft[activeIndex]!.columnId = tOrC2;
+
+      const temp = draft[activeIndex]!;
+      const firstInCol = draft.findIndex((t) => t.columnId === tOrC2);
+
+      if (firstInCol === -1) {
+        draft[activeIndex] = draft[firstInCol]!;
+      } else {
+        draft[activeIndex] = draft[firstInCol]!;
+        draft[firstInCol] = temp;
+      }
+    }
 
     return draft;
   });
 
-  return newBoards as Board[];
+  return newTasks as Task[];
 }

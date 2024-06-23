@@ -1,6 +1,6 @@
 import { WriteTransaction } from "replicache";
 import { createColumnMutation } from "./mutators/create-column";
-import { Board, Column, Task } from "../../schemas/page.schema";
+import { Column, Task } from "../../schemas/page.schema";
 import { deleteColumnMutation } from "./mutators/delete-column";
 import { updateColumnMutation } from "./mutators/update-column";
 import { createTaskMutation } from "./mutators/create-task";
@@ -10,157 +10,133 @@ import { moveColumnsMutation } from "./mutators/move-columns";
 import { moveTasksMutation } from "./mutators/move-tasks";
 
 export interface CreateColumnArgs {
-  boardId: string;
   title?: string;
   id: string;
 }
 export interface CreateTaskArgs {
-  boardId: string;
   task: Task;
   col: string;
 }
 
 export interface EditTaskArgs {
-  boardId: string;
   task: Task;
 }
 
 export interface MoveColumnsArgs {
   c1: string;
   c2: string;
-  boardId: string;
 }
 
 export interface MoveTasksArgs {
   t1: string;
   tOrC2: string;
-  boardId: string;
   isOverColumn: boolean;
 }
 export const pageMutators = {
   async createColumn(tx: WriteTransaction, data: CreateColumnArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const columns = (await tx.get<Column[]>("columns")) || [];
 
-    if (data.boardId) return;
-
-    const newBoards = createColumnMutation({
-      boardId: data.boardId,
+    const newColumns = createColumnMutation({
       col: {
         id: data.id,
-        title: data.title,
+        title: data.title?.trim(),
       },
-      boards,
+      columns,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("columns", newColumns);
   },
+
   async deleteColumn(tx: WriteTransaction, data: CreateColumnArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const columns = (await tx.get<Column[]>("columns")) || [];
+    const tasks = (await tx.get<Task[]>("tasks")) || [];
 
-    if (data.boardId) return;
-
-    const newBoards = deleteColumnMutation({
-      boardId: data.boardId,
+    const { newColumns, newTasks } = deleteColumnMutation({
       col: {
         id: data.id,
         title: data.title,
       },
-      boards,
+      columns,
+      tasks,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("columns", newColumns);
+    await tx.set("tasks", newTasks);
   },
+
   async updateColumn(tx: WriteTransaction, data: CreateColumnArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const columns = (await tx.get<Column[]>("columns")) || [];
 
-    if (data.boardId) return;
-
-    const newBoards = updateColumnMutation({
-      boardId: data.boardId,
+    const newColumns = updateColumnMutation({
       col: {
         id: data.id,
-        title: data.title,
+        title: data.title?.trim(),
       },
-      boards,
+      columns,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("columns", newColumns);
   },
+
   async createTask(tx: WriteTransaction, data: CreateTaskArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const tasks = (await tx.get<Task[]>("tasks")) || [];
+    const columns = (await tx.get<Task[]>("columns")) || [];
 
-    if (data.boardId) return;
-
-    const newBoards = createTaskMutation({
-      boardId: data.boardId,
-      col: data.col,
+    const newTasks = createTaskMutation({
+      colId: data.col,
+      columns,
       task: data.task,
-      boards,
+      tasks,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("tasks", newTasks);
   },
+
   async editTask(tx: WriteTransaction, data: EditTaskArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const tasks = (await tx.get<Task[]>("tasks")) || [];
 
-    if (!data.boardId) return;
-
-    const newBoards = editTaskMutation({
-      boardId: data.boardId,
+    const newTasks = editTaskMutation({
       task: data.task,
-      boards,
+      tasks,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("tasks", newTasks);
   },
   async deleteTask(tx: WriteTransaction, data: EditTaskArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const tasks = (await tx.get<Task[]>("tasks")) || [];
 
-    if (!data.boardId) return;
-
-    const newBoards = deleteTaskMutation({
-      boardId: data.boardId,
+    const newTasks = deleteTaskMutation({
       task: data.task,
-      boards,
+      tasks,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("tasks", newTasks);
   },
+
   async moveColumns(tx: WriteTransaction, data: MoveColumnsArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const columns = (await tx.get<Column[]>("columns")) || [];
 
-    if (!data.boardId) return;
-
-    const newBoards = moveColumnsMutation({
-      boardId: data.boardId,
+    const newColumns = moveColumnsMutation({
       c1: data.c1,
       c2: data.c2,
-      boards,
+      columns,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("columns", newColumns);
   },
+
   async moveTasks(tx: WriteTransaction, data: MoveTasksArgs) {
-    const boards = await tx.get<Board[]>("boards");
-    if (!boards) return;
+    const tasks = (await tx.get<Task[]>("tasks")) || [];
+    const columns = (await tx.get<Task[]>("columns")) || [];
 
-    if (!data.boardId) return;
-
-    const newBoards = moveTasksMutation({
-      boardId: data.boardId,
+    const newTasks = moveTasksMutation({
       t1: data.t1,
       tOrC2: data.tOrC2,
       isOverColumn: data.isOverColumn,
-      boards,
+      tasks,
+      columns,
     });
 
-    await tx.set("boards", newBoards);
+    await tx.set("tasks", newTasks);
   },
 };

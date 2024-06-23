@@ -3,8 +3,11 @@ import { Versions } from "../types";
 import PageParty from "./page-party";
 
 export async function startFn(party: PageParty) {
-  party.boards = (await party.room.storage.get("boards")) || {
-    data: [],
+  party.db = (await party.room.storage.get("db")) || {
+    data: {
+      columns: [],
+      tasks: [],
+    },
     lastModifiedVersion: 0,
     deleted: false,
   };

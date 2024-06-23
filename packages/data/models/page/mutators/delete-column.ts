@@ -1,31 +1,27 @@
 import { produce } from "immer";
 import { DrObj } from "../../..";
-import { Board, Column } from "../../../schemas/page.schema";
+import { Column, Task } from "../../../schemas/page.schema";
 
 export function deleteColumnMutation({
   col,
-  boards,
-  boardId,
+  columns,
+  tasks,
 }: {
   col: Column;
-  boards: Board[] | DrObj<Board[]>;
-  boardId: string;
+  columns: Column[] | DrObj<Column[]>;
+  tasks: Task[] | DrObj<Task[]>;
 }) {
-  const newBoards = produce(boards, (draft) => {
-    const bIdx = draft.findIndex((b) => b.id === boardId);
-
-    if (bIdx === -1) {
-      return draft;
-    }
-
-    draft[bIdx]!.columns = draft[bIdx]!.columns.filter((c) => c.id !== col.id);
-
-    draft[bIdx]!.tasks = draft[bIdx]!.tasks.filter(
-      (t) => t.columnId !== col.id
-    );
+  const newColumns = produce(columns, (draft) => {
+    draft = draft.filter((c) => c.id !== col.id);
 
     return draft;
-  });
+  }) as Column[];
 
-  return newBoards as Board[];
+  const newTasks = produce(tasks, (draft) => {
+    draft = draft.filter((t) => t.columnId !== col.id);
+
+    return draft;
+  }) as Task[];
+
+  return { newColumns, newTasks };
 }

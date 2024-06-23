@@ -28,9 +28,13 @@ export const BoardSchema = z.object({
   columns: z.array(ColumnSchema),
 });
 
+export type Db = {
+  tasks: Task[];
+  columns: Column[];
+};
+
 export const PageSchema = ChannelSchema.extend({});
 export type Task = z.infer<typeof TaskSchema>;
 export type Column = z.infer<typeof ColumnSchema>;
-export type Board = z.infer<typeof BoardSchema>;
 
 export type Page = z.infer<typeof PageSchema>;
