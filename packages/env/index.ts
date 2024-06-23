@@ -14,12 +14,6 @@ export const env = createEnv({
     LIVEKIT_API_SECRET: z.string(),
     APP_DOMAIN: z.string(),
     BACKEND_DOMAIN: z.string(),
-    PAYMOB_API_KEY: z.string(),
-    PAYMOB_HMAC: z.string(),
-    PAYMOB_PK_KEY: z.string(),
-    PAYMOB_SK_KEY: z.string(),
-    PAYMOB_INTEGRATION_ID: z.string(),
-    PAYMOB_IFRAME_URL: z.string(),
   },
 
   client: {
@@ -48,11 +42,5 @@ export const env = createEnv({
     RESEND_EMAIL_FROM: process.env.RESEND_EMAIL_FROM,
     SERVICE_KEY: process.env.SERVICE_KEY,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
-    PAYMOB_API_KEY: process.env.PAYMOB_API_KEY,
-    PAYMOB_HMAC: process.env.PAYMOB_HMAC,
-    PAYMOB_PK_KEY: process.env.PAYMOB_PK_KEY,
-    PAYMOB_SK_KEY: process.env.PAYMOB_SK_KEY,
-    PAYMOB_INTEGRATION_ID: process.env.PAYMOB_INTEGRATION_ID,
-    PAYMOB_IFRAME_URL: process.env.PAYMOB_IFRAME_URL,
   },
 });

@@ -9,20 +9,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { cn } from "@/lib/utils";
+import { Workspace } from "@repo/data";
+import { useMutation } from "@tanstack/react-query";
 import { CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 
 type PricingCardProps = {
-  isYearly?: boolean;
   title: string;
   monthlyPrice?: number;
-  yearlyPrice?: number;
   description: string;
   features: string[];
   actionLabel: string;
   popular?: boolean;
   exclusive?: boolean;
-  disabled?: boolean;
+  disabled?: Workspace["isPremium"];
+  action: () => void;
+  isLoading?: boolean;
 };
 
 const PricingHeader = ({
@@ -40,16 +44,16 @@ const PricingHeader = ({
 );
 
 const PricingCard = ({
-  isYearly,
   title,
   monthlyPrice,
-  yearlyPrice,
   description,
   features,
   actionLabel,
   popular,
   exclusive,
   disabled,
+  action,
+  isLoading,
 }: PricingCardProps) => (
   <Card
     className={cn(
@@ -62,38 +66,13 @@ const PricingCard = ({
   >
     <div>
       <CardHeader className="pb-8 pt-4">
-        {isYearly && yearlyPrice && monthlyPrice ? (
-          <div className="flex justify-between">
-            <CardTitle className="text-lg text-zinc-700 dark:text-zinc-300">
-              {title}
-            </CardTitle>
-            <div
-              className={cn(
-                "h-fit rounded-xl bg-zinc-200 px-2.5 py-1 text-sm text-black dark:bg-zinc-800 dark:text-white",
-                {
-                  "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
-                    popular,
-                },
-              )}
-            >
-              Save ${monthlyPrice * 12 - yearlyPrice}
-            </div>
-          </div>
-        ) : (
-          <CardTitle className="text-lg text-zinc-700 dark:text-zinc-300">
-            {title}
-          </CardTitle>
-        )}
+        <CardTitle className="text-lg text-foreground">{title}</CardTitle>
         <div className="flex gap-0.5">
           <h3 className="text-3xl font-bold">
-            {yearlyPrice && isYearly
-              ? "$" + yearlyPrice
-              : monthlyPrice
-                ? "$" + monthlyPrice
-                : "Custom"}
+            {monthlyPrice ? "$" + monthlyPrice : "Custom"}
           </h3>
           <span className="mb-1 flex flex-col justify-end text-sm">
-            {yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}
+            {monthlyPrice ? "/month" : null}
           </span>
         </div>
         <CardDescription className="h-12 pt-1.5">{description}</CardDescription>
@@ -106,8 +85,10 @@ const PricingCard = ({
     </div>
     <CardFooter className="mt-2">
       <Button
-        disabled={disabled}
+        isPending={isLoading}
+        disabled={!!disabled}
         className="relative inline-flex w-full items-center justify-center rounded-md bg-black px-6 font-medium text-white transition-colors  focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-white dark:text-black"
+        onClick={() => action()}
       >
         <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
         {actionLabel}
@@ -124,23 +105,67 @@ const CheckItem = ({ text }: { text: string }) => (
 );
 
 function UpgradePage() {
+  const { workspace } = useCurrentWorkspace();
+
+  const { mutate: upgrade, isPending: isUpgrading } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/workspaces/${workspace?.id}/upgrade`, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to upgrade");
+      }
+
+      toast.success("Upgraded successfully");
+    },
+
+    onError: (e) => {
+      toast.error("Failed to upgrade");
+    },
+  });
+
+  const { mutate: revert, isPending: isReverting } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/workspaces/${workspace?.id}/revert`, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to revert");
+      }
+
+      toast.success("Reverted successfully");
+    },
+
+    onError: (e) => {
+      toast.error("Failed to revert");
+    },
+  });
+
+  if (!workspace) return null;
+
   const plans = [
     {
       title: "Basic",
       monthlyPrice: 5,
       description: "Essential features you need to get started",
       features: ["Storage up to 5GB", "Maximum 10 members"],
-      actionLabel: "Current Plan",
-      disabled: true,
+      actionLabel: workspace?.isPremium ? "Revert" : "Current Plan",
+      disabled: !workspace?.isPremium,
+      action: revert,
+      isLoading: isReverting,
     },
     {
       title: "Pro",
       monthlyPrice: 25,
-      yearlyPrice: 250,
       description: "Perfect for owners of small & medium businesses",
       features: ["Ai access", "Storage up to 100GB", "Up to 50 members"],
-      actionLabel: "Upgrade",
+      actionLabel: workspace?.isPremium! ? "Current Plan" : "Upgrade",
       exclusive: true,
+      disabled: workspace?.isPremium,
+      action: upgrade,
+      isLoading: isUpgrading,
     },
   ];
   return (

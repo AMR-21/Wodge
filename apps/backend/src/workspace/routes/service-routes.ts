@@ -15,7 +15,6 @@ export function setupServiceRoutes(party: WorkspaceParty) {
   party.app.get("/service/isAdmin", async (c) => {
     const userId = c.req.header("x-user-id");
 
-    console.log(userId);
     if (
       party.workspaceMembers.data.createdBy === userId ||
       party.workspaceMembers.data.members.some((member) => member.id === userId)
@@ -25,9 +24,17 @@ export function setupServiceRoutes(party: WorkspaceParty) {
 
     return unauthorized();
   });
+
   party.app.post(
     "/service/member-update",
     memberUpdateHandler.bind(null, party)
   );
-  party.app.post("/service/poke", channelPoke.bind(null, party));
+  party.app.post("/service/poke-channel", channelPoke.bind(null, party));
+
+  party.app.post("/service/poke", async (c) => {
+    await party.poke({
+      type: "workspaceInfo",
+    });
+    return ok();
+  });
 }

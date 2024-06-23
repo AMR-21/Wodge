@@ -7,8 +7,7 @@ import {
   Workspace,
   workspaces,
 } from "../../schemas/workspace.schema";
-// import { db } from "../../server";
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { createDb } from "../../server";
 import { nanoid } from "nanoid";
 
@@ -83,18 +82,31 @@ export async function addWorkspaceMember(
   const db = createDb();
 
   try {
-    const data = await db
-      .select()
-      .from(invites)
-      .innerJoin(workspaces, eq(workspaces.id, invites.workspaceId))
-      .where(eq(invites.token, token))
-      .get();
+    const [invitesData, members] = await db.batch([
+      db
+        .select()
+        .from(invites)
+        .innerJoin(workspaces, eq(workspaces.id, invites.workspaceId))
+        .where(eq(invites.token, token)),
+      db
+        .select({ members: count() })
+        .from(memberships)
+        .where(eq(memberships.workspaceId, workspaceId)),
+    ]);
+
+    const data = invitesData[0];
 
     if (
       !data ||
       data.invites.workspaceId !== workspaceId ||
       !data.workspaces.isInviteLinkEnabled
     )
+      return null;
+
+    if (!data.workspaces.isPremium && (members[0]?.members || 1) >= 10)
+      return null;
+
+    if (data.workspaces.isPremium && (members[0]?.members || 1) >= 50)
       return null;
 
     await db.insert(memberships).values({ userId, workspaceId });
@@ -138,5 +150,52 @@ export async function isWorkspaceMember(userId: string, workspaceId: string) {
     return false;
   } catch {
     return false;
+  }
+}
+
+export async function getWorkspaceById(workspaceId: string) {
+  const db = createDb();
+  try {
+    return await db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function upgradeWorkspace(workspaceId: string) {
+  try {
+    const db = createDb();
+
+    const workspace = await db
+      .update(workspaces)
+      .set({ isPremium: true })
+      .where(eq(workspaces.id, workspaceId))
+      .returning();
+
+    if (!workspace) return null;
+
+    return workspace;
+  } catch {
+    return null;
+  }
+}
+
+export async function revertWorkspace(workspaceId: string) {
+  try {
+    const db = createDb();
+
+    const workspace = await db
+      .update(workspaces)
+      .set({ isPremium: false })
+      .where(eq(workspaces.id, workspaceId))
+      .returning();
+
+    if (!workspace) return null;
+
+    return workspace;
+  } catch {
+    return null;
   }
 }

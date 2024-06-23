@@ -22,7 +22,9 @@ export async function POST(
   const validatedFields = WorkspaceSchema.pick({
     name: true,
     slug: true,
-  }).safeParse(body);
+  })
+    .strict()
+    .safeParse(body);
 
   if (!validatedFields.success) {
     return new Response(null, { status: 400 });
