@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "main": "index.js",
-  "type": "module",
-  "types": "index.d.ts",
   "scripts": {},
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.8.0",

@@ -15,6 +15,12 @@ type Env = Readonly<{
   NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
   NEXT_PUBLIC_AVATARS_URL: string;
   NEXT_PUBLIC_APP_DOMAIN: string;
+  PAYMOB_API_KEY: string;
+  PAYMOB_HMAC: string;
+  PAYMOB_PK_KEY: string;
+  PAYMOB_SK_KEY: string;
+  PAYMOB_INTEGRATION_ID: string;
+  PAYMOB_IFRAME_URL: string;
 }>;
 
 declare module "@repo/env" {
