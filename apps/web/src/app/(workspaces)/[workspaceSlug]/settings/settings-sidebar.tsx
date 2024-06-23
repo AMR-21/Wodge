@@ -82,7 +82,7 @@ export function SettingsSidebar() {
       <Button
         size="sm"
         variant="secondary"
-        className="mt-auto w-full"
+        className="mt-auto w-full shrink-0"
         onClick={() => {
           workspaceRep?.pull();
           queryClient.invalidateQueries({});
