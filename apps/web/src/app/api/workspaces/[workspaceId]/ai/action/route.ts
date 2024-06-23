@@ -39,8 +39,17 @@ const promptTemplates = [
       "Translate the following text into the target language, ensuring accurate and contextually appropriate linguistic conversion that preserves the original meaning, tone, and intent of the source text. just give the translated text and nothing else. the translation should be in ",
   },
 
-  //complete
-  //simplify
+  // they would produce results similar to longer and shorter but here you go
+  {
+    case: "complete",
+    prompt_header:
+      "Provide a comprehensive and detailed response by expanding on the given text, incorporating relevant information, and offering thorough explanations, ensuring a comprehensive understanding of the topic. Just give the complete response and nothing else.",
+  },
+  {
+    case: "simplify",
+    prompt_header:
+      "Simplify the provided text by removing unnecessary complexity, simplifying language, and condensing information to make it more accessible and easier to understand. Just give the simplified text and nothing else.",
+  },
 
   {
     case: "default",
