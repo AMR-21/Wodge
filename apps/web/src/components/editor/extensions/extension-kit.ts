@@ -1,7 +1,6 @@
 "use client";
 
 import { lowlight } from "lowlight";
-import YPartyKitProvider from "y-partykit/provider";
 
 import { StarterKit } from "@tiptap/starter-kit";
 import { Highlight } from "@tiptap/extension-highlight";
@@ -23,9 +22,7 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { FileHandler } from "@tiptap-pro/extension-file-handler";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 
-import { Selection } from "./selection";
 import { AiWriter } from "./ai-writer";
-// import { AiImage } from './ai-Image'
 import { Table, TableCell, TableHeader, TableRow } from "./table";
 import { HorizontalRule } from "./horizontal-rule";
 import { Heading } from "./heading";
@@ -36,16 +33,13 @@ import { FontSize } from "./font-size";
 import { Figure } from "./figure";
 import { Figcaption } from "./fig-caption";
 import { BlockquoteFigure } from "./blockquote-figure";
-import { Quote } from "./blockquote-figure/quote";
-import { QuoteCaption } from "./blockquote-figure/quote-caption";
 import { Link } from "./link";
 import { ImageUpload } from "./image-upload";
 import { ImageBlock } from "./image-block";
 import { Columns, Column } from "./multi-column";
 import { emojiSuggestion } from "./emoji-suggestions";
 import { TasksDB } from "./tasks";
-import { AiPrompts } from "./ai";
-import { API } from "@/lib/utils";
+import { AiActions } from "./ai";
 
 interface ExtensionKitProps {
   userId?: string;
@@ -73,7 +67,7 @@ export const ExtensionKit = ({
   //   authorId: userId,
   //   authorName: userName,
   // }),
-  AiPrompts,
+  AiActions,
   Column,
   // Selection,
   Heading,

@@ -87,7 +87,7 @@ export function MessageEditor({
             </DialogContent>
           </Dialog>
           <div
-            className="flex w-full items-center overflow-hidden "
+            className="flex  w-full items-center overflow-hidden"
             onKeyDown={(e) => {
               if (e.code === "Enter" && !e.shiftKey && !e.ctrlKey) {
                 onSubmit();

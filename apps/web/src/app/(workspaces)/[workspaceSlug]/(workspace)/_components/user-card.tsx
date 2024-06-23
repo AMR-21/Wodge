@@ -62,6 +62,7 @@ export function UserCard() {
           >
             <SafeAvatar
               src={user?.avatar}
+              fallback={user?.displayName}
               className={cn(
                 "h-6 w-6",
                 isSpeaking && "ring-green-500 dark:ring-green-600",

@@ -5,6 +5,7 @@ import Typography from "@tiptap/extension-typography";
 import { Extension, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Emoji, { gitHubEmojis } from "@tiptap-pro/extension-emoji";
+import { AiActions } from "@/components/editor/extensions/ai";
 
 const MessageNewLine = Extension.create({
   addKeyboardShortcuts() {
@@ -57,6 +58,7 @@ export function useMessageEditor({
         emojis: gitHubEmojis,
         // suggestion: emojiSuggestion,
       }),
+      AiActions,
       MessageNewLine,
     ],
     editorProps: {

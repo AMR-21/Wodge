@@ -5,12 +5,15 @@ import { CommandButton } from "./command-button";
 import { Surface } from "../../ui/surface";
 import { DropdownButton } from "../../ui/Dropdown";
 import { Icon } from "../../ui/icon";
+import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
   const activeItem = useRef<HTMLButtonElement>(null);
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
   const [selectedCommandIndex, setSelectedCommandIndex] = useState(0);
+
+  const { workspace } = useCurrentWorkspace();
 
   // Anytime the groups change, i.e. the user types to narrow it down, we want to
   // reset the current selection to the first menu item
@@ -129,29 +132,38 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
       className="mb-8 max-h-[min(80vh,24rem)] flex-wrap overflow-auto p-2 text-black"
     >
       <div className="grid grid-cols-1 gap-0.5">
-        {props.items.map((group, groupIndex: number) => (
-          <React.Fragment key={`${group.title}-wrapper`}>
-            <div
-              className="col-[1/-1] mx-2 mt-4 select-none text-[0.65rem] font-semibold uppercase tracking-wider text-neutral-500 first:mt-0.5"
-              key={`${group.title}`}
-            >
-              {group.title}
-            </div>
-            {group.commands.map((command: Command, commandIndex: number) => (
-              <DropdownButton
-                key={`${command.label}`}
-                isActive={
-                  selectedGroupIndex === groupIndex &&
-                  selectedCommandIndex === commandIndex
-                }
-                onClick={createCommandClickHandler(groupIndex, commandIndex)}
+        {props.items.map((group, groupIndex: number) => {
+          if (group.name === "ai" && !workspace?.isPremium) return null;
+
+          return (
+            <React.Fragment key={`${group.title}-wrapper`}>
+              <div
+                className="col-[1/-1] mx-2 mt-4 select-none text-[0.65rem] font-semibold uppercase tracking-wider text-neutral-500 first:mt-0.5"
+                key={`${group.title}`}
               >
-                <Icon Icon={command.icon} className="mr-1" />
-                {command.label}
-              </DropdownButton>
-            ))}
-          </React.Fragment>
-        ))}
+                {group.title}
+              </div>
+              {group.commands.map((command: Command, commandIndex: number) => {
+                return (
+                  <DropdownButton
+                    key={`${command.label}`}
+                    isActive={
+                      selectedGroupIndex === groupIndex &&
+                      selectedCommandIndex === commandIndex
+                    }
+                    onClick={createCommandClickHandler(
+                      groupIndex,
+                      commandIndex,
+                    )}
+                  >
+                    <Icon Icon={command.icon} className="mr-1" />
+                    {command.label}
+                  </DropdownButton>
+                );
+              })}
+            </React.Fragment>
+          );
+        })}
       </div>
     </Surface>
   );

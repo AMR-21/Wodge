@@ -14,7 +14,6 @@ import {
   Sparkles,
   SquareCode,
   Table,
-  Trello,
 } from "lucide-react";
 import { Group } from "./types";
 

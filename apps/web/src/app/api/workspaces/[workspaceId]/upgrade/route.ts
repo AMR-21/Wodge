@@ -31,7 +31,7 @@ export async function POST(
   const token = await sign({ userId });
   // inform users about the upgrade
   await fetch(
-    `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/services/poke?token=${token}`,
+    `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/poke?token=${token}`,
     { method: "POST", headers: { authorization: env.SERVICE_KEY } },
   );
 

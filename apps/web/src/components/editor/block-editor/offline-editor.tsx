@@ -30,7 +30,7 @@ export const OfflineEditor = memo(
     return (
       <div
         className={cn(
-          "flex h-full flex-col overflow-y-auto",
+          "flex h-full w-full flex-col overflow-y-auto",
           !isThread && "max-h-16",
           className,
         )}

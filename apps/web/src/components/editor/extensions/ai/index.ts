@@ -20,7 +20,7 @@ declare module "@tiptap/core" {
   }
 }
 
-export const AiPrompts = Extension.create({
+export const AiActions = Extension.create({
   name: "aiPrompts",
   //@ts-ignore
   addCommands() {
