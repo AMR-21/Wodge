@@ -10,3 +10,5 @@ database_id = "f17da2ae-c255-422f-99ad-b8b93733b758"
 preview_database_id = "DB"
 migrations_dir = "./node_modules/@repo/data/migrations"
 
+[vars]
+NODE_OPTIONS= "--max_old_space_size=4096"
