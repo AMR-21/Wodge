@@ -38,3 +38,8 @@ next-env.d.ts
 # Wrangler
 .dev.vars
 /.wrangler/
+
+
+# PWA
+sw.js
+workbox-*.js

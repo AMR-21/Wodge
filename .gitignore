@@ -49,3 +49,7 @@ next-env.d.ts
 
 
 /tsconfig.tsbuildinfo/
+
+# PWA
+sw.js
+workbox-*.js
