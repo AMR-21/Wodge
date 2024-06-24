@@ -31,7 +31,7 @@ export function useCurrentUser() {
       const data = (await response.json()) as typeof users.$inferSelect;
       return data;
     },
-    enabled: !pathname.startsWith("/login"),
+    enabled: pathname !== "/demo" && pathname !== "/login",
   });
 
   // if (!isPending && !data) throw Error("Error loading user");

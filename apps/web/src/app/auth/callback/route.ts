@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
-import { env } from "@repo/env";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -9,12 +8,11 @@ export async function GET(request: Request) {
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
 
-  console.log({ code, next, origin });
   if (code) {
     const cookieStore = cookies();
     const supabase = createServerClient(
-      env.NEXT_PUBLIC_SUPABASE_URL,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
           get(name: string) {
@@ -30,15 +28,11 @@ export async function GET(request: Request) {
       },
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    console.log({ error, domain: env.NEXT_PUBLIC_APP_DOMAIN });
-
     if (!error) {
-      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_DOMAIN}${next}`);
+      return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(
-    `${env.NEXT_PUBLIC_APP_DOMAIN}/auth/auth-code-error`,
-  );
+  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }

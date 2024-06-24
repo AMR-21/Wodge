@@ -21,7 +21,7 @@ export function useUserWorkspaces() {
       return data;
     },
 
-    enabled: !!user?.id,
+    enabled: !!user?.id && pathname !== "/demo" && pathname !== "/login",
   });
 
   if (isError) {

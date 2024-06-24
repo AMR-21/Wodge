@@ -43,5 +43,5 @@ export async function POST(req: NextRequest) {
     return Response.json({ success: true, user: updatedUser });
   }
 
-  return Response.json({ error }, { status: 400 });
+  return new Response(error, { status: 400 });
 }

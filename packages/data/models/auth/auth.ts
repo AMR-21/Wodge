@@ -61,12 +61,11 @@ export async function updateUserById(userId: string, data: Partial<UserType>) {
 
     return { user, updatedUser: updated[0] };
   } catch (e) {
-    console.log(e);
     if (!(e instanceof Error)) return { error: "Internal server error" };
 
     switch (e.message) {
       case "D1_ERROR: UNIQUE constraint failed: users.username":
-        return { error: "Username already exists" };
+        return { error: "Dup username" };
       default:
         return { error: "Failed to update user" };
     }

@@ -17,6 +17,7 @@ export function OAuth() {
   async function onClick(provider: "google" | "github") {
     await supabase.auth.signInWithOAuth({
       provider,
+
       options: {
         redirectTo: `${env.NEXT_PUBLIC_APP_DOMAIN}/auth/callback?next=${redirect || "/"}`,
       },

@@ -29,13 +29,16 @@ export function CompleteProfileForm() {
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: z.infer<typeof UpdateUserSchema>) => {
-      const res = await fetch("/api/user/update", {
+      const res = await fetch("/api/users/update", {
         method: "POST",
         body: JSON.stringify(data),
       });
 
       if (!res.ok) {
-        toast.error("Something went wrong");
+        // const error = await res.json<error>();
+        const text = await res.text();
+        if (text === "Dup username") toast.warning("Username Already Taken");
+
         return false;
       }
 
