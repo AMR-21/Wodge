@@ -108,7 +108,7 @@ function TasksHeader() {
 
       <div
         className={cn(
-          "invisible flex h-0 items-center gap-2",
+          "invisible flex h-0 w-full items-center gap-2 overflow-x-auto",
           isFilterOpen && "visible h-[calc(100%)] pb-3 pt-1",
         )}
       >
@@ -116,6 +116,7 @@ function TasksHeader() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
+          className="shrink-0 basis-52 md:flex-1 md:basis-auto"
         />
 
         <DateTimePicker
@@ -128,7 +129,7 @@ function TasksHeader() {
         />
 
         <Select value={priority} onValueChange={setPriority}>
-          <SelectTrigger>
+          <SelectTrigger className="shrink-0 basis-52 md:flex-1 md:basis-auto">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
 
@@ -148,7 +149,7 @@ function TasksHeader() {
 
         <Button
           disabled={!title && !priority && !assignees.length && !due}
-          className="px-1.5"
+          className="shrink-0 px-1.5"
           onClick={() => {
             setTitle("");
             setPriority("");
@@ -158,7 +159,7 @@ function TasksHeader() {
           variant="outline"
           size="sm"
         >
-          <X className="size-4" />
+          <X className="size-4 shrink-0" />
         </Button>
       </div>
     </>

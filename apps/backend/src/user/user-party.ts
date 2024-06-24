@@ -159,7 +159,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     const payload = await verifyToken(req, lobby);
 
     if (!payload || payload?.userId !== lobby.id || payload?.isUpload) {
-      console.log("Problem 1");
       return unauthorized();
     }
     req.headers.set("x-user-id", payload.userId);
@@ -175,8 +174,6 @@ export default class UserParty implements Party.Server, UserPartyInterface {
     const payload = await verifyToken(req, lobby);
 
     if (!payload || payload?.userId !== lobby.id) {
-      console.log("Problem 2");
-
       return unauthorized();
     }
 

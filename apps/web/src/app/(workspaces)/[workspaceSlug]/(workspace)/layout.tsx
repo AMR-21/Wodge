@@ -2,11 +2,10 @@
 
 import { AppHeader } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/app-header";
 import { SidebarWrapper } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-wrapper";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
 import { cn } from "@/lib/utils";
 import { isSidebarOpenAtom } from "@/store/global-atoms";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
@@ -21,7 +20,12 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh w-full ">
       <SidebarWrapper />
 
-      <div className="flex h-full w-full flex-col  ">
+      <div
+        className="flex h-full w-full flex-col"
+        onClick={() => {
+          if (!isDesktop) setSidebarOpen(false);
+        }}
+      >
         <AppHeader />
         <div
           className={cn(

@@ -45,7 +45,6 @@ export function WorkspaceGeneralForm() {
     mutationFn: async (data: Pick<Workspace, "name" | "slug">) => {
       await fetch(`/api/workspaces/${workspaceId}/update`, {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify(data),
       });
 

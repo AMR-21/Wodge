@@ -4,13 +4,18 @@ import { produce } from "immer";
 import ThreadParty from "./thread-party";
 import { createCommentMutation } from "@repo/data/models/thread/mutators/create-comment";
 
-export async function createComment(party: ThreadParty, params: RunnerParams) {
+export async function createComment(
+  party: ThreadParty,
+  params: RunnerParams,
+  isPrivileged: boolean
+) {
   const { postId, ...comment } = params.mutation.args as ThreadMessage & {
     postId: string;
   };
   const d = createCommentMutation({
     comment,
     postId,
+    isPrivileged,
     postsArray: party.threadPosts.data,
     userId: params.userId,
   });

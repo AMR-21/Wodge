@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChannelPath } from "@/hooks/use-channel-path";
 import { ThreadAction } from "./thread-actions";
 import { ThreadMessagesList } from "./thread-msgs-list";
-import { CheckCircle2, CircleDot } from "lucide-react";
+import { CheckCircle2, CircleDot, MoreHorizontal } from "lucide-react";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useMember } from "@/hooks/use-member";
 import { useParams } from "next/navigation";
@@ -17,6 +17,14 @@ import { nanoid } from "nanoid";
 import { useSubscribe } from "@/hooks/use-subscribe";
 import { useMemo } from "react";
 import { toast } from "sonner";
+import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 
 export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   const { postId } = useParams<{ postId: string }>();
@@ -49,6 +57,7 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
   }
 
   const Icon = post?.isResolved ? CircleDot : CheckCircle2;
+  const isManager = useIsTeamModerator();
 
   return (
     <div className="h-full px-2 pt-3">
@@ -68,22 +77,46 @@ export function QAPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
             isFirst
           />
 
-          <Button
-            variant="secondary"
-            size="sm"
-            className={cn("gap-1.5")}
-            onClick={toggleThread}
-          >
-            <Icon
-              className={cn(
-                "h-4 w-4 shrink-0",
-                post?.isResolved
-                  ? "text-green-600 dark:text-green-500"
-                  : "text-purple-600 dark:text-purple-500",
-              )}
-            />
-            {post?.isResolved ? "Reopen thread" : "Close thread"}
-          </Button>
+          {(isManager || user?.id === post?.author) && (
+            <Button
+              variant="secondary"
+              size="sm"
+              className={cn("hidden gap-1.5  sm:inline-flex")}
+              onClick={toggleThread}
+            >
+              <Icon
+                className={cn(
+                  "h-4 w-4 shrink-0",
+                  post?.isResolved
+                    ? "text-green-600 dark:text-green-500"
+                    : "text-purple-600 dark:text-purple-500",
+                )}
+              />
+              {post?.isResolved ? "Reopen thread" : "Close thread"}
+            </Button>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarItemBtn
+                className="ml-2 sm:hidden"
+                Icon={MoreHorizontal}
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={toggleThread}>
+                <Icon
+                  className={cn(
+                    "h-4 w-4 shrink-0",
+                    post?.isResolved
+                      ? "text-green-600 dark:text-green-500"
+                      : "text-purple-600 dark:text-purple-500",
+                  )}
+                />
+                {post?.isResolved ? "Reopen thread" : "Close thread"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div

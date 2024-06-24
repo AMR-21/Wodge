@@ -140,14 +140,14 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
               <SidebarItemBtn
                 Icon={PencilLine}
                 onClick={setIsEditing.bind(null, true)}
-                className="invisible ml-auto transition-all group-hover/task:visible"
+                className="invisible ml-auto transition-all md:group-hover/task:visible"
               />
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarItemBtn
                     Icon={MoreHorizontal}
-                    className="invisible my-0.5 transition-all group-hover/task:visible"
+                    className="my-0.5 transition-all group-hover/task:visible md:invisible"
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent

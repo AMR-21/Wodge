@@ -48,37 +48,35 @@ export function CommentEditor({
   }
 
   return (
-    <div className="flex w-full items-center gap-2">
-      <div className="flex flex-1 shrink-0 flex-col rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1.5">
-        {!isResolved && (
-          <>
-            <div
-              className="flex h-full w-full items-center"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && e.ctrlKey) {
-                  createComment();
-                }
-              }}
-            >
-              <SafeAvatar
-                src={user?.avatar}
-                className="mr-3 h-6 w-6 self-start"
+    <div className="flex w-full items-center gap-2 rounded-md border border-border/50 bg-secondary/40 px-1.5 py-1.5">
+      {!isResolved && (
+        <>
+          <div
+            className="flex h-full w-full items-center"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && e.ctrlKey) {
+                createComment();
+              }
+            }}
+          >
+            <SafeAvatar
+              src={user?.avatar}
+              className="mr-3 h-6 w-6 self-start"
+            />
+            <OfflineEditor editor={editor} isThread className="flex-1" />
+            <TooltipWrapper content={isQA ? "Send answer" : "Send comment"}>
+              <SidebarItemBtn
+                Icon={Send}
+                className="self-start"
+                onClick={createComment}
               />
-              <OfflineEditor editor={editor} isThread className="flex-1" />
-              <TooltipWrapper content={isQA ? "Send answer" : "Send comment"}>
-                <SidebarItemBtn
-                  Icon={Send}
-                  className="self-start"
-                  onClick={createComment}
-                />
-              </TooltipWrapper>
-            </div>
-          </>
-        )}
-        {isResolved && (
-          <p className="text-sm text-muted-foreground">Thread is resolved</p>
-        )}
-      </div>
+            </TooltipWrapper>
+          </div>
+        </>
+      )}
+      {isResolved && (
+        <p className="text-sm text-muted-foreground">Thread is resolved</p>
+      )}
     </div>
   );
 }

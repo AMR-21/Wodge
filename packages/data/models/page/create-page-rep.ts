@@ -29,25 +29,25 @@ export function createPageRep({
     pullInterval: null,
     pushURL: undefined,
     pullURL: undefined,
-    // puller: replicacheWrapper<PullRequest, PullerResult>(
-    //   "pull",
-    //   "page",
-    //   channelId,
-    //   {
-    //     "x-workspace-id": workspaceId,
-    //     "x-team-id": teamId,
-    //     "x-folder-id": folderId,
-    //   }
-    // ),
-    // pusher: replicacheWrapper<PushRequest, PusherResult>(
-    //   "push",
-    //   "page",
-    //   channelId,
-    //   {
-    //     "x-workspace-id": workspaceId,
-    //     "x-team-id": teamId,
-    //     "x-folder-id": folderId,
-    //   }
-    // ),
+    puller: replicacheWrapper<PullRequest, PullerResult>(
+      "pull",
+      "page",
+      channelId,
+      {
+        "x-workspace-id": workspaceId,
+        "x-team-id": teamId,
+        "x-folder-id": folderId,
+      }
+    ),
+    pusher: replicacheWrapper<PushRequest, PusherResult>(
+      "push",
+      "page",
+      channelId,
+      {
+        "x-workspace-id": workspaceId,
+        "x-team-id": teamId,
+        "x-folder-id": folderId,
+      }
+    ),
   });
 }

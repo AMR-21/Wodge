@@ -29,7 +29,7 @@ import { useMemo } from "react";
 
 import { cn } from "@/lib/utils";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,13 +41,14 @@ import { useCanView } from "@/hooks/use-can-view";
 import { AddPageForm } from "./add-page-form";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AddRoomForm } from "./add-room-form";
-import { recentlyVisitedAtom } from "@/store/global-atoms";
+import { isSidebarOpenAtom, recentlyVisitedAtom } from "@/store/global-atoms";
 import { useSetAtom } from "jotai";
 import { produce } from "immer";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { Button } from "@/components/ui/button";
 import { AddThreadForm } from "./add-thread-form";
 import { toast } from "sonner";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
 
 interface ChannelsProps {
   channels: readonly DrObj<ChannelType>[];
@@ -196,13 +197,13 @@ export const Channel = React.forwardRef<
     },
     ref,
   ) => {
-    const { workspaceSlug, workspaceRep, workspaceId } = useCurrentWorkspace();
-    const setRecentAtom = useSetAtom(recentlyVisitedAtom);
+    const { workspaceSlug, workspaceRep } = useCurrentWorkspace();
     const { channelId } = useParams() as { channelId: string };
 
-    const [isDeleting, setIsDeleting] = React.useState(false);
+    const isDesktop = useIsDesktop();
+    const router = useRouter();
+    const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom);
 
-    // const icon =
     let icon: LucideIcon | undefined;
 
     switch (type) {
@@ -226,7 +227,12 @@ export const Channel = React.forwardRef<
           aria-disabled={isDragging}
           Icon={icon}
           isActive={channel.id === channelId}
-          href={`/${workspaceSlug}/${type}/${teamId}${type === "page" ? "/" + folderId : ""}/${channel.id}`}
+          onClick={() => {
+            if (!isDesktop) setIsSidebarOpen(false);
+            router.push(
+              `/${workspaceSlug}/${type}/${teamId}${type === "page" ? "/" + folderId : ""}/${channel.id}`,
+            );
+          }}
         >
           <span className="select-none truncate">{channel.name}</span>
           {isMod && (
@@ -236,7 +242,7 @@ export const Channel = React.forwardRef<
                   <DropdownMenuTrigger asChild>
                     <SidebarItemBtn
                       Icon={MoreHorizontal}
-                      className="invisible -my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible"
+                      className="-my-1 ml-auto flex transition-all group-hover:visible aria-expanded:visible md:invisible"
                     />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>

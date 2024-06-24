@@ -52,7 +52,7 @@ export function DateTimePicker({
           variant={isFilter ? "outline" : "ghost"}
           size={bigger || isFilter ? "sm" : "fit"}
           className={cn(
-            "justify-start gap-2 overflow-hidden truncate text-left text-sm font-normal disabled:opacity-85",
+            "shrink-0 basis-52 justify-start gap-2 overflow-hidden truncate text-left text-sm font-normal disabled:opacity-85 md:flex-1 md:basis-auto",
             !date && "text-sm text-muted-foreground",
             bigger && "text-sm",
             isFilter && "w-full",

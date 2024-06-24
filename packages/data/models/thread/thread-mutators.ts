@@ -89,6 +89,8 @@ export const threadMutators = {
       postId,
       postsArray: posts,
       comment,
+      isPrivileged: true,
+
       userId: user.id,
     });
 

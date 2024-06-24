@@ -90,7 +90,7 @@ export const CallWindow = memo(({}) => {
       <div
         tabIndex={-1}
         className={cn(
-          "invisible absolute right-0 top-[3.375rem] z-50 flex h-[calc(100vh-3.375rem)] flex-col items-center justify-center gap-4 bg-background transition-all",
+          "invisible absolute right-0 top-[3.375rem] z-50 flex h-[calc(100vh-3.375rem)] flex-col items-center justify-center gap-4 bg-background ",
           isSidebarOpen && "w-[calc(100vw-15rem)]",
           !isSidebarOpen && "w-[calc(100vw-0rem)]",
           isCallWindowOpen && "visible",
@@ -131,7 +131,7 @@ export const CallWindow = memo(({}) => {
   return (
     <div
       className={cn(
-        "h invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4  bg-background transition-all",
+        "h invisible absolute right-0 top-[3.375rem] z-40 flex h-[calc(100vh-3.4rem)] flex-col items-center justify-center gap-4  overflow-y-auto bg-background",
         isSidebarOpen && "w-[calc(100vw-15rem)]",
         !isSidebarOpen && "w-[calc(100vw-0rem)]",
         isCallWindowOpen && "visible",
@@ -155,7 +155,7 @@ export const CallWindow = memo(({}) => {
 
         <div
           className={cn(
-            "invisible absolute bottom-0 z-50 w-full shrink-0 translate-y-full transition-all group-hover/call:visible group-hover/call:translate-y-0",
+            "z-50 w-full shrink-0 transition-all md:invisible md:absolute md:bottom-0 md:translate-y-full md:group-hover/call:visible md:group-hover/call:translate-y-0",
             (isMicListOpen || isCamListOpen) && "visible translate-y-0",
           )}
         >

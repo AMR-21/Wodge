@@ -21,7 +21,6 @@ export function ImageMessage({
 
       if (!link) throw new Error("Failed to get audio link");
       const res = await fetch(link, {
-        credentials: "include",
       });
 
       const { downloadUrl } = await res.json<{

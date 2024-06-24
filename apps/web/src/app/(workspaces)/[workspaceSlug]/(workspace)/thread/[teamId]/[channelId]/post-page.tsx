@@ -12,8 +12,6 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 export function PostPage({ rep }: { rep?: Replicache<typeof threadMutators> }) {
-  const path = useChannelPath();
-
   const { postId } = useParams<{ postId: string }>();
 
   const { snapshot: posts } = useSubscribe(rep, (tx) =>

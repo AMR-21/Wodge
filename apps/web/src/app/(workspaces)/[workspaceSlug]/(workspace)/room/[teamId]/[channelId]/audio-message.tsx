@@ -22,9 +22,7 @@ export function AudioMessage({
       const link = await getSrcLink(message.id, workspaceId, channelId, teamId);
 
       if (!link) throw new Error("Failed to get audio link");
-      const res = await fetch(link, {
-        credentials: "include",
-      });
+      const res = await fetch(link, {});
 
       if (!res.ok) throw new Error("Failed to fetch audio");
       const { downloadUrl } = await res.json<{

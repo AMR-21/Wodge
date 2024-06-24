@@ -37,7 +37,7 @@ export function File({
       <span>{name}</span>
       <SidebarItemBtn
         Icon={Download}
-        className="invisible ml-2 group-hover:visible"
+        className="ml-auto group-hover:visible md:invisible md:ml-2"
         onClick={async () => {
           // download file
           const path = curPath ? curPath + "/" : "";
@@ -47,7 +47,7 @@ export function File({
       />
       <SidebarItemBtn
         Icon={Trash2}
-        className="invisible group-hover:visible"
+        className="group-hover:visible md:invisible"
         onClick={async () => {
           const path = curPath ? curPath + "/" : "";
 

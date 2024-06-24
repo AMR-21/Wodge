@@ -60,7 +60,6 @@ export function AccountGeneralForm() {
     ) => {
       await fetch(`/api/users/update`, {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify(data),
       });
 

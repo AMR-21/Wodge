@@ -27,7 +27,7 @@ export function TaskSheet({ task, rep }: TaskSheetProps) {
 
   const editor = useThreadEditor({
     content: task?.overview,
-    placeholder: "Write something or / for commands",
+    placeholder: "Type / for commands",
   });
 
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom);

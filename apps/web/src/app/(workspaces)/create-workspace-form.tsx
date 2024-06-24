@@ -38,7 +38,6 @@ export function CreateWorkspaceForm() {
     mutationFn: async (data: NewWorkspace & { id: string }) => {
       const res = await fetch(`/api/workspaces/new`, {
         method: "POST",
-        credentials: "include",
         body: JSON.stringify(data),
       });
 

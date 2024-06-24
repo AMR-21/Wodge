@@ -51,13 +51,11 @@ export const Post = memo(
 
     const { isEditing, setIsEditing, onCancelEdit, onEdit } = useEditEditor();
 
-    const { workspaceRep, workspaceId } = useCurrentWorkspace();
     const author = post?.author || comment?.author;
     const { member } = useMember(author);
     const { user } = useCurrentUser();
     const isPrivileged = useIsTeamModerator();
     const router = useRouter();
-    const setRecentAtom = useSetAtom(recentlyVisitedAtom);
 
     const { channelId, postId } = useParams<{
       channelId: string;
@@ -82,7 +80,7 @@ export const Post = memo(
               <p className="text-sm">
                 {member?.displayName || "Workspace Member"}
               </p>
-              <p className="pt-0.5 text-xs text-muted-foreground">
+              <p className="truncate pt-0.5 text-xs text-muted-foreground">
                 {format(
                   post?.createdAt ||
                     comment?.createdAt ||

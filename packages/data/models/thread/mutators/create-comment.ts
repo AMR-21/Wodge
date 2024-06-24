@@ -11,11 +11,13 @@ export function createCommentMutation({
   postId,
   postsArray,
   userId,
+  isPrivileged,
 }: {
   postId: string;
   comment: ThreadMessage;
   postsArray: ThreadPost[] | DrObj<ThreadPost[]>;
   userId: string;
+  isPrivileged: boolean;
 }) {
   const validateFields = ThreadMessageSchema.safeParse(comment);
   if (!validateFields.success) throw new Error("Invalid msg data");
@@ -27,6 +29,13 @@ export function createCommentMutation({
   const newPostsArray = produce(postsArray, (draft) => {
     const post = draft.find((p) => p.id === postId);
     if (!post) throw new Error("post not found");
+
+    if (
+      !isPrivileged &&
+      post.author !== userId &&
+      (comment.type === "open" || comment.type === "close")
+    )
+      throw new Error("not privileged");
 
     if (post.isResolved && comment.type === "message")
       throw new Error("post is resolved");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { Sidebar } from "./sidebar";
 import { SidebarHeader } from "./sidebar-header";
 import { isSidebarOpenAtom } from "@/store/global-atoms";
@@ -10,7 +10,7 @@ import { UserCard } from "./user-card";
 import { roomAtom } from "../room/[teamId]/[channelId]/atoms";
 
 export function SidebarWrapper() {
-  const isSidebarOpen = useAtomValue(isSidebarOpenAtom);
+  const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom);
   const room = useAtomValue(roomAtom);
 
   return (

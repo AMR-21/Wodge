@@ -42,7 +42,11 @@ function runner(party: ThreadParty, req: HonoRequest) {
     try {
       switch (params.mutation.name) {
         case "createComment":
-          return await createComment(party, params);
+          return await createComment(
+            party,
+            params,
+            isAdmin || isOwner || isTeamModerator
+          );
         case "editComment":
           return await editComment(party, params);
         case "deleteComment":

@@ -88,7 +88,7 @@ export function TeamMore({ teamId, folderId, folder }: TeamMoreProps) {
         <DropdownMenuTrigger asChild>
           <SidebarItemBtn
             Icon={MoreHorizontal}
-            className="invisible z-10 -my-1 ml-auto flex transition-all hover:bg-transparent group-hover:visible aria-expanded:visible"
+            className="z-10 -my-1 ml-auto flex transition-all hover:bg-transparent group-hover:visible aria-expanded:visible md:invisible"
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48" sideOffset={2}>

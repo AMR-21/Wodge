@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 
 export function LoginWrapper() {
   return (
-    <Card className="z-20 flex w-fit max-w-96 flex-col justify-center border-none bg-transparent shadow-none">
+    <Card className="z-20  flex w-fit max-w-96 flex-col justify-center border-none bg-transparent shadow-none">
       <CardHeader>
         <CardTitle className="text-center text-2xl">Welcome Back</CardTitle>
         <CardDescription className="text-center">
@@ -39,7 +39,7 @@ export function LoginWrapper() {
         </div>
       </CardContent>
 
-      <CardFooter className="mt-4 flex px-8 text-sm text-muted-foreground">
+      {/* <CardFooter className="mt-4 flex px-8 text-sm text-muted-foreground">
         <p className="px-0.5">
           By logging in, you agree to our{" "}
           <Link
@@ -57,7 +57,7 @@ export function LoginWrapper() {
           </Link>
           .
         </p>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

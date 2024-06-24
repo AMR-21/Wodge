@@ -13,7 +13,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Folders } from "./folders";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import {
   Collapsible,
@@ -23,13 +23,15 @@ import {
 import { TeamMore } from "./team-more";
 import { Channels } from "./channels";
 import { TeamThreadsMore } from "./team-threads-more";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useIsTeamMember } from "@/hooks/use-is-team-member";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { activeSidebarAtom, openTeamsAtom } from "./sidebar-atoms";
 import { useIsTeamModerator } from "@/hooks/use-is-team-moderator";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { TeamRoomsMore } from "./team-rooms-more";
+import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { isSidebarOpenAtom } from "@/store/global-atoms";
 
 interface TeamspacesProps {
   isPages?: boolean;
@@ -197,6 +199,9 @@ export const Teamspace = React.forwardRef<
     const { workspaceSlug } = useCurrentWorkspace();
     const activeSideBar = useAtomValue(activeSidebarAtom);
     const activeChan = usePathname().split("/").at(2) || "home";
+    const isDesktop = useIsDesktop();
+    const router = useRouter();
+    const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom);
 
     return (
       <li ref={ref} className="group flex grow" {...props}>
@@ -208,7 +213,10 @@ export const Teamspace = React.forwardRef<
           }
           noIcon
           {...(type === "resources" && {
-            href: `/${workspaceSlug}/resources/${team.id}`,
+            onClick: () => {
+              if (!isDesktop) setIsSidebarOpen(false);
+              router.push(`/${workspaceSlug}/resources/${team.id}`);
+            },
           })}
           className="group/collapsible"
         >

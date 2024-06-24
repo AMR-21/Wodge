@@ -77,7 +77,10 @@ export function ThreadMessage({
           />
         </div>
       ) : (
-        <SafeDiv className="BlockEditor pl-9" html={comment.content} />
+        <SafeDiv
+          className="BlockEditor w-full overflow-hidden text-balance break-words pl-9"
+          html={comment.content}
+        />
       )}
     </div>
   );

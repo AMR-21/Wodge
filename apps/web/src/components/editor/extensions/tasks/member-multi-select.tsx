@@ -217,7 +217,7 @@ const Trigger = forwardRef<
           variant: icon ? "ghost" : "outline",
           size: bigger || !icon ? "sm" : "fit",
         }),
-        "max-h-7 w-full justify-start gap-2 overflow-hidden text-sm aria-disabled:opacity-85",
+        "max-h-7 w-full shrink-0 basis-52 justify-start gap-2 overflow-hidden text-sm aria-disabled:opacity-85 md:flex-1 md:basis-auto",
         !isEditing && "bg-transparent hover:bg-transparent",
         bigger && "max-h-20 text-sm",
         !icon && "max-h-full",

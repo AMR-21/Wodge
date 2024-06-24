@@ -14,7 +14,7 @@ export function ThreadAction({
 }) {
   const Icon = comment.type === "open" ? CircleDot : CheckCircle2;
   return (
-    <div className="z-50 flex items-center gap-3 pl-[0.5625rem] text-sm">
+    <div className="z-50 flex items-center gap-3 truncate pl-[0.5625rem] text-sm">
       <Icon
         className={cn(
           "h-6 w-6 shrink-0 rounded-full border-2 border-background  p-0.5 ",
@@ -25,7 +25,7 @@ export function ThreadAction({
       />
       <div className="flex gap-1">
         <p>@{member?.username || "workspace_member"}</p>
-        <p className="text-muted-foreground">
+        <p className="truncate text-muted-foreground">
           {comment.type === "open"
             ? isFirst
               ? "opened"
@@ -33,7 +33,7 @@ export function ThreadAction({
             : "closed"}{" "}
           the thread
         </p>
-        <p className="pt-0.5 text-xs text-muted-foreground">
+        <p className="truncate pt-0.5 text-xs text-muted-foreground">
           {comment.createdAt && format(comment.createdAt, "yyyy/MM/dd h:mm a")}
         </p>
       </div>

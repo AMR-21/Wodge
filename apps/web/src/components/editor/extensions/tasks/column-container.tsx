@@ -80,13 +80,13 @@ function ColumnContainer({ column, tasks, rep, editor }: Props) {
 
   return (
     <div ref={setNodeRef}>
-      <div className="group flex w-80 select-none flex-col rounded-md bg-secondary/30 p-2 transition-all">
+      <div className="group flex w-64 select-none flex-col rounded-md bg-secondary/30 p-2 transition-all md:w-80">
         {/* Column title */}
         <div
           style={style}
           {...attributes}
           {...listeners}
-          className="flex max-w-80 cursor-grab items-center pb-3"
+          className="flex max-w-64 cursor-grab items-center pb-3 md:max-w-80"
         >
           <div className="flex w-full items-start gap-1">
             <p
@@ -123,7 +123,7 @@ function ColumnContainer({ column, tasks, rep, editor }: Props) {
                 <DropdownMenuTrigger asChild>
                   <SidebarItemBtn
                     Icon={MoreHorizontal}
-                    className="invisible my-0.5 ml-auto transition-all group-hover:visible"
+                    className="my-0.5 ml-auto transition-all group-hover:visible md:invisible"
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

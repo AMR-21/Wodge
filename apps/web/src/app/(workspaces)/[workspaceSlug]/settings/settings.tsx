@@ -89,7 +89,7 @@ function SettingsSidebarCollapsibleItem({
     <SidebarItemBtn
       Icon={actionIcon || Plus}
       className={cn(
-        "invisible -my-1 ml-auto transition-all group-hover:visible",
+        "-my-1 ml-auto transition-all group-hover:visible md:invisible",
         isActive && "visible",
       )}
       href={`/${workspaceSlug}/settings/${label}/new`}

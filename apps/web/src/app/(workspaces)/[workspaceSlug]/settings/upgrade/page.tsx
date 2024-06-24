@@ -169,16 +169,17 @@ function UpgradePage() {
     },
   ];
   return (
-    <div className="py-8">
+    <div className="py-4">
       <PricingHeader
         title="Pricing Plans"
         subtitle="Choose the plan that's right for you"
       />
-      <section className="mt-8 flex flex-col justify-center gap-8 sm:flex-row sm:flex-wrap">
+      <section className="mt-4 flex flex-col justify-center gap-6 sm:flex-row sm:flex-wrap">
         {plans.map((plan) => {
           return <PricingCard key={plan.title} {...plan} />;
         })}
       </section>
+      <div className="invisible h-6" />
     </div>
   );
 }
