@@ -10,7 +10,6 @@ export async function createTeam(
   params: RunnerParams,
   auth: PushAuth
 ) {
-  console.log(params, auth.isOwnerOrAdmin);
   if (!auth.isOwnerOrAdmin) return;
   const newStructure = createTeamMutation({
     currentUserId: params.userId,
