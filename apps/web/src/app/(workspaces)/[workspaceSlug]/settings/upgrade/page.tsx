@@ -148,7 +148,7 @@ function UpgradePage() {
   const plans = [
     {
       title: "Basic",
-      monthlyPrice: 5,
+      monthlyPrice: 0,
       description: "Essential features you need to get started",
       features: ["Storage up to 5GB", "Maximum 10 members"],
       actionLabel: workspace?.isPremium ? "Revert" : "Current Plan",
@@ -158,7 +158,7 @@ function UpgradePage() {
     },
     {
       title: "Pro",
-      monthlyPrice: 25,
+      monthlyPrice: 50,
       description: "Perfect for owners of small & medium businesses",
       features: ["Ai access", "Storage up to 100GB", "Up to 50 members"],
       actionLabel: workspace?.isPremium! ? "Current Plan" : "Upgrade",
