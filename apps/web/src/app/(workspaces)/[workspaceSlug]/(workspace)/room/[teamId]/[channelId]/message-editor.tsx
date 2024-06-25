@@ -46,7 +46,6 @@ export function MessageEditor({
           date: new Date().toISOString(),
           id: nanoid(),
           type: "text",
-          reactions: [],
           pollOptions: [],
           pollVoters: [],
           votes: [],

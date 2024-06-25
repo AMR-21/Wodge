@@ -1,6 +1,5 @@
 import { deleteFile } from "../handlers/delete-file";
 import { downloadFile } from "../handlers/download-file";
-import { getMembersInfo } from "../handlers/get-members-info";
 import { leaveWorkspace } from "../handlers/leave-workspace";
 import { listFiles } from "../handlers/list-files";
 import { uploadFile } from "../handlers/upload-file";

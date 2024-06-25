@@ -11,13 +11,13 @@ export async function editMessage(party: RoomParty, params: RunnerParams) {
     curUserId: params.userId,
     message: args.message,
     newContent: args.newContent,
-    arr: party.roomMessages.data,
+    arr: party.messages.data,
   });
 
-  party.roomMessages = produce(party.roomMessages, (draft) => {
+  party.messages = produce(party.messages, (draft) => {
     draft.data = d;
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("messages", party.roomMessages);
+  await party.room.storage.put("messages", party.messages);
 }

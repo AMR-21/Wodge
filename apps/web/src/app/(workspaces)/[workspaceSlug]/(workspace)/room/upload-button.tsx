@@ -107,7 +107,6 @@ export function UploadButton({
         date: new Date().toISOString(),
         id: fileId,
         type,
-        reactions: [],
         pollOptions: [],
         pollVoters: [],
         votes: [],

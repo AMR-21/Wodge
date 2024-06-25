@@ -8,13 +8,13 @@ export async function sendMessage(party: RoomParty, params: RunnerParams) {
   const d = sendMessageMutation({
     curUserId: params.userId,
     message: params.mutation.args as Message,
-    arr: party.roomMessages.data,
+    arr: party.messages.data,
   });
 
-  party.roomMessages = produce(party.roomMessages, (draft) => {
+  party.messages = produce(party.messages, (draft) => {
     draft.data = d;
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("messages", party.roomMessages);
+  await party.room.storage.put("messages", party.messages);
 }

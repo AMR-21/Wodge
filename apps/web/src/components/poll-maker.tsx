@@ -142,7 +142,6 @@ export function PollMaker({ isRoom }: { isRoom: boolean }) {
                 votes: [],
                 pollVoters: [],
                 comments: [],
-                reactions: [],
               });
 
             if (isRoom)
@@ -155,7 +154,6 @@ export function PollMaker({ isRoom }: { isRoom: boolean }) {
                 pollOptions: options,
                 pollVoters: [],
                 votes: [],
-                reactions: [],
               });
 
             closeRef.current?.click();

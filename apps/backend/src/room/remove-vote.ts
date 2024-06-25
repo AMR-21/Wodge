@@ -7,7 +7,7 @@ import { VoteArgs } from "@repo/data";
 export async function removeVote(party: RoomParty, params: RunnerParams) {
   const vote = params.mutation.args as VoteArgs;
 
-  party.roomMessages = produce(party.roomMessages, (draft) => {
+  party.messages = produce(party.messages, (draft) => {
     draft.data = removeRoomVoteMutation({
       curUserId: params.userId,
       msgsArr: draft.data,
@@ -16,5 +16,5 @@ export async function removeVote(party: RoomParty, params: RunnerParams) {
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("messages", party.roomMessages);
+  await party.room.storage.put("messages", party.messages);
 }

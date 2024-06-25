@@ -28,7 +28,7 @@ export function ThreadDropDown({
       <DropdownMenuTrigger asChild>
         <SidebarItemBtn
           Icon={MoreHorizontal}
-          className="invisible ml-auto transition-all group-hover:visible aria-expanded:visible"
+          className="ml-auto transition-all group-hover:visible aria-expanded:visible md:invisible"
         />
       </DropdownMenuTrigger>
 

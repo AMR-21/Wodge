@@ -71,7 +71,7 @@ export async function joinWorkspace(party: WorkspaceParty, c: Context) {
   // 7. persist updates
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
-    [WORKSPACE_INVITES_KEY]: party.invites,
+    // [WORKSPACE_INVITES_KEY]: party.invites,
     [REPLICACHE_VERSIONS_KEY]: party.versions,
     [WORKSPACE_PRESENCE_KEY]: party.presenceMap,
     [makeWorkspaceStructureKey()]: party.workspaceStructure,

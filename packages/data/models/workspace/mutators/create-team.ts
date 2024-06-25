@@ -49,7 +49,7 @@ export function createTeamMutation({
         id: "root-" + newTeamBase.id,
       },
     ],
-    tags: [],
+    // tags: [],
     rooms: [],
     threads: [],
     default: false,

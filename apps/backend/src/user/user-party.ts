@@ -19,7 +19,6 @@ import { userPush } from "./handlers/user-push";
 import { addWorkspace } from "./handlers/add-workspace";
 import { removeWorkspace } from "./handlers/remove-workspace";
 import { poke } from "./handlers/poke";
-import { getUserWorkspaces } from "./handlers/get-user-workspace";
 import { update } from "./handlers/update";
 import { uploadAvatar } from "./handlers/upload-avatar";
 import { cors } from "hono/cors";

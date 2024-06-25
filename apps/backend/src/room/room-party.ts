@@ -15,7 +15,7 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
     hibernate: true,
   };
 
-  roomMessages: ServerRoomMessages;
+  messages: ServerRoomMessages;
   versions: Versions;
 
   app: Hono = new Hono().basePath("/parties/room/:roomId");

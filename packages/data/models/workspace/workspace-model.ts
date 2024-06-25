@@ -38,7 +38,7 @@ export async function createWorkspace(data: Workspace) {
     console.log(e);
     switch (e.message) {
       case "D1_ERROR: UNIQUE constraint failed: workspaces.slug":
-        return { error: "Workspace slug already exists" };
+        return { error: "Workspace url already exists" };
       default:
         return { error: "Failed to create workspace" };
     }

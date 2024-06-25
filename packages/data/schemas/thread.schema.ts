@@ -48,15 +48,6 @@ export const ThreadPostSchema = z.object({
     .default([]),
   isVoteOpen: z.boolean().default(true).optional(),
   comments: z.array(ThreadMessageSchema).optional().default([]),
-  reactions: z
-    .array(
-      z.object({
-        user: z.string(),
-        reaction: z.string(),
-      })
-    )
-    .optional()
-    .default([]),
 });
 
 export type ThreadMessage = z.infer<typeof ThreadMessageSchema>;

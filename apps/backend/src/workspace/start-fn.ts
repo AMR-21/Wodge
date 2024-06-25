@@ -58,7 +58,7 @@ export async function startFn(party: WorkspaceParty) {
     ]);
 
   // remove
-  party.invites = <Invites>map.get(WORKSPACE_INVITES_KEY) || new Map();
+  // party.invites = <Invites>map.get(WORKSPACE_INVITES_KEY) || new Map();
 
   party.presenceMap = <PresenceMap>map.get(WORKSPACE_PRESENCE_KEY) || new Map();
 }

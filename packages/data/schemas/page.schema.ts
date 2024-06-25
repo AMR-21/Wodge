@@ -22,12 +22,6 @@ export const ColumnSchema = z.object({
   title: z.string().optional(),
 });
 
-export const BoardSchema = z.object({
-  id: z.string(),
-  tasks: z.array(TaskSchema),
-  columns: z.array(ColumnSchema),
-});
-
 export type Db = {
   tasks: Task[];
   columns: Column[];

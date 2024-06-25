@@ -1,5 +1,5 @@
 import { sign } from "@/lib/utils/sign";
-import { getUserById, getUserInfoById } from "@repo/data/server";
+import { getUserById } from "@repo/data/server";
 import { env } from "@repo/env";
 import { redirect } from "next/navigation";
 

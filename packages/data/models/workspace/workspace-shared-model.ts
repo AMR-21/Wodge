@@ -8,7 +8,6 @@ import { Folder, Team } from "../../schemas/team.schema";
 import {
   Invite,
   Member,
-  NewInvite,
   WorkspaceMembers,
   WorkspaceStructure,
 } from "../../schemas/workspace.schema";
@@ -58,7 +57,7 @@ export const createDefaultTeam = (createdBy: string): Team => {
     folders: [createRootFolder(teamId)],
     threads: [createWelcomeThread()],
     rooms: [createWelcomeRoom()],
-    tags: [],
+    // tags: [],
   };
 };
 

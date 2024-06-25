@@ -24,10 +24,13 @@ import { setupAdministrativeRoutes } from "./routes/administrative-routes";
 export default class WorkspaceParty
   implements Party.Server, WorkspacePartyInterface
 {
+  options: Party.ServerOptions = {
+    hibernate: true,
+  };
+
   workspaceMembers: ServerWorkspaceMembers;
   // workspaceMetadata: ServerWorkspaceData;
   workspaceStructure: ServerWorkspaceStructure;
-  invites: Invites;
   versions: Versions;
 
   // Map to track the presence of users in the workspace

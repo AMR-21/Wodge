@@ -12,14 +12,14 @@ export async function deleteMessage(
   const d = deleteMessageMutation({
     userId: params.userId,
     msg: params.mutation.args as Message,
-    arr: party.roomMessages.data,
+    arr: party.messages.data,
     isPrivileged,
   });
 
-  party.roomMessages = produce(party.roomMessages, (draft) => {
+  party.messages = produce(party.messages, (draft) => {
     draft.data = d;
     draft.lastModifiedVersion = params.nextVersion;
   });
 
-  await party.room.storage.put("messages", party.roomMessages);
+  await party.room.storage.put("messages", party.messages);
 }

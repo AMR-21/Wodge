@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { BRAND_COLOR, ID_LENGTH, WORKSPACE_GROUP_ID_LENGTH } from "./config";
 import { TeamSchema } from "./team.schema";
 import {
@@ -8,6 +7,7 @@ import {
   text,
 } from "drizzle-orm/sqlite-core";
 import { users } from "./auth.schema";
+import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
@@ -100,26 +100,6 @@ export const WorkspaceSchema = createInsertSchema(workspaces, {
     ),
 });
 
-export const InviteSchema = z.object({
-  limit: z.number().int().positive().default(Infinity),
-  method: z.enum(["link", "email", "owner"]),
-  // emails: z.array(z.string().email()).optional(),
-});
-// .refine(
-//   (data) => {
-//     if (
-//       data.method === "email" &&
-//       (!data.emails || data.emails.length === 0)
-//     ) {
-//       return false;
-//     }
-//     return true;
-//   },
-//   {
-//     message: "Emails are required",
-//   }
-// );
-
 export const MemberSchema = z.object({
   id: z.string(),
   role: z.enum(["owner", "admin", "member"]),
@@ -181,4 +161,3 @@ export type NewWorkspace = z.infer<typeof NewWorkspaceSchema>;
 
 export type Invite = typeof invites.$inferSelect;
 export type Invites = Map<string, Invite>;
-export type NewInvite = z.infer<typeof InviteSchema>;

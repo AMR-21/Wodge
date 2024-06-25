@@ -27,11 +27,11 @@ function patcher(party: RoomParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    if (party.roomMessages.lastModifiedVersion > fromVersion) {
+    if (party.messages.lastModifiedVersion > fromVersion) {
       patch.push({
         op: "put",
         key: "messages",
-        value: party.roomMessages.data,
+        value: party.messages.data,
       });
     }
 

@@ -88,9 +88,9 @@ export function CreateWorkspaceForm() {
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Workspace slug</FormLabel>
+              <FormLabel>Workspace URL</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Workspace slug" />
+                <Input {...field} placeholder="Workspace url" />
               </FormControl>
             </FormItem>
           )}

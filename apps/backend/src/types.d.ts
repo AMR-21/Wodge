@@ -57,7 +57,6 @@ export interface WorkspacePartyInterface extends Party {
   // workspaceMetadata: ServerWorkspaceData;
   workspaceMembers: ServerWorkspaceMembers;
   workspaceStructure: ServerWorkspaceStructure;
-  invites: Invites;
   presenceMap: PresenceMap;
 }
 
@@ -74,7 +73,7 @@ export interface ServerRoomMessages extends ReplicacheFields {
 }
 
 export interface RoomPartyInterface extends Party {
-  roomMessages: ServerRoomMessages;
+  messages: ServerRoomMessages;
 }
 
 export interface ThreadPartyInterface extends Party {

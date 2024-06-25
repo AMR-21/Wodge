@@ -61,7 +61,6 @@ export function ThreadEditor({
           id: nanoid(6),
           pollOptions: [],
           pollVoters: [],
-          reactions: [],
           type: isQA ? "qa" : "post",
           votes: [],
         });

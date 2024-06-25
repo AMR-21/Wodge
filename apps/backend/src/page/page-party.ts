@@ -20,15 +20,12 @@ import { pagePull } from "./page-pull";
 import { pagePush } from "./page-push";
 
 export default class PageParty implements Party.Server, PagePartyInterface {
-  ai: Ai;
   db: ServerPageDB;
   versions: Versions;
 
   app: Hono = new Hono().basePath("/parties/page/:pageId");
 
-  constructor(readonly room: Party.Room) {
-    this.ai = new Ai(room.context.ai);
-  }
+  constructor(readonly room: Party.Room) {}
 
   async onStart() {
     this.app.post("/replicache-pull", pagePull.bind(null, this));

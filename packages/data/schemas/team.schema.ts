@@ -8,10 +8,10 @@ import { ThreadSchema } from "./thread.schema";
 import { RoomSchema } from "./room.schema";
 import { PageSchema } from "./page.schema";
 
-export const TagSchema = z.object({
-  name: z.string().max(70),
-  color: z.string().default(BRAND_COLOR).optional(),
-});
+// export const TagSchema = z.object({
+//   name: z.string().max(70),
+//   color: z.string().default(BRAND_COLOR).optional(),
+// });
 
 export const FolderSchema = z.object({
   id: z.string().length(WORKSPACE_GROUP_ID_LENGTH),
@@ -32,10 +32,10 @@ export const TeamSchema = z.object({
   folders: z.array(FolderSchema),
   rooms: z.array(RoomSchema),
   threads: z.array(ThreadSchema),
-  tags: z.array(TagSchema),
+  // tags: z.array(TagSchema),
   default: z.boolean().default(false),
 });
 
 export type Team = z.infer<typeof TeamSchema>;
-export type Tag = z.infer<typeof TagSchema>;
+// export type Tag = z.infer<typeof TagSchema>;
 export type Folder = z.infer<typeof FolderSchema>;

@@ -49,14 +49,14 @@ export async function deleteWorkspace(party: WorkspaceParty) {
     ["globalVersion", 0],
     ["workspaceInfo", 0],
   ]);
-  party.invites = new Map();
+  // party.invites = new Map();
   party.presenceMap = new Map();
 
   await party.room.storage.put({
     [makeWorkspaceMembersKey()]: party.workspaceMembers,
     [makeWorkspaceStructureKey()]: party.workspaceStructure,
     REPLICACHE_VERSIONS_KEY: party.versions,
-    WORKSPACE_INVITES_KEY: party.invites,
+    // WORKSPACE_INVITES_KEY: party.invites,
     WORKSPACE_PRESENCE_KEY: party.presenceMap,
   });
 

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   });
 
   if (!validatedFields.success)
-    return new Response("Invalid workspace data", { status: 401 });
+    return new Response("Invalid workspace data", { status: 400 });
 
   const { data: newWorkspace } = validatedFields;
 

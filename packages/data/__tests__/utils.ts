@@ -106,7 +106,7 @@ export function createTestMessage(data?: Partial<Message>) {
     content: "Hello",
     date: new Date().toISOString(),
     sender: UserId,
-    reactions: [],
+
     ...data,
   };
   return message;
