@@ -19,8 +19,6 @@ function patcher(party: WorkspaceParty, userId: string) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    const { workspaceMembers, workspaceStructure } = party;
-
     if (party.versions.get("workspaceInfo")! > fromVersion) {
       await party.poke({
         type: "workspaceInfo",
@@ -31,7 +29,7 @@ function patcher(party: WorkspaceParty, userId: string) {
       patch.push({
         op: "put",
         key: makeWorkspaceMembersKey(),
-        value: workspaceMembers.data,
+        value: party.workspaceMembers.data,
       });
     }
 
@@ -39,7 +37,7 @@ function patcher(party: WorkspaceParty, userId: string) {
       patch.push({
         op: "put",
         key: makeWorkspaceStructureKey(),
-        value: workspaceStructure.data,
+        value: party.workspaceStructure.data,
       });
     }
 

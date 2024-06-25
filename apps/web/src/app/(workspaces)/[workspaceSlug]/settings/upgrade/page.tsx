@@ -69,7 +69,7 @@ const PricingCard = ({
         <CardTitle className="text-lg text-foreground">{title}</CardTitle>
         <div className="flex gap-0.5">
           <h3 className="text-3xl font-bold">
-            {monthlyPrice ? "$" + monthlyPrice : "Custom"}
+            {monthlyPrice ? "$" + monthlyPrice : "Free"}
           </h3>
           <span className="mb-1 flex flex-col justify-end text-sm">
             {monthlyPrice ? "/month" : null}

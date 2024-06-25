@@ -3,20 +3,25 @@ import { createTeamMutation } from "@repo/data/models/workspace/mutators/create-
 import { RunnerParams } from "../../lib/replicache";
 import { Team, makeWorkspaceStructureKey } from "@repo/data";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function createTeam(
   party: WorkspaceParty,
   params: RunnerParams,
   auth: PushAuth
 ) {
+  console.log(params, auth.isOwnerOrAdmin);
   if (!auth.isOwnerOrAdmin) return;
-  party.workspaceStructure.data = createTeamMutation({
+  const newStructure = createTeamMutation({
     currentUserId: params.userId,
     structure: party.workspaceStructure.data,
     team: params.mutation.args as Team,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),
