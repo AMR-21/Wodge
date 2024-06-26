@@ -14,12 +14,7 @@ const jiti = require("jiti")(__filename);
 jiti("./node_modules/@repo/env/index.ts");
 
 /** @type {import('next').NextConfig} */
-const nextConfig =
-  withPWA({
-    experimental: {
-      cpus: 4,
-    },
-  }) || {};
+const nextConfig = withPWA({}) || {};
 
 /**
  * Add Cloudflare bindings for Next.js development mode.
