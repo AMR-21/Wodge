@@ -125,10 +125,10 @@ export function TeamSettings({
               addMember={addMember}
             />
           </SettingsContentSection>
-
+          {/* 
           <SettingsContentSection header="Manage Tags">
             <p>To do</p>
-          </SettingsContentSection>
+          </SettingsContentSection> */}
 
           <SettingsContentSection header="Danger Zone">
             <Button size="sm" variant="destructive" onClick={deleteTeam}>

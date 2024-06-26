@@ -4,6 +4,7 @@ import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
 import { createRoomMutation } from "@repo/data/models/workspace/mutators/create-room";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function createRoom(
   party: WorkspaceParty,
@@ -15,13 +16,16 @@ export async function createRoom(
 
   if (!teamId || !room) return;
 
-  party.workspaceStructure.data = createRoomMutation({
+  const newStructure = createRoomMutation({
     structure: party.workspaceStructure.data,
     teamId,
     room,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

@@ -4,6 +4,7 @@ import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
 import { DeleteChannelArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function deleteChannel(
   party: WorkspaceParty,
@@ -16,7 +17,7 @@ export async function deleteChannel(
   if (args.type === "page" || args.type === "room")
     if (!auth.isOwnerOrAdmin && !auth.isTeamModerator) return;
 
-  party.workspaceStructure.data = deleteChannelMutation({
+  const newStructure = deleteChannelMutation({
     structure: party.workspaceStructure.data,
     channelId: args.channelId,
     folderId: args?.folderId,
@@ -26,7 +27,10 @@ export async function deleteChannel(
     isAdmin: auth.isOwnerOrAdmin || auth.isTeamModerator,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

@@ -8,6 +8,7 @@ import {
 import { updateRoomMutation } from "@repo/data/models/workspace/mutators/update-room";
 import { updateThreadMutation } from "@repo/data/models/workspace/mutators/update-thread";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function updateThread(
   party: WorkspaceParty,
@@ -18,14 +19,17 @@ export async function updateThread(
 
   if (!teamId || !thread) return;
 
-  party.workspaceStructure.data = updateThreadMutation({
+  const newStructure = updateThreadMutation({
     structure: party.workspaceStructure.data,
     teamId,
     thread,
     userId: params.userId,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

@@ -10,6 +10,7 @@ import { updateRoomMutation } from "@repo/data/models/workspace/mutators/update-
 import { updateThreadMutation } from "@repo/data/models/workspace/mutators/update-thread";
 import { updateFolderMutation } from "@repo/data/models/workspace/mutators/update-folder";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function updateFolder(
   party: WorkspaceParty,
@@ -22,13 +23,16 @@ export async function updateFolder(
 
   if (!teamId || !folder) return;
 
-  party.workspaceStructure.data = updateFolderMutation({
+  const newStructure = updateFolderMutation({
     structure: party.workspaceStructure.data,
     teamId,
     folder,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

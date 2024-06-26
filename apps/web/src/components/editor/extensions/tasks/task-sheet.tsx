@@ -36,13 +36,13 @@ export function TaskSheet({ task, rep }: TaskSheetProps) {
 
   useEffect(() => {
     if (debouncedEditor && editor?.getHTML() !== task?.overview) {
-      onEdit();
+      onEdit({ overview: editor?.getHTML() });
     }
   }, [debouncedEditor]);
 
   useEditable(titleRef, (t) => {
-    setTitle(t.trim());
-    onEdit({ title: t.trim() });
+    setTitle(t);
+    onEdit({ title: t });
   });
 
   async function onEdit(
@@ -88,6 +88,9 @@ export function TaskSheet({ task, rep }: TaskSheetProps) {
           onKeyDown={(e) => {
             if (e.key === "Enter") return;
           }}
+          // onBlur={() => {
+          //   onEdit({ title });
+          // }}
         >
           {title}
         </SheetTitle>

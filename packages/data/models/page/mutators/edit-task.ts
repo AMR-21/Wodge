@@ -16,7 +16,6 @@ export function editTaskMutation({
 
     draft[taskIndex] = {
       ...task,
-      title: task.title?.trim(),
     };
 
     return draft;

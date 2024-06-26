@@ -38,7 +38,7 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
     useEditable(
       titleRef,
       (t) => {
-        setTitle(t.trim());
+        setTitle(t);
       },
       {
         disabled: !isEditing,
@@ -69,7 +69,7 @@ export const TaskItem = forwardRef<HTMLDivElement, TaskItemProps>(
       }
     }
 
-    const noTitle = title === "" || !title;
+    const noTitle = !title || title?.trim() === "";
     return (
       <div
         ref={ref}

@@ -6,6 +6,8 @@ export function deleteTeamMutation({
   structure,
   teamId,
 }: WorkspaceTeamMutation) {
+  if (structure.teams.length === 1)
+    throw new Error("Cannot delete the last team");
   // 1. check if the team not existing
   const teamExists = structure.teams.some((t) => t.id === teamId);
 

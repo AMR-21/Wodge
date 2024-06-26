@@ -7,7 +7,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { recentlyVisitedAtom } from "@/store/global-atoms";
 
 export function useRecentlyVisited() {
-  const { workspaceId } = useCurrentWorkspace();
+  const { workspaceId, structure } = useCurrentWorkspace();
   const recentlyVisitedRecord = useAtomValue(recentlyVisitedAtom);
 
   if (!workspaceId) return [];

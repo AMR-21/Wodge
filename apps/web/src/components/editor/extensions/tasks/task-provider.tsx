@@ -9,6 +9,7 @@ const Context = createContext<
       setTitle: (title: string | undefined) => void;
       setIsEditing: (isEditing: boolean) => void;
       open: boolean;
+      setOpen: (open: boolean) => void;
     }
   | undefined
 >(undefined);
@@ -18,21 +19,18 @@ export function TaskProvider({
   task,
   isEditing,
   setIsEditing,
-  open,
+  // open,
 }: {
   children: React.ReactNode;
   task: Task;
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
-  open: boolean;
+  // open: boolean;
 }) {
   const [title, setTitle] = useState(task?.title);
-  const [assignee, setAssignee] = useState(task?.assignee || []);
-  const [due, setDue] = useState(task?.due as DateRange | undefined);
-  const [priority, setPriority] = useState(task?.priority);
-  const [includeTime, setIncludeTime] = useState(task?.includeTime);
+  const [open, setOpen] = useState(false);
 
-  if (task?.title !== title && (!isEditing || open)) {
+  if (task?.title !== title && !isEditing) {
     setTitle(task.title);
   }
 
@@ -44,6 +42,7 @@ export function TaskProvider({
         setTitle,
         setIsEditing,
         open,
+        setOpen,
       }}
     >
       {children}

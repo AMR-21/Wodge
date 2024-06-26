@@ -4,6 +4,7 @@ import WorkspaceParty from "../workspace-party";
 import { WorkspaceStructure, makeWorkspaceStructureKey } from "@repo/data";
 import { GroupUpdateArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function updateGroup(
   party: WorkspaceParty,
@@ -16,14 +17,17 @@ export async function updateGroup(
 
   const curMembers = party.workspaceMembers.data.members.map((m) => m.id);
 
-  party.workspaceStructure.data = groupUpdateRunner({
+  const newStructure = groupUpdateRunner({
     structure: party.workspaceStructure.data,
     groupUpdate,
     groupId,
     curMembers,
   }) as WorkspaceStructure;
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

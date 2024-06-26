@@ -3,6 +3,7 @@ import { RunnerParams } from "../../lib/replicache";
 import WorkspaceParty from "../workspace-party";
 import { makeWorkspaceStructureKey } from "@repo/data";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function deleteTeam(
   party: WorkspaceParty,
@@ -10,12 +11,15 @@ export async function deleteTeam(
   auth: PushAuth
 ) {
   if (!auth.isOwnerOrAdmin) return;
-  party.workspaceStructure.data = deleteTeamMutation({
+  const newStructure = deleteTeamMutation({
     structure: party.workspaceStructure.data,
     teamId: params.mutation.args as string,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),

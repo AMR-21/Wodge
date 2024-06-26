@@ -5,6 +5,7 @@ import { createPageMutation } from "@repo/data/models/workspace/mutators/create-
 import { NewPageArgs } from "@repo/data/models/workspace/workspace-mutators";
 import { updatePageMutation } from "@repo/data/models/workspace/mutators/update-page";
 import { PushAuth } from "../handlers/workspace-push";
+import { produce } from "immer";
 
 export async function updatePage(
   party: WorkspaceParty,
@@ -16,14 +17,17 @@ export async function updatePage(
 
   if (!folderId || !teamId || !page) return;
 
-  party.workspaceStructure.data = updatePageMutation({
+  const newStructure = updatePageMutation({
     structure: party.workspaceStructure.data,
     folderId,
     teamId,
     page,
   });
 
-  party.workspaceStructure.lastModifiedVersion = params.nextVersion;
+  party.workspaceStructure = produce(party.workspaceStructure, (draft) => {
+    draft.data = newStructure;
+    draft.lastModifiedVersion = params.nextVersion;
+  });
 
   await party.room.storage.put(
     makeWorkspaceStructureKey(),
