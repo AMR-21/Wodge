@@ -41,7 +41,7 @@ export function File({
         onClick={async () => {
           // download file
           const path = curPath ? curPath + "/" : "";
-          const url = `/api/file/${wid}/${teamId}/${btoa(path + name)}`;
+          const url = `/api/workspaces/${wid}/file/${teamId}/${btoa(path + name)}`;
           await download(url);
         }}
       />
@@ -62,6 +62,8 @@ export function File({
             if (!res.ok) {
               throw new Error("Failed to delete file");
             }
+
+            toast.success("File deleted successfully");
           } catch (e) {
             toast.error("Failed to delete file");
           }
