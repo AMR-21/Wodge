@@ -10,7 +10,7 @@ export async function serviceMiddleware(
   const serviceKey = c.req.header("authorization");
 
   // Verify service key
-  if (serviceKey !== room.env.SERVICE_KEY) return unauthorized();
+  if (serviceKey !== room.env.SECRET_KEY) return unauthorized();
 
   return await next();
 }

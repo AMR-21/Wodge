@@ -112,7 +112,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            Authorization: this.room.env.SERVICE_KEY as string,
+            Authorization: this.room.env.SECRET_KEY as string,
           },
           body: JSON.stringify({
             userId: this.room.id,
@@ -129,7 +129,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
               method: "POST",
               headers: {
                 "content-type": "application/json",
-                Authorization: this.room.env.SERVICE_KEY as string,
+                Authorization: this.room.env.SECRET_KEY as string,
               },
               body: JSON.stringify({
                 userId: this.room.id,

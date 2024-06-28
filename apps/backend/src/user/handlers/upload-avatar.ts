@@ -28,7 +28,7 @@ export async function uploadAvatar(party: UserParty, c: Context) {
     //   {
     //     method: "POST",
     //     headers: {
-    //       authorization: party.room.env.SERVICE_KEY as string,
+    //       authorization: party.room.env.SECRET_KEY as string,
     //       userId: party.room.id,
     //       key,
     //     },
@@ -46,7 +46,7 @@ export async function uploadAvatar(party: UserParty, c: Context) {
       return workspaceParty.get(wid).fetch("/service/member-update", {
         method: "POST",
         headers: {
-          Authorization: party.room.env.SERVICE_KEY as string,
+          Authorization: party.room.env.SECRET_KEY as string,
         },
       });
     });

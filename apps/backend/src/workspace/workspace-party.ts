@@ -122,7 +122,7 @@ export default class WorkspaceParty
       return await userParty.get(userId).fetch("/service/poke", {
         method: "POST",
         headers: {
-          authorization: this.room.env.SERVICE_KEY as string,
+          authorization: this.room.env.SECRET_KEY as string,
         },
         body: JSON.stringify({
           type,
@@ -137,7 +137,7 @@ export default class WorkspaceParty
         return userParty.get(userId).fetch("/service/poke", {
           method: "POST",
           headers: {
-            authorization: this.room.env.SERVICE_KEY as string,
+            authorization: this.room.env.SECRET_KEY as string,
           },
           body: JSON.stringify({
             type,

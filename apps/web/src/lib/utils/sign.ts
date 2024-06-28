@@ -6,7 +6,7 @@ export async function sign(data?: any, duration: string = "5m") {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(duration)
-    .sign(new TextEncoder().encode(env.SERVICE_KEY));
+    .sign(new TextEncoder().encode(env.SECRET_KEY));
 
   return jwt;
 }

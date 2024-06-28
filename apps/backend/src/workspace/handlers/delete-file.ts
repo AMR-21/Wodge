@@ -32,7 +32,7 @@ export async function deleteFile(
     // const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/update-avatar`, {
     //   method: "DELETE",
     //   headers: {
-    //     authorization: party.room.env.SERVICE_KEY as string,
+    //     authorization: party.room.env.SECRET_KEY as string,
     //     workspaceId: party.room.id,
     //   },
     // });

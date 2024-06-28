@@ -9,7 +9,7 @@ export async function update(party: UserParty, c: Context) {
     return workspaceParty.get(wid).fetch("/service/member-update", {
       method: "POST",
       headers: {
-        Authorization: party.room.env.SERVICE_KEY as string,
+        Authorization: party.room.env.SECRET_KEY as string,
       },
     });
   });

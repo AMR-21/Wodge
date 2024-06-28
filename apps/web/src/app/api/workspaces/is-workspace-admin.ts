@@ -6,7 +6,7 @@ export async function isWorkspaceAdmin(userId: string, workspaceId: string) {
 
   const res = await fetch(
     `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/isAdmin?token=${token}`,
-    { headers: { authorization: env.SERVICE_KEY as string } },
+    { headers: { authorization: env.SECRET_KEY as string } }
   );
 
   if (res.ok) return true;

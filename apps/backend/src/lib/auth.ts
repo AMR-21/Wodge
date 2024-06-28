@@ -52,7 +52,7 @@ export const checkMembershipEdge = async (
   // 3. Get the current user membership
   const res = await workspace.fetch("/service/membership", {
     headers: {
-      authorization: lobby.env.SERVICE_KEY as string,
+      authorization: lobby.env.SECRET_KEY as string,
       "x-user-id": userId,
     },
   });
@@ -104,7 +104,7 @@ export const authorizeChannel = async (
       "x-user-id": userId,
       "x-channel-id": lobby.id,
       "x-channel-type": type,
-      authorization: lobby.env.SERVICE_KEY as string,
+      authorization: lobby.env.SECRET_KEY as string,
       ...(type === "page" && { "x-folder-id": folderId }),
     },
   });
@@ -135,7 +135,7 @@ export const verify = async (req: Party.Request, lobby: Party.Lobby) => {
   try {
     const { payload } = await jose.jwtVerify(
       token,
-      new TextEncoder().encode(lobby.env.SERVICE_KEY as string)
+      new TextEncoder().encode(lobby.env.SECRET_KEY as string)
     );
 
     if (payload.exp && payload.exp < Date.now() / 1000) return false;
@@ -160,7 +160,7 @@ export const verifyToken = async (req: Party.Request, lobby: Party.Lobby) => {
   try {
     const { payload } = await jose.jwtVerify(
       token,
-      new TextEncoder().encode(lobby.env.SERVICE_KEY as string)
+      new TextEncoder().encode(lobby.env.SECRET_KEY as string)
     );
 
     if (payload.exp && payload.exp < Date.now() / 1000) {

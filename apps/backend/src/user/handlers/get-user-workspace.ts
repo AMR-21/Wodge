@@ -12,7 +12,7 @@ export async function getUserWorkspaces(party: UserParty, c: Context) {
   const res = await fetch(`${party.room.env.AUTH_DOMAIN}/api/user-workspaces`, {
     headers: {
       // Accept: "application/json",
-      authorization: party.room.env.SERVICE_KEY as string,
+      authorization: party.room.env.SECRET_KEY as string,
       "x-user-id": userId as string,
     },
   });

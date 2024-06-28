@@ -16,7 +16,7 @@ export async function deleteWorkspace(party: WorkspaceParty) {
     userParty.get(m.id).fetch("/service/remove-workspace", {
       method: "POST",
       headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
+        authorization: party.room.env.SECRET_KEY as string,
       },
       body: JSON.stringify({ workspaceId: party.room.id }),
     })

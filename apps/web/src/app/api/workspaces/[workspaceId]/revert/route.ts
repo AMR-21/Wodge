@@ -10,7 +10,7 @@ import { sign } from "@/lib/utils/sign";
 
 export async function POST(
   req: NextRequest,
-  { params: { workspaceId } }: { params: { workspaceId: string } },
+  { params: { workspaceId } }: { params: { workspaceId: string } }
 ) {
   const userId = req.headers.get("x-user-id");
 
@@ -35,7 +35,7 @@ export async function POST(
   const token = await sign({ userId });
   await fetch(
     `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/poke?token=${token}`,
-    { method: "POST", headers: { authorization: env.SERVICE_KEY } },
+    { method: "POST", headers: { authorization: env.SECRET_KEY } }
   );
 
   return new Response("OK", { status: 200 });

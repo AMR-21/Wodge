@@ -56,7 +56,7 @@ export async function pokeWorkspace(
     await workspaceParty.fetch("/service/poke-channel", {
       method: "POST",
       headers: {
-        authorization: party.room.env.SERVICE_KEY as string,
+        authorization: party.room.env.SECRET_KEY as string,
         channelId: party.room.id,
       },
     });

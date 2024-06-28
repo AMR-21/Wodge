@@ -33,7 +33,7 @@ export async function createWorkspace(party: WorkspaceParty, c: Context) {
   const res = await userInstance.fetch("/service/add-workspace", {
     method: "POST",
     headers: {
-      authorization: party.room.env.SERVICE_KEY as string,
+      authorization: party.room.env.SECRET_KEY as string,
       workspaceId: party.room.id,
     },
   });

@@ -9,7 +9,7 @@ export const env = createEnv({
 
     RESEND_API_KEY: z.string(),
     RESEND_EMAIL_FROM: z.string(),
-    SERVICE_KEY: z.string(),
+    SECRET_KEY: z.string(),
     LIVEKIT_API_KEY: z.string(),
     LIVEKIT_API_SECRET: z.string(),
     APP_DOMAIN: z.string(),
@@ -40,7 +40,7 @@ export const env = createEnv({
     NEXT_PUBLIC_REPLICACHE_KEY: process.env.NEXT_PUBLIC_REPLICACHE_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL_FROM: process.env.RESEND_EMAIL_FROM,
-    SERVICE_KEY: process.env.SERVICE_KEY,
+    SECRET_KEY: process.env.SECRET_KEY,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
   },
 });
