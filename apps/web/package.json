@@ -49,6 +49,7 @@
     "@react-hook/latest": "^1.0.3",
     "@repo/data": "workspace:*",
     "@repo/env": "workspace:*",
+    "@stripe/stripe-js": "^4.0.0",
     "@supabase/auth-js": "^2.62.0",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "2.39.8",
