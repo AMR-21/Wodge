@@ -30,6 +30,7 @@ export const workspaces = sqliteTable("workspaces", {
     mode: "boolean",
   }).default(true),
   isPremium: integer("is_premium", { mode: "boolean" }).default(false),
+  customerId: text("customer_id"),
 });
 
 export const memberships = sqliteTable(

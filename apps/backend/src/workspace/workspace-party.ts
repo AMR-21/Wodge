@@ -93,14 +93,22 @@ export default class WorkspaceParty
     if (req.method === "OPTIONS") {
       return ok();
     }
+    const route = getRoute(req);
 
+    if (route === "/service/poke") {
+      const secretKey = req.headers.get("authorization");
+
+      if (secretKey === lobby.env.SECRET_KEY) {
+        return req;
+      } else {
+        return unauthorized();
+      }
+    }
     const payload = await verifyToken(req, lobby);
 
     if (!payload || !payload?.userId) {
       return unauthorized();
     }
-
-    const route = getRoute(req);
 
     if (payload?.isUpload && !route.startsWith("/file")) {
       return unauthorized();

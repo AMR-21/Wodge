@@ -21,7 +21,7 @@
   "devDependencies": {
     "@repo/ts": "workspace:*",
     "eslint": "latest",
-    "eslint-config-turbo": "^1.12.4",
+    "eslint-config-turbo": "^2.0.0",
     "tsx": "^4.7.1",
     "turbo": "^2.0.5",
     "typescript": "^5.3.3",

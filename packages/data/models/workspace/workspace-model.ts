@@ -164,13 +164,13 @@ export async function getWorkspaceById(workspaceId: string) {
   }
 }
 
-export async function upgradeWorkspace(workspaceId: string) {
+export async function upgradeWorkspace(workspaceId: string, cus: string) {
   try {
     const db = createDb();
 
     const workspace = await db
       .update(workspaces)
-      .set({ isPremium: true })
+      .set({ isPremium: true, customerId: cus })
       .where(eq(workspaces.id, workspaceId))
       .returning();
 
@@ -188,7 +188,7 @@ export async function revertWorkspace(workspaceId: string) {
 
     const workspace = await db
       .update(workspaces)
-      .set({ isPremium: false })
+      .set({ isPremium: false, customerId: null })
       .where(eq(workspaces.id, workspaceId))
       .returning();
 

@@ -36,6 +36,17 @@ function WorkspacesPage() {
           <WorkspacesList />
         </ScrollArea>
 
+        <SubscribeComponent
+          priceId={"prod_QNTD1HpMozUpbm"}
+          price={"50"}
+          description="Test"
+        />
+        <Portal
+          priceId={"prod_QNTD1HpMozUpbm"}
+          price={"50"}
+          description="Test"
+        />
+
         <AddWorkspaceDialog />
       </div>
     </div>
@@ -43,3 +54,81 @@ function WorkspacesPage() {
 }
 
 export default WorkspacesPage;
+
+import { loadStripe } from "@stripe/stripe-js";
+type props = {
+  priceId: string;
+  price: string;
+  description: string;
+};
+
+const SubscribeComponent = ({ priceId, price, description }: props) => {
+  const router = useRouter();
+  const handleSubmit = async () => {
+    const stripe = await loadStripe(
+      process.env.NEXT_PUBLIC_STRIPE_PK as string,
+    );
+    if (!stripe) {
+      return;
+    }
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ priceId }),
+      });
+
+      if (!response.ok) throw new Error("Something went wrong");
+      const data = await response.json<{ url: string }>();
+      // if (!data.ok) throw new Error("Something went wrong");
+      // await stripe.redirectToCheckout({
+      //   sessionId: data.result.id,
+      // });
+
+      router.push(data.url);
+      console.log({ data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <div>
+      Click Below button to get {description}
+      <Button onClick={handleSubmit}>Upgrade in {price}</Button>
+    </div>
+  );
+};
+const Portal = ({ priceId, price, description }: props) => {
+  const router = useRouter();
+  const handleSubmit = async () => {
+    const stripe = await loadStripe(
+      process.env.NEXT_PUBLIC_STRIPE_PK as string,
+    );
+    if (!stripe) {
+      return;
+    }
+    try {
+      const response = await fetch("/api/portal", {
+        method: "POST",
+        body: JSON.stringify({ priceId }),
+      });
+
+      if (!response.ok) throw new Error("Something went wrong");
+      const data = await response.json<{ url: string }>();
+      // if (!data.ok) throw new Error("Something went wrong");
+      // await stripe.redirectToCheckout({
+      //   sessionId: data.result.id,
+      // });
+
+      router.push(data.url);
+      console.log({ data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <div>
+      Click Below button to get {description}
+      <Button onClick={handleSubmit}>Upgrade in {price}</Button>
+    </div>
+  );
+};

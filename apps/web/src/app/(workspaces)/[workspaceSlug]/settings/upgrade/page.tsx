@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Workspace } from "@repo/data";
 import { useMutation } from "@tanstack/react-query";
 import { CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type PricingCardProps = {
@@ -90,7 +91,7 @@ const PricingCard = ({
         className="relative inline-flex w-full items-center justify-center rounded-md bg-black px-6 font-medium text-white transition-colors  focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-white dark:text-black"
         onClick={() => action()}
       >
-        <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
+        {/* <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" /> */}
         {actionLabel}
       </Button>
     </CardFooter>
@@ -109,15 +110,17 @@ function UpgradePage() {
 
   const { mutate: upgrade, isPending: isUpgrading } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/workspaces/${workspace?.id}/upgrade`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `/api/workspaces/${workspace?.id}/billing/checkout`,
+      );
 
       if (!res.ok) {
         throw new Error("Failed to upgrade");
       }
 
-      toast.success("Upgraded successfully");
+      const data = await res.json<{ url: string }>();
+
+      router.push(data.url);
     },
 
     onError: (e) => {
@@ -127,21 +130,25 @@ function UpgradePage() {
 
   const { mutate: revert, isPending: isReverting } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/workspaces/${workspace?.id}/revert`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `/api/workspaces/${workspace?.id}/billing/portal`,
+      );
 
       if (!res.ok) {
         throw new Error("Failed to revert");
       }
 
-      toast.success("Reverted successfully");
+      const data = await res.json<{ url: string }>();
+
+      router.push(data.url);
     },
 
     onError: (e) => {
       toast.error("Failed to revert");
     },
   });
+
+  const router = useRouter();
 
   if (!workspace) return null;
 
@@ -165,6 +172,7 @@ function UpgradePage() {
       exclusive: true,
       disabled: workspace?.isPremium,
       action: upgrade,
+
       isLoading: isUpgrading,
     },
   ];
