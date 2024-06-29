@@ -1,0 +1,1 @@
+ALTER TABLE workspaces ADD `checkout_session_id` text;

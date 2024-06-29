@@ -18,6 +18,7 @@ export async function middleware(request: NextRequest) {
   if (
     nextUrl.pathname === "/auth/user" ||
     nextUrl.pathname === "/demo" ||
+    nextUrl.pathname === "/api/billing/webhook" ||
     nextUrl.pathname === "/auth/callback"
   ) {
     return;

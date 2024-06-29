@@ -14,6 +14,9 @@ export const env = createEnv({
     LIVEKIT_API_SECRET: z.string(),
     APP_DOMAIN: z.string(),
     BACKEND_DOMAIN: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WH_SECRET: z.string(),
+    STRIPE_LOOKUP_KEY: z.string(),
   },
 
   client: {
@@ -42,5 +45,8 @@ export const env = createEnv({
     RESEND_EMAIL_FROM: process.env.RESEND_EMAIL_FROM,
     SECRET_KEY: process.env.SECRET_KEY,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WH_SECRET: process.env.STRIPE_WH_SECRET,
+    STRIPE_LOOKUP_KEY: process.env.STRIPE_LOOKUP_KEY,
   },
 });
