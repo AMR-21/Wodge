@@ -10,7 +10,7 @@
     "pages:build": "pnpm next-on-pages",
     "pages:start": "wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat --port 3000",
     "pages:preview": "pnpm pages:build && wrangler pages dev .vercel/output/static --compatibility-date=2024-01-29 --compatibility-flag=nodejs_compat --port 3000",
-    "deploy:app": "pnpm pages:build && wrangler pages deploy .vercel/output/static",
+    "deploy:app": "infisical export > .env --path=/web --env=prod && infisical export > .dev.vars --path=/web --env=prod  && pnpm pages:build && wrangler pages deploy .vercel/output/static && infisical export > .env --path=/web --env=dev && infisical export > .dev.vars --path=/web --env=dev",
     "db:migration:local": "wrangler d1 migrations apply wodge --local",
     "db:migration:cloud": "wrangler d1 migrations apply wodge --remote",
     "db:studio": "drizzle-kit studio",
