@@ -9,5 +9,6 @@
     "thread": "src/thread/thread-party.ts",
     "page": "src/page/page-party.ts"
   },
-  "compatibilityDate": "2024-02-14"
+  "compatibilityDate": "2024-02-14",
+  "domain": "api.wodge.xyz"
 }
