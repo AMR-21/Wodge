@@ -133,6 +133,7 @@
     "lodash": "^4.17.21",
     "lowlight": "^2.9.0",
     "lucide-react": "^0.330.0",
+    "micro": "^10.0.1",
     "mini-svg-data-uri": "^1.4.4",
     "nanoid": "^5.0.6",
     "next": "14.1.0",

@@ -7,9 +7,14 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "types": ["@cloudflare/workers-types/2023-07-01"]
+    "types": [
+      "@cloudflare/workers-types/2023-07-01"
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
@@ -21,5 +26,7 @@
     "src/components/resources/advanced-uploadtsx",
     "src/lib/utils/is-custom-node-selected.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

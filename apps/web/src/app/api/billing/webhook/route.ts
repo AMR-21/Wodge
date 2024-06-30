@@ -61,14 +61,15 @@ export async function POST(request: NextRequest) {
       cus = subscription.customer;
 
       if (!workspaceId || !cus) return new Response(null, { status: 400 });
-
-      await upgradeWorkspace(workspaceId, cus as string);
-
+      try {
+        await upgradeWorkspace(workspaceId, cus as string);
+      } catch (e) {
+        return new Response(null, { status: 400 });
+      }
       await fetch(
         `${env.BACKEND_DOMAIN}/parties/workspace/${workspaceId}/service/poke`,
         { method: "POST", headers: { authorization: env.SECRET_KEY } },
       );
-
       break;
     case "customer.subscription.updated":
       subscription = event.data.object;
@@ -80,7 +81,5 @@ export async function POST(request: NextRequest) {
       break;
     default:
   }
-  // Return a 200 response to acknowledge receipt of the event
-  // response.send();
   return new Response(null, { status: 200 });
 }
