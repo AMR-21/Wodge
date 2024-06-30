@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "partykit dev --live",
-    "deploy": "partykit deploy"
+    "deploy:app": "partykit deploy --with-vars"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.32",
