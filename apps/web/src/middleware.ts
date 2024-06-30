@@ -27,7 +27,6 @@ export async function middleware(request: NextRequest) {
 
   let { response, user } = await updateSession(request);
 
-  // console.log({ user: user });
   let curUser = await getUserById(user.data.user?.id);
 
   // handle saving user data on our side
@@ -58,7 +57,6 @@ export async function middleware(request: NextRequest) {
   const isOnboardingRoute = nextUrl.pathname === "/onboarding";
 
   if (isApiRoute) {
-    // request.headers.set("x-user-id", curUser?.id || "");
     return response;
   }
 

@@ -25,25 +25,27 @@ export class API {
 
     const { token } = await tokenRes.json<{ token: string }>();
 
-    const res = await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}?token=${token}`,
-      { method: "POST", body: formData },
-    );
+    try {
+      const res = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}?token=${token}`,
+        { method: "POST", body: formData },
+      );
 
-    if (!res.ok) {
-      toast.error("Something went wrong");
-      return;
-    }
+      if (!res.ok) {
+        toast.error("Something went wrong");
+        return;
+      }
 
-    const data = await res.json<{ fileId: string }>();
+      const data = await res.json<{ fileId: string }>();
 
-    const linkRes = await fetch(
-      `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}/${btoa(data.fileId)}?token=${token}`,
-    );
+      const linkRes = await fetch(
+        `${env.NEXT_PUBLIC_BACKEND_DOMAIN}/parties/workspace/${workspaceId}/file/${teamId}/${channelId}/${btoa(data.fileId)}?token=${token}`,
+      );
 
-    const link = await linkRes.json<{ downloadUrl: string }>();
+      const link = await linkRes.json<{ downloadUrl: string }>();
 
-    return link.downloadUrl;
+      return link.downloadUrl;
+    } catch {}
   };
 }
 

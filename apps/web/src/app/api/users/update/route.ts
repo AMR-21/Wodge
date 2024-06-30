@@ -34,12 +34,14 @@ export async function POST(req: NextRequest) {
   if (updatedUser) {
     const token = await sign({ userId });
     //inform workspaces
-    await fetch(
-      `${env.BACKEND_DOMAIN}/parties/user/${userId}/update?token=${token}`,
-      {
-        method: "POST",
-      },
-    );
+    try {
+      await fetch(
+        `${env.BACKEND_DOMAIN}/parties/user/${userId}/update?token=${token}`,
+        {
+          method: "POST",
+        },
+      );
+    } catch {}
     return Response.json({ success: true, user: updatedUser });
   }
 
