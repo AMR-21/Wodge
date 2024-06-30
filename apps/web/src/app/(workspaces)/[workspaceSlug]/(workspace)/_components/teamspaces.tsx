@@ -56,13 +56,14 @@ export function Teamspaces({ isPages = false, type }: TeamspacesProps) {
       <SortableContext items={teamsId} strategy={verticalListSortingStrategy}>
         <ul className="flex flex-col gap-2">
           {structure.teams?.map((team, i) => (
-            <SortableTeamspace
-              key={team.id}
-              team={team}
-              idx={i}
-              type={type}
-              isPages={isPages}
-            />
+            <li key={team.id}>
+              <SortableTeamspace
+                team={team}
+                idx={i}
+                type={type}
+                isPages={isPages}
+              />
+            </li>
           ))}
         </ul>
       </SortableContext>
@@ -140,6 +141,8 @@ function SortableTeamspace({
             // "border-b-2 border-b-blue-200 -py-2",
             isSomethingOver && isOpen && isChanFoldOver && "border-b-blue-400",
           )}
+          role="button"
+          aria-label={team?.name}
         >
           <Teamspace
             isMod={isTeamModerator}
@@ -188,8 +191,8 @@ interface DraggableProps {
 }
 
 export const Teamspace = React.forwardRef<
-  HTMLLIElement,
-  { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLLIElement>
+  HTMLDivElement,
+  { team: DrObj<Team> } & DraggableProps & React.HTMLAttributes<HTMLDivElement>
 >(
   (
     { team, isChanFoldOver, type, isMod = false, isDragging, ...props },
@@ -204,7 +207,7 @@ export const Teamspace = React.forwardRef<
     const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom);
 
     return (
-      <li ref={ref} className="group flex grow" {...props}>
+      <div ref={ref} className="group flex grow" {...props}>
         <SidebarItem
           aria-disabled={isDragging}
           isActive={
@@ -257,7 +260,7 @@ export const Teamspace = React.forwardRef<
             </div>
           )}
         </SidebarItem>
-      </li>
+      </div>
     );
   },
 );

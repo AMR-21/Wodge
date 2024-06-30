@@ -59,6 +59,8 @@ export function UserCard() {
               }),
               "group/card relative w-full select-none justify-start gap-3 overflow-hidden",
             )}
+            role="button"
+            aria-label={user?.displayName || "User card"}
           >
             <SafeAvatar
               src={user?.avatar}

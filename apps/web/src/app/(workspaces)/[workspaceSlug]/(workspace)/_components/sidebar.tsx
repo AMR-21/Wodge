@@ -82,29 +82,30 @@ export function Sidebar() {
             const baseUrl = `/${workspaceSlug}`;
 
             return (
-              <SidebarItem
-                key={tab.label}
-                Icon={tab.Icon}
-                className="capitalize"
-                isActive={activeSidebar === tab.val}
-                {...(tab.val === "settings" && {
-                  href: `${baseUrl}/settings`,
-                })}
-                {...(tab.val === "home" && {
-                  href: `${baseUrl}/`,
-                })}
-                {...(tab.val === "resources" &&
-                  teamId && {
-                    href: `${baseUrl}/resources/${teamId}`,
+              <li key={tab.label}>
+                <SidebarItem
+                  Icon={tab.Icon}
+                  className="capitalize"
+                  isActive={activeSidebar === tab.val}
+                  {...(tab.val === "settings" && {
+                    href: `${baseUrl}/settings`,
                   })}
-                onClick={() => {
-                  if (tab.val && tab.val !== "settings") {
-                    setActiveSidebar(tab.val);
-                  }
-                }}
-              >
-                {tab.label}
-              </SidebarItem>
+                  {...(tab.val === "home" && {
+                    href: `${baseUrl}/`,
+                  })}
+                  {...(tab.val === "resources" &&
+                    teamId && {
+                      href: `${baseUrl}/resources/${teamId}`,
+                    })}
+                  onClick={() => {
+                    if (tab.val && tab.val !== "settings") {
+                      setActiveSidebar(tab.val);
+                    }
+                  }}
+                >
+                  {tab.label}
+                </SidebarItem>
+              </li>
             );
           })}
         </ul>

@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 
 import { useUserWorkspaces } from "@/hooks/use-user-workspaces";
@@ -57,6 +56,8 @@ export function WorkspaceSwitcher() {
             buttonVariants({ variant: "ghost", size: "fit" }),
             "group max-w-44 cursor-pointer items-center justify-start pl-[0.345rem]",
           )}
+          role="button"
+          aria-label="Switch workspace"
         >
           <SafeAvatar
             src={workspace?.avatar}
