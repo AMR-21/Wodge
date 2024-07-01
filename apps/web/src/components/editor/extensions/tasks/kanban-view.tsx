@@ -72,25 +72,39 @@ export function KanbanView({ editor }: { editor: Editor }) {
         if (!t.due) return false;
 
         // Given a range
-        if (due.from && due.to && t.due.from && t.due.to) {
-          return (
-            (isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from)) &&
-            (isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to))
-          );
+        if (due.from && due.to) {
+          if (t.due.from && t.due.to) {
+            return (
+              (isEqual(due.from, t.due.from) ||
+                isAfter(t.due.from, due.from)) &&
+              (isEqual(due.to, t.due.to) || isBefore(t.due.to, due.to))
+            );
+          }
+
+          if (t.due.from) {
+            return (
+              isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from)
+            );
+          }
+
+          if (t.due.to) {
+            return isEqual(due.from, t.due.to) || isBefore(t.due.to, due.to);
+          }
+
+          return false;
         }
 
-        if (due.from && t.due.from && !due.to && !t.due.to)
-          return isEqual(due.from, t.due.from);
+        // Given a single data
+        const searchDate = due.from || due.to;
 
-        if (due.to && t.due.to && !due.from && !t.due.from)
-          return isEqual(due.to, t.due.to);
+        if (!searchDate) return false;
 
-        if (due.from && t.due.from) {
-          return isEqual(due.from, t.due.from) || isAfter(t.due.from, due.from);
+        if (t.due.from) {
+          return isEqual(searchDate, t.due.from);
         }
 
-        if (due.to && t.due.to) {
-          return isEqual(due.to, t.due.to) || isBefore(due.to, t.due.to);
+        if (t.due.to) {
+          return isEqual(searchDate, t.due.to);
         }
 
         return false;
