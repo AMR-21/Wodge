@@ -179,10 +179,12 @@ export const Post = memo(
               />
             </>
           ) : (
-            <SafeDiv
-              className="BlockEditor w-full overflow-hidden text-balance break-words pl-9"
-              html={post?.content || comment?.content || ""}
-            />
+            <div className="BlockEditor tiptap ProseMirror overflow-hidden">
+              <SafeDiv
+                className=" tableWrapper w-full text-balance break-words pl-9"
+                html={post?.content || comment?.content || ""}
+              />
+            </div>
           )}
         </div>
 

@@ -33,12 +33,14 @@ export function moveTasksMutation({
       arrayMoveMutable(draft, activeIndex, overIndex);
 
       return draft;
-    } else {
+    } else if (!isOverColumn) {
       const temp = draft[activeIndex];
-      if (!temp) return;
-      if (!draft[overIndex]) return;
+      if (!temp) return draft;
+      if (!draft[overIndex]) return draft;
       draft[activeIndex] = draft[overIndex]!;
       draft[overIndex] = temp;
+
+      return draft;
     }
 
     if (isOverColumn) {

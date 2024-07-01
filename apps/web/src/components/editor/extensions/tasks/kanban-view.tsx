@@ -174,6 +174,7 @@ export function KanbanView({ editor }: { editor: Editor }) {
     const isActiveColumn = active.data.current?.type === "Column";
 
     const isOverATask = over.data.current?.type === "Task";
+
     if (!isActiveATask && !isActiveColumn) return;
 
     // Im dropping a Task over another Task
@@ -195,6 +196,7 @@ export function KanbanView({ editor }: { editor: Editor }) {
     // Im dropping a Task over a column
 
     if (isActiveATask && isOverAColumn) {
+      console.log("Moving task to column");
       try {
         await rep?.mutate.moveTasks({
           t1: activeId as string,

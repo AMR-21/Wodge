@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "partykit dev --live",
-    "deploy:app": "infisical export > .env --path=/web --env=prod && partykit deploy --with-vars"
+    "deploy:app": "infisical export > .env --path=/web --env=prod && partykit deploy --with-vars && infisical export > .env --path=/web --env=dev"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.32",

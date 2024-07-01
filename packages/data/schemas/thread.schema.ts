@@ -29,7 +29,7 @@ export const ThreadMessageSchema = z.object({
 
 export const ThreadPostSchema = z.object({
   id: z.string(),
-  content: z.string().min(1).max(4096),
+  content: z.string().min(1),
   type: z.enum(["post", "qa", "poll"]),
   author: z.string(),
   isResolved: z.boolean().default(false).optional(),

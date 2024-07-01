@@ -1,7 +1,13 @@
 import { DrObj, Page, Room, Thread } from "@repo/data";
 import { format } from "date-fns";
 import { useSetAtom } from "jotai";
-import { Database, MessageCircle, Newspaper, NotebookText } from "lucide-react";
+import {
+  Database,
+  GanttChart,
+  MessageCircle,
+  Newspaper,
+  NotebookText,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { activeSidebarAtom } from "./_components/sidebar-atoms";
@@ -37,7 +43,7 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
       url = `${url}/${item.channelId}`;
       break;
     case "thread":
-      Icon = Newspaper;
+      Icon = GanttChart;
       channel = team?.threads.find(
         (c) => c.id === item.channelId,
       ) as DrObj<Thread>;
@@ -62,15 +68,7 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
           <Icon className="absolute bottom-0 h-5 w-5 translate-y-1/2 opacity-50 transition-all group-hover/item:opacity-100" />
         </div>
         <div className="px-3 pb-2 pt-4">
-          <p>
-            {item.type === "thread"
-              ? // @ts-ignore
-                channel?.type === "post"
-                ? "Post"
-                : "Q&A"
-              : // @ts-ignore
-                channel?.name || "Resources"}
-          </p>
+          <p>{channel?.name || "Resources"}</p>
           {folder && (
             <span className="truncate text-xs text-muted-foreground">
               {folder?.name} /{" "}
