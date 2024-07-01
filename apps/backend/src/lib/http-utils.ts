@@ -12,10 +12,7 @@ import type * as Party from "partykit/server";
  * Must be changed in production
  */
 export const CORS = {
-  "Access-Control-Allow-Origin":
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://beta.wodge.xyz",
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "*",
   "Access-Control-Allow-Headers": "Authorization,*",
 };
