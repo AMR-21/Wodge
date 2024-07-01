@@ -23,3 +23,20 @@ jobs:
           PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN  }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_EMAIL_FROM: ${{ secrets.RESEND_EMAIL_FROM }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          LIVEKIT_API_KEY: ${{ secrets.LIVEKIT_API_KEY }}
+          LIVEKIT_API_SECRET: ${{ secrets.LIVEKIT_API_SECRET }}
+          APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
+          BACKEND_DOMAIN: ${{ secrets.BACKEND_DOMAIN }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WH_SECRET: ${{ secrets.STRIPE_WH_SECRET }}
+          STRIPE_LOOKUP_KEY: ${{ secrets.STRIPE_LOOKUP_KEY }}
+          NEXT_PUBLIC_BACKEND_DOMAIN: ${{ secrets.NEXT_PUBLIC_BACKEND_DOMAIN }}
+          NEXT_PUBLIC_REPLICACHE_KEY: ${{ secrets.NEXT_PUBLIC_REPLICACHE_KEY }}
+          NEXT_PUBLIC_LIVEKIT_URL: ${{ secrets.NEXT_PUBLIC_LIVEKIT_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_AVATARS_URL: ${{ secrets.NEXT_PUBLIC_AVATARS_URL }}
+          NEXT_PUBLIC_APP_DOMAIN: ${{ secrets.NEXT_PUBLIC_APP_DOMAIN }}
