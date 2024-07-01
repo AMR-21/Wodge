@@ -19,10 +19,10 @@ import { UserId } from "./tests";
 export function createTestThread(data?: Partial<Thread>) {
   const newThread: Thread = {
     id: nanoid(ID_LENGTH),
-    type: "post",
-    content: "Test Thread",
-    createdAt: new Date().toISOString(),
-    createdBy: UserId,
+    editGroups: [TEAM_MEMBERS_ROLE],
+    viewGroups: [TEAM_MEMBERS_ROLE],
+    name: "Test Thread",
+
     ...data,
   };
   return newThread;
@@ -32,7 +32,7 @@ export function createThreadMessage(data?: Partial<ThreadMessage>) {
     id: nanoid(ID_LENGTH),
     author: UserId,
     content: "Test Message",
-    date: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     type: "message",
     ...data,
   };
@@ -47,8 +47,6 @@ export function createTestTeam(data?: Partial<Team>) {
         name: "root",
         channels: [],
         id: "root",
-        editGroups: [TEAM_MEMBERS_ROLE],
-        viewGroups: [TEAM_MEMBERS_ROLE],
       },
     ],
     id: nanoid(WORKSPACE_TEAM_ID_LENGTH),
@@ -57,8 +55,8 @@ export function createTestTeam(data?: Partial<Team>) {
     rooms: [],
     default: false,
     threads: [],
-    tags: [],
     moderators: [],
+
     ...data,
   };
   return newTeam;
@@ -106,6 +104,9 @@ export function createTestMessage(data?: Partial<Message>) {
     content: "Hello",
     date: new Date().toISOString(),
     sender: UserId,
+    pollOptions: [],
+    pollVoters: [],
+    votes: [],
 
     ...data,
   };
@@ -131,7 +132,6 @@ export function createTestMembers(data?: Partial<WorkspaceMembers>) {
         joinInfo: {
           createdBy: "",
           joinedAt: new Date().toISOString(),
-          method: "email",
           token: "",
         },
       },

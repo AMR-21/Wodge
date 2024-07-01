@@ -72,12 +72,6 @@ describe("Workspace teams' unit mutations", () => {
     // Test: Team creation sanitization
     const team6 = createTestTeam({
       members: ["-4oxKtIB8FXvYZL0AXjXp"],
-      tags: [
-        {
-          name: "test",
-          color: "#000000",
-        },
-      ],
     });
 
     expect(
@@ -219,8 +213,6 @@ describe("Workspace teams' unit mutations", () => {
             name: "Account",
             id: dirId,
             channels: [],
-            editGroups: [],
-            viewGroups: [],
           },
         },
       })
@@ -261,8 +253,6 @@ describe("Workspace teams' unit mutations", () => {
           name: "Account",
           id: dirId,
           channels: [],
-          editGroups: [],
-          viewGroups: [],
         },
       },
     });
@@ -277,8 +267,6 @@ describe("Workspace teams' unit mutations", () => {
             name: "Account",
             id: dirId,
             channels: [],
-            editGroups: [],
-            viewGroups: [],
           },
         },
       })
@@ -293,8 +281,6 @@ describe("Workspace teams' unit mutations", () => {
             name: "Account",
             id: dirId,
             channels: [],
-            editGroups: [],
-            viewGroups: [],
           },
         },
       })

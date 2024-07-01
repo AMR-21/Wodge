@@ -44,7 +44,14 @@ export async function DELETE(
   });
 
   if (!user) {
-    return new Response(null, { status: 400 });
+    console.log("errorr");
+    return new Response(null, { status: 404 });
+  }
+
+  console.log(user);
+
+  if (!user.avatar?.startsWith(env.NEXT_PUBLIC_AVATARS_URL)) {
+    return new Response(null, { status: 204 });
   }
 
   return redirect(

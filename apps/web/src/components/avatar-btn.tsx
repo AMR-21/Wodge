@@ -64,9 +64,9 @@ export function AvatarBtn({
         <SafeAvatar
           src={blobUrl || avatar}
           isBlob={!!blobUrl}
-          className={cn("h-12 w-12", isSquare && "rounded-md", className)}
+          className={cn("h-10 w-10", isSquare && "rounded-md", className)}
           fallbackClassName={cn(
-            "text-lg uppercase transition-all",
+            "text-2xl uppercase transition-all",
             isSquare && "rounded-md",
           )}
           fallback={fallback}
