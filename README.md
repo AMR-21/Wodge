@@ -1,6 +1,6 @@
 # Wodge
 
-A collaborative workspace that features communication and knowledge management capabilities.
+A collaborative workspace that features communication and knowledge management capabilities. [Walk-through](https://youtu.be/IBZvqOu6Xro?si=aTqJbLlVdo2VtL7t)
 
 ## Environment Configuration
 
