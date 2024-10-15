@@ -14,7 +14,8 @@ Environment Variables:
 
 - NODE_OPTIONS=--max-old-space-size=8192
 
-// The following are configuration for Partykit deployment 
+// The following are configuration for Partykit deployment
+
 - CLOUDFLARE_ACCOUNT_ID=...
 - CLOUDFLARE_API_TOKEN=...
 
