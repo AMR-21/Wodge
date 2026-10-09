@@ -1,3 +1,8 @@
+---
+description: "Why Wodge keeps a separate backend for multiple possible clients."
+icon: server
+---
+
 # Decision 001 — Separate backend for multiple clients
 
 **Decision:** Keep the backend as a separate service exposing shared APIs.

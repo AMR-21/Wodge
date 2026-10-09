@@ -1,5 +1,6 @@
 # Summary
 
+* [Overview](README.md)
 * [Decision 001 — Separate backend for multiple clients](001-separate-backend.md)
 * [Decision 002 — Structured and text collaboration](002-structured-text-collaboration.md)
 * [Decision 003 — Member-provided agents](003-member-provided-agents.md)

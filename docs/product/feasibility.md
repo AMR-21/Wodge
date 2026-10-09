@@ -1,3 +1,8 @@
+---
+description: "Historical financial assessment and feasibility assumptions."
+icon: chart-line
+---
+
 # Financial Assessment
 
 ### Purpose and decision

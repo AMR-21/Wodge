@@ -1,5 +1,6 @@
 # Summary
 
+* [Overview](README.md)
 * [Local setup and current commands](setup.md)
 * [Engineering policy](engineering-policy.md)
 * [Development Tooling](tooling.md)

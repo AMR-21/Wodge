@@ -1,3 +1,8 @@
+---
+description: "Recorded pipeline behavior, approved gates, and gaps in enforcement."
+icon: code-branch
+---
+
 # CI/CD and deployment gates
 
 ## Current configuration

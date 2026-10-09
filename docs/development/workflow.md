@@ -1,3 +1,8 @@
+---
+description: "The delivery workflow, approvals, and execution tracking."
+icon: code-branch
+---
+
 # Development and delivery workflow
 
 ## Delivery window

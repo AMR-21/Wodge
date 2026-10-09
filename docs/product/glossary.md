@@ -1,3 +1,8 @@
+---
+description: "Shared vocabulary for workspaces, teams, collaboration, and access."
+icon: book-open
+---
+
 # Glossary
 
 ## Organization and access

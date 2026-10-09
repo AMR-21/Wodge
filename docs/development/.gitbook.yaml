@@ -1,4 +1,4 @@
 root: ./
 structure:
-  readme: setup.md
+  readme: README.md
   summary: SUMMARY.md

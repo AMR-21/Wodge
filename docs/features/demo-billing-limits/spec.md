@@ -1,4 +1,9 @@
-# Demo Billing & Limits — specification
+---
+description: "Demo Billing & Limits: behavior, scope, acceptance criteria, and recorded approval evidence."
+icon: list-check
+---
+
+# Spec
 
 Status distinction: the source describes approved revival intent. Related capstone code exists, but compliance with these changed rules has not been demonstrated. This migration proposes document organization only.
 

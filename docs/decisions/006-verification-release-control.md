@@ -1,3 +1,8 @@
+---
+description: "Verification and release controls, with approval evidence."
+icon: clipboard-check
+---
+
 # Decision 006 — Verification and release control
 
 **Decision:** Retain Vitest, add Playwright for critical browser journeys, and use GitHub Actions for lint, formatting, types, tests, and builds before manually approved Cloudflare deployment.

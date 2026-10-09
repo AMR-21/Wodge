@@ -1,5 +1,6 @@
 # Summary
 
-* [Agent Access — specification](spec.md)
-* [Agent Access — design](design.md)
+* [Overview](README.md)
+* [Spec](spec.md)
+* [Design](design.md)
 * [Delivery approach](plan.md)

@@ -1,4 +1,5 @@
 # Summary
 
-* [Workspace Setup & Membership — specification](spec.md)
-* [Workspace Setup & Membership — design](design.md)
+* [Overview](README.md)
+* [Spec](spec.md)
+* [Design](design.md)

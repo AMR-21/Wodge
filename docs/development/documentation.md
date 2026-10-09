@@ -1,3 +1,8 @@
+---
+description: "Documentation ownership, engineering coverage, and unresolved questions."
+icon: book-open
+---
+
 # Documentation ownership, coverage and open questions
 
 ## Agreed migration

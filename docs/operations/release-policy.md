@@ -1,3 +1,8 @@
+---
+description: "Release readiness, approval evidence, and rollback expectations."
+icon: flag-checkered
+---
+
 # Release policy
 
 ## Deployment and named release

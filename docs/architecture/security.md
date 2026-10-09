@@ -1,3 +1,8 @@
+---
+description: "Authorization, privacy, secrets, revocation, and integration boundaries."
+icon: shield-halved
+---
+
 # Security
 
 ## Identity and invitations

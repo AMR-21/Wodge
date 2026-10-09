@@ -1,4 +1,9 @@
-# Discussions & Messaging — design
+---
+description: "Discussions & Messaging: user journeys, interaction states, and design constraints."
+icon: pen-ruler
+---
+
+# Design
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

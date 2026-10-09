@@ -1,3 +1,8 @@
+---
+description: "Quality requirements for reliability, performance, accessibility, and cost."
+icon: gauge
+---
+
 # Non-Functional Requirements
 
 ## Local-first behavior

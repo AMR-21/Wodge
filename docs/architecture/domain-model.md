@@ -1,3 +1,8 @@
+---
+description: "Domain concepts, invariants, ownership, and entity lifecycles."
+icon: shapes
+---
+
 # Domain model, invariants and lifecycles
 
 ### Core concepts

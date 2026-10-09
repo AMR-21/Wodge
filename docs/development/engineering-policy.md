@@ -1,3 +1,8 @@
+---
+description: "Engineering expectations, ownership, and validation policy."
+icon: clipboard-check
+---
+
 # Engineering policy
 
 This baseline is part of the plugin's approved operating model. A project's canonical Organization Policy may add stricter rules. `DEFAULT` rules may be overridden only with documented rationale and approval. `MANDATORY` rules require organization-policy change, not a project-level exception.

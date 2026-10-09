@@ -1,4 +1,5 @@
 # Summary
 
-* [Discussions & Messaging — specification](spec.md)
-* [Discussions & Messaging — design](design.md)
+* [Overview](README.md)
+* [Spec](spec.md)
+* [Design](design.md)

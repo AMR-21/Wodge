@@ -1,4 +1,4 @@
 root: ./
 structure:
-  readme: 001-separate-backend.md
+  readme: README.md
   summary: SUMMARY.md

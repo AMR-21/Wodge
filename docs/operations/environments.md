@@ -1,3 +1,8 @@
+---
+description: "Environment responsibilities and runtime topology."
+icon: server
+---
+
 # Environments and runtime topology
 
 data

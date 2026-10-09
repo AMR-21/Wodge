@@ -1,3 +1,8 @@
+---
+description: "Pages & Embedded Tasks: delivery sequencing, dependencies, and validation approach."
+icon: route
+---
+
 # Pages and embedded tasks — delivery approach
 
 ## Why this document exists

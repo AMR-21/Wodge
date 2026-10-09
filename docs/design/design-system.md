@@ -1,3 +1,8 @@
+---
+description: "Design system direction, visual foundations, and shared components."
+icon: palette
+---
+
 # Design System
 
 ## Visual direction

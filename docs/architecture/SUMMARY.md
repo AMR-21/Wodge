@@ -1,5 +1,6 @@
 # Summary
 
+* [Overview](README.md)
 * [Architecture](overview.md)
 * [Tech Stack](tech-stack.md)
 * [Domain model, invariants and lifecycles](domain-model.md)

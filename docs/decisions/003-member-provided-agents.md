@@ -1,3 +1,8 @@
+---
+description: "The decision to use member-provided agents instead of hosted AI."
+icon: robot
+---
+
 # Decision 003 — Member-provided agents
 
 **Decision:** Replace the hosted AI writer with MCP access for members’ own compatible agents.

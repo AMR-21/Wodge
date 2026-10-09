@@ -1,4 +1,5 @@
 # Summary
 
-* [Demo Billing & Limits — specification](spec.md)
-* [Demo Billing & Limits — design](design.md)
+* [Overview](README.md)
+* [Spec](spec.md)
+* [Design](design.md)

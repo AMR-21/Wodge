@@ -1,3 +1,8 @@
+---
+description: "Wodge’s purpose, people, capabilities, and portfolio revival boundaries."
+icon: compass
+---
+
 # Product Definition
 
 ### Identity and purpose

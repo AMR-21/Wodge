@@ -1,3 +1,8 @@
+---
+description: "Persistence boundaries, synchronization, and data ownership."
+icon: database
+---
+
 # Persistence and data ownership
 
 ### Database and files

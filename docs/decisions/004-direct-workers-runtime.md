@@ -1,3 +1,8 @@
+---
+description: "The decision to use a direct Workers realtime runtime."
+icon: bolt
+---
+
 # Decision 004 — Direct Workers realtime runtime
 
 **Decision:** Replace PartyKit with PartyServer directly on Cloudflare Workers, using required Yjs server addons.

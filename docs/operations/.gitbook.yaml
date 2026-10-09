@@ -1,4 +1,4 @@
 root: ./
 structure:
-  readme: environments.md
+  readme: README.md
   summary: SUMMARY.md

@@ -1,3 +1,8 @@
+---
+description: "Local setup and current commands, separated from revival targets."
+icon: terminal
+---
+
 # Local setup and current commands
 
 ## Capstone checkout

@@ -1,3 +1,8 @@
+---
+description: "Navigation and information architecture across Wodge’s shared spaces."
+icon: map
+---
+
 # Information Architecture
 
 ## Workspace entry

@@ -1,5 +1,6 @@
 # Summary
 
-* [Pages & Embedded Tasks — specification](spec.md)
-* [Pages & Embedded Tasks — design](design.md)
+* [Overview](README.md)
+* [Spec](spec.md)
+* [Design](design.md)
 * [Delivery approach](plan.md)

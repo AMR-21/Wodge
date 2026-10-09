@@ -1,3 +1,8 @@
+---
+description: "Testing strategy and evidence needed to validate the revival."
+icon: flask
+---
+
 # Testing Strategy
 
 ## Validation scope

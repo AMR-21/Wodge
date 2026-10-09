@@ -1,3 +1,8 @@
+---
+description: "Operational visibility, diagnostics, and observability gaps."
+icon: chart-line
+---
+
 # Observability
 
 ## Wodge Revival

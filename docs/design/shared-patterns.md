@@ -1,3 +1,8 @@
+---
+description: "Reusable interaction patterns and feedback across features."
+icon: object-group
+---
+
 # Shared Patterns
 
 ## Forms and action feedback

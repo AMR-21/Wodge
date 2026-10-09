@@ -1,3 +1,8 @@
+---
+description: "Shared principles for clear, accessible collaboration experiences."
+icon: heart
+---
+
 # UX Principles
 
 ## Recognizable product

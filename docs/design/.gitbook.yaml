@@ -1,4 +1,4 @@
 root: ./
 structure:
-  readme: ux-principles.md
+  readme: README.md
   summary: SUMMARY.md

@@ -1,3 +1,8 @@
+---
+description: "Recorded stack compatibility investigation and outstanding verification."
+icon: magnifying-glass
+---
+
 # Stack Compatibility Investigation
 
 This is the recorded investigation as of 2026-10-01. Provider/version statements and linked upstream references have not been independently reverified during this documentation migration. Its outstanding runtime proof remains outstanding.

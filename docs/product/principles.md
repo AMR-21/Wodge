@@ -1,3 +1,8 @@
+---
+description: "Product principles, non-goals, and the boundaries of the showcase."
+icon: bullseye
+---
+
 # Principles & Non-Goals
 
 ## Principles

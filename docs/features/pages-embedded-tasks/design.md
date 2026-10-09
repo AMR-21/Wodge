@@ -1,4 +1,9 @@
-# Pages & Embedded Tasks — design
+---
+description: "Pages & Embedded Tasks: user journeys, interaction states, and design constraints."
+icon: pen-ruler
+---
+
+# Design
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

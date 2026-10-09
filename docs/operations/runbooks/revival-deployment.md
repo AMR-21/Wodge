@@ -1,3 +1,8 @@
+---
+description: "Additional deployment coordination for the revival."
+icon: list-check
+---
+
 # Revival deployment coordination
 
 ## Wodge Revival release

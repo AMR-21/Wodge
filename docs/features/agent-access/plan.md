@@ -1,3 +1,8 @@
+---
+description: "Agent Access: delivery sequencing, dependencies, and validation approach."
+icon: route
+---
+
 # Agent access — delivery approach
 
 ## Why this document exists

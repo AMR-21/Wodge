@@ -1,3 +1,8 @@
+---
+description: "Approved technology targets and their relationship to the existing stack."
+icon: layer-group
+---
+
 # Tech Stack
 
 The comparison records the approved revival targets. It does not upgrade dependencies or establish that any selected version is installed or currently compatible. Exact version and runtime proof remains in the [compatibility investigation](compatibility-investigation.md).
