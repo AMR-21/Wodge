@@ -59,7 +59,7 @@ Validation covers view/edit separation, all thread item types, room text and med
 
 ## Document responsibilities
 
-[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/amr21/project/wodge-discussions-and-room-messaging-75e7b5e2ac83).
+[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/axxi-labs/project/wodge-discussions-and-room-messaging-75e7b5e2ac83).
 
 ## Historical approval evidence
 

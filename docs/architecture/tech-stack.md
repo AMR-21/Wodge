@@ -46,7 +46,7 @@ Replicache remains fundamental to the product. Collaborative page editing contin
 Members connect their own MCP-compatible agents. Wodge hosts no AI model. Agent actions follow the member’s current permissions and carry member and agent attribution. Members can revoke connections; workspace owners and admins can disable agent access.
 The initial MCP scope covers permitted workspace and team discovery, pages, tasks, and discussions. Room chat, calls, administration, and autonomous background workflows remain outside that scope.
 [Agent Access](../features/agent-access/spec.md)
-[Agent Access delivery project](<https://linear.app/amr21/project/wodge-agent-access-a097a3305099>)
+[Agent Access delivery project](<https://linear.app/axxi-labs/project/wodge-agent-access-a097a3305099>)
 
 ## Approved verification and MCP additions
 

@@ -11,7 +11,7 @@ The revival is a portfolio showcase with no committed ongoing active-maintenance
 
 ## Intake and ownership
 
-The [development workflow](../development/workflow.md) retains independent Product: Wodge triage, duplicate checking, routing into matching active delivery scope or a bounded follow-up, and preserving completed revival projects. WDG-171/WDG-172 are finite intake setup and verification work, not parents for every future incident. Their configuration and runtime behavior remain unverified.
+The [development workflow](../development/workflow.md) retains independent Product: Wodge triage, duplicate checking, routing into matching active delivery scope or a bounded follow-up, and preserving completed revival projects. [WDG-171](https://linear.app/axxi-labs/issue/WDG-171/enable-and-verify-native-wodge-triage) and [WDG-172](https://linear.app/axxi-labs/issue/WDG-172/validate-maintenance-intake-duplicate-handling-and-routing) are finite intake setup and verification work, not parents for every future incident. Their configuration and runtime behavior remain unverified.
 
 ## Ongoing safeguards already required
 

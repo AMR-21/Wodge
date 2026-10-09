@@ -24,3 +24,10 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
     <tr><td><i class="fa-pen-ruler"></i></td><td><strong>Design</strong></td><td>User journeys, interaction states, and design constraints.</td><td><a href="design.md">Design</a></td></tr>
   </tbody>
 </table>
+
+## Delivery in Linear
+
+[Open the delivery project](https://linear.app/axxi-labs/project/wodge-team-roles-and-access-1003fb2c4428) for current status, ownership, dependencies and evidence.
+
+- [WDG-38 — Replace legacy access rules with additive team roles](https://linear.app/axxi-labs/issue/WDG-38/replace-legacy-access-rules-with-additive-team-roles)
+- [WDG-97 — Apply current permissions across HTTP, sync and realtime](https://linear.app/axxi-labs/issue/WDG-97/apply-current-permissions-across-http-sync-and-realtime)

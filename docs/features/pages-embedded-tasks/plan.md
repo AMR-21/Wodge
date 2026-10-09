@@ -13,7 +13,7 @@ Coordinating independent Yjs text, Replicache tasks, retained editor controls an
 
 Preserve the approved editor and page access foundation; configure Yjs load/save and viewer restrictions; preserve one page-owned task collection across table/Kanban and task-block removal; integrate links/files through containing-page authorization and pooled storage. Use current issue blockers for actual execution order.
 
-The existing executable outcomes remain [WDG-45](https://linear.app/amr21/issue/WDG-45), [WDG-46](https://linear.app/amr21/issue/WDG-46), [WDG-127](https://linear.app/amr21/issue/WDG-127), [WDG-128](https://linear.app/amr21/issue/WDG-128), [WDG-129](https://linear.app/amr21/issue/WDG-129). Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear. Existing IDs are the stable work identifiers; this migration adds none.
+The existing executable outcomes remain [WDG-45](https://linear.app/axxi-labs/issue/WDG-45/preserve-yjs-collaboration-and-offline-page-recovery), [WDG-46](https://linear.app/axxi-labs/issue/WDG-46/reconcile-the-page-owned-task-collection-and-tablekanban-views), [WDG-127](https://linear.app/axxi-labs/issue/WDG-127/reconcile-page-link-operations-and-inherited-access), [WDG-128](https://linear.app/axxi-labs/issue/WDG-128/enforce-authorized-page-attachment-upload-and-download), [WDG-129](https://linear.app/axxi-labs/issue/WDG-129/clean-up-page-attachments-and-storage-usage). Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear. Existing IDs are the stable work identifiers; this migration adds none.
 
 ## Readiness and blockers
 

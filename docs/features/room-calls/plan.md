@@ -13,7 +13,7 @@ Replacing provider signaling while retaining navigation, access-loss handling an
 
 Replace LiveKit with the approved Calls/Realtime SFU signaling path using the separate backend and current role foundation; preserve one room call, explicit self-media controls and session lifecycle; retain compact controls during navigation and confirmed call switching; integrate existing billing/limits work rather than duplicating quota logic.
 
-The existing executable outcomes remain [WDG-50](https://linear.app/amr21/issue/WDG-50), [WDG-51](https://linear.app/amr21/issue/WDG-51). Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear. Existing IDs are the stable work identifiers; this migration adds none.
+The existing executable outcomes remain [WDG-50](https://linear.app/axxi-labs/issue/WDG-50/replace-livekit-with-cloudflare-calls-signaling-and-admission), [WDG-51](https://linear.app/axxi-labs/issue/WDG-51/preserve-call-controls-navigation-and-switching-behavior). Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear. Existing IDs are the stable work identifiers; this migration adds none.
 
 ## Readiness and blockers
 

@@ -70,7 +70,7 @@ The showcase runs on Workers Free. Demo Pro changes Wodge's product limits but c
 
 ### Dependencies and references
 
-[Product Definition](../../product/overview.md), [Domain Model](../../architecture/domain-model.md), [Workspace Setup & Membership](../workspace-membership/spec.md), [Room Calls](../room-calls/spec.md), and [Decision 007 — Remove standalone resource libraries](../../decisions/007-remove-resource-libraries.md) define the surrounding product and feature behavior. [Financial Assessment](../../product/feasibility.md) traces the illustrative $29 test price to its superseded Workers Paid calculation and assesses Workers Free limits. [Wodge Demo Billing and Limits in Linear](<https://linear.app/amr21/project/wodge-demo-billing-and-limits-155a0717deca>) tracks delivery.
+[Product Definition](../../product/overview.md), [Domain Model](../../architecture/domain-model.md), [Workspace Setup & Membership](../workspace-membership/spec.md), [Room Calls](../room-calls/spec.md), and [Decision 007 — Remove standalone resource libraries](../../decisions/007-remove-resource-libraries.md) define the surrounding product and feature behavior. [Financial Assessment](../../product/feasibility.md) traces the illustrative $29 test price to its superseded Workers Paid calculation and assesses Workers Free limits. [Wodge Demo Billing and Limits in Linear](<https://linear.app/axxi-labs/project/wodge-demo-billing-and-limits-155a0717deca>) tracks delivery.
 
 ### Validation expectations
 
@@ -78,7 +78,7 @@ Validation covers Checkout success and failure, portal cancellation, delayed or 
 
 ## Document responsibilities
 
-[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/amr21/project/wodge-demo-billing-and-limits-155a0717deca).
+[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/axxi-labs/project/wodge-demo-billing-and-limits-155a0717deca).
 
 ## Source and revision
 

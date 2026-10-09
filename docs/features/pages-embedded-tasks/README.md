@@ -25,3 +25,11 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
     <tr><td><i class="fa-route"></i></td><td><strong>Delivery approach</strong></td><td>Sequencing, dependencies, and validation for delivery.</td><td><a href="plan.md">Delivery approach</a></td></tr>
   </tbody>
 </table>
+
+## Delivery in Linear
+
+[Open the delivery project](https://linear.app/axxi-labs/project/wodge-pages-and-embedded-tasks-1e8ffa29562c) for current status, ownership, dependencies and evidence.
+
+- [WDG-45 — Preserve Yjs collaboration and offline page recovery](https://linear.app/axxi-labs/issue/WDG-45/preserve-yjs-collaboration-and-offline-page-recovery)
+- [WDG-46 — Reconcile the page-owned task collection and table/Kanban views](https://linear.app/axxi-labs/issue/WDG-46/reconcile-the-page-owned-task-collection-and-tablekanban-views)
+- [WDG-128 — Enforce authorized page attachment upload and download](https://linear.app/axxi-labs/issue/WDG-128/enforce-authorized-page-attachment-upload-and-download)

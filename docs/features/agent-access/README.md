@@ -25,3 +25,10 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
     <tr><td><i class="fa-route"></i></td><td><strong>Delivery approach</strong></td><td>Sequencing, dependencies, and validation for delivery.</td><td><a href="plan.md">Delivery approach</a></td></tr>
   </tbody>
 </table>
+
+## Delivery in Linear
+
+[Open the delivery project](https://linear.app/axxi-labs/project/wodge-agent-access-a097a3305099) for current status, ownership, dependencies and evidence.
+
+- [WDG-54 — Integrate official MCP/OAuth authorization and connection controls](https://linear.app/axxi-labs/issue/WDG-54/integrate-official-mcpoauth-authorization-and-connection-controls)
+- [WDG-161 — Verify MCP exclusions and access-loss enforcement](https://linear.app/axxi-labs/issue/WDG-161/verify-mcp-exclusions-and-access-loss-enforcement)

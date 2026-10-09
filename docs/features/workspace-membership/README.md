@@ -24,3 +24,11 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
     <tr><td><i class="fa-pen-ruler"></i></td><td><strong>Design</strong></td><td>User journeys, interaction states, and design constraints.</td><td><a href="design.md">Design</a></td></tr>
   </tbody>
 </table>
+
+## Delivery in Linear
+
+[Open the delivery project](https://linear.app/axxi-labs/project/wodge-workspace-setup-and-membership-48598624b1f1) for current status, ownership, dependencies and evidence.
+
+- [WDG-35 — Migrate authentication to Better Auth over D1](https://linear.app/axxi-labs/issue/WDG-35/migrate-authentication-to-better-auth-over-d1)
+- [WDG-42 — Reconcile reusable and email invitation workflows](https://linear.app/axxi-labs/issue/WDG-42/reconcile-reusable-and-email-invitation-workflows)
+- [WDG-112 — Clean up membership departure state](https://linear.app/axxi-labs/issue/WDG-112/clean-up-membership-departure-state)

@@ -60,7 +60,7 @@ Validation covers discovery and each allowed content action, denied actions, rol
 
 ## Document responsibilities
 
-[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/amr21/project/wodge-agent-access-a097a3305099).
+[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/axxi-labs/project/wodge-agent-access-a097a3305099).
 
 ## Historical approval evidence
 

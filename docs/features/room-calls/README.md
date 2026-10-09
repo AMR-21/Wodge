@@ -25,3 +25,10 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
     <tr><td><i class="fa-route"></i></td><td><strong>Delivery approach</strong></td><td>Sequencing, dependencies, and validation for delivery.</td><td><a href="plan.md">Delivery approach</a></td></tr>
   </tbody>
 </table>
+
+## Delivery in Linear
+
+[Open the delivery project](https://linear.app/axxi-labs/project/wodge-room-calls-5ebfd26679db) for current status, ownership, dependencies and evidence.
+
+- [WDG-50 — Replace LiveKit with Cloudflare Calls signaling and admission](https://linear.app/axxi-labs/issue/WDG-50/replace-livekit-with-cloudflare-calls-signaling-and-admission)
+- [WDG-51 — Preserve call controls, navigation, and switching behavior](https://linear.app/axxi-labs/issue/WDG-51/preserve-call-controls-navigation-and-switching-behavior)

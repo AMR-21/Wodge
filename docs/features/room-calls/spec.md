@@ -55,7 +55,7 @@ Call entry and continued participation honor current room access. A change in ac
 
 ### Dependencies and references
 
-[Product Definition](../../product/overview.md), [Domain Model](../../architecture/domain-model.md), [Teams & Shared Spaces](../teams-shared-spaces/spec.md), [Team Roles & Access](../team-roles-access/spec.md), and [Discussions & Messaging](../discussions-messaging/spec.md) define the containing room and its access rules. [Wodge Room Calls in Linear](<https://linear.app/amr21/project/wodge-room-calls-5ebfd26679db>) tracks delivery.
+[Product Definition](../../product/overview.md), [Domain Model](../../architecture/domain-model.md), [Teams & Shared Spaces](../teams-shared-spaces/spec.md), [Team Roles & Access](../team-roles-access/spec.md), and [Discussions & Messaging](../discussions-messaging/spec.md) define the containing room and its access rules. [Wodge Room Calls in Linear](<https://linear.app/axxi-labs/project/wodge-room-calls-5ebfd26679db>) tracks delivery.
 
 ### Validation expectations
 
@@ -63,7 +63,7 @@ Validation covers first and later joins, the last participant leaving, viewer-ve
 
 ## Document responsibilities
 
-[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/amr21/project/wodge-room-calls-5ebfd26679db).
+[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/axxi-labs/project/wodge-room-calls-5ebfd26679db).
 
 ## Source and revision
 

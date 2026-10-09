@@ -72,7 +72,7 @@ The October 4–11, 2026 target schedule remains a historical approved planning 
 
 Cross-feature work stays in Wodge Engineering and links shared engineering documents. Feature delivery approach files exist only for complex agent authorization, collaborative pages/tasks and call migration. Remaining feature plans are supplied by their existing issues plus shared processes.
 
-[WDG-171](https://linear.app/amr21/issue/WDG-171) and [WDG-172](https://linear.app/amr21/issue/WDG-172) cover maintenance intake setup separately from release. Neither is turned into an ongoing maintenance commitment or release blocker.
+[WDG-171](https://linear.app/axxi-labs/issue/WDG-171/enable-and-verify-native-wodge-triage) and [WDG-172](https://linear.app/axxi-labs/issue/WDG-172/validate-maintenance-intake-duplicate-handling-and-routing) cover maintenance intake setup separately from release. Neither is turned into an ongoing maintenance commitment or release blocker.
 
 ## Cutover change
 

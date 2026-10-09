@@ -64,7 +64,7 @@ Validation covers creation defaults, new-account and existing-account invitation
 
 ## Document responsibilities
 
-[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/amr21/project/wodge-workspace-setup-and-membership-48598624b1f1).
+[Design](design.md) contains the migrated UX and shared engineering boundaries. Acceptance identifiers such as `AC-01` remain scoped to this feature; they are not renumbered. Detailed implementation, validation, deployment and maintenance work remains in the [existing delivery project](https://linear.app/axxi-labs/project/wodge-workspace-setup-and-membership-48598624b1f1).
 
 ## Historical approval evidence
 
