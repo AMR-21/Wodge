@@ -1,7 +1,6 @@
 $schema: https://api.gitbook.com/gitbook-docs.yaml
-version: 1
 site:
-  title: Wodge documentation
+  title: Wodge
   structure:
     - type: section
       key: section-product
@@ -71,50 +70,50 @@ site:
       children:
         - type: space
           key: space-workspace-membership
-          title: "Workspace Setup & Membership"
+          title: Workspace Setup & Membership
           path: workspace-membership
           default: true
           content:
             directory: ./docs/features/workspace-membership
         - type: space
           key: space-teams-shared-spaces
-          title: "Teams & Shared Spaces"
+          title: Teams & Shared Spaces
           path: teams-shared-spaces
           content:
             directory: ./docs/features/teams-shared-spaces
         - type: space
           key: space-team-roles-access
-          title: "Team Roles & Access"
+          title: Team Roles & Access
           path: team-roles-access
           content:
             directory: ./docs/features/team-roles-access
         - type: space
           key: space-agent-access
-          title: "Agent Access"
+          title: Agent Access
           path: agent-access
           content:
             directory: ./docs/features/agent-access
         - type: space
           key: space-discussions-messaging
-          title: "Discussions & Messaging"
+          title: Discussions & Messaging
           path: discussions-messaging
           content:
             directory: ./docs/features/discussions-messaging
         - type: space
           key: space-room-calls
-          title: "Room Calls"
+          title: Room Calls
           path: room-calls
           content:
             directory: ./docs/features/room-calls
         - type: space
           key: space-pages-embedded-tasks
-          title: "Pages & Embedded Tasks"
+          title: Pages & Embedded Tasks
           path: pages-embedded-tasks
           content:
             directory: ./docs/features/pages-embedded-tasks
         - type: space
           key: space-demo-billing-limits
-          title: "Demo Billing & Limits"
+          title: Demo Billing & Limits
           path: demo-billing-limits
           content:
             directory: ./docs/features/demo-billing-limits
