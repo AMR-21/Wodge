@@ -3,12 +3,26 @@ site:
   title: Wodge
   structure:
     - type: section
+      key: section-home
+      title: Home
+      icon: house
+      description: "Start here to explore all Wodge documentation."
+      path: home
+      default: true
+      children:
+        - type: space
+          key: space-home
+          title: Wodge documentation
+          path: overview
+          default: true
+          content:
+            directory: ./docs
+    - type: section
       key: section-product
       title: Product
       icon: compass
       description: "Start with Wodge’s purpose and the principles shaping its revival."
       path: product
-      default: true
       children:
         - type: space
           key: space-product

@@ -1,6 +1,28 @@
+---
+description: "Your starting point for Wodge’s product, architecture, design, features, development, operations, and decisions."
+icon: house
+layout:
+  width: default
+  outline:
+    visible: false
+---
+
 # Wodge documentation
 
 Wodge is a local-first collaborative workspace and portfolio revival. This documentation preserves existing product and engineering knowledge; it does not restart the SDLC or claim the revival has been delivered.
+
+<table data-view="cards">
+  <thead><tr><th width="48"></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead>
+  <tbody>
+    <tr><td><i class="fa-compass"></i></td><td><strong>Product</strong></td><td>Purpose, principles, vocabulary, and feasibility.</td><td><a href="product/README.md">Product</a></td></tr>
+    <tr><td><i class="fa-diagram-project"></i></td><td><strong>Architecture</strong></td><td>Runtime, data models, security, and quality requirements.</td><td><a href="architecture/README.md">Architecture</a></td></tr>
+    <tr><td><i class="fa-palette"></i></td><td><strong>Design</strong></td><td>UX principles, navigation, visual foundations, and shared patterns.</td><td><a href="design/README.md">Design</a></td></tr>
+    <tr><td><i class="fa-shapes"></i></td><td><strong>Features</strong></td><td>Behavior and design across Wodge’s eight documented features.</td><td><a href="#features">Features</a></td></tr>
+    <tr><td><i class="fa-code"></i></td><td><strong>Development</strong></td><td>Local setup, engineering guidance, tooling, and validation.</td><td><a href="development/README.md">Development</a></td></tr>
+    <tr><td><i class="fa-server"></i></td><td><strong>Operations</strong></td><td>Environments, release gates, observability, and maintenance.</td><td><a href="operations/README.md">Operations</a></td></tr>
+    <tr><td><i class="fa-scale-balanced"></i></td><td><strong>Decisions</strong></td><td>Recorded engineering choices and their approval evidence.</td><td><a href="decisions/README.md">Decisions</a></td></tr>
+  </tbody>
+</table>
 
 ## Status and authority
 
