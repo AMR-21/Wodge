@@ -11,6 +11,20 @@ layout:
 
 Wodge is a local-first collaborative workspace and portfolio revival. This documentation preserves existing product and engineering knowledge; it does not restart the SDLC or claim the revival has been delivered.
 
+## Important notes
+
+<table data-view="cards">
+  <thead><tr><th width="48"></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead>
+  <tbody>
+    <tr><td><i class="fa-circle-info"></i></td><td><strong>Status and authority</strong></td><td>Distinguish the implemented baseline, approved revival intent, and unverified work.</td><td><a href="#status-and-authority">Status and authority</a></td></tr>
+    <tr><td><i class="fa-clipboard-question"></i></td><td><strong>Coverage and open questions</strong></td><td>Find unresolved engineering gaps and the evidence still needed.</td><td><a href="development/documentation.md">Coverage and open questions</a></td></tr>
+    <tr><td><i class="fa-terminal"></i></td><td><strong>Local setup</strong></td><td>Use the checked-in commands and understand the target tooling.</td><td><a href="development/setup.md">Local setup</a></td></tr>
+    <tr><td><i class="fa-flag-checkered"></i></td><td><strong>Release policy</strong></td><td>Check readiness, required approval evidence, and rollback expectations.</td><td><a href="operations/release-policy.md">Release policy</a></td></tr>
+  </tbody>
+</table>
+
+## Explore the documentation
+
 <table data-view="cards">
   <thead><tr><th width="48"></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead>
   <tbody>
