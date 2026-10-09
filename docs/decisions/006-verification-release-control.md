@@ -1,7 +1,5 @@
 # Decision 006 — Verification and release control
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Retain Vitest, add Playwright for critical browser journeys, and use GitHub Actions for lint, formatting, types, tests, and builds before manually approved Cloudflare deployment.
 **Boundary:** A passing workflow does not override the required explicit remote-push confirmation.
 [Development Workflow](../development/workflow.md)

@@ -1,7 +1,5 @@
 # Engineering policy
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 This baseline is part of the plugin's approved operating model. A project's canonical Organization Policy may add stricter rules. `DEFAULT` rules may be overridden only with documented rationale and approval. `MANDATORY` rules require organization-policy change, not a project-level exception.
 
 | ID | Classification | Rule |

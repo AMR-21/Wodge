@@ -1,7 +1,5 @@
 # Decision 003 — Member-provided agents
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Replace the hosted AI writer with MCP access for members’ own compatible agents.
 **Access:** Current member permissions, revocable connections, workspace disablement, and member-via-agent attribution apply.
 [Agent Access](../features/agent-access/spec.md)

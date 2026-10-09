@@ -1,7 +1,5 @@
 # Persistence and data ownership
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ### Database and files
 
 Retain the existing D1 database with Drizzle. Better Auth uses that D1 database. Retain R2 for files.

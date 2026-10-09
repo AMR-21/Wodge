@@ -1,7 +1,5 @@
 # Domain model, invariants and lifecycles
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ### Core concepts
 
 A **workspace** is the boundary for its members, teams, content, and demo billing. It has one owner. Other workspace members have an administrator or member role. Only the owner can grant or remove administrator status or delete the workspace. The owner cannot leave or be removed while they own it. Owners and administrators can manage ordinary memberships and invitations.

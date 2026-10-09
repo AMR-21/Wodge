@@ -1,7 +1,5 @@
 # UX Principles
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Recognizable product
 
 The existing Wodge visual direction is the starting point. Improve usability around the approved workflows without assuming a full redesign.

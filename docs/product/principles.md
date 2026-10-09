@@ -1,7 +1,5 @@
 # Principles & Non-Goals
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Principles
 
 * **Revive the existing product.** Wodge remains a collaborative workspace and portfolio showcase built from the capstone code.

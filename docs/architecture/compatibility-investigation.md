@@ -1,7 +1,5 @@
 # Stack Compatibility Investigation
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 This is the recorded investigation as of 2026-10-01. Provider/version statements and linked upstream references have not been independently reverified during this documentation migration. Its outstanding runtime proof remains outstanding.
 
 Result: Partial — source and documentation checks completed; runtime checks could not execute.

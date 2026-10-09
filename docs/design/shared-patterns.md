@@ -1,7 +1,5 @@
 # Shared Patterns
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Forms and action feedback
 
 Use labelled, keyboard-operable controls. Show sending, uploading, joining, voting, and failed-action states clearly. Invitation mismatch, expiry, revocation, and full capacity have distinct explanations.

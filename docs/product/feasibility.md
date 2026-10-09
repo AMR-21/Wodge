@@ -1,7 +1,5 @@
 # Financial Assessment
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ### Purpose and decision
 
 Wodge is a portfolio showcase with **Stripe test-mode billing** on **Workers Free**, without a Workers Paid subscription. Demo Pro displays **$29/month as an illustrative test price**; no subscriber pays it, so actual subscription revenue is **$0**. The original paid-plan calculation that suggested $29 is preserved below as historical reasoning and explicitly superseded. Current provider terms were checked on **2026-09-28**.

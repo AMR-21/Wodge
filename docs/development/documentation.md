@@ -1,7 +1,5 @@
 # Documentation ownership, coverage and open questions
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Revision `migration-draft-1`, 2026-10-09.
-
 ## Agreed migration
 
 The user explicitly confirmed preparing the proposed repository documentation in this chat on 2026-10-09. Source and execution tracker: AMR21 workspace, permanent WODGE team (WDG). Destination: the existing AMR-21/Wodge repository. The intervening proposal to use Axxi was withdrawn; no cross-workspace copy or identifier migration is needed.

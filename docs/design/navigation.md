@@ -1,7 +1,5 @@
 # Information Architecture
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Workspace entry
 
 The signed-in workspace list exposes current memberships and workspace creation. Invitation journeys return to the invitation after sign-in or signup. Joining or creating a workspace leads into General.

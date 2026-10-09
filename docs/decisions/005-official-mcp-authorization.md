@@ -1,7 +1,5 @@
 # Decision 005 — Official MCP authorization
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Use Better Auth's official MCP/OAuth plugin for member agent connection and revocation.
 **Reason:** Use standard authorization within the selected Better Auth backend rather than a bespoke agent authentication protocol.
 **Boundary:** Wodge's current member permissions and workspace agent setting remain authoritative.

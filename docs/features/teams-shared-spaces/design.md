@@ -1,7 +1,5 @@
 # Teams & Shared Spaces — design
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 
 ### Experience

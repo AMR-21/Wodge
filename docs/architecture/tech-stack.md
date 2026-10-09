@@ -1,7 +1,5 @@
 # Tech Stack
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 The comparison records the approved revival targets. It does not upgrade dependencies or establish that any selected version is installed or currently compatible. Exact version and runtime proof remains in the [compatibility investigation](compatibility-investigation.md).
 
 ## Revival stack

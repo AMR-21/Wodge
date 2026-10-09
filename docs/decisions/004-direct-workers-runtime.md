@@ -1,7 +1,5 @@
 # Decision 004 — Direct Workers realtime runtime
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Replace PartyKit with PartyServer directly on Cloudflare Workers, using required Yjs server addons.
 **Reason:** Remove unnecessary existing boilerplate.
 [Tech Stack](../architecture/tech-stack.md)

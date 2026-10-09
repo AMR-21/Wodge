@@ -1,7 +1,5 @@
 # Local setup and current commands
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Capstone checkout
 
 This describes checked-in configuration, not a verified working installation. The current baseline is `d875c2d369f2bed15ba4e7257242131fddcbfa0a`. Root configuration declares Node.js >=18 and pnpm 9.4.0. The [root README](../../README.md) preserves the walkthrough, team attribution, license and capstone setup instructions.

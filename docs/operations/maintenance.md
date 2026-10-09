@@ -1,7 +1,5 @@
 # Maintenance and feedback
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Existing commitment
 
 The revival is a portfolio showcase with no committed ongoing active-maintenance allocation. Do not create an on-call rotation, monitoring subscription, retention job, per-feature maintenance plan or service-level commitment from this migration.

@@ -1,7 +1,5 @@
 # Testing Strategy
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Validation scope
 
 The approved feature acceptance criteria define what the revival must demonstrate. Validation covers both normal journeys and direct backend/agent attempts that bypass visible controls.

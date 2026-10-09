@@ -1,7 +1,5 @@
 # Security
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Identity and invitations
 
 Better Auth uses the existing D1 database. Email invitation acceptance requires a signed-in account with the invited verified address. Revoked, expired, or reset invitations cannot grant entry.

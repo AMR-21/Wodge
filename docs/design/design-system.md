@@ -1,7 +1,5 @@
 # Design System
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Visual direction
 
 The existing Wodge visual direction remains the basis of the revival. Usability changes accompany the migration; a full visual redesign has not been selected.

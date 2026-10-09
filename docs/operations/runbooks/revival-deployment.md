@@ -1,7 +1,5 @@
 # Revival deployment coordination
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Wodge Revival release
 
 Fresh deployment of the existing project with the approved migrations. Existing accounts and data do not require migration.

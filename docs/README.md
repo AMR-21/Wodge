@@ -1,7 +1,5 @@
 # Wodge documentation
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Revision `migration-draft-1`, prepared 2026-10-09. Repository documentation is the agreed destination; Linear cutover is approved subject to verified remote replacement links.
-
 Wodge is a local-first collaborative workspace and portfolio revival. This documentation preserves existing product and engineering knowledge; it does not restart the SDLC or claim the revival has been delivered.
 
 ## Status and authority

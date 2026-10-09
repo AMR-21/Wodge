@@ -1,7 +1,5 @@
 # Development and delivery workflow
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Delivery window
 
 The approved revival delivery window is October 4–11, 2026, with weekday work after work. No further allocation or ongoing active maintenance has been committed.

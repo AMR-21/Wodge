@@ -1,7 +1,5 @@
 # Decision 002 — Structured and text collaboration
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Retain Replicache for structured local-first state and Yjs for collaborative text.
 **Reason:** The approved product treats them as fundamental systems handling different kinds of shared state.
 [Product Definition](../product/overview.md)

@@ -1,7 +1,5 @@
 # Observability
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Wodge Revival
 
 Operational visibility supports the retained user journeys and the preferred $5 / maximum $10 monthly budget. This page defines checks for implementation and release; it does not claim monitoring is configured.

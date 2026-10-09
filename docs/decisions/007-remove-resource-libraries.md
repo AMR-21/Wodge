@@ -1,7 +1,5 @@
 # Decision 007 — Remove standalone resource libraries
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Decision
 
 The Wodge revival does not include standalone workspace or team resource libraries, file-folder navigation, or a separate Manage resources permission. The capstone's team library is a deliberate removal from the portfolio showcase.

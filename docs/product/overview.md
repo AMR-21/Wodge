@@ -1,7 +1,5 @@
 # Product Definition
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ### Identity and purpose
 
 Wodge is a local-first collaborative workspace created as a graduation project. It combines team communication, shared knowledge, task coordination, and live collaboration. The revival keeps that product idea and makes Wodge a portfolio showcase.

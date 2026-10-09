@@ -1,7 +1,5 @@
 # Pages and embedded tasks — delivery approach
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. This reorganizes existing approved delivery intent; it does not authorize execution, add packages, change blockers or record a validation pass.
-
 ## Why this document exists
 
 Coordinating independent Yjs text, Replicache tasks, retained editor controls and attachment access justifies a durable delivery approach.

@@ -1,7 +1,5 @@
 # Non-Functional Requirements
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Local-first behavior
 
 Previously available structured state and page content remain usable through connection loss. Valid local changes reconcile after reconnecting. Unsent or rejected changes remain visible rather than being silently discarded.

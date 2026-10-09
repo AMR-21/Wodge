@@ -1,7 +1,5 @@
 # Environments and runtime topology
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 data
 
 The revival can use a fresh deployment. Migration of old accounts and data is outside scope.

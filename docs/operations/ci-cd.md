@@ -1,7 +1,5 @@
 # CI/CD and deployment gates
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Current configuration
 
 [The checked-in workflow](../../.github/workflows/deploy.yml) deploys PartyKit backend changes on push to `main`. It installs dependencies and invokes PartyKit deployment. It does not implement the approved complete lint/format/type/test/build gates or manual deployment approval. This migration does not change that executable workflow.

@@ -1,7 +1,5 @@
 # Decision 001 — Separate backend for multiple clients
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 **Decision:** Keep the backend as a separate service exposing shared APIs.
 **Reason:** The web application uses TanStack Start, while a possible future mobile client should be able to use the same backend.
 **Scope:** A mobile application is not committed for the revival.

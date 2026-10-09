@@ -1,7 +1,5 @@
 # Code Structure & Design
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 Detailed folder organization, code patterns, and coding rules are deferred to implementation by project-owner decision. The existing content records the established architecture boundaries and general guidance; it does not settle the deferred conventions. The project owner will author `AGENTS.md`.
 
 ## Separate applications

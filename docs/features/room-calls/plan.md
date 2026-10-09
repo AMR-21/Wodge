@@ -1,7 +1,5 @@
 # Room calls — delivery approach
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. This reorganizes existing approved delivery intent; it does not authorize execution, add packages, change blockers or record a validation pass.
-
 ## Why this document exists
 
 Replacing provider signaling while retaining navigation, access-loss handling and quota behavior justifies a durable delivery approach.

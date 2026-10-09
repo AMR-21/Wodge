@@ -1,7 +1,5 @@
 # Release policy
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Prepared 2026-10-09 as `migration-draft-1`. Source decisions retain their recorded status; the repository revision is approved; external cutover awaits verified remote replacement links.
-
 ## Deployment and named release
 
 A deployment is identified by the reviewed commit SHA/build ID. A named release is a separate meaningful checkpoint and requires explicit human approval before a tag or release is created. The plugin baseline requires SemVer; project-specific internal/public release mode, initial release version, pre-1.0 behavior and automated release engine configuration are not settled by the inspected Wodge records. Those remain discussion gaps rather than invented choices.

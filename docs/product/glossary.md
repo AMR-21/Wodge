@@ -1,7 +1,5 @@
 # Glossary
 
-> **Migration revision approved.** User approved `migration-draft-1` in this chat on 2026-10-09. Historical source knowledge is preserved; this file does not establish implementation, runtime validation, deployment, or release completion.
-
 ## Organization and access
 
 * **Workspace:** boundary for members, teams, shared content, and demo billing.
