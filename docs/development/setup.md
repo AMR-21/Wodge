@@ -16,6 +16,12 @@ This describes checked-in configuration, not a verified working installation. Th
 
 Existing scripts also include `build`, `lint`, `generate`, `migrate:local`, and `studio`. These script definitions were inspected; installation, generation, migrations, services and builds were not run in this migration.
 
+AMR-5 preserves the original premium editor packages and integrations. Tracked
+registry configuration contains no authentication assignment. Configure any
+required private registry access outside tracked files. The
+[security cleanup evidence](amr-5-security-evidence.md) records the final checks
+and redacted history findings.
+
 ## Constraints and target setup
 
 Current setup includes Next-on-Pages, PartyKit, Supabase, LiveKit and Infisical assumptions. It is not the final revival setup. [Tooling](tooling.md) preserves the target command contract and [environments](../operations/environments.md) the proposed Workers bindings. Pin resolved target versions and update the lockfile during the existing implementation work; no target dependency was installed here.
