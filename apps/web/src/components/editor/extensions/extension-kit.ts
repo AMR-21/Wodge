@@ -22,7 +22,6 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { FileHandler } from "@tiptap-pro/extension-file-handler";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 
-import { AiWriter } from "./ai-writer";
 import { Table, TableCell, TableHeader, TableRow } from "./table";
 import { HorizontalRule } from "./horizontal-rule";
 import { Heading } from "./heading";
@@ -39,35 +38,18 @@ import { ImageBlock } from "./image-block";
 import { Columns, Column } from "./multi-column";
 import { emojiSuggestion } from "./emoji-suggestions";
 import { TasksDB } from "./tasks";
-import { AiActions } from "./ai";
 
 interface ExtensionKitProps {
-  userId?: string;
-  userName?: string;
-  userColor?: string;
   placeholder?: string;
 }
 
-export const ExtensionKit = ({
-  userId,
-  userName = "Maxi",
-  placeholder,
-}: ExtensionKitProps) => [
+export const ExtensionKit = ({ placeholder }: ExtensionKitProps) => [
   Document,
   Columns,
   TaskList,
   TaskItem.configure({
     nested: true,
   }),
-  AiWriter.configure({
-    authorId: userId,
-    authorName: userName,
-  }),
-  // AiImage.configure({
-  //   authorId: userId,
-  //   authorName: userName,
-  // }),
-  AiActions,
   Column,
   // Selection,
   Heading,

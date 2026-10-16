@@ -16,21 +16,3 @@ export const ChannelSchema = z.object({
 });
 
 export type Channel = z.infer<typeof ChannelSchema>;
-
-export const AiActionSchema = z.object({
-  text: z.string(),
-  action: z.enum([
-    "simplify",
-    "fix",
-    "shorter",
-    "longer",
-    "tone",
-    "tldr",
-    "emojify",
-    "translate",
-    "complete",
-  ]),
-  lang: z.string().optional(),
-});
-
-export type AiAction = z.infer<typeof AiActionSchema>;

@@ -11,28 +11,12 @@ import {
   ListTodo,
   Minus,
   Quote,
-  Sparkles,
   SquareCode,
   Table,
 } from "lucide-react";
 import { Group } from "./types";
 
 export const GROUPS: Group[] = [
-  {
-    name: "ai",
-    title: "AI",
-    commands: [
-      {
-        name: "aiWriter",
-        label: "AI Writer",
-        icon: Sparkles,
-        description: "Let AI finish your thoughts",
-
-        shouldBeHidden: (editor) => editor.isActive("columns"),
-        action: (editor) => editor.chain().focus().setAiWriter().run(),
-      },
-    ],
-  },
   {
     name: "format",
     title: "Format",

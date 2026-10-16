@@ -12,7 +12,6 @@ import { getRoute, ok, unauthorized } from "../lib/http-utils";
 import { authorizeChannel, verifyToken } from "../lib/auth";
 import queryString from "query-string";
 
-import { Ai } from "partykit-ai";
 import { Hono } from "hono";
 import { PagePartyInterface, ServerPageDB, Versions } from "../types";
 import { startFn } from "./start-fn";

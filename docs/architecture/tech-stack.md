@@ -10,9 +10,10 @@ work still awaiting application acceptance.
 
 The checkout retains Next.js 14 and React 18, Tailwind CSS 3, Radix components,
 Tiptap 2 with its original premium packages, and Replicache/Yjs. Existing source
-still contains PartyKit and Supabase paths. Calls and hosted generation remain in
-the capstone source but must be disabled for the current portfolio milestone.
-Do not infer that those migration/disablement tasks are already implemented.
+still contains PartyKit and Supabase paths. Hosted generation has been removed from the application, including provider
+endpoints, editor controls, SDK dependencies and API key configuration. Calls
+remain in the capstone source and must be disabled for the current milestone;
+that separate disablement is not established by the generation removal.
 
 ## Current migration scope
 
