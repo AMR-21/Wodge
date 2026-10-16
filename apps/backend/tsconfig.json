@@ -4,6 +4,7 @@
     "strictPropertyInitialization": false,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["@cloudflare/workers-types"]
   }
 }

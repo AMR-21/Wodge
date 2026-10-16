@@ -5,8 +5,8 @@ import {
   PushRequest,
   Replicache,
 } from "replicache";
-import { env } from "@repo/env";
-import { replicacheWrapper } from "../../lib/utils";
+import { env } from "@repo/env/client";
+import { replicacheWrapper } from "../../lib/browser-utils";
 import { threadMutators } from "./thread-mutators";
 
 export function createThreadRep({
@@ -34,7 +34,7 @@ export function createThreadRep({
       {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
-      }
+      },
     ),
     pusher: replicacheWrapper<PushRequest, PusherResult>(
       "push",
@@ -43,7 +43,7 @@ export function createThreadRep({
       {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
-      }
+      },
     ),
   });
 }

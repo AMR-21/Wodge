@@ -1,5 +1,5 @@
 import { invites, workspaces } from "@repo/data";
-import { createDb } from "@repo/data/server";
+import { createDb } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { eq, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";

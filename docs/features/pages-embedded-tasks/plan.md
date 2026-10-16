@@ -1,32 +1,16 @@
 ---
-description: "Pages & Embedded Tasks: delivery sequencing, dependencies, and validation approach."
-icon: route
+description: "Retained pages and tasks delivery scope."
 ---
 
-# Pages and embedded tasks — delivery approach
+# Retained pages and tasks delivery scope
 
-## Why this document exists
+The [current project](../../development/documentation.md) retains the existing editor,
+product behavior, Replicache tasks, and Yjs collaboration while making the necessary
+backend/runtime compatibility changes. Preserve the original premium editor packages;
+no removal or replacement is authorized by the foundation work.
 
-Coordinating independent Yjs text, Replicache tasks, retained editor controls and attachment access justifies a durable delivery approach.
-
-## Scope and sequence
-
-Preserve the approved editor and page access foundation; configure Yjs load/save and viewer restrictions; preserve one page-owned task collection across table/Kanban and task-block removal; integrate links/files through containing-page authorization and pooled storage. Use current issue blockers for actual execution order.
-
-The existing executable outcomes cover preserving Yjs collaboration and offline recovery; reconciling the page-owned task collection and table/Kanban views; enforcing inherited page-link and attachment access; and cleaning up attachments and storage usage. Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear.
-
-## Readiness and blockers
-
-PartyServer/Yjs persistence and permission hooks require runtime proof. Exact persistence contracts and byte-accounting implementation remain unresolved where not settled by shared sources. Do not infer readiness from the existence of editor components.
-
-## Required evidence
-
-Two-client editing, offline/reconnect and restart recovery; viewer and access-loss denial; task/column CRUD, ordering, team assignees, filters and view switching; task-block preservation versus page deletion; authorized links/files and storage cleanup. Attach actual results to the existing executable issues. [Testing strategy](../../development/testing-strategy.md) remains confidence-first and risk-based. No tests or product runtime probes were executed by this migration.
-
-## Deployment and maintenance applicability
-
-The shared [fresh-deployment coordination](../../operations/runbooks/revival-deployment.md), [CI/CD](../../operations/ci-cd.md) and [maintenance guidance](../../operations/maintenance.md) cover the existing revival scope. No separate feature deployment file is created to duplicate them. Additional rollout/state-compatibility needs must be resolved before execution; no ongoing feature-maintenance commitment is introduced.
-
-## Sources and approval
-
-[Specification](spec.md), [design](design.md), [architecture](../../architecture/overview.md), [compatibility investigation](../../architecture/compatibility-investigation.md), and the unchanged [revival implementation plan](https://linear.app/amr21/document/implementation-plan-wodge-revival-adfe59e91282), source revision 2026-10-07T00:21:59.077Z. Historical owner-approval statements in that source are retained; this newly arranged approach is pending scoped review as `migration-draft-1`.
+Local compilation and shared D1 fixture checks do not establish page/task acceptance.
+Integrated editing, synchronization, permissions, persistence, recovery, and existing
+views still need actual verification against the retained behavior. Resource redesigns
+and expanded agent actions remain deferred; this page adds no new schema, quota,
+provider, or interaction requirements.

@@ -1,7 +1,8 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { Message } from "./message";
 import { memo, useEffect, useLayoutEffect, useRef } from "react";
-import { Message as MessageType, roomMutators } from "@repo/data";
+import { Message as MessageType } from "@repo/data";
+import { roomMutators } from "@repo/data/browser";
 import { ReadTransaction, Replicache } from "replicache";
 import { useSubscribe } from "@/hooks/use-subscribe";
 import { useCurrentWorkspace } from "@/components/workspace-provider";

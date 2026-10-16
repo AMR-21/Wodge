@@ -6,8 +6,8 @@ import {
   Replicache,
 } from "replicache";
 import { roomMutators } from "./room-mutators";
-import { env } from "@repo/env";
-import { replicacheWrapper } from "../../lib/utils";
+import { env } from "@repo/env/client";
+import { replicacheWrapper } from "../../lib/browser-utils";
 
 export function createRoomRep({
   channelId,
@@ -34,7 +34,7 @@ export function createRoomRep({
       {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
-      }
+      },
     ),
     pusher: replicacheWrapper<PushRequest, PusherResult>(
       "push",
@@ -43,7 +43,7 @@ export function createRoomRep({
       {
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
-      }
+      },
     ),
   });
 }

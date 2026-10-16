@@ -4,7 +4,7 @@ import "server-only";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 
-import { updateUserById } from "@repo/data/server";
+import { updateUserById } from "@/lib/data-server";
 import { UpdateUserSchema } from "@repo/data";
 import { currentUser } from "@/lib/supabase/current-user";
 

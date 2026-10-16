@@ -34,27 +34,30 @@ Wodge is a local-first collaborative workspace and portfolio revival. This docum
     <tr><td><i class="fa-shapes"></i></td><td><strong>Features</strong></td><td>Behavior and design across Wodge’s eight documented features.</td><td><a href="#features">Features</a></td></tr>
     <tr><td><i class="fa-code"></i></td><td><strong>Development</strong></td><td>Local setup, engineering guidance, tooling, and validation.</td><td><a href="development/README.md">Development</a></td></tr>
     <tr><td><i class="fa-server"></i></td><td><strong>Operations</strong></td><td>Environments, release gates, observability, and maintenance.</td><td><a href="operations/README.md">Operations</a></td></tr>
-    <tr><td><i class="fa-scale-balanced"></i></td><td><strong>Decisions</strong></td><td>Recorded engineering choices and their approval evidence.</td><td><a href="decisions/README.md">Decisions</a></td></tr>
+    <tr><td><i class="fa-scale-balanced"></i></td><td><strong>Decisions</strong></td><td>Current engineering scope and implementation boundaries.</td><td><a href="decisions/README.md">Decisions</a></td></tr>
   </tbody>
 </table>
 
 ## Status and authority
 
-| State | Meaning in this repository |
-| --- | --- |
-| Capstone / implemented baseline | Source commit `d875c2d369f2bed15ba4e7257242131fddcbfa0a` still uses Next.js 14, React 18, Supabase, PartyKit, LiveKit, group/moderator access and existing Stripe integrations. The root README/walkthrough describe the capstone. Source presence is not a current live-deployment or test pass. |
-| Approved revival intent, not demonstrated complete | TanStack Start, React 19, Tailwind 4, Base UI, separate Hono backend, Better Auth/D1, PartyServer/SQLite Durable Objects, retained Replicache/Yjs, Calls/SFU, member MCP agents, additive team roles, test billing and smaller limits. Source decisions/approval claims are preserved with provenance. |
-| Approved migration revision | The file split/consolidation, repository navigation and canonical-link cutover in `migration-draft-1`. User approved the prepared content and proposed external edits on 2026-10-09; canonical-link cutover remains pending remote verification. |
-| Unverified or unresolved | Current live/shipped state, runtime compatibility, executed validation/cost evidence, several historical/asset reads and GitBook synchronization. See [coverage and gaps](development/documentation.md). |
+Only [AMR21 / Wodge Revival & Enhancements](https://linear.app/amr21/project/wodge-revival-and-enhancements-ee86a6345a5d) governs active delivery.
+The [current scope and evidence rules](development/documentation.md) distinguish
+retained implementation, necessary portfolio migrations, and deferred modernization.
 
-Use the [root README](../README.md) for the capstone introduction, walkthrough, team attribution and license. Use [local setup](development/setup.md) to distinguish checked-in commands from target tooling. Existing [WODGE execution work](https://linear.app/amr21/team/WDG/overview) retains detailed delivery state. Do not use historical canceled/archived plans to overwrite current requirements.
+The working application retains Next.js/Tailwind/Radix and its existing product
+behavior. Backend PartyServer/Better Auth/D1 and minimal member-controlled MCP
+are current migration goals. Calls and hosted generation are to be disabled;
+broader framework/tooling/UI redesign and call restoration are deferred.
+
+Use the [foundation record](development/backend-foundation.md) and
+[baseline](development/baseline.md) for actual local observations and limitations.
 
 ## Product
 
 - [Product overview](product/overview.md)
 - [Principles and non-goals](product/principles.md)
 - [Glossary](product/glossary.md)
-- [Financial history and feasibility](product/feasibility.md)
+- [Portfolio operating-cost boundary](product/feasibility.md)
 
 ## Architecture
 
@@ -75,20 +78,20 @@ Use the [root README](../README.md) for the capstone introduction, walkthrough, 
 
 ## Features
 
-Every feature has a specification and design. Acceptance IDs remain scoped to their feature. The old documents called their behavioral section a “feature plan”; those requirements now live in `spec.md`, not an execution plan.
+Each feature page describes its current portfolio scope and retained UI. The project scope governs delivery.
 
-| Feature | Requirements | Design | Delivery approach |
-| --- | --- | --- | --- |
-| Workspace Setup & Membership | [spec](features/workspace-membership/spec.md) | [design](features/workspace-membership/design.md) | Existing Linear issues + shared process |
-| Teams & Shared Spaces | [spec](features/teams-shared-spaces/spec.md) | [design](features/teams-shared-spaces/design.md) | Existing Linear issues + shared process |
-| Team Roles & Access | [spec](features/team-roles-access/spec.md) | [design](features/team-roles-access/design.md) | Existing Linear issues + shared process |
-| Agent Access | [spec](features/agent-access/spec.md) | [design](features/agent-access/design.md) | [plan](features/agent-access/plan.md) |
-| Discussions & Messaging | [spec](features/discussions-messaging/spec.md) | [design](features/discussions-messaging/design.md) | Existing Linear issues + shared process |
-| Room Calls | [spec](features/room-calls/spec.md) | [design](features/room-calls/design.md) | [plan](features/room-calls/plan.md) |
-| Pages & Embedded Tasks | [spec](features/pages-embedded-tasks/spec.md) | [design](features/pages-embedded-tasks/design.md) | [plan](features/pages-embedded-tasks/plan.md) |
-| Demo Billing & Limits | [spec](features/demo-billing-limits/spec.md) | [design](features/demo-billing-limits/design.md) | Existing Linear issues + shared process |
+| Feature                      | Requirements                                   | Design                                             | Delivery approach                             |
+| ---------------------------- | ---------------------------------------------- | -------------------------------------------------- | --------------------------------------------- |
+| Workspace Setup & Membership | [spec](features/workspace-membership/spec.md)  | [design](features/workspace-membership/design.md)  | Existing Linear issues + shared process       |
+| Teams & Shared Spaces        | [spec](features/teams-shared-spaces/spec.md)   | [design](features/teams-shared-spaces/design.md)   | Existing Linear issues + shared process       |
+| Team Roles & Access          | [spec](features/team-roles-access/spec.md)     | [design](features/team-roles-access/design.md)     | Existing Linear issues + shared process       |
+| Agent Access                 | [spec](features/agent-access/spec.md)          | [design](features/agent-access/design.md)          | [plan](features/agent-access/plan.md)         |
+| Discussions & Messaging      | [spec](features/discussions-messaging/spec.md) | [design](features/discussions-messaging/design.md) | Existing Linear issues + shared process       |
+| Room Calls                   | [spec](features/room-calls/spec.md)            | [design](features/room-calls/design.md)            | [plan](features/room-calls/plan.md)           |
+| Pages & Embedded Tasks       | [spec](features/pages-embedded-tasks/spec.md)  | [design](features/pages-embedded-tasks/design.md)  | [plan](features/pages-embedded-tasks/plan.md) |
+| Demo Billing & Limits        | [spec](features/demo-billing-limits/spec.md)   | [design](features/demo-billing-limits/design.md)   | Existing Linear issues + shared process       |
 
-No standalone prototype asset was found in the inspected sources. Written UX and the existing capstone walkthrough are retained; no empty prototype directories or invented screens were generated. Only the three substantial approaches above warrant separate plan documents. Fresh-deployment coordination is shared in the operations runbook; detailed implementation/deployment/maintenance stays in existing issues.
+The linked delivery pages describe only the current scoped increments. They do not authorize broader redesign or remote deployment.
 
 ## Development and operations
 
@@ -126,4 +129,4 @@ The inspection covered 65 Wodge documents (46 current, 19 archived), 12 projects
 
 ## Original navigation provenance
 
-The former [Start Here](https://linear.app/amr21/document/start-here-3e5b85a2456e), [Product](https://linear.app/amr21/document/product-1679c84a393c), [Domain](https://linear.app/amr21/document/domain-941b5e9ecde0), [Features](https://linear.app/amr21/document/features-3a7fe6a226d8), [Design](https://linear.app/amr21/document/design-4105d64cac5d), [Engineering](https://linear.app/amr21/document/engineering-cf734441ce57), and [Decisions](https://linear.app/amr21/document/decisions-8998f260618f) hubs are consolidated here. Their originals are not changed or deleted.
+The former Start Here, Product, Domain, Features, Design, Engineering, and Decisions hubs are consolidated here. Their originals are not changed or deleted.

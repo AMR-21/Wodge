@@ -1,4 +1,5 @@
-import { DrObj, Team, threadMutators, ThreadPost } from "@repo/data";
+import { DrObj, Team, ThreadPost } from "@repo/data";
+import { threadMutators } from "@repo/data/browser";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
 import { Post } from "./post";

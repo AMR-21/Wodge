@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { env } from "@repo/env";
 import { getStripe } from "@/lib/utils/get-stripe";
 import { isWorkspaceAdmin } from "../../../is-workspace-admin";
-import { getWorkspaceById } from "@repo/data/server";
+import { getWorkspaceById } from "@/lib/data-server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(

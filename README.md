@@ -115,7 +115,7 @@ Wodge separates synchronized state by domain rather than treating the whole prod
 
 ### Prerequisites
 
-- Node.js 18 or newer
+- Node.js 22.19 or newer (`.node-version` selects 24.19.0)
 - pnpm 9
 - A Linux-based development environment is recommended
 - LiveKit Server for local audio/video development
@@ -136,7 +136,15 @@ cp .env.example apps/web/.env.local
 cp .env.example apps/backend/.env
 ```
 
-Fill the required values in both files. The repository contains integrations that are not required for every local workflow, so only configure the services you intend to run.
+For local D1 bindings used by the retained Pages adapter, also copy the example to
+`apps/web/.dev.vars` and configure the bindings in `apps/web/wrangler.toml`.
+These files stay private and ignored. Fill the required values in the local files. The repository contains integrations that are not required for every local workflow, so only configure the services you intend to run.
+
+Deployed secrets are configured directly with the hosting provider. Deployment scripts
+do not export secrets or copy local `.env` values into deployed bindings; the retained
+PartyKit deployment no longer uses `--with-vars`. Backend Worker bindings are being
+established by the backend foundation; production routing/deployment migration
+remains separate work.
 
 Initialize the local application state and database:
 

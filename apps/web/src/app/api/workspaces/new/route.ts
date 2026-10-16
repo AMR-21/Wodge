@@ -1,6 +1,6 @@
 import { sign } from "@/lib/utils/sign";
 import { Workspace, workspaces, WorkspaceSchema } from "@repo/data";
-import { createDb, createWorkspace } from "@repo/data/server";
+import { createDb, createWorkspace } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { eq } from "drizzle-orm";
 
