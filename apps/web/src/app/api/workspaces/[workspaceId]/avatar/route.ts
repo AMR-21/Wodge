@@ -1,6 +1,7 @@
 import { sign } from "@/lib/utils/sign";
-import { getAvatarAddress, makeWorkspaceAvatarKey } from "@repo/data";
-import { updateUserById, updateWorkspaceById } from "@repo/data/server";
+import { makeWorkspaceAvatarKey } from "@repo/data";
+import { getAvatarAddress } from "@repo/data/browser";
+import { updateUserById, updateWorkspaceById } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { redirect } from "next/navigation";
 import { isWorkspaceAdmin } from "../../is-workspace-admin";

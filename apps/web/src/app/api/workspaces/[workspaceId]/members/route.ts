@@ -1,5 +1,5 @@
 import { memberships } from "@repo/data";
-import { createDb, getUserInfoById } from "@repo/data/server";
+import { createDb, getUserInfoById } from "@/lib/data-server";
 import { and, eq } from "drizzle-orm";
 
 export async function GET(

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getWorkspacesByUserId } from "@repo/data/server";
+import { getWorkspacesByUserId } from "@/lib/data-server";
 
 export async function GET(req: Request) {
   const userId = req.headers.get("x-user-id");

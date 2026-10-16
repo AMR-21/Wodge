@@ -1,18 +1,10 @@
-# Discussions & Messaging
+# Discussions and messaging
 
 [Docs home](../../README.md) · [Feature index](../../README.md#features)
 
-Start with the spec for behavior and acceptance criteria, then the design for journeys and interaction details. These documents retain their recorded status and evidence.
+Retain existing discussion, reply, room messaging, and poll behavior. Backend/runtime migrations must preserve the existing product rather than introduce new discussion rules or agent actions.
 
-| Read | What you will find |
-| --- | --- |
-| [Spec](spec.md) | Behavior, scope, acceptance criteria, and approval evidence. |
-| [Design](design.md) | User journeys, interaction states, and design constraints. |
-
-## Delivery in Linear
-
-[Open the delivery project](https://linear.app/axxi-labs/project/wodge-discussions-and-room-messaging-75e7b5e2ac83) for current status, ownership, dependencies and evidence.
-
-- Reconcile discussion posts, comments and authorship
-- Restore Q&A resolution and reopening
-- Reconcile room messages and authorship
+- [Current feature scope](spec.md)
+- [Retained UI](design.md)
+- [Portfolio project scope](../../development/documentation.md)
+- [Recorded smoke checks](../../development/smoke-test-matrix.md)

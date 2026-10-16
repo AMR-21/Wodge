@@ -1,18 +1,10 @@
-# Demo Billing & Limits
+# Stripe test billing
 
 [Docs home](../../README.md) · [Feature index](../../README.md#features)
 
-Start with the spec for behavior and acceptance criteria, then the design for journeys and interaction details. These documents retain their recorded status and evidence.
+Retain working Stripe test Checkout and customer portal behavior for the portfolio demo. This scope introduces no live-payment launch, new plan prices, storage quotas, premium-eligibility rules, or call metering.
 
-| Read | What you will find |
-| --- | --- |
-| [Spec](spec.md) | Behavior, scope, acceptance criteria, and approval evidence. |
-| [Design](design.md) | User journeys, interaction states, and design constraints. |
-
-## Delivery in Linear
-
-[Open the delivery project](https://linear.app/axxi-labs/project/wodge-demo-billing-and-limits-155a0717deca) for current status, ownership, dependencies and evidence.
-
-- Restore Stripe test Checkout and portal
-- Enforce accepted-member limits
-- Account for monthly participant-minutes
+- [Current feature scope](spec.md)
+- [Retained UI](design.md)
+- [Portfolio project scope](../../development/documentation.md)
+- [Recorded smoke checks](../../development/smoke-test-matrix.md)

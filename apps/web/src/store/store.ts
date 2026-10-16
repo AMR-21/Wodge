@@ -7,7 +7,8 @@ import PartySocket from "partysocket";
 import { Room } from "livekit-client";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
 import { userMutators } from "@repo/data/models/user/user-mutators";
-import { pageMutators, roomMutators, threadMutators } from "@repo/data";
+import { pageMutators } from "@repo/data";
+import { roomMutators, threadMutators } from "@repo/data/browser";
 import { env } from "@repo/env";
 
 import { createSocket } from "./create-socket";

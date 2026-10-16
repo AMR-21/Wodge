@@ -2,7 +2,9 @@
 
 [Docs home](../README.md) · [Develop Wodge](README.md)
 
-These are dated migration and integration records, preserved for source and approval evidence. They describe the state at each inspection, not current publishing instructions. The [current documentation workflow](documentation.md) supersedes their GitBook setup/reuse guidance. The 2026-10-16 connection record supersedes earlier claims that no connection was verified.
+These are dated migration and integration records, preserved for source and approval evidence. They describe the state at each inspection, not current publishing instructions. The [current documentation workflow](documentation-workflow.md) supersedes their GitBook setup/reuse guidance. The 2026-10-16 connection record supersedes earlier claims that no connection was verified.
+
+The [current project scope](documentation.md) supersedes broader revival targets below. Imported source approvals and outside-project links are historical records, not evidence of current-project approval.
 
 ## Agreed migration
 

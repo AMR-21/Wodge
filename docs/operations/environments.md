@@ -1,68 +1,36 @@
-# Environments and runtime topology
+# Local and deployed environments
 
 [Docs home](../README.md) · [Operate Wodge](README.md)
 
-## Data
+The [current project scope](../development/documentation.md) selects a fresh
+portfolio setup without old-account/data migration. No deployment or remote
+provisioning is authorized by the local foundation work.
 
-The revival can use a fresh deployment. Migration of old accounts and data is outside scope.
+## Local configuration
 
-### Sources
+Use ignored application environment files and explicit local bindings, as described
+in [setup](../development/setup.md). The foundation Worker configuration uses a
+placeholder local D1 identifier and SQLite Durable Object classes. It is a local
+compatibility fixture; production routing and deployed binding wiring are incomplete.
 
-[Domain Model](../architecture/domain-model.md)
-[Pages & Embedded Tasks](../features/pages-embedded-tasks/spec.md)
-[Demo Billing & Limits](../features/demo-billing-limits/spec.md)
+## Deployment boundary
 
-## Deployment
+The web application remains Next.js with the retained UI. Backend services migrate
+toward PartyServer/Better Auth/D1. Existing PartyKit and Supabase paths remain in
+source until their separate migrations. Stripe remains in test mode. Calls and
+hosted generation must be disabled for the current milestone; a replacement call
+provider is not selected here.
 
-### Showcase deployment
+Deployed secrets belong in provider-managed configuration. The owner-directed
+secret-export CLI removal changes local scripts only; no remote secret values or
+provider settings were migrated. See the [foundation evidence](../development/backend-foundation.md).
 
-The revival can start from a fresh deployment, with no migration of old accounts or data. It is a portfolio showcase with no committed active maintenance afterward.
+## Verification limits
 
-### Runtime boundary
+Actual local Worker compilation and D1 fixture results do not validate production
+sessions, MCP authorization, collaboration persistence, browser journeys, usage,
+or operating cost. The current project requires bounded operating cost, but this
+page does not adopt numerical budgets or dates from unrelated project records.
 
-The backend is a separate service. PartyServer runs directly on Cloudflare Workers rather than through the existing PartyKit setup. The TanStack Start web application consumes the shared backend APIs.
-
-### Secrets
-
-Secrets move from Infisical to Cloudflare.
-
-### Cost constraints
-
-Use Workers Free without a Workers Paid subscription. Operating spend should remain near $5/month and must not exceed $10/month. Product plan upgrades cannot increase account-wide provider free limits.
-
-### External behavior
-
-Calls use Cloudflare Calls. Authentication uses Better Auth. Stripe remains in test mode. Agents connect through MCP with their own models.
-
-### Approved delivery pipeline
-
-GitHub Actions runs lint, formatting, type checks, Vitest, Playwright, and builds before manually approved Cloudflare deployment. The separate backend and web app remain distinct deployment units.
-The audited PartyKit workflow's automatic main-branch deployment is superseded by this agreed release flow. The Next-on-Pages build output and PartyKit deployment configuration are current artifacts to replace.
-
-### Binding and integration checks
-
-Backend deployment includes D1/Drizzle, R2, Better Auth/MCP, PartyServer namespaces, Stripe test webhooks, Calls credentials, and Resend. The backend owns server-side product integrations. Auth origins and provider callback URLs must match the deployed web/backend configuration.
-Workers Free requires SQLite-backed Durable Objects. A fresh deployment avoids migration of old namespace/account data but does not waive validation of new D1 schemas and bindings.
-
-### Release evidence
-
-A successful build is distinct from a healthy deployment. Release evidence includes authenticated requests, restored document state, realtime synchronization, permitted file access, test billing, call participation, and agent revocation.
-No successful migration, deployment, or provider validation is claimed by these documents.
-
-### Delivery allocation
-
-Implementation is limited to this weekend, next week after work, and the following weekend.
-
-### Related knowledge
-
-[Product Definition](../product/overview.md)
-[Tech Stack](../architecture/tech-stack.md)
-[Financial Assessment](../product/feasibility.md)
-
-## Documentation access
-
-Read the Markdown directly in the repository. Documentation needs no application environment or publishing service. The [documentation workflow](../development/documentation.md#source-and-integration-state--2026-10-16) records repository access and the outstanding live GitBook detachment; no remote integration or visibility was changed by this cleanup.
-
-## Source and revision
-
-[Architecture](https://linear.app/amr21/document/architecture-15a3790a91f7), ID `219776f3-b3d9-4b90-b493-9ae8aa9b9163`, last updated 2026-10-06T23:57:23.209Z by Amr Yasser. Migration is editorial; existing approval statements are preserved claims, not new approvals or execution evidence.
+Production validation, deployment permission, and any recovery plan must be recorded
+for the actual reviewed deployment. A build pass does not authorize deployment.

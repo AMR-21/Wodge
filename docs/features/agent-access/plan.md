@@ -1,29 +1,17 @@
-# Agent access — delivery approach
+# Minimal member-controlled MCP delivery scope
 
-[Docs home](../../README.md) · [Agent Access](README.md) · [Specification](spec.md) · [Design](design.md)
+[Docs home](../../README.md) · [Member-controlled MCP](README.md) · [Specification](spec.md) · [Design](design.md)
 
-## Why this document exists
+Use only the [current project scope](../../development/documentation.md). The initial
+increment covers permitted discovery, page reading, and task creation/update under
+the acting member's current access. Expanded content, discussion, attachment, and
+administration actions are not authorized by this plan.
 
-The protocol/authorization boundary and its cross-feature permissions justify a durable delivery approach.
+The foundation selects compatible Better Auth/MCP dependencies and checks their
+importability. Auth sessions, OAuth/discovery transport, connection/revocation,
+permission enforcement, and synchronization still require implementation and actual
+validation. No discovery fallback or security exception is selected here.
 
-## Scope and sequence
-
-Use existing auth/role dependencies before connection and revocation work; expose only the accepted discovery, page/text/link/file/task/discussion operations after their underlying authorized product operations exist. Keep excluded administration, room chat/calls and autonomous background workflows unavailable.
-
-The existing executable outcomes cover integrating MCP/OAuth authorization and connection controls; exposing permitted discovery, page/text, link/file, task, discussion, Q&A and poll operations; and verifying exclusions and access-loss enforcement. Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear.
-
-## Readiness and blockers
-
-The compatibility investigation leaves generic CIMD transport on Workers unverified. No fallback registration/security model is selected here. The executable OAuth increment cannot be declared ready until compliant transport/client-registration behavior is resolved and exercised.
-
-## Required evidence
-
-OAuth connection/revocation and workspace disable; HTTP/MCP authorization parity; member-via-agent attribution; rejected cross-resource requests; current permissions after role/membership loss; supported Worker transport evidence. Attach actual results to the existing executable issues. [Testing strategy](../../development/testing-strategy.md) remains confidence-first and risk-based. No tests or product runtime probes were executed by this migration.
-
-## Deployment and maintenance applicability
-
-The shared [fresh-deployment coordination](../../operations/runbooks/revival-deployment.md), [CI/CD](../../operations/ci-cd.md) and [maintenance guidance](../../operations/maintenance.md) cover the existing revival scope. No separate feature deployment file is created to duplicate them. Additional rollout/state-compatibility needs must be resolved before execution; no ongoing feature-maintenance commitment is introduced.
-
-## Sources and approval
-
-[Specification](spec.md), [design](design.md), [architecture](../../architecture/overview.md), [compatibility investigation](../../architecture/compatibility-investigation.md), and the unchanged [revival implementation plan](https://linear.app/amr21/document/implementation-plan-wodge-revival-adfe59e91282), source revision 2026-10-07T00:21:59.077Z. Historical owner-approval statements in that source are retained; this newly arranged approach is pending scoped review as `migration-draft-1`.
+Keep authorization at the backend, record denied as well as successful requests,
+and distinguish package compatibility from integrated agent acceptance. The
+[foundation evidence](../../development/backend-foundation.md) records current limits.

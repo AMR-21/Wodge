@@ -1,7 +1,7 @@
 // This temporary as partykit does not support bindings yet
 
 import { sign } from "@/lib/utils/sign";
-import { removeMember } from "@repo/data/server";
+import { removeMember } from "@/lib/data-server";
 import { env } from "@repo/env";
 
 export async function POST(

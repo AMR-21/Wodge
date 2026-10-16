@@ -1,7 +1,8 @@
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Replicache } from "replicache";
-import { createPageRep, pageMutators } from "@repo/data";
+import { pageMutators } from "@repo/data";
+import { createPageRep } from "@repo/data/browser";
 import { useCurrentUser } from "./use-current-user";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useAppStore } from "@/store/store";

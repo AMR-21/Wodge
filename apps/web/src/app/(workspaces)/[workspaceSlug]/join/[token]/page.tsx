@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { invites, memberships, users, workspaces } from "@repo/data";
-import { createDb } from "@repo/data/server";
+import { createDb } from "@/lib/data-server";
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { AcceptButton } from "./accept-button";

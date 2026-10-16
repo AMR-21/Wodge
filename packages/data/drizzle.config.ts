@@ -1,7 +1,7 @@
-import type { Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
-export default {
+export default defineConfig({
   schema: ["./schemas/auth.schema.ts", "./schemas/workspace.schema.ts"],
   out: "./migrations",
-  driver: "d1",
-} satisfies Config;
+  dialect: "sqlite",
+});

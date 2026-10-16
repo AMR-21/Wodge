@@ -10,11 +10,13 @@ Wodge is a local-first collaborative workspace for team conversations, shared pa
 | [Develop Wodge](development/README.md) | Start locally and find architecture, design, specifications, and testing guidance. |
 | [Operate Wodge](operations/README.md) | Find environment, deployment, debugging, and maintenance guidance. |
 
-The revival is work in progress. Feature specifications describe intended behavior, not verified user guides. Consult the [baseline and known failures](development/baseline.md) for recorded checks and the [execution project](https://linear.app/amr21/project/wodge-revival-and-enhancements-ee86a6345a5d) for delivery work.
+Only [AMR21 / Wodge Revival & Enhancements](https://linear.app/amr21/project/wodge-revival-and-enhancements-ee86a6345a5d) governs active delivery. The [current project scope](development/documentation.md) distinguishes retained behavior, necessary migrations, and deferred work.
+
+Retain the existing Next.js/Tailwind/Radix application and product behavior. Backend PartyServer/Better Auth/D1 and minimal member-controlled MCP are current migration goals. Calls and hosted generation are to be disabled; broader framework/tooling/UI redesign and call restoration are deferred. See the [backend foundation record](development/backend-foundation.md) and [baseline](development/baseline.md) for actual observations and limits.
 
 ## Features
 
-Browse the requirements and designs behind each capability. These are engineering references; a verified revival walkthrough is not yet documented here.
+Browse the current portfolio scope and retained UI for each capability. Specifications describe intended behavior; they are not proof of integrated acceptance or deployment.
 
 | Feature | Requirements | Design | Delivery approach |
 | --- | --- | --- | --- |
@@ -32,8 +34,8 @@ Browse the requirements and designs behind each capability. These are engineerin
 - [Architecture and data](architecture/README.md)
 - [Shared design](design/README.md)
 - [Engineering decisions](decisions/README.md)
-- [Documentation workflow and historical evidence](development/documentation.md)
+- [Documentation workflow and historical evidence](development/documentation-workflow.md)
 
 Detailed implementation, deployment, and maintenance work stays in Linear.
 
-Read these pages directly in GitHub. To propose an edit, use the page’s pencil button and the repository review process; see the [documentation workflow](development/documentation.md).
+Read these pages directly in GitHub. To propose an edit, use the page’s pencil button and the repository review process; see the [documentation workflow](development/documentation-workflow.md).

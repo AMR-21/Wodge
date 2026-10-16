@@ -12,7 +12,7 @@ Begin with local setup and the recorded baseline. Use the engineering references
 | [Code Structure & Design](code-structure.md) | Package boundaries, dependency direction, and code organization. |
 | [Development and delivery workflow](workflow.md) | The delivery workflow, approvals, and execution tracking. |
 | [Testing Strategy](testing-strategy.md) | Testing strategy and evidence needed to validate the revival. |
-| [Documentation workflow](documentation.md) | How to read, edit, review, and maintain the repository docs. |
+| [Documentation workflow](documentation-workflow.md) | How to read, edit, review, and maintain the repository docs. |
 
 ## Understand the system
 
@@ -27,3 +27,8 @@ Begin with local setup and the recorded baseline. Use the engineering references
 
 - [Security evidence](security-evidence.md) — recorded security findings and verification limits.
 - [Documentation migration history](documentation-history.md) — source provenance, approvals, coverage, and earlier integration inspections.
+
+## Current scope and foundation
+
+- [Project scope and authority](documentation.md) — the current portfolio milestone and approval boundary.
+- [Backend foundation](backend-foundation.md) — implementation observations and validation limits.
