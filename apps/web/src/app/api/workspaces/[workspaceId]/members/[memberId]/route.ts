@@ -1,4 +1,4 @@
-import { removeMember } from "@repo/data/server";
+import { removeMember } from "@/lib/data-server";
 import { isWorkspaceAdmin } from "../../../is-workspace-admin";
 
 export async function DELETE(

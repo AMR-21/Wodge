@@ -1,6 +1,6 @@
 import { sign } from "@/lib/utils/sign";
 import { Workspace, WorkspaceSchema } from "@repo/data";
-import { updateWorkspaceById } from "@repo/data/server";
+import { updateWorkspaceById } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { isWorkspaceAdmin } from "../../is-workspace-admin";
 

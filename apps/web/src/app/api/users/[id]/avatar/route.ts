@@ -1,10 +1,7 @@
 import { sign } from "@/lib/utils/sign";
-import {
-  getAvatarAddress,
-  makeUserAvatarKey,
-  makeWorkspaceAvatarKey,
-} from "@repo/data";
-import { updateUserById, updateWorkspaceById } from "@repo/data/server";
+import { makeUserAvatarKey, makeWorkspaceAvatarKey } from "@repo/data";
+import { getAvatarAddress } from "@repo/data/browser";
+import { updateUserById, updateWorkspaceById } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { redirect } from "next/navigation";
 

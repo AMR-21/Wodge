@@ -14,14 +14,12 @@
     "add:comp": "turbo add:comp",
     "reset:app": "rm -r ./apps/web/.wrangler && rm -r ./apps/backend/.partykit",
     "init:app": "pnpm generate && pnpm migrate:local && mkdir -p ./apps/backend/.partykit",
-    "pull:secrets:dev": "infisical export > ./apps/web/.env --path=/web --env=dev && infisical export > ./apps/web/.dev.vars --path=/web --env=dev && infisical export > ./apps/backend/.env --path=/web --env=dev",
-    "pull:secrets:prod": "infisical export > ./apps/web/.env --path=/web --env=prod && infisical export > ./apps/web/.dev.vars --path=/web --env=prod && infisical export > ./apps/backend/.env --path=/web --env=prod",
     "livekit": "livekit-server --dev --bind 0.0.0.0",
-    "deploy:app": "pnpm pull:secrets:prod && turbo deploy:app && pnpm pull:secrets:dev"
+    "deploy:app": "turbo deploy:app"
   },
   "devDependencies": {
     "@repo/ts": "workspace:*",
-    "eslint": "latest",
+    "eslint": "8.56.0",
     "eslint-config-turbo": "^2.0.0",
     "tsx": "^4.7.1",
     "turbo": "^2.0.6",
@@ -31,7 +29,7 @@
   },
   "license": "AGPL-3.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=22.19.0"
   },
   "packageManager": "pnpm@9.4.0"
 }

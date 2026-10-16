@@ -7,7 +7,7 @@ import {
 } from "replicache";
 
 import { env } from "@repo/env";
-import { replicacheWrapper } from "@repo/data";
+import { replicacheWrapper } from "@repo/data/browser";
 import { workspaceMutators } from "@repo/data/models/workspace/workspace-mutators";
 
 export function createWorkspaceRep(userId: string, workspaceId: string) {

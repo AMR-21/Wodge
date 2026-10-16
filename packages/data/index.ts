@@ -2,7 +2,7 @@
  * Client modules
  */
 
-import { DeepReadonlyObject } from "replicache";
+import type { DeepReadonlyObject } from "replicache";
 
 /**
  * End of client modules
@@ -59,9 +59,6 @@ export type DrObj<T> = DeepReadonlyObject<T>;
  */
 
 export * from "./models/workspace/workspace-shared-model";
-export * from "./models/room/room-mutators";
-export * from "./models/thread/thread-mutators";
+export type * from "./models/room/room-mutators";
+export type * from "./models/thread/thread-mutators";
 export * from "./models/page/page-mutators";
-export * from "./models/room/create-room-rep";
-export * from "./models/thread/create-thread-rep";
-export * from "./models/page/create-page-rep";

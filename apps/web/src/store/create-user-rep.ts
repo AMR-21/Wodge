@@ -7,7 +7,7 @@ import {
 } from "replicache";
 
 import { env } from "@repo/env";
-import { replicacheWrapper } from "@repo/data";
+import { replicacheWrapper } from "@repo/data/browser";
 import { userMutators } from "@repo/data/models/user/user-mutators";
 
 import { useAppStore } from "./store";

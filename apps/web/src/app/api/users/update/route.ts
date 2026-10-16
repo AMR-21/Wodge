@@ -1,7 +1,7 @@
 import { currentUser } from "@/lib/supabase/current-user";
 import { sign } from "@/lib/utils/sign";
 import { UpdateUserSchema } from "@repo/data";
-import { updateUserById } from "@repo/data/server";
+import { updateUserById } from "@/lib/data-server";
 import { env } from "@repo/env";
 import { NextRequest } from "next/server";
 

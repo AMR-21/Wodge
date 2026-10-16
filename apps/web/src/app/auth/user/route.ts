@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getUserById } from "@repo/data/server";
+import { getUserById } from "@/lib/data-server";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

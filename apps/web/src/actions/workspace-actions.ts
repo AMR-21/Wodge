@@ -8,7 +8,7 @@ import {
   workspaces,
   WorkspaceSchema,
 } from "@repo/data";
-import { createDb } from "@repo/data/server";
+import { createDb } from "@/lib/data-server";
 import { eq } from "drizzle-orm";
 import "server-only";
 

@@ -1,9 +1,9 @@
 import {
   Thread,
   ThreadMessage as ThreadMessageType,
-  threadMutators,
   ThreadPost,
 } from "@repo/data";
+import { threadMutators } from "@repo/data/browser";
 import { memo, useEffect } from "react";
 import { ReadTransaction, Replicache } from "replicache";
 import { useSubscribe } from "@/hooks/use-subscribe";

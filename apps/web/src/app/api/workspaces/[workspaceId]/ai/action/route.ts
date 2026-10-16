@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { openai } from "@ai-sdk/openai";
 
 import { generateText, streamText } from "ai";
-import { createDb } from "@repo/data/server";
+import { createDb } from "@/lib/data-server";
 import { AiActionSchema, memberships, workspaces } from "@repo/data";
 import { and, eq } from "drizzle-orm";
 

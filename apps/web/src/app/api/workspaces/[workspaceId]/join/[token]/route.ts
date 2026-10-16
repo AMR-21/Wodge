@@ -4,7 +4,7 @@ import {
   addWorkspaceMember,
   createDb,
   updateWorkspaceById,
-} from "@repo/data/server";
+} from "@/lib/data-server";
 import { env } from "@repo/env";
 import { and, eq } from "drizzle-orm";
 

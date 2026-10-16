@@ -8,7 +8,8 @@ import {
 } from "replicache";
 
 import { env } from "@repo/env";
-import { ChannelsTypes, replicacheWrapper } from "@repo/data";
+import { ChannelsTypes } from "@repo/data";
+import { replicacheWrapper } from "@repo/data/browser";
 
 export interface CreateChannelArgs {
   userId: string;

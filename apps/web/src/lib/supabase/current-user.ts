@@ -1,4 +1,4 @@
-import { getUserById } from "@repo/data/server";
+import { getUserById } from "@/lib/data-server";
 import { createClient } from "./server";
 
 export async function currentUser() {

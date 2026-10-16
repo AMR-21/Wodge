@@ -5,8 +5,8 @@ import {
   PushRequest,
   Replicache,
 } from "replicache";
-import { env } from "@repo/env";
-import { replicacheWrapper } from "../../lib/utils";
+import { env } from "@repo/env/client";
+import { replicacheWrapper } from "../../lib/browser-utils";
 import { pageMutators } from "./page-mutators";
 
 export function createPageRep({
@@ -37,7 +37,7 @@ export function createPageRep({
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
         "x-folder-id": folderId,
-      }
+      },
     ),
     pusher: replicacheWrapper<PushRequest, PusherResult>(
       "push",
@@ -47,7 +47,7 @@ export function createPageRep({
         "x-workspace-id": workspaceId,
         "x-team-id": teamId,
         "x-folder-id": folderId,
-      }
+      },
     ),
   });
 }
