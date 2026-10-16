@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 // This temporary as partykit does not support bindings yet
 
 import { sign } from "@/lib/utils/sign";
@@ -8,6 +9,9 @@ export async function POST(
   req: Request,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response(null, { status: 401 });

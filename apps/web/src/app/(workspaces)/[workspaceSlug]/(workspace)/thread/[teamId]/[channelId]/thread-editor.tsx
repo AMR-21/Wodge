@@ -1,3 +1,4 @@
+import { FeatureGate } from "@/components/feature-flags-provider";
 import { SidebarItemBtn } from "@/app/(workspaces)/[workspaceSlug]/(workspace)/_components/sidebar-item-btn";
 import { SafeAvatar } from "@/components/safe-avatar";
 import { Button } from "@/components/ui/button";
@@ -104,27 +105,31 @@ export function ThreadEditor({
             <OfflineEditor editor={editor} isThread className="w-full" />
           </div>
           <div className="ml-0.5 flex items-center py-1.5 pl-8">
-            <SidebarItemBtn
-              className="p-1.5"
-              Icon={Image}
-              iconClassName="w-4 h-4 "
-              onClick={() => {
-                editor?.commands.setImageUpload();
-              }}
-            />
+            <FeatureGate feature="attachments">
+              <SidebarItemBtn
+                className="p-1.5"
+                Icon={Image}
+                iconClassName="w-4 h-4 "
+                onClick={() => {
+                  editor?.commands.setImageUpload();
+                }}
+              />
+            </FeatureGate>
             {!isQA && (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <SidebarItemBtn
-                    className="p-1.5"
-                    Icon={Vote}
-                    iconClassName="w-4 h-4"
-                  />
-                </DialogTrigger>
-                <DialogContent>
-                  <PollMaker isRoom={false} />
-                </DialogContent>
-              </Dialog>
+              <FeatureGate feature="polls">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <SidebarItemBtn
+                      className="p-1.5"
+                      Icon={Vote}
+                      iconClassName="w-4 h-4"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <PollMaker isRoom={false} />
+                  </DialogContent>
+                </Dialog>
+              </FeatureGate>
             )}
             <SubmitButton
               isEmpty={editor?.isEmpty}

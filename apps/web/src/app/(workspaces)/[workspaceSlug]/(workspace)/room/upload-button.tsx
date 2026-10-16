@@ -1,5 +1,10 @@
 "use client";
 
+import type { ComponentProps } from "react";
+
+
+import { FeatureGate } from "@/components/feature-flags-provider";
+
 import {
   Popover,
   PopoverContent,
@@ -23,7 +28,7 @@ import Audio from "@uppy/audio";
 import { toast } from "sonner";
 import { useUploadToken } from "../../use-upload-token";
 
-export function UploadButton({
+function UploadButtonContent({
   workspaceId,
   channelId,
   teamId,
@@ -133,5 +138,15 @@ export function UploadButton({
         />
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function UploadButton(
+  props: ComponentProps<typeof UploadButtonContent>,
+) {
+  return (
+    <FeatureGate feature="attachments">
+      <UploadButtonContent {...props} />
+    </FeatureGate>
   );
 }

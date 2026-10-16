@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { removeMember } from "@repo/data/server";
 import { isWorkspaceAdmin } from "../../../is-workspace-admin";
 
@@ -7,6 +8,9 @@ export async function DELETE(
     params: { workspaceId, memberId },
   }: { params: { workspaceId: string; memberId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) {

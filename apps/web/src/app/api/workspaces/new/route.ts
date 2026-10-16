@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import { Workspace, workspaces, WorkspaceSchema } from "@repo/data";
 import { createDb, createWorkspace } from "@repo/data/server";
@@ -5,6 +6,9 @@ import { env } from "@repo/env";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const rawWorkspace = (await req.json()) as Workspace;
   const userId = req.headers.get("x-user-id");
 

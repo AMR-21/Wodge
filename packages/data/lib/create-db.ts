@@ -1,3 +1,4 @@
+import { featureFlags } from "../schemas/feature-flag.schema";
 import { drizzle } from "drizzle-orm/d1";
 import * as authSchema from "../schemas/auth.schema";
 import { workspaces, memberships } from "../schemas/workspace.schema";
@@ -7,6 +8,6 @@ export function createDb() {
   const { env } = getRequestContext();
 
   return drizzle(env.DB, {
-    schema: { ...authSchema, workspaces, memberships },
+    schema: { ...authSchema, workspaces, memberships, featureFlags },
   });
 }

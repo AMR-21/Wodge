@@ -1,3 +1,4 @@
+import { FeatureGate } from "@/components/feature-flags-provider";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -71,12 +72,14 @@ export function TeamThreadsMore({ teamId }: TeamMoreProps) {
 
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link href={`/${workspaceSlug}/settings/teams/${teamId}`}>
-              <DropdownMenuItem className="gap-2 text-sm">
-                <Settings className="h-4 w-4" />
-                Team settings
-              </DropdownMenuItem>
-            </Link>
+            <FeatureGate feature="teamManagement">
+              <Link href={`/${workspaceSlug}/settings/teams/${teamId}`}>
+                <DropdownMenuItem className="gap-2 text-sm">
+                  <Settings className="h-4 w-4" />
+                  Team settings
+                </DropdownMenuItem>
+              </Link>
+            </FeatureGate>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

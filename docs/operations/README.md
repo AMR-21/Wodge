@@ -26,5 +26,6 @@ Explore runtime topology, deployment gates, rollout coordination, observability,
     <tr><td><i class="fa-list-check"></i></td><td><strong>Revival deployment coordination</strong></td><td>Additional deployment coordination for the revival.</td><td><a href="runbooks/revival-deployment.md">Revival deployment coordination</a></td></tr>
     <tr><td><i class="fa-chart-line"></i></td><td><strong>Observability</strong></td><td>Operational visibility, diagnostics, and observability gaps.</td><td><a href="observability.md">Observability</a></td></tr>
     <tr><td><i class="fa-screwdriver-wrench"></i></td><td><strong>Maintenance and feedback</strong></td><td>Maintenance expectations and the feedback process.</td><td><a href="maintenance.md">Maintenance and feedback</a></td></tr>
+    <tr><td><i class="fa-toggle-on"></i></td><td><strong>Feature flags</strong></td><td>Capability coverage, database edits, propagation, and recovery.</td><td><a href="runbooks/feature-flags.md">Feature flags</a></td></tr>
   </tbody>
 </table>

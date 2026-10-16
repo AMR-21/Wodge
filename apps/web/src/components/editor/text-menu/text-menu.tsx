@@ -1,3 +1,4 @@
+import { useFeatureFlags } from "@/components/feature-flags-provider";
 import { useTextMenuCommands } from "./use-text-menu-commands";
 import { useTextMenuStates } from "./use-text-menu-states";
 import { BubbleMenu, Editor } from "@tiptap/react";
@@ -45,6 +46,7 @@ export type TextMenuProps = {
 };
 
 export const TextMenu = ({ editor }: TextMenuProps) => {
+  const flags = useFeatureFlags();
   const commands = useTextMenuCommands(editor);
   const states = useTextMenuStates(editor);
   const blockOptions = useTextMenuContentTypes(editor);
@@ -63,7 +65,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
       className="z-50"
     >
       <Toolbar.Wrapper>
-        {workspace?.isPremium && (
+        {flags.hostedGeneration && workspace?.isPremium && (
           <>
             <AIDropdown
               onCompleteSentence={commands.onCompleteSentence}

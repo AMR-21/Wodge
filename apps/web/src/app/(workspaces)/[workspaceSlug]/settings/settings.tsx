@@ -1,5 +1,9 @@
 "use client";
 
+import { useFeatureFlags } from "@/components/feature-flags-provider";
+import { pageFeatures } from "@repo/data/feature-policy";
+import { disabledFeature } from "@repo/data/feature-flags";
+
 import { SidebarItem } from "../(workspace)/_components/sidebar-item";
 
 import {
@@ -52,10 +56,19 @@ function SettingsSidebarItem({
   href?: string;
   isDefault?: boolean;
 }) {
+  const flags = useFeatureFlags();
   const { workspaceSlug } = useCurrentWorkspace();
   const curPage = usePathname().split("/").at(3);
   const isActive = curPage === label || (isDefault && !curPage);
   const isDesktop = useIsDesktop();
+
+  if (
+    disabledFeature(
+      flags,
+      pageFeatures(`/${workspaceSlug}/settings${href || `/${label}`}`),
+    )
+  )
+    return null;
 
   const jsx = (
     <SidebarItem
@@ -78,12 +91,18 @@ function SettingsSidebarCollapsibleItem({
   children,
   actionIcon,
 }: SettingsCollapsibleItemProps) {
+  const flags = useFeatureFlags();
   const { workspaceSlug } = useCurrentWorkspace();
   const curPage = usePathname().split("/").at(3);
   const [open, setOpen] = useState(curPage === label);
   const isActive = curPage === label;
 
   const isDesktop = useIsDesktop();
+
+  if (
+    disabledFeature(flags, pageFeatures(`/${workspaceSlug}/settings/${label}`))
+  )
+    return null;
 
   const actionBtn = (
     <SidebarItemBtn

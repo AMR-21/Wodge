@@ -1,3 +1,6 @@
+import { readFeatureFlags } from "@/lib/feature-flags";
+import { featureDisabledResponse } from "@repo/data/feature-flags";
+import { getUserById } from "@repo/data/server";
 import { currentUser } from "@/lib/supabase/current-user";
 import { sign } from "@/lib/utils/sign";
 import { UpdateUserSchema } from "@repo/data";
@@ -12,6 +15,12 @@ export async function POST(req: NextRequest) {
 
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
+  }
+
+  // Initial profile completion is required to leave onboarding and stays recoverable.
+  const existingUser = await getUserById(userId);
+  if (existingUser?.username && !(await readFeatureFlags()).flags.profiles) {
+    return featureDisabledResponse("profiles");
   }
 
   const body = await req.json();

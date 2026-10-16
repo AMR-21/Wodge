@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 // This temporary as partykit does not support bindings yet
 
 import { deleteWorkspace, removeMember } from "@repo/data/server";
@@ -9,6 +10,9 @@ export async function DELETE(
   req: Request,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response(null, { status: 401 });

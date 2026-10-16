@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { invites, workspaces } from "@repo/data";
 import { createDb } from "@repo/data/server";
 import { env } from "@repo/env";
@@ -12,6 +13,9 @@ export async function POST(
     params: { workspaceId },
   }: { params: { workspaceId: string; token: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const db = createDb();
 
   const userId = req.headers.get("x-user-id");
@@ -42,6 +46,9 @@ export async function PATCH(
   req: NextRequest,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const db = createDb();
 
   const userId = req.headers.get("x-user-id");
@@ -68,6 +75,9 @@ export async function GET(
   req: NextRequest,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const db = createDb();
 
   const userId = req.headers.get("x-user-id");

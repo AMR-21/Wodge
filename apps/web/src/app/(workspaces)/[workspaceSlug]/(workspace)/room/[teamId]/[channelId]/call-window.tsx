@@ -1,5 +1,7 @@
 "use client";
 
+import { useFeatureFlags } from "@/components/feature-flags-provider";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { useChannelPath } from "@/hooks/use-channel-path";
@@ -55,6 +57,7 @@ import { MediaDeviceList } from "./media-device-list";
 import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
 
 export const CallWindow = memo(({}) => {
+  const flags = useFeatureFlags();
   const room = useAtomValue(roomAtom);
   const [isConnecting, setIsConnecting] = useState(false);
 
@@ -84,6 +87,8 @@ export const CallWindow = memo(({}) => {
     return () =>
       document.documentElement.removeEventListener("fullscreenchange", toggle);
   }, []);
+
+  if (!room && (!flags.calls || !flags.messaging)) return null;
 
   if (!room)
     return (

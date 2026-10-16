@@ -1,3 +1,4 @@
+import { gatePartyRequest, partyFlagReader } from "../lib/feature-flags";
 import type * as Party from "partykit/server";
 import { getRoute, notImplemented, ok, unauthorized } from "../lib/http-utils";
 
@@ -39,14 +40,18 @@ export default class WorkspaceParty
 
   app: Hono = new Hono().basePath("/parties/workspace/:workspaceId");
 
-  constructor(readonly room: Party.Room) {}
+  private readFlags: ReturnType<typeof partyFlagReader>;
+
+  constructor(readonly room: Party.Room) {
+    this.readFlags = partyFlagReader(room.env);
+  }
 
   async onStart() {
     this.app.use(
       cors({
         origin: "*",
         allowHeaders: ["x-file-path", "x-user-id"],
-      })
+      }),
     );
 
     // Authenticated users routes from the edge
@@ -65,6 +70,8 @@ export default class WorkspaceParty
   }
 
   async onRequest(req: Party.Request) {
+    const denied = await gatePartyRequest(req, "workspace", this.readFlags);
+    if (denied) return denied;
     const route = getRoute(req);
 
     const userId = req.headers.get("x-user-id");
@@ -122,7 +129,7 @@ export default class WorkspaceParty
   async poke(
     { type, id, userId, teamId }: WorkspacePokeProps = {
       type: "workspace",
-    }
+    },
   ) {
     const userParty = this.room.context.parties.user!;
 
@@ -153,7 +160,7 @@ export default class WorkspaceParty
             teamId,
           }),
         });
-      })
+      }),
     );
   }
 }
