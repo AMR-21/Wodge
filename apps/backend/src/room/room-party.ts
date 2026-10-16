@@ -1,3 +1,4 @@
+import { gatePartyRequest, partyFlagReader } from "../lib/feature-flags";
 import type * as Party from "partykit/server";
 
 import { ok, unauthorized } from "../lib/http-utils";
@@ -20,13 +21,17 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
 
   app: Hono = new Hono().basePath("/parties/room/:roomId");
 
-  constructor(readonly room: Party.Room) {}
+  readonly readFlags: ReturnType<typeof partyFlagReader>;
+
+  constructor(readonly room: Party.Room) {
+    this.readFlags = partyFlagReader(room.env);
+  }
 
   async onStart() {
     this.app.use(
       cors({
         origin: "*",
-      })
+      }),
     );
     this.app.post("/replicache-push", roomPush.bind(null, this));
     this.app.post("/replicache-pull", roomPull.bind(null, this));
@@ -37,6 +42,17 @@ export default class RoomParty implements Party.Server, RoomPartyInterface {
   }
 
   async onRequest(req: Party.Request) {
+    const denied = await gatePartyRequest(
+      req,
+      "room",
+      this.readFlags,
+      (mutation) => {
+        const args = mutation.args;
+        const id = args?.id ?? args?.msgId ?? args?.postId ?? args?.message?.id;
+        return this.messages.data.find((item) => item.id === id)?.type;
+      },
+    );
+    if (denied) return denied;
     //@ts-ignore
     return this.app.fetch(req);
   }

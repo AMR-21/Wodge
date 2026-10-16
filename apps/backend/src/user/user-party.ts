@@ -1,3 +1,4 @@
+import { gatePartyRequest, partyFlagReader } from "../lib/feature-flags";
 /**
  * The purpose of this class to localize the user data
  * and keep it in sync
@@ -35,14 +36,18 @@ export default class UserParty implements Party.Server, UserPartyInterface {
   versions: Versions;
   app: Hono = new Hono().basePath("/parties/user/:userId");
 
-  constructor(readonly room: Party.Room) {}
+  private readFlags: ReturnType<typeof partyFlagReader>;
+
+  constructor(readonly room: Party.Room) {
+    this.readFlags = partyFlagReader(room.env);
+  }
 
   async onStart() {
     this.app.use(
       cors({
         origin: "*",
         allowHeaders: ["x-file-path", "x-user-id"],
-      })
+      }),
     );
 
     this.app.post("/replicache-pull", userPull.bind(null, this));
@@ -54,7 +59,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
 
     this.app.post(
       "/service/remove-workspace",
-      removeWorkspace.bind(null, this)
+      removeWorkspace.bind(null, this),
     );
 
     this.app.post("/service/poke", poke.bind(null, this));
@@ -76,7 +81,7 @@ export default class UserParty implements Party.Server, UserPartyInterface {
       JSON.stringify({
         type: "welcome",
         msg: "Welcome to the party!",
-      })
+      }),
     );
   }
 
@@ -135,14 +140,16 @@ export default class UserParty implements Party.Server, UserPartyInterface {
                 userId: this.room.id,
                 connect: connecting,
               }),
-            })
-          )
+            }),
+          ),
         );
       } catch {}
     }
   }
 
   async onRequest(req: Party.Request) {
+    const denied = await gatePartyRequest(req, "user", this.readFlags);
+    if (denied) return denied;
     // console.log(req.url);
     //@ts-ignore
     return this.app.fetch(req);

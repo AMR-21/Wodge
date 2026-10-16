@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import { Workspace, WorkspaceSchema } from "@repo/data";
 import { updateWorkspaceById } from "@repo/data/server";
@@ -8,6 +9,9 @@ export async function POST(
   req: Request,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response(null, { status: 401 });

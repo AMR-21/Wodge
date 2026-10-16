@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import { getUserById } from "@repo/data/server";
 import { env } from "@repo/env";
@@ -7,6 +8,9 @@ export async function GET(
   req: Request,
   { params: { channelId } }: { params: { channelId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });

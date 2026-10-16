@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import { getAvatarAddress, makeWorkspaceAvatarKey } from "@repo/data";
 import { updateUserById, updateWorkspaceById } from "@repo/data/server";
@@ -9,6 +10,9 @@ export async function POST(
   req: Request,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   const key = req.headers.get("key");
@@ -31,6 +35,9 @@ export async function DELETE(
   req: Request,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) {

@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { memberships } from "@repo/data";
 import { createDb, getUserInfoById } from "@repo/data/server";
 import { and, eq } from "drizzle-orm";
@@ -6,6 +7,9 @@ export async function GET(
   req: Request,
   { params }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   // Check if workspace member
   const { workspaceId } = params;
   const userId = req.headers.get("x-user-id");

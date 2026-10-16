@@ -103,6 +103,7 @@ No standalone prototype asset was found in the inspected sources. Written UX and
 - [CI/CD and approval gates](operations/ci-cd.md)
 - [Observability](operations/observability.md)
 - [Release policy and open release decisions](operations/release-policy.md)
+- [Database-controlled feature flags](operations/runbooks/feature-flags.md)
 - [Shared revival deployment coordination](operations/runbooks/revival-deployment.md)
 - [Maintenance and feedback](operations/maintenance.md)
 

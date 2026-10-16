@@ -1,3 +1,4 @@
+import { FeatureFlags } from "@repo/data/feature-flags";
 import type * as Party from "partykit/server";
 import { PatcherParams, repPull } from "../lib/replicache";
 import { PatchOperation } from "replicache";
@@ -19,21 +20,25 @@ export async function roomPull(party: RoomParty, c: Context) {
     req: c.req,
     storage: party.room.storage,
     versions: party.versions,
-    patcher: patcher(party, userId),
+    patcher: patcher(party, userId, (await party.readFlags()).flags),
   });
 }
 
-function patcher(party: RoomParty, userId: string) {
+function patcher(party: RoomParty, userId: string, flags: FeatureFlags) {
   return async function ({ fromVersion }: PatcherParams) {
     const patch: PatchOperation[] = [];
 
-    if (party.messages.lastModifiedVersion > fromVersion) {
-      patch.push({
-        op: "put",
-        key: "messages",
-        value: party.messages.data,
-      });
-    }
+    // Always replace this collection: flags may change without a data version change.
+    patch.push({
+      op: "put",
+      key: "messages",
+      value: party.messages.data.filter(
+        (item) =>
+          (flags.polls || item.type !== "poll") &&
+          (flags.attachments ||
+            !["image", "audio", "video", "file"].includes(item.type)),
+      ),
+    });
 
     return patch;
   };

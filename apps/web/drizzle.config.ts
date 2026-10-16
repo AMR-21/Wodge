@@ -7,6 +7,7 @@ const baseConfig: Partial<Config> = {
   schema: [
     "./node_modules/@repo/data/schemas/auth.schema.ts",
     "./node_modules/@repo/data/schemas/workspace.schema.ts",
+    "./node_modules/@repo/data/schemas/feature-flag.schema.ts",
   ],
   out: "./node_modules/@repo/data/migrations",
 };

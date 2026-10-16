@@ -1,3 +1,5 @@
+import { useFeatureFlags } from "@/components/feature-flags-provider";
+import { CHANNEL_FEATURES } from "@repo/data/feature-policy";
 import { DrObj, Page, Room, Thread } from "@repo/data";
 import { format } from "date-fns";
 import { useSetAtom } from "jotai";
@@ -15,6 +17,7 @@ import { useCurrentWorkspace } from "@/components/workspace-provider";
 import { RecentlyVisitedItem } from "@/store/global-atoms";
 
 export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
+  const flags = useFeatureFlags();
   let Icon;
   let channel;
   let folder;
@@ -55,6 +58,8 @@ export function RecentItem({ item }: { item: RecentlyVisitedItem }) {
     default:
       Icon = NotebookText;
   }
+
+  if (!flags[CHANNEL_FEATURES[item.type]]) return null;
 
   return (
     <Link

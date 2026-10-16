@@ -1,3 +1,4 @@
+import { FeatureGate } from "@/components/feature-flags-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ID_LENGTH, NewWorkspaceSchema, type NewWorkspace } from "@repo/data";
 import { env } from "@repo/env";
@@ -20,7 +21,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { toast } from "@/components/ui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function CreateWorkspaceForm() {
+function CreateWorkspaceFormContent() {
   const { user } = useCurrentUser();
   const router = useRouter();
 
@@ -108,5 +109,13 @@ export function CreateWorkspaceForm() {
         </div>
       </form>
     </Form>
+  );
+}
+
+export function CreateWorkspaceForm() {
+  return (
+    <FeatureGate feature="workspaceCreation">
+      <CreateWorkspaceFormContent />
+    </FeatureGate>
   );
 }

@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { NextRequest } from "next/server";
 import { env } from "@repo/env";
 import { getStripe } from "@/lib/utils/get-stripe";
@@ -9,6 +10,9 @@ export async function GET(
   request: NextRequest,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(request);
+  if (denied) return denied;
+
   const supabase = createClient();
 
   const user = await supabase.auth.getUser();

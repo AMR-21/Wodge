@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import {
   getAvatarAddress,
@@ -12,6 +13,9 @@ export async function POST(
   req: Request,
   { params: { id } }: { params: { id: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   const key = req.headers.get("key");
@@ -31,6 +35,9 @@ export async function DELETE(
   req: Request,
   { params: { id } }: { params: { id: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId || userId !== id) {

@@ -1,3 +1,4 @@
+import { FeatureGate } from "@/components/feature-flags-provider";
 import OfflineEditor from "@/components/editor/block-editor/offline-editor";
 import { UploadButton } from "../../upload-button";
 import { SidebarItemBtn } from "../../../_components/sidebar-item-btn";
@@ -73,18 +74,20 @@ export function MessageEditor({
             teamId={teamId}
             rep={rep}
           />
-          <Dialog>
-            <DialogTrigger asChild>
-              <SidebarItemBtn
-                className="ml-0.5 mr-2"
-                Icon={Vote}
-                iconClassName="w-4 h-4"
-              />
-            </DialogTrigger>
-            <DialogContent>
-              <PollMaker isRoom />
-            </DialogContent>
-          </Dialog>
+          <FeatureGate feature="polls">
+            <Dialog>
+              <DialogTrigger asChild>
+                <SidebarItemBtn
+                  className="ml-0.5 mr-2"
+                  Icon={Vote}
+                  iconClassName="w-4 h-4"
+                />
+              </DialogTrigger>
+              <DialogContent>
+                <PollMaker isRoom />
+              </DialogContent>
+            </Dialog>
+          </FeatureGate>
           <div
             className="flex  w-full items-center overflow-hidden"
             onKeyDown={(e) => {

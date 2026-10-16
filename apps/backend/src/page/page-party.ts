@@ -1,3 +1,5 @@
+import { gatePageConnection } from "../lib/feature-connection";
+import { gatePartyRequest, partyFlagReader } from "../lib/feature-flags";
 /**
  * The purpose of this class to localize the user data
  * and keep it in sync
@@ -25,7 +27,11 @@ export default class PageParty implements Party.Server, PagePartyInterface {
 
   app: Hono = new Hono().basePath("/parties/page/:pageId");
 
-  constructor(readonly room: Party.Room) {}
+  private readFlags: ReturnType<typeof partyFlagReader>;
+
+  constructor(readonly room: Party.Room) {
+    this.readFlags = partyFlagReader(room.env);
+  }
 
   async onStart() {
     this.app.post("/replicache-pull", pagePull.bind(null, this));
@@ -41,22 +47,34 @@ export default class PageParty implements Party.Server, PagePartyInterface {
       ctx.request.headers.get("x-admin") === "true" ||
       ctx.request.headers.get("x-team-moderator") === "true";
 
-    return await onConnect(conn, this.room, {
-      // ...options
+    const denied = await gatePartyRequest(ctx.request, "page", this.readFlags);
+    if (denied) {
+      conn.send(JSON.stringify({ error: "FeatureDisabled", feature: "pages" }));
+      return;
+    }
 
-      readOnly: !canEdit,
-      persist: {
-        mode: "snapshot",
+    return await onConnect(
+      gatePageConnection(conn, this.readFlags),
+      this.room,
+      {
+        // ...options
+
+        readOnly: !canEdit,
+        persist: {
+          mode: "snapshot",
+        },
+        // callback: {
+        //   async handler(yDoc) {
+        //     // console.log("a callback @", new Date().toISOString());
+        //   },
+        // },
       },
-      // callback: {
-      //   async handler(yDoc) {
-      //     // console.log("a callback @", new Date().toISOString());
-      //   },
-      // },
-    });
+    );
   }
 
   async onRequest(req: Party.Request) {
+    const denied = await gatePartyRequest(req, "page", this.readFlags);
+    if (denied) return denied;
     //@ts-ignore
     return this.app.fetch(req);
   }
@@ -66,6 +84,13 @@ export default class PageParty implements Party.Server, PagePartyInterface {
     if (req.method === "OPTIONS") {
       return ok();
     }
+
+    const denied = await gatePartyRequest(
+      req,
+      "page",
+      partyFlagReader(lobby.env),
+    );
+    if (denied) return denied;
 
     try {
       const payload = await verifyToken(req, lobby);
@@ -89,7 +114,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
           folderId: string;
           teamId: string;
           workspaceId: string;
-        }
+        },
       );
     } catch (e) {
       return unauthorized();
@@ -125,7 +150,7 @@ export default class PageParty implements Party.Server, PagePartyInterface {
           folderId: string;
           teamId: string;
           workspaceId: string;
-        }
+        },
       );
     } catch (e) {
       return unauthorized();

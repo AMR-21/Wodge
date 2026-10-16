@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { NextRequest } from "next/server";
 import { openai } from "@ai-sdk/openai";
 
@@ -62,6 +63,9 @@ export async function POST(
   req: NextRequest,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) {

@@ -65,3 +65,5 @@ export * from "./models/page/page-mutators";
 export * from "./models/room/create-room-rep";
 export * from "./models/thread/create-thread-rep";
 export * from "./models/page/create-page-rep";
+
+export * from "./schemas/feature-flag.schema";

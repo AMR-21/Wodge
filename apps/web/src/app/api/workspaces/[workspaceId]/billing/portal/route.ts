@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { NextRequest, NextResponse } from "next/server";
 import { env } from "@repo/env";
 import { getStripe } from "@/lib/utils/get-stripe";
@@ -8,6 +9,9 @@ export async function GET(
   request: NextRequest,
   { params: { workspaceId } }: { params: { workspaceId: string } },
 ) {
+  const denied = await gateHttpFeature(request);
+  if (denied) return denied;
+
   const userId = request.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });

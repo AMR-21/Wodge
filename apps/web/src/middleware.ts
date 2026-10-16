@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "./lib/feature-flags";
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 import { createDb, getUserById } from "@repo/data/server";
@@ -12,6 +13,17 @@ import {
 export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
+
+  if (isApiRoute) {
+    const denied = await gateHttpFeature(request);
+    if (denied) return denied;
+  }
+  if (
+    ["/api/feature-flags", "/api/internal/feature-flags"].includes(
+      nextUrl.pathname,
+    )
+  )
+    return NextResponse.next();
 
   // order matters here
 

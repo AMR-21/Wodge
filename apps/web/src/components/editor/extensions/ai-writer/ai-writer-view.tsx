@@ -1,3 +1,4 @@
+import { FeatureGate } from "@/components/feature-flags-provider";
 import { NodeViewWrapper, NodeViewWrapperProps } from "@tiptap/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useCurrentWorkspace } from "@/components/workspace-provider";
@@ -21,7 +22,7 @@ export interface DataProps {
   language?: string;
 }
 
-export const AiWriterView = ({
+const AiWriterViewContent = ({
   editor,
   node,
   getPos,
@@ -157,3 +158,9 @@ export const AiWriterView = ({
     </NodeViewWrapper>
   );
 };
+
+export const AiWriterView = (props: NodeViewWrapperProps) => (
+  <FeatureGate feature="hostedGeneration">
+    <AiWriterViewContent {...props} />
+  </FeatureGate>
+);

@@ -1,3 +1,4 @@
+import { gateHttpFeature } from "@/lib/feature-flags";
 import { sign } from "@/lib/utils/sign";
 import { env } from "@repo/env";
 import { redirect } from "next/navigation";
@@ -9,6 +10,9 @@ export async function GET(
     params: { teamId, workspaceId, path },
   }: { params: { workspaceId: string; teamId: string; path?: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });
@@ -26,6 +30,9 @@ export async function DELETE(
     params: { teamId, workspaceId, path },
   }: { params: { workspaceId: string; teamId: string; path?: string } },
 ) {
+  const denied = await gateHttpFeature(req);
+  if (denied) return denied;
+
   const userId = req.headers.get("x-user-id");
 
   if (!userId) return new Response("Unauthorized", { status: 401 });
