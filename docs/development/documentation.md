@@ -50,7 +50,7 @@ Nineteen archived documents and thirty archived issues remain intact. Historical
 
 Three archived source documents (Scope & Product Constraints, Target Architecture, Delivery & Review Rules) remain truncated even through both get-document and fetch reads. Six archived issue descriptions are also truncated. Their originals remain intact in Linear; this migration cannot claim a complete independent historical export. No truncated historical text is used to reconstruct missing requirements.
 
-The archived credential-remediation issue [WDG-5](https://linear.app/amr21/issue/WDG-5) retains an In Progress status and a single `@codex` comment. No rotation/completion evidence was returned. This migration neither exposes credential values nor executes credential rotation.
+The archived credential-remediation work retains an In Progress status and a single `@codex` comment. No rotation/completion evidence was returned. This migration neither exposes credential values nor executes credential rotation.
 
 ## Open questions and unresolved proof
 
@@ -58,10 +58,10 @@ The archived credential-remediation issue [WDG-5](https://linear.app/amr21/issue
 | --- | --- | --- |
 | GAP-01 | Official MCP authorization remains selected, but compliant CIMD discovery transport on Workers is not proven; managed registration or dynamic fallback is not selected. | Preserve Decision 005 and the partial investigation; resolve before the affected executable OAuth increment. No security fallback chosen. |
 | GAP-02 | Target dependency graph, TypeScript/tool/compiler API compatibility, Worker sessions, Yjs persistence and SFU calls lack runtime evidence. | Keep existing implementation/evidence issues; no success claimed. Provider statements remain dated source findings. |
-| GAP-03 | Current deployment runs on push to main; the approved target requires full verification and manual approval. | Existing WDG-162/163 handle implementation. This docs-only migration leaves executable CI unchanged. |
+| GAP-03 | Current deployment runs on push to main; the approved target requires full verification and manual approval. | Existing verification and deployment work covers implementation. This docs-only migration leaves executable CI unchanged. |
 | GAP-04 | $5 preferred / $10 maximum monthly operating budget is an approved constraint; product quotas cannot guarantee an account-wide provider spending cap. | Preserve financial history and usage requirements. Do not claim a configured billing cap or free-plan feasibility pass. |
 | GAP-05 | Source approval labels do not provide independent signed approving revisions; some historical reads are truncated and Notion/report access is unverified. | Retain original links and claims, mark limitations, and keep originals. |
-| GAP-06 | Detailed code conventions and repository agent instructions are owner-deferred. | Preserve existing WDG-173/174 scope; do not settle through documentation migration. |
+| GAP-06 | Detailed code conventions and repository agent instructions are owner-deferred. | Preserve existing code-convention and repository-guidance work scope; do not settle through documentation migration. |
 | GAP-07 | October 4–11 targets coexist with a current Backlog execution snapshot. | Record historical window and current state; no automatic date shifts, completion claims or new estimates. |
 | GAP-08 | Quantitative performance/SLO, backup/restore, RPO/RTO, retention and support/maintenance responsibilities are not settled. | Explicit gaps; no invented targets or ongoing allocation. |
 | GAP-09 | Release mode, initial version, pre-1.0 rules and release-engine setup are not verified. | Preserve approval boundary and separate named releases from deployment. |

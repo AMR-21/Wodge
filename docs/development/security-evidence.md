@@ -1,4 +1,4 @@
-# AMR-5 security cleanup evidence
+# Security cleanup evidence
 
 Verified on 2026-10-16 against owner-selected baseline
 `51d921d8a03d5808df8df7c75d521ab920a870bb`.
@@ -29,8 +29,8 @@ restored, logged, or reused. `.env.*` files are now ignored while the public
 - **Pass:** final diff whitespace check and evidence-document formatting.
 - **Owner confirmed:** the exposed Tiptap token was explicitly revoked.
 - **Owner-directed assumption:** the historical Cloudflare token is treated as
-  deleted. The separate finding is recorded in
-  [AMR-225](https://linear.app/amr21/issue/AMR-225/verify-issuer-side-remediation-for-historical-cloudflare-api-token).
+  deleted. The separate historical finding is recorded in the external execution
+  tracker.
 
 Issuer state was not independently inspected. The earlier installation/type-check
 results were obtained with the reverted extension-removal trial and are not

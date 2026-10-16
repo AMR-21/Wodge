@@ -23,13 +23,13 @@ Determine the scope from the complete change set, including both paths of a rena
 
 When revisiting the pipeline, apply the exclusion to every application CI/CD entry point. Non-required workflows can use `paths-ignore: ['docs/**']` for both pull-request and push events. GitHub leaves required checks pending when an entire required workflow is skipped by a path filter, so required workflows need a lightweight scope check that succeeds for documentation-only changes and skips all application jobs. This scope check must not trigger a build or deployment. See [GitHub's path-filter rules](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onpushpull_requestpull_request_targetpathspaths-ignore).
 
-This is the approved policy; enforcement remains outstanding in the checked-in workflow. Reconcile the affected verification and deployment work through the existing WDG-162 and WDG-163 issues below.
+This is the approved policy; enforcement remains outstanding in the checked-in workflow. Reconcile the affected verification and deployment work through the existing delivery scope below.
 
 ## Approved target
 
 For changes outside the documentation-only exemption, GitHub Actions must check lint, formatting, types, tests and builds before manually approved Cloudflare deployment. The [tooling contract](../development/tooling.md) supplies the intended commands; [testing strategy](../development/testing-strategy.md) supplies evidence requirements. Separate web/backend deployment units require correct D1/R2/SQLite Durable Object bindings, trusted origins, callbacks and server-only provider secrets.
 
-Reuse [WDG-162](https://linear.app/axxi-labs/issue/WDG-162/configure-github-actions-verification-checks) for verification checks and [WDG-163](https://linear.app/axxi-labs/issue/WDG-163/replace-automatic-deployment-with-manual-cloudflare-approval) for replacing automatic deployment. Preserve their current scope, status and blockers. Passing CI does not authorize a push or deployment.
+Reuse Configure GitHub actions verification checks for verification checks and Replace automatic deployment with manual Cloudflare approval for replacing automatic deployment. Preserve their current scope, status and blockers. Passing CI does not authorize a push or deployment.
 
 ## Approval and recovery
 

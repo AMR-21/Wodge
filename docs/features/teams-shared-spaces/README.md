@@ -29,6 +29,6 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
 
 [Open the delivery project](https://linear.app/axxi-labs/project/wodge-teams-and-shared-spaces-e86363f4335a) for current status, ownership, dependencies and evidence.
 
-- [WDG-101 — Reconcile ordinary team creation and membership](https://linear.app/axxi-labs/issue/WDG-101/reconcile-ordinary-team-creation-and-membership)
-- [WDG-104 — Reconcile nested folder hierarchy](https://linear.app/axxi-labs/issue/WDG-104/reconcile-nested-folder-hierarchy)
-- [WDG-107 — Remove standalone resource-library entry points](https://linear.app/axxi-labs/issue/WDG-107/remove-standalone-resource-library-entry-points)
+- Reconcile ordinary team creation and membership
+- Reconcile nested folder hierarchy
+- Remove standalone resource-library entry points

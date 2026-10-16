@@ -49,7 +49,7 @@ The project is a portfolio revival with no committed ongoing maintenance allocat
 
 ## Applicability and readiness
 
-This retained shared coordination covers the fresh web/backend revival deployment; it is not evidence that the new process is already established. Old accounts/data are explicitly outside the migration scope. Detailed rollout, manual QA, approval requests and deployed smoke evidence stay in WDG-167 through WDG-170 under WDG-58. No feature-specific rollout document is needed solely to duplicate this shared procedure. If a feature introduces additional compatibility or rollout requirements, resolve that scope before executing it.
+This retained shared coordination covers the fresh web/backend revival deployment; it is not evidence that the new process is already established. Old accounts/data are explicitly outside the migration scope. Detailed rollout, manual QA, approval requests and deployed smoke evidence stay in the existing release-validation and deployment work. No feature-specific rollout document is needed solely to duplicate this shared procedure. If a feature introduces additional compatibility or rollout requirements, resolve that scope before executing it.
 
 No production operation, schema migration, Worker probe, rollback or smoke check was executed during the documentation migration. Readiness remains conditional on the evidence above.
 

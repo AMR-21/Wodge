@@ -13,7 +13,7 @@ The protocol/authorization boundary and its cross-feature permissions justify a 
 
 Use existing auth/role dependencies before connection and revocation work; expose only the accepted discovery, page/text/link/file/task/discussion operations after their underlying authorized product operations exist. Keep excluded administration, room chat/calls and autonomous background workflows unavailable.
 
-The existing executable outcomes remain [WDG-54](https://linear.app/axxi-labs/issue/WDG-54/integrate-official-mcpoauth-authorization-and-connection-controls), [WDG-156](https://linear.app/axxi-labs/issue/WDG-156/expose-permitted-workspace-and-team-discovery-through-mcp), [WDG-157](https://linear.app/axxi-labs/issue/WDG-157/expose-page-and-text-operations-through-mcp), [WDG-158](https://linear.app/axxi-labs/issue/WDG-158/expose-page-link-and-file-operations-through-mcp), [WDG-159](https://linear.app/axxi-labs/issue/WDG-159/expose-task-operations-through-mcp), [WDG-160](https://linear.app/axxi-labs/issue/WDG-160/expose-discussion-qanda-and-poll-operations-through-mcp), [WDG-161](https://linear.app/axxi-labs/issue/WDG-161/verify-mcp-exclusions-and-access-loss-enforcement). Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear. Existing IDs are the stable work identifiers; this migration adds none.
+The existing executable outcomes cover integrating MCP/OAuth authorization and connection controls; exposing permitted discovery, page/text, link/file, task, discussion, Q&A and poll operations; and verifying exclusions and access-loss enforcement. Their detailed acceptance, engineering instructions, owners, sub-issues, dates and evidence stay in Linear.
 
 ## Readiness and blockers
 

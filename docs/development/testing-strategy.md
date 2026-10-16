@@ -5,6 +5,14 @@ icon: flask
 
 # Testing Strategy
 
+## Executed baseline and smoke checklist
+
+The [application baseline](baseline.md) records actual executions and dependency/environment
+conditions. Its [failure inventory](failure-inventory.md) maps current boundaries
+and consumers, and the [smoke-test matrix](smoke-test-matrix.md) defines reusable
+journeys and failure injection checks. Generated checklists and static source
+findings are distinguished from executed product acceptance.
+
 ## Validation scope
 
 The approved feature acceptance criteria define what the revival must demonstrate. Validation covers both normal journeys and direct backend/agent attempts that bypass visible controls.

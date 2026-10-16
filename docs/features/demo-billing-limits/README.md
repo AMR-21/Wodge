@@ -29,6 +29,6 @@ Start with the spec for behavior and acceptance criteria, then the design for jo
 
 [Open the delivery project](https://linear.app/axxi-labs/project/wodge-demo-billing-and-limits-155a0717deca) for current status, ownership, dependencies and evidence.
 
-- [WDG-145 — Restore Stripe test Checkout and portal](https://linear.app/axxi-labs/issue/WDG-145/restore-stripe-test-checkout-and-portal)
-- [WDG-147 — Enforce accepted-member limits](https://linear.app/axxi-labs/issue/WDG-147/enforce-accepted-member-limits)
-- [WDG-150 — Account for monthly participant-minutes](https://linear.app/axxi-labs/issue/WDG-150/account-for-monthly-participant-minutes)
+- Restore Stripe test Checkout and portal
+- Enforce accepted-member limits
+- Account for monthly participant-minutes

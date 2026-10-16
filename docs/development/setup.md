@@ -16,11 +16,16 @@ This describes checked-in configuration, not a verified working installation. Th
 
 Existing scripts also include `build`, `lint`, `generate`, `migrate:local`, and `studio`. These script definitions were inspected; installation, generation, migrations, services and builds were not run in this migration.
 
-AMR-5 preserves the original premium editor packages and integrations. Tracked
+The security cleanup preserves the original premium editor packages and integrations. Tracked
 registry configuration contains no authentication assignment. Configure any
 required private registry access outside tracked files. The
-[security cleanup evidence](amr-5-security-evidence.md) records the final checks
+[security cleanup evidence](security-evidence.md) records the final checks
 and redacted history findings.
+
+The [application baseline](baseline.md) records executed install, build, test, lint,
+type-check and startup results at the reviewed checkout, with a
+[failure inventory](failure-inventory.md) and reusable
+[smoke-test matrix](smoke-test-matrix.md).
 
 ## Constraints and target setup
 
