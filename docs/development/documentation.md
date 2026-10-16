@@ -13,8 +13,8 @@ Restore a reliable portfolio showcase with bounded operating cost. Retain the
 existing product and frontend UI, Replicache/Yjs, and working Stripe test billing.
 Migrate backend realtime services to PartyServer with SQLite Durable Objects and
 authentication to Better Auth/D1. Provide minimal member-controlled MCP discovery,
-page reading, and task creation/update. Temporarily disable calls and hosted
-generation in both UI and backend.
+page reading, and task creation/update. Temporarily disable calls in both UI
+and backend. Hosted generation is fully removed at the owner’s instruction.
 
 Necessary retained Next.js/React and maintained Cloudflare adapter compatibility
 work is approved while preserving Tailwind, Radix, and the current UI. Broader

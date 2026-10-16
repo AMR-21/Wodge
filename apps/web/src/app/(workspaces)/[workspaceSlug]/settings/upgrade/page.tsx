@@ -167,7 +167,7 @@ function UpgradePage() {
       title: "Pro",
       monthlyPrice: 50,
       description: "Perfect for owners of small & medium businesses",
-      features: ["Ai access", "Storage up to 100GB", "Up to 50 members"],
+      features: ["Storage up to 100GB", "Up to 50 members"],
       actionLabel: workspace?.isPremium! ? "Current Plan" : "Upgrade",
       exclusive: true,
       disabled: workspace?.isPremium,

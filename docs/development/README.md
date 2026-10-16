@@ -32,3 +32,5 @@ Begin with local setup and the recorded baseline. Use the engineering references
 
 - [Project scope and authority](documentation.md) — the current portfolio milestone and approval boundary.
 - [Backend foundation](backend-foundation.md) — implementation observations and validation limits.
+
+- [Hosted generation removal](hosted-generation-removal.md) — total removal and local verification limits.

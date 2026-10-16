@@ -4,7 +4,6 @@ import { ImageBlock } from "../../components/editor/extensions/image-block";
 import { ImageUpload } from "../../components/editor/extensions/image-upload";
 import CodeBlock from "@tiptap/extension-code-block";
 import { Link } from "../../components/editor/extensions/link";
-import { AiWriter } from "../../components/editor/extensions/ai-writer";
 import { Figcaption } from "../../components/editor/extensions/fig-caption";
 import { TableOfContentsNode } from "../../components/editor/extensions/table-of-contents";
 
@@ -39,8 +38,6 @@ export const isCustomNodeSelected = (editor: Editor, node: HTMLElement) => {
     CodeBlock.name,
     ImageBlock.name,
     Link.name,
-    AiWriter.name,
-    // AiImage.name,
     Figcaption.name,
     TableOfContentsNode.name,
   ];
