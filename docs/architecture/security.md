@@ -1,9 +1,6 @@
----
-description: "Authorization, privacy, secrets, revocation, and integration boundaries."
-icon: shield-halved
----
-
 # Security
+
+[Docs home](../README.md) · [Architecture](README.md)
 
 ## Identity and invitations
 

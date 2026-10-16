@@ -1,9 +1,6 @@
----
-description: "Room Calls: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Room Calls — Design
 
-# Design
+[Docs home](../../README.md) · [Room Calls](README.md) · [Specification](spec.md) · [Delivery approach](plan.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

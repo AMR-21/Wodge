@@ -1,9 +1,6 @@
----
-description: "Why shared resources belong in pages rather than standalone libraries."
-icon: file-lines
----
-
 # Decision 007 — Remove standalone resource libraries
+
+[Docs home](../README.md) · [Decisions](README.md)
 
 ## Decision
 

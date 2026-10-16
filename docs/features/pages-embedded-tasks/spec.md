@@ -1,9 +1,6 @@
----
-description: "Pages & Embedded Tasks: behavior, scope, acceptance criteria, and recorded approval evidence."
-icon: list-check
----
+# Pages & Embedded Tasks — Specification
 
-# Spec
+[Docs home](../../README.md) · [Pages & Embedded Tasks](README.md) · [Design](design.md) · [Delivery approach](plan.md)
 
 Status distinction: the source describes approved revival intent. Related capstone code exists, but compliance with these changed rules has not been demonstrated. This migration proposes document organization only.
 

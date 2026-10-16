@@ -1,9 +1,6 @@
----
-description: "Why Wodge keeps a separate backend for multiple possible clients."
-icon: server
----
-
 # Decision 001 — Separate backend for multiple clients
+
+[Docs home](../README.md) · [Decisions](README.md)
 
 **Decision:** Keep the backend as a separate service exposing shared APIs.
 **Reason:** The web application uses TanStack Start, while a possible future mobile client should be able to use the same backend.

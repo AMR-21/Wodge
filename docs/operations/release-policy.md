@@ -1,9 +1,6 @@
----
-description: "Release readiness, approval evidence, and rollback expectations."
-icon: flag-checkered
----
-
 # Release policy
+
+[Docs home](../README.md) · [Operate Wodge](README.md)
 
 ## Deployment and named release
 
@@ -19,4 +16,4 @@ Documentation-only changes under `docs/` skip application CI/CD according to the
 
 ## Evidence and publication
 
-[Decision 006](../decisions/006-verification-release-control.md) preserves the approved verification/deployment boundary. [Engineering policy](../development/engineering-policy.md) preserves plugin release controls. Publishing GitBook, pushing source, merging code, creating tags/releases and sending announcements remain separate authorized operations.
+[Decision 006](../decisions/006-verification-release-control.md) preserves the approved verification/deployment boundary. [Engineering policy](../development/engineering-policy.md) preserves plugin release controls. Publishing documentation, pushing source, merging code, creating tags/releases and sending announcements remain separate authorized operations.

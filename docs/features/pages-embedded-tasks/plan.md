@@ -1,9 +1,6 @@
----
-description: "Pages & Embedded Tasks: delivery sequencing, dependencies, and validation approach."
-icon: route
----
-
 # Pages and embedded tasks — delivery approach
+
+[Docs home](../../README.md) · [Pages & Embedded Tasks](README.md) · [Specification](spec.md) · [Design](design.md)
 
 ## Why this document exists
 

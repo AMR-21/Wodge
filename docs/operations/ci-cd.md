@@ -1,9 +1,6 @@
----
-description: "Recorded pipeline behavior, approved gates, and gaps in enforcement."
-icon: code-branch
----
-
 # CI/CD and deployment gates
+
+[Docs home](../README.md) · [Operate Wodge](README.md)
 
 ## Current configuration
 
@@ -11,13 +8,13 @@ icon: code-branch
 
 ## Documentation-only changes
 
-CI/CD must always skip pull requests and changes whose changed files are all under `docs/`. This applies to pull requests, pushes and their merge commits. Documentation-only changes must not run application lint, formatting, type checks, tests, builds, releases or deployments. GitBook Git Sync remains independent of application CI/CD.
+CI/CD must always skip pull requests and changes whose changed files are all under `docs/`. This applies to pull requests, pushes and their merge commits. Documentation-only changes must not run application lint, formatting, type checks, tests, builds, releases or deployments. Documentation review and link checks are independent of application CI/CD; no documentation publishing service is required.
 
 | Changed files | Required behavior |
 | --- | --- |
 | Only `docs/**`, including additions, edits and deletions | Skip application CI/CD. |
 | `docs/**` together with any path outside `docs/` | Run the normal checks for the application change; deployment still requires approval. |
-| Any path outside `docs/` | Apply the normal pipeline policy. Root files such as `gitbook-docs.yaml` are outside this exemption. |
+| Any path outside `docs/` | Apply the normal pipeline policy. Root configuration and workflow files are outside this exemption. |
 
 Determine the scope from the complete change set, including both paths of a rename. A move into or out of `docs/` is not documentation-only. Reviewers still check documentation accuracy, navigation and links; a skipped pipeline is not approval evidence or proof that requirements have shipped.
 

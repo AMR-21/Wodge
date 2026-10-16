@@ -1,9 +1,6 @@
----
-description: "Operational visibility, diagnostics, and observability gaps."
-icon: chart-line
----
-
 # Observability
+
+[Docs home](../README.md) · [Operate Wodge](README.md)
 
 ## Wodge Revival
 

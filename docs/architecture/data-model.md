@@ -1,9 +1,6 @@
----
-description: "Persistence boundaries, synchronization, and data ownership."
-icon: database
----
-
 # Persistence and data ownership
+
+[Docs home](../README.md) · [Architecture](README.md)
 
 ### Database and files
 

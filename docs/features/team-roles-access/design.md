@@ -1,9 +1,6 @@
----
-description: "Team Roles & Access: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Team Roles & Access — Design
 
-# Design
+[Docs home](../../README.md) · [Team Roles & Access](README.md) · [Specification](spec.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

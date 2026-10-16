@@ -1,5 +1,7 @@
 # Baseline failure paths and consumers
 
+[Docs home](../README.md) · [Develop Wodge](README.md)
+
 Source inventory at `3f7c59372334db7fc20d87f4964964bf16759421`, 2026-10-16.
 See the [executed baseline](baseline.md) for reproduced failures and the
 [smoke matrix](smoke-test-matrix.md) for the required runtime checks. Unless a

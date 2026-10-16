@@ -1,9 +1,6 @@
----
-description: "The decision to use member-provided agents instead of hosted AI."
-icon: robot
----
-
 # Decision 003 — Member-provided agents
+
+[Docs home](../README.md) · [Decisions](README.md)
 
 **Decision:** Replace the hosted AI writer with MCP access for members’ own compatible agents.
 **Access:** Current member permissions, revocable connections, workspace disablement, and member-via-agent attribution apply.

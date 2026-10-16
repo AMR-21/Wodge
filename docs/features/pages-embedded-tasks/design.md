@@ -1,9 +1,6 @@
----
-description: "Pages & Embedded Tasks: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Pages & Embedded Tasks — Design
 
-# Design
+[Docs home](../../README.md) · [Pages & Embedded Tasks](README.md) · [Specification](spec.md) · [Delivery approach](plan.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

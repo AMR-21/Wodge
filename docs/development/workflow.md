@@ -1,9 +1,6 @@
----
-description: "The delivery workflow, approvals, and execution tracking."
-icon: code-branch
----
-
 # Development and delivery workflow
+
+[Docs home](../README.md) · [Develop Wodge](README.md)
 
 ## Delivery window
 

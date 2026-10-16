@@ -1,9 +1,6 @@
----
-description: "Navigation and information architecture across Wodge’s shared spaces."
-icon: map
----
-
 # Information Architecture
+
+[Docs home](../README.md) · [Design](README.md)
 
 ## Workspace entry
 

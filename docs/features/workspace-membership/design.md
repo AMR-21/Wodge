@@ -1,9 +1,6 @@
----
-description: "Workspace Setup & Membership: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Workspace Setup & Membership — Design
 
-# Design
+[Docs home](../../README.md) · [Workspace Setup & Membership](README.md) · [Specification](spec.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

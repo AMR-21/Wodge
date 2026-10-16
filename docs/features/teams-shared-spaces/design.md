@@ -1,9 +1,6 @@
----
-description: "Teams & Shared Spaces: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Teams & Shared Spaces — Design
 
-# Design
+[Docs home](../../README.md) · [Teams & Shared Spaces](README.md) · [Specification](spec.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

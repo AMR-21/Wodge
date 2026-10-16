@@ -1,9 +1,6 @@
----
-description: "Development tools and the approved tooling direction."
-icon: screwdriver-wrench
----
-
 # Development Tooling
+
+[Docs home](../README.md) · [Develop Wodge](README.md)
 
 ## Confirmed tooling
 

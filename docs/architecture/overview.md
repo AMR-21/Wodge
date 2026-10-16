@@ -1,9 +1,6 @@
----
-description: "The target architecture, collaboration systems, and capstone evidence."
-icon: diagram-project
----
-
 # Architecture
+
+[Docs home](../README.md) · [Architecture](README.md)
 
 The target and capstone evidence below retain their original distinction. Current source inspection on 2026-10-09 found the same capstone baseline at commit `d875c2d369f2bed15ba4e7257242131fddcbfa0a`. No runtime checks were executed.
 

@@ -1,5 +1,7 @@
 # Application baseline
 
+[Docs home](../README.md) · [Develop Wodge](README.md)
+
 Recorded on 2026-10-16 at `3f7c59372334db7fc20d87f4964964bf16759421` on `dev`.
 The owner authorized proceeding from the completed local security cleanup work. The original
 premium editor extensions and dependency declarations are retained. This work

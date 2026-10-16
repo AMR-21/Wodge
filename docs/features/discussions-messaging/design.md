@@ -1,9 +1,6 @@
----
-description: "Discussions & Messaging: user journeys, interaction states, and design constraints."
-icon: pen-ruler
----
+# Discussions & Messaging — Design
 
-# Design
+[Docs home](../../README.md) · [Discussions & Messaging](README.md) · [Specification](spec.md)
 
 Companion to [specification](spec.md). The following UX is transposed from the same source revision without changing behavior.
 

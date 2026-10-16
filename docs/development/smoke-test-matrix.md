@@ -1,5 +1,7 @@
 # Retained showcase smoke-test matrix
 
+[Docs home](../README.md) · [Develop Wodge](README.md)
+
 Reviewed baseline: `3f7c59372334db7fc20d87f4964964bf16759421`, 2026-10-16.
 **Every integrated journey below is Unverified in this baseline.** Dev startup
 failed environment validation before a Wodge browser session could run. These

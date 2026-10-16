@@ -1,9 +1,6 @@
----
-description: "Team Roles & Access: behavior, scope, acceptance criteria, and recorded approval evidence."
-icon: list-check
----
+# Team Roles & Access — Specification
 
-# Spec
+[Docs home](../../README.md) · [Team Roles & Access](README.md) · [Design](design.md)
 
 Status distinction: the source describes approved revival intent. Related capstone code exists, but compliance with these changed rules has not been demonstrated. This migration proposes document organization only.
 

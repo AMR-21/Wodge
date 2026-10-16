@@ -1,5 +1,7 @@
 # Security cleanup evidence
 
+[Docs home](../README.md) · [Develop Wodge](README.md)
+
 Verified on 2026-10-16 against owner-selected baseline
 `51d921d8a03d5808df8df7c75d521ab920a870bb`.
 

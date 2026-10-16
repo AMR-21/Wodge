@@ -1,9 +1,6 @@
----
-description: "Shared vocabulary for workspaces, teams, collaboration, and access."
-icon: book-open
----
-
 # Glossary
+
+[Docs home](../README.md) · [Explore Wodge](README.md)
 
 ## Organization and access
 

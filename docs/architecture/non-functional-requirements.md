@@ -1,9 +1,6 @@
----
-description: "Quality requirements for reliability, performance, accessibility, and cost."
-icon: gauge
----
-
 # Non-Functional Requirements
+
+[Docs home](../README.md) · [Architecture](README.md)
 
 ## Local-first behavior
 

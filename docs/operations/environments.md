@@ -1,11 +1,8 @@
----
-description: "Environment responsibilities and runtime topology."
-icon: server
----
-
 # Environments and runtime topology
 
-data
+[Docs home](../README.md) · [Operate Wodge](README.md)
+
+## Data
 
 The revival can use a fresh deployment. Migration of old accounts and data is outside scope.
 
@@ -62,9 +59,9 @@ Implementation is limited to this weekend, next week after work, and the followi
 [Tech Stack](../architecture/tech-stack.md)
 [Financial Assessment](../product/feasibility.md)
 
-## Documentation synchronization
+## Documentation access
 
-GitBook is a separate repository integration. See [documentation workflow](../development/documentation.md#gitbook-verification). No GitBook synchronization was configured by this migration.
+Read the Markdown directly in the repository. Documentation needs no application environment or publishing service. The [documentation workflow](../development/documentation.md#source-and-integration-state--2026-10-16) records repository access and the outstanding live GitBook detachment; no remote integration or visibility was changed by this cleanup.
 
 ## Source and revision
 

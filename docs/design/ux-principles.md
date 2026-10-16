@@ -1,9 +1,6 @@
----
-description: "Shared principles for clear, accessible collaboration experiences."
-icon: heart
----
-
 # UX Principles
+
+[Docs home](../README.md) · [Design](README.md)
 
 ## Recognizable product
 

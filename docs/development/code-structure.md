@@ -1,9 +1,6 @@
----
-description: "Package boundaries, dependency direction, and code organization."
-icon: folder-tree
----
-
 # Code Structure & Design
+
+[Docs home](../README.md) · [Develop Wodge](README.md)
 
 Detailed folder organization, code patterns, and coding rules are deferred to implementation by project-owner decision. The existing content records the established architecture boundaries and general guidance; it does not settle the deferred conventions. The project owner will author `AGENTS.md`.
 

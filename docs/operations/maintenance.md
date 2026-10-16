@@ -1,9 +1,6 @@
----
-description: "Maintenance expectations and the feedback process."
-icon: screwdriver-wrench
----
-
 # Maintenance and feedback
+
+[Docs home](../README.md) · [Operate Wodge](README.md)
 
 ## Existing commitment
 

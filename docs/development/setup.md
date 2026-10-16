@@ -1,9 +1,6 @@
----
-description: "Local setup and current commands, separated from revival targets."
-icon: terminal
----
-
 # Local setup and current commands
+
+[Docs home](../README.md) · [Develop Wodge](README.md)
 
 ## Capstone checkout
 

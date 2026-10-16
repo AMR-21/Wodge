@@ -1,9 +1,6 @@
----
-description: "Design system direction, visual foundations, and shared components."
-icon: palette
----
-
 # Design System
+
+[Docs home](../README.md) · [Design](README.md)
 
 ## Visual direction
 

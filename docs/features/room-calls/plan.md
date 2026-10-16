@@ -1,9 +1,6 @@
----
-description: "Room Calls: delivery sequencing, dependencies, and validation approach."
-icon: route
----
-
 # Room calls — delivery approach
+
+[Docs home](../../README.md) · [Room Calls](README.md) · [Specification](spec.md) · [Design](design.md)
 
 ## Why this document exists
 

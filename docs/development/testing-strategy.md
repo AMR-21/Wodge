@@ -1,9 +1,6 @@
----
-description: "Testing strategy and evidence needed to validate the revival."
-icon: flask
----
-
 # Testing Strategy
+
+[Docs home](../README.md) · [Develop Wodge](README.md)
 
 ## Executed baseline and smoke checklist
 

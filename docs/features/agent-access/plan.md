@@ -1,9 +1,6 @@
----
-description: "Agent Access: delivery sequencing, dependencies, and validation approach."
-icon: route
----
-
 # Agent access — delivery approach
+
+[Docs home](../../README.md) · [Agent Access](README.md) · [Specification](spec.md) · [Design](design.md)
 
 ## Why this document exists
 

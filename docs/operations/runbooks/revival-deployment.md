@@ -1,9 +1,6 @@
----
-description: "Additional deployment coordination for the revival."
-icon: list-check
----
-
 # Revival deployment coordination
+
+[Docs home](../../README.md) · [Operate Wodge](../README.md)
 
 ## Wodge Revival release
 

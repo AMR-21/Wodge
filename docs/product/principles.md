@@ -1,9 +1,6 @@
----
-description: "Product principles, non-goals, and the boundaries of the showcase."
-icon: bullseye
----
-
 # Principles & Non-Goals
+
+[Docs home](../README.md) · [Explore Wodge](README.md)
 
 ## Principles
 

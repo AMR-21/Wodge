@@ -1,9 +1,6 @@
----
-description: "Wodge’s purpose, people, capabilities, and portfolio revival boundaries."
-icon: compass
----
-
 # Product Definition
+
+[Docs home](../README.md) · [Explore Wodge](README.md)
 
 ### Identity and purpose
 

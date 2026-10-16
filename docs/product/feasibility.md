@@ -1,9 +1,6 @@
----
-description: "Historical financial assessment and feasibility assumptions."
-icon: chart-line
----
-
 # Financial Assessment
+
+[Docs home](../README.md) · [Explore Wodge](README.md)
 
 ### Purpose and decision
 

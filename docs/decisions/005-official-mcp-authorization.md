@@ -1,9 +1,6 @@
----
-description: "The approved MCP authorization approach and its boundaries."
-icon: key
----
-
 # Decision 005 — Official MCP authorization
+
+[Docs home](../README.md) · [Decisions](README.md)
 
 **Decision:** Use Better Auth's official MCP/OAuth plugin for member agent connection and revocation.
 **Reason:** Use standard authorization within the selected Better Auth backend rather than a bespoke agent authentication protocol.

@@ -1,9 +1,6 @@
----
-description: "Reusable interaction patterns and feedback across features."
-icon: object-group
----
-
 # Shared Patterns
+
+[Docs home](../README.md) · [Design](README.md)
 
 ## Forms and action feedback
 

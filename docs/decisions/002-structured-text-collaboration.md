@@ -1,9 +1,6 @@
----
-description: "Why structured data and collaborative text use different systems."
-icon: arrows-rotate
----
-
 # Decision 002 — Structured and text collaboration
+
+[Docs home](../README.md) · [Decisions](README.md)
 
 **Decision:** Retain Replicache for structured local-first state and Yjs for collaborative text.
 **Reason:** The approved product treats them as fundamental systems handling different kinds of shared state.
